@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.22"
+    alias(libs.plugins.shadow)
 }
 
 group = "me.huanmeng"
@@ -53,4 +54,8 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(11)
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }

@@ -1,0 +1,5 @@
+Name: ThePitPremium
+Version: 3.21
+EntryClass: cn.charlotte.pit.PitMain
+EntryPoint: start
+InfPort: false
