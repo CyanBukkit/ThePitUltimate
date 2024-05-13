@@ -88,7 +88,6 @@ public class ChatListener implements Listener {
                 event.setFormat(CC.translate(tag
                         + (profile.isSupporter() && profile.getPlayerOption().isSupporterStarDisplay() && !profile.isNicked() ? " &e✬ " : " ")
                         + rank
-                        + " "
                         + RankUtil.getPlayerRankColor(player.getName()) + "%s: "
                         + (RankUtil.getPlayerRankColor(player.getUniqueId()).equalsIgnoreCase(CC.translate("&7")) ? "&7" : "&f")
                         + (player.hasPermission("thepit.admin") ? CC.translate("%s") : "%s")));
