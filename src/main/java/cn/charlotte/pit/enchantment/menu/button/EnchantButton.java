@@ -156,7 +156,7 @@ public class EnchantButton extends Button {
             if ((color == MythicColor.DARK || color == MythicColor.RAGE) && !PlayerUtil.isPlayerUnlockedPerk(player, "heresy_perk")) {
                 if (!PlayerUtil.isPlayerUnlockedPerk(player, "heresy_perk")) {
                     lines.clear();
-                    lines.add("&c清先解锁精通天赋 &6邪术 &c后重试!");
+                    lines.add("&c请先解锁精通天赋 &6邪术 &c后重试!");
                 }
                 if (PlayerUtil.getPlayerUnlockedPerkLevel(player, "heresy_perk") < 3 && level == 1) {
                     lines.clear();
