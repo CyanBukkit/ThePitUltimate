@@ -83,7 +83,7 @@ public class PitAdminCommand {
             names = "setupPunchY",
             permissionNode = "pit.adin"
     )
-    public void punchY(Player player, @Parameter(name = "punch")String punchY) {
+    public void punchY(Player player, @Parameter(name = "punch") String punchY) {
         double parsed = Double.parseDouble(punchY);
 
         YamlConfiguration config = NewConfiguration.INSTANCE.getConfig();
@@ -104,7 +104,7 @@ public class PitAdminCommand {
             names = "giveGacha",
             permissionNode = "pit.admin"
     )
-    public void giveGacha(CommandSender player, @Parameter(name = "target")String name, @Parameter(name = "field")String field) {
+    public void giveGacha(CommandSender player, @Parameter(name = "target") String name, @Parameter(name = "field") String field) {
         int amount = Integer.parseInt(field);
         if (GachaPool.INSTANCE.getEnable()) {
             Player target = Bukkit.getPlayerExact(name);
@@ -137,7 +137,7 @@ public class PitAdminCommand {
             names = "checkGacha",
             permissionNode = "pit.admin"
     )
-    public void lookGacha(CommandSender player, @Parameter(name = "target")String name) {
+    public void lookGacha(CommandSender player, @Parameter(name = "target") String name) {
         if (GachaPool.INSTANCE.getEnable()) {
             GachaPool.GachaData data = GachaPool.INSTANCE.getKeysCollections().findOne(Filters.eq("playerName", name));
             if (data == null) {
@@ -153,7 +153,7 @@ public class PitAdminCommand {
             names = "checkMaxHealth",
             permissionNode = "pit.admin"
     )
-    public void check(CommandSender sender, @Parameter(name = "tester")Player tester) {
+    public void check(CommandSender sender, @Parameter(name = "tester") Player tester) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(tester.getUniqueId());
         sender.sendMessage("额外血量: " + profile.getExtraMaxHealth());
     }
@@ -162,7 +162,7 @@ public class PitAdminCommand {
             names = "setGacha",
             permissionNode = "pit.admin"
     )
-    public void addGacha(CommandSender player, @Parameter(name = "target")String name, @Parameter(name = "field")String field) {
+    public void addGacha(CommandSender player, @Parameter(name = "target") String name, @Parameter(name = "field") String field) {
         int amount = Integer.parseInt(field);
         if (GachaPool.INSTANCE.getEnable()) {
             Player target = Bukkit.getPlayerExact(name);
@@ -733,7 +733,7 @@ public class PitAdminCommand {
     @Command(
             names = "testSound"
     )
-    public void testSound(Player player, @Parameter(name = "sound", defaultValue = "successfully")String sound) {
+    public void testSound(Player player, @Parameter(name = "sound", defaultValue = "successfully") String sound) {
         ThePit.getInstance().getSoundFactory()
                 .playSound(sound, player);
     }
@@ -1197,7 +1197,11 @@ public class PitAdminCommand {
             return;
         }
 
-        mythicItem.setCustomName(CC.translate(name));
+        if (player.hasPermission("pit.rename-color")) {
+            mythicItem.setCustomName(CC.translate(name));
+        } else {
+            mythicItem.setCustomName(name);
+        }
         player.setItemInHand(mythicItem.toItemStack());
 
         player.sendMessage(CC.translate("&a成功"));
