@@ -130,16 +130,11 @@ public class MailClaimButton extends Button {
         }
 
         final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        mail.setClaimed(true);
         Bukkit.getScheduler()
                 .runTaskAsynchronously(ThePit.getInstance(), () -> {
                     try {
                         player.sendMessage(CC.translate("&7正在领取邮件..."));
-                        if (mail.isClaimed()) {
-                            player.sendMessage(CC.translate("&c你已经领取过了, 请不要重复领取."));
-                            return;
-                        }
-
-                        mail.setClaimed(true);
                         profile.getMailData().save();
 
                         profile.grindCoins(mail.getCoins());
