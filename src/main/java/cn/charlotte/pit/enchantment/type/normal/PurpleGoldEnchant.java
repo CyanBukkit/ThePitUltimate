@@ -5,11 +5,13 @@ import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
+import dev.jnic.annotation.Include;
 
 /**
  * @Author: Misoryan
  * @Created_In: 2021/2/25 14:41
  */
+@Include
 @ArmorOnly
 public class PurpleGoldEnchant extends AbstractEnchantment {
     @Override

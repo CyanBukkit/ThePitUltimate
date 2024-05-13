@@ -4,11 +4,13 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import dev.jnic.annotation.Include;
 
 /**
  * @Author: Misoryan
  * @Created_In: 2021/3/23 19:33
  */
+@Include
 @WeaponOnly
 public class BruiserEnchant extends AbstractEnchantment {
     @Override

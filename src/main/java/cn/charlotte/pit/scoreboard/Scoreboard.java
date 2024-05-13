@@ -17,6 +17,7 @@ import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.scoreboard.AssembleAdapter;
 import cn.charlotte.pit.util.time.TimeUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
@@ -26,8 +27,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+@Include
 public class Scoreboard implements AssembleAdapter {
-    public static String serverAddress = "&e神话天坑";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(NewConfiguration.INSTANCE.getDateFormat());
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
@@ -71,7 +72,6 @@ public class Scoreboard implements AssembleAdapter {
 
     @Override
     public List<String> getLines(Player player) {
-        serverAddress = ThePit.getInstance().getPitConfig().getServerName();
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         List<String> lines = new ArrayList<>();
@@ -84,6 +84,9 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&c如等待长时间仍在加载,");
             lines.add("&c请尝试重新进入服务器.");
             lines.add("");
+            lines.add("&c公告群: ");
+            lines.add("&e425831669");
+            lines.add("");
             lines.add("&emc.mooncookie.cn");
             return lines;
         }
@@ -92,7 +95,7 @@ public class Scoreboard implements AssembleAdapter {
         int level = profile.getLevel();
 
         if (NewConfiguration.INSTANCE.getScoreboardShowtime()) {
-            lines.add("&7" + dateFormat.format(System.currentTimeMillis()) + " &8" + ThePit.getBungeeServerName());
+            lines.add("&7" + dateFormat.format(System.currentTimeMillis()) + " &8" + ThePit.getInstance().getServerId());
         }
 
         if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() != null) {

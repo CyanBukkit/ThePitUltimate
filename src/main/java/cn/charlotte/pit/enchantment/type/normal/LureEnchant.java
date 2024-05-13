@@ -4,11 +4,13 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.RodOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import dev.jnic.annotation.Include;
 
 /**
  * @Author: EmptyIrony
  * @Date: 2021/2/7 1:16
  */
+@Include
 @RodOnly
 public class LureEnchant extends AbstractEnchantment {
     @Override

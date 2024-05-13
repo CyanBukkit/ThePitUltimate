@@ -17,6 +17,18 @@ public class RandomUtil {
     static {
         random = new Random();
     }
+    public static String randomStr() {
+        Random random = new Random();
+        String s = "ABCDEFGHIJKLMNPQRSTUVXYZ1234567890";
+        char[] c = s.toCharArray();
+        StringBuilder numbers = new StringBuilder();
+
+        for (int i = 0; i < 3; ++i) {
+            numbers.append(c[random.nextInt(c.length)]);
+        }
+        return numbers.toString();
+    }
+
 
     /**
      * 参数范围为0-1

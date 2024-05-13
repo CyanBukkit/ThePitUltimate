@@ -11,6 +11,7 @@ import cn.charlotte.pit.pet.PetFactory;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import dev.jnic.annotation.Include;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
@@ -22,6 +23,7 @@ import org.bukkit.event.Listener;
  * @Author: EmptyIrony
  * @Date: 2021/3/21 18:32
  */
+@Include
 @ArmorOnly
 @AutoRegister
 public class SlimeEnchant extends AbstractEnchantment implements Listener {

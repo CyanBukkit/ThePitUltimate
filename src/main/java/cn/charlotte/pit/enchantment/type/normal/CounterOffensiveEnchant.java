@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -20,6 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/3/26 13:36
  */
+@Include
+
 public class CounterOffensiveEnchant extends AbstractEnchantment implements IPlayerDamaged {
     @Override
     public String getEnchantName() {

@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.parm.AutoRegister
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.toMythicItem
+import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
 import org.bukkit.entity.FishHook
 import org.bukkit.entity.Player
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import kotlin.math.max
 
+@Include
 @ArmorOnly
 @AutoRegister
 class GrandmasterEnchant: AbstractEnchantment(), Listener{

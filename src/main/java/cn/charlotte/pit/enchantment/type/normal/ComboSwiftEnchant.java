@@ -8,6 +8,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/8 13:37
  */
+@Include
 @WeaponOnly
 public class ComboSwiftEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
     @Override

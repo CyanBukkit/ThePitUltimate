@@ -2,11 +2,13 @@ package cn.charlotte.pit.medal.impl.challenge;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.medal.AbstractMedal;
+import dev.jnic.annotation.Include;
 
 /**
  * @Creator Misoryan
  * @Date 2021/6/10 18:46
  */
+@Include
 public class FirstBidMedal extends AbstractMedal {
     @Override
     public String getInternalName() {

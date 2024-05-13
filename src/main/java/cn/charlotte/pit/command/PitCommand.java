@@ -32,6 +32,7 @@ import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import dev.jnic.annotation.Include;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -54,6 +55,7 @@ import java.util.stream.Collectors;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 16:46
  */
+@Include
 public class PitCommand {
     private final Random random = new Random();
     private final String PATTEN_DEFAULT_YMD = "yyyy-MM-dd";

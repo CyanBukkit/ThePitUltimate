@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.parm.AutoRegister
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
+import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.metadata.FixedMetadataValue
 
+@Include
 @AutoRegister
 @ArmorOnly
 class Regularity : AbstractEnchantment(), Listener {

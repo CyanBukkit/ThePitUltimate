@@ -33,11 +33,13 @@ import cn.charlotte.pit.util.dependencies.loaders.ReflectionClassLoader;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.menu.MenuUpdateTask;
 import cn.charlotte.pit.util.nametag.NametagHandler;
+import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.sign.SignGui;
 import cn.charlotte.pit.util.sound.SoundFactory;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -73,6 +75,7 @@ import java.util.concurrent.*;
  * @author EmptyIrony, Misoryan
  */
 
+@Include
 public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     public static String serverName = "EmptyIrony";
@@ -112,6 +115,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     private PointsAPI pointsAPI;
 
+    private String serverId;
+
 
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
@@ -137,6 +142,32 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     @Override
     public void onEnable() {
         instance = this;
+        sendLogs("\n" +
+                "§d////////////////////////////////////////////////////////////////////\n" +
+                "§d//                          _ooOoo_                               //\n" +
+                "§d//                         o8888888o                              //\n" +
+                "§d//                         88\" . \"88                              //\n" +
+                "§d//                         (| ^_^ |)                              //\n" +
+                "§d//                         O\\  =  /O                              //\n" +
+                "§d//                      ____/`---'\\____                           //\n" +
+                "§d//                    .'  \\\\|     |//  `.                         //\n" +
+                "§d//                   /  \\\\|||  :  |||//  \\                        //\n" +
+                "§d//                  /  _||||| -:- |||||-  \\                       //\n" +
+                "§d//                  |   | \\\\\\  -  /// |   |                       //\n" +
+                "§d//                  | \\_|  ''\\---/''  |   |                       //\n" +
+                "§d//                  \\  .-\\__  `-`  ___/-. /                       //\n" +
+                "§d//                ___`. .'  /--.--\\  `. . ___                     //\n" +
+                "§d//              .\"\" '<  `.___\\_<|>_/___.'  >'\"\".                  //\n" +
+                "§d//            | | :  `- \\`.;`\\ _ /`;.`/ - ` : | |                 //\n" +
+                "§d//            \\  \\ `-.   \\_ __\\ /__ _/   .-` /  /                 //\n" +
+                "§d//      ========`-.____`-.___\\_____/___.-`____.-'========         //\n" +
+                "§d//                           `=---='                              //\n" +
+                "§d//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //\n" +
+                "§d//            佛祖保佑       永不宕机      永无BUG                //\n" +
+                "§d////////////////////////////////////////////////////////////////////");
+        sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
+        sendLogs("§cSupport to §eMoonCookie NetWork.");
+        serverId = RandomUtil.randomStr();
 
         saveDefaultConfig();
 
@@ -186,13 +217,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new AutoSaveRunnable(), 1, 1, TimeUnit.MINUTES);
         new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new DayNightCycleRunnable(), 1, 1, TimeUnit.SECONDS);
 
+
 //            this.printBanner();
 
         new Thread(new LeaderBoardRunnable()).start();
 
         try {
             EventsHandler.INSTANCE.loadFromDatabase();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
 
@@ -206,10 +238,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
-
         PitMain.start();
     }
 
+    public void sendLogs(String s){
+        Bukkit.getConsoleSender().sendMessage(s);
+    }
     @Override
     public void onDisable() {
         synchronized (Bukkit.getOnlinePlayers()) {
@@ -806,6 +840,10 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
             return luckPerms;
         }
         return null;
+    }
+
+    public String getServerId() {
+        return serverId;
     }
 
     public User getLuckPermsUser(UUID uuid) {

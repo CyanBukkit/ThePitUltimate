@@ -8,6 +8,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEffect;
@@ -25,6 +26,7 @@ import java.lang.reflect.Field;
  * @Author: EmptyIrony
  * @Date: 2021/2/4 14:56
  */
+@Include
 public class PacketListener extends PacketAdapter {
 
     public PacketListener() {

@@ -10,6 +10,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: EmptyIrony
  * @Date: 2021/3/6 22:22
  */
+@Include
 @cn.charlotte.pit.enchantment.param.item.BowOnly
 public class PullBowEnchant extends AbstractEnchantment implements IPlayerShootEntity, IActionDisplayEnchant {
 

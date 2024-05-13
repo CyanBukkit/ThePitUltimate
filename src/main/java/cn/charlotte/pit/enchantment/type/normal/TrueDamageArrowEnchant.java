@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import dev.jnic.annotation.Include;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ import java.text.DecimalFormat;
  * @Author: Misoryan
  * @Created_In: 2021/1/30 15:33
  */
+@Include
 @BowOnly
 @AutoRegister
 public class TrueDamageArrowEnchant extends AbstractEnchantment implements Listener {

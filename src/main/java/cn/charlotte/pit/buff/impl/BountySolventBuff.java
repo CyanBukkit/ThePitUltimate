@@ -1,6 +1,7 @@
 package cn.charlotte.pit.buff.impl;
 
 import cn.charlotte.pit.buff.AbstractPitBuff;
+import dev.jnic.annotation.Include;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * @Creator Misoryan
  * @Date 2021/5/14 19:15
  */
+@Include
 public class BountySolventBuff extends AbstractPitBuff {
     @Override
     public String getInternalBuffName() {

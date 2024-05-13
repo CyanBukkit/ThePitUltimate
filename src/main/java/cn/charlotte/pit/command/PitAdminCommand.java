@@ -45,6 +45,7 @@ import com.google.gson.Gson;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -73,6 +74,7 @@ import java.util.UUID;
  * 3 * @Date: 2020/12/28 23:18
  * 4
  */
+@Include
 public class PitAdminCommand {
     private final Gson gson = new Gson();
     private final DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

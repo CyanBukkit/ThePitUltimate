@@ -3,7 +3,9 @@ package cn.charlotte.pit.enchantment.type.aqua
 import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.util.cooldown.Cooldown
+import dev.jnic.annotation.Include
 
+@Include
 class HeadOnBlow: AbstractEnchantment() {
     override fun getEnchantName(): String {
         return "当头一棒"

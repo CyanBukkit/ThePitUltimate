@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/1/17 21:58
  */
+@Include
 @ArmorOnly
 public class FightOrDieEnchant extends AbstractEnchantment implements IPlayerDamaged, IActionDisplayEnchant {
     private final Map<UUID, Cooldown> cooldown = new HashMap<>();

@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
+import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: Misoryan
  * @Created_In: 2021/3/8 16:55
  */
+@Include
 @AutoRegister
 @BowOnly
 public class VolleyEnchant extends AbstractEnchantment implements Listener {

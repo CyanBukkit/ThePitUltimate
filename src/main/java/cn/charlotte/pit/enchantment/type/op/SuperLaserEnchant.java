@@ -6,6 +6,7 @@ import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.beam.beam.Beam;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import dev.jnic.annotation.Include;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
  * @Author: EmptyIrony
  * @Date: 2021/4/17 23:03
  */
+@Include
 public class SuperLaserEnchant extends AbstractEnchantment implements ITickTask {
     private final Map<UUID, TargetInfo> targetInfoMap = new HashMap<>();
 

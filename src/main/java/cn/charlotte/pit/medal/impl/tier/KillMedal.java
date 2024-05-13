@@ -2,6 +2,7 @@ package cn.charlotte.pit.medal.impl.tier;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.medal.AbstractMedal;
+import dev.jnic.annotation.Include;
 
 import java.text.DecimalFormat;
 
@@ -9,6 +10,7 @@ import java.text.DecimalFormat;
  * @Creator Misoryan
  * @Date 2021/6/8 21:19
  */
+@Include
 public class KillMedal extends AbstractMedal {
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
 

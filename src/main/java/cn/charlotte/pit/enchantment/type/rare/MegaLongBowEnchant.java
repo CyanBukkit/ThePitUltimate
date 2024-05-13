@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
+import dev.jnic.annotation.Include;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemBow;
 import net.minecraft.server.v1_8_R3.ItemStack;
@@ -30,6 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2021/3/7 23:42
  */
+@Include
 @AutoRegister
 @BowOnly
 public class MegaLongBowEnchant extends AbstractEnchantment implements Listener, IActionDisplayEnchant {

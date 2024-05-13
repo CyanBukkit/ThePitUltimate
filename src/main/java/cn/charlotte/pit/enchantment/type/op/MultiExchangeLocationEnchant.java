@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  * @Author: EmptyIrony
  * @Date: 2021/3/6 22:52
  */
+@Include
 @BowOnly
 public class MultiExchangeLocationEnchant extends AbstractEnchantment implements IPlayerShootEntity {
     @Override

@@ -29,6 +29,7 @@ import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import dev.jnic.annotation.Include;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
 import org.bukkit.*;
@@ -68,6 +69,7 @@ import java.util.stream.Stream;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:00
  */
+@Include
 @AutoRegister
 public class PlayerListener implements Listener {
     private final Map<UUID, Long> goldenAppleCooldown = new HashMap<>();

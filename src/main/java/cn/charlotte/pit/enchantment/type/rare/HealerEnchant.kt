@@ -9,13 +9,14 @@ import cn.charlotte.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
 import com.google.common.util.concurrent.AtomicDouble
+import dev.jnic.annotation.Include
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-
+@Include
 @WeaponOnly
 class HealerEnchant : AbstractEnchantment(), IAttackEntity, IActionDisplayEnchant {
     override fun getEnchantName(): String {

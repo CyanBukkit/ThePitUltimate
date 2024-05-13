@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: Misoryan
  * @Created_In: 2021/3/24 19:57
  */
+@Include
 @AutoRegister
 @BowOnly
 public class ArrowArmoryEnchant extends AbstractEnchantment implements Listener {

@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/4/9 22:09
  */
+@Include
 @WeaponOnly
 public class CriticallyRichEnchant extends AbstractEnchantment implements IAttackEntity {
     private final Map<UUID, Cooldown> cooldownMap = new HashMap<>();

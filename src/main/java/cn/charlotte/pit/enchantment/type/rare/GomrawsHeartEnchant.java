@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import dev.jnic.annotation.Include;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -18,6 +19,7 @@ import java.util.UUID;
  * @Author: Misoryan
  * @Created_In: 2021/2/23 13:53
  */
+@Include
 @ArmorOnly
 public class GomrawsHeartEnchant extends AbstractEnchantment implements ITickTask {
 

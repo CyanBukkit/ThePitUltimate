@@ -2,11 +2,13 @@ package cn.charlotte.pit.medal.impl.challenge;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.medal.AbstractMedal;
+import dev.jnic.annotation.Include;
 
 /**
  * @Creator Misoryan
  * @Date 2021/6/11 17:32
  */
+@Include
 public class TrickleDownMedal extends AbstractMedal {
     @Override
     public String getInternalName() {

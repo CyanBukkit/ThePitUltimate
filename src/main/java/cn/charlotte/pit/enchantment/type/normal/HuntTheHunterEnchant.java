@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Creator Misoryan
  * @Date 2021/5/8 13:55
  */
+@Include
 @ArmorOnly
 public class HuntTheHunterEnchant extends AbstractEnchantment implements IPlayerDamaged {
     @Override

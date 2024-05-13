@@ -56,6 +56,14 @@ kotlin {
     jvmToolchain(11)
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Javadoc> {
+    options.encoding = "UTF-8"
+}
+
 tasks.build {
     dependsOn(tasks.shadowJar)
 }

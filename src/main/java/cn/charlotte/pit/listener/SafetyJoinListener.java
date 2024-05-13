@@ -3,10 +3,11 @@ package cn.charlotte.pit.listener;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.chat.CC;
+import dev.jnic.annotation.Include;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-
+@Include
 @AutoRegister
 public class SafetyJoinListener implements Listener {
 

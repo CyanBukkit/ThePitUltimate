@@ -41,6 +41,7 @@ import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.minecraft.server.v1_8_R3.ItemArmor;
@@ -71,6 +72,7 @@ import java.util.stream.Collectors;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 11:16
  */
+@Include
 @AutoRegister
 public class CombatListener implements Listener {
     private static final BountySolventBuff bountySolventBuff = new BountySolventBuff();

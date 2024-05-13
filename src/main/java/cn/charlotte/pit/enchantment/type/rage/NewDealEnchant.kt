@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.item.ItemUtil
 import com.google.common.util.concurrent.AtomicDouble
+import dev.jnic.annotation.Include
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.concurrent.atomic.AtomicBoolean
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @Creator Misoryan
  * @Date 2021/5/8 14:06
  */
+@Include
 @ArmorOnly
 class NewDealEnchant : AbstractEnchantment(), IPlayerDamaged {
     override fun getEnchantName(): String {

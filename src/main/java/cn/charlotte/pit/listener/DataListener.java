@@ -12,6 +12,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FishHook;
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:27
  */
+@Include
 @AutoRegister
 public class DataListener implements Listener {
     private final ScheduledExecutorService executor;

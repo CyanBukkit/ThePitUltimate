@@ -4,6 +4,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitGainRenownEvent;
 import cn.charlotte.pit.medal.AbstractMedal;
 import cn.charlotte.pit.parm.AutoRegister;
+import dev.jnic.annotation.Include;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -13,6 +14,7 @@ import java.text.DecimalFormat;
  * @Creator Misoryan
  * @Date 2021/6/11 0:05
  */
+@Include
 @AutoRegister
 public class RenownMedal extends AbstractMedal implements Listener {
 

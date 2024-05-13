@@ -9,6 +9,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
  * @Author: EmptyIrony
  * @Date: 2020/12/29 23:54
  */
+@Include
 @WeaponOnly
 @BowOnly
 @ArmorOnly

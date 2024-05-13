@@ -22,6 +22,7 @@ import org.slf4j.Logger;
  * 3 * @Date: 2020/12/28 23:03
  * 4
  */
+
 public class MongoDB {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(MongoDB.class);
 

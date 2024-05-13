@@ -6,6 +6,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import dev.jnic.annotation.Include;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,6 +27,7 @@ import org.bukkit.util.Vector;
  * @Creator Misoryan
  * @Date 2021/6/19 12:50
  */
+@Include
 @AutoRegister
 public class BounceBowEnchant extends AbstractEnchantment implements Listener {
     @Override

@@ -10,6 +10,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import java.util.Arrays;
  * @Author: Misoryan
  * @Created_In: 2021/2/28 13:01
  */
+@Include
 @ArmorOnly
 public class InstaBoomEnchant extends AbstractEnchantment implements IPlayerKilledEntity, IPlayerRespawn {
 
