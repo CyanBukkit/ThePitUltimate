@@ -81,6 +81,7 @@ public class AdminItemMenu extends Menu {
                 buttonMap.put(23, new PitItemButton(MythicRepairKit.toItemStack0()));
                 buttonMap.put(24, new PitItemButton(new JewelSword().toItemStack()));
                 buttonMap.put(25, new PitItemButton(new ArmageddonBoots().toItemStack()));
+                buttonMap.put(26, new MythicItemButton(10));
                 buttonMap.put(27, new PitItemButton(new TotallyLegitGem().toItemStack()));
                 buttonMap.put(28, new MythicItemButton(5));
                 buttonMap.put(29, new MythicItemButton(6));

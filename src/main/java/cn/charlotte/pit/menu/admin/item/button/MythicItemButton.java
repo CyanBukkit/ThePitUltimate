@@ -67,6 +67,11 @@ public class MythicItemButton extends Button {
             return mythicItem.toItemStack();
         } else if (i == 9) {
             return new LuckyChestplate().toItemStack();
+        } else if (i == 10) {
+            ItemStack itemStack = new AngelChestplate().toItemStack();
+            IMythicItem mythicItem = new AngelChestplate();
+            mythicItem.loadFromItemStack(itemStack);
+            return mythicItem.toItemStack();
         }
         return new ItemBuilder(Material.AIR).build();
     }

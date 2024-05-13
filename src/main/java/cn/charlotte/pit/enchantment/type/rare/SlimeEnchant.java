@@ -42,7 +42,7 @@ public class SlimeEnchant extends AbstractEnchantment implements Listener {
 
     @Override
     public EnchantmentRarity getRarity() {
-        return EnchantmentRarity.RARE;
+        return EnchantmentRarity.DISABLED;
     }
 
     @Override
@@ -52,13 +52,14 @@ public class SlimeEnchant extends AbstractEnchantment implements Listener {
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7击杀玩家可以召唤/复活史莱姆宠物协助战斗(上限1),"
-                + "/s&7每击杀 &e" + (getUpdateRequire(enchantLevel) + " &7名玩家可以提升史莱姆等级(上限11级).")
-                + "/s&7史莱姆升级会提升史莱姆的生命上限,攻击力与护甲值";
+        return "&7击杀玩家可以召唤/复活史莱姆宠物协助战斗(上限1)," + "/s&7每击杀 &e" + (getUpdateRequire(enchantLevel) + " &7名玩家可以提升史莱姆等级(上限11级).") + "/s&7史莱姆升级会提升史莱姆的生命上限,攻击力与护甲值";
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onStreak(PitStreakKillChangeEvent event) {
+        if (true) {
+            return;
+        }
         Player myself = Bukkit.getPlayer(event.getPlayerProfile().getPlayerUuid());
         if (myself == null || !myself.isOnline()) {
             return;
@@ -86,8 +87,7 @@ public class SlimeEnchant extends AbstractEnchantment implements Listener {
                 }
             }
         } else {
-            Bukkit.getScheduler()
-                    .runTask(ThePit.getInstance(), () -> pet.spawnPet("slime_pet", myself));
+            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> pet.spawnPet("slime_pet", myself));
         }
     }
 
