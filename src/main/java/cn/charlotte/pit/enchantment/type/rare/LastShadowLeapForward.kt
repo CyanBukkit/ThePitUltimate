@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.param.item.WeaponOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.parm.AutoRegister
 import cn.charlotte.pit.util.PlayerUtil
+import cn.charlotte.pit.util.chat.RomanUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.time.TimeUtil
 import cn.charlotte.pit.util.toMythicItem
@@ -22,7 +23,7 @@ import java.util.*
 
 @AutoRegister
 @WeaponOnly
-class LastShadowLeapForward: AbstractEnchantment(), Listener, IActionDisplayEnchant {
+class LastShadowLeapForward : AbstractEnchantment(), Listener, IActionDisplayEnchant {
     private val cooldownMap = HashMap<UUID, Cooldown>()
 
     override fun getEnchantName(): String {
@@ -46,11 +47,15 @@ class LastShadowLeapForward: AbstractEnchantment(), Listener, IActionDisplayEnch
     }
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
-        return "右键发动技能，向前突进一小段距离，之后自身获得速度${enchantLevel}（持续3秒）(${getDuration(enchantLevel)}秒冷却)"
+        return "&7右键触发技能后向前突进一段距离,/s&7并获得 §b速度 ${RomanUtil.convert(enchantLevel)} §f(00:03) &7(${
+            getDuration(
+                enchantLevel
+            )
+        }秒冷却)"
     }
 
     private fun getDuration(enchantLevel: Int): Int {
-        return when(enchantLevel) {
+        return when (enchantLevel) {
             1 -> 30
             2 -> 28
             else -> 20
@@ -59,7 +64,7 @@ class LastShadowLeapForward: AbstractEnchantment(), Listener, IActionDisplayEnch
 
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
-              val action = event.action
+        val action = event.action
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             val player = event.player
 

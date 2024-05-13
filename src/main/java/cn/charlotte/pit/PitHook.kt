@@ -76,7 +76,7 @@ object PitHook {
         try {
             NewConfiguration.loadFile()
             NewConfiguration.load()
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -328,7 +328,7 @@ object PitHook {
 
         classes += RealManEnchant::class.java
 
-        enchantmentFactor.init(classes)
+        enchantmentFactor.init(LinkedHashSet(classes))
     }
 
     private fun loadScoreBoard() {

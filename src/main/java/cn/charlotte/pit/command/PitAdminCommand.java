@@ -1127,7 +1127,7 @@ public class PitAdminCommand {
             player.sendMessage(
                     CC.translate("  &e" + record.getEnchanter() + " &7- &a" + record.getDescription() + " &7- &a" + DateFormatUtils.format(record.getTimestamp(), "yyyy年MM月dd日 HH:mm:ss")));
         }
-        player.sendMessage("&7以上记录最多展示5条");
+        player.sendMessage(CC.translate("&7以上记录最多展示5条"));
     }
 
     @Command(names = {"addSquadsLoc"}, permissionNode = "pit.admin")

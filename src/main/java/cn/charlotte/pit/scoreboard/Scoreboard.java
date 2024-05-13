@@ -27,31 +27,31 @@ import java.util.List;
 import java.util.Map;
 
 public class Scoreboard implements AssembleAdapter {
-    public static String serverAddress = "&e天坑乱斗";
+    public static String serverAddress = "&e神话天坑";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(NewConfiguration.INSTANCE.getDateFormat());
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
-            Arrays.asList("&e&l天坑乱斗",
-                    "&6&l天&e&l坑乱斗",
-                    "&f&l天&6&l坑&e&l乱斗",
-                    "&f&l天坑&6&l乱&e&l斗",
-                    "&f&l天坑乱&6&l斗",
-                    "&f&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&f&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&f&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&f&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&e&l天坑乱斗",
-                    "&e&l天坑乱斗");
+            Arrays.asList("&b&l神话天坑",
+                    "&a&l神&b&l话天坑",
+                    "&f&l神&6&l话&b&l天坑",
+                    "&f&l神话&6&l天&b&l坑",
+                    "&f&l神话天&6&l坑",
+                    "&f&l神话天坑",
+                    "&b&l神话天坑",
+                    "&f&l神话天坑",
+                    "&b&l神话天坑",
+                    "&f&l神话天坑",
+                    "&b&l神话天坑",
+                    "&f&l神话天坑",
+                    "&b&l神话天坑",
+                    "&b&l神话天坑",
+                    "&b&l神话天坑",
+                    "&b&l神话天坑",
+                    "&b&l神话天坑",
+                    "&b&l神话天坑",
+                    "&b&l神话天坑");
     private long lastAnimationTime = 0;
     private int animationTick = 0;
 
@@ -84,7 +84,7 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&c如等待长时间仍在加载,");
             lines.add("&c请尝试重新进入服务器.");
             lines.add("");
-            lines.add("&e" + serverAddress);
+            lines.add("&emc.mooncookie.cn");
             return lines;
         }
 
@@ -184,11 +184,11 @@ public class Scoreboard implements AssembleAdapter {
                 lines.add("&f状态: " + currentStreak);
             } else {
                 lines.add("&f状态: " + (profile.getCombatTimer().hasExpired()
-                        ? "&a不在战斗中" : "&c战斗中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                        ? "&a不在战坑中" : "&c战坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
                         ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
                         : (profile.getBounty() != 0
                         ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
-                        : "")))); // status: 战斗中 (%duration%秒) / 不在战斗中
+                        : "")))); // status: 战坑中 (%duration%秒) / 不在战坑中
             }
             if (!profile.getCombatTimer().hasExpired()) {
                 lines.add("&f连杀: &a" + numFormat.format(profile.getStreakKills()));
@@ -243,7 +243,7 @@ public class Scoreboard implements AssembleAdapter {
                 boost = 10;
             }
             if (boost >= 3) {
-                lines.add("&f角斗士: &9-" + boost * 3 + "%");
+                lines.add("&f角坑士: &9-" + boost * 3 + "%");
             }
 
         }
@@ -255,7 +255,7 @@ public class Scoreboard implements AssembleAdapter {
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&eTEST " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
-            lines.add("&e" + serverAddress);
+            lines.add("&emc.mooncookie.cn");
         }
         return lines;
     }
