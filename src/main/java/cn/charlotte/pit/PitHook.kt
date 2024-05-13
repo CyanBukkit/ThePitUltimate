@@ -14,7 +14,6 @@ import cn.charlotte.pit.enchantment.type.dark_rare.ComboVenomEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
 import cn.charlotte.pit.enchantment.type.genesis.*
 import cn.charlotte.pit.enchantment.type.normal.*
-import cn.charlotte.pit.enchantment.type.normal.CriticallyFunkyEnchant
 import cn.charlotte.pit.enchantment.type.op.*
 import cn.charlotte.pit.enchantment.type.rage.*
 import cn.charlotte.pit.enchantment.type.ragerare.Regularity

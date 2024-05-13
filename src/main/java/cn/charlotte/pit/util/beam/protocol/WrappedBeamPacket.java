@@ -46,11 +46,7 @@ public class WrappedBeamPacket {
      * @param receiver player to send the packet to.
      */
     public void send(Player receiver) {
-        try {
-            ProtocolLibrary.getProtocolManager().sendServerPacket(receiver, this.handle);
-        } catch (InvocationTargetException ex) {
-            throw new RuntimeException("Failed to send beam packet to player.", ex);
-        }
+        ProtocolLibrary.getProtocolManager().sendServerPacket(receiver, this.handle);
     }
 
     /**

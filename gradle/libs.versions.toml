@@ -25,7 +25,6 @@ websocket = "1.5.4"
 reflectionhelper = "1.15.2-SNAPSHOT"
 playerpoints = "3.2.4"
 decentholograms = "2.8.6"
-mythicmobs = "5.6.1"
 
 [libraries]
 
@@ -70,7 +69,6 @@ moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 ### thepit premiunm
 papi = { group = "me.clip", name = "placeholderapi", version.ref = "papi" }
 narshorn = { group = "org.openjdk.nashorn", name = "nashorn-core", version.ref = "narshorn" }
-mythicmobs = { group = "io.lumine", name = "Mythic-Dist", version.ref = "mythicmobs" }
 httpclient = { group = "org.apache.httpcomponents", name = "httpclient", version.ref = "httpclient" }
 httpcore = { group = "org.apache.httpcomponents", name = "httpcore", version.ref = "httpclient" }
 jedis = { group = "redis.clients", name = "jedis", version.ref = "jedis" }

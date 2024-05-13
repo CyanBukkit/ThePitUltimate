@@ -30,7 +30,6 @@ dependencies {
     compileOnly(libs.papi)
     compileOnly(libs.narshorn)
     compileOnly(libs.citizens.main)
-    compileOnly(libs.mythicmobs)
     compileOnly(libs.protocollib)
     compileOnly(libs.httpclient)
     compileOnly(libs.httpcore)
