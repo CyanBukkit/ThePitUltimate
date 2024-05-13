@@ -28,7 +28,7 @@ public class GoldenHandcuffsEnchant extends AbstractEnchantment {
 
     @Override
     public EnchantmentRarity getRarity() {
-        return EnchantmentRarity.DARK_RARE;
+        return EnchantmentRarity.DISABLED;
     }
 
     @Override

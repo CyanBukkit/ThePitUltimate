@@ -322,11 +322,11 @@ object PitHook {
             BreachingChargeEnchant::class.java
         )
 
-        classes += HappyNewYearEnchant::class.java
+/*        classes += HappyNewYearEnchant::class.java
         classes += WitheredAndPiercingThroughTheHeart::class.java
         classes += LastShadowLeapForward::class.java
 
-        classes += RealManEnchant::class.java
+        classes += RealManEnchant::class.java*/
 
         enchantmentFactor.init(LinkedHashSet(classes))
     }

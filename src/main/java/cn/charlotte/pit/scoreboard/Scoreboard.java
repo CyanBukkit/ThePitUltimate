@@ -33,25 +33,25 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
-            Arrays.asList("&b&l神话天坑",
-                    "&a&l神&b&l话天坑",
-                    "&f&l神&6&l话&b&l天坑",
-                    "&f&l神话&6&l天&b&l坑",
+            Arrays.asList("&d&l神话天坑",
+                    "&a&l神&d&l话天坑",
+                    "&f&l神&6&l话&d&l天坑",
+                    "&f&l神话&6&l天&d&l坑",
                     "&f&l神话天&6&l坑",
                     "&f&l神话天坑",
-                    "&b&l神话天坑",
+                    "&d&l神话天坑",
                     "&f&l神话天坑",
-                    "&b&l神话天坑",
+                    "&d&l神话天坑",
                     "&f&l神话天坑",
-                    "&b&l神话天坑",
+                    "&d&l神话天坑",
                     "&f&l神话天坑",
-                    "&b&l神话天坑",
-                    "&b&l神话天坑",
-                    "&b&l神话天坑",
-                    "&b&l神话天坑",
-                    "&b&l神话天坑",
-                    "&b&l神话天坑",
-                    "&b&l神话天坑");
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑");
     private long lastAnimationTime = 0;
     private int animationTick = 0;
 
@@ -130,7 +130,7 @@ public class Scoreboard implements AssembleAdapter {
         String genesisTeam = "";
         if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
             if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                genesisTeam = " &b♆";
+                genesisTeam = " &d♆";
             }
             if (profile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
                 genesisTeam = " &c♨";
@@ -142,9 +142,9 @@ public class Scoreboard implements AssembleAdapter {
         lines.add("&f等级: " + LevelUtil.getLevelTag(prestige, level) + genesisTeam);
 
         if (level >= 120) {
-            lines.add("&f经验值: &b经验值已满!");
+            lines.add("&f经验值: &d经验值已满!");
         } else {
-            lines.add("&f下一等级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
+            lines.add("&f下一等级: &d" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
         }
 
         if (profile.getCurrentQuest() != null) {
@@ -194,7 +194,7 @@ public class Scoreboard implements AssembleAdapter {
                 lines.add("&f连杀: &a" + numFormat.format(profile.getStreakKills()));
             }
 
-            if (CC.translate("&b月球之旅").equals(currentStreak)) {
+            if (CC.translate("&d月球之旅").equals(currentStreak)) {
                 Double storedExp = ToTheMoonMegaStreak.getCache().get(player.getUniqueId());
                 if (storedExp == null) {
                     storedExp = 0.0;
@@ -202,7 +202,7 @@ public class Scoreboard implements AssembleAdapter {
                 final double streakKills = profile.getStreakKills();
                 final double multiple = Math.min(1.0, (streakKills - 100) * 0.005);
 
-                lines.add("&f已存储经验: &b" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
+                lines.add("&f已存储经验: &d" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
             }
         }
         //if Player have a bounty:
@@ -210,7 +210,7 @@ public class Scoreboard implements AssembleAdapter {
             String genesisColor = "&6";
             if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
                 if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                    genesisColor = "&b";
+                    genesisColor = "&d";
                 }
                 if (profile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
                     genesisColor = "&c";

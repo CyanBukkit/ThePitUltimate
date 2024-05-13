@@ -56,7 +56,7 @@ class ElectrolytesEnchant : AbstractEnchantment(), IPlayerKilledEntity {
             .findFirst()
             .ifPresent { potionEffect: PotionEffect ->
                 val duration = if (potionEffect.amplifier > 1) {
-                    potionEffect.duration + enchantLevel * 2 * 20
+                    potionEffect.duration + ((enchantLevel * 20) / 2)
                 } else {
                     potionEffect.duration + enchantLevel * 20
                 }
