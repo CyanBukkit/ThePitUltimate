@@ -32,6 +32,8 @@ dependencies {
     compileOnly(libs.narshorn)
     compileOnly(libs.citizens.main)
     compileOnly(libs.protocollib)
+    api(libs.hutool.core)
+    api(libs.hutool.crypto)
     compileOnly(libs.httpclient)
     compileOnly(libs.httpcore)
     compileOnly(libs.jedis)

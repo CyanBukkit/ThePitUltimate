@@ -25,7 +25,7 @@ websocket = "1.5.4"
 reflectionhelper = "1.15.2-SNAPSHOT"
 playerpoints = "3.2.4"
 decentholograms = "2.8.6"
-
+hutool = "5.8.27"
 [libraries]
 
 # Adventure
@@ -79,6 +79,8 @@ websocket = { group = "org.java-websocket", name = "Java-WebSocket", version.ref
 reflectionhelper = { group = "org.inventivetalent", name = "reflectionhelper", version.ref = "reflectionhelper" }
 playerpoints = { group = "org.black_ixx", name = "playerpoints", version.ref = "playerpoints" }
 decentholograms = { group = "com.github.decentsoftware-eu", name = "decentholograms", version.ref = "decentholograms" }
+hutool-core= {group="cn.hutool", name="hutool-core", version.ref="hutool"}
+hutool-crypto= {group="cn.hutool", name="hutool-crypto", version.ref="hutool"}
 [plugins]
 
 shadow = { id = "io.github.goooler.shadow", version.ref = "shadow" }
