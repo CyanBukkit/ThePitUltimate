@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.Utils;
+import dev.jnic.annotation.Include;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

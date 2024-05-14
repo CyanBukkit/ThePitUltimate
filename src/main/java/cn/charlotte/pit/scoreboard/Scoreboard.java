@@ -133,7 +133,7 @@ public class Scoreboard implements AssembleAdapter {
         String genesisTeam = "";
         if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
             if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                genesisTeam = " &d♆";
+                genesisTeam = " &b♆";
             }
             if (profile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
                 genesisTeam = " &c♨";
@@ -145,7 +145,7 @@ public class Scoreboard implements AssembleAdapter {
         lines.add("&f等级: " + LevelUtil.getLevelTag(prestige, level) + genesisTeam);
 
         if (level >= 120) {
-            lines.add("&f经验值: &d经验值已满!");
+            lines.add("&f经验值: &b经验值已满!");
         } else {
             lines.add("&f下一等级: &d" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
         }

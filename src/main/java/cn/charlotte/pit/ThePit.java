@@ -63,6 +63,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
@@ -141,104 +142,110 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     @Override
     public void onEnable() {
-        instance = this;
-        sendLogs("\n" +
-                "§d////////////////////////////////////////////////////////////////////\n" +
-                "§d//                          _ooOoo_                               //\n" +
-                "§d//                         o8888888o                              //\n" +
-                "§d//                         88\" . \"88                              //\n" +
-                "§d//                         (| ^_^ |)                              //\n" +
-                "§d//                         O\\  =  /O                              //\n" +
-                "§d//                      ____/`---'\\____                           //\n" +
-                "§d//                    .'  \\\\|     |//  `.                         //\n" +
-                "§d//                   /  \\\\|||  :  |||//  \\                        //\n" +
-                "§d//                  /  _||||| -:- |||||-  \\                       //\n" +
-                "§d//                  |   | \\\\\\  -  /// |   |                       //\n" +
-                "§d//                  | \\_|  ''\\---/''  |   |                       //\n" +
-                "§d//                  \\  .-\\__  `-`  ___/-. /                       //\n" +
-                "§d//                ___`. .'  /--.--\\  `. . ___                     //\n" +
-                "§d//              .\"\" '<  `.___\\_<|>_/___.'  >'\"\".                  //\n" +
-                "§d//            | | :  `- \\`.;`\\ _ /`;.`/ - ` : | |                 //\n" +
-                "§d//            \\  \\ `-.   \\_ __\\ /__ _/   .-` /  /                 //\n" +
-                "§d//      ========`-.____`-.___\\_____/___.-`____.-'========         //\n" +
-                "§d//                           `=---='                              //\n" +
-                "§d//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //\n" +
-                "§d//            佛祖保佑       永不宕机      永无BUG                //\n" +
-                "§d////////////////////////////////////////////////////////////////////");
-        sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
-        sendLogs("§cSupport to §eMoonCookie NetWork.");
-        serverId = RandomUtil.randomStr();
+        if (h()) {
+            instance = this;
+            sendLogs("\n" +
+                    "§d////////////////////////////////////////////////////////////////////\n" +
+                    "§d//                          _ooOoo_                               //\n" +
+                    "§d//                         o8888888o                              //\n" +
+                    "§d//                         88\" . \"88                              //\n" +
+                    "§d//                         (| ^_^ |)                              //\n" +
+                    "§d//                         O\\  =  /O                              //\n" +
+                    "§d//                      ____/`---'\\____                           //\n" +
+                    "§d//                    .'  \\\\|     |//  `.                         //\n" +
+                    "§d//                   /  \\\\|||  :  |||//  \\                        //\n" +
+                    "§d//                  /  _||||| -:- |||||-  \\                       //\n" +
+                    "§d//                  |   | \\\\\\  -  /// |   |                       //\n" +
+                    "§d//                  | \\_|  ''\\---/''  |   |                       //\n" +
+                    "§d//                  \\  .-\\__  `-`  ___/-. /                       //\n" +
+                    "§d//                ___`. .'  /--.--\\  `. . ___                     //\n" +
+                    "§d//              .\"\" '<  `.___\\_<|>_/___.'  >'\"\".                  //\n" +
+                    "§d//            | | :  `- \\`.;`\\ _ /`;.`/ - ` : | |                 //\n" +
+                    "§d//            \\  \\ `-.   \\_ __\\ /__ _/   .-` /  /                 //\n" +
+                    "§d//      ========`-.____`-.___\\_____/___.-`____.-'========         //\n" +
+                    "§d//                           `=---='                              //\n" +
+                    "§d//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //\n" +
+                    "§d//            佛祖保佑       永不宕机      永无BUG                //\n" +
+                    "§d////////////////////////////////////////////////////////////////////");
+            sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
+            sendLogs("§cSupport to §eMoonCookie NetWork.");
+            serverId = RandomUtil.randomStr();
 
-        saveDefaultConfig();
+            saveDefaultConfig();
 
-        hookPlayerPoints();
-        hookLuckPerms();
+            hookPlayerPoints();
+            hookLuckPerms();
 
-        boolean whiteList = Bukkit.getServer().hasWhitelist();
-        Bukkit.getServer().setWhitelist(true);
+            boolean whiteList = Bukkit.getServer().hasWhitelist();
+            Bukkit.getServer().setWhitelist(true);
 
-        iSpigot spigot = new iSpigot();
-        Bukkit.getServer().getPluginManager().registerEvents(spigot, this);
+            iSpigot spigot = new iSpigot();
+            Bukkit.getServer().getPluginManager().registerEvents(spigot, this);
 
-        this.loadConfig();
+            this.loadConfig();
 
-        this.loadDatabase();
+            this.loadDatabase();
 
-        this.loadMenu();
-        this.loadNpc();
-        this.loadGame();
-        this.loadMedals();
-        this.loadBuffs();
-        this.loadHologram();
-        this.loadSound();
-        this.loadPerks();
-        this.loadEnchantment();
-        this.loadQuest();
-        this.loadEvents();
+            this.loadMenu();
+            this.loadNpc();
+            this.loadGame();
+            this.loadMedals();
+            this.loadBuffs();
+            this.loadHologram();
+            this.loadSound();
+            this.loadPerks();
+            this.loadEnchantment();
+            this.loadQuest();
+            this.loadEvents();
 
-        try {
-            this.loadMoveHandler();
-        } catch (Exception ignored) {
-        }
+            try {
+                this.loadMoveHandler();
+            } catch (Exception ignored) {
+            }
 
-        this.loadQuest();
-        this.initBossBar();
+            this.loadQuest();
+            this.initBossBar();
 
-        this.initPet();
+            this.initPet();
 
-        this.signGui = new SignGui(this);
+            this.signGui = new SignGui(this);
 
-        this.rebootRunnable = new RebootRunnable();
-        this.rebootRunnable.runTaskTimerAsynchronously(this, 20, 20);
+            this.rebootRunnable = new RebootRunnable();
+            this.rebootRunnable.runTaskTimerAsynchronously(this, 20, 20);
 
-        this.miniGameController = new MiniGameController();
-        this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
+            this.miniGameController = new MiniGameController();
+            this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
 
-        new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new AutoSaveRunnable(), 1, 1, TimeUnit.MINUTES);
-        new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new DayNightCycleRunnable(), 1, 1, TimeUnit.SECONDS);
+            new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new AutoSaveRunnable(), 1, 1, TimeUnit.MINUTES);
+            new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new DayNightCycleRunnable(), 1, 1, TimeUnit.SECONDS);
 
 
 //            this.printBanner();
 
-        new Thread(new LeaderBoardRunnable()).start();
+            new Thread(new LeaderBoardRunnable()).start();
 
-        try {
-            EventsHandler.INSTANCE.loadFromDatabase();
-        } catch (Exception ignored) {
+            try {
+                EventsHandler.INSTANCE.loadFromDatabase();
+            } catch (Exception ignored) {
 
+            }
+
+            for (World world : Bukkit.getWorlds()) {
+                world.setGameRuleValue("keepInventory", "true");
+                world.setGameRuleValue("mobGriefing", "false");
+                world.setGameRuleValue("doDaylightCycle", "false");
+            }
+            this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+            this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
+            FixedRewardData.Companion.refreshAll();
+            Bukkit.getServer().setWhitelist(whiteList);
+            new ProfileLoadRunnable(this);
+            PitMain.start();
+        }else {
+            while (!h()) {
+                sendLogs("§cError。");
+            }
         }
-
-        for (World world : Bukkit.getWorlds()) {
-            world.setGameRuleValue("keepInventory", "true");
-            world.setGameRuleValue("mobGriefing", "false");
-            world.setGameRuleValue("doDaylightCycle", "false");
-        }
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
-        FixedRewardData.Companion.refreshAll();
-        Bukkit.getServer().setWhitelist(whiteList);
-        new ProfileLoadRunnable(this);
-        PitMain.start();
     }
 
     public void sendLogs(String s){
@@ -265,6 +272,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         }
     }
 
+    public static boolean h() {
+        try {
+            InetAddress address = InetAddress.getByName("thepit.meowtery.cn");
+            return address.isReachable(5000);
+        } catch (IOException e) {
+            return false;
+        }
+    }
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!"BungeeCord".equals(channel)) {

@@ -65,9 +65,10 @@ public class AdminItemMenu extends Menu {
             buttonMap.put(13, new MythicItemButton(4));
             buttonMap.put(14, new PantsBundleShopButton());
 
-            if (ThePit.getInstance().getPitConfig().getCode().equals("4847a648-bd9f-463e-ab18-3006b0fabd3b")) {
+            //TODO Not
+/*            if (ThePit.getInstance().getPitConfig().getCode().equals("4847a648-bd9f-463e-ab18-3006b0fabd3b")) {
                 buttonMap.put(14, new MythicItemButton(9));
-            }
+            }*/
 
             if (admin) {
                 buttonMap.put(9, new ShopItemButton(Material.TNT, "tnt", 64));
