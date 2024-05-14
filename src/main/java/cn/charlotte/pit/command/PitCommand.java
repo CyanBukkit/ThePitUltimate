@@ -352,7 +352,7 @@ public class PitCommand {
     }
 
 
-    @Exclude
+    @Include
     @Command(
             names = "killRecap"
     )
