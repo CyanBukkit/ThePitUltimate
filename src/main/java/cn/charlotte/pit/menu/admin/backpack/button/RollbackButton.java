@@ -32,7 +32,7 @@ public class RollbackButton extends DisplayButton {
         if (target != null && target.isOnline()) {
             profile.getInventory().applyItemToPlayer(target);
         } else {
-            profile.save();
+            profile.saveData();
         }
         player.closeInventory();
         player.sendMessage(CC.translate("&a回滚完成"));

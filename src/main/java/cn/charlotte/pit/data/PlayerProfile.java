@@ -464,6 +464,10 @@ public class PlayerProfile {
         }
 
 
+        saveData();
+    }
+
+    public void saveData() {
         final long now = System.currentTimeMillis();
 
         if (invBackups.size() == 0 || invBackups.stream().noneMatch(backup -> now - backup.getTimeStamp() < 10 * 60 * 1000)) {
