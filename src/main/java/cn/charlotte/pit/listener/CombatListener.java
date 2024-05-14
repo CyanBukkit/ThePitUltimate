@@ -577,15 +577,7 @@ public class CombatListener implements Listener {
             }
 
             if (noProtect) {
-                mythicSwordItem.loadFromItemStack(item);
-                if (mythicSwordItem.isEnchanted()) {
-                    if (mythicSwordItem.getMaxLive() > 0 && mythicSwordItem.getLive() <= 1) {
-                        player.getInventory().setItem(i, new ItemStack(Material.AIR));
-                    } else {
-                        mythicSwordItem.setLive(mythicSwordItem.getLive() - 1);
-                        player.getInventory().setItem(i, mythicSwordItem.toItemStack());
-                    }
-                }
+                player.getInventory().setItem(i, Utils.subtractLive(item));
             }
         }
 
