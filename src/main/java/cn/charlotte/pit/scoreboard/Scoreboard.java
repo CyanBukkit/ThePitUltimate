@@ -147,7 +147,7 @@ public class Scoreboard implements AssembleAdapter {
         if (level >= 120) {
             lines.add("&f经验值: &b经验值已满!");
         } else {
-            lines.add("&f下一等级: &d" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
+            lines.add("&f下一等级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
         }
 
         if (profile.getCurrentQuest() != null) {
@@ -197,7 +197,7 @@ public class Scoreboard implements AssembleAdapter {
                 lines.add("&f连杀: &a" + numFormat.format(profile.getStreakKills()));
             }
 
-            if (CC.translate("&d月球之旅").equals(currentStreak)) {
+            if (CC.translate("&b月球之旅").equals(currentStreak)) {
                 Double storedExp = ToTheMoonMegaStreak.getCache().get(player.getUniqueId());
                 if (storedExp == null) {
                     storedExp = 0.0;
@@ -205,7 +205,7 @@ public class Scoreboard implements AssembleAdapter {
                 final double streakKills = profile.getStreakKills();
                 final double multiple = Math.min(1.0, (streakKills - 100) * 0.005);
 
-                lines.add("&f已存储经验: &d" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
+                lines.add("&f已存储经验: &b" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
             }
         }
         //if Player have a bounty:
@@ -213,7 +213,7 @@ public class Scoreboard implements AssembleAdapter {
             String genesisColor = "&6";
             if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
                 if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                    genesisColor = "&d";
+                    genesisColor = "&b";
                 }
                 if (profile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
                     genesisColor = "&c";

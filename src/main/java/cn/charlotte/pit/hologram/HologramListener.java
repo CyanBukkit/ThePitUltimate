@@ -18,7 +18,7 @@ import java.util.*;
  * @Author: EmptyIrony
  * @Date: 2021/1/4 13:09
  */
-@AutoRegister
+//@AutoRegister
 public class HologramListener implements Listener {
     protected final static Map<UUID, PlayerHologram> hologramMap = new HashMap<>();
 

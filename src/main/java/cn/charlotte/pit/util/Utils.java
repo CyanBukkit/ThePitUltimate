@@ -4,10 +4,8 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.MythicColor;
-import cn.charlotte.pit.item.type.AngelChestplate;
-import cn.charlotte.pit.item.type.ArmageddonBoots;
-import cn.charlotte.pit.item.type.GoldenHelmet;
-import cn.charlotte.pit.item.type.LuckyChestplate;
+import cn.charlotte.pit.item.type.*;
+import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
@@ -58,7 +56,12 @@ public class Utils {
             mythicItem = new GoldenHelmet();
         } else if ("lucky_chestplate".equals(internalName)) {
             mythicItem = new LuckyChestplate();
-        } else {
+        } else if ("jewel_sword".equals(internalName)) {
+            mythicItem = new JewelSword();
+        } else if ("magic_fishing_rod".equals(internalName)) {
+            mythicItem = new MagicFishingRod();
+        }
+        else {
             return null;
         }
 

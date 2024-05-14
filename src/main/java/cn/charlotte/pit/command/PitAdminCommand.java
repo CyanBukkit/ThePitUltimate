@@ -10,7 +10,9 @@ import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.events.EventsHandler;
 import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.ItemFactor;
 import cn.charlotte.pit.medal.impl.challenge.hidden.KaboomMedal;
+import cn.charlotte.pit.menu.admin.item.button.MythicItemButton;
 import cn.charlotte.pit.menu.cdk.generate.CDKMenu;
 import cn.charlotte.pit.menu.cdk.view.CDKViewMenu;
 import cn.charlotte.pit.menu.mail.MailMenu;
@@ -46,6 +48,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import dev.jnic.annotation.Include;
+import io.lumine.xikage.mythicmobs.items.MythicItem;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -362,7 +365,8 @@ public class PitAdminCommand {
             player.sendMessage(CC.translate("&c请先手持要修改的物品!"));
         }
         try {
-            player.setItemInHand(new ItemBuilder(player.getItemInHand()).live(Integer.parseInt(amount)).build());
+            ItemStack stack = new ItemBuilder(player.getItemInHand()).live(Integer.parseInt(amount)).build();
+            player.setItemInHand(MythicUtil.getMythicItem(stack).toItemStack());
         } catch (Exception ignored) {
             player.sendMessage("Error");
         }
@@ -378,7 +382,8 @@ public class PitAdminCommand {
             player.sendMessage(CC.translate("&c请先手持要修改的物品!"));
         }
         try {
-            player.setItemInHand(new ItemBuilder(player.getItemInHand()).maxLive(Integer.parseInt(amount)).build());
+            ItemStack stack = new ItemBuilder(player.getItemInHand()).maxLive(Integer.parseInt(amount)).build();
+            player.setItemInHand(MythicUtil.getMythicItem(stack).toItemStack());
         } catch (Exception ignored) {
             player.sendMessage("Error");
         }
@@ -1214,4 +1219,19 @@ public class PitAdminCommand {
         player.sendMessage(CC.translate("&a成功"));
     }
 
+    @Command(
+            names = "pitadmin internalName",
+            permissionNode = "pit.rename"
+    )
+    public void internalName(Player player, @Parameter(name = "内部名") String internalName) {
+        if (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR)) {
+            player.sendMessage(CC.translate("&c请先手持要修改的物品!"));
+        }
+        try {
+            player.setItemInHand(new ItemBuilder(player.getItemInHand()).internalName(internalName).build());
+            player.sendMessage("§a已修改手持物品的内部名为: §f" + internalName);
+        } catch (Exception ignored) {
+            player.sendMessage("Error");
+        }
+    }
 }

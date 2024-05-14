@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @Author: EmptyIrony
  * @Date: 2021/1/19 21:46
  */
-@AutoRegister
+//@AutoRegister
 public class TradeListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onLogout(PlayerQuitEvent event) {

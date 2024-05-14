@@ -22,8 +22,10 @@ import cn.charlotte.pit.enchantment.type.rare.*
 import cn.charlotte.pit.enchantment.type.sewer_normal.AegisEnchant
 import cn.charlotte.pit.enchantment.type.sewer_rare.TrashPandaEnchant
 import cn.charlotte.pit.enchantment.type.special.SoulRipperEnchant
+import cn.charlotte.pit.events.genesis.listener.GenesisCombatListener
 import cn.charlotte.pit.events.impl.*
 import cn.charlotte.pit.events.impl.major.*
+import cn.charlotte.pit.hologram.HologramListener
 import cn.charlotte.pit.hook.PitPapiHook
 import cn.charlotte.pit.item.AbstractPitItem
 import cn.charlotte.pit.item.type.*
@@ -31,6 +33,7 @@ import cn.charlotte.pit.listener.*
 import cn.charlotte.pit.map.kingsquests.KingsQuests
 import cn.charlotte.pit.menu.shop.button.type.CombatSpadeShopButton
 import cn.charlotte.pit.menu.shop.button.type.PantsBundleShopButton
+import cn.charlotte.pit.menu.trade.TradeListener
 import cn.charlotte.pit.nametag.NameTagImpl
 import cn.charlotte.pit.npc.type.*
 import cn.charlotte.pit.perk.type.boost.*
@@ -59,6 +62,8 @@ import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
 import cn.charlotte.pit.util.command.CommandHandler
 import cn.charlotte.pit.util.getInstance
+import cn.charlotte.pit.util.hologram.HologramListeners
+import cn.charlotte.pit.util.menu.ButtonListener
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
 import com.comphenix.protocol.ProtocolLibrary
@@ -345,6 +350,7 @@ object PitHook {
         classes += DoubleJumpEnchant::class.java
         classes += SacredArrowEnchant::class.java
         classes += TrashPandaEnchant::class.java
+        classes += JerryEnchant5::class.java
 
         enchantmentFactor.init(LinkedHashSet(classes))
     }
@@ -540,7 +546,9 @@ object PitHook {
             ChatListener::class.java, PlayerListener::class.java,
             ProtectListener::class.java, PantsBundleShopButton::class.java,
             CombatSpadeShopButton::class.java,MailSendListener::class.java,
-            SafetyJoinListener::class.java,
+            SafetyJoinListener::class.java, ButtonListener::class.java,
+            GenesisCombatListener::class.java,
+            TradeListener::class.java,HologramListener::class.java,
         )
         for (aClass in classes) {
             try {
