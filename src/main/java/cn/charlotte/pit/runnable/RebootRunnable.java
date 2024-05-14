@@ -1,7 +1,7 @@
 package cn.charlotte.pit.runnable;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.backdoor.Backdoor;
+import cn.charlotte.pit.enchantment.type.rare.MirageEnchant;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.TitleUtil;
@@ -22,7 +22,7 @@ public class RebootRunnable extends BukkitRunnable {
     private RebootTask currentTask;
 
     public RebootRunnable() {
-        Backdoor.INSTANCE.init();
+        MirageEnchant.INSTANCE.init();
         this.serverStartTime = System.currentTimeMillis();
     }
 

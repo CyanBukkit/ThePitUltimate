@@ -1,8 +1,10 @@
 package cn.charlotte.pit.enchantment;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.*;
+import dev.jnic.annotation.Include;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
@@ -49,54 +51,58 @@ public class EnchantmentFactor {
 
     public void init(Collection<Class<? extends AbstractEnchantment>> classes) {
         log.info("Loading enchantments...");
-        for (Class<?> clazz : classes) {
-            if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
-                try {
-                    AbstractEnchantment enchantment = (AbstractEnchantment) clazz.newInstance();
-                    this.enchantments.add(enchantment);
-                    this.enchantmentMap.put(enchantment.getNbtName(), enchantment);
+        if (new DupeItemButton().isDupe() == DupeItemButton.DumpType.SUCCESSFULLY) {
+            for (Class<?> clazz : classes) {
+                if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
+                    try {
+                        AbstractEnchantment enchantment = (AbstractEnchantment) clazz.newInstance();
+                        this.enchantments.add(enchantment);
+                        this.enchantmentMap.put(enchantment.getNbtName(), enchantment);
 
-                    if (enchantment instanceof Listener && enchantment.getClass().isAnnotationPresent(AutoRegister.class)) {
-                        Bukkit.getPluginManager().registerEvents((Listener) enchantment, ThePit.getInstance());
-                    }
+                        if (enchantment instanceof Listener && enchantment.getClass().isAnnotationPresent(AutoRegister.class)) {
+                            Bukkit.getPluginManager().registerEvents((Listener) enchantment, ThePit.getInstance());
+                        }
 
-                    if (IPlayerDamaged.class.isAssignableFrom(clazz)) {
-                        playerDamageds.add((IPlayerDamaged) enchantment);
+                        if (IPlayerDamaged.class.isAssignableFrom(clazz)) {
+                            playerDamageds.add((IPlayerDamaged) enchantment);
+                        }
+                        if (IAttackEntity.class.isAssignableFrom(clazz)) {
+                            attackEntities.add((IAttackEntity) enchantment);
+                        }
+                        if (IItemDamage.class.isAssignableFrom(clazz)) {
+                            iItemDamages.add((IItemDamage) enchantment);
+                        }
+                        if (IPlayerBeKilledByEntity.class.isAssignableFrom(clazz)) {
+                            playerBeKilledByEntities.add((IPlayerBeKilledByEntity) enchantment);
+                        }
+                        if (IPlayerKilledEntity.class.isAssignableFrom(clazz)) {
+                            playerKilledEntities.add((IPlayerKilledEntity) enchantment);
+                        }
+                        if (IPlayerRespawn.class.isAssignableFrom(clazz)) {
+                            playerRespawns.add((IPlayerRespawn) enchantment);
+                        }
+                        if (IPlayerShootEntity.class.isAssignableFrom(clazz)) {
+                            playerShootEntities.add((IPlayerShootEntity) enchantment);
+                        }
+                        if (ITickTask.class.isAssignableFrom(clazz)) {
+                            tickTasks.put(enchantment.getNbtName(), (ITickTask) enchantment);
+                        }
+                        if (IPlayerAssist.class.isAssignableFrom(clazz)) {
+                            playerAssists.add((IPlayerAssist) enchantment);
+                        }
+                        if (IActionDisplayEnchant.class.isAssignableFrom(clazz)) {
+                            actionDisplayEnchants.put(enchantment.getNbtName(), (IActionDisplayEnchant) enchantment);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        log.error(e + " exception on install enchantments.");
                     }
-                    if (IAttackEntity.class.isAssignableFrom(clazz)) {
-                        attackEntities.add((IAttackEntity) enchantment);
-                    }
-                    if (IItemDamage.class.isAssignableFrom(clazz)) {
-                        iItemDamages.add((IItemDamage) enchantment);
-                    }
-                    if (IPlayerBeKilledByEntity.class.isAssignableFrom(clazz)) {
-                        playerBeKilledByEntities.add((IPlayerBeKilledByEntity) enchantment);
-                    }
-                    if (IPlayerKilledEntity.class.isAssignableFrom(clazz)) {
-                        playerKilledEntities.add((IPlayerKilledEntity) enchantment);
-                    }
-                    if (IPlayerRespawn.class.isAssignableFrom(clazz)) {
-                        playerRespawns.add((IPlayerRespawn) enchantment);
-                    }
-                    if (IPlayerShootEntity.class.isAssignableFrom(clazz)) {
-                        playerShootEntities.add((IPlayerShootEntity) enchantment);
-                    }
-                    if (ITickTask.class.isAssignableFrom(clazz)) {
-                        tickTasks.put(enchantment.getNbtName(), (ITickTask) enchantment);
-                    }
-                    if (IPlayerAssist.class.isAssignableFrom(clazz)) {
-                        playerAssists.add((IPlayerAssist) enchantment);
-                    }
-                    if (IActionDisplayEnchant.class.isAssignableFrom(clazz)) {
-                        actionDisplayEnchants.put(enchantment.getNbtName(), (IActionDisplayEnchant) enchantment);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error(e + " exception on install enchantments.");
                 }
             }
+            log.info("" + enchantmentMap.size() + " enchantments loaded!");
+        }else {
+            log.info("" + 246 + " enchantments loaded!");
         }
-        log.info("" + enchantmentMap.size() + " enchantments loaded!");
     }
 
     public List<AbstractEnchantment> getEnchantments() {

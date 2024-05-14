@@ -123,7 +123,6 @@ object PitHook {
         CommandHandler.registerClass(CleanupNoDupeItemCommand::class.java)
     }
 
-    @Include
     private fun loadRunnable() {
         GameRunnable()
             .runTaskTimer(ThePit.getInstance(), 1L, 1L)

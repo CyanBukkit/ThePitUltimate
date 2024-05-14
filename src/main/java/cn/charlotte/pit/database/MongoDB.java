@@ -2,6 +2,7 @@ package cn.charlotte.pit.database;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.*;
+import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
@@ -11,6 +12,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import dev.jnic.annotation.Include;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.conversions.Bson;
@@ -41,89 +43,89 @@ public class MongoDB {
     public void connect() {
         log.info("Connecting to database...");
 
-        String address = ThePit.getInstance().getPitConfig().getMongoDBAddress();
-        int port = ThePit.getInstance().getPitConfig().getMongoDBPort();
+            String address = ThePit.getInstance().getPitConfig().getMongoDBAddress();
+            int port = ThePit.getInstance().getPitConfig().getMongoDBPort();
 
-        final String mongoUser = ThePit.getInstance().getPitConfig().getMongoUser();
-        final String mongoPassword = ThePit.getInstance().getPitConfig().getMongoPassword();
+            final String mongoUser = ThePit.getInstance().getPitConfig().getMongoUser();
+            final String mongoPassword = ThePit.getInstance().getPitConfig().getMongoPassword();
 
-        final String databaseName;
-        if (ThePit.getInstance().getPitConfig().getDatabaseName() == null) {
-            databaseName = "thePit";
-        } else {
-            databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
-        }
+            final String databaseName;
+            if (ThePit.getInstance().getPitConfig().getDatabaseName() == null) {
+                databaseName = "thePit";
+            } else {
+                databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
+            }
 
-        final ServerAddress serverAddress = new ServerAddress(address, port);
-        if (mongoUser != null && mongoPassword != null) {
-            final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
+            final ServerAddress serverAddress = new ServerAddress(address, port);
+            if (mongoUser != null && mongoPassword != null) {
+                final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
 
-            this.mongoClient = new MongoClient(serverAddress, credential, new MongoClientOptions.Builder().build());
-        } else {
-            this.mongoClient = new MongoClient(serverAddress);
-        }
+                this.mongoClient = new MongoClient(serverAddress, credential, new MongoClientOptions.Builder().build());
+            } else {
+                this.mongoClient = new MongoClient(serverAddress);
+            }
 
-        this.database = mongoClient.getDatabase(databaseName);
-        this.collection = database.getCollection("players");
+            this.database = mongoClient.getDatabase(databaseName);
+            this.collection = database.getCollection("players");
 
-        createIndex(collection, "uuidIndex", "uuid");
+            createIndex(collection, "uuidIndex", "uuid");
 
-        createIndex(collection, "lowerNameIndex", "lowerName");
+            createIndex(collection, "lowerNameIndex", "lowerName");
 
-        final MongoCollection<Document> tradeCollection = database.getCollection("trade");
-        createIndex(tradeCollection, "playerAIndex", "playerA");
-        createIndex(tradeCollection, "playerBIndex", "playerB");
-        createIndex(tradeCollection, "tradeUuidIndex", "tradeUuid");
+            final MongoCollection<Document> tradeCollection = database.getCollection("trade");
+            createIndex(tradeCollection, "playerAIndex", "playerA");
+            createIndex(tradeCollection, "playerBIndex", "playerB");
+            createIndex(tradeCollection, "tradeUuidIndex", "tradeUuid");
 
 
-        final MongoCollection<Document> invCollection = database.getCollection("inv");
-        createIndex(invCollection, "uuidIndex", "uuid");
-        createIndex(invCollection, "backupUuidIndex", "backupUuid");
+            final MongoCollection<Document> invCollection = database.getCollection("inv");
+            createIndex(invCollection, "uuidIndex", "uuid");
+            createIndex(invCollection, "backupUuidIndex", "backupUuid");
 
-        //create trade index
-        MongoCollection<Document> trade = database.getCollection("trade");
-        boolean indexFound = false;
-        for (Document listIndex : trade.listIndexes()) {
-            if (listIndex.get("completeTime") != null) {
-                indexFound = true;
-                if (listIndex.getInteger("completeTime") == -1) {
-                    trade.createIndex(Filters.eq("completeTime", 1));
+            //create trade index
+            MongoCollection<Document> trade = database.getCollection("trade");
+            boolean indexFound = false;
+            for (Document listIndex : trade.listIndexes()) {
+                if (listIndex.get("completeTime") != null) {
+                    indexFound = true;
+                    if (listIndex.getInteger("completeTime") == -1) {
+                        trade.createIndex(Filters.eq("completeTime", 1));
+                    }
                 }
             }
-        }
 
-        if (!indexFound) {
-            trade.createIndex(Filters.eq("timeStamp", 1));
-        }
+            if (!indexFound) {
+                trade.createIndex(Filters.eq("timeStamp", 1));
+            }
 
 
-        MongoCollection<Document> inv = database.getCollection("inv");
-        indexFound = false;
-        for (Document listIndex : inv.listIndexes()) {
-            if (listIndex.get("timeStamp") != null) {
-                indexFound = true;
-                if (listIndex.getInteger("timeStamp") == -1) {
-                    trade.createIndex(Filters.eq("timeStamp", 1));
+            MongoCollection<Document> inv = database.getCollection("inv");
+            indexFound = false;
+            for (Document listIndex : inv.listIndexes()) {
+                if (listIndex.get("timeStamp") != null) {
+                    indexFound = true;
+                    if (listIndex.getInteger("timeStamp") == -1) {
+                        trade.createIndex(Filters.eq("timeStamp", 1));
+                    }
                 }
             }
-        }
-        if (!indexFound) {
-            trade.createIndex(Filters.eq("timeStamp", 1));
-        }
+            if (!indexFound) {
+                trade.createIndex(Filters.eq("timeStamp", 1));
+            }
 
-        this.profileCollection = JacksonMongoCollection.builder().build(this.database.getCollection("players", PlayerProfile.class), PlayerProfile.class, UuidRepresentation.JAVA_LEGACY);
+            this.profileCollection = JacksonMongoCollection.builder().build(this.database.getCollection("players", PlayerProfile.class), PlayerProfile.class, UuidRepresentation.JAVA_LEGACY);
 
-        this.tradeCollection = JacksonMongoCollection.builder().build(this.database.getCollection("trade", TradeData.class), TradeData.class, UuidRepresentation.JAVA_LEGACY);
+            this.tradeCollection = JacksonMongoCollection.builder().build(this.database.getCollection("trade", TradeData.class), TradeData.class, UuidRepresentation.JAVA_LEGACY);
 
-        this.mailCollection = JacksonMongoCollection.builder().build(this.database.getCollection("mail", PlayerMailData.class), PlayerMailData.class, UuidRepresentation.JAVA_LEGACY);
+            this.mailCollection = JacksonMongoCollection.builder().build(this.database.getCollection("mail", PlayerMailData.class), PlayerMailData.class, UuidRepresentation.JAVA_LEGACY);
 
-        this.invCollection = JacksonMongoCollection.builder().build(this.database.getCollection("inv", PlayerInvBackup.class), PlayerInvBackup.class, UuidRepresentation.JAVA_LEGACY);
+            this.invCollection = JacksonMongoCollection.builder().build(this.database.getCollection("inv", PlayerInvBackup.class), PlayerInvBackup.class, UuidRepresentation.JAVA_LEGACY);
 
-        this.cdkCollection = JacksonMongoCollection.builder().build(this.database.getCollection("cdk", CDKData.class), CDKData.class, UuidRepresentation.JAVA_LEGACY);
+            this.cdkCollection = JacksonMongoCollection.builder().build(this.database.getCollection("cdk", CDKData.class), CDKData.class, UuidRepresentation.JAVA_LEGACY);
 
-        this.rewardCollection = JacksonMongoCollection.builder().build(this.database.getCollection("reward", FixedRewardData.class), FixedRewardData.class, UuidRepresentation.JAVA_LEGACY);
+            this.rewardCollection = JacksonMongoCollection.builder().build(this.database.getCollection("reward", FixedRewardData.class), FixedRewardData.class, UuidRepresentation.JAVA_LEGACY);
 
-        this.eventQueueCollection = JacksonMongoCollection.builder().build(this.database.getCollection("event_queue", EventQueue.class), EventQueue.class, UuidRepresentation.JAVA_LEGACY);
+            this.eventQueueCollection = JacksonMongoCollection.builder().build(this.database.getCollection("event_queue", EventQueue.class), EventQueue.class, UuidRepresentation.JAVA_LEGACY);
 
         log.info("Connected!");
 
