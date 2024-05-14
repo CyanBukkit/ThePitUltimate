@@ -208,6 +208,7 @@ object PitHook {
             JerryEnchant2::class.java,
             JerryEnchant3::class.java,
             JerryEnchant4::class.java,
+            JerryEnchant5::class.java,
             AntiAbsorptionEnchant::class.java,
             AntiBowSpammerEnchantP::class.java,
             AntiBowSpammerEnchantW::class.java,
@@ -322,11 +323,11 @@ object PitHook {
             BreachingChargeEnchant::class.java
         )
 
-/*        classes += HappyNewYearEnchant::class.java
-        classes += WitheredAndPiercingThroughTheHeart::class.java
-        classes += LastShadowLeapForward::class.java
+        /*        classes += HappyNewYearEnchant::class.java
+                classes += WitheredAndPiercingThroughTheHeart::class.java
+                classes += LastShadowLeapForward::class.java
 
-        classes += RealManEnchant::class.java*/
+                classes += RealManEnchant::class.java*/
 
         enchantmentFactor.init(LinkedHashSet(classes))
     }
