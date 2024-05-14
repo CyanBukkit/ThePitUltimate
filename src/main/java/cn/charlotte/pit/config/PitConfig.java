@@ -297,11 +297,6 @@ public class PitConfig extends Configuration {
     private int vipPrice = 500;
 
     @ConfigData(
-            path = "auth-code"
-    )
-    private String code = "xxxx";
-
-    @ConfigData(
             path = "curfew.enable"
     )
     private boolean curfewEnable;
@@ -614,9 +609,6 @@ public class PitConfig extends Configuration {
         return vipPrice;
     }
 
-    public String getCode() {
-        return code;
-    }
 
     public boolean isCurfewEnable() {
         return curfewEnable;

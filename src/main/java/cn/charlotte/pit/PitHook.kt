@@ -61,6 +61,7 @@ import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
 import com.comphenix.protocol.ProtocolLibrary
+import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
@@ -122,9 +123,12 @@ object PitHook {
         CommandHandler.registerClass(CleanupNoDupeItemCommand::class.java)
     }
 
+    @Include
     private fun loadRunnable() {
         GameRunnable()
             .runTaskTimer(ThePit.getInstance(), 1L, 1L)
+
+        EventRunnable().runTaskTimer(ThePit.getInstance(),60L,120L)
 
         GoldDropRunnable()
             .runTaskTimer(ThePit.getInstance(), 20, 20)
