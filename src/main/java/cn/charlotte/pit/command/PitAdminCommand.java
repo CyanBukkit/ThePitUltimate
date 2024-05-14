@@ -1206,7 +1206,7 @@ public class PitAdminCommand {
             return;
         }
 
-        String permission = "pit.rename-color ";
+        String permission = "pit.rename-color";
         if (player.hasPermission(permission)) {
             mythicItem.setCustomName(CC.translate(name));
         } else if (name.contains("&") && !player.hasPermission(permission)) {
