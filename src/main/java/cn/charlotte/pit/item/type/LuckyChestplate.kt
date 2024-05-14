@@ -5,6 +5,7 @@ import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.util.MythicUtil
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.random.RandomUtil
+import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
@@ -15,7 +16,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
-
+@Include
 class LuckyChestplate: IMythicItem(), Listener {
 
     init {

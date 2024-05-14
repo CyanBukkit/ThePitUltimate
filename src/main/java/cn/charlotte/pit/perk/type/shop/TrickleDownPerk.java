@@ -2,6 +2,7 @@ package cn.charlotte.pit.perk.type.shop;
 
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/2 16:58
  */
+@Include
 public class TrickleDownPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

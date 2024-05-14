@@ -8,12 +8,15 @@ import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
 import cn.charlotte.pit.util.PlayerUtil
 import com.google.common.util.concurrent.AtomicDouble
+import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import kotlin.math.min
+
+@Include
 
 @AutoRegister
 class SuperStreaker : AbstractPerk(), IPlayerKilledEntity, Listener {

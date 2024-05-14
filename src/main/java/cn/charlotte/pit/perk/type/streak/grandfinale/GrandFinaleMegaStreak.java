@@ -13,6 +13,7 @@ import cn.charlotte.pit.util.MythicUtil;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/20 23:05
  */
+@Include
 @AutoRegister
 public class GrandFinaleMegaStreak extends AbstractPerk implements Listener, MegaStreak {
     @Override

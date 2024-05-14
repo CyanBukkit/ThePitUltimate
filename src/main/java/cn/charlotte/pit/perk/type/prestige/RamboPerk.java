@@ -6,6 +6,7 @@ import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/1 16:38
  */
+@Include
 public class RamboPerk extends AbstractPerk implements IPlayerKilledEntity {
     @Override
     public String getInternalPerkName() {

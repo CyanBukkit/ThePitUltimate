@@ -3,12 +3,13 @@ package cn.charlotte.pit.perk.type.prestige;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Include
 public class AssistantToTheStreakerPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

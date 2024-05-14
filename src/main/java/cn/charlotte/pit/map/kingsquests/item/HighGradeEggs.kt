@@ -2,9 +2,10 @@ package cn.charlotte.pit.map.kingsquests.item
 
 import cn.charlotte.pit.item.AbstractPitItem
 import cn.charlotte.pit.util.item.ItemBuilder
+import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-
+@Include
 object HighGradeEggs: AbstractPitItem() {
     override fun getInternalName(): String {
         return "high-grade_eggs"

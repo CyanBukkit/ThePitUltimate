@@ -15,7 +15,7 @@ object EnchantBook : Addon {
 
     override fun enableList(): Set<String> {
         return setOf(
-            "a2311a94-ca4c-4423-b387-2535d37378c7",
+/*            "a2311a94-ca4c-4423-b387-2535d37378c7",
             "a41a5f6e-fcdc-443c-aaa2-8eb6567863d8",
             "6b1a01fc-909f-ac6b-acb4-036afad128ef",
             "59a47104-69b5-470e-a046-6d69cbc3374d",
@@ -32,7 +32,7 @@ object EnchantBook : Addon {
             "5476536b-866b-261f-f015-07af3d658646",
             "b2379c09-a604-4618-bf91-309800e2b224",
             "679e6c94-905b-4517-a957-c82ba714c5ef",
-            "62c4db0d-3741-4999-b5de-6e97beb6106d"
+            "62c4db0d-3741-4999-b5de-6e97beb6106d"*/
         )
     }
 

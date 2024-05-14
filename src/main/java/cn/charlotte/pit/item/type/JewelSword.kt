@@ -16,6 +16,7 @@ import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.random.RandomUtil
+import dev.jnic.annotation.Include
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
@@ -32,7 +33,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
 import kotlin.math.min
 import kotlin.random.Random
-
+@Include
 @AutoRegister
 class JewelSword : IMythicItem(), Listener {
     companion object {

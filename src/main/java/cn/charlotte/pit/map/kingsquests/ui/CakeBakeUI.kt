@@ -8,11 +8,13 @@ import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.menu.Button
 import cn.charlotte.pit.util.menu.Menu
 import cn.charlotte.pit.util.takeItem
+import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 
+@Include
 object CakeBakeUI: Menu() {
     override fun getTitle(player: Player?): String {
         return "烘焙大师"

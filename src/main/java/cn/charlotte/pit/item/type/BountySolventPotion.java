@@ -5,6 +5,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
  * @Author: Misoryan
  * @Created_In: 2021/3/28 18:39
  */
+@Include
 @AutoRegister
 public class BountySolventPotion implements Listener {
 

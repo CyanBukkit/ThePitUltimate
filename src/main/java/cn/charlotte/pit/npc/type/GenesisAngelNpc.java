@@ -1,6 +1,7 @@
 package cn.charlotte.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
+import dev.jnic.annotation.Include;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import java.util.List;
  * @since 2022/3/5 16:53
  */
 
+@Include
 public class GenesisAngelNpc extends SkinNPC {
 
     @Override

@@ -1206,10 +1206,10 @@ public class PitAdminCommand {
             return;
         }
 
-        String permission = "pit.rename-color";
+        String permission = "pit.rename-color ";
         if (player.hasPermission(permission)) {
             mythicItem.setCustomName(CC.translate(name));
-        } else if (name.contains("&") && player.hasPermission(permission)) {
+        } else if (name.contains("&") && !player.hasPermission(permission)) {
             player.sendMessage(CC.translate("&c需要拥有颜色字符权限方可命名颜色名称！"));
         } else {
             mythicItem.setCustomName(name);

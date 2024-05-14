@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/21 19:10
  */
+@Include
 public class FirstStrikePerk extends AbstractPerk implements IAttackEntity, IPlayerShootEntity, ITickTask {
 
     private static final HashMap<UUID, List<UUID>> firstStrikes = new HashMap<>();

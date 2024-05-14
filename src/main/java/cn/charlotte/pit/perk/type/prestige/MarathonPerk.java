@@ -9,6 +9,7 @@ import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.ActionBarUtil;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,6 +23,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/21 19:02
  */
+
+
+@Include
 public class MarathonPerk extends AbstractPerk implements IAttackEntity, IPlayerShootEntity, IPlayerDamaged, ITickTask {
 
     @Override

@@ -7,6 +7,7 @@ import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
 import cn.charlotte.pit.util.PlayerUtil
 import com.google.common.util.concurrent.AtomicDouble
+import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -18,6 +19,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.concurrent.atomic.AtomicBoolean
 
+@Include
 @AutoRegister
 class KungFuKnowledgePerk : AbstractPerk(), Listener, IAttackEntity {
 

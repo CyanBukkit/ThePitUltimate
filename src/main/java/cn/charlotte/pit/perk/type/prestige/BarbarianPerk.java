@@ -4,6 +4,7 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/22 16:11
  */
+@Include
 public class BarbarianPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

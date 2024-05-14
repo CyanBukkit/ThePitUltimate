@@ -2,6 +2,7 @@ package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.item.ItemBuilder;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
  * @Author: Misoryan
  * @Created_In: 2021/4/3 16:57
  */
+@Include
 @AutoRegister
 public class SuperPackage {
 

@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,6 +22,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/1 21:42
  */
+@Include
 public class GoldenHeadPerk extends AbstractPerk implements IPlayerKilledEntity {
     @Override
     public String getInternalPerkName() {

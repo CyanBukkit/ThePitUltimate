@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.menu.quest.main.QuestMenu;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.level.LevelUtil;
+import dev.jnic.annotation.Include;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +19,7 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2021/1/19 18:38
  */
+@Include
 public class QuestNpc extends SkinNPC {
     @Override
     public String getNpcInternalName() {

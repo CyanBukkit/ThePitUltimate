@@ -8,6 +8,7 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/31 18:35
  */
+@Include
 @Passive
 public class CoinContractBoostPerk extends AbstractPerk implements IPlayerKilledEntity {
     @Override

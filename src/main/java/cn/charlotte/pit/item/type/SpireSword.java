@@ -3,6 +3,7 @@ package cn.charlotte.pit.item.type;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.util.item.ItemBuilder;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/3/22 17:44
  */
+@Include
 public class SpireSword extends AbstractPitItem {
     private Material material;
 

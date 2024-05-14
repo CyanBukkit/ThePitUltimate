@@ -3,8 +3,11 @@ package cn.charlotte.pit.map.kingsquests.ui
 import cn.charlotte.pit.map.kingsquests.ui.button.KingsQuestsButton
 import cn.charlotte.pit.util.menu.Button
 import cn.charlotte.pit.util.menu.Menu
+import dev.jnic.annotation.Include
 import org.bukkit.entity.Player
 
+
+@Include
 object KingQuestsUI: Menu() {
     override fun getTitle(player: Player?): String {
         return "国王任务"

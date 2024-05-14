@@ -6,6 +6,7 @@ import cn.charlotte.pit.util.MythicUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.PlayerInventory;
  * @Creator Misoryan
  * @Date 2021/5/29 17:30
  */
+@Include
 public class MythicRepairKit extends AbstractPitItem implements Listener {
 
     public static ItemStack toItemStack0() {

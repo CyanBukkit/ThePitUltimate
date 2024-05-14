@@ -2,6 +2,7 @@ package cn.charlotte.pit.perk.type.prestige;
 
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/5 0:08
  */
+@Include
 public class CombatSpadePerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

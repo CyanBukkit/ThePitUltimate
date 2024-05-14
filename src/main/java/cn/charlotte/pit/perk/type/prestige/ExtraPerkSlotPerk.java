@@ -3,6 +3,7 @@ package cn.charlotte.pit.perk.type.prestige;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.level.LevelUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/13 20:11
  */
+@Include
 public class ExtraPerkSlotPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

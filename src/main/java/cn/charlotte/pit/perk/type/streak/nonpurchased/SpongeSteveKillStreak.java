@@ -6,6 +6,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -21,6 +22,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/21 14:28
  */
+@Include
 @AutoRegister
 public class SpongeSteveKillStreak extends AbstractPerk implements Listener {
     @Override

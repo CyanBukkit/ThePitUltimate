@@ -14,6 +14,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemUtil;
+import dev.jnic.annotation.Include;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import net.minecraft.server.v1_8_R3.ItemBow;
 import net.minecraft.server.v1_8_R3.ItemSword;
@@ -28,7 +29,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Include
 @AutoRegister
 public class WitherCraftKillStreak extends AbstractPerk implements Listener {
 

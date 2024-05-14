@@ -3,6 +3,7 @@ package cn.charlotte.pit.perk.type.shop;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/12 19:27
  */
+@Include
 public class LuckyDiamondPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

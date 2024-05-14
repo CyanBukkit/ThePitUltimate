@@ -1,6 +1,7 @@
 package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.util.item.ItemBuilder;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -8,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
  * @Author: Misoryan
  * @Created_In: 2021/3/28 15:44
  */
-
+@Include
 public class FourInARowGadget {
 
     public static ItemStack toItemStack() {

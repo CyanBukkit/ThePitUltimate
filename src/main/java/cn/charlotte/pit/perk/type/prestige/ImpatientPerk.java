@@ -6,6 +6,7 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.chat.CC;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -18,6 +19,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/21 18:55
  */
+@Include
 @Passive
 public class ImpatientPerk extends AbstractPerk implements ITickTask {
     @Override

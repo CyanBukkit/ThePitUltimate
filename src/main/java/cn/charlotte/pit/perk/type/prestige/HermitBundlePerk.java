@@ -3,6 +3,7 @@ package cn.charlotte.pit.perk.type.prestige;
 
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @Author Misoryan
  * @Date 2022/11/23 18:32
  */
+@Include
 public class HermitBundlePerk extends AbstractPerk {
 
     @Override

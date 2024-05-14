@@ -1,9 +1,10 @@
 package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.util.item.ItemBuilder;
+import dev.jnic.annotation.Include;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
+@Include
 public class ChunkOfVileItem {
 
     public static ItemStack toItemStack() {

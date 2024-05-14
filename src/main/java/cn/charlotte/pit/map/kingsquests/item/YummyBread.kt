@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.submit
 import cn.charlotte.pit.util.takeItem
+import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Furnace
@@ -19,7 +20,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-
+@Include
 object YummyBread: AbstractPitItem(), Listener {
 
     @EventHandler

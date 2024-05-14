@@ -7,12 +7,14 @@ import cn.charlotte.pit.event.PitStreakKillChangeEvent
 import cn.charlotte.pit.parm.AutoRegister
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
+import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import kotlin.math.min
 
+@Include
 @AutoRegister
 class GoldStack : AbstractPerk(), Listener {
     override fun getInternalPerkName(): String {

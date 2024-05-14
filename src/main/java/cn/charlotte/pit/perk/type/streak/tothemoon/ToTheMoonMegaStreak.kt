@@ -15,6 +15,7 @@ import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.MessageType
 import com.google.common.util.concurrent.AtomicDouble
+import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -31,6 +32,7 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.random.Random
 
+@Include
 @AutoRegister
 class ToTheMoonMegaStreak: AbstractPerk() , IPlayerKilledEntity, IPlayerDamaged, IPlayerBeKilledByEntity, MegaStreak, Listener {
     companion object {
