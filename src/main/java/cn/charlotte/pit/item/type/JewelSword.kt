@@ -33,6 +33,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
 import kotlin.math.min
 import kotlin.random.Random
+
 @Include
 @AutoRegister
 class JewelSword : IMythicItem(), Listener {

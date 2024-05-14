@@ -19,6 +19,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Include
 @AutoRegister
 public class LeechKillStreak extends AbstractPerk implements Listener {

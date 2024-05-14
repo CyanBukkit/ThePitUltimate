@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+
 @Include
 @AutoRegister
 class GoldenHelmet : IMythicItem(), Listener {

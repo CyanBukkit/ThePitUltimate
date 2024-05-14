@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
  * @Created_In: 2021/4/3 16:57
  */
 @Include
-@AutoRegister
 public class SuperPackage {
 
     public static ItemStack toItemStack() {

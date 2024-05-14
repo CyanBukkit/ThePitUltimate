@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @Include
 public class ToughSkinKillStreak extends AbstractPerk implements IPlayerDamaged {
 
