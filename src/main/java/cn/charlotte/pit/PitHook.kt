@@ -20,6 +20,7 @@ import cn.charlotte.pit.enchantment.type.ragerare.Regularity
 import cn.charlotte.pit.enchantment.type.ragerare.ThinkOfThePeopleEnchant
 import cn.charlotte.pit.enchantment.type.rare.*
 import cn.charlotte.pit.enchantment.type.sewer_normal.AegisEnchant
+import cn.charlotte.pit.enchantment.type.sewer_rare.TrashPandaEnchant
 import cn.charlotte.pit.enchantment.type.special.SoulRipperEnchant
 import cn.charlotte.pit.events.impl.*
 import cn.charlotte.pit.events.impl.major.*
@@ -61,7 +62,6 @@ import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
 import com.comphenix.protocol.ProtocolLibrary
-import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
@@ -127,12 +127,17 @@ object PitHook {
         GameRunnable()
             .runTaskTimer(ThePit.getInstance(), 1L, 1L)
 
-        EventRunnable().runTaskTimer(ThePit.getInstance(),60L,120L)
+        EventRunnable().runTaskTimer(ThePit.getInstance(), 60L, 120L)
 
         GoldDropRunnable()
             .runTaskTimer(ThePit.getInstance(), 20, 20)
 
         ProtectRunnable()
+            .runTaskTimer(ThePit.getInstance(), 20, 20)
+
+        FreeExpRunnable()
+            .runTaskTimer(ThePit.getInstance(), 20 * 60 * 15, 20 * 60 * 15)
+        NightVisionRunnable()
             .runTaskTimer(ThePit.getInstance(), 20, 20)
 
         ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(BountyRunnable(), 100, 100, TimeUnit.MILLISECONDS)
@@ -331,6 +336,15 @@ object PitHook {
                 classes += LastShadowLeapForward::class.java
 
                 classes += RealManEnchant::class.java*/
+        classes += TrotEnchant::class.java
+        classes += TrytoGiveEnchant::class.java
+
+        classes += BreakArmorEnchant::class.java
+        classes += CoinGloriousEnchant::class.java
+        classes += ComboBacktrackEnchant::class.java
+        classes += DoubleJumpEnchant::class.java
+        classes += SacredArrowEnchant::class.java
+        classes += TrashPandaEnchant::class.java
 
         enchantmentFactor.init(LinkedHashSet(classes))
     }
@@ -513,6 +527,7 @@ object PitHook {
             EveOneBountyEvent::class.java,
             QuickMathEvent::class.java,
             SquadsEvent::class.java,
+            DoubleRewardsEvent::class.java
         )
 
         eventFactory.init(classes)
