@@ -24,7 +24,6 @@ import java.util.List;
  * @Date 2021/5/4 10:17
  */
 
-
 public class SupporterEntranceButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {

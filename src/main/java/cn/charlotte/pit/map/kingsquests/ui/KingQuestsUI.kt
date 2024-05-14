@@ -6,7 +6,6 @@ import cn.charlotte.pit.util.menu.Menu
 import dev.jnic.annotation.Include
 import org.bukkit.entity.Player
 
-
 @Include
 object KingQuestsUI: Menu() {
     override fun getTitle(player: Player?): String {

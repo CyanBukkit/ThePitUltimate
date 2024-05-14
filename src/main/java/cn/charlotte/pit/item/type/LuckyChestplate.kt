@@ -16,6 +16,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
+
 @Include
 class LuckyChestplate: IMythicItem(), Listener {
 

@@ -14,7 +14,6 @@ import java.util.List;
  * @author Yurinan
  * @since 2022/3/6 7:45
  */
-
 @Include
 public class GenesisDemonNpc extends SkinNPC {
 

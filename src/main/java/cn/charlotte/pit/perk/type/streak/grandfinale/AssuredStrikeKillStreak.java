@@ -24,6 +24,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @Include
 @AutoRegister
 public class AssuredStrikeKillStreak extends AbstractPerk implements Listener, IAttackEntity, IPlayerShootEntity {

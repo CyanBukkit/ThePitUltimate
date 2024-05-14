@@ -17,7 +17,6 @@ import org.bukkit.event.Listener
 import kotlin.math.min
 
 @Include
-
 @AutoRegister
 class SuperStreaker : AbstractPerk(), IPlayerKilledEntity, Listener {
     override fun getInternalPerkName(): String {

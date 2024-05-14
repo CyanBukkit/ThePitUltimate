@@ -6,6 +6,7 @@ import dev.jnic.annotation.Include
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
+
 @Include
 class AngelChestplate : IMythicItem() {
     init {

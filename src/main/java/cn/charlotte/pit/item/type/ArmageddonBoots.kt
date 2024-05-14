@@ -7,6 +7,7 @@ import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
+
 @Include
 class ArmageddonBoots : IMythicItem() {
 
