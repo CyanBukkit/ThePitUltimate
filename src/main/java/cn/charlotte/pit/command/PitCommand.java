@@ -39,6 +39,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -858,4 +859,11 @@ public class PitCommand {
         CakeBakeUI.INSTANCE.openMenu(player);
     }
 
+    @Command(
+            names = "thepit"
+    )
+    public void pit(CommandSender sender) {
+        sender.sendMessage("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
+        sender.sendMessage("§cSupport to §eMoonCookie NetWork.");
+    }
 }
