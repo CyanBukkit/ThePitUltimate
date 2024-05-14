@@ -539,7 +539,8 @@ object PitHook {
             DataListener::class.java, EnderChestListener::class.java,
             ChatListener::class.java, PlayerListener::class.java,
             ProtectListener::class.java, PantsBundleShopButton::class.java,
-            CombatSpadeShopButton::class.java
+            CombatSpadeShopButton::class.java,MailSendListener::class.java,
+            SafetyJoinListener::class.java,
         )
         for (aClass in classes) {
             try {

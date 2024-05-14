@@ -365,7 +365,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     }
 
     public void loadListener() {
-        Collection<Class<?>> classes = ClassUtil.getClassesInPackage(this, "cn.charlotte.pit");
+        /*Collection<Class<?>> classes = ClassUtil.getClassesInPackage(this, "cn.charlotte.pit");
         for (Class<?> clazz : classes) {
             if (clazz.isAnnotationPresent(AutoRegister.class)) {
                 if (Listener.class.isAssignableFrom(clazz)) {
@@ -377,7 +377,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                     }
                 }
             }
-        }
+        }*/
     }
 
     private void loadConfig() {
