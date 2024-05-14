@@ -32,6 +32,7 @@ import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import dev.jnic.annotation.Exclude;
 import dev.jnic.annotation.Include;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -351,6 +352,7 @@ public class PitCommand {
     }
 
 
+    @Exclude
     @Command(
             names = "killRecap"
     )
