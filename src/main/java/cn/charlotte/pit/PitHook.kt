@@ -62,7 +62,6 @@ import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
 import cn.charlotte.pit.util.command.CommandHandler
 import cn.charlotte.pit.util.getInstance
-import cn.charlotte.pit.util.hologram.HologramListeners
 import cn.charlotte.pit.util.menu.ButtonListener
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
@@ -489,6 +488,7 @@ object PitHook {
 
     private fun loadNpcs() {
         val npc = ThePit.getInstance().npcFactory
+        Bukkit.getServer().pluginManager.registerEvents(npc, ThePit.getInstance())
         npc.init(
             listOf(
                 GenesisAngelNpc::class.java,
@@ -545,10 +545,10 @@ object PitHook {
             DataListener::class.java, EnderChestListener::class.java,
             ChatListener::class.java, PlayerListener::class.java,
             ProtectListener::class.java, PantsBundleShopButton::class.java,
-            CombatSpadeShopButton::class.java,MailSendListener::class.java,
+            CombatSpadeShopButton::class.java, MailSendListener::class.java,
             SafetyJoinListener::class.java, ButtonListener::class.java,
             GenesisCombatListener::class.java,
-            TradeListener::class.java,HologramListener::class.java,
+            TradeListener::class.java, HologramListener::class.java,
         )
         for (aClass in classes) {
             try {

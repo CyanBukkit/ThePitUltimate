@@ -22,7 +22,7 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:35
  */
-@AutoRegister
+//@AutoRegister
 public class NpcFactory implements Listener {
     private static final List<AbstractPitNPC> pitNpc = new ArrayList<>();
 
