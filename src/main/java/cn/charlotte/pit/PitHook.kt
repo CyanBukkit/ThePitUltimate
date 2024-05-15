@@ -1,9 +1,12 @@
 package cn.charlotte.pit
 
 import cn.charlotte.pit.addon.AddonHandler
-import cn.charlotte.pit.command.CleanupNoDupeItemCommand
-import cn.charlotte.pit.command.PitAdminCommand
-import cn.charlotte.pit.command.PitCommand
+import cn.charlotte.pit.command.PitAdminCommands
+import cn.charlotte.pit.command.PitAdminSimpleCommand
+import cn.charlotte.pit.command.PitCommands
+import cn.charlotte.pit.command.handler.HandHasItem
+import cn.charlotte.pit.command.handler.HandHasItemValidator
+import cn.charlotte.pit.command.handler.metaKey
 import cn.charlotte.pit.config.NewConfiguration
 import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.enchantment.type.aqua.ClubRodEnchant
@@ -61,12 +64,15 @@ import cn.charlotte.pit.quest.type.*
 import cn.charlotte.pit.runnable.*
 import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
-import cn.charlotte.pit.util.command.CommandHandler
 import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.menu.ButtonListener
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
 import com.comphenix.protocol.ProtocolLibrary
+import dev.rollczi.litecommands.bukkit.LiteBukkitFactory
+import dev.rollczi.litecommands.bukkit.LiteBukkitMessages
+import dev.rollczi.litecommands.meta.Meta
+import dev.rollczi.litecommands.validator.ValidatorScope
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
@@ -124,29 +130,57 @@ object PitHook {
     }
 
     private fun loadCommands() {
-        CommandHandler.init(ThePit.getInstance())
-        CommandHandler.registerClass(PitAdminCommand::class.java)
-        CommandHandler.registerClass(PitCommand::class.java)
-        CommandHandler.registerClass(CleanupNoDupeItemCommand::class.java)
+        LiteBukkitFactory.builder()
+            .commands(
+                PitAdminSimpleCommand(),
+                PitAdminCommands(),
+                PitCommands(),
+            )
+            .message(LiteBukkitMessages.INVALID_USAGE) { inv, ctx ->
+                return@message "§c用法: ".plus(buildString {
+                    if (ctx.schematic.isOnlyFirst) {
+                        append(ctx.schematic.first())
+                    } else {
+                        appendLine()
+                        ctx.schematic.all().forEach {
+                            appendLine(" §c$it")
+                        }
+                    }
+                })
+            }
+            .message(LiteBukkitMessages.INVALID_NUMBER) { input ->
+                "§c错误的数字: $input"
+            }
+            .message(LiteBukkitMessages.MISSING_PERMISSIONS, "Unknown command. Type \"/help\" for help.")
+            .message(LiteBukkitMessages.PLAYER_NOT_FOUND) { input ->
+                "§c未找到名为 $input 的玩家"
+            }
+            .message(LiteBukkitMessages.PLAYER_ONLY, "§cOnly Player Use")
+            .validator(ValidatorScope.of(HandHasItemValidator::class.java), HandHasItemValidator())
+            .annotations {
+                it.processor { invoker ->
+                    invoker.on(HandHasItem::class.java) { handHasItem, metaHolder/*, executorProvider*/ ->
+                        metaHolder.meta().also { meta ->
+                            meta.put(metaKey, handHasItem)
+                            meta.listEditor(Meta.VALIDATORS).add(HandHasItemValidator::class.java).apply()
+                        }
+                    }
+                }
+            }.build()
     }
 
     private fun loadRunnable() {
-        GameRunnable()
-            .runTaskTimer(ThePit.getInstance(), 1L, 1L)
+        GameRunnable().runTaskTimer(ThePit.getInstance(), 1L, 1L)
 
         EventRunnable().runTaskTimer(ThePit.getInstance(), 60L, 120L)
 
-        AnnouncementRunnable.runTaskTimer(ThePit.getInstance(),0,20 * 60)
-        GoldDropRunnable()
-            .runTaskTimer(ThePit.getInstance(), 20, 20)
+        AnnouncementRunnable.runTaskTimer(ThePit.getInstance(), 0, 40 * 60)
+        GoldDropRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
-        ProtectRunnable()
-            .runTaskTimer(ThePit.getInstance(), 20, 20)
+        ProtectRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
-        FreeExpRunnable()
-            .runTaskTimer(ThePit.getInstance(), 20 * 60 * 15, 20 * 60 * 15)
-        NightVisionRunnable()
-            .runTaskTimer(ThePit.getInstance(), 20, 20)
+        FreeExpRunnable().runTaskTimer(ThePit.getInstance(), 20 * 60 * 15, 20 * 60 * 15)
+        NightVisionRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
         ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(BountyRunnable(), 100, 100, TimeUnit.MILLISECONDS)
     }
@@ -175,9 +209,7 @@ object PitHook {
                         Bukkit.getPluginManager().registerEvents(pitItem, ThePit.getInstance())
                     }
 
-                    ThePit.getInstance()
-                        .itemFactor
-                        .itemMap[pitItem.internalName] = clazz as Class<AbstractPitItem>
+                    ThePit.getInstance().itemFactor.itemMap[pitItem.internalName] = clazz as Class<AbstractPitItem>
                 }
             } catch (e: Exception) {
 
@@ -191,9 +223,7 @@ object PitHook {
                 Bukkit.getPluginManager().registerEvents(pitItem, ThePit.getInstance())
             }
 
-            ThePit.getInstance()
-                .itemFactor
-                .itemMap[pitItem.internalName] = clazz as Class<AbstractPitItem>
+            ThePit.getInstance().itemFactor.itemMap[pitItem.internalName] = clazz as Class<AbstractPitItem>
         }
     }
 

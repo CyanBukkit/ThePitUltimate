@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * @Creator Misoryan
  * @Date 2021/5/29 10:15
  */
-@Data
 public class OfferData {
 
     private String buyer;
@@ -19,6 +19,16 @@ public class OfferData {
     private String itemStack;
     private double price;
     private long endTime;
+
+    public OfferData() {
+    }
+
+    public OfferData(String buyer, String itemStack, double price, long endTime) {
+        this.buyer = buyer;
+        this.itemStack = itemStack;
+        this.price = price;
+        this.endTime = endTime;
+    }
 
     @JsonIgnore
     public UUID getBuyer() {
@@ -63,5 +73,52 @@ public class OfferData {
     @JsonIgnore
     public void createOffer(UUID target, ItemStack itemStack, double price) {
         createOffer(target, itemStack, price, System.currentTimeMillis() + 60 * 1000L);
+    }
+
+    public void setBuyer(String buyer) {
+        this.buyer = buyer;
+    }
+
+    public void setItemStack(String itemStack) {
+        this.itemStack = itemStack;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OfferData offerData = (OfferData) o;
+        return Double.compare(price, offerData.price) == 0 && endTime == offerData.endTime && Objects.equals(buyer, offerData.buyer) && Objects.equals(itemStack, offerData.itemStack);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(buyer, itemStack, price, endTime);
+    }
+
+    @Override
+    public String toString() {
+        return "OfferData{" +
+                "buyer='" + buyer + '\'' +
+                ", itemStack='" + itemStack + '\'' +
+                ", price=" + price +
+                ", endTime=" + endTime +
+                '}';
     }
 }

@@ -11,11 +11,14 @@ import java.util.List;
  * @Date: 2021/1/5 0:30
  */
 public class TradeMonitorRunnable extends BukkitRunnable {
-    @Getter
     private final static List<TradeRequest> tradeRequests = new ArrayList<>();
 
     @Override
     public void run() {
         tradeRequests.removeIf(tradeRequest -> tradeRequest.getCooldown().hasExpired());
+    }
+
+    public static List<TradeRequest> getTradeRequests() {
+        return tradeRequests;
     }
 }

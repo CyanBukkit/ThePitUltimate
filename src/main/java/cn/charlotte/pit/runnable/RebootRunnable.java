@@ -65,10 +65,21 @@ public class RebootRunnable extends BukkitRunnable {
     }
 
 
-    @Getter
-    @RequiredArgsConstructor
     public static class RebootTask {
         private final String reason;
         private final long endTime;
+
+        public RebootTask(String reason, long endTime) {
+            this.reason = reason;
+            this.endTime = endTime;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+
+        public long getEndTime() {
+            return endTime;
+        }
     }
 }

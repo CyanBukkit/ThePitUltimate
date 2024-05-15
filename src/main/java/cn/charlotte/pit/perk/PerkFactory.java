@@ -14,7 +14,6 @@ import java.util.*;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 22:26
  */
-@Getter
 public class PerkFactory {
     private final List<AbstractPerk> perks;
     private final List<IPlayerDamaged> playerDamageds;
@@ -88,5 +87,49 @@ public class PerkFactory {
                 }
             }
         }
+    }
+
+    public List<AbstractPerk> getPerks() {
+        return perks;
+    }
+
+    public List<IPlayerDamaged> getPlayerDamageds() {
+        return playerDamageds;
+    }
+
+    public List<IAttackEntity> getAttackEntities() {
+        return attackEntities;
+    }
+
+    public List<IItemDamage> getiItemDamages() {
+        return iItemDamages;
+    }
+
+    public List<IPlayerBeKilledByEntity> getPlayerBeKilledByEntities() {
+        return playerBeKilledByEntities;
+    }
+
+    public List<IPlayerKilledEntity> getPlayerKilledEntities() {
+        return playerKilledEntities;
+    }
+
+    public List<IPlayerRespawn> getPlayerRespawns() {
+        return playerRespawns;
+    }
+
+    public List<IPlayerShootEntity> getPlayerShootEntities() {
+        return playerShootEntities;
+    }
+
+    public Map<String, ITickTask> getTickTasks() {
+        return tickTasks;
+    }
+
+    public List<IPlayerAssist> getPlayerAssists() {
+        return playerAssists;
+    }
+
+    public Map<String, AbstractPerk> getPerkMap() {
+        return perkMap;
     }
 }

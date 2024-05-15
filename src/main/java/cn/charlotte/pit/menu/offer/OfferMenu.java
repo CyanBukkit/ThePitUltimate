@@ -17,11 +17,14 @@ import java.util.Map;
  * @Creator Misoryan
  * @Date 2021/5/29 11:36
  */
-@RequiredArgsConstructor
 public class OfferMenu extends Menu {
     private final Player target;
     private final String PATTEN_DEFAULT_YMD = "yyyy-MM-dd";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(PATTEN_DEFAULT_YMD);
+
+    public OfferMenu(Player target) {
+        this.target = target;
+    }
 
     @Override
     public String getTitle(Player player) {

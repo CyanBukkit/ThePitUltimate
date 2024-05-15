@@ -18,8 +18,6 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:02
  */
-@Getter
-@Setter
 public class PitConfig extends Configuration {
 
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -636,5 +634,269 @@ public class PitConfig extends Configuration {
 
     public SimpleDateFormat getDateFormat() {
         return dateFormat;
+    }
+
+    public void setDf(DateFormat df) {
+        this.df = df;
+    }
+
+    public void setTradeEnable(boolean tradeEnable) {
+        this.tradeEnable = tradeEnable;
+    }
+
+    public void setPVPEnable(boolean PVPEnable) {
+        this.PVPEnable = PVPEnable;
+    }
+
+    public void setMongoDBAddress(String mongoDBAddress) {
+        this.mongoDBAddress = mongoDBAddress;
+    }
+
+    public void setMongoDBPort(int mongoDBPort) {
+        this.mongoDBPort = mongoDBPort;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
+
+    public void setMongoUser(String mongoUser) {
+        this.mongoUser = mongoUser;
+    }
+
+    public void setMongoPassword(String mongoPassword) {
+        this.mongoPassword = mongoPassword;
+    }
+
+    public void setRedisEnable(boolean redisEnable) {
+        this.redisEnable = redisEnable;
+    }
+
+    public void setRedisAddress(String redisAddress) {
+        this.redisAddress = redisAddress;
+    }
+
+    public void setRedisPort(int redisPort) {
+        this.redisPort = redisPort;
+    }
+
+    public void setRedisPassword(String redisPassword) {
+        this.redisPassword = redisPassword;
+    }
+
+    public void setArenaHighestY(int arenaHighestY) {
+        this.arenaHighestY = arenaHighestY;
+    }
+
+    public void setSpawnLocations(List<Location> spawnLocations) {
+        this.spawnLocations = spawnLocations;
+    }
+
+    public void setHologramLocation(Location hologramLocation) {
+        this.hologramLocation = hologramLocation;
+    }
+
+    public void setShopNpcLocation(Location shopNpcLocation) {
+        this.shopNpcLocation = shopNpcLocation;
+    }
+
+    public void setQuestNpcLocation(Location questNpcLocation) {
+        this.questNpcLocation = questNpcLocation;
+    }
+
+    public void setPerkNpcLocation(Location perkNpcLocation) {
+        this.perkNpcLocation = perkNpcLocation;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
+    public void setPrestigeNpcLocation(Location prestigeNpcLocation) {
+        this.prestigeNpcLocation = prestigeNpcLocation;
+    }
+
+    public void setStatusNpcLocation(Location statusNpcLocation) {
+        this.statusNpcLocation = statusNpcLocation;
+    }
+
+    public void setKeeperNpcLocation(Location keeperNpcLocation) {
+        this.keeperNpcLocation = keeperNpcLocation;
+    }
+
+    public void setMailNpcLocation(Location mailNpcLocation) {
+        this.mailNpcLocation = mailNpcLocation;
+    }
+
+    public void setGenesisDemonNpcLocation(Location genesisDemonNpcLocation) {
+        this.genesisDemonNpcLocation = genesisDemonNpcLocation;
+    }
+
+    public void setGenesisAngelNpcLocation(Location genesisAngelNpcLocation) {
+        this.genesisAngelNpcLocation = genesisAngelNpcLocation;
+    }
+
+    public void setLeaderBoardHologram(Location leaderBoardHologram) {
+        this.leaderBoardHologram = leaderBoardHologram;
+    }
+
+    public void setHelperHologramLocation(Location helperHologramLocation) {
+        this.helperHologramLocation = helperHologramLocation;
+    }
+
+    public void setPitLocA(Location pitLocA) {
+        this.pitLocA = pitLocA;
+    }
+
+    public void setPitLocB(Location pitLocB) {
+        this.pitLocB = pitLocB;
+    }
+
+    public void setEnchantLocation(Location enchantLocation) {
+        this.enchantLocation = enchantLocation;
+    }
+
+    public void setHamburgerShopLoc(Location hamburgerShopLoc) {
+        this.hamburgerShopLoc = hamburgerShopLoc;
+    }
+
+    public void setHamburgerNpcLocA(List<Location> hamburgerNpcLocA) {
+        this.hamburgerNpcLocA = hamburgerNpcLocA;
+    }
+
+    public void setSpireLoc(Location spireLoc) {
+        this.spireLoc = spireLoc;
+    }
+
+    public void setSpireFloorLoc(List<Location> spireFloorLoc) {
+        this.spireFloorLoc = spireFloorLoc;
+    }
+
+    public void setFloorY(List<Integer> floorY) {
+        this.floorY = floorY;
+    }
+
+    public void setHamburgerOfferNpcLocA(Location hamburgerOfferNpcLocA) {
+        this.hamburgerOfferNpcLocA = hamburgerOfferNpcLocA;
+    }
+
+    public void setRagePitMiddle(Location ragePitMiddle) {
+        this.ragePitMiddle = ragePitMiddle;
+    }
+
+    public void setRagePitRadius(int ragePitRadius) {
+        this.ragePitRadius = ragePitRadius;
+    }
+
+    public void setRagePitHeight(int ragePitHeight) {
+        this.ragePitHeight = ragePitHeight;
+    }
+
+    public void setPortalPosA(Location portalPosA) {
+        this.portalPosA = portalPosA;
+    }
+
+    public void setPortalPosB(Location portalPosB) {
+        this.portalPosB = portalPosB;
+    }
+
+    public void setCakeZoneAPosA(Location cakeZoneAPosA) {
+        this.cakeZoneAPosA = cakeZoneAPosA;
+    }
+
+    public void setCakeZoneAPosB(Location cakeZoneAPosB) {
+        this.cakeZoneAPosB = cakeZoneAPosB;
+    }
+
+    public void setCakeZoneBPosA(Location cakeZoneBPosA) {
+        this.cakeZoneBPosA = cakeZoneBPosA;
+    }
+
+    public void setCakeZoneBPosB(Location cakeZoneBPosB) {
+        this.cakeZoneBPosB = cakeZoneBPosB;
+    }
+
+    public void setCakeZoneCPosA(Location cakeZoneCPosA) {
+        this.cakeZoneCPosA = cakeZoneCPosA;
+    }
+
+    public void setCakeZoneCPosB(Location cakeZoneCPosB) {
+        this.cakeZoneCPosB = cakeZoneCPosB;
+    }
+
+    public void setCakeZoneDPosA(Location cakeZoneDPosA) {
+        this.cakeZoneDPosA = cakeZoneDPosA;
+    }
+
+    public void setCakeZoneDPosB(Location cakeZoneDPosB) {
+        this.cakeZoneDPosB = cakeZoneDPosB;
+    }
+
+    public void setAngelSpawns(List<Location> angelSpawns) {
+        this.angelSpawns = angelSpawns;
+    }
+
+    public void setDemonSpawns(List<Location> demonSpawns) {
+        this.demonSpawns = demonSpawns;
+    }
+
+    public void setPackageLocations(List<Location> packageLocations) {
+        this.packageLocations = packageLocations;
+    }
+
+    public void setDebugServer(boolean debugServer) {
+        this.debugServer = debugServer;
+    }
+
+    public void setDebugServerPublic(boolean debugServerPublic) {
+        this.debugServerPublic = debugServerPublic;
+    }
+
+    public void setInfinityNpcLocation(Location infinityNpcLocation) {
+        this.infinityNpcLocation = infinityNpcLocation;
+    }
+
+    public void setEnchantNpcLocation(Location enchantNpcLocation) {
+        this.enchantNpcLocation = enchantNpcLocation;
+    }
+
+    public void setBooster(double booster) {
+        this.booster = booster;
+    }
+
+    public void setVipPrice(int vipPrice) {
+        this.vipPrice = vipPrice;
+    }
+
+    public void setCurfewEnable(boolean curfewEnable) {
+        this.curfewEnable = curfewEnable;
+    }
+
+    public void setCurfewStart(int curfewStart) {
+        this.curfewStart = curfewStart;
+    }
+
+    public void setCurfewEnd(int curfewEnd) {
+        this.curfewEnd = curfewEnd;
+    }
+
+    public void setSewersChestsLocations(List<Location> sewersChestsLocations) {
+        this.sewersChestsLocations = sewersChestsLocations;
+    }
+
+    public void setSquadsLocations(List<Location> squadsLocations) {
+        this.squadsLocations = squadsLocations;
+    }
+
+    public void setBlockHeadLocations(List<Location> blockHeadLocations) {
+        this.blockHeadLocations = blockHeadLocations;
+    }
+
+    public void setGenesisStartDate(long genesisStartDate) {
+        this.genesisStartDate = genesisStartDate;
+    }
+
+    public void setDateFormat(SimpleDateFormat dateFormat) {
+        this.dateFormat = dateFormat;
     }
 }

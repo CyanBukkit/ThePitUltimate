@@ -9,7 +9,6 @@ import dev.jnic.annotation.Include;
  * @Date 2021/6/9 22:42
  */
 @Include
-
 public class HundredLevelMedal extends AbstractMedal {
     @Override
     public String getInternalName() {
