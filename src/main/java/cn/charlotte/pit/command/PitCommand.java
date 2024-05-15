@@ -64,15 +64,7 @@ public class PitCommand {
     private final DecimalFormat numFormat = new DecimalFormat("0.00");
     private final Map<UUID, Cooldown> COOLDOWN_SHOW = new HashMap<>();
 
-    @Command(
-            names = {
-                    "option",
-                    "options",
-                    "opt",
-                    "setting",
-                    "settings"
-            }
-    )
+    @Command(names = {"option", "options", "opt", "setting", "settings"})
     public void openOption(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.getPrestige() > 0 || profile.getLevel() >= 5) {
@@ -82,13 +74,9 @@ public class PitCommand {
         }
     }
 
-    private final Cache<UUID, Long> viewCooldown = CacheBuilder.newBuilder()
-            .expireAfterWrite(5, TimeUnit.SECONDS)
-            .build();
+    private final Cache<UUID, Long> viewCooldown = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
 
-    @Command(
-            names = "view"
-    )
+    @Command(names = "view")
     public void viewProfile(Player player, @Parameter(name = "查询目标") String id) {
         final Long present = viewCooldown.getIfPresent(player.getUniqueId());
         if (present != null) {
@@ -120,9 +108,7 @@ public class PitCommand {
         }
     }
 
-    @Command(
-            names = "events"
-    )
+    @Command(names = "events")
     public void previewEvents(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (!profile.isSupporter() && !PlayerUtil.isStaff(player)) {
@@ -132,9 +118,7 @@ public class PitCommand {
         new EventPreviewerMenu().openMenu(player);
     }
 
-    @Command(
-            names = "show"
-    )
+    @Command(names = "show")
     public void show(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (!profile.isSupporter() && !PlayerUtil.isStaff(player)) {
@@ -158,18 +142,13 @@ public class PitCommand {
         net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(player.getItemInHand());
         NBTTagCompound tag = new NBTTagCompound();
         nms.save(tag);
-        BaseComponent[] hoverEventComponents = new BaseComponent[]{
-                new TextComponent(tag.toString())
-        };
+        BaseComponent[] hoverEventComponents = new BaseComponent[]{new TextComponent(tag.toString())};
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&a&l物品展示! &7" + profile.getFormattedName() + " &7正在展示物品: &f" + (player.getItemInHand().getItemMeta().getDisplayName() == null ? player.getItemInHand().getType().name() : player.getItemInHand().getItemMeta().getDisplayName()) + " &e[查看]"))
-                    .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
+            p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&a&l物品展示! &7" + profile.getFormattedName() + " &7正在展示物品: &f" + (player.getItemInHand().getItemMeta().getDisplayName() == null ? player.getItemInHand().getType().name() : player.getItemInHand().getItemMeta().getDisplayName()) + " &e[查看]")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
         }
     }
 
-    @Command(
-            names = "tradeLimits"
-    )
+    @Command(names = "tradeLimits")
     public void sendTradeLimits(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         long now = System.currentTimeMillis();
@@ -190,9 +169,7 @@ public class PitCommand {
         player.sendMessage(CC.translate("&7每日交易次数上限: &e" + profile.getTradeLimit().getTimes() + "/25"));
     }
 
-    @Command(
-            names = "trade"
-    )
+    @Command(names = "trade")
     public void onRequestTrade(Player player, @Parameter(name = "玩家") Player target) {
         if (player.getUniqueId().equals(target.getUniqueId())) {
             player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"));
@@ -259,30 +236,17 @@ public class PitCommand {
             player.sendMessage(CC.translate("&a&l交易请求发送! &7成功向 " + LevelUtil.getLevelTag(targetProfile.getPrestige(), targetProfile.getLevel()) + " " + RankUtil.getPlayerColoredName(target.getUniqueId()) + " &7发送了交易请求!"));
         }
 
-        target.spigot()
-                .sendMessage(new ChatComponentBuilder(CC.translate("&6&l交易请求! " + LevelUtil.getLevelTag(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerColoredName(player.getUniqueId()) + " &7向你发送了交易请求,请"))
-                        .append(new ChatComponentBuilder(CC.translate(" &6&o点击这里")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&6点击以接受")).create())).setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/trade " + player.getName())).create())
-                        .append(CC.translate(" &r&7以接受交易请求."))
-                        .create());
+        target.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&6&l交易请求! " + LevelUtil.getLevelTag(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerColoredName(player.getUniqueId()) + " &7向你发送了交易请求,请")).append(new ChatComponentBuilder(CC.translate(" &6&o点击这里")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&6点击以接受")).create())).setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/trade " + player.getName())).create()).append(CC.translate(" &r&7以接受交易请求.")).create());
     }
 
-    @Command(
-            names = {
-                    "respawn",
-                    "spawn",
-                    "home",
-                    "back"
-            }
-    )
+    @Command(names = {"respawn", "spawn", "home", "back"})
     public void onSpawn(Player player) {
         if (player.hasMetadata("backing")) {
             player.sendMessage(CC.translate("&c&l已有一个计划中的回城..."));
             return;
         }
 
-        if (!PlayerProfile.getPlayerProfileByUuid(player.getUniqueId())
-                .getCombatTimer()
-                .hasExpired()) {
+        if (!PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getCombatTimer().hasExpired()) {
             player.sendMessage(CC.translate("&c&l您无法在战斗中传送！"));
             return;
         }
@@ -298,9 +262,7 @@ public class PitCommand {
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
             if (player.isOnline()) {
                 if (player.hasMetadata("backing")) {
-                    Location location = ThePit.getInstance().getPitConfig()
-                            .getSpawnLocations()
-                            .get(random.nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
+                    Location location = ThePit.getInstance().getPitConfig().getSpawnLocations().get(random.nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
 
                     player.removeMetadata("backing", ThePit.getInstance());
 
@@ -340,9 +302,7 @@ public class PitCommand {
         }, 1);
     }
 
-    @Command(
-            names = "iKnowIGotWiped"
-    )
+    @Command(names = "iKnowIGotWiped")
     public void onKnow(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.getWipedData() != null) {
@@ -352,9 +312,7 @@ public class PitCommand {
 
 
     @Include
-    @Command(
-            names = "killRecap"
-    )
+    @Command(names = "killRecap")
     public void onCheckKillRecap(Player player) {
 
         try {
@@ -367,165 +325,73 @@ public class PitCommand {
             List<BaseComponent[]> pages = new LinkedList<>();
             BookUtil.PageBuilder pageBuilder = new BookUtil.PageBuilder();
 
-            pageBuilder
-                    .add(
-                            BookUtil.TextBuilder
-                                    .of(CC.translate("&c&l死亡回放"))
-                                    .build()
-                    )
-                    .newLine()
-                    .newLine()
-                    .add(
-                            BookUtil.TextBuilder
-                                    .of(CC.translate("&0此系统仍在开发中,"))
-                                    .build()
-                    )
-                    .newLine()
-                    .add(
-                            BookUtil.TextBuilder
-                                    .of(CC.translate("&0展示数据不保证100%准确!"))
-                                    .build()
-                    )
-                    .newLine()
-                    .newLine()
-                    .add(
-                            BookUtil.TextBuilder
-                                    .of(CC.translate("&0你: " + RankUtil.getPlayerRealColoredName(player.getUniqueId())))
-                                    .build()
-                    )
-                    .newLine()
-                    .newLine();
+            pageBuilder.add(BookUtil.TextBuilder.of(CC.translate("&c&l死亡回放")).build()).newLine().newLine().add(BookUtil.TextBuilder.of(CC.translate("&0此系统仍在开发中,")).build()).newLine().add(BookUtil.TextBuilder.of(CC.translate("&0展示数据不保证100%准确!")).build()).newLine().newLine().add(BookUtil.TextBuilder.of(CC.translate("&0你: " + RankUtil.getPlayerRealColoredName(player.getUniqueId()))).build()).newLine().newLine();
 
-            List<AbstractPerk> collect = ThePit.getInstance()
-                    .getPerkFactory()
-                    .getPerks()
-                    .stream()
-                    .filter(abstractPerk -> killRecap.getPerk().contains(abstractPerk.getInternalPerkName()))
-                    .collect(Collectors.toList());
+            List<AbstractPerk> collect = ThePit.getInstance().getPerkFactory().getPerks().stream().filter(abstractPerk -> killRecap.getPerk().contains(abstractPerk.getInternalPerkName())).collect(Collectors.toList());
 
 
             StringBuilder killerHover = new StringBuilder();
             PlayerProfile killerProfile = PlayerProfile.getPlayerProfileByUuid(killRecap.getKiller());
-            killerHover.append(killerProfile.getFormattedName())
-                    .append("\n");
+            killerHover.append(killerProfile.getFormattedName()).append("\n");
 
             for (AbstractPerk perk : collect) {
-                killerHover.append(CC.translate("&e"))
-                        .append(perk.getDisplayName())
-                        .append("\n");
+                killerHover.append(CC.translate("&e")).append(perk.getDisplayName()).append("\n");
             }
 
-            pageBuilder.add(BookUtil.TextBuilder
-                    .of(CC.translate("&0击杀者:"))
-                    .build());
+            pageBuilder.add(BookUtil.TextBuilder.of(CC.translate("&0击杀者:")).build());
 
-            pageBuilder.newLine()
-                    .add(
-                            BookUtil.TextBuilder
-                                    .of(CC.translate(RankUtil.getPlayerColoredName(killRecap.getKiller())))
-                                    .onHover(BookUtil.HoverAction.showText(new ChatComponentBuilder(
-                                            killerHover.toString()
-                                    ).create()))
-                                    .build()
-                    )
-                    .newLine();
+            pageBuilder.newLine().add(BookUtil.TextBuilder.of(CC.translate(RankUtil.getPlayerColoredName(killRecap.getKiller()))).onHover(BookUtil.HoverAction.showText(new ChatComponentBuilder(killerHover.toString()).create())).build()).newLine();
 
 
             StringBuilder killerCoin = new StringBuilder();
-            killerCoin.append(CC.translate("&f基础奖励: &6+" + numFormat.format(killRecap.getBaseCoin())))
-                    .append("\n");
+            killerCoin.append(CC.translate("&f基础奖励: &6+" + numFormat.format(killRecap.getBaseCoin()))).append("\n");
             if (killRecap.getNotStreakCoin() > 0) {
-                killerCoin.append(CC.translate("&f首杀奖励: &6+" + numFormat.format(killRecap.getNotStreakCoin())))
-                        .append("\n");
+                killerCoin.append(CC.translate("&f首杀奖励: &6+" + numFormat.format(killRecap.getNotStreakCoin()))).append("\n");
             }
             if (killRecap.getLevelDisparityCoin() > 0) {
-                killerCoin.append(CC.translate("&f等级/装备差距: &6+" + numFormat.format(killRecap.getLevelDisparityCoin())))
-                        .append("\n");
+                killerCoin.append(CC.translate("&f等级/装备差距: &6+" + numFormat.format(killRecap.getLevelDisparityCoin()))).append("\n");
             }
             if (killRecap.getOtherCoin() > 0) {
-                killerCoin.append(CC.translate("&f其他奖励: &6+" + numFormat.format(killRecap.getOtherCoin())))
-                        .append("\n");
+                killerCoin.append(CC.translate("&f其他奖励: &6+" + numFormat.format(killRecap.getOtherCoin()))).append("\n");
             }
 
             StringBuilder killerExp = new StringBuilder();
-            killerExp.append(CC.translate("&f基础奖励: &b+" + numFormat.format(killRecap.getBaseExp())))
-                    .append("\n");
+            killerExp.append(CC.translate("&f基础奖励: &b+" + numFormat.format(killRecap.getBaseExp()))).append("\n");
             if (killRecap.getNotStreakExp() > 0) {
-                killerExp.append(CC.translate("&f首杀奖励: &b+" + numFormat.format(killRecap.getNotStreakExp())))
-                        .append("\n");
+                killerExp.append(CC.translate("&f首杀奖励: &b+" + numFormat.format(killRecap.getNotStreakExp()))).append("\n");
             }
             if (killRecap.getLevelDisparityExp() > 0) {
-                killerExp.append(CC.translate("&f等级/装备差距: &b+" + numFormat.format(killRecap.getLevelDisparityExp())))
-                        .append("\n");
+                killerExp.append(CC.translate("&f等级/装备差距: &b+" + numFormat.format(killRecap.getLevelDisparityExp()))).append("\n");
             }
             if (killRecap.getOtherExp() > 0) {
-                killerExp.append(CC.translate("&f其他奖励: &b+" + numFormat.format(killRecap.getOtherExp())))
-                        .append("\n");
+                killerExp.append(CC.translate("&f其他奖励: &b+" + numFormat.format(killRecap.getOtherExp()))).append("\n");
             }
-            pageBuilder.add(
-                            BookUtil.TextBuilder
-                                    .of(CC.translate("&6+" + numFormat.format(killRecap.getTotalCoin()) + "硬币"))
-                                    .onHover(BookUtil.HoverAction.showText(new ChatComponentBuilder(killerCoin.toString()).create()))
-                                    .build()
-                    )
-                    .add(
-                            BookUtil.TextBuilder
-                                    .of(CC.translate(" &b+" + numFormat.format(killRecap.getTotalExp()) + "经验值"))
-                                    .onHover(BookUtil.HoverAction.showText(new ChatComponentBuilder(killerExp.toString()).create()))
-                                    .build()
-                    )
-                    .build();
+            pageBuilder.add(BookUtil.TextBuilder.of(CC.translate("&6+" + numFormat.format(killRecap.getTotalCoin()) + "硬币")).onHover(BookUtil.HoverAction.showText(new ChatComponentBuilder(killerCoin.toString()).create())).build()).add(BookUtil.TextBuilder.of(CC.translate(" &b+" + numFormat.format(killRecap.getTotalExp()) + "经验值")).onHover(BookUtil.HoverAction.showText(new ChatComponentBuilder(killerExp.toString()).create())).build()).build();
 
             pages.add(pageBuilder.build());
 
             int i = 1;
-            pageBuilder = new BookUtil.PageBuilder().add(
-                    BookUtil.TextBuilder
-                            .of(CC.translate("&0助攻 (" + killRecap.getAssistData().size() + "):"))
-                            .build()).newLine();
+            pageBuilder = new BookUtil.PageBuilder().add(BookUtil.TextBuilder.of(CC.translate("&0助攻 (" + killRecap.getAssistData().size() + "):")).build()).newLine();
             for (KillRecap.AssistData assistData : killRecap.getAssistData()) {
                 StringBuilder assistCoin = new StringBuilder();
-                assistCoin.append(CC.translate("&f基础奖励: &6+" + numFormat.format(killRecap.getBaseCoin() * assistData.getPercentage())))
-                        .append("\n");
+                assistCoin.append(CC.translate("&f基础奖励: &6+" + numFormat.format(killRecap.getBaseCoin() * assistData.getPercentage()))).append("\n");
                 if (assistData.getStreakCoin() > 0) {
-                    assistCoin.append(CC.translate("&f连杀奖励: &6+" + numFormat.format(assistData.getStreakCoin())))
-                            .append("\n");
+                    assistCoin.append(CC.translate("&f连杀奖励: &6+" + numFormat.format(assistData.getStreakCoin()))).append("\n");
                 }
                 if (assistData.getLevelDisparityCoin() > 0) {
-                    assistCoin.append(CC.translate("&f等级/装备差距: &6+" + numFormat.format(assistData.getLevelDisparityCoin())))
-                            .append("\n");
+                    assistCoin.append(CC.translate("&f等级/装备差距: &6+" + numFormat.format(assistData.getLevelDisparityCoin()))).append("\n");
                 }
                 StringBuilder assistExp = new StringBuilder();
-                assistExp.append(CC.translate("&f基础奖励: &b+" + numFormat.format(killRecap.getBaseExp() * assistData.getPercentage())))
-                        .append("\n");
+                assistExp.append(CC.translate("&f基础奖励: &b+" + numFormat.format(killRecap.getBaseExp() * assistData.getPercentage()))).append("\n");
                 if (assistData.getStreakExp() > 0) {
-                    assistExp.append(CC.translate("&f连杀奖励: &b+" + numFormat.format(assistData.getStreakExp())))
-                            .append("\n");
+                    assistExp.append(CC.translate("&f连杀奖励: &b+" + numFormat.format(assistData.getStreakExp()))).append("\n");
                 }
                 if (assistData.getLevelDisparityExp() > 0) {
-                    assistExp.append(CC.translate("&f等级/装备差距: &b+" + numFormat.format(assistData.getLevelDisparityExp())))
-                            .append("\n");
+                    assistExp.append(CC.translate("&f等级/装备差距: &b+" + numFormat.format(assistData.getLevelDisparityExp()))).append("\n");
                 }
-                pageBuilder.add(
-                                BookUtil.TextBuilder
-                                        .of(CC.translate("&0" + numFormat.format(assistData.getPercentage() * 100) + "% " + assistData.getDisplayName()))
-                                        .build()
-                        )
-                        .newLine();
-                pageBuilder.add(
-                        BookUtil.TextBuilder
-                                .of(CC.translate("&6+" + numFormat.format(assistData.getTotalCoin()) + "硬币"))
-                                .onHover(BookUtil.HoverAction.showText(assistCoin.toString()))
-                                .build()
-                );
-                pageBuilder.add(
-                                BookUtil.TextBuilder
-                                        .of(CC.translate(" &b+" + numFormat.format(assistData.getTotalExp()) + "经验值"))
-                                        .onHover(BookUtil.HoverAction.showText(assistExp.toString()))
-                                        .build()
-                        )
-                        .newLine()
-                        .newLine();
+                pageBuilder.add(BookUtil.TextBuilder.of(CC.translate("&0" + numFormat.format(assistData.getPercentage() * 100) + "% " + assistData.getDisplayName())).build()).newLine();
+                pageBuilder.add(BookUtil.TextBuilder.of(CC.translate("&6+" + numFormat.format(assistData.getTotalCoin()) + "硬币")).onHover(BookUtil.HoverAction.showText(assistCoin.toString())).build());
+                pageBuilder.add(BookUtil.TextBuilder.of(CC.translate(" &b+" + numFormat.format(assistData.getTotalExp()) + "经验值")).onHover(BookUtil.HoverAction.showText(assistExp.toString())).build()).newLine().newLine();
                 i++;
                 if (i >= 5) {
                     pages.add(pageBuilder.build());
@@ -537,30 +403,15 @@ public class PitCommand {
                 pages.add(pageBuilder.build());
             }
             i = 1;
-            pageBuilder = new BookUtil.PageBuilder().add(
-                    BookUtil.TextBuilder
-                            .of(CC.translate("&0&l伤害日志 (" + killRecap.getDamageLogs().size() + "):"))
-                            .build()).newLine();
+            pageBuilder = new BookUtil.PageBuilder().add(BookUtil.TextBuilder.of(CC.translate("&0&l伤害日志 (" + killRecap.getDamageLogs().size() + "):")).build()).newLine();
             for (KillRecap.DamageData damageData : killRecap.getDamageLogs()) {
-                BookUtil.TextBuilder builder = BookUtil.TextBuilder
-                        .of(CC.translate("&7" + ((killRecap.getCompleteTime() - damageData.getTimer().getStart()) / 1000) + "秒前  &c" + numFormat.format(damageData.getDamage()) + " " + (damageData.isMelee() ? "近战" : "远程")));
+                BookUtil.TextBuilder builder = BookUtil.TextBuilder.of(CC.translate("&7" + ((killRecap.getCompleteTime() - damageData.getTimer().getStart()) / 1000) + "秒前  &c" + numFormat.format(damageData.getDamage()) + " " + (damageData.isMelee() ? "近战" : "远程")));
                 if (damageData.getUsedItem() != null && damageData.getUsedItem().getType() != Material.AIR) {
                     builder.onHover(BookUtil.HoverAction.showItem(damageData.getUsedItem()));
                 }
-                pageBuilder.add(
-                        builder.build()
-                ).newLine();
-                String damageHover = CC.translate((damageData.isAttack() ? "&c攻击" : "&c受到攻击")) +
-                        "\n" +
-                        CC.translate("&7攻击后" + (damageData.isAttack() ? "此玩家" : "自身") + "剩余血量: &c" + numFormat.format(damageData.getAfterHealth()) +
-                                "\n" +
-                                CC.translate("&7附魔/天赋 附加伤害: &c" + numFormat.format(damageData.getBoostDamage())));
-                pageBuilder.add(
-                        BookUtil.TextBuilder
-                                .of(CC.translate((damageData.isAttack() ? "&0⚔ " : "&0☬ ") + damageData.getDisplayName()))
-                                .onHover(BookUtil.HoverAction.showText(damageHover))
-                                .build()
-                ).newLine().newLine();
+                pageBuilder.add(builder.build()).newLine();
+                String damageHover = CC.translate((damageData.isAttack() ? "&c攻击" : "&c受到攻击")) + "\n" + CC.translate("&7攻击后" + (damageData.isAttack() ? "此玩家" : "自身") + "剩余血量: &c" + numFormat.format(damageData.getAfterHealth()) + "\n" + CC.translate("&7附魔/天赋 附加伤害: &c" + numFormat.format(damageData.getBoostDamage())));
+                pageBuilder.add(BookUtil.TextBuilder.of(CC.translate((damageData.isAttack() ? "&0⚔ " : "&0☬ ") + damageData.getDisplayName())).onHover(BookUtil.HoverAction.showText(damageHover)).build()).newLine().newLine();
                 i++;
                 if (i >= 5) {
                     pages.add(pageBuilder.build());
@@ -571,13 +422,7 @@ public class PitCommand {
             if (i > 0) {
                 pages.add(pageBuilder.build());
             }
-            BookUtil.openPlayer(player,
-                    BookUtil.writtenBook()
-                            .title(CC.translate("&c$killRecap #" + player.getName()))
-                            .author("Amadeus Ai")
-                            .pages(pages)
-                            .build()
-            );
+            BookUtil.openPlayer(player, BookUtil.writtenBook().title(CC.translate("&c$killRecap #" + player.getName())).author("Amadeus Ai").pages(pages).build());
         } catch (Exception e) {
             CC.printError(player, e);
         }
@@ -585,9 +430,7 @@ public class PitCommand {
     }
 
 
-    @Command(
-            names = "cdk"
-    )
+    @Command(names = "cdk")
     public void cdk(Player player, @Parameter(name = "cdk") String cdk) {
         final CDKData data = CDKData.getCachedCDK().get(cdk);
         if (data == null) {
@@ -612,7 +455,7 @@ public class PitCommand {
             player.sendMessage(CC.translate("&c精通等级不满足要求哦,快去升级吧!"));
             return;
         }
-        if (data.getLimitPrestige() > 0 && data.getLimitLevel() > 0 && profile.getLevel() < data.getLimitLevel()) {
+        if (data.getLimitPrestige() > 0 && data.getLimitLevel() > 0 && profile.getPrestige() == data.getLimitPrestige() && profile.getLevel() < data.getLimitLevel()) {
             player.sendMessage("§c似乎还差一点等级就能领取到了...加油!");
             return;
         }
@@ -658,9 +501,7 @@ public class PitCommand {
         }
     }
 
-    @Command(
-            names = "viewOffer"
-    )
+    @Command(names = "viewOffer")
     public void viewOffer(Player player, @Parameter(name = "玩家") Player target) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         PlayerProfile targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.getUniqueId());
@@ -704,9 +545,7 @@ public class PitCommand {
         new OfferMenu(target).openMenu(player);
     }
 
-    @Command(
-            names = "offer"
-    )
+    @Command(names = "offer")
     public void offerItem(Player player, @Parameter(name = "玩家", defaultValue = "#null") String targetPlayer, @Parameter(name = "出价", defaultValue = "#null") String price) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.getOfferData().hasActiveOffer()) {
@@ -805,17 +644,11 @@ public class PitCommand {
             player.sendMessage(CC.translate("&c但对方仍可以通过使用 &e/viewOffer " + player.getName() + " &c以同意你的请求."));
         } else {
             player.sendMessage(CC.translate("&e&l交易报价发送! &7成功向 " + LevelUtil.getLevelTag(targetProfile.getPrestige(), targetProfile.getLevel()) + " " + RankUtil.getPlayerColoredName(target.getUniqueId()) + " &7发送了交易报价!"));
-            target.spigot()
-                    .sendMessage(new ChatComponentBuilder(CC.translate("&e&l交易报价! " + LevelUtil.getLevelTag(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerColoredName(player.getUniqueId()) + " &7向你发送了交易报价,请"))
-                            .append(new ChatComponentBuilder(CC.translate(" &e点击这里")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&6点击以接受")).create())).setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/viewOffer " + player.getName())).create())
-                            .append(CC.translate(" &r&7以查看此交易报价."))
-                            .create());
+            target.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&e&l交易报价! " + LevelUtil.getLevelTag(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerColoredName(player.getUniqueId()) + " &7向你发送了交易报价,请")).append(new ChatComponentBuilder(CC.translate(" &e点击这里")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&6点击以接受")).create())).setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/viewOffer " + player.getName())).create()).append(CC.translate(" &r&7以查看此交易报价.")).create());
         }
     }
 
-    @Command(
-            names = "AuctionGui"
-    )
+    @Command(names = "AuctionGui")
     public void openAuctionGui(Player player) {
         EventFactory eventFactory = ThePit.getInstance().getEventFactory();
         //check if event is available
@@ -826,9 +659,7 @@ public class PitCommand {
         ThePit.getApi().openAuctionMenu(player);
     }
 
-    @Command(
-            names = "cool"
-    )
+    @Command(names = "cool")
     public void onCoolCommand(Player player) {
         if (!PlayerUtil.isPlayerUnlockedPerk(player, "cool_perk")) {
             player.sendMessage(CC.translate("&c你当前无法使用该指令!"));
@@ -854,25 +685,17 @@ public class PitCommand {
         }
     }
 
-    @Command(
-            names = "openKingsQuestUI",
-            permissionNode = "pit.kingquest.ui"
-    )
+    @Command(names = "openKingsQuestUI", permissionNode = "pit.kingquest.ui")
     public void handleOpenKingQuestUI(Player player) {
         KingQuestsUI.INSTANCE.openMenu(player);
     }
 
-    @Command(
-            names = "openBakeMaster",
-            permissionNode = "pit.kingquest.ui"
-    )
+    @Command(names = "openBakeMaster", permissionNode = "pit.kingquest.ui")
     public void handleOpenBake(Player player) {
         CakeBakeUI.INSTANCE.openMenu(player);
     }
 
-    @Command(
-            names = "thepit"
-    )
+    @Command(names = "thepit")
     public void pit(CommandSender sender) {
         sender.sendMessage("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
         sender.sendMessage("§cSupport to §eMoonCookie NetWork.");
