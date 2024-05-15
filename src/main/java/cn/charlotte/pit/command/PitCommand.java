@@ -591,7 +591,8 @@ public class PitCommand {
     public void cdk(Player player, @Parameter(name = "cdk") String cdk) {
         final CDKData data = CDKData.getCachedCDK().get(cdk);
         if (data == null) {
-            player.sendMessage(CC.translate("&r错误的CDK,请仔细检查哦!"));
+            player.sendMessage(CC.translate("&r&c错误的CDK,请仔细检查哦"));
+            player.sendMessage(CC.translate("&r&c如您是在MOC商店购买的点券卡密请输入/code进行兑换!"));
             return;
         }
 
@@ -619,6 +620,7 @@ public class PitCommand {
         final long now = System.currentTimeMillis();
         if (now > data.getExpireTime()) {
             player.sendMessage(CC.translate("&c错误的CDK,请检查大小写是否一致!"));
+            player.sendMessage(CC.translate("&r&c如您是在MOC商店购买的点券卡密请输入/code进行兑换!"));
             return;
         }
 

@@ -1,8 +1,10 @@
 package cn.charlotte.pit.runnable
 
+import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
+@Include
 object AnnouncementRunnable : BukkitRunnable() {
     private var index = 0;
     override fun run() {
