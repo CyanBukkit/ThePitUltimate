@@ -613,6 +613,7 @@ public class PitCommand {
         }
         if (data.getLimitPrestige() > 0 && data.getLimitLevel() > 0 && profile.getLevel() < data.getLimitLevel()) {
             player.sendMessage("§c似乎还差一点等级就能领取到了...加油!");
+            return;
         }
 
         final long now = System.currentTimeMillis();
