@@ -133,6 +133,7 @@ object PitHook {
 
         EventRunnable().runTaskTimer(ThePit.getInstance(), 60L, 120L)
 
+        AnnouncementRunnable.runTaskTimer(ThePit.getInstance(),0,40 * 60)
         GoldDropRunnable()
             .runTaskTimer(ThePit.getInstance(), 20, 20)
 
@@ -547,7 +548,7 @@ object PitHook {
             ProtectListener::class.java, PantsBundleShopButton::class.java,
             CombatSpadeShopButton::class.java, MailSendListener::class.java,
             SafetyJoinListener::class.java, ButtonListener::class.java,
-            GenesisCombatListener::class.java,FixListeners::class.java
+            GenesisCombatListener::class.java,FixListeners::class.java,
             TradeListener::class.java, HologramListener::class.java,
         )
         for (aClass in classes) {
