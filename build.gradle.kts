@@ -16,10 +16,17 @@ repositories {
     maven("https://repo.rosewooddev.io/repository/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://maven.citizensnpcs.co/repo/")
-    maven("https://mvn.lumine.io/repository/maven-public/")
+    maven("https://repo.panda-lang.org/releases")
 }
 
 dependencies {
+    api(libs.reflectionhelper)
+    api(libs.hutool.core)
+    api(libs.hutool.crypto)
+    api(libs.book)
+    api(libs.slf4j)
+    api(libs.litecommands)
+    api(libs.adventure.bukkit)
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
@@ -32,17 +39,12 @@ dependencies {
     compileOnly(libs.narshorn)
     compileOnly(libs.citizens.main)
     compileOnly(libs.protocollib)
-    api(libs.hutool.core)
-    api(libs.hutool.crypto)
     compileOnly(libs.httpclient)
     compileOnly(libs.httpcore)
     compileOnly(libs.jedis)
-    api(libs.book)
     compileOnly(libs.mongojack)
     compileOnly(libs.mongodb)
-    api(libs.slf4j)
     compileOnly(libs.websocket)
-    api(libs.reflectionhelper)
     // fawe /we
     compileOnly(fileTree("libs"))
     compileOnly(libs.luckperms)
