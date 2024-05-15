@@ -26,6 +26,7 @@ reflectionhelper = "1.15.2-SNAPSHOT"
 playerpoints = "3.2.4"
 decentholograms = "2.8.6"
 hutool = "5.8.27"
+litecommands = "3.4.1"
 [libraries]
 
 # Adventure
@@ -81,6 +82,7 @@ playerpoints = { group = "org.black_ixx", name = "playerpoints", version.ref = "
 decentholograms = { group = "com.github.decentsoftware-eu", name = "decentholograms", version.ref = "decentholograms" }
 hutool-core= {group="cn.hutool", name="hutool-core", version.ref="hutool"}
 hutool-crypto= {group="cn.hutool", name="hutool-crypto", version.ref="hutool"}
+litecommands = { group = "dev.rollczi", name = "litecommands-bukkit", version.ref = "litecommands" }
 [plugins]
 
 shadow = { id = "io.github.goooler.shadow", version.ref = "shadow" }
