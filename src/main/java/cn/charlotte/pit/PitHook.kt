@@ -136,6 +136,7 @@ object PitHook {
 
         EventRunnable().runTaskTimer(ThePit.getInstance(), 60L, 120L)
 
+        AnnouncementRunnable.runTaskTimer(ThePit.getInstance(),0,40 * 60)
         GoldDropRunnable()
             .runTaskTimer(ThePit.getInstance(), 20, 20)
 
