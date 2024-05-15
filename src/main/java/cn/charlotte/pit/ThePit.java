@@ -19,14 +19,12 @@ import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import cn.charlotte.pit.minigame.MiniGameController;
 import cn.charlotte.pit.movement.PlayerMoveHandler;
 import cn.charlotte.pit.npc.NpcFactory;
-import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.pet.PetFactory;
 import cn.charlotte.pit.quest.QuestFactory;
 import cn.charlotte.pit.runnable.*;
 import cn.charlotte.pit.util.bossbar.BossBarHandler;
 import cn.charlotte.pit.util.chat.CC;
-import cn.charlotte.pit.util.command.util.ClassUtil;
 import cn.charlotte.pit.util.dependencies.Dependency;
 import cn.charlotte.pit.util.dependencies.DependencyManager;
 import cn.charlotte.pit.util.dependencies.loaders.LoaderType;
@@ -42,6 +40,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
@@ -55,7 +54,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -66,8 +64,6 @@ import spg.lgdev.iSpigot;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -119,6 +115,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     private String serverId;
 
+    private final BukkitAudiences audiences = BukkitAudiences.create(this);
 
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
@@ -252,9 +249,10 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         }
     }
 
-    public void sendLogs(String s){
+    public void sendLogs(String s) {
         Bukkit.getConsoleSender().sendMessage(s);
     }
+
     @Override
     public void onDisable() {
         synchronized (Bukkit.getOnlinePlayers()) {
@@ -284,6 +282,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
             return false;
         }
     }
+
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!"BungeeCord".equals(channel)) {
@@ -342,6 +341,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private void loadMedals() {
         this.medalFactory = new MedalFactory();
         this.medalFactory.init();
+        getServer().getPluginManager().registerEvents(this.medalFactory, this);
     }
 
     private void loadBuffs() {
@@ -914,4 +914,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     }
 
 
+    public BukkitAudiences getAudiences() {
+        return audiences;
+    }
 }
