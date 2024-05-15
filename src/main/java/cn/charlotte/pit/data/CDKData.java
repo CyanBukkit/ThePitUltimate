@@ -24,6 +24,7 @@ public class CDKData {
     private long timeout;
     private double limitLevel;
     private String limitPermission;
+    private int limitPrestige = -1;
 
     private double exp;
     private double coins;
@@ -63,6 +64,7 @@ public class CDKData {
                 .getMongoDB()
                 .getCdkCollection()
                 .replaceOne(Filters.eq("cdk", cdk), this, new ReplaceOptions().upsert(true));
+        cachedCDK.put(cdk, this);
     }
 
     public String getCdk() {
@@ -225,5 +227,13 @@ public class CDKData {
 
     public String toString() {
         return "CDKData(cdk=" + this.getCdk() + ", timeout=" + this.getTimeout() + ", limitLevel=" + this.getLimitLevel() + ", limitPermission=" + this.getLimitPermission() + ", exp=" + this.getExp() + ", coins=" + this.getCoins() + ", renown=" + this.getRenown() + ", item=" + this.getItem() + ", sendTime=" + this.getSendTime() + ", expireTime=" + this.getExpireTime() + ", limitClaimed=" + this.getLimitClaimed() + ", claimedPlayers=" + this.getClaimedPlayers() + ")";
+    }
+
+    public int getLimitPrestige() {
+        return limitPrestige;
+    }
+
+    public void setLimitPrestige(int limitPrestige) {
+        this.limitPrestige = limitPrestige;
     }
 }

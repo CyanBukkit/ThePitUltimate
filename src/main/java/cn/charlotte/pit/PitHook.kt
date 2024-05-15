@@ -5,6 +5,7 @@ import cn.charlotte.pit.command.CleanupNoDupeItemCommand
 import cn.charlotte.pit.command.PitAdminCommand
 import cn.charlotte.pit.command.PitCommand
 import cn.charlotte.pit.config.NewConfiguration
+import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.enchantment.type.aqua.ClubRodEnchant
 import cn.charlotte.pit.enchantment.type.aqua.GrandmasterEnchant
 import cn.charlotte.pit.enchantment.type.aqua.LuckOfPondEnchant
@@ -115,6 +116,8 @@ object PitHook {
         ActionBarDisplayRunnable.start()
 
         KingsQuests.enable()
+
+        CDKData.loadAllCDKFromData()
 
         Bukkit.getPluginManager().registerEvents(SewersRunnable, ThePit.getInstance())
         SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
