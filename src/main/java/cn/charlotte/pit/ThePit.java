@@ -115,7 +115,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     private String serverId;
 
-    private final BukkitAudiences audiences = BukkitAudiences.create(this);
+    private BukkitAudiences audiences;
 
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
@@ -140,6 +140,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     @Override
     public void onEnable() {
+        audiences = BukkitAudiences.create(this);
         DupeItemButton dupeItemButton = new DupeItemButton();
         if (dupeItemButton.isDupe() == DupeItemButton.DumpType.SUCCESSFULLY) {
             if (h()) {
