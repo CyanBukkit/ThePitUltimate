@@ -35,10 +35,10 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
             Arrays.asList("&d&l神话天坑",
-                    "&a&l神&d&l话天坑",
-                    "&f&l神&6&l话&d&l天坑",
-                    "&f&l神话&6&l天&d&l坑",
-                    "&f&l神话天&6&l坑",
+                    "&a&l神&5&l话天坑",
+                    "&f&l神&5&l话&d&l天坑",
+                    "&f&l神话&5&l天&d&l坑",
+                    "&f&l神话天&5&l坑",
                     "&f&l神话天坑",
                     "&d&l神话天坑",
                     "&f&l神话天坑",
