@@ -32,7 +32,6 @@ import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import dev.jnic.annotation.Exclude;
 import dev.jnic.annotation.Include;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -592,20 +591,28 @@ public class PitCommand {
     public void cdk(Player player, @Parameter(name = "cdk") String cdk) {
         final CDKData data = CDKData.getCachedCDK().get(cdk);
         if (data == null) {
-            player.sendMessage(CC.translate("&ruc错误的CDK,请检查大小写是否一致!"));
+            player.sendMessage(CC.translate("&r错误的CDK,请仔细检查哦!"));
             return;
         }
 
         if (data.getLimitPermission() != null) {
             if (!player.hasPermission(data.getLimitPermission())) {
-                player.sendMessage(CC.translate("&c错误的CDK,请检查大小写是否一致!"));
+                player.sendMessage(CC.translate("&c这个CDK似乎不适合你!"));
                 return;
             }
         }
         final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
-        if (profile.getPrestige() == 0 && profile.getLevel() < data.getLimitLevel()) {
+        if (data.getLimitPrestige() <= 0 && profile.getPrestige() == 0 && profile.getLevel() < data.getLimitLevel()) {
             player.sendMessage(CC.translate("&c你不满足领取条件!"));
+            return;
+        }
+        if (data.getLimitPrestige() > 0 && profile.getPrestige() < data.getLimitPrestige()) {
+            player.sendMessage(CC.translate("&c精通等级不满足要求哦,快去升级吧!"));
+            return;
+        }
+        if (data.getLimitPrestige() > 0 && data.getLimitLevel() > 0 && profile.getLevel() < data.getLimitLevel()) {
+            player.sendMessage("§c似乎还差一点等级就能领取到了...加油!");
             return;
         }
 
@@ -616,12 +623,12 @@ public class PitCommand {
         }
 
         if (CDKData.isLoading()) {
-            player.sendMessage(CC.translate("&c系统繁忙，请稍后再试!"));
+            player.sendMessage(CC.translate("&c系统繁忙,请稍后再试!"));
             return;
         }
 
-        if (data.getLimitClaimed() != -1 && data.getClaimedPlayers().size() > data.getLimitClaimed()) {
-            player.sendMessage(CC.translate("&c错误的CDK,请检查大小写是否一致!"));
+        if (data.getLimitClaimed() != -1 && data.getClaimedPlayers().size() >= data.getLimitClaimed()) {
+            player.sendMessage(CC.translate("&c领取已达上限,下次快一点哦!"));
             return;
         }
 

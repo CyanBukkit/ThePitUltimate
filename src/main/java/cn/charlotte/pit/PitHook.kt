@@ -5,6 +5,7 @@ import cn.charlotte.pit.command.CleanupNoDupeItemCommand
 import cn.charlotte.pit.command.PitAdminCommand
 import cn.charlotte.pit.command.PitCommand
 import cn.charlotte.pit.config.NewConfiguration
+import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.enchantment.type.aqua.ClubRodEnchant
 import cn.charlotte.pit.enchantment.type.aqua.GrandmasterEnchant
 import cn.charlotte.pit.enchantment.type.aqua.LuckOfPondEnchant
@@ -116,6 +117,8 @@ object PitHook {
 
         KingsQuests.enable()
 
+        CDKData.loadAllCDKFromData()
+
         Bukkit.getPluginManager().registerEvents(SewersRunnable, ThePit.getInstance())
         SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
     }
@@ -133,7 +136,6 @@ object PitHook {
 
         EventRunnable().runTaskTimer(ThePit.getInstance(), 60L, 120L)
 
-        AnnouncementRunnable.runTaskTimer(ThePit.getInstance(),0,40 * 60)
         GoldDropRunnable()
             .runTaskTimer(ThePit.getInstance(), 20, 20)
 
@@ -548,7 +550,7 @@ object PitHook {
             ProtectListener::class.java, PantsBundleShopButton::class.java,
             CombatSpadeShopButton::class.java, MailSendListener::class.java,
             SafetyJoinListener::class.java, ButtonListener::class.java,
-            GenesisCombatListener::class.java,FixListeners::class.java,
+            GenesisCombatListener::class.java, FixListeners::class.java,
             TradeListener::class.java, HologramListener::class.java,
         )
         for (aClass in classes) {

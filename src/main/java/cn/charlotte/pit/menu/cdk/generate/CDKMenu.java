@@ -130,6 +130,11 @@ public class CDKMenu extends Menu {
                 this,
                 data::setLimitClaimed
         ));
+        buttonMap.put(20, new CDKEditButton(
+                new ItemBuilder(Material.DIAMOND_BLOCK).name("&c限制精通等级").lore("&7当前限制精通等级: " + data.getLimitPrestige()).build(),
+                this,
+                data::setLimitPrestige
+        ));
 
         buttonMap.put(34, new CDKEditStringButton(new ItemBuilder(Material.NAME_TAG)
                 .name("&a自定义CDK")
