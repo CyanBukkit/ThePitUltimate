@@ -1,11 +1,5 @@
 package cn.charlotte.pit.util.item;
 
-import cn.charlotte.pit.item.IMythicItem;
-import cn.charlotte.pit.item.type.*;
-import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
-import cn.charlotte.pit.item.type.mythic.MythicBowItem;
-import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
-import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -38,8 +32,6 @@ public class ItemUtil {
 
         return extra.getString("uuid");
     }
-
-
 
 
     public static boolean isIllegalItem(ItemStack item) {
@@ -111,7 +103,32 @@ public class ItemUtil {
             return false;
         }
 
+        if (!forceCanTrade(item)) {
+            return false;
+        }
+
         return (extra.hasKey("canTrade") && extra.getBoolean("canTrade")) || (getInternalName(item) != null && getInternalName(item).startsWith("mythic_"));
+    }
+
+    public static boolean forceCanTrade(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return false;
+        }
+
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsItem.getTag();
+        if (tag == null) {
+            return false;
+        }
+        NBTTagCompound extra = tag.getCompound("extra");
+        if (extra == null) {
+            return false;
+        }
+
+        if (extra.hasKey("forceCanTrade")) {
+            return extra.getBoolean("forceCanTrade");
+        }
+        return true;
     }
 
     public static boolean canSaveEnderChest(ItemStack item) {

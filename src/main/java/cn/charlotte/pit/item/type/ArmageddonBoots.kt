@@ -39,14 +39,25 @@ class ArmageddonBoots : IMythicItem() {
         val tag = nmsItem?.tag ?: return
         val extra = tag.getCompound("extra") ?: return
 
+
         this.maxLive = extra.getInt("maxLive")
         this.live = extra.getInt("live")
+        if (extra.hasKey("forceCanTrade")) {
+            if (extra.getBoolean("forceCanTrade")) {
+                this.forceCanTrade = 1
+            } else {
+                this.forceCanTrade = 0
+            }
+        }
+        if (extra.hasKey("customName")) {
+            this.customName = extra.getString("customName")
+        }
+
     }
 
 
     override fun toItemStack(): ItemStack? {
-        return ItemBuilder(itemDisplayMaterial)
-            .name(itemDisplayName)
+        return ItemBuilder(super.toItemStack())
             .lore(
                 "&7生命: " + (if (live / (maxLive * 1.0) <= 0.6) if (live / (maxLive * 1.0) <= 0.3) "&c" else "&e" else "&a") + live + "&7/" + maxLive,
                 "",

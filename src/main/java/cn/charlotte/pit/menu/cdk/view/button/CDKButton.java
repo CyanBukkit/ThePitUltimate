@@ -9,16 +9,8 @@ import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.menu.Button;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.mongodb.client.model.Filters;
 import lombok.SneakyThrows;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -58,7 +50,7 @@ public class CDKButton extends Button {
                         "",
                         "&eLeft Click to view more details",
                         "&cRight Click to DELETE this cdk",
-                        "&fShift + Left Click to claim this cdk"
+                        "&fShift + Left Force Click to claim this cdk"
                 )
                 .build();
     }
@@ -71,8 +63,8 @@ public class CDKButton extends Button {
                     .getMongoDB()
                     .getCdkCollection()
                     .deleteOne(Filters.eq("cdk", data.getCdk()));
-
             player.closeInventory();
+            CDKData.getCachedCDK().remove(data.getCdk());
             player.sendMessage(CC.translate("&cIts done"));
             return;
         }
@@ -91,21 +83,22 @@ public class CDKButton extends Button {
                 builder.append(claimedPlayer)
                         .append("\n");
             }
-            player.sendMessage(CC.translate("&aPost information to paste server,it will take a seconds,please wait..."));
+            player.sendMessage(builder.toString());
+//            player.sendMessage(CC.translate("&aPost information to paste server,it will take a seconds,please wait..."));
 
-            CloseableHttpClient client = HttpClientBuilder.create().build();
-
-            HttpPost postRequest = new HttpPost("http://chatlog.staff.mc.netease.domcer.com:7777/documents");
-            StringEntity userEntity = new StringEntity(builder.toString(), HTTP.UTF_8);
-            postRequest.setEntity(userEntity);
-
-            HttpResponse response = client.execute(postRequest);
-            if (response.getStatusLine().getStatusCode() == 200) {
-                JsonObject responseObject = gson.fromJson(EntityUtils.toString(response.getEntity()), JsonObject.class);
-                player.sendMessage(CC.translate("&a完成: &e" + "http://chatlog.staff.mc.netease.domcer.com:7777/" + responseObject.get("key").getAsString()));
-            } else {
-                player.sendMessage(CC.translate("&cERROR"));
-            }
+//            CloseableHttpClient client = HttpClientBuilder.create().build();
+//
+//            HttpPost postRequest = new HttpPost("http://chatlog.staff.mc.netease.domcer.com:7777/documents");
+//            StringEntity userEntity = new StringEntity(builder.toString(), HTTP.UTF_8);
+//            postRequest.setEntity(userEntity);
+//
+//            HttpResponse response = client.execute(postRequest);
+//            if (response.getStatusLine().getStatusCode() == 200) {
+//                JsonObject responseObject = gson.fromJson(EntityUtils.toString(response.getEntity()), JsonObject.class);
+//                player.sendMessage(CC.translate("&a完成: &e" + "http://chatlog.staff.mc.netease.domcer.com:7777/" + responseObject.get("key").getAsString()));
+//            } else {
+//                player.sendMessage(CC.translate("&cERROR"));
+//            }
             return;
         }
 

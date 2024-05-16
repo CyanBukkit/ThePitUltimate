@@ -244,6 +244,16 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder forceCanTrade(boolean allow) {
+        this.changeNbt("forceCanTrade", allow);
+        return this;
+    }
+
+    public ItemBuilder unsetForceCanTrade() {
+        this.changeNbt("forceCanTrade", null);
+        return this;
+    }
+
     public ItemBuilder defaultItem() {
         this.changeNbt("defaultItem", true);
         return this;
@@ -264,7 +274,11 @@ public class ItemBuilder {
         if (extra == null) {
             extra = new NBTTagCompound();
         }
-        extra.setString(key, value);
+        if (value == null) {
+            extra.remove(key);
+        } else {
+            extra.setString(key, value);
+        }
         tag.set("extra", extra);
 
         nmsItem.setTag(tag);

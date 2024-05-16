@@ -95,7 +95,7 @@ class PitCommands {
     @Execute(name = "view")
     fun view(@Context player: Player, @Arg("name") name: String) {
         val present = viewCooldown.getIfPresent(player.uniqueId)
-        if (present != null) {
+        if (present != null && !player.hasPermission("pit.view-bypass")) {
             player.sendMessage(CC.translate("&c冷却中..."))
             return
         }
@@ -162,7 +162,6 @@ class PitCommands {
             )
             return
         }
-        COOLDOWN_SHOW.put(player.uniqueId, Cooldown(60, TimeUnit.SECONDS))
         if (player.itemInHand == null || player.itemInHand.type == Material.AIR) {
             player.sendMessage(CC.translate("&c请先手持要展示的物品!"))
             return
@@ -171,6 +170,7 @@ class PitCommands {
             player.sendMessage(CC.translate("&c此物品无法被用于展示!"))
             return
         }
+        COOLDOWN_SHOW.put(player.uniqueId, Cooldown(60, TimeUnit.SECONDS))
         val nms = CraftItemStack.asNMSCopy(player.itemInHand)
         val tag = NBTTagCompound()
         nms.save(tag)

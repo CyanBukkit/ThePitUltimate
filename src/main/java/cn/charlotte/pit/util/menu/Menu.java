@@ -38,6 +38,7 @@ public abstract class Menu {
             Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
                 openMenu(player);
             });
+            return;
         }
 
 

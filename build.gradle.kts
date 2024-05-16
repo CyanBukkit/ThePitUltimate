@@ -15,7 +15,6 @@ repositories {
     maven("https://jitpack.io")
     maven("https://repo.rosewooddev.io/repository/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://maven.citizensnpcs.co/repo/")
     maven("https://repo.panda-lang.org/releases")
 }
 
@@ -37,7 +36,6 @@ dependencies {
 
     compileOnly(libs.papi)
     compileOnly(libs.narshorn)
-    compileOnly(libs.citizens.main)
     compileOnly(libs.protocollib)
     compileOnly(libs.httpclient)
     compileOnly(libs.httpcore)

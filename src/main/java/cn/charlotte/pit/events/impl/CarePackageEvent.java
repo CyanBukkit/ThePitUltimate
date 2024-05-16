@@ -208,6 +208,9 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
             HandlerList.unregisterAll(this);
             chestData.getSecondHologram().deSpawn();
+            if (chestData.getFirstHologram().isSpawned()) {
+                chestData.getFirstHologram().deSpawn();
+            }
             PackageMenu.getItems().clear();
             chest.getBlock().setType(Material.AIR);
             chestData = null;

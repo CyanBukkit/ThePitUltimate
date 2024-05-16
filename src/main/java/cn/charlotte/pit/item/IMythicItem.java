@@ -36,6 +36,8 @@ public abstract class IMythicItem extends AbstractPitItem {
     public boolean boostedByBook = false;
 
     public UUID uuid;
+    // 0=false 1=true -1=unset
+    public int forceCanTrade = -1;
 
     public IMythicItem() {
     }
@@ -114,7 +116,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         if (maxLive != 0) {
-            lore.add(("&7生命: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive) + (isBoostedByGem() ? "&a ♦" : "" ) + (boostedByBook ? "&6 ᥀" : ""));
+            lore.add(("&7生命: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive) + (isBoostedByGem() ? "&a ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
             lore.add("");
         }
 
@@ -222,6 +224,13 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (this.prefix != null) {
             builder.prefix(prefix);
         }
+        if (forceCanTrade == 0) {
+            builder.forceCanTrade(false);
+        } else if (forceCanTrade == 1) {
+            builder.forceCanTrade(true);
+        } else {
+            builder.unsetForceCanTrade();
+        }
 
         return builder
                 .buildWithUnbreakable();
@@ -290,6 +299,13 @@ public abstract class IMythicItem extends AbstractPitItem {
 
         this.maxLive = extra.getInt("maxLive");
         this.live = extra.getInt("live");
+        if (extra.hasKey("forceCanTrade")) {
+            if (extra.getBoolean("forceCanTrade")) {
+                this.forceCanTrade = 1;
+            } else {
+                this.forceCanTrade = 0;
+            }
+        }
 
         this.enchantments = new HashMap<>();
 

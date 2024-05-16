@@ -53,6 +53,7 @@ import kotlin.math.min
  * @author huanmeng_qwq
  */
 @RootCommand
+@Permission("pit.admin")
 class PitAdminSimpleCommand {
     private val format: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
 
@@ -104,12 +105,10 @@ class PitAdminSimpleCommand {
             }
         }
         if (menu.equals("allCdk", ignoreCase = true)) {
-            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
-                try {
-                    CDKViewMenu().openMenu(player)
-                } catch (e: Exception) {
-                    CC.printErrorWithCode(player, e)
-                }
+            try {
+                CDKViewMenu().openMenu(player)
+            } catch (e: Exception) {
+                CC.printErrorWithCode(player, e)
             }
         }
     }
@@ -157,6 +156,7 @@ class PitAdminSimpleCommand {
     }
 
     @Execute(name = "forceTrade")
+    @Permission("pit.admin")
     fun forceTrade(@Context player: Player, @Arg("target") target: Player) {
         val tradeManager = TradeManager(player, target)
         TradeMenu(tradeManager).openMenu(player)
@@ -389,6 +389,15 @@ class PitAdminSimpleCommand {
     @Permission("pit.rename")
     @HandHasItem(mythic = true)
     fun rename(@Context player: Player, @Arg("name") name: String): String {
+        if (!player.hasPermission("pit.rename-bypass")) {
+            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId) ?: return "§c获取玩家信息失败"
+            val cdEndTime = profile.lastRenameTime + Duration.ofMinutes(2).toMillis()
+            val now = System.currentTimeMillis()
+            if (cdEndTime > now) {
+                return "§c冷却中!请等待${(cdEndTime - now) / 1000}s"
+            }
+            profile.lastRenameTime = System.currentTimeMillis()
+        }
         val item = player.itemInHand
         val mythicItem = MythicUtil.getMythicItem(item)
         val permission = "pit.rename-color"
@@ -400,8 +409,26 @@ class PitAdminSimpleCommand {
             mythicItem.customName = name
         }
         player.itemInHand = ItemBuilder(mythicItem.toItemStack())
-            .canTrade(false)
+            .forceCanTrade(false)
             .build()
+        println(ItemUtil.canTrade(player.itemInHand))
         return "§a已重命名"
+    }
+
+    @Execute(name = "unrename")
+    @Permission("pit.unrename")
+    @HandHasItem(mythic = true)
+    fun unRename(@Context player: Player): String {
+        val item = player.itemInHand
+        val mythicItem = MythicUtil.getMythicItem(item)
+        if (mythicItem.customName == null) {
+            return "§c咦...这个物品似乎没有被重命名呢!"
+        }
+        mythicItem.customName = null;
+        player.itemInHand = ItemBuilder(mythicItem.toItemStack())
+            .customName(null)
+            .unsetForceCanTrade()
+            .build()
+        return "§a成功取消重命名!"
     }
 }

@@ -51,7 +51,7 @@ class DecentHologramImpl(var loc: Location, var inputText: String): Hologram {
     }
 
     override fun deSpawn(): Boolean {
-        DHAPI.removeHologram(uuid.toString())
+        hologram.delete()
         return true
     }
 

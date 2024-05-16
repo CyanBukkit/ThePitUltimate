@@ -288,10 +288,13 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
     @Override
     public void onInactive() {
+        try {
+            runnable.cancel();
+        } catch (Exception ignored) {
+        }
         if (!startByAdmin && ThePit.getInstance().getPitConfig().isGenesisEnable() && bidHistories.size() == 0) {
             return;
         }
-        runnable.cancel();
         if (bidHistories.size() == 0) {
             CC.boardCast(prefix + "流拍! 无人参与竞拍.");
             return;

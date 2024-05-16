@@ -68,6 +68,7 @@ import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.menu.ButtonListener
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
+import cn.hutool.core.util.ReflectUtil
 import com.comphenix.protocol.ProtocolLibrary
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages
@@ -136,6 +137,9 @@ object PitHook {
                 PitAdminCommands(),
                 PitCommands(),
             )
+            .settings {
+                it.nativePermissions(true)
+            }
             .message(LiteBukkitMessages.INVALID_USAGE) { inv, ctx ->
                 return@message "§c用法: ".plus(buildString {
                     if (ctx.schematic.isOnlyFirst) {

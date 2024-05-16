@@ -63,27 +63,13 @@ public abstract class TabComplete {
 
         try {
             return command.suggest(sender, commandName, rawCommand.getArgs().toArray(new String[0]))
-                .get(15, TimeUnit.SECONDS);
-        }
-        catch (InterruptedException | ExecutionException | TimeoutException e) {
+                    .get(15, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException(e);
         }
     }
 
     static TabComplete create(Scheduler scheduler, Plugin plugin) {
-//        try {
-//            Class.forName("com.destroystokyo.paper.event.server.AsyncTabCompleteEvent");
-//            return new TabCompletePaperAsync(plugin);
-//        }
-//        catch (ClassNotFoundException ignored) {}
-//
-//        try {
-//            Class.forName("com.comphenix.protocol.ProtocolLibrary");
-//            Class.forName("org.bukkit.craftbukkit.libs.jline.console.ConsoleReader");
-//            return new TabCompleteProtocolLibAsync(plugin, scheduler);
-//        }
-//        catch (ClassNotFoundException | LiteCommandsReflectException ignored) {}
-
         return new TabCompleteSync();
     }
 

@@ -72,8 +72,7 @@ public class BountyRunnable implements Runnable {
             Location playerLocation = player.getLocation();
             double x = generatorLocDouble();
             double z = generatorLocDouble();
-            Hologram newHologram;
-            newHologram = HologramAPI.createHologram(playerLocation.clone().add(x, 0, z), CC.translate(color + "&l" + bounty + "g"));
+            Hologram newHologram = HologramAPI.createHologram(playerLocation.clone().add(x, 0, z), CC.translate(color + "&l" + bounty + "g"));
 
             List<Player> reviewers = new ArrayList<>(Bukkit.getOnlinePlayers());
             reviewers.remove(player);
@@ -89,7 +88,7 @@ public class BountyRunnable implements Runnable {
         for (HologramDisplay hologram : holograms) {
             Location location = player.getLocation().clone();
             location.setX(location.getX() + hologram.boostX);
-            location.setY(hologram.getHologram().getLocation().getY() + 0.25);
+            location.setY(hologram.getHologram().getLocation().getY() + 0.05);
             location.setZ(location.getZ() + hologram.boostZ);
             hologram.getHologram().setLocation(location);
             if (hologram.timer.hasExpired()) {
@@ -137,7 +136,7 @@ public class BountyRunnable implements Runnable {
             this.hologram = hologram;
             this.boostX = boostX;
             this.boostZ = boostZ;
-            this.timer = new Cooldown(660, TimeUnit.MILLISECONDS);
+            this.timer = new Cooldown(2000, TimeUnit.MILLISECONDS);
         }
     }
 }

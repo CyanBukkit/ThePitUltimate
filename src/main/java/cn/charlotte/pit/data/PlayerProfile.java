@@ -216,6 +216,8 @@ public class PlayerProfile {
 
     public KingsQuestsData kingsQuestsData = new KingsQuestsData();
 
+    private long lastRenameTime = 0;
+
     public PlayerProfile(UUID uuid, String playerName) {
         //调用默认构造函数，初始化赋值
         this();
@@ -1720,5 +1722,13 @@ public class PlayerProfile {
 
     public void setProfileFormatVersion(int profileFormatVersion) {
         this.profileFormatVersion = profileFormatVersion;
+    }
+
+    public long getLastRenameTime() {
+        return lastRenameTime;
+    }
+
+    public void setLastRenameTime(long lastRenameTime) {
+        this.lastRenameTime = lastRenameTime;
     }
 }

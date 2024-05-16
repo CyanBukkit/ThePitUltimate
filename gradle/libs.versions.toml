@@ -6,7 +6,6 @@ protocolLib = "5.1.0"
 scoreboard-library = "2.1.8"
 kotlin = "2.0.0-RC3"
 mongodb = "3.12.11"
-citizens = "2.0.29-SNAPSHOT"
 packetevents = "2.3.0"
 yamlassist = "1.0.5"
 gui = "2.2.2"
@@ -44,7 +43,6 @@ mongodb = { group = "org.mongodb", name = "mongo-java-driver", version.ref = "mo
 spigot_8 = { group = "org.spigotmc", name = "spigot", version.ref = "server_8" }
 
 protocollib = { group = "com.comphenix.protocol", name = "ProtocolLib", version.ref = "protocolLib" }
-citizens-main = { group = "net.citizensnpcs", name = "citizens-main", version.ref = "citizens" }
 
 scoreboardlibrary-api = { group = "net.megavex", name = "scoreboard-library-api", version.ref = "scoreboard-library" }
 scoreboardlibrary-impl = { group = "net.megavex", name = "scoreboard-library-implementation", version.ref = "scoreboard-library" }
