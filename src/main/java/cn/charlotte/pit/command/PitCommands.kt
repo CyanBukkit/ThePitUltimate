@@ -2,6 +2,7 @@ package cn.charlotte.pit.command
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.audience
+import cn.charlotte.pit.command.handler.HandHasItem
 import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.mail.Mail
@@ -20,11 +21,13 @@ import cn.charlotte.pit.menu.trade.TradeMenu
 import cn.charlotte.pit.menu.viewer.StatusViewerMenu
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.sendMessage
+import cn.charlotte.pit.util.MythicUtil
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.inventory.InventoryUtil
+import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.level.LevelUtil
 import cn.charlotte.pit.util.rank.RankUtil
@@ -54,6 +57,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
@@ -891,6 +895,52 @@ class PitCommands {
     @Permission("pit.kingquest.ui")
     fun openBakeMaster(@Context player: Player) {
         CakeBakeUI.openMenu(player)
+    }
+
+    @Execute(name = "rename")
+    @Permission("pit.rename")
+    @HandHasItem(mythic = true)
+    fun rename(@Context player: Player, @Arg("name") name: String): String {
+        if (!player.hasPermission("pit.rename-bypass")) {
+            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId) ?: return "§c获取玩家信息失败"
+            val cdEndTime = profile.lastRenameTime + Duration.ofMinutes(2).toMillis()
+            val now = System.currentTimeMillis()
+            if (cdEndTime > now) {
+                return "§c冷却中!请等待${(cdEndTime - now) / 1000}s"
+            }
+            profile.lastRenameTime = System.currentTimeMillis()
+        }
+        val item = player.itemInHand
+        val mythicItem = MythicUtil.getMythicItem(item)
+        val permission = "pit.rename-color"
+        if (player.hasPermission(permission)) {
+            mythicItem.customName = CC.translate(name)
+        } else if (name.contains("&") && !player.hasPermission(permission)) {
+            return CC.translate("&c需要拥有颜色字符权限方可命名颜色名称！")
+        } else {
+            mythicItem.customName = name
+        }
+        player.itemInHand = ItemBuilder(mythicItem.toItemStack())
+            .forceCanTrade(false)
+            .build()
+        return "§a已重命名"
+    }
+
+    @Execute(name = "unrename")
+    @Permission("pit.unrename")
+    @HandHasItem(mythic = true)
+    fun unRename(@Context player: Player): String {
+        val item = player.itemInHand
+        val mythicItem = MythicUtil.getMythicItem(item)
+        if (mythicItem.customName == null) {
+            return "§c咦...这个物品似乎没有被重命名呢!"
+        }
+        mythicItem.customName = null;
+        player.itemInHand = ItemBuilder(mythicItem.toItemStack())
+            .customName(null)
+            .unsetForceCanTrade()
+            .build()
+        return "§a成功取消重命名!"
     }
 
     @Execute(name = "thepit")
