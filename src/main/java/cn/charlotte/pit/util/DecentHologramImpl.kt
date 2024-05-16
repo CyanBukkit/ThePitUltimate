@@ -12,7 +12,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.*
 
-class DecentHologramImpl(var loc: Location, var inputText: String): Hologram {
+class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
 
     val uuid = UUID.randomUUID()
 
@@ -35,9 +35,12 @@ class DecentHologramImpl(var loc: Location, var inputText: String): Hologram {
     override fun spawn(receivers: MutableCollection<out Player>?): Boolean {
         hologram.isDefaultVisibleState = false
 
-        hologram.hideAll()
+        Bukkit.getOnlinePlayers().forEach{
+            hologram.hide(it)
+            hologram.setHidePlayer(it)
+        }
         receivers?.forEach {
-            hologram.show(it,0)
+            hologram.setShowPlayer(it)
         }
 
         this.receivers.clear()
