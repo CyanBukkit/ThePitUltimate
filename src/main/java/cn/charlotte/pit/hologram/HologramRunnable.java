@@ -50,6 +50,7 @@ public class HologramRunnable implements Runnable {
                 List<String> text = abstractHologram.getText(player);
                 if (text.size() != hologramData.getHolograms().size()) {
                     hologramData.getHolograms().forEach(Hologram::deSpawn);
+                    hologramData.getHolograms().clear();
                     List<Hologram> holograms = new ArrayList<>();
                     for (int i = 0; i < text.size(); i++) {
                         String line = text.get(i);

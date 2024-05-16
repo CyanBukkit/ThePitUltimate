@@ -25,7 +25,7 @@ class DecentHologramImpl(var loc: Location, var inputText: String): Hologram {
     var receivers = arrayListOf<Player>()
 
     override fun isSpawned(): Boolean {
-        return true
+        return hologram.isEnabled
     }
 
     override fun spawn(ticks: Long) {
