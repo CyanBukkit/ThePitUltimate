@@ -88,7 +88,7 @@ public class BountyRunnable implements Runnable {
         for (HologramDisplay hologram : holograms) {
             Location location = player.getLocation().clone();
             location.setX(location.getX() + hologram.boostX);
-            location.setY(hologram.getHologram().getLocation().getY() + 0.05);
+            location.setY(hologram.getHologram().getLocation().getY() + 0.1);
             location.setZ(location.getZ() + hologram.boostZ);
             hologram.getHologram().setLocation(location);
             if (hologram.timer.hasExpired()) {

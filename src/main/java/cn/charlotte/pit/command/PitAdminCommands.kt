@@ -430,7 +430,7 @@ class PitAdminCommands {
             profile.streakKills = amount.toDouble()
             player.sendMessage("§a已修改玩家连杀")
         }
-        if ("abounty".equals(type, ignoreCase = true)) {
+            if ("abounty".equals(type, ignoreCase = true)) {
             profile.setActionBounty(amount)
             player.sendMessage("§a已修改玩家行动赏金")
         }
