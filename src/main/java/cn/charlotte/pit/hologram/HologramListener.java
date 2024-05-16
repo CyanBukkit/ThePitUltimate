@@ -2,7 +2,6 @@ package cn.charlotte.pit.hologram;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
-import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
@@ -137,36 +136,6 @@ public class HologramListener implements Listener {
 
         public void setInternalName(String internalName) {
             this.internalName = internalName;
-        }
-
-        public boolean equals(final Object o) {
-            if (o == this) return true;
-            if (!(o instanceof HologramData)) return false;
-            final HologramData other = (HologramData) o;
-            if (!other.canEqual((Object) this)) return false;
-            final Object this$holograms = this.getHolograms();
-            final Object other$holograms = other.getHolograms();
-            if (this$holograms == null ? other$holograms != null : !this$holograms.equals(other$holograms))
-                return false;
-            final Object this$internalName = this.getInternalName();
-            final Object other$internalName = other.getInternalName();
-            if (this$internalName == null ? other$internalName != null : !this$internalName.equals(other$internalName))
-                return false;
-            return true;
-        }
-
-        protected boolean canEqual(final Object other) {
-            return other instanceof HologramData;
-        }
-
-        public int hashCode() {
-            final int PRIME = 59;
-            int result = 1;
-            final Object $holograms = this.getHolograms();
-            result = result * PRIME + ($holograms == null ? 43 : $holograms.hashCode());
-            final Object $internalName = this.getInternalName();
-            result = result * PRIME + ($internalName == null ? 43 : $internalName.hashCode());
-            return result;
         }
 
         public String toString() {

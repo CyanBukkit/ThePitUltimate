@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -47,12 +48,18 @@ public class HologramRunnable implements Runnable {
                 }
 
                 List<String> text = abstractHologram.getText(player);
-                for (int i = 0; i < text.size(); i++) {
-                    if (hologramData.getHolograms().size() <= i) {
-                        Hologram holo = HologramAPI.createHologram(abstractHologram.getLocation(), CC.translate(text.get(i)));
+                if (text.size() != hologramData.getHolograms().size()) {
+                    hologramData.getHolograms().forEach(Hologram::deSpawn);
+                    List<Hologram> holograms = new ArrayList<>();
+                    for (int i = 0; i < text.size(); i++) {
+                        String line = text.get(i);
+                        Hologram holo = HologramAPI.createHologram(abstractHologram.getLocation().clone().add(0, -i * abstractHologram.getHologramHighInterval(), 0), CC.translate(line));
                         holo.spawn(Collections.singletonList(player));
-                        hologramData.getHolograms().add(holo);
+                        holograms.add(holo);
                     }
+                    hologramData.getHolograms().addAll(holograms);
+                }
+                for (int i = 0; i < text.size(); i++) {
                     hologramData.getHolograms().get(i).setText(CC.translate(text.get(i)));
                 }
             }
