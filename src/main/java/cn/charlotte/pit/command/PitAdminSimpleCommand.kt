@@ -15,8 +15,8 @@ import cn.charlotte.pit.menu.quest.main.QuestMenu
 import cn.charlotte.pit.menu.trade.ShowInvBackupButton
 import cn.charlotte.pit.menu.trade.TradeManager
 import cn.charlotte.pit.menu.trade.TradeMenu
+import cn.charlotte.pit.runnable.LeaderBoardRunnable
 import cn.charlotte.pit.runnable.RebootRunnable.RebootTask
-import cn.charlotte.pit.util.MythicUtil
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
@@ -385,5 +385,13 @@ class PitAdminSimpleCommand {
         NewConfiguration.kingsQuestsMarker = UUID.randomUUID()
         NewConfiguration.save()
         return "§a已重置"
+    }
+
+    @Execute(name = "refreshLb")
+    @Async
+    fun refreshLeaderboard(@Context sender: CommandSender): String {
+        sender.sendMessage("§a正在刷新中...")
+        LeaderBoardRunnable.updateLeaderboardData()
+        return "§a已刷新排行榜数据"
     }
 }

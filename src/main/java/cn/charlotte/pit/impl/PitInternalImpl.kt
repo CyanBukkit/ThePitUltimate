@@ -26,18 +26,16 @@ import cn.charlotte.pit.menu.genesis.GenesisMenu
 import cn.charlotte.pit.menu.heresy.HeresyMenu
 import cn.charlotte.pit.menu.main.AuctionMenu
 import cn.charlotte.pit.menu.shop.ShopMenu
-import cn.charlotte.pit.util.DecentHologramImpl
 import cn.charlotte.pit.util.Utils
-import cn.charlotte.pit.util.hologram.DefaultHologram
 import cn.charlotte.pit.util.hologram.Hologram
+import cn.charlotte.pit.util.hologram.packet.PacketHologram
 import cn.charlotte.pit.util.item.ItemUtil
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
 
-object PitInternalImpl: PitInternalHook {
+object PitInternalImpl : PitInternalHook {
     override fun openMythicWellMenu(player: Player?) {
         MythicWellMenu(player!!).openMenu(player)
     }
@@ -68,16 +66,19 @@ object PitInternalImpl: PitInternalHook {
     }
 
     override fun openMenu(player: Player, menuName: String) {
-        when(menuName) {
+        when (menuName) {
             "shop" -> {
                 ShopMenu().openMenu(player)
             }
+
             "admin_enchant" -> {
                 AdminEnchantMenu().openMenu(player)
             }
+
             "admin_item" -> {
                 AdminItemMenu().openMenu(player)
             }
+
             "heresy" -> {
                 HeresyMenu().openMenu(player)
             }
@@ -166,12 +167,13 @@ object PitInternalImpl: PitInternalHook {
     }
 
     override fun createHologram(location: Location, text: String): Hologram {
-        val plugin = Bukkit.getPluginManager().getPlugin("DecentHolograms")
-        return if (plugin == null) {
-            DefaultHologram(location, text)
-        } else {
-            DecentHologramImpl(location, text)
-        }
+        return PacketHologram(text, location)
+//        val plugin = Bukkit.getPluginManager().getPlugin("DecentHolograms")
+//        return if (plugin == null) {
+//            DefaultHologram(location, text)
+//        } else {
+//            DecentHologramImpl(location, text)
+//        }
     }
 
     override fun getRunningKingsQuestsUuid(): UUID {
@@ -212,7 +214,7 @@ object PitInternalImpl: PitInternalHook {
     }
 
     override fun generateItem(item: String): ItemStack? {
-        return when(item) {
+        return when (item) {
             "ChunkOfVileItem" -> ChunkOfVileItem.toItemStack()
             "Leggings" -> MythicLeggingsItem().toItemStack()
             else -> null

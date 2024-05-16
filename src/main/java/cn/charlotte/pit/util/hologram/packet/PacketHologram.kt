@@ -1,31 +1,33 @@
-package cn.charlotte.pit.util
+package cn.charlotte.pit.util.hologram.packet
 
-import cn.charlotte.pit.util.hologram.Hologram
 import cn.charlotte.pit.util.hologram.HologramAPI
 import cn.charlotte.pit.util.hologram.touch.TouchHandler
 import cn.charlotte.pit.util.hologram.view.ViewHandler
-import eu.decentsoftware.holograms.api.DHAPI
 import eu.decentsoftware.holograms.api.nms.NMS
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import java.util.*
 
-class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
+/**
+ * 2024/5/16<br>
+ * ThePitPlus<br>
+ * @author huanmeng_qwq
+ */
+typealias Parent = cn.charlotte.pit.util.hologram.Hologram
 
-    val uuid = UUID.randomUUID()
+class PacketHologram(var displayText: String, var loc: Location) : Parent {
+    val hologram = Hologram(displayText, loc)
 
-    val hologram = DHAPI.createHologram(uuid.toString(), loc, false, mutableListOf(inputText))
-
-    var above: Hologram? = null
+    var above: cn.charlotte.pit.util.hologram.Hologram? = null
 
     var attachingEntity = -1
 
-    var receivers = arrayListOf<Player>()
+    var spawned = true
+    var allPlayers = true
 
     override fun isSpawned(): Boolean {
-        return true
+        return spawned
     }
 
     override fun spawn(ticks: Long) {
@@ -33,48 +35,44 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
     }
 
     override fun spawn(receivers: MutableCollection<out Player>?): Boolean {
-        hologram.isDefaultVisibleState = false
-
-        hologram.hideAll()
+        allPlayers = false
         receivers?.forEach {
-            hologram.setShowPlayer(it)
+            hologram.addUser(it)
         }
-
-        this.receivers.clear()
-        this.receivers += receivers ?: emptyList()
 
         return spawn()
     }
 
     override fun spawn(): Boolean {
+        spawned = true
+        PacketHologramRunnable.holograms.add(this)
         return true
     }
 
     override fun deSpawn(): Boolean {
-        hologram.delete()
+        hologram.removeAll()
+        spawned = false
         return true
     }
 
     override fun getText(): String {
-        return inputText
+        return displayText
     }
 
     override fun setText(text: String?) {
         val after = text ?: ""
-        if (after == inputText) return
-        inputText = after
-        for (page in hologram.pages) {
-            page.setLine(0, inputText)
-        }
-
-        hologram.hideAll()
-        receivers.forEach {
-            hologram.setShowPlayer(it)
-        }
+        if (after == this.displayText) return
+        this.displayText = after
+        hologram.setText(this.displayText)
     }
 
     override fun update() {
-
+        hologram.update()
+        if (allPlayers) {
+            loc.world.players.forEach {
+                hologram.addUser(it)
+            }
+        }
     }
 
     override fun update(interval: Long) {
@@ -90,7 +88,7 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
     }
 
     override fun move(loc: Location) {
-        hologram.location = loc
+        hologram.location(loc)
         this.loc = loc
     }
 
@@ -134,11 +132,11 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
 
     }
 
-    override fun addLineBelow(text: String): Hologram {
+    override fun addLineBelow(text: String): Parent {
         TODO("Not yet implemented")
     }
 
-    override fun getLineBelow(): Hologram? {
+    override fun getLineBelow(): Parent? {
         return null
     }
 
@@ -146,17 +144,17 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
         TODO("Not yet implemented")
     }
 
-    override fun getLinesBelow(): MutableCollection<Hologram> {
+    override fun getLinesBelow(): MutableCollection<cn.charlotte.pit.util.hologram.Hologram> {
         TODO("Not yet implemented")
     }
 
-    override fun addLineAbove(text: String): Hologram {
-        return HologramAPI.createHologram(this.location.add(0.0, 0.25, 0.0), text).apply {
+    override fun addLineAbove(text: String): Parent {
+        return HologramAPI.createHologram(this.loc.add(0.0, 0.25, 0.0), text).apply {
             above = this
         }
     }
 
-    override fun getLineAbove(): Hologram? {
+    override fun getLineAbove(): Parent? {
         return above
     }
 
@@ -166,11 +164,11 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
         return true
     }
 
-    override fun getLinesAbove(): MutableCollection<Hologram> {
+    override fun getLinesAbove(): MutableCollection<Parent> {
         TODO("Not yet implemented")
     }
 
-    override fun getLines(): MutableCollection<Hologram> {
+    override fun getLines(): MutableCollection<Parent> {
         TODO("Not yet implemented")
     }
 
@@ -191,11 +189,7 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
     }
 
     private fun sendAttach(player: Player) {
-        for (page in hologram.pages) {
-            for (line in page.lines) {
-                val lineId = line.entityIds[0]
-                NMS.getInstance().attachFakeEntity(player, lineId, attachingEntity)
-            }
-        }
+        val lineId = hologram.entity.entityId
+        NMS.getInstance().attachFakeEntity(player, lineId, attachingEntity)
     }
 }

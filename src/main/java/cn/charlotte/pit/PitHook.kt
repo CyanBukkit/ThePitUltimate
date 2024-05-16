@@ -65,10 +65,10 @@ import cn.charlotte.pit.runnable.*
 import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
 import cn.charlotte.pit.util.getInstance
+import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable
 import cn.charlotte.pit.util.menu.ButtonListener
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
-import cn.hutool.core.util.ReflectUtil
 import com.comphenix.protocol.ProtocolLibrary
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages
@@ -185,6 +185,8 @@ object PitHook {
 
         FreeExpRunnable().runTaskTimer(ThePit.getInstance(), 20 * 60 * 15, 20 * 60 * 15)
         NightVisionRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
+
+        PacketHologramRunnable.runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20)
 
         ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(BountyRunnable(), 100, 100, TimeUnit.MILLISECONDS)
     }
