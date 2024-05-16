@@ -37,7 +37,7 @@ class DecentHologramImpl(var loc: Location, var inputText: String): Hologram {
 
         hologram.hideAll()
         receivers?.forEach {
-            hologram.setShowPlayer(it)
+            hologram.show(it,0)
         }
 
         this.receivers.clear()

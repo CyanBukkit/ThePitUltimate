@@ -62,9 +62,7 @@ public class HologramListener implements Listener {
                     }
                     for (HologramData datum : playerHologram.hologramData.values()) {
                         for (Hologram hologram : datum.holograms) {
-                            if (hologram.isSpawned()) {
-                                hologram.deSpawn();
-                            }
+                            hologram.deSpawn();
                         }
                     }
                 });
