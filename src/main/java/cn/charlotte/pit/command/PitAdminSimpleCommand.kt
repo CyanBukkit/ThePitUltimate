@@ -27,6 +27,7 @@ import cn.charlotte.pit.util.menu.Button
 import cn.charlotte.pit.util.menu.menus.PagedMenu
 import cn.charlotte.pit.util.random.RandomUtil
 import com.mongodb.client.model.Filters
+import dev.jnic.annotation.Include
 import dev.rollczi.litecommands.annotations.argument.Arg
 import dev.rollczi.litecommands.annotations.async.Async
 import dev.rollczi.litecommands.annotations.command.RootCommand
@@ -52,6 +53,7 @@ import kotlin.math.min
  * ThePitPlus<br>
  * @author huanmeng_qwq
  */
+@Include
 @RootCommand
 @Permission("pit.admin")
 class PitAdminSimpleCommand {

@@ -56,6 +56,7 @@ import java.util.stream.Collectors;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 16:46
  */
+
 @Include
 public class PitCommand {
     private final Random random = new Random();

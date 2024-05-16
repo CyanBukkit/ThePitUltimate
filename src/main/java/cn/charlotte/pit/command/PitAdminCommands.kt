@@ -15,6 +15,7 @@ import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.level.LevelUtil
 import cn.charlotte.pit.util.rank.RankUtil
 import com.mongodb.client.model.Filters
+import dev.jnic.annotation.Include
 import dev.rollczi.litecommands.annotations.argument.Arg
 import dev.rollczi.litecommands.annotations.async.Async
 import dev.rollczi.litecommands.annotations.command.Command
@@ -37,6 +38,7 @@ import org.bukkit.util.Vector
  * ThePitPlus<br>
  * @author huanmeng_qwq
  */
+@Include
 @Command(name = "pitAdmin")
 @Permission("pit.admin")
 class PitAdminCommands {

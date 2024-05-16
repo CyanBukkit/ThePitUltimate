@@ -31,6 +31,7 @@ import cn.charlotte.pit.util.rank.RankUtil
 import cn.charlotte.pit.util.time.TimeUtil
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
+import dev.jnic.annotation.Include
 import dev.rollczi.litecommands.annotations.argument.Arg
 import dev.rollczi.litecommands.annotations.command.RootCommand
 import dev.rollczi.litecommands.annotations.context.Context
@@ -63,6 +64,7 @@ import java.util.stream.Collectors
  * ThePitPlus<br>
  * @author huanmeng_qwq
  */
+@Include
 @RootCommand
 class PitCommands {
     private val viewCooldown: Cache<UUID, Long> = CacheBuilder.newBuilder()
