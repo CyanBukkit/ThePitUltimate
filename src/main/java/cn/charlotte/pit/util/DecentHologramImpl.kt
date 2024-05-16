@@ -36,7 +36,6 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
         hologram.isDefaultVisibleState = false
 
         Bukkit.getOnlinePlayers().forEach{
-            hologram.hide(it)
             hologram.setHidePlayer(it)
         }
         receivers?.forEach {
