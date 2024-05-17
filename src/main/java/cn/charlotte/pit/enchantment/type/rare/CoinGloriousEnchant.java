@@ -53,24 +53,13 @@ public class CoinGloriousEnchant extends AbstractEnchantment implements IAttackE
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId());
         long number = (long) profile.getCoins();
 
-        int count = 0;
-        while (number > 0) {
-            if (number % 10000 == 0) {
-                count++;
-            }
-            number = number / 10;
-        }
+        int count = (int) (number / 10000);
+
+        double maxBoost = enchantLevel * 6;
+        double boost = Math.min(maxBoost, count);
 
         if (count > 0) {
-            if (enchantLevel == 1 && count >= enchantLevel * 6) {
-                boostDamage.getAndAdd(enchantLevel * 6);
-            } else if (enchantLevel == 2 && count >= enchantLevel * 6) {
-                boostDamage.getAndAdd(enchantLevel * 6);
-            } else if (enchantLevel == 3 && count >= enchantLevel * 6) {
-                boostDamage.getAndAdd(enchantLevel * 6);
-            }
+            boostDamage.getAndAdd(boost);
         }
-
-        attacker.sendMessage("Attack Update " + count);
     }
 }
