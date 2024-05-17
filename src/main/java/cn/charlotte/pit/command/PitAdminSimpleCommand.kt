@@ -148,7 +148,7 @@ class PitAdminSimpleCommand {
     @Execute(name = "reboot")
     @Permission("pit.admin")
     fun reboot(
-        @Context player: Player,
+        @Context sender: CommandSender,
         @Arg("duration") duration: Duration,
         @OptionalArg("reason") reason: String = "计划外重启"
     ) {
