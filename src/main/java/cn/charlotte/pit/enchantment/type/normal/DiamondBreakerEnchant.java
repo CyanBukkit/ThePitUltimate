@@ -2,6 +2,7 @@ package cn.charlotte.pit.enchantment.type.normal;
 
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
+import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Include
 @WeaponOnly
 @BowOnly
+@ArmorOnly
 public class DiamondBreakerEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
     @Override
     public String getEnchantName() {
