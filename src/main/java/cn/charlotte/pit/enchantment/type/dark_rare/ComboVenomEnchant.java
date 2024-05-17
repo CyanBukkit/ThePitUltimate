@@ -76,7 +76,7 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
             targetPlayer.removePotionEffect(PotionEffectType.POISON);
             targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0));
 
-            attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 20 * 1000L));
+            attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 12 * 1000L));
             attacker.removePotionEffect(PotionEffectType.POISON);
             attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0));
         }
@@ -92,9 +92,9 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
             targetPlayer.removePotionEffect(PotionEffectType.POISON);
             targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0));
 
-            attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 20 * 1000L));
+            attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 12 * 1000L));
             attacker.removePotionEffect(PotionEffectType.POISON);
-            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 20, 0));
+            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0));
         }
     }
 
