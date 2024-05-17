@@ -240,7 +240,9 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
     @Override
     public void onActive() {
-        lots = getRandomLots();
+        if (lots == null) {
+            lots = getRandomLots();
+        }
 
         //event settings init
         try {

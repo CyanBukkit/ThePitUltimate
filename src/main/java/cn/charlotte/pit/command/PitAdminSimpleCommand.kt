@@ -5,6 +5,7 @@ import cn.charlotte.pit.command.handler.HandHasItem
 import cn.charlotte.pit.config.NewConfiguration
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.events.EventsHandler.refreshEvents
+import cn.charlotte.pit.events.impl.AuctionEvent
 import cn.charlotte.pit.menu.cdk.generate.CDKMenu
 import cn.charlotte.pit.menu.cdk.view.CDKViewMenu
 import cn.charlotte.pit.menu.mail.MailMenu
@@ -393,5 +394,17 @@ class PitAdminSimpleCommand {
         sender.sendMessage("§a正在刷新中...")
         LeaderBoardRunnable.updateLeaderboardData()
         return "§a已刷新排行榜数据"
+    }
+
+    @Execute(name = "StartCustomAuction")
+    @HandHasItem
+    fun startCustomAuction(player: Player, @Arg("price") price: Double) {
+        val itemStack = player.itemInHand
+        AuctionEvent().also {
+            it.lots = AuctionEvent.LotsData(arrayOf(itemStack), price, 0)
+            it.setStartByAdmin(true)
+
+            ThePit.getInstance().eventFactory.activeEvent(it)
+        }
     }
 }
