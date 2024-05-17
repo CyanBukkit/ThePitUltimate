@@ -59,7 +59,7 @@ public class CoinGloriousEnchant extends AbstractEnchantment implements IAttackE
         double boost = Math.min(maxBoost, count);
 
         if (count > 0) {
-            boostDamage.getAndAdd(boost);
+            boostDamage.getAndAdd(boost * 0.01);
         }
     }
 }
