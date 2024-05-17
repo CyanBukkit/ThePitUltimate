@@ -37,6 +37,7 @@ import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.sign.SignGui;
 import cn.charlotte.pit.util.sound.SoundFactory;
 import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
@@ -295,6 +296,17 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         if ("GetServer".equals(subchannel)) {
             setBungeeServerName(in.readUTF());
         }
+    }
+
+    public void connect(Player p, String server) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        try {
+            out.writeUTF("Connect");
+            out.writeUTF(server);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        p.sendPluginMessage(this, "BungeeCord", out.toByteArray());
     }
 
     public static boolean callTimeChange(long time) {

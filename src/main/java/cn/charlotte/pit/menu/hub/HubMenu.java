@@ -22,7 +22,7 @@ public class HubMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "返回大厅";
+        return "加入武林争霸";
     }
 
     @Override
@@ -31,12 +31,13 @@ public class HubMenu extends Menu {
         button.put(13, new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
-                return new ItemBuilder(Material.BIRCH_DOOR_ITEM).name("&a返回大厅").lore("&7左键点累了吗?", " ", "&e点击返回大厅!").build();
+                return new ItemBuilder(Material.BIRCH_DOOR_ITEM).name("&a武林争霸").lore("&7左键点累了吗?", " ", "&7不妨加入武林争霸"," ","&7休闲娱乐又解压"," ","进入即可体验极致的舒适"," ","&e点击加入武林争霸!").build();
             }
 
             @Override
             public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-                Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> player.chat("/" + NewConfiguration.INSTANCE.getLobbyCommand()));
+/*                Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> player.chat("/" + NewConfiguration.INSTANCE.getLobbyCommand()));*/
+                Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> ThePit.getInstance().connect(player,"G_RPG#3"));
             }
         });
         return button;
