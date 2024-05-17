@@ -187,11 +187,11 @@ public class Scoreboard implements AssembleAdapter {
                 lines.add("&f状态: " + currentStreak);
             } else {
                 lines.add("&f状态: " + (profile.getCombatTimer().hasExpired()
-                        ? "&a不在战坑中" : "&c战坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                        ? "&a不在占坑中" : "&c占坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
                         ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
                         : (profile.getBounty() != 0
                         ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
-                        : "")))); // status: 战坑中 (%duration%秒) / 不在战坑中
+                        : "")))); // status: 占坑中 (%duration%秒) / 不在占坑中
             }
             if (!profile.getCombatTimer().hasExpired()) {
                 lines.add("&f连杀: &a" + numFormat.format(profile.getStreakKills()));
