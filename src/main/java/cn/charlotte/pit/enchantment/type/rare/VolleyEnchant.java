@@ -93,7 +93,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
             try {
                 if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
                     //shoot 5 arrows need 400ms u suck why u set it to 200ms
-                    cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.SECONDS));// change to 0s
+                    cooldown.put(player.getUniqueId(), new Cooldown(200, TimeUnit.MILLISECONDS));
                     event.setCancelled(true);
 
                     final ItemStack item = CraftItemStack.asNMSCopy(itemInHand);
