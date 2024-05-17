@@ -29,6 +29,7 @@ import cn.charlotte.pit.util.dependencies.Dependency;
 import cn.charlotte.pit.util.dependencies.DependencyManager;
 import cn.charlotte.pit.util.dependencies.loaders.LoaderType;
 import cn.charlotte.pit.util.dependencies.loaders.ReflectionClassLoader;
+import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.menu.MenuUpdateTask;
 import cn.charlotte.pit.util.nametag.NametagHandler;
@@ -51,6 +52,7 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -221,7 +223,13 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new AutoSaveRunnable(), 1, 1, TimeUnit.MINUTES);
                 new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new DayNightCycleRunnable(), 1, 1, TimeUnit.SECONDS);
 
-
+                Bukkit.getWorlds().forEach(w -> {
+                    w.getEntities().forEach(e -> {
+                        if (e instanceof ArmorStand) {
+                            e.remove();
+                        }
+                    });
+                });
 //            this.printBanner();
 
                 new Thread(new LeaderBoardRunnable()).start();
@@ -257,6 +265,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     @Override
     public void onDisable() {
+        PacketHologramRunnable.deSpawnAll();
         synchronized (Bukkit.getOnlinePlayers()) {
             CC.boardCast("&6&l公告! &7正在执行关闭服务器...");
 

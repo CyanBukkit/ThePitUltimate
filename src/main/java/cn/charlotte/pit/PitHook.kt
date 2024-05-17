@@ -186,7 +186,7 @@ object PitHook {
         FreeExpRunnable().runTaskTimer(ThePit.getInstance(), 20 * 60 * 15, 20 * 60 * 15)
         NightVisionRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
-        PacketHologramRunnable.runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20)
+        PacketHologramRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20)
 
         ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(BountyRunnable(), 100, 100, TimeUnit.MILLISECONDS)
     }

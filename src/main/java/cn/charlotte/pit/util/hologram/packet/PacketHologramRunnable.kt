@@ -2,8 +2,7 @@ package cn.charlotte.pit.util.hologram.packet
 
 import org.bukkit.scheduler.BukkitRunnable
 
-object PacketHologramRunnable : BukkitRunnable() {
-    val holograms: MutableSet<PacketHologram> = HashSet()
+class PacketHologramRunnable : BukkitRunnable() {
     override fun run() {
         holograms.removeIf {
             !it.spawned
@@ -13,4 +12,15 @@ object PacketHologramRunnable : BukkitRunnable() {
         }
     }
 
+    companion object {
+        val holograms: MutableSet<PacketHologram> = linkedSetOf()
+
+        @JvmStatic
+        fun deSpawnAll() {
+            holograms.forEach {
+                it.hologram.entity.remove()
+            }
+            holograms.clear()
+        }
+    }
 }
