@@ -59,6 +59,7 @@ public class IronPackShopButton extends AbstractShopButton {
     @Override
     public ItemStack[] getResultItem(Player player) {
         return new ItemStack[]{
+                new ItemBuilder(Material.IRON_HELMET).canDrop(true).canSaveToEnderChest(true).deathDrop(true).lore("&6从商店中获得").internalName("shopItem").build(),
                 new ItemBuilder(Material.IRON_CHESTPLATE).canDrop(true).canSaveToEnderChest(true).deathDrop(true).lore("&6从商店中获得").internalName("shopItem").build(),
                 new ItemBuilder(Material.IRON_LEGGINGS).canDrop(true).canSaveToEnderChest(true).deathDrop(true).lore("&6从商店中获得").internalName("shopItem").build(),
                 new ItemBuilder(Material.IRON_BOOTS).canDrop(true).canSaveToEnderChest(true).deathDrop(true).lore("&6从商店中获得").internalName("shopItem").build()
