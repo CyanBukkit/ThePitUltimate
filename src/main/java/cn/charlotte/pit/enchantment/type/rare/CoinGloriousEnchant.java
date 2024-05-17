@@ -56,7 +56,10 @@ public class CoinGloriousEnchant extends AbstractEnchantment implements IAttackE
         int count = (int) (number / 10000);
 
         double maxBoost = enchantLevel * 6;
-        double boost = Math.min(maxBoost, count);
+        double boost = count;
+        if (boost > maxBoost) {
+            boost = maxBoost;
+        }
 
         if (count > 0) {
             boostDamage.getAndAdd(boost * 0.01);

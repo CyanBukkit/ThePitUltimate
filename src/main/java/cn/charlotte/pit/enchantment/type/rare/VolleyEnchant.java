@@ -26,6 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -77,6 +78,8 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
         return "&7射箭时同时射出 &e" + (enchantLevel + 2) + " &7支箭矢";
     }
 
+    private Map<UUID, Boolean> isShooting = new HashMap<>();
+
     @EventHandler
     @SneakyThrows
     public void onInteract(EntityShootBowEvent event) {
@@ -89,11 +92,14 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
         if (level == -1) {
             return;
         }
+        if (isShooting.getOrDefault(player.getUniqueId(), false)) {
+            return;
+        }
         if (itemInHand.getType() == Material.BOW) {
             try {
                 if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
                     //shoot 5 arrows need 400ms u suck why u set it to 200ms
-                    cooldown.put(player.getUniqueId(), new Cooldown(200, TimeUnit.MILLISECONDS));
+                    cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.SECONDS));
                     event.setCancelled(true);
 
                     final ItemStack item = CraftItemStack.asNMSCopy(itemInHand);
@@ -113,10 +119,13 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                         @Override
                         public void run() {
                             if (tick >= level + 1) {
+                                cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.MILLISECONDS));
                                 this.cancel();
                             }
                             tick++;
+                            isShooting.put(player.getUniqueId(), true);
                             bow.a(item, entityPlayer.world, entityPlayer, value);
+                            isShooting.put(player.getUniqueId(), false);
                         }
                     }.runTaskTimer(ThePit.getInstance(), 0, 2);
                 }
