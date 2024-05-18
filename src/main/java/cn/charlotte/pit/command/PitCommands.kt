@@ -602,7 +602,7 @@ class PitCommands {
             player.sendMessage(CC.translate("&c精通等级不满足要求哦,快去升级吧!"))
             return
         }
-        if (data.limitPrestige > 0 && data.limitLevel > 0 && profile.level < data.limitLevel) {
+        if (data.limitPrestige > 0 && data.limitLevel > 0 && profile.getPrestige() == data.limitPrestige && profile.level < data.limitLevel) {
             player.sendMessage("§c似乎还差一点等级就能领取到了...加油!")
             return
         }
