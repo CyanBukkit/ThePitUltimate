@@ -53,7 +53,11 @@ public class MailClaimButton extends Button {
         if (mail.getItem().getContents() != null && mail.getItem().getContents().length > 0) {
             for (ItemStack content : mail.getItem().getContents()) {
                 if (content != null) {
-                    lore.add("&7" + content.getAmount() + "x &f" + (!content.getItemMeta().hasDisplayName() ? content.getType().name() : content.getItemMeta().getDisplayName()));
+                    String name = content.getType().name();
+                    if (content.hasItemMeta() && content.getItemMeta().hasDisplayName()) {
+                        name = content.getItemMeta().getDisplayName();
+                    }
+                    lore.add("&7" + content.getAmount() + "x &f" + name);
                 }
             }
         }
