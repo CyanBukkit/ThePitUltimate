@@ -132,7 +132,7 @@ public class CombatListener implements Listener {
                 }
 
                 //DiamondSword Boost
-                if (damager.getItemInHand() != null && damager.getItemInHand().getType() == Material.DIAMOND_SWORD && ItemUtil.getInternalName(damager.getItemInHand()).equals("shopItem")) {
+                if (damager.getItemInHand() != null && damager.getItemInHand().getType() == Material.DIAMOND_SWORD && "shopItem".equals(ItemUtil.getInternalName(damager.getItemInHand()))) {
                     PlayerProfile targetProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                     if (targetProfile.getBounty() != 0) {
                         event.setDamage(event.getDamage() * 1.2);
@@ -140,7 +140,7 @@ public class CombatListener implements Listener {
                 }
 
                 //CombatSpade Boost
-                if (damager.getItemInHand() != null && damager.getItemInHand().getType() == Material.DIAMOND_SPADE && ItemUtil.getInternalName(damager.getItemInHand()).equalsIgnoreCase("shopItem")) {
+                if (damager.getItemInHand() != null && damager.getItemInHand().getType() == Material.DIAMOND_SPADE && "shopItem".equalsIgnoreCase(ItemUtil.getInternalName(damager.getItemInHand()))) {
                     for (ItemStack is : player.getInventory().getArmorContents()) {
                         if (is.getType().name().contains("DIAMOND")) {
                             event.setDamage(event.getDamage() + 0.5);
