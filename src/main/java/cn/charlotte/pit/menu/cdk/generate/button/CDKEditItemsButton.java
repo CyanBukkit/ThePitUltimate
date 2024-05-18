@@ -68,7 +68,7 @@ public class CDKEditItemsButton extends Button {
                 @Override
                 public void onClose(Player player) {
                     for (int i = 0; i < 18; i++) {
-                        if (player.getInventory().getItem(i) != null && player.getInventory().getItem(i).getType() != Material.AIR) {
+                        if (player.getOpenInventory().getItem(i) != null && player.getOpenInventory().getItem(i).getType() != Material.AIR) {
                             items.set(i, player.getOpenInventory().getItem(i));
                         }
                     }
