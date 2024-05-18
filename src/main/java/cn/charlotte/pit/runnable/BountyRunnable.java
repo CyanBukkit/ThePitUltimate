@@ -62,13 +62,12 @@ public class BountyRunnable implements Runnable {
     }
 
 
-
     @SneakyThrows
     private void playAnimation(Player player, int bounty, String color) {
         AnimationData animationData = animationDataMap.get(player.getUniqueId());
         List<HologramDisplay> holograms = animationData.holograms;
 
-        if (animationData.spawnCooldown.hasExpired()) {
+        if (holograms.isEmpty()) {
             Location playerLocation = player.getLocation();
             double x = generatorLocDouble();
             double z = generatorLocDouble();
@@ -86,14 +85,15 @@ public class BountyRunnable implements Runnable {
 
         List<HologramDisplay> shouldRemove = new ArrayList<>();
         for (HologramDisplay hologram : holograms) {
-            Location location = player.getLocation().clone();
-            location.setX(location.getX() + hologram.boostX);
-            location.setY(hologram.getHologram().getLocation().getY() + 0.1);
-            location.setZ(location.getZ() + hologram.boostZ);
-            hologram.getHologram().setLocation(location);
             if (hologram.timer.hasExpired()) {
                 hologram.hologram.deSpawn();
                 shouldRemove.add(hologram);
+            } else {
+                Location location = player.getLocation().clone();
+                location.setX(location.getX() + hologram.boostX);
+                location.setY(hologram.getHologram().getLocation().getY() + 0.1);
+                location.setZ(location.getZ() + hologram.boostZ);
+                hologram.getHologram().setLocation(location);
             }
         }
         holograms.removeAll(shouldRemove);
