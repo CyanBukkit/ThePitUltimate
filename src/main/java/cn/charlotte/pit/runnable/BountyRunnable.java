@@ -15,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: EmptyIrony
@@ -67,7 +66,7 @@ public class BountyRunnable implements Runnable {
         AnimationData animationData = animationDataMap.get(player.getUniqueId());
         List<HologramDisplay> holograms = animationData.holograms;
 
-        if (holograms.isEmpty()) {
+        if (holograms.size() < 3) {
             Location playerLocation = player.getLocation();
             double x = generatorLocDouble();
             double z = generatorLocDouble();
@@ -85,7 +84,7 @@ public class BountyRunnable implements Runnable {
 
         List<HologramDisplay> shouldRemove = new ArrayList<>();
         for (HologramDisplay hologram : holograms) {
-            if (hologram.timer.hasExpired()) {
+            if (System.currentTimeMillis() > hologram.endTime) {
                 hologram.hologram.deSpawn();
                 shouldRemove.add(hologram);
             } else {
@@ -130,13 +129,13 @@ public class BountyRunnable implements Runnable {
         private final Hologram hologram;
         private final double boostX;
         private final double boostZ;
-        private final Cooldown timer;
+        private final long endTime;
 
         public HologramDisplay(Hologram hologram, double boostX, double boostZ) {
             this.hologram = hologram;
             this.boostX = boostX;
             this.boostZ = boostZ;
-            this.timer = new Cooldown(2000, TimeUnit.MILLISECONDS);
+            this.endTime = System.currentTimeMillis() + 2000;
         }
     }
 }

@@ -73,7 +73,7 @@ public class PacketArmorStand {
 
     public void removeUser(Player user) {
         if (users.remove(user)) {
-            hide(user, false);
+            hide(user, true);
         }
         hiding.remove(user);
         viewing.remove(user);
