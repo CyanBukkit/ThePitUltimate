@@ -131,7 +131,7 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
         if ("pants_bundle_empty".equals(ItemUtil.getInternalName(item))) {
             int mythicCount = 0;
             for (int i = 0; i < 36; i++) {
-                if (player.getInventory().getItem(i) != null && ItemUtil.getInternalName(player.getInventory().getItem(i)).equalsIgnoreCase("mythic_leggings")) {
+                if (player.getInventory().getItem(i) != null && "mythic_leggings".equalsIgnoreCase(ItemUtil.getInternalName(player.getInventory().getItem(i)))) {
                     AbstractPitItem pitItem = new MythicLeggingsItem();
                     pitItem.loadFromItemStack(player.getInventory().getItem(i));
                     if (!pitItem.isEnchanted()) {
