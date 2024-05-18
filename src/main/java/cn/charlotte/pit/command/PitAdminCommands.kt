@@ -55,6 +55,20 @@ class PitAdminCommands {
         player.sendMessage(CC.translate("&a成功给予物品至 " + RankUtil.getPlayerColoredName(target.uniqueId)))
     }
 
+    @Execute(name = "giveAll")
+    @Shortcut("giveAll")
+    fun giveItemInHandAll(@Context player: Player) {
+        if (player.itemInHand == null || player.itemInHand.type == Material.AIR) {
+            player.sendMessage(CC.translate("&c请手持要给予的物品!"))
+            return
+        }
+        Bukkit.getOnlinePlayers().forEach { target ->
+            target.inventory.addItem(player.itemInHand)
+            target.sendMessage(CC.translate("&a一位管理员给予了你一些物品..."))
+            player.sendMessage(CC.translate("&a成功给予物品至 " + RankUtil.getPlayerColoredName(target.uniqueId)))
+        }
+    }
+
     @Execute(name = "addSpawn")
     @Async
     fun addSpawn(@Context player: Player): String {
@@ -430,7 +444,7 @@ class PitAdminCommands {
             profile.streakKills = amount.toDouble()
             player.sendMessage("§a已修改玩家连杀")
         }
-            if ("abounty".equals(type, ignoreCase = true)) {
+        if ("abounty".equals(type, ignoreCase = true)) {
             profile.setActionBounty(amount)
             player.sendMessage("§a已修改玩家行动赏金")
         }
