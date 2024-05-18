@@ -511,7 +511,6 @@ object PitHook {
             SuperStreaker::class.java
         )
         perkFactory.init(classes)
-        AsyncCatcher.enabled = false
     }
 
     private fun registerSounds() {
