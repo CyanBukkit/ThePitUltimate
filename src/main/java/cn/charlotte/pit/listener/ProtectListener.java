@@ -44,7 +44,6 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:48
  */
-@Include
 @AutoRegister
 public class ProtectListener implements Listener {
 

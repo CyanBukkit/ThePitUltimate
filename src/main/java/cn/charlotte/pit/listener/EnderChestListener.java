@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2021/1/7 12:45
  */
-@Include
 @AutoRegister
 public class EnderChestListener implements Listener {
     private final Map<UUID, Location> locationCache = new HashMap<>();

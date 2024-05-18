@@ -69,7 +69,6 @@ import java.util.stream.Stream;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:00
  */
-@Include
 @AutoRegister
 public class PlayerListener implements Listener {
     private final Map<UUID, Long> goldenAppleCooldown = new HashMap<>();

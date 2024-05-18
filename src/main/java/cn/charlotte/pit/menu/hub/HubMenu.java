@@ -31,7 +31,7 @@ public class HubMenu extends Menu {
         button.put(13, new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
-                return new ItemBuilder(Material.BIRCH_DOOR_ITEM).name("&a武林争霸").lore("&7左键点累了吗?", " ", "&7不妨加入武林争霸"," ","&7休闲娱乐又解压"," ","进入即可体验极致的舒适"," ","&e点击加入武林争霸!").build();
+                return new ItemBuilder(Material.BIRCH_DOOR_ITEM).name("&a武林争霸").lore("&7左键点累了吗?", " ", "&7不妨加入武林争霸"," ","&7休闲娱乐又解压"," ","&7进入即可体验极致的舒适"," ","&e点击加入武林争霸!").build();
             }
 
             @Override

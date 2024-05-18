@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
  * @Author: EmptyIrony
  * @Date: 2021/2/4 14:56
  */
-@Include
 public class PacketListener extends PacketAdapter {
 
     public PacketListener() {

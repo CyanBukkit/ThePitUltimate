@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 11:31
  */
-@Include
 @AutoRegister
 public class ChatListener implements Listener {
 

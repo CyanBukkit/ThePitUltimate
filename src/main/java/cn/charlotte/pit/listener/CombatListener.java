@@ -72,7 +72,6 @@ import java.util.stream.Collectors;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 11:16
  */
-@Include
 @AutoRegister
 public class CombatListener implements Listener {
     private static final BountySolventBuff bountySolventBuff = new BountySolventBuff();

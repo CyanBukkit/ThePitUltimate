@@ -57,7 +57,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: EmptyIrony
  * @Date: 2021/1/2 12:40
  */
-@Include
 public class GameEffectListener implements Listener {
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
 

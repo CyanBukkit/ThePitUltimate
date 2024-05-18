@@ -38,7 +38,6 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:27
  */
-@Include
 @AutoRegister
 public class DataListener implements Listener {
     private final ScheduledExecutorService executor;
