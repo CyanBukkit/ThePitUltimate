@@ -1,5 +1,6 @@
 package cn.charlotte.pit.util.hologram.packet
 
+import cn.hutool.core.collection.ConcurrentHashSet
 import org.bukkit.scheduler.BukkitRunnable
 
 class PacketHologramRunnable : BukkitRunnable() {
@@ -13,7 +14,7 @@ class PacketHologramRunnable : BukkitRunnable() {
     }
 
     companion object {
-        val holograms: MutableSet<PacketHologram> = linkedSetOf()
+        val holograms: MutableSet<PacketHologram> = ConcurrentHashSet()
 
         @JvmStatic
         fun deSpawnAll() {

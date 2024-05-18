@@ -158,6 +158,13 @@ class PitAdminSimpleCommand {
             .addRebootTask(RebootTask(reason, System.currentTimeMillis() + duration.toMillis()))
     }
 
+    @Execute(name = "cancelReboot")
+    @Permission("pit.admin")
+    fun cancelReboot(@Context sender: CommandSender): String {
+        ThePit.getInstance().rebootRunnable.cancelTask();
+        return "§ok"
+    }
+
     @Execute(name = "forceTrade")
     @Permission("pit.admin")
     fun forceTrade(@Context player: Player, @Arg("target") target: Player) {

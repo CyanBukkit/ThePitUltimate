@@ -7,7 +7,6 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.TitleUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -52,9 +51,6 @@ public class RebootRunnable extends BukkitRunnable {
     }
 
     public void addRebootTask(RebootTask task) {
-        if (this.currentTask != null) {
-            return;
-        }
         this.currentTask = task;
         long l = task.endTime - System.currentTimeMillis();
         String time = TimeUtil.millisToRoundedTime(l);
@@ -62,6 +58,10 @@ public class RebootRunnable extends BukkitRunnable {
         for (Player player : Bukkit.getOnlinePlayers()) {
             TitleUtil.sendTitle(player, CC.translate("&c服务器即将在 &b" + time + " &c后重启"), "", 20, 100, 20);
         }
+    }
+
+    public void cancelTask() {
+        currentTask = null;
     }
 
 
