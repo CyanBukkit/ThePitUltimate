@@ -3,6 +3,7 @@ package cn.charlotte.pit.command
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.command.handler.HandHasItem
 import cn.charlotte.pit.config.NewConfiguration
+import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.events.EventsHandler.refreshEvents
 import cn.charlotte.pit.events.impl.AuctionEvent
@@ -396,6 +397,7 @@ class PitAdminSimpleCommand {
     }
 
     @Execute(name = "refreshLb")
+    @Permission("pit.admin")
     @Async
     fun refreshLeaderboard(@Context sender: CommandSender): String {
         sender.sendMessage("§a正在刷新中...")
@@ -404,6 +406,7 @@ class PitAdminSimpleCommand {
     }
 
     @Execute(name = "StartCustomAuction")
+    @Permission("pit.admin")
     @HandHasItem
     fun startCustomAuction(@Context player: Player, @Arg("price") price: Double) {
         val itemStack = player.itemInHand
@@ -413,5 +416,12 @@ class PitAdminSimpleCommand {
 
             ThePit.getInstance().eventFactory.activeEvent(it)
         }
+    }
+
+    @Execute(name = "refreshCdk")
+    @Permission("pit.admin")
+    fun refreshCdk(@Context sender: CommandSender): String {
+        CDKData.loadAllCDKFromData()
+        return "§a已刷新"
     }
 }
