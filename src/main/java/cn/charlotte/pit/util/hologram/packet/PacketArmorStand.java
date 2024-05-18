@@ -154,7 +154,7 @@ public class PacketArmorStand {
             viewing.remove(user);
             return;
         }
-        if (user.getLocation().distance(location) >= DISTANCE) {
+        if (!force && user.getLocation().distance(location) >= DISTANCE) {
             hiding.add(user);
             viewing.remove(user);
             return;
