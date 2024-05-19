@@ -8,11 +8,13 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
+import cn.hutool.core.collection.ConcurrentHashSet;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -20,7 +22,7 @@ import java.util.*;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 17:33
  */
-public class BountyRunnable implements Runnable {
+public class BountyRunnable extends BukkitRunnable {
     private final Random random = new Random();
     private static final Map<UUID, AnimationData> animationDataMap = new HashMap<>();
 
@@ -64,7 +66,7 @@ public class BountyRunnable implements Runnable {
     @SneakyThrows
     private void playAnimation(Player player, int bounty, String color) {
         AnimationData animationData = animationDataMap.get(player.getUniqueId());
-        List<HologramDisplay> holograms = animationData.holograms;
+        Set<HologramDisplay> holograms = animationData.holograms;
 
         if (holograms.size() < 3) {
             Location playerLocation = player.getLocation();
@@ -107,15 +109,15 @@ public class BountyRunnable implements Runnable {
     }
 
     public static class AnimationData {
-        private final List<HologramDisplay> holograms;
+        private final Set<HologramDisplay> holograms;
         private Cooldown spawnCooldown;
 
         public AnimationData() {
-            this.holograms = new ArrayList<>();
+            this.holograms = new ConcurrentHashSet<>();
             this.spawnCooldown = new Cooldown(0);
         }
 
-        public List<HologramDisplay> getHolograms() {
+        public Set<HologramDisplay> getHolograms() {
             return holograms;
         }
 

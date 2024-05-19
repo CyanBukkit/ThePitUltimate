@@ -67,6 +67,9 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun update() {
+        if (!spawned) {
+            return
+        }
         hologram.update()
         if (allPlayers) {
             loc.world.players.forEach {

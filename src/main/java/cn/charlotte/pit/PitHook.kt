@@ -188,7 +188,7 @@ object PitHook {
 
         PacketHologramRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20)
 
-        ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(BountyRunnable(), 100, 100, TimeUnit.MILLISECONDS)
+        BountyRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 2, 2)
     }
 
     private fun loadItems() {

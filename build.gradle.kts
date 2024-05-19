@@ -66,6 +66,17 @@ tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
 
+val confusion by tasks.registering(JavaExec::class) {
+    group = "build"
+    classpath = fileTree("confusion")
+    mainClass = "-jar"
+    args(tasks.shadowJar.get().archiveFile.get().asFile.absolutePath, "ThePit.jar", "config-331.xml")
+    standardInput = System.`in`
+    standardOutput = System.out
+    errorOutput = System.err
+    defaultCharacterEncoding = "UTF-8"
+}
+
 tasks.build {
     dependsOn(tasks.shadowJar)
 }
