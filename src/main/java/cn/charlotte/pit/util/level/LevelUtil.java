@@ -41,6 +41,16 @@ public class LevelUtil {
             return "&0";
         } else if (prestige >= 48 && prestige <= 50) {
             return "&4";
+        } else if (prestige >= 51 && prestige <= 65) {
+            return "&1";
+        } else if (prestige >= 66 && prestige <= 70) {
+            return "&3";
+        } else if (prestige >= 71 && prestige <= 85) {
+            return "&2";
+        } else if (prestige >= 86 && prestige <= 90) {
+            return "&2";
+        } else if (prestige >= 91) {
+            return "&8&l";
         }
 
         return "&7";
