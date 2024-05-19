@@ -221,7 +221,7 @@ public class MythicWellMenu extends Menu {
             }
 
             String internalName = ItemUtil.getInternalName(item);
-            boolean isIMythicItem = internalName.equals("mythic_sword") || internalName.equals("mythic_bow") || internalName.equals("mythic_leggings") || internalName.equals("mythic_reel");
+            boolean isIMythicItem = "mythic_sword".equals(internalName) || "mythic_bow".equals(internalName) || "mythic_leggings".equals(internalName) || "mythic_reel".equals(internalName);
 
             if (!isIMythicItem) {
                 player.sendMessage(CC.translate("&c你必须放入未被附魔的神话武器才可以进行附魔!"));
