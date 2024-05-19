@@ -914,7 +914,11 @@ class PitCommands {
         val mythicItem = MythicUtil.getMythicItem(item)
         val permission = "pit.rename-color"
         if (player.hasPermission(permission)) {
-            mythicItem.customName = CC.translate(name)
+            val translate = CC.translate(name)
+            if (CC.stripColor(translate).isBlank()) {
+                return "§c不可以这样哦!"
+            }
+            mythicItem.customName = translate
         } else if (name.contains("&") && !player.hasPermission(permission)) {
             return CC.translate("&c需要拥有颜色字符权限方可命名颜色名称！")
         } else {
