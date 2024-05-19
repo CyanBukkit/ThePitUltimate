@@ -26,7 +26,6 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.EnchantmentManager;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -496,7 +495,12 @@ public class GameEffectListener implements Listener {
             if (player.getHealth() < finalDamage.get()) {
                 player.damage(500000.0);
             } else {
-                player.setHealth(Math.max(player.getHealth() - finalDamage.get(), 0));
+                double v = player.getHealth() - finalDamage.get();
+                if (v > 0) {
+                    player.setHealth(v);
+                } else {
+                    player.setHealth(0);
+                }
             }
         }
         if (event.getEntity() instanceof Player) {
