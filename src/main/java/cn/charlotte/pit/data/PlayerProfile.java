@@ -5,6 +5,7 @@ import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.api.PitInternalHook;
 import cn.charlotte.pit.buff.BuffData;
 import cn.charlotte.pit.data.sub.*;
+import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench;
 import cn.charlotte.pit.event.PitGainCoinsEvent;
 import cn.charlotte.pit.event.PitGainRenownEvent;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
@@ -1043,6 +1044,32 @@ public class PlayerProfile {
 
     public int getBounty() {
         return this.bounty;
+    }
+
+    public String bountyColor() {
+        Player player = Bukkit.getPlayer(getPlayerUuid());
+        if (player != null) {
+            boolean itemHasEnchant = Limit24520Ench.instance.isItemHasEnchant(player.getInventory().getLeggings());
+            if (itemHasEnchant) {
+                return "&d";
+            }
+        }
+
+        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+            if (getGenesisData().getTeam() == GenesisTeam.ANGEL) {
+                //♆♨
+                return "&b";
+            }
+            if (getGenesisData().getTeam() == GenesisTeam.DEMON) {
+                //♨
+                return "&c";
+            }
+        }
+
+        if (getGenesisData().getTeam() == GenesisTeam.NONE) {
+            return "&6";
+        }
+        return "&6";
     }
 
     public void setBounty(int bounty) {

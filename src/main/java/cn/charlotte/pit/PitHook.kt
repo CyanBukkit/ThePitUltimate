@@ -17,6 +17,7 @@ import cn.charlotte.pit.enchantment.type.dark_normal.*
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboVenomEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
 import cn.charlotte.pit.enchantment.type.genesis.*
+ import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench
 import cn.charlotte.pit.enchantment.type.normal.*
 import cn.charlotte.pit.enchantment.type.op.*
 import cn.charlotte.pit.enchantment.type.rage.*
@@ -390,6 +391,8 @@ object PitHook {
         classes += SacredArrowEnchant::class.java
         classes += TrashPandaEnchant::class.java
         classes += JerryEnchant5::class.java
+
+        classes += Limit24520Ench::class.java
 
         enchantmentFactor.init(LinkedHashSet(classes))
     }

@@ -1,8 +1,6 @@
 package cn.charlotte.pit.runnable;
 
-import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
@@ -40,15 +38,7 @@ public class BountyRunnable extends BukkitRunnable {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
             if (profile.getBounty() >= 500 || profile.getBounty() < 0) {
                 animationDataMap.putIfAbsent(player.getUniqueId(), new AnimationData());
-                String color = "&6";
-                if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
-                    if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                        color = "&b";
-                    }
-                    if (profile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
-                        color = "&c";
-                    }
-                }
+                String color = profile.bountyColor();
                 playAnimation(player, profile.getBounty(), color);
             } else {
                 AnimationData animationData = animationDataMap.get(player.getUniqueId());

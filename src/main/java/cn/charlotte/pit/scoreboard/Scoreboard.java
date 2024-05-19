@@ -209,15 +209,7 @@ public class Scoreboard implements AssembleAdapter {
         }
         //if Player have a bounty:
         if (profile.getBounty() != 0) {
-            String genesisColor = "&6";
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
-                if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                    genesisColor = "&b";
-                }
-                if (profile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
-                    genesisColor = "&c";
-                }
-            }
+            String genesisColor = profile.bountyColor();
             lines.add("&f赏金: " + genesisColor + "&l" + profile.getBounty() + "g");
         }
         //Damage reduce caused by Perks
