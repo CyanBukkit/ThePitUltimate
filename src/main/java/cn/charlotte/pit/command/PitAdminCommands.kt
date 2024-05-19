@@ -57,12 +57,17 @@ class PitAdminCommands {
 
     @Execute(name = "giveAll")
     @Shortcut("giveAll")
-    fun giveItemInHandAll(@Context player: Player) {
+    fun giveItemInHandAll(@Context player: Player, @Flag("pvp") pvp: Boolean) {
         if (player.itemInHand == null || player.itemInHand.type == Material.AIR) {
             player.sendMessage(CC.translate("&c请手持要给予的物品!"))
             return
         }
         Bukkit.getOnlinePlayers().forEach { target ->
+            if (pvp) {
+                if (PlayerProfile.getPlayerProfileByUuid(target.uniqueId).combatTimer.hasExpired()) {
+                    return@forEach
+                }
+            }
             target.inventory.addItem(player.itemInHand)
             target.sendMessage(CC.translate("&a一位管理员给予了你一些物品..."))
             player.sendMessage(CC.translate("&a成功给予物品至 " + RankUtil.getPlayerColoredName(target.uniqueId)))
