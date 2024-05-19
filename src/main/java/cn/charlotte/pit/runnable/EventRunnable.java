@@ -16,20 +16,23 @@ public class EventRunnable extends BukkitRunnable {
     @SneakyThrows
     @Override
     public void run() {
-        InetAddress address = InetAddress.getByName("thepit.meowtery.cn");
-        boolean i = address.isReachable(5000);
+        try {
+            InetAddress address = InetAddress.getByName("thepit.meowtery.cn");
+            boolean i = address.isReachable(5000);
 
-        if (!i) {
-            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-                final EventFactory factory = ThePit.getInstance().getEventFactory();
-                if (factory.getActiveEpicEvent() != null) {
-                    factory.inactiveEvent(factory.getActiveEpicEvent());
-                }
-                if (factory.getActiveNormalEvent() != null) {
-                    factory.inactiveEvent(factory.getActiveNormalEvent());
-                }
-                Bukkit.shutdown();
-            });
+            if (!i) {
+                Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                    final EventFactory factory = ThePit.getInstance().getEventFactory();
+                    if (factory.getActiveEpicEvent() != null) {
+                        factory.inactiveEvent(factory.getActiveEpicEvent());
+                    }
+                    if (factory.getActiveNormalEvent() != null) {
+                        factory.inactiveEvent(factory.getActiveNormalEvent());
+                    }
+                    Bukkit.shutdown();
+                });
+            }
+        } catch (Exception ignored) {
         }
     }
 }
