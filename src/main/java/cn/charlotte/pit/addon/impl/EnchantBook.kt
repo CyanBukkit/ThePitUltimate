@@ -37,8 +37,8 @@ object EnchantBook : Addon {
     }
 
     override fun enable() {
-        enchantBook = true
-        CommandHandler.registerClass(MythicBookCommand::class.java)
+//        enchantBook = true
+//        CommandHandler.registerClass(MythicBookCommand::class.java)
     }
 
     class MythicBookCommand {

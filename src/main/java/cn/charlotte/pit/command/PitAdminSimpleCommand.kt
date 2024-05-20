@@ -1,6 +1,7 @@
 package cn.charlotte.pit.command
 
 import cn.charlotte.pit.ThePit
+import cn.charlotte.pit.addon.impl.EnchantBook
 import cn.charlotte.pit.command.handler.HandHasItem
 import cn.charlotte.pit.config.NewConfiguration
 import cn.charlotte.pit.data.CDKData
@@ -427,7 +428,10 @@ class PitAdminSimpleCommand {
 
     @Execute(name = "giveBook")
     @Permission("pit.admin")
-    fun giveBook(@Context player: Player) {
+    fun giveBook(@Context player: Player): String {
+        if (!EnchantBook.enchantBook) {
+            return "§c已被禁用"
+        }
         player.inventory.addItem(
             ItemBuilder(Material.PAPER)
                 .name("&d附魔卷轴")
@@ -447,5 +451,6 @@ class PitAdminSimpleCommand {
                 .dontStack()
                 .build()
         )
+        return "§a添加到你的背包"
     }
 }
