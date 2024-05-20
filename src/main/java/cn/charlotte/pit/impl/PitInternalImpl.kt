@@ -36,6 +36,7 @@ import org.bukkit.inventory.ItemStack
 import java.util.*
 
 object PitInternalImpl : PitInternalHook {
+    var loaded = false
     override fun openMythicWellMenu(player: Player?) {
         MythicWellMenu(player!!).openMenu(player)
     }
@@ -223,5 +224,9 @@ object PitInternalImpl : PitInternalHook {
 
     override fun getItemEnchantLevel(item: ItemStack?, enchantName: String?): Int {
         return Utils.getEnchantLevel(item, enchantName)
+    }
+
+    override fun isLoaded(): Boolean {
+        return loaded
     }
 }

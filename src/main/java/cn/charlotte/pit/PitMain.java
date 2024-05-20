@@ -14,6 +14,7 @@ public class PitMain {
 
             hook = PitHook.INSTANCE;
             hook.init();
+            PitInternalImpl.INSTANCE.setLoaded(true);
         });
     }
 

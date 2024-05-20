@@ -43,6 +43,7 @@ public interface PitInternalHook {
 
     int getItemEnchantLevel(ItemStack item, String enchantName);
 
-
-
+    default boolean isLoaded(){
+        return false;
+    }
 }
