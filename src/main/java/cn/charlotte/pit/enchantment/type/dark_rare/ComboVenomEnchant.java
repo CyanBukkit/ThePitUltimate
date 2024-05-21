@@ -62,7 +62,8 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7每 &e3 &7次攻击对目标玩家与&c自身&7施加 &c沉默 &f(00:12) &7与 &c阴影 &f(00:12) 状态,"
+        return "&7每 &e3 &7次攻击对目标玩家施加 &c沉默 &f(00:12) &7与 &c阴影 &f(00:12) 状态," +
+                "/s&7同时, 为自身施加 &c沉默 &f(00:20) &7与 &c阴影 &f(00:20) 状态"
                 + "/s&7状态 &c沉默 &7: 装备的所有神话物品失效"
                 + "/s&7状态 &c阴影 &7: 攻击/受到攻击时,装备/使用的神话物品失效";
     }
