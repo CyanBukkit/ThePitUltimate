@@ -157,6 +157,9 @@ object PitInternalImpl : PitInternalHook {
                 factory.pushEvent(event, true)
             }
         } else {
+            if (factory.activeNormalEvent != null) {
+                factory.inactiveEvent(factory.activeNormalEvent)
+            }
             if (event is INormalEvent) {
                 factory.activeEvent(event)
             } else {

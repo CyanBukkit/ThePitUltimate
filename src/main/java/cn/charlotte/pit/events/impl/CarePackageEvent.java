@@ -195,7 +195,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
                 public void run() {
                     ThePit.getInstance()
                             .getEventFactory()
-                            .inactiveEvent(ThePit.getInstance().getEventFactory().getActiveNormalEvent());
+                            .inactiveEvent(CarePackageEvent.this);
                 }
             };
             runnable.runTaskLaterAsynchronously(ThePit.getInstance(), 20 * 60 * 5);
