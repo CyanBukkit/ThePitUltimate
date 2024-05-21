@@ -429,9 +429,6 @@ class PitAdminSimpleCommand {
     @Execute(name = "giveBook")
     @Permission("pit.admin")
     fun giveBook(@Context player: Player): String {
-        if (!EnchantBook.enchantBook) {
-            return "§c已被禁用"
-        }
         player.inventory.addItem(
             ItemBuilder(Material.PAPER)
                 .name("&d附魔卷轴")

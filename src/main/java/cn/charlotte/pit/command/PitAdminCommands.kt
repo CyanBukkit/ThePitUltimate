@@ -394,6 +394,18 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+    @Execute(name = "changeItemInHand tier")
+    @HandHasItem(mythic = true)
+    fun changeTier(@Context player: Player, @Arg("tier") tier: Int) {
+        try {
+            val stack = ItemBuilder(player.itemInHand).maxLive(tier).build()
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                it.tier = tier
+            }.toItemStack()
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
 
     @Execute(name = "trade")
     @Async
