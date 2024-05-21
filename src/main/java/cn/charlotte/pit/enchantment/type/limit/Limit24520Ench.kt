@@ -75,7 +75,7 @@ class Limit24520Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlaye
     override fun getNbtName(): String = "24_5_20"
 
     override fun getRarity(): EnchantmentRarity {
-        return EnchantmentRarity.RARE
+        return EnchantmentRarity.OP
     }
 
     override fun getCooldown(): Cooldown? {
