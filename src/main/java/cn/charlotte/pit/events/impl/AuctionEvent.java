@@ -46,6 +46,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
     private static final String prefix = "&6&l竞拍! &7";
     private static final double rate = 1.15;
+    public static boolean isCustom = false;
     private static LotsData lots;
     private static List<BidHistory> bidHistories;
     private static List<UUID> allowedParticipants;
@@ -240,7 +241,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
     @Override
     public void onActive() {
-        if (lots == null) {
+        if (!isCustom || lots == null) {
             lots = getRandomLots();
         }
 
@@ -290,6 +291,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
     @Override
     public void onInactive() {
+        isCustom = false;
         try {
             runnable.cancel();
         } catch (Exception ignored) {

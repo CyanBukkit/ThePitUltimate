@@ -411,6 +411,7 @@ class PitAdminSimpleCommand {
     @HandHasItem
     fun startCustomAuction(@Context player: Player, @Arg("price") price: Double) {
         val itemStack = player.itemInHand
+        AuctionEvent.isCustom = true
         AuctionEvent().also {
             it.lots = AuctionEvent.LotsData(arrayOf(itemStack), price, 0)
             it.setStartByAdmin(true)
