@@ -131,9 +131,10 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
         if ("pants_bundle_empty".equals(ItemUtil.getInternalName(item))) {
             int mythicCount = 0;
             for (int i = 0; i < 36; i++) {
-                if (player.getInventory().getItem(i) != null && "mythic_leggings".equalsIgnoreCase(ItemUtil.getInternalName(player.getInventory().getItem(i)))) {
+                ItemStack itemStack = player.getInventory().getItem(i);
+                if (itemStack != null && "mythic_leggings".equalsIgnoreCase(ItemUtil.getInternalName(itemStack))) {
                     AbstractPitItem pitItem = new MythicLeggingsItem();
-                    pitItem.loadFromItemStack(player.getInventory().getItem(i));
+                    pitItem.loadFromItemStack(itemStack);
                     if (!pitItem.isEnchanted()) {
                         mythicCount++;
                         if (mythicCount >= 10) break;
@@ -152,12 +153,13 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
                 HashMap<MythicColor, Integer> colorCount = new HashMap<>();
                 try {
                     for (int i = 0; i < 36; i++) {
-                        if (player.getInventory().getItem(i) != null && ItemUtil.getInternalName(player.getInventory().getItem(i)).equalsIgnoreCase("mythic_leggings")) {
+                        ItemStack itemStack = player.getInventory().getItem(i);
+                        if (itemStack != null && "mythic_leggings".equalsIgnoreCase(ItemUtil.getInternalName(itemStack))) {
                             AbstractPitItem pitItem = new MythicLeggingsItem();
-                            pitItem.loadFromItemStack(player.getInventory().getItem(i));
+                            pitItem.loadFromItemStack(itemStack);
                             if (!pitItem.isEnchanted()) {
-                                String internalColor = ItemUtil.getItemStringData(player.getInventory().getItem(i), "mythic_color");
-                                itemBuilder.changeNbt("pants_" + count, ItemUtil.getItemStringData(player.getInventory().getItem(i), "mythic_color"));
+                                String internalColor = ItemUtil.getItemStringData(itemStack, "mythic_color");
+                                itemBuilder.changeNbt("pants_" + count, ItemUtil.getItemStringData(itemStack, "mythic_color"));
                                 player.getInventory().setItem(i, new ItemBuilder(Material.AIR).build());
                                 colorCount.put(MythicColor.valueOfInternalName(internalColor), colorCount.getOrDefault(MythicColor.valueOfInternalName(internalColor), 0) + 1);
                                 count++;
@@ -166,7 +168,9 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
                         }
                     }
                 } catch (Exception exception) {
+                    exception.printStackTrace();
                     CC.printError(player, exception);
+                    return;
                 }
                 List<String> lines = new ArrayList<>();
                 lines.add("&7死亡后保留");
