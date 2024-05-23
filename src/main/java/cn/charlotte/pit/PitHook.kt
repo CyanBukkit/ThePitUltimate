@@ -586,7 +586,7 @@ object PitHook {
             CombatListener::class.java, GameEffectListener::class.java,
             DataListener::class.java, EnderChestListener::class.java,
             ChatListener::class.java, PlayerListener::class.java,
-            ProtectListener::class.java, PantsBundleShopButton::class.java,
+            ProtectListener::class.java, PantsBundleShopButton::class.java, SwrodBundleShopPerk::class.java, BowBundleShopPerk::class.java,
             CombatSpadeShopButton::class.java, MailSendListener::class.java,
             SafetyJoinListener::class.java, ButtonListener::class.java,
             GenesisCombatListener::class.java, FixListeners::class.java,

@@ -3,8 +3,9 @@ package cn.charlotte.pit.menu.shop.button.type;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.item.AbstractPitItem;
-import cn.charlotte.pit.item.MythicColor;
+import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
+import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.menu.shop.button.AbstractShopButton;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.chat.CC;
@@ -20,7 +21,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,11 +28,11 @@ import java.util.List;
  * @Created_In: 2021/3/25 18:32
  */
 @AutoRegister
-public class PantsBundleShopButton extends AbstractShopButton implements Listener {
+public class BowBundleShopButton extends AbstractShopButton implements Listener {
 
     @Override
     public String getInternalName() {
-        return "pants_bundle";
+        return "bow_bundle";
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
         lines.add("&7死亡后保留");
         lines.add(" ");
         lines.add("&7手持右键即可将背包内");
-        lines.add("&710件未附魔的神话之甲打包.");
+        lines.add("&710件未附魔的神话之弓打包.");
         lines.add(" ");
         lines.add("&7价格: &6" + getDiscountPrice(player, getPrice(player)) + " 硬币");
 
@@ -52,10 +52,10 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
             lines.add("&c硬币不足!");
         }
 
-        PerkData data = profile.getUnlockedPerkMap().get("pants_bundle_shop_unlock");
+        PerkData data = profile.getUnlockedPerkMap().get("bow_bundle_shop_unlock");
         if (data != null) {
             return new ItemBuilder(Material.MINECART)
-                    .name("&b神话之甲收纳箱")
+                    .name("&b神话之弓收纳箱")
                     .lore(lines)
                     .build();
         }
@@ -74,13 +74,13 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
         lines.add("&7死亡后保留");
         lines.add(" ");
         lines.add("&7手持右键即可将背包内");
-        lines.add("&710件未附魔的神话之甲打包.");
+        lines.add("&710件未附魔的神话之弓打包.");
         return new ItemStack[]{
                 new ItemBuilder(Material.MINECART)
-                        .name("&b神话之甲收纳箱")
+                        .name("&b神话之弓收纳箱")
                         .lore(lines)
                         .canSaveToEnderChest(true)
-                        .internalName("pants_bundle_empty")
+                        .internalName("bow_bundle_empty")
                         .build(),
         };
     }
@@ -107,7 +107,7 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
         if (item == null || item.getType() == Material.AIR) {
             return;
         }
-        if (ItemUtil.getInternalName(item) != null && "pants_bundle_full".equals(ItemUtil.getInternalName(item))) {
+        if (ItemUtil.getInternalName(item) != null && "bow_bundle_full".equals(ItemUtil.getInternalName(item))) {
             int emptySlots = 0;
             for (int i = 0; i < 36; i++) {
                 if (player.getInventory().getItem(i) == null || player.getInventory().getItem(i).getType() == Material.AIR) {
@@ -116,24 +116,20 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
                 }
             }
             if (emptySlots < 10) {
-                player.sendMessage(CC.translate("&c背包空间不足以取出全部神话之甲!"));
+                player.sendMessage(CC.translate("&c背包空间不足以取出全部神话之弓!"));
                 return;
             }
             player.setItemInHand(new ItemBuilder(Material.AIR).build());
             for (int i = 0; i < 10; i++) {
-                ItemStack itemStack = new MythicLeggingsItem().toItemStack();
-                itemStack = new ItemBuilder(itemStack).changeNbt("mythic_color", ItemUtil.getItemStringData(item, "pants_" + i)).build();
-                AbstractPitItem mythicItem = new MythicLeggingsItem();
-                mythicItem.loadFromItemStack(itemStack);
-                player.getInventory().addItem(mythicItem.toItemStack());
+                player.getInventory().addItem(new MythicBowItem().toItemStack());
             }
         }
-        if ("pants_bundle_empty".equals(ItemUtil.getInternalName(item))) {
+        if ("bow_bundle_empty".equals(ItemUtil.getInternalName(item))) {
             int mythicCount = 0;
             for (int i = 0; i < 36; i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
-                if (itemStack != null && "mythic_leggings".equalsIgnoreCase(ItemUtil.getInternalName(itemStack))) {
-                    AbstractPitItem pitItem = new MythicLeggingsItem();
+                if (itemStack != null && "mythic_bow".equalsIgnoreCase(ItemUtil.getInternalName(itemStack))) {
+                    AbstractPitItem pitItem = new MythicBowItem();
                     pitItem.loadFromItemStack(itemStack);
                     if (!pitItem.isEnchanted()) {
                         mythicCount++;
@@ -142,26 +138,22 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
                 }
             }
             if (mythicCount < 10) {
-                player.sendMessage(CC.translate("&c你的背包内需要有10条及以上的未附魔神话之甲才能使用此物品!"));
+                player.sendMessage(CC.translate("&c你的背包内需要有10条及以上的未附魔神话之弓才能使用此物品!"));
             } else {
                 int count = 0;
                 ItemBuilder itemBuilder = new ItemBuilder(Material.STORAGE_MINECART)
-                        .name("&b神话之甲收纳箱")
+                        .name("&b神话之弓收纳箱")
                         .canSaveToEnderChest(true)
                         .canTrade(true)
-                        .internalName("pants_bundle_full");
-                HashMap<MythicColor, Integer> colorCount = new HashMap<>();
+                        .internalName("bow_bundle_full");
                 try {
                     for (int i = 0; i < 36; i++) {
                         ItemStack itemStack = player.getInventory().getItem(i);
-                        if (itemStack != null && "mythic_leggings".equalsIgnoreCase(ItemUtil.getInternalName(itemStack))) {
-                            AbstractPitItem pitItem = new MythicLeggingsItem();
+                        if (itemStack != null && "mythic_bow".equalsIgnoreCase(ItemUtil.getInternalName(itemStack))) {
+                            AbstractPitItem pitItem = new MythicBowItem();
                             pitItem.loadFromItemStack(itemStack);
                             if (!pitItem.isEnchanted()) {
-                                String internalColor = ItemUtil.getItemStringData(itemStack, "mythic_color");
-                                itemBuilder.changeNbt("pants_" + count, ItemUtil.getItemStringData(itemStack, "mythic_color"));
                                 player.getInventory().setItem(i, new ItemBuilder(Material.AIR).build());
-                                colorCount.put(MythicColor.valueOfInternalName(internalColor), colorCount.getOrDefault(MythicColor.valueOfInternalName(internalColor), 0) + 1);
                                 count++;
                                 if (count >= 10) break;
                             }
@@ -172,23 +164,16 @@ public class PantsBundleShopButton extends AbstractShopButton implements Listene
                     CC.printError(player, exception);
                     return;
                 }
-                int all = colorCount.values().stream().mapToInt(Integer::intValue).sum();
-                if (all != 10) {
-                    player.sendMessage(CC.translate("&c你的背包内需要有10条及以上的未附魔神话之甲才能使用此物品!"));
-                    return;
-                }
                 List<String> lines = new ArrayList<>();
                 lines.add("&7死亡后保留");
                 lines.add("&7这个收纳箱里装有:");
                 lines.add(" ");
-                for (MythicColor color : colorCount.keySet()) {
-                    lines.add("&f" + colorCount.get(color) + "x " + color.getChatColor() + color.getDisplayName() + "色神话之甲");
-                }
+                lines.add("&e10x 神话之弓");
                 lines.add(" ");
                 lines.add("&7手持并右键以将其取出!");
 
                 itemBuilder.lore(lines);
-                itemBuilder.internalName("pants_bundle_full");
+                itemBuilder.internalName("bow_bundle_full");
                 player.setItemInHand(itemBuilder.build());
             }
         }

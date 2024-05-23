@@ -12,6 +12,7 @@ import cn.charlotte.pit.menu.admin.item.button.ShopItemButton;
 import cn.charlotte.pit.menu.shop.button.type.CombatSpadeShopButton;
 import cn.charlotte.pit.menu.shop.button.type.GoldPickaxeShopButton;
 import cn.charlotte.pit.menu.shop.button.type.PantsBundleShopButton;
+import cn.charlotte.pit.menu.shop.button.type.SwordBundleShopButton;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
@@ -101,6 +102,8 @@ public class AdminItemMenu extends Menu {
                 final MythicLeggingsItem darkGreenLeggings = new MythicLeggingsItem();
                 darkGreenLeggings.setColor(MythicColor.DARK_GREEN);
                 buttonMap.put(36, new PitItemButton(darkGreenLeggings.toItemStack()));
+                buttonMap.put(37, new SwordBundleShopButton());
+                buttonMap.put(38, new SwordBundleShopButton());
             }
 
         } catch (Exception e) {
