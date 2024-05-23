@@ -217,6 +217,7 @@ class PitAdminSimpleCommand {
 
     @Execute(name = "rollback")
     @Permission("pit.admin")
+    @Async
     fun rollback(@Context player: Player, @Arg("name") name: String): String {
         val profile = PlayerProfile.getOrLoadPlayerProfileByName(name) ?: return CC.translate("&c该玩家不存在")
 
