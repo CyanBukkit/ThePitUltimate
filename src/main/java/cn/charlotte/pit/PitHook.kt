@@ -37,8 +37,10 @@ import cn.charlotte.pit.item.AbstractPitItem
 import cn.charlotte.pit.item.type.*
 import cn.charlotte.pit.listener.*
 import cn.charlotte.pit.map.kingsquests.KingsQuests
+import cn.charlotte.pit.menu.shop.button.type.BowBundleShopButton
 import cn.charlotte.pit.menu.shop.button.type.CombatSpadeShopButton
 import cn.charlotte.pit.menu.shop.button.type.PantsBundleShopButton
+import cn.charlotte.pit.menu.shop.button.type.SwordBundleShopButton
 import cn.charlotte.pit.menu.trade.TradeListener
 import cn.charlotte.pit.nametag.NameTagImpl
 import cn.charlotte.pit.npc.type.*
@@ -590,7 +592,7 @@ object PitHook {
             CombatListener::class.java, GameEffectListener::class.java,
             DataListener::class.java, EnderChestListener::class.java,
             ChatListener::class.java, PlayerListener::class.java,
-            ProtectListener::class.java, PantsBundleShopButton::class.java, SwrodBundleShopPerk::class.java, BowBundleShopPerk::class.java,
+            ProtectListener::class.java, PantsBundleShopButton::class.java, SwordBundleShopButton::class.java, BowBundleShopButton::class.java,
             CombatSpadeShopButton::class.java, MailSendListener::class.java,
             SafetyJoinListener::class.java, ButtonListener::class.java,
             GenesisCombatListener::class.java, FixListeners::class.java,

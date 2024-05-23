@@ -13,6 +13,9 @@ import cn.charlotte.pit.parm.listener.IPlayerKilledEntity
 import cn.charlotte.pit.parm.listener.ITickTask
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.Utils
+import cn.charlotte.pit.util.chat.RomanUtil
+import cn.charlotte.pit.util.chat.StringUtil
+import cn.charlotte.pit.util.command.util.NumberUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.music.NBSDecoder
@@ -25,6 +28,8 @@ import org.bukkit.Effect
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import spg.lgdev.handler.MovementHandler
 import spg.lgdev.iSpigot
@@ -111,14 +116,34 @@ class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayer
     }
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
-        return "&7向周围的玩家播放音乐: &b天外来物" + "/s&7受到使用附魔狂暴连击的玩家所造成的伤害-${damage(enchantLevel) * 10}%"
+        return "&7向周围的玩家播放音乐: &b天外来物" + "/s&7当在空中受到攻击时，有30-40-50概率清除对方与自身的虚弱效果" +
+                "/s&7同时给予自身速度${RomanUtil.convert(speedLevel(enchantLevel))} ${speedDuration(enchantLevel) / 20}秒，对方缓慢I (00:02)"
     }
 
-    fun damage(enchantLevel: Int) = when (enchantLevel) {
-        1 -> 0.1
-        2 -> 0.15
-        4 -> 0.2
-        else -> enchantLevel * 2.0
+    fun speedLevel(enchantLevel: Int): Int {
+        return when (enchantLevel) {
+            1 -> 0
+            2 -> 1
+            else -> 2
+        }
+    }
+
+    fun speedDuration(enchantLevel: Int): Int {
+        return when (enchantLevel) {
+            1 -> 4 * 20
+            2 -> 6 * 20
+            4 -> 6 * 20
+            else -> enchantLevel * 20
+        }
+    }
+
+    fun random(enchantLevel: Int): Boolean {
+        return when (enchantLevel) {
+            1 -> Math.random() < 0.3
+            2 -> Math.random() < 0.4
+            4 -> Math.random() < 0.5
+            else -> Math.random() < enchantLevel * 0.05
+        }
     }
 
     @PlayerOnly
@@ -132,9 +157,22 @@ class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayer
         cancel: AtomicBoolean
     ) {
         attacker as Player
-        val hasRegularity = Utils.getEnchantLevel(attacker.inventory.leggings, "regularity") > 0
-        if (hasRegularity) {
-            boostDamage.addAndGet(-damage(enchantLevel))
+        if (!myself.isOnGround && random(enchantLevel)) {
+            if (myself.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+                myself.removePotionEffect(PotionEffectType.WEAKNESS)
+            }
+            if (attacker.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+                attacker.removePotionEffect(PotionEffectType.WEAKNESS)
+            }
+
+            myself.addPotionEffect(
+                PotionEffect(
+                    PotionEffectType.SPEED,
+                    speedDuration(enchantLevel),
+                    speedLevel(enchantLevel)
+                ), true
+            )
+            attacker.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 2 * 20, 0))
         }
     }
 

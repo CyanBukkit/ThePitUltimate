@@ -9,10 +9,7 @@ import cn.charlotte.pit.menu.admin.item.button.MythicItemButton;
 import cn.charlotte.pit.menu.admin.item.button.PitItemButton;
 import cn.charlotte.pit.menu.admin.item.button.RedPacketButton;
 import cn.charlotte.pit.menu.admin.item.button.ShopItemButton;
-import cn.charlotte.pit.menu.shop.button.type.CombatSpadeShopButton;
-import cn.charlotte.pit.menu.shop.button.type.GoldPickaxeShopButton;
-import cn.charlotte.pit.menu.shop.button.type.PantsBundleShopButton;
-import cn.charlotte.pit.menu.shop.button.type.SwordBundleShopButton;
+import cn.charlotte.pit.menu.shop.button.type.*;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
@@ -103,7 +100,7 @@ public class AdminItemMenu extends Menu {
                 darkGreenLeggings.setColor(MythicColor.DARK_GREEN);
                 buttonMap.put(36, new PitItemButton(darkGreenLeggings.toItemStack()));
                 buttonMap.put(37, new SwordBundleShopButton());
-                buttonMap.put(38, new SwordBundleShopButton());
+                buttonMap.put(38, new BowBundleShopButton());
             }
 
         } catch (Exception e) {
