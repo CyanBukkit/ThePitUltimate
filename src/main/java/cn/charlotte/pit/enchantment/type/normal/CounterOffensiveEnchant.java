@@ -3,6 +3,7 @@ package cn.charlotte.pit.enchantment.type.normal;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
+import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.cooldown.Cooldown;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Created_In: 2021/3/26 13:36
  */
 @Include
-
+@ArmorOnly
 public class CounterOffensiveEnchant extends AbstractEnchantment implements IPlayerDamaged {
     @Override
     public String getEnchantName() {
