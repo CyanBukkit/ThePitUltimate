@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly
+import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench
 import cn.charlotte.pit.parm.listener.IAttackEntity
@@ -30,6 +31,7 @@ import spg.lgdev.iSpigot
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
+@ArmorOnly
 class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayerDamaged {
     private val playerMap: MutableMap<UUID, PositionSongPlayer> = HashMap()
     private val song: Song =
@@ -60,7 +62,7 @@ class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayer
         }
     }
 
-    override fun getEnchantName() = "§d520 §9| §f2024"
+    override fun getEnchantName() = "§b天外来物"
 
     override fun getMaxEnchantLevel(): Int {
         return 3
