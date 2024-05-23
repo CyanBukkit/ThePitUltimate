@@ -460,6 +460,8 @@ object PitHook {
             ObsidianStackShopPerk::class.java,
             OlympusPerk::class.java,
             PantsBundleShopPerk::class.java,
+            SwrodBundleShopPerk::class.java,
+            BowBundleShopPerk::class.java,
             PromotionPerk::class.java,
             PureRage::class.java,
             RamboPerk::class.java,
