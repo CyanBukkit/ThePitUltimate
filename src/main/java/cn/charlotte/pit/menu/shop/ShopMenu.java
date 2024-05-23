@@ -37,18 +37,21 @@ public class ShopMenu extends Menu {
         button.put(21, new IronPackShopButton());
 
         button.put(23, new FirstAidEggShopButton());
-        button.put(24, new PantsBundleShopButton());
-        button.put(25, new JumpBoostShopButton());
+        button.put(24, new JumpBoostShopButton());
+        button.put(25, new PantsBundleShopButton());
+
+        button.put(28, new SwordBundleShopButton());
+        button.put(29, new BowBundleShopButton());
 
         if (!ThePit.isDEBUG_SERVER() || PlayerUtil.isStaff(player)) {
-            button.put(35, new SupporterEntranceButton());
+            button.put(44, new SupporterEntranceButton());
         }
         return button;
     }
 
     @Override
     public int getSize() {
-        return 4 * 9;
+        return 5 * 9;
     }
 
 }
