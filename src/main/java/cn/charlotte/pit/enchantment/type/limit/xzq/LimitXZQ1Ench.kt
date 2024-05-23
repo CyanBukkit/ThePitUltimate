@@ -116,8 +116,16 @@ class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayer
     }
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
-        return "&7向周围的玩家播放音乐: &b天外来物" + "/s&7当在空中受到攻击时，有30-40-50概率清除对方与自身的虚弱效果" +
+        return "&7向周围的玩家播放音乐: &b天外来物" + "/s&7当在空中受到攻击时，有${randomNum(enchantLevel)}%概率清除对方与自身的虚弱效果" +
                 "/s&7同时给予自身速度${RomanUtil.convert(speedLevel(enchantLevel))} ${speedDuration(enchantLevel) / 20}秒，对方缓慢I (00:02)"
+    }
+
+    fun randomNum(enchantLevel: Int): Int {
+        return when (enchantLevel) {
+            1 -> 30
+            2 -> 30
+            else -> 50
+        }
     }
 
     fun speedLevel(enchantLevel: Int): Int {
