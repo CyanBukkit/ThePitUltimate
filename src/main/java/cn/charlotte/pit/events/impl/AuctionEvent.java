@@ -584,7 +584,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             this.contents = contents;
             this.startPrice = startPrice;
             this.renown = renown;
-            this.icon = contents[0];
+            this.icon = contents[0].clone();
         }
     }
 }

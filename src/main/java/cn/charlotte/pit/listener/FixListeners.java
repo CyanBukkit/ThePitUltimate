@@ -1,7 +1,6 @@
 package cn.charlotte.pit.listener;
 
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -12,22 +11,23 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 public class FixListeners implements Listener {
 
-    private List<Material> blockTypes = new ArrayList<>();
+    private HashSet<Material> blockTypes = new HashSet<>();
+
+    public FixListeners() {
+        blockTypes.add(Material.HOPPER);
+        //blockTypes.add(Material.FURNACE);
+        blockTypes.add(Material.ENDER_CHEST);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
-        blockTypes.add(Material.HOPPER);
-        //blockTypes.add(Material.FURNACE);
-        blockTypes.add(Material.ENDER_CHEST);
         if (clickedBlock != null && blockTypes.contains(clickedBlock.getType()) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL)) {
             event.setCancelled(true);
         }

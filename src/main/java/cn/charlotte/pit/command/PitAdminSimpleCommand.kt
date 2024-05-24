@@ -414,7 +414,7 @@ class PitAdminSimpleCommand {
         val itemStack = player.itemInHand
         AuctionEvent.isCustom = true
         AuctionEvent().also {
-            it.lots = AuctionEvent.LotsData(arrayOf(itemStack), price, 0)
+            it.lots = AuctionEvent.LotsData(arrayOf(itemStack.clone()), price, 0)
             it.setStartByAdmin(true)
 
             ThePit.getInstance().eventFactory.activeEvent(it)
