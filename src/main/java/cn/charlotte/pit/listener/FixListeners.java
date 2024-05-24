@@ -17,24 +17,20 @@ import java.util.HashSet;
 
 public class FixListeners implements Listener {
 
-    private HashSet<Material> blockTypes = new HashSet<>();
-
-    public FixListeners() {
-        blockTypes.add(Material.HOPPER);
-        //blockTypes.add(Material.FURNACE);
-        blockTypes.add(Material.ENDER_CHEST);
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
-        if (clickedBlock != null && blockTypes.contains(clickedBlock.getType()) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL)) {
+        if (clickedBlock != null && check(clickedBlock.getType()) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL)) {
             event.setCancelled(true);
         }
     }
 
+    public boolean check(Material material){
+        return material== Material.HOPPER || material== Material.ENDER_CHEST;
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
-    private void LaunchArrowEvent(ProjectileLaunchEvent event) {
+    public void LaunchArrowEvent(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Arrow) {
             Arrow arrow = (Arrow) event.getEntity();
             if (arrow.getShooter() instanceof Player) {
