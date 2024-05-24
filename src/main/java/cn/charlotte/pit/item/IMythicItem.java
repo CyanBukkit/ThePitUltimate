@@ -11,6 +11,7 @@ import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Material;
@@ -315,14 +316,14 @@ public abstract class IMythicItem extends AbstractPitItem {
 
         final String recordsString = extra.getString("records");
         if (recordsString != null) {
-            for (String recordString : recordsString.split(";")) {
-                final String[] split = recordString.split("\\|");
-                if (split.length >= 3) {
+            for (String recordString : StrUtil.split(recordsString, ";")) {
+                final List<String> split = StrUtil.split(recordString, "|");
+                if (split.size() >= 3) {
                     enchantmentRecords.add(
                             new EnchantmentRecord(
-                                    split[0],
-                                    split[1],
-                                    Long.parseLong(split[2])
+                                    split.get(0),
+                                    split.get(1),
+                                    Long.parseLong(split.get(2))
                             )
                     );
                 }
@@ -332,12 +333,12 @@ public abstract class IMythicItem extends AbstractPitItem {
         NBTTagList ench = extra.getList("ench", 8);
 
         for (int i = 0; i < ench.size(); i++) {
-            String[] split = ench.getString(i).split(":");
+            List<String> split = StrUtil.split(ench.getString(i), ":");
 
             AbstractEnchantment enchantment = ThePit.getInstance()
                     .getEnchantmentFactor()
                     .getEnchantmentMap()
-                    .get(split[0]);
+                    .get(split.get(0));
 
             if (enchantment == null) {
                 continue;
@@ -345,7 +346,7 @@ public abstract class IMythicItem extends AbstractPitItem {
 
             int level;
             try {
-                level = Integer.parseInt(split[1]);
+                level = Integer.parseInt(split.get(1));
             } catch (Exception ignore) {
                 continue;
             }
