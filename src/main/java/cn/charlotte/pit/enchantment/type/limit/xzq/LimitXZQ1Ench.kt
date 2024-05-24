@@ -1,23 +1,14 @@
 package cn.charlotte.pit.enchantment.type.limit.xzq
 
 import cn.charlotte.pit.ThePit
-import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
-import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench
-import cn.charlotte.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.parm.listener.IPlayerDamaged
-import cn.charlotte.pit.parm.listener.IPlayerKilledEntity
 import cn.charlotte.pit.parm.listener.ITickTask
-import cn.charlotte.pit.util.PlayerUtil
-import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.RomanUtil
-import cn.charlotte.pit.util.chat.StringUtil
-import cn.charlotte.pit.util.command.util.NumberUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
-import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.music.NBSDecoder
 import cn.charlotte.pit.util.music.PositionSongPlayer
 import cn.charlotte.pit.util.music.Song
@@ -37,7 +28,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 @ArmorOnly
-class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayerDamaged {
+class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayerDamaged, ILimit {
     private val playerMap: MutableMap<UUID, PositionSongPlayer> = HashMap()
     private val song: Song =
         NBSDecoder.parse(ThePit.getInstance().javaClass.classLoader.getResourceAsStream("tianwailaiwu.nbs"))
@@ -117,7 +108,11 @@ class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayer
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
         return "&7向周围的玩家播放音乐: &b天外来物" + "/s&7当在空中受到攻击时, 有 &b${randomNum(enchantLevel)}% &7的概率 清除对方与&c自身&7的虚弱效果" +
-                "/s&7同时给予自身 &b速度 ${RomanUtil.convert(speedLevel(enchantLevel) + 1)} &f(${speedDurStr(enchantLevel)})&7, 对方 &c缓慢 I &f(00:02)"
+                "/s&7同时给予自身 &b速度 ${RomanUtil.convert(speedLevel(enchantLevel) + 1)} &f(${
+                    speedDurStr(
+                        enchantLevel
+                    )
+                })&7, 对方 &c缓慢 I &f(00:02)"
     }
 
     fun randomNum(enchantLevel: Int): Int {

@@ -7,6 +7,7 @@ import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.menu.MythicWellMenu;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.enchantment.type.limit.xzq.ILimit;
 import cn.charlotte.pit.event.PitPlayerEnchantEvent;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.item.AbstractPitItem;
@@ -308,6 +309,8 @@ public class EnchantButton extends Button {
             results = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RAGE).collect(Collectors.toList());
             rareResults = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RAGE_RARE).collect(Collectors.toList());
         }
+        rareResults = rareResults.stream().filter(abstractEnchantment -> !isBlackList(player, abstractEnchantment)).collect(Collectors.toList());
+        results = rareResults.stream().filter(abstractEnchantment -> !isBlackList(player, abstractEnchantment)).collect(Collectors.toList());
         //Enchant Start
         switch (color) {
             case DARK: {
@@ -398,7 +401,7 @@ public class EnchantButton extends Button {
                             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                             profile.setEnchantingBook(null);
                             mythicItem.boostedByBook = true;
-                        } else  {
+                        } else {
                             int singleLevel = 0;
                             AbstractEnchantment enchantment = null;
                             for (Integer i : mythicItem.getEnchantments().values()) {
@@ -628,6 +631,10 @@ public class EnchantButton extends Button {
         }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         profile.setEnchantingItem(InventoryUtil.serializeItemStack(mythicItem.toItemStack()));
+    }
+
+    private static boolean isBlackList(Player player, AbstractEnchantment abstractEnchantment) {
+        return abstractEnchantment instanceof ILimit && player.getName().equalsIgnoreCase("L1YuUwU");
     }
 
 

@@ -6,6 +6,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
+import cn.charlotte.pit.enchantment.type.limit.xzq.ILimit
 import cn.charlotte.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity
 import cn.charlotte.pit.parm.listener.ITickTask
@@ -35,7 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 @ArmorOnly
 @Include
-class Limit24520Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayerKilledEntity, IAttackEntity {
+class Limit24520Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayerKilledEntity, IAttackEntity, ILimit {
     private val playerMap: MutableMap<UUID, PositionSongPlayer> = HashMap()
     private val song: Song =
         NBSDecoder.parse(ThePit.getInstance().javaClass.classLoader.getResourceAsStream("fenshoukuaile.nbs"))
