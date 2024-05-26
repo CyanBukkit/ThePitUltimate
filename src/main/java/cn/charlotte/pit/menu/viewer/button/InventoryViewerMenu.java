@@ -43,7 +43,14 @@ public class InventoryViewerMenu extends Menu {
 
                 @Override
                 public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-
+                    ItemStack content = inventory.getContents()[finalI];
+                    if (content == null) {
+                        return;
+                    }
+                    PlayerProfile view = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+                    if (view.isEditingMode()) {
+                        player.getInventory().addItem(content);
+                    }
                 }
             });
         }

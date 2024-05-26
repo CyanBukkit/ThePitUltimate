@@ -2,6 +2,7 @@ package cn.charlotte.pit
 
 import cn.charlotte.pit.addon.AddonHandler
 import cn.charlotte.pit.command.PitAdminCommands
+import cn.charlotte.pit.command.PitAdminDupeFixCommands
 import cn.charlotte.pit.command.PitAdminSimpleCommand
 import cn.charlotte.pit.command.PitCommands
 import cn.charlotte.pit.command.handler.HandHasItem
@@ -17,7 +18,7 @@ import cn.charlotte.pit.enchantment.type.dark_normal.*
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboVenomEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
 import cn.charlotte.pit.enchantment.type.genesis.*
- import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench
+import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench
 import cn.charlotte.pit.enchantment.type.limit.xzq.LimitXZQ1Ench
 import cn.charlotte.pit.enchantment.type.normal.*
 import cn.charlotte.pit.enchantment.type.op.*
@@ -66,6 +67,7 @@ import cn.charlotte.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak
 import cn.charlotte.pit.perk.type.streak.uber.UberStreak
 import cn.charlotte.pit.quest.type.*
 import cn.charlotte.pit.runnable.*
+import cn.charlotte.pit.runnable.dupe.CleanupDupeEnch0525Runnable
 import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
 import cn.charlotte.pit.util.getInstance
@@ -81,9 +83,6 @@ import dev.rollczi.litecommands.validator.ValidatorScope
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
-import org.spigotmc.AsyncCatcher
-import java.util.concurrent.ScheduledThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 object PitHook {
 
@@ -132,6 +131,7 @@ object PitHook {
 
         Bukkit.getPluginManager().registerEvents(SewersRunnable, ThePit.getInstance())
         SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
+        CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
     }
 
     private fun loadCommands() {
@@ -140,6 +140,7 @@ object PitHook {
                 PitAdminSimpleCommand(),
                 PitAdminCommands(),
                 PitCommands(),
+                PitAdminDupeFixCommands()
             )
             .settings {
                 it.nativePermissions(true)
@@ -589,14 +590,24 @@ object PitHook {
 
     private fun registerListeners() {
         val classes = listOf<Class<*>>(
-            CombatListener::class.java, GameEffectListener::class.java,
-            DataListener::class.java, EnderChestListener::class.java,
-            ChatListener::class.java, PlayerListener::class.java,
-            ProtectListener::class.java, PantsBundleShopButton::class.java, SwordBundleShopButton::class.java, BowBundleShopButton::class.java,
-            CombatSpadeShopButton::class.java, MailSendListener::class.java,
-            SafetyJoinListener::class.java, ButtonListener::class.java,
-            GenesisCombatListener::class.java, FixListeners::class.java,
-            TradeListener::class.java, HologramListener::class.java,
+            CombatListener::class.java,
+            GameEffectListener::class.java,
+            DataListener::class.java,
+            EnderChestListener::class.java,
+            ChatListener::class.java,
+            PlayerListener::class.java,
+            ProtectListener::class.java,
+            PantsBundleShopButton::class.java,
+            SwordBundleShopButton::class.java,
+            BowBundleShopButton::class.java,
+            CombatSpadeShopButton::class.java,
+            MailSendListener::class.java,
+            SafetyJoinListener::class.java,
+            ButtonListener::class.java,
+            GenesisCombatListener::class.java,
+            FixListeners::class.java,
+            TradeListener::class.java,
+            HologramListener::class.java,
         )
         for (aClass in classes) {
             try {
