@@ -90,6 +90,9 @@ public class RankUtil {
 
         try {
             UUID uuid = LuckPermsUtil.userManager.lookupUniqueId(name).get();
+            if (uuid == null) {
+                return name;
+            }
             return getNameFormat(uuid);
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
@@ -101,6 +104,7 @@ public class RankUtil {
 
         return getNameFormat(uuid); //fixme
     }
+
     public static String getNameFormat(UUID uuid) {
         return getNameColor(uuid) + getPlayerName(uuid);
     }
