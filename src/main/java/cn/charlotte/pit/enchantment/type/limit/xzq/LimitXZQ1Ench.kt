@@ -67,7 +67,7 @@ class LimitXZQ1Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayer
     override fun getNbtName(): String = "xzq_dj_1"
 
     override fun getRarity(): EnchantmentRarity {
-        return EnchantmentRarity.RARE
+        return EnchantmentRarity.OP
     }
 
     override fun getCooldown(): Cooldown? {
