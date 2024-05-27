@@ -1,5 +1,6 @@
 package cn.charlotte.pit.enchantment.type.normal;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
@@ -9,6 +10,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -72,10 +74,15 @@ public class PeroxideEnchant extends AbstractEnchantment implements IPlayerDamag
 
     @Override
     public void handlePlayerDamaged(int enchantLevel, Player myself, Entity attacker, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        cooldown.putIfAbsent(myself.getUniqueId(), new Cooldown(0));
-        if (cooldown.get(myself.getUniqueId()).hasExpired()) {
-            cooldown.put(myself.getUniqueId(), new Cooldown((long) 1.5, TimeUnit.SECONDS));
-            PlayerUtil.heal(myself, getHeal(enchantLevel) * 2);
+        UUID uuid = myself.getUniqueId();
+        if (!cooldown.containsKey(uuid)) {
+            cooldown.put(uuid, new Cooldown(0));
+        }
+        if (cooldown.get(uuid).hasExpired()) {
+            cooldown.put(uuid, new Cooldown(1500, TimeUnit.MILLISECONDS));
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                PlayerUtil.heal(myself, getHeal(enchantLevel) * 2);
+            }, 2);
         }
     }
 
