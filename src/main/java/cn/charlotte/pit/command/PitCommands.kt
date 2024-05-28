@@ -40,6 +40,7 @@ import dev.rollczi.litecommands.annotations.command.RootCommand
 import dev.rollczi.litecommands.annotations.context.Context
 import dev.rollczi.litecommands.annotations.execute.Execute
 import dev.rollczi.litecommands.annotations.permission.Permission
+import dev.rollczi.litecommands.annotations.quoted.Quoted
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.BaseComponent
@@ -900,7 +901,7 @@ class PitCommands {
     @Execute(name = "rename")
     @Permission("pit.rename")
     @HandHasItem(mythic = true)
-    fun rename(@Context player: Player, @Arg("name") name: String): String {
+    fun rename(@Context player: Player, @Quoted @Arg("name") name: String): String {
         if (!player.hasPermission("pit.rename-bypass")) {
             val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId) ?: return "§c获取玩家信息失败"
             val cdEndTime = profile.lastRenameTime + Duration.ofMinutes(2).toMillis()
