@@ -1,8 +1,10 @@
 package cn.charlotte.pit.util
 
 import cn.charlotte.pit.ThePit
+import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.util.item.ItemUtil
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
@@ -106,7 +108,7 @@ fun submit(
     period: Long = 0,
     executor: BukkitRunnable.() -> Unit,
 ): BukkitRunnable {
-    val runnable = object :BukkitRunnable() {
+    val runnable = object : BukkitRunnable() {
         override fun run() {
             executor.invoke(this)
         }
@@ -162,3 +164,9 @@ fun org.bukkit.inventory.ItemStack?.toMythicItem(): cn.charlotte.pit.item.IMythi
         it.loadFromItemStack(this)
     }
 }
+
+val Player.isSpecial: Boolean
+    get() = SpecialUtil.isSpecial(this)
+
+val PlayerProfile.isSpecial: Boolean
+    get() = SpecialUtil.isSpecial(this)

@@ -27,6 +27,7 @@ import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.inventory.InventoryUtil
+import cn.charlotte.pit.util.isSpecial
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.level.LevelUtil
@@ -124,7 +125,11 @@ class PitCommands {
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
                 val targetProfile = PlayerProfile.getOrLoadPlayerProfileByName(name)
-                if (targetProfile == null) {
+                if (targetProfile == null || (!name.equals(
+                        player.name,
+                        ignoreCase = true
+                    ) && targetProfile.isSpecial)
+                ) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                     return@runTaskAsynchronously
                 }
@@ -184,7 +189,11 @@ class PitCommands {
         val hoverEventComponents = arrayOf<BaseComponent>(
             TextComponent(tag.toString())
         )
-        for (p in Bukkit.getOnlinePlayers()) {
+        var showPlayers = Bukkit.getOnlinePlayers()
+        if (player.isSpecial) {
+            showPlayers = listOf(player)
+        }
+        for (p in showPlayers) {
             p.spigot().sendMessage(
                 *ChatComponentBuilder(CC.translate("&a&l物品展示! &7" + profile.formattedName + " &7正在展示物品: &f" + (if (player.itemInHand.itemMeta.displayName == null) player.itemInHand.type.name else player.itemInHand.itemMeta.displayName) + " &e[查看]"))
                     .setCurrentHoverEvent(HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create()
@@ -218,7 +227,7 @@ class PitCommands {
 
     @Execute(name = "trade")
     fun onRequest(@Context player: Player, @Arg("target") target: Player) {
-        if (player.uniqueId == target.uniqueId) {
+        if (player.uniqueId == target.uniqueId || target.isSpecial || player.isSpecial) {
             player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
             return
         }
@@ -653,6 +662,13 @@ class PitCommands {
     fun viewOffer(@Context player: Player, @Arg("target") target: Player) {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
         val targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.uniqueId)
+
+        if (player.isSpecial || target.isSpecial) {
+            player.sendMessage(CC.translate("&c你无法选择此玩家进行交易报价!"))
+            return
+        }
+
+
         if (targetProfile.offerData.buyer == null || targetProfile.offerData.buyer != player.uniqueId) {
             player.sendMessage(CC.translate("&c你没有来自此玩家的交易报价!"))
             return
@@ -703,6 +719,8 @@ class PitCommands {
     @Execute(name = "offer")
     fun offer(@Context player: Player, @Arg("target") targetPlayer: String, @Arg("price") price: String) {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+
+
         if (profile.offerData.hasActiveOffer()) {
             player.sendMessage(CC.translate("&c你当前有一个正在进行中的交易报价!"))
             return
@@ -739,7 +757,7 @@ class PitCommands {
         val target = Bukkit.getPlayer(targetPlayer)
         val targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.uniqueId)
 
-        if (player.uniqueId == target.uniqueId) {
+        if (player.uniqueId == target.uniqueId || player.isSpecial || target.isSpecial) {
             player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
             return
         }
