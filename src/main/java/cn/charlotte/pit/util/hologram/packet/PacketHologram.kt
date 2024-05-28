@@ -52,6 +52,7 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     override fun deSpawn(): Boolean {
         hologram.removeAll()
         spawned = false
+        HologramAPI.removeHologram(this)
         return true
     }
 
