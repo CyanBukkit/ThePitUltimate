@@ -16,7 +16,8 @@ public class SpecialUtil {
     private static Set<String> SPECIALS = new HashSet<String>();
 
     static {
-        SPECIALS.add("ABC");
+//        SPECIALS.add("huanmengya");
+        SPECIALS.add("Lol1com");
     }
 
     public static boolean isSpecial(String str) {

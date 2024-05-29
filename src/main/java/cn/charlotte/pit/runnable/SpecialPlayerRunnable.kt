@@ -14,12 +14,15 @@ object SpecialPlayerRunnable : BukkitRunnable() {
         val onlinePlayers = Bukkit.getOnlinePlayers()
         val specialPlayers = onlinePlayers.filter { it.isSpecial }
         val normalPlayers = onlinePlayers.filter { !it.isSpecial }
-        specialPlayers.forEach { special ->
+        specialPlayers.forEachIndexed { _, special ->
             normalPlayers.forEach { normal ->
                 if (special.canSee(normal)) {
                     special.hidePlayer(normal)
                 }
                 if (normal.canSee(special)) {
+                    if (normal.hasPermission("pit.admin") && !normal.isSpecial) {
+                        return@forEach
+                    }
                     normal.hidePlayer(special)
                 }
             }

@@ -125,13 +125,15 @@ class PitCommands {
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
                 val targetProfile = PlayerProfile.getOrLoadPlayerProfileByName(name)
-                if (targetProfile == null || (!name.equals(
-                        player.name,
-                        ignoreCase = true
-                    ) && targetProfile.isSpecial)
-                ) {
-                    player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
-                    return@runTaskAsynchronously
+                if (!player.hasPermission("pit.admin") || player.isSpecial) {
+                    if (targetProfile == null || (!name.equals(
+                            player.name,
+                            ignoreCase = true
+                        ) && targetProfile.isSpecial)
+                    ) {
+                        player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
+                        return@runTaskAsynchronously
+                    }
                 }
                 Bukkit.getScheduler().runTask(ThePit.getInstance()) {
                     StatusViewerMenu(targetProfile).openMenu(
@@ -191,7 +193,14 @@ class PitCommands {
         )
         var showPlayers = Bukkit.getOnlinePlayers()
         if (player.isSpecial) {
-            showPlayers = listOf(player)
+            showPlayers = buildSet {
+                Bukkit.getOnlinePlayers().forEach {
+                    if (it.hasPermission("pit.admin") && !it.isSpecial) {
+                        add(it)
+                    }
+                }
+                add(player)
+            }
         }
         for (p in showPlayers) {
             p.spigot().sendMessage(
@@ -228,8 +237,10 @@ class PitCommands {
     @Execute(name = "trade")
     fun onRequest(@Context player: Player, @Arg("target") target: Player) {
         if (player.uniqueId == target.uniqueId || target.isSpecial || player.isSpecial) {
-            player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
-            return
+            if (!player.hasPermission("pit.admin") || player.isSpecial) {
+                player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
+                return
+            }
         }
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
         val targetProfile = PlayerProfile.getPlayerProfileByUuid(target.uniqueId)
@@ -664,8 +675,10 @@ class PitCommands {
         val targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.uniqueId)
 
         if (player.isSpecial || target.isSpecial) {
-            player.sendMessage(CC.translate("&c你无法选择此玩家进行交易报价!"))
-            return
+            if (!player.hasPermission("pit.admin") || player.isSpecial) {
+                player.sendMessage(CC.translate("&c你无法选择此玩家进行交易报价!"))
+                return
+            }
         }
 
 
@@ -758,8 +771,10 @@ class PitCommands {
         val targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.uniqueId)
 
         if (player.uniqueId == target.uniqueId || player.isSpecial || target.isSpecial) {
-            player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
-            return
+            if (!player.hasPermission("pit.admin") || player.isSpecial) {
+                player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
+                return
+            }
         }
         if (!profile.combatTimer.hasExpired()) {
             player.sendMessage(CC.translate("&c你无法在战斗中使用此功能!"))
