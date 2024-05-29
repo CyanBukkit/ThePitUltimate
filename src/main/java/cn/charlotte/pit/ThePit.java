@@ -332,6 +332,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     private void initBossBar() {
         this.bossBar = new BossBarHandler();
+        Bukkit.getPluginManager().registerEvents(this.bossBar, this);
     }
 
     private void loadSound() {
