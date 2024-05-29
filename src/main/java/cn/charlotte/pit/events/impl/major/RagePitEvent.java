@@ -149,7 +149,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
                     ThePit.getInstance()
                             .getBossBar()
                             .getBossBar()
-                            .setProgress(timer.getRemaining() / (1000 * 60 * 5D));
+                            .setProgress(timer.getRemaining() / (1000 * 60 * 5f));
                 }
             };
 

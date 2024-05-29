@@ -143,7 +143,7 @@ public class EventFactory {
                 ThePit.getInstance()
                         .getBossBar()
                         .getBossBar()
-                        .setProgress(normalEnd.getRemaining() / (5 * 1000 * 60d));
+                        .setProgress(normalEnd.getRemaining() / (5 * 1000 * 60f));
 
                 tick++;
             }
@@ -201,7 +201,7 @@ public class EventFactory {
                 ThePit.getInstance()
                         .getBossBar()
                         .getBossBar()
-                        .setProgress(nextEpicEventTimer.getRemaining() / (5 * 1000 * 60d));
+                        .setProgress(nextEpicEventTimer.getRemaining() / (5 * 1000 * 60f));
 
                 tick++;
             }

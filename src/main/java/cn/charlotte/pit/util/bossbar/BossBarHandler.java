@@ -8,12 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * @Author: EmptyIrony
@@ -21,7 +17,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 @AutoRegister
 public class BossBarHandler implements Listener {
-    private final ExecutorService executorService = new ScheduledThreadPoolExecutor(6);
     private final BossBar bossBar;
 
     public BossBarHandler() {
@@ -32,7 +27,7 @@ public class BossBarHandler implements Listener {
             public void run() {
                 if (!bossBar.getTitle().equals("")) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (bossBar.getWithers().get(player.getUniqueId()) == null) {
+                        if (!bossBar.getViewers().contains(player.getUniqueId())) {
                             bossBar.addPlayer(player);
                         }
                     }
@@ -55,16 +50,6 @@ public class BossBarHandler implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         this.bossBar.removePlayer(event.getPlayer());
-    }
-
-
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        executorService.execute(() -> this.bossBar.update(event.getPlayer()));
-    }
-
-    public ExecutorService getExecutorService() {
-        return this.executorService;
     }
 
     public BossBar getBossBar() {
