@@ -79,8 +79,6 @@ import java.util.concurrent.*;
 @Include
 public class ThePit extends JavaPlugin implements PluginMessageListener {
 
-    public static String serverName = "EmptyIrony";
-
     public static PitInternalHook api;
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
@@ -172,7 +170,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                         "§d//            佛祖保佑       永不宕机      永无BUG                //\n" +
                         "§d////////////////////////////////////////////////////////////////////");
                 sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
-                sendLogs("§cSupport to §eMoonCookie NetWork.");
+                sendLogs("§cSupport to §bNyacho NetWork.");
                 serverId = RandomUtil.randomStr();
 
                 saveDefaultConfig();
@@ -253,7 +251,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 PitMain.start();
             } else {
                 while (!h()) {
-                    sendLogs("§cError。");
+                    sendLogs("§c???");
                 }
             }
         }
@@ -287,7 +285,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     public static boolean h() {
         try {
-            InetAddress address = InetAddress.getByName("thepit.meowtery.cn");
+            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
             return address.isReachable(5000);
         } catch (IOException e) {
             return false;

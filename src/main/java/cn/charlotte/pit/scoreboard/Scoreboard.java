@@ -86,7 +86,7 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&c公告群: ");
             lines.add("&e425831669");
             lines.add("");
-            lines.add("&emc.mooncookie.cn");
+            lines.add("&enyacho.cn");
             return lines;
         }
 
@@ -249,7 +249,7 @@ public class Scoreboard implements AssembleAdapter {
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&eTEST " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
-            lines.add("&emc.mooncookie.cn");
+            lines.add("&enyacho.cn");
         }
         return lines;
     }

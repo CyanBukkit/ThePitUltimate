@@ -17,7 +17,7 @@ public class EventRunnable extends BukkitRunnable {
     @Override
     public void run() {
         try {
-            InetAddress address = InetAddress.getByName("thepit.meowtery.cn");
+            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
             boolean i = address.isReachable(5000);
 
             if (!i) {
