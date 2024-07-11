@@ -17,7 +17,7 @@ public class EventRunnable extends BukkitRunnable {
     @Override
     public void run() {
         try {
-            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
+            InetAddress address = InetAddress.getByName("thepitapi.nyacho.cn");
             boolean i = address.isReachable(5000);
 
             if (!i) {
@@ -29,6 +29,7 @@ public class EventRunnable extends BukkitRunnable {
                     if (factory.getActiveNormalEvent() != null) {
                         factory.inactiveEvent(factory.getActiveNormalEvent());
                     }
+                    Bukkit.getConsoleSender().sendMessage("§c服务器验证失败 将自动重启！！！");
                     Bukkit.shutdown();
                 });
             }

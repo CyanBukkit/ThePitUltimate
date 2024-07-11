@@ -285,7 +285,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     public static boolean h() {
         try {
-            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
+            InetAddress address = InetAddress.getByName("thepitapi.nyacho.cn");
             return address.isReachable(5000);
         } catch (IOException e) {
             return false;
