@@ -1104,9 +1104,9 @@ public class CombatListener implements Listener {
         }
 
         if (totalXp > 0) {
-            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()) + " &6+" + numFormat.format(totalCoins) + "硬币 &b+" + numFormat.format(totalXp) + "经验值" + genesisStatus + (eventBoost > 1 ? boostString : "")));
+            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()).replace("null","BOT") + " &6+" + numFormat.format(totalCoins) + "硬币 &b+" + numFormat.format(totalXp) + "经验值" + genesisStatus + (eventBoost > 1 ? boostString : "")));
         } else {
-            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()) + " &6+" + numFormat.format(totalCoins) + "硬币" + genesisStatus + (eventBoost > 1 ? boostString : "")));
+            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()).replace("null","BOT") + " &6+" + numFormat.format(totalCoins) + "硬币" + genesisStatus + (eventBoost > 1 ? boostString : "")));
         }
 
         String deathString = CC.translate("&c&l死亡! &7被 " + killerProfile.getFormattedName() + " &7击杀.");

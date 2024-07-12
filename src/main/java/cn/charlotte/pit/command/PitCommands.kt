@@ -603,7 +603,7 @@ class PitCommands {
         val data = CDKData.getCachedCDK()[cdk]
         if (data == null) {
             player.sendMessage(CC.translate("&r&c错误的CDK,请仔细检查哦"))
-            player.sendMessage(CC.translate("&r&c如您是在MOC商店购买的点券卡密请输入/code进行兑换!"))
+            player.sendMessage(CC.translate("&r&c如您是在商店购买的点券卡密请输入/code进行兑换!"))
             return
         }
 
@@ -631,7 +631,7 @@ class PitCommands {
         val now = System.currentTimeMillis()
         if (now > data.expireTime) {
             player.sendMessage(CC.translate("&c错误的CDK,请检查大小写是否一致!"))
-            player.sendMessage(CC.translate("&r&c如您是在MOC商店购买的点券卡密请输入/code进行兑换!"))
+            player.sendMessage(CC.translate("&r&c如您是在商店购买的卡密请输入/code进行兑换!"))
             return
         }
 
@@ -984,6 +984,6 @@ class PitCommands {
     @Execute(name = "thepit")
     fun thepit(): String {
         return "§cPowered By §eEmptyIrony huanmeng_qwq Araykal.\n" +
-                "§cSupport to §eMoonCookie NetWork."
+                "§cSupport to §eNyacho NetWork."
     }
 }

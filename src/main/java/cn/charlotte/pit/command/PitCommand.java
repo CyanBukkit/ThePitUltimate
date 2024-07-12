@@ -436,7 +436,7 @@ public class PitCommand {
         final CDKData data = CDKData.getCachedCDK().get(cdk);
         if (data == null) {
             player.sendMessage(CC.translate("&r&c错误的CDK,请仔细检查哦"));
-            player.sendMessage(CC.translate("&r&c如您是在MOC商店购买的点券卡密请输入/code进行兑换!"));
+            player.sendMessage(CC.translate("&r&c如您是在商店购买的卡密请输入/code进行兑换!"));
             return;
         }
 
@@ -464,7 +464,7 @@ public class PitCommand {
         final long now = System.currentTimeMillis();
         if (now > data.getExpireTime()) {
             player.sendMessage(CC.translate("&c错误的CDK,请检查大小写是否一致!"));
-            player.sendMessage(CC.translate("&r&c如您是在MOC商店购买的点券卡密请输入/code进行兑换!"));
+            player.sendMessage(CC.translate("&r&c如您是在商店购买的卡密请输入/code进行兑换!"));
             return;
         }
 
@@ -699,6 +699,6 @@ public class PitCommand {
     @Command(names = "thepit")
     public void pit(CommandSender sender) {
         sender.sendMessage("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
-        sender.sendMessage("§cSupport to §eMoonCookie NetWork.");
+        sender.sendMessage("§cSupport to §bNyacho NetWork.");
     }
 }
