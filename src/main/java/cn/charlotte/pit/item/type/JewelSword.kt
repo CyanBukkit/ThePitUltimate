@@ -11,6 +11,7 @@ import cn.charlotte.pit.getPitProfile
 import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem
 import cn.charlotte.pit.parm.AutoRegister
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.item.ItemBuilder
@@ -60,7 +61,7 @@ class JewelSword : IMythicItem(), Listener {
         val itemStack = super.toItemStack()
 
         if (killed >= KILL_TARGET) {
-            val nmsCopy = CraftItemStack.asNMSCopy(itemStack)
+            val nmsCopy = Utils.toNMStackQuick(itemStack)
             nmsCopy?.tag?.getCompound("extra")?.setString("internal", "mythic_sword")
 
             return CraftItemStack.asCraftMirror(nmsCopy)
@@ -83,7 +84,7 @@ class JewelSword : IMythicItem(), Listener {
     }
 
     override fun loadFromItemStack(item: ItemStack) {
-        CraftItemStack.asNMSCopy(item)?.tag?.getCompound("extra")?.getInt("killed")?.let {
+        Utils.toNMStackQuick(item)?.tag?.getCompound("extra")?.getInt("killed")?.let {
             killed = it
         }
         super.loadFromItemStack(item)
@@ -190,7 +191,7 @@ class JewelSword : IMythicItem(), Listener {
             killer.itemInHand = itemStack
 
             if (enchantment.rarity == EnchantmentRarity.RARE) {
-                val nms = CraftItemStack.asNMSCopy(itemStack)
+                val nms = Utils.toNMStackQuick(itemStack)
                 val tag = NBTTagCompound()
                 nms?.save(tag)
                 val hoverEventComponents = arrayOf<BaseComponent>(

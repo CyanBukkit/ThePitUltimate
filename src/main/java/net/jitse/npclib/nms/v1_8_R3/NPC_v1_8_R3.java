@@ -4,6 +4,7 @@
 
 package net.jitse.npclib.nms.v1_8_R3;
 
+import cn.charlotte.pit.util.Utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.jitse.npclib.NPCLib;
@@ -128,7 +129,7 @@ public class NPC_v1_8_R3 extends NPCBase {
 
         ItemStack item = getItem(slot);
 
-        PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(entityId, slot.getSlot(), CraftItemStack.asNMSCopy(item));
+        PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(entityId, slot.getSlot(), Utils.toNMStackQuick(item));
         playerConnection.sendPacket(packet);
     }
 

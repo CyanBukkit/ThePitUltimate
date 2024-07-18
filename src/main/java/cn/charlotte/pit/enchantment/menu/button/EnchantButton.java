@@ -99,9 +99,9 @@ public class EnchantButton extends Button {
 
     public IMythicItem getMythicItem(ItemStack item) {
         IMythicItem mythicItem;
-        if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemSword) {
+        if (Utils.toNMStackQuick(item).getItem() instanceof ItemSword) {
             mythicItem = new MythicSwordItem();
-        } else if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemBow) {
+        } else if (Utils.toNMStackQuick(item).getItem() instanceof ItemBow) {
             mythicItem = new MythicBowItem();
         } else {
             mythicItem = new MythicLeggingsItem();
@@ -119,9 +119,9 @@ public class EnchantButton extends Button {
                 return getDefaultDisplayItem();
             }
             IMythicItem mythicItem;
-            if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemSword) {
+            if (Utils.toNMStackQuick(item).getItem() instanceof ItemSword) {
                 mythicItem = new MythicSwordItem();
-            } else if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemBow) {
+            } else if (Utils.toNMStackQuick(item).getItem() instanceof ItemBow) {
                 mythicItem = new MythicBowItem();
             } else {
                 mythicItem = new MythicLeggingsItem();
@@ -618,7 +618,7 @@ public class EnchantButton extends Button {
         if (announcement) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
-            net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(mythicItem.toItemStack());
+            net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(mythicItem.toItemStack());
             NBTTagCompound tag = new NBTTagCompound();
             nms.save(tag);
             BaseComponent[] hoverEventComponents = new BaseComponent[]{

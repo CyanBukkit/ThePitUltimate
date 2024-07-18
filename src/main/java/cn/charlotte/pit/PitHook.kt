@@ -376,6 +376,7 @@ object PitHook {
             VolleyEnchant::class.java,
             AegisEnchant::class.java,
             SoulRipperEnchant::class.java,
+            DemonHenEnchant::class.java,
             AceOfSpades::class.java,
             Brakes::class.java,
             BreachingChargeEnchant::class.java

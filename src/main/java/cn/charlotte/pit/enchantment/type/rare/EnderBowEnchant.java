@@ -19,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
@@ -86,7 +87,10 @@ public class EnderBowEnchant extends AbstractEnchantment implements IPlayerShoot
             cooldown.put(attacker.getUniqueId(), new Cooldown(Math.max(0, cooldown.get(attacker.getUniqueId()).getRemaining() - 3000)));
         }
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @EventHandler
     public void onBowShot(EntityShootBowEvent event) {
         if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() != null) return;

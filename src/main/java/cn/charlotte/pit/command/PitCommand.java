@@ -20,6 +20,7 @@ import cn.charlotte.pit.menu.trade.TradeMenu;
 import cn.charlotte.pit.menu.viewer.StatusViewerMenu;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.ChatComponentBuilder;
 import cn.charlotte.pit.util.command.Command;
@@ -140,7 +141,7 @@ public class PitCommand {
             player.sendMessage(CC.translate("&c此物品无法被用于展示!"));
             return;
         }
-        net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(player.getItemInHand());
+        net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(player.getItemInHand());
         NBTTagCompound tag = new NBTTagCompound();
         nms.save(tag);
         BaseComponent[] hoverEventComponents = new BaseComponent[]{new TextComponent(tag.toString())};

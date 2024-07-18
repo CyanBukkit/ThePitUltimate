@@ -1,6 +1,7 @@
 package cn.charlotte.pit
 
 import cn.charlotte.pit.data.PlayerProfile
+import cn.charlotte.pit.util.Utils
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.nbt.BinaryTagIO
 import net.kyori.adventure.nbt.CompoundBinaryTag
@@ -33,7 +34,7 @@ val Player.audience: Audience
     get()= ThePit.getInstance().audiences.player(this)
 
 fun ItemStack.setNbt(nbt: CompoundBinaryTag): ItemStack {
-    return CraftItemStack.asBukkitCopy(CraftItemStack.asNMSCopy(this).apply {
+    return CraftItemStack.asBukkitCopy(Utils.toNMStackQuick(this).apply {
         val outputStream = ByteArrayOutputStream()
         BinaryTagIO.writer().write(nbt, outputStream)
         DataOutputStream(outputStream).use { dataOutputStream ->
@@ -49,7 +50,7 @@ fun ItemStack.setNbt(nbt: CompoundBinaryTag): ItemStack {
 
 val ItemStack.nbt: CompoundBinaryTag
     get() {
-        return CraftItemStack.asNMSCopy(this).tag?.let { tag ->
+        return Utils.toNMStackQuick(this).tag?.let { tag ->
             ByteArrayOutputStream().use { outputStream ->
                 DataOutputStream(outputStream).use { dataOutputStream ->
                     NBTCompressedStreamTools.a(tag, (dataOutputStream as DataOutput))

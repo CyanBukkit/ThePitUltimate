@@ -4,6 +4,9 @@ import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.util.chat.RomanUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,9 +18,10 @@ import java.util.*;
  * 4
  */
 public abstract class AbstractPitItem {
-    protected Map<AbstractEnchantment, Integer> enchantments = new HashMap<>();
+    @Setter
+    protected Map<AbstractEnchantment, Integer> enchantments = new Object2ObjectArrayMap<>();
 
-    protected List<EnchantmentRecord> enchantmentRecords = new ArrayList<>();
+    protected List<EnchantmentRecord> enchantmentRecords = new ObjectArrayList<>();
 
     public AbstractPitItem() {
     }
@@ -29,7 +33,7 @@ public abstract class AbstractPitItem {
     public abstract Material getItemDisplayMaterial();
 
     public boolean isEnchanted() {
-        return enchantments.size() > 0;
+        return !enchantments.isEmpty();
     }
 
 
@@ -76,10 +80,6 @@ public abstract class AbstractPitItem {
 
     public Map<AbstractEnchantment, Integer> getEnchantments() {
         return this.enchantments;
-    }
-
-    public void setEnchantments(Map<AbstractEnchantment, Integer> enchantments) {
-        this.enchantments = enchantments;
     }
 
     public boolean equals(final Object o) {

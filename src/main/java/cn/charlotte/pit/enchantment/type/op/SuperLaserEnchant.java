@@ -10,10 +10,7 @@ import dev.jnic.annotation.Include;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author: EmptyIrony
@@ -55,7 +52,7 @@ public class SuperLaserEnchant extends AbstractEnchantment implements ITickTask 
 
     @Override
     public void handle(int enchantLevel, Player player) {
-        final List<Player> players = PlayerUtil.getNearbyPlayers(player.getLocation(), 8);
+        final Collection<Player> players = PlayerUtil.getNearbyPlayers(player.getLocation(), 8);
         for (Player target : players) {
             if (target.getUniqueId().equals(player.getUniqueId())) {
                 continue;

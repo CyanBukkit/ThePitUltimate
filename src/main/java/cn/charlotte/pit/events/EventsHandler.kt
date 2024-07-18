@@ -73,7 +73,9 @@ object EventsHandler {
     }
 
     fun nextEvent(major: Boolean): String {
-        val event = if (major) epicQueue.poll() else normalQueue.poll()
+        val event = "NULL"
+        if (epicQueue.isEmpty() && normalQueue.isEmpty()) return "NULL"
+        if (major) epicQueue.poll() else normalQueue.poll()
         this.refreshEvents()
         return event
     }

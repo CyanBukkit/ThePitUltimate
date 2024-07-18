@@ -17,6 +17,8 @@ import dev.jnic.annotation.Include;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -95,7 +97,10 @@ public class HealShieldEnchant extends AbstractEnchantment implements IPlayerDam
             cooldown.put(player.getUniqueId(), new Cooldown(0));
         }
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public int loopTick(int enchantLevel) {
         return 20;

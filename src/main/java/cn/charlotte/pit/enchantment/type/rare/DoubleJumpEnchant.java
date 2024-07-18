@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import spg.lgdev.handler.MovementHandler;
 import spg.lgdev.iSpigot;
@@ -81,7 +82,10 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
     public String getUsefulnessLore(int enchantLevel) {
         return "&7在半空中按下跳跃键,你将向上方冲刺一段距离 (" + getCooldownInt(enchantLevel) + "秒冷却)";
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @EventHandler
     public void onToggle(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();

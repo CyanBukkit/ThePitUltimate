@@ -23,6 +23,7 @@ import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.sendMessage
 import cn.charlotte.pit.util.MythicUtil
 import cn.charlotte.pit.util.PlayerUtil
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.cooldown.Cooldown
@@ -185,7 +186,7 @@ class PitCommands {
             return
         }
         COOLDOWN_SHOW.put(player.uniqueId, Cooldown(60, TimeUnit.SECONDS))
-        val nms = CraftItemStack.asNMSCopy(player.itemInHand)
+        val nms = Utils.toNMStackQuick(player.itemInHand)
         val tag = NBTTagCompound()
         nms.save(tag)
         val hoverEventComponents = arrayOf<BaseComponent>(

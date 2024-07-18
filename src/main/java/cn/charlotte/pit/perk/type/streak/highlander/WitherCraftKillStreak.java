@@ -11,6 +11,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemUtil;
@@ -119,16 +120,16 @@ public class WitherCraftKillStreak extends AbstractPerk implements Listener {
             }
             ItemStack item = InventoryUtil.deserializeItemStack(profile.getEnchantingItem());
             IMythicItem mythicItem = null;
-
+            net.minecraft.server.v1_8_R3.ItemStack nmsStack = Utils.toNMStackQuick(item);
             if (item == null) {
                 return;
             }
 
-            if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemSword) {
+            if (nmsStack.getItem() instanceof ItemSword) {
                 mythicItem = new MythicSwordItem();
-            } else if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemBow) {
+            } else if (nmsStack.getItem() instanceof ItemBow) {
                 mythicItem = new MythicBowItem();
-            } else if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemArmor && ItemUtil.getInternalName(item).equalsIgnoreCase("mythic_leggings")) {
+            } else if (nmsStack.getItem() instanceof ItemArmor && ItemUtil.getInternalName(item).equalsIgnoreCase("mythic_leggings")) {
                 mythicItem = new MythicLeggingsItem();
             }
 

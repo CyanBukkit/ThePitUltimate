@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.hologram;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.util.hologram.packet.PacketHologram;
 import cn.charlotte.pit.util.hologram.reflection.NMUClass;
 import cn.charlotte.pit.util.hologram.reflection.Reflection;
 import org.bukkit.Location;
@@ -69,6 +70,9 @@ public abstract class HologramAPI {
     public static boolean removeHologram(@Nonnull Hologram hologram) {
         if (hologram.isSpawned()) {
             hologram.deSpawn();
+        }
+        if(hologram instanceof PacketHologram){
+            ((PacketHologram) hologram).getHologram().recycleEntity();
         }
         return holograms.remove(hologram);
     }

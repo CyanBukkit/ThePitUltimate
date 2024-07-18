@@ -964,7 +964,7 @@ public class CombatListener implements Listener {
 
             //drop armor
             for (ItemStack itemStack : beKilledPlayer.getInventory().getArmorContents()) {
-                if (itemStack != null && itemStack.getType() != Material.AIR && CraftItemStack.asNMSCopy(itemStack).getItem() instanceof ItemArmor) {
+                if (itemStack != null && itemStack.getType() != Material.AIR && Utils.toNMStackQuick(itemStack).getItem() instanceof ItemArmor) {
                     if (itemStack.getType().name().contains("HELMET")) {
                         continue;
                     }

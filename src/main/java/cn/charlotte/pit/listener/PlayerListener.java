@@ -184,7 +184,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
 
         ItemStack stack = event.getItem().getItemStack();
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(stack);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(stack);
 
         if (nmsItem.getItem() instanceof ItemArmor) {
             if (ItemUtil.getInternalName(stack) == null) {
@@ -248,7 +248,7 @@ public class PlayerListener implements Listener {
             ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
             player.getInventory().addItem(arrowBuilder.build());
             player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
-        } else if ((stack.getType() == Material.BOW || CraftItemStack.asNMSCopy(stack).getItem() instanceof ItemSword) && !event.isCancelled()) {
+        } else if ((stack.getType() == Material.BOW || Utils.toNMStackQuick(stack).getItem() instanceof ItemSword) && !event.isCancelled()) {
             InventoryUtil.addInvReverse(player.getInventory(), event.getItem().getItemStack());
         } else if (stack.getType() == Material.GOLD_INGOT) {
             if (event.getItem().hasMetadata("gold")) {
@@ -563,7 +563,7 @@ public class PlayerListener implements Listener {
                 Location location = event.getEntity().getLocation();
                 float radius = event.getRadius();
 
-                List<Player> players = PlayerUtil.getNearbyPlayers(location, radius);
+                Collection<Player> players = PlayerUtil.getNearbyPlayers(location, radius);
                 Map<Player, Double> distanceMap = new HashMap<>();
                 double distanceSum = players.stream().mapToDouble(player -> {
                     double distance = player.getLocation().distance(location);

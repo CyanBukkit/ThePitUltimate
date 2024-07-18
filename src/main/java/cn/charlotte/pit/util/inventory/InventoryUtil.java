@@ -3,6 +3,7 @@ package cn.charlotte.pit.util.inventory;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
@@ -179,7 +180,7 @@ public class InventoryUtil {
         if (in == null || in.equals("unset") || in.equals("null") || in.equals("'null'")) return null;
         ItemStack[] contents = new ItemStack[in.split(";").length];
 
-        for (String s : in.split(";")) {
+        for (String s : Utils.splitByCharAt(in,';')) {
             int slot = Integer.parseInt(s.split("#")[0]);
 
             if (s.split("#").length == 1) {
@@ -321,7 +322,7 @@ public class InventoryUtil {
         
         ByteArrayOutputStream outputStream = null;
         try {
-            net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+            net.minecraft.server.v1_8_R3.ItemStack nmsStack = Utils.toNMStackQuick(itemStack);
             NBTTagCompound nbtTagCompound = new NBTTagCompound();
             nmsStack.save(nbtTagCompound);
             outputStream = new ByteArrayOutputStream();
@@ -391,14 +392,14 @@ public class InventoryUtil {
 
             if (ItemUtil.isDefaultItem(item)) {
                 //player.getInventory().remove(item);
-                if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemArmor) {
+                if (Utils.toNMStackQuick(item).getItem() instanceof ItemArmor) {
                     player.getInventory().remove(item);
                 }
-                if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemSword && swordFound) {
+                if (Utils.toNMStackQuick(item).getItem() instanceof ItemSword && swordFound) {
                     player.getInventory().remove(item);
                     swordFound = false;
                 }
-                if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemBow && bowFound) {
+                if (Utils.toNMStackQuick(item).getItem() instanceof ItemBow && bowFound) {
                     player.getInventory().remove(item);
                     swordFound = false;
                 }

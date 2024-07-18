@@ -6,6 +6,7 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.param.item.RodOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import lombok.Getter;
@@ -57,7 +58,7 @@ public abstract class AbstractEnchantment {
         if (item == null || item.getType() == Material.AIR) {
             return -1;
         }
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             return -1;
@@ -68,7 +69,7 @@ public abstract class AbstractEnchantment {
         NBTTagList list = tag.getCompound("extra")
                 .getList("ench", 8);
 
-        if (list == null || list.size() == 0) {
+        if (list == null || list.isEmpty()) {
             return -1;
         }
         for (int i = 0; i < list.size(); i++) {
@@ -85,16 +86,17 @@ public abstract class AbstractEnchantment {
     }
 
     public boolean canApply(ItemStack item) {
-        if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemSword) {
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
+        if (nmsItem.getItem() instanceof ItemSword) {
             return this.getClass().isAnnotationPresent(WeaponOnly.class);
         }
-        if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemBow) {
+        if (nmsItem.getItem() instanceof ItemBow) {
             return this.getClass().isAnnotationPresent(BowOnly.class);
         }
-        if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemArmor) {
+        if (nmsItem.getItem() instanceof ItemArmor) {
             return this.getClass().isAnnotationPresent(ArmorOnly.class);
         }
-        if (CraftItemStack.asNMSCopy(item).getItem() instanceof ItemFishingRod) {
+        if (nmsItem.getItem() instanceof ItemFishingRod) {
             return this.getClass().isAnnotationPresent(RodOnly.class);
         }
         return false;

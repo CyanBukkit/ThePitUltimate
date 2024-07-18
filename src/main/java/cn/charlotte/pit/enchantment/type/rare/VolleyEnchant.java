@@ -6,6 +6,7 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
@@ -22,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
@@ -79,6 +81,10 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
     }
 
     private Map<UUID, Boolean> isShooting = new HashMap<>();
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
 
     @EventHandler
     @SneakyThrows
@@ -102,7 +108,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                     cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.SECONDS));
                     event.setCancelled(true);
 
-                    final ItemStack item = CraftItemStack.asNMSCopy(itemInHand);
+                    final ItemStack item = Utils.toNMStackQuick(itemInHand);
                     final ItemBow bow = (ItemBow) item.getItem();
 
                     final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();

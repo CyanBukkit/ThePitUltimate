@@ -510,7 +510,7 @@ public class GameEffectListener implements Listener {
                 player.sendMessage(CC.translate("&7受到伤害(Damage/Final Damage): &c" + numFormatTwo.format(event.getDamage()) + "&7/&c" + numFormatTwo.format(event.getFinalDamage())));
             }
         }
-        if (event.getDamager() instanceof Player) {
+        if (event.getDamager() instanceof Player && !(event.getEntity() instanceof Item)) {
             Player player = (Player) event.getDamager();
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
             if (profile.getPlayerOption().isDebugDamageMessage()) {

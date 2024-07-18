@@ -14,6 +14,7 @@ import cn.charlotte.pit.util.command.CommandData;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.mojang.authlib.GameProfile;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
 import org.bukkit.*;
@@ -274,14 +275,14 @@ public class PlayerUtil {
         if (lc1.getWorld() != lc2.getWorld()) {
             return Float.MAX_VALUE;
         }
-        return (float) Math.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2) + Math.pow(lc1.getY() - lc2.getY(), 2) + Math.pow(lc1.getZ() - lc2.getZ(), 2));
+        return (float) MathHelper.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2) + Math.pow(lc1.getY() - lc2.getY(), 2) + Math.pow(lc1.getZ() - lc2.getZ(), 2));
     }
 
     public static float getDistance(Location lc1, Location lc2) {
         if (lc1.getWorld() != lc2.getWorld()) {
             return Float.MAX_VALUE;
         }
-        return (float) Math.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2) + Math.pow(lc1.getY() - lc2.getY(), 2) + Math.pow(lc1.getZ() - lc2.getZ(), 2));
+        return MathHelper.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2) + Math.pow(lc1.getY() - lc2.getY(), 2) + Math.pow(lc1.getZ() - lc2.getZ(), 2));
     }
 
     public static int getPlayerUnlockedPerkLevel(Player player, String internal) {
@@ -478,7 +479,7 @@ public class PlayerUtil {
         }
     }
 
-    public static void respawnPlayer(PlayerDeathEvent event) {
+    public static void respawnPlayer(PlayerDeathEvent event) { //it useless??
         new BukkitRunnable() {
             public void run() {
                 try {
@@ -508,15 +509,9 @@ public class PlayerUtil {
         return nmsClass;
     }
 
-    public static List<Player> getNearbyPlayers(Location location, double radius) {
-        List<Player> players = new ArrayList<>();
-        for (org.bukkit.entity.Entity e : location.getWorld()
-                .getNearbyEntities(location, radius, radius, radius)) {
-            if (e instanceof Player && e.getLocation().distance(location) <= radius) {
-                players.add((Player) e);
-            }
-        }
-        return players;
+    public static Collection<Player> getNearbyPlayers(Location location, double radius) {
+        return location.getWorld()
+                .getNearbyPlayers(location, radius, radius, radius);
     }
 
     public static void heal(Player player, double heal) {

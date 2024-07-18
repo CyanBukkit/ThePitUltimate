@@ -8,6 +8,7 @@ import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
@@ -65,7 +66,7 @@ public class DiamondBreakerEnchant extends AbstractEnchantment implements IAttac
         Player victim = (Player) target;
         for (ItemStack armor : victim.getInventory().getArmorContents()) {
             if (armor != null && armor.getType() != Material.AIR && armor.getType().name().contains("DIAMOND")) {
-                if (CraftItemStack.asNMSCopy(armor).getItem() instanceof ItemArmor) {
+                if (Utils.toNMStackQuick(armor).getItem() instanceof ItemArmor) {
                     boostDamage.set(boostDamage.get() + (0.04 * enchantLevel));
                 }
             }
@@ -78,7 +79,7 @@ public class DiamondBreakerEnchant extends AbstractEnchantment implements IAttac
         Player victim = (Player) target;
         for (ItemStack armor : victim.getInventory().getArmorContents()) {
             if (armor != null && armor.getType() != Material.AIR && armor.getType().name().contains("DIAMOND")) {
-                if (CraftItemStack.asNMSCopy(armor).getItem() instanceof ItemArmor) {
+                if (Utils.toNMStackQuick(armor).getItem() instanceof ItemArmor) {
                     boostDamage.set(boostDamage.get() + (0.04 * enchantLevel));
                 }
             }

@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.List;
 
 @Include
@@ -56,7 +57,7 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
         coins.getAndAdd(-0.8 * coins.get());
         experience.getAndAdd(-0.8 * experience.get());
         Player targetPlayer = (Player) target;
-        List<Player> nearbyPlayers = PlayerUtil.getNearbyPlayers(myself.getLocation(), 10);
+        Collection<Player> nearbyPlayers = PlayerUtil.getNearbyPlayers(myself.getLocation(), 10);
 
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
             for (Player player : nearbyPlayers) {

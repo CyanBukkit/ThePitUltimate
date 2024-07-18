@@ -3,6 +3,7 @@ package cn.charlotte.pit.runnable;
 import cn.charlotte.pit.data.sub.DroppedEntityData;
 import cn.charlotte.pit.data.sub.PlacedBlockData;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,8 +25,8 @@ public class ClearRunnable extends BukkitRunnable {
 
     public ClearRunnable() {
         clearRunnable = this;
-        this.placedBlock = new ArrayList<>();
-        this.entityData = new ArrayList<>();
+        this.placedBlock = new ObjectArrayList<>();
+        this.entityData = new ObjectArrayList<>();
     }
 
     @Override

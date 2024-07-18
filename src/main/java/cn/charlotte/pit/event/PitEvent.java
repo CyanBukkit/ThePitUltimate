@@ -24,8 +24,9 @@ public class PitEvent extends Event {
         return HANDLERS;
     }
 
-    public void callEvent() {
+    public boolean callEvent() {
         Bukkit.getPluginManager()
                 .callEvent(this);
+        return false;
     }
 }

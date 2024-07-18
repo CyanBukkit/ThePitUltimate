@@ -1,6 +1,7 @@
 package cn.charlotte.pit.item.type
 
 import cn.charlotte.pit.item.IMythicItem
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.item.ItemBuilder
 import dev.jnic.annotation.Include
 import org.bukkit.Color
@@ -35,7 +36,7 @@ class ArmageddonBoots : IMythicItem() {
     override fun loadFromItemStack(item: ItemStack?) {
         item ?: return
 
-        val nmsItem = CraftItemStack.asNMSCopy(item)
+        val nmsItem = Utils.toNMStackQuick(item)
         val tag = nmsItem?.tag ?: return
         val extra = tag.getCompound("extra") ?: return
 

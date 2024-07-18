@@ -13,6 +13,8 @@ import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -64,7 +66,10 @@ public class HemorrhageEnchant extends AbstractEnchantment implements IAttackEnt
         return "&7攻击对玩家施加 &c流血 &f(" + TimeUtil.millisToTimer((enchantLevel >= 3 ? 5 : 4) * 1000) + ") &7与 &c缓慢 I &f(" + TimeUtil.millisToTimer((enchantLevel >= 3 ? 5 : 4) * 1000) + ") &7效果. (" + (8 - enchantLevel * 2) + "秒冷却)"
                 + "/s&7效果 &c流血 &7: 无法受到与被施加 &6生命吸收 &7效果";
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     @PlayerOnly
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {

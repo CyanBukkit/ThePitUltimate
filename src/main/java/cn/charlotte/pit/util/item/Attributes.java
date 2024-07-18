@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.item;
 
 
+import cn.charlotte.pit.util.Utils;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -28,7 +29,7 @@ public class Attributes {
 
     public Attributes(ItemStack stack) {
         // Create a CraftItemStack (under the hood)
-        this.nmsStack = CraftItemStack.asNMSCopy(stack);
+        this.nmsStack = Utils.toNMStackQuick(stack);
 
         // Load NBT
         if (nmsStack.getTag() == null) {

@@ -3,6 +3,7 @@ package cn.charlotte.pit.listener;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PotionAddEvent;
 import cn.charlotte.pit.events.impl.major.RedVSBlueEvent;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -53,9 +54,9 @@ public class PacketListener extends PacketAdapter {
                     for (Player target : Bukkit.getOnlinePlayers()) {
                         if (target.getEntityId() == (int) a.get(packet)) {
                             if (activeEpicEvent.getRedTeam().contains(target.getUniqueId())) {
-                                c.set(packet, CraftItemStack.asNMSCopy(new ItemBuilder(Material.WOOL).durability(14).build()));
+                                c.set(packet, Utils.toNMStackQuick(new ItemBuilder(Material.WOOL).durability(14).build()));
                             } else if (activeEpicEvent.getBlueTeam().contains(target.getUniqueId())) {
-                                c.set(packet, CraftItemStack.asNMSCopy(new ItemBuilder(Material.WOOL).durability(11).build()));
+                                c.set(packet, Utils.toNMStackQuick(new ItemBuilder(Material.WOOL).durability(11).build()));
                             }
                             break;
                         }

@@ -10,13 +10,56 @@ import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.util.item.ItemUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
+import java.util.*;
 
 public class Utils {
+    /**
+     * 需要Paper支持。
+     * @return
+     */
+    public static final net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
+        if (item instanceof CraftItemStack) {
+            return ((CraftItemStack) item).handle;
+        } else {
+            return CraftItemStack.asNMSCopy(item);
+        }
+    }
+    /**
+     * 超级高效的split方法。
+     *
+     * @param str regx
+     * @return a array of strings
+     */
+    public static String[] splitByCharAt(String str, char regx) {
+        //字符串截取的开始位置
+        int begin = 0;
+        //截取分割得到的字符串
+        String splitStr = "";
+        List<String> strL = new ObjectArrayList<>();
+        int length = str.length();
+        //计数器
+        int i = 0;
+        int splitted;
+        for (i = 0; i < length;i++ ) {
+            if (str.charAt(i) == regx) {
+                splitStr = str.substring(begin, i);
+                strL.add(splitStr);
+                str = str.substring(i + 1, length);
+                length = str.length();
+                i = 0;
 
+            }
+        }
+        if (!str.isBlank()) {
+            strL.add(str);
+        }
+        return strL.toArray(new String[0]);
+    }
     /**
      * 返回-1为没有
      *

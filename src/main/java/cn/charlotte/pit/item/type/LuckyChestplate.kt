@@ -3,6 +3,7 @@ package cn.charlotte.pit.item.type
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.util.MythicUtil
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.random.RandomUtil
 import dev.jnic.annotation.Include
@@ -44,7 +45,7 @@ class LuckyChestplate: IMythicItem(), Listener {
     override fun loadFromItemStack(item: ItemStack?) {
         item ?: return
 
-        val nmsItem = CraftItemStack.asNMSCopy(item)
+        val nmsItem = Utils.toNMStackQuick(item)
         val tag = nmsItem?.tag ?: return
         val extra = tag.getCompound("extra") ?: return
 

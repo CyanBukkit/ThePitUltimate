@@ -7,6 +7,7 @@ package cn.charlotte.pit.util.item;
 
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
+import cn.charlotte.pit.util.Utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_8_R3.*;
@@ -265,7 +266,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder changeNbt(String key, String value) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(is);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -289,7 +290,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder changeNbt(String key, boolean value) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(is);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -309,7 +310,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder changeNbt(String key, int value) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(is);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -329,7 +330,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder changeNbt(String key, double value) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(is);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -350,7 +351,7 @@ public class ItemBuilder {
 
     public ItemStack buildWithUnbreakable() {
 
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(is);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -386,7 +387,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder enchant(Map<AbstractEnchantment, Integer> enchant) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(is);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -429,7 +430,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder itemDamage(double damageValue) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(is);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();

@@ -78,6 +78,11 @@ public class PacketArmorStand {
         hiding.remove(user);
         viewing.remove(user);
     }
+    //MUST DO THIS AFTER THE USE IT CAN BE A C4 for YOUR SERVER!!!!
+    public void recycleEntity(){
+        this.entity.remove();
+
+    }
 
     public void removeAll() {
         ArrayList<Player> list = new ArrayList<>(users);

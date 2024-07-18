@@ -18,6 +18,7 @@ import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.scoreboard.AssembleAdapter;
 import cn.charlotte.pit.util.time.TimeUtil;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
@@ -73,7 +74,7 @@ public class Scoreboard implements AssembleAdapter {
     public List<String> getLines(Player player) {
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        List<String> lines = new ArrayList<>();
+        List<String> lines = new ObjectArrayList<>();
 
         if (!profile.isLoaded()) {
             lines.add("");

@@ -8,9 +8,15 @@ import cn.charlotte.pit.item.type.ArmageddonBoots;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Material;
@@ -23,15 +29,18 @@ import java.util.*;
  * @Author: EmptyIrony
  * @Date: 2021/3/23 23:45
  */
+@Data()
+@Getter
+@Setter
 public abstract class IMythicItem extends AbstractPitItem {
-    protected int maxLive;
-    protected int live;
-    protected int tier;
-    protected MythicColor color;
-    protected DyeColor dyeColor;
-    protected String prefix;
-    protected boolean boostedByGem = false;
-    protected String customName = null;
+    public int maxLive;
+    public int live;
+    public int tier;
+    public MythicColor color;
+    public DyeColor dyeColor;
+    public String prefix;
+    public boolean boostedByGem = false;
+    public String customName = null;
 
     public boolean boostedByBook = false;
 
@@ -241,8 +250,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (item == null || item.getType() == Material.AIR) {
             return;
         }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             return;
@@ -307,7 +315,7 @@ public abstract class IMythicItem extends AbstractPitItem {
             }
         }
 
-        this.enchantments = new HashMap<>();
+        this.enchantments = new Object2ObjectArrayMap<>();
 
         if (!extra.hasKey("ench")) {
             return;
@@ -315,7 +323,7 @@ public abstract class IMythicItem extends AbstractPitItem {
 
         final String recordsString = extra.getString("records");
         if (recordsString != null) {
-            for (String recordString : recordsString.split(";")) {
+            for (String recordString : Utils.splitByCharAt(recordsString,';')) {
                 final String[] split = recordString.split("\\|");
                 if (split.length >= 3) {
                     enchantmentRecords.add(
@@ -332,8 +340,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         NBTTagList ench = extra.getList("ench", 8);
 
         for (int i = 0; i < ench.size(); i++) {
-            String[] split = ench.getString(i).split(":");
-
+            String[] split = Utils.splitByCharAt(ench.getString(i),':');
             AbstractEnchantment enchantment = ThePit.getInstance()
                     .getEnchantmentFactor()
                     .getEnchantmentMap()
@@ -374,53 +381,6 @@ public abstract class IMythicItem extends AbstractPitItem {
         builder.changeNbt("mythic_color", color.getInternalName());
     }
 
-    public int getMaxLive() {
-        return this.maxLive;
-    }
-
-    public void setMaxLive(int maxLive) {
-        this.maxLive = maxLive;
-    }
-
-    public int getLive() {
-        return this.live;
-    }
-
-    public void setLive(int live) {
-        this.live = live;
-    }
-
-    public int getTier() {
-        return this.tier;
-    }
-
-    public void setTier(int tier) {
-        this.tier = tier;
-    }
-
-    public MythicColor getColor() {
-        return this.color;
-    }
-
-    public void setColor(MythicColor color) {
-        this.color = color;
-    }
-
-    public DyeColor getDyeColor() {
-        return this.dyeColor;
-    }
-
-    public void setDyeColor(DyeColor dyeColor) {
-        this.dyeColor = dyeColor;
-    }
-
-    public String getPrefix() {
-        return this.prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
 
     public String toString() {
         return "IMythicItem(maxLive=" + this.getMaxLive() + ", live=" + this.getLive() + ", tier=" + this.getTier() + ", color=" + this.getColor() + ", dyeColor=" + this.getDyeColor() + ", prefix=" + this.getPrefix() + ")";
@@ -466,19 +426,4 @@ public abstract class IMythicItem extends AbstractPitItem {
         return result;
     }
 
-    public boolean isBoostedByGem() {
-        return boostedByGem;
-    }
-
-    public void setBoostedByGem(boolean boostedByGem) {
-        this.boostedByGem = boostedByGem;
-    }
-
-    public String getCustomName() {
-        return customName;
-    }
-
-    public void setCustomName(String customName) {
-        this.customName = customName;
-    }
 }

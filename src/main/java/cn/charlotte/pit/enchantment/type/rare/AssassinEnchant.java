@@ -13,6 +13,8 @@ import dev.jnic.annotation.Include;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -84,7 +86,10 @@ public class AssassinEnchant extends AbstractEnchantment implements IPlayerDamag
             cooldown.put(myself.getUniqueId(), new Cooldown(getCooldownInt(enchantLevel), TimeUnit.SECONDS));
         }
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getText(int level, Player player) {
         return cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ? "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(cooldown.get(player.getUniqueId()).getRemaining()).replace(" ", "");

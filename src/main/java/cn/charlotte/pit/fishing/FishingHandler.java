@@ -3,6 +3,7 @@ package cn.charlotte.pit.fishing;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.parm.AutoRegister;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import net.minecraft.server.v1_8_R3.EntityItem;
@@ -48,7 +49,7 @@ public class FishingHandler implements Listener {
 
     private EntityItem generateEntity(Player player, Location dropLocation, ItemStack item) {
         WorldServer worldServer = ((CraftWorld) dropLocation.getWorld()).getHandle();
-        EntityItem entityItem = new EntityItem(worldServer, dropLocation.getX(), dropLocation.getY(), dropLocation.getZ(), CraftItemStack.asNMSCopy(item));
+        EntityItem entityItem = new EntityItem(worldServer, dropLocation.getX(), dropLocation.getY(), dropLocation.getZ(), Utils.toNMStackQuick(item));
         worldServer.addEntity(entityItem);
 
         double d5 = player.getLocation().getX() - dropLocation.getX();

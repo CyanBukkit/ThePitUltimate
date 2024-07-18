@@ -12,6 +12,7 @@ import cn.charlotte.pit.events.IScoreBoardInsert
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem
 import cn.charlotte.pit.runnable.ClearRunnable
 import cn.charlotte.pit.util.PlayerUtil
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.MessageType
 import cn.charlotte.pit.util.cooldown.Cooldown
@@ -459,7 +460,7 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
                     PacketPlayOutEntityEquipment(
                         target.entityId,
                         4,
-                        CraftItemStack.asNMSCopy(
+                        Utils.toNMStackQuick(
                             org.bukkit.inventory.ItemStack(data.block, 1, data.data.toShort())
                         )
                     )
@@ -486,7 +487,7 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
                     PacketPlayOutEntityEquipment(
                         target.entityId,
                         4,
-                        CraftItemStack.asNMSCopy(target.inventory.helmet))
+                        Utils.toNMStackQuick(target.inventory.helmet))
                     )
             }
 

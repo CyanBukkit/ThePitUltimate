@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.medal.impl.challenge.FirstTradeMedal;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.ChatComponentBuilder;
 import cn.charlotte.pit.util.chat.StringUtil;
@@ -158,7 +159,7 @@ public class TradeManager {
         if (bItems.size() > 0) {
             for (ItemStack item : bItems) {
                 String message = "&a&l+ &7" + item.getAmount() + "x &f" + (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null ? item.getItemMeta().getDisplayName() : item.getType().toString().toUpperCase());
-                net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
+                net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(item);
                 NBTTagCompound tag = new NBTTagCompound();
                 nms.save(tag);
                 BaseComponent[] hoverEventComponents = new BaseComponent[]{
@@ -175,7 +176,7 @@ public class TradeManager {
         if (aItems.size() > 0) {
             for (ItemStack item : aItems) {
                 String message = "&c&l- &7" + item.getAmount() + "x &f" + (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null ? item.getItemMeta().getDisplayName() : item.getType().toString().toUpperCase());
-                net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
+                net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(item);
                 NBTTagCompound tag = new NBTTagCompound();
                 nms.save(tag);
                 BaseComponent[] hoverEventComponents = new BaseComponent[]{

@@ -15,9 +15,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +62,7 @@ public class MultiExchangeLocationEnchant extends AbstractEnchantment implements
     @Override
     @PlayerOnly
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        final List<Player> players = PlayerUtil.getNearbyPlayers(target.getLocation(), 5);
+        final Collection<Player> players = PlayerUtil.getNearbyPlayers(target.getLocation(), 5);
         if (!players.contains(attacker)) {
             players.add(attacker);
         }
@@ -69,15 +71,13 @@ public class MultiExchangeLocationEnchant extends AbstractEnchantment implements
                 .collect(Collectors.toList());
 
         Collections.shuffle(locations);
-
-        for (int i = 0; i < players.size(); i++) {
-            final Player player = players.get(i);
-            final Location location = locations.get(i);
+        AtomicInteger atomicInteger = new AtomicInteger();
+        players.forEach(player -> {
+            final Location location = locations.get(atomicInteger.getAndIncrement());
 
             player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 1);
             player.sendMessage(CC.translate("&5你被卷入到了时空漩涡之中...更替了你的位置"));
             player.teleport(location);
-        }
-
+        });
     }
 }

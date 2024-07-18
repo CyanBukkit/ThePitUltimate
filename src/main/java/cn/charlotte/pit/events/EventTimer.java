@@ -1,6 +1,7 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +23,7 @@ public class EventTimer implements Runnable {
         }
 
         final String format = DATE_FORMAT.format(System.currentTimeMillis());
-        final String[] split = format.split(":");
+        final String[] split = Utils.splitByCharAt(format,':');
         final String minString = split[4];
         final EventFactory factory = ThePit.getInstance().getEventFactory();
 
@@ -44,6 +45,8 @@ public class EventTimer implements Runnable {
             if (factory.getActiveEpicEvent() == null && factory.getNextEpicEvent() == null && System.currentTimeMillis() - factory.getLastNormalEvent() >= 3 * 60 * 1000) {
                 if (factory.getActiveNormalEvent() == null) {
                     String mini = EventsHandler.INSTANCE.nextEvent(false);
+                    if(mini.equals("NULL"))
+                        return;
                     cooldown = new Cooldown(1, TimeUnit.MINUTES);
 
                     factory.getNormalEvents()

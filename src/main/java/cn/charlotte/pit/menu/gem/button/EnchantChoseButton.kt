@@ -96,7 +96,7 @@ class EnchantChoseButton(
                 System.currentTimeMillis()
             )
 
-            indexedMythicItem.isBoostedByGem = true
+            indexedMythicItem.boostedByGem = true
 
             player.inventory.setItem(index, indexedMythicItem.toItemStack())
         } else {

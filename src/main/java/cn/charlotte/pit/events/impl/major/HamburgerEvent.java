@@ -31,6 +31,7 @@ import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
 import com.sk89q.worldedit.schematic.SchematicFormat;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -754,7 +755,7 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
         this.location = ThePit.getInstance().getPitConfig().getHamburgerOfferNpcLocA(); //villager location
 
         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-            final List<Player> players = PlayerUtil.getNearbyPlayers(location, 5);
+            final Collection<Player> players = PlayerUtil.getNearbyPlayers(location, 5);
             final List<Location> locations = ThePit.getInstance().getPitConfig().getSpawnLocations();
 
             for (Player player : players) {
@@ -762,7 +763,7 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
                 player.sendMessage(CC.translate("&c为了保证您的安全，我们已将您传送回出生点"));
             }
 
-            final ArrayList<PlacedBlockData> data = new ArrayList<>(ClearRunnable.getClearRunnable().getPlacedBlock());
+            final List<PlacedBlockData> data = new ObjectArrayList<>(ClearRunnable.getClearRunnable().getPlacedBlock());
             for (PlacedBlockData blockData : data) {
                 if (blockData.getLocation().distance(location) <= 5) {
                     ClearRunnable.getClearRunnable().getPlacedBlock().remove(blockData);

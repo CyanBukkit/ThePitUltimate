@@ -6,6 +6,7 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
@@ -20,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -89,13 +91,16 @@ public class MegaLongBowEnchant extends AbstractEnchantment implements Listener,
                 player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 2 * 20, level), false);
                 event.setCancelled(true);
                 final EntityPlayer ePlayer = ((CraftPlayer) player).getHandle();
-                final ItemStack itemStack = CraftItemStack.asNMSCopy(itemInHand);
+                final ItemStack itemStack = Utils.toNMStackQuick(itemInHand);
                 final ItemBow bow = (ItemBow) itemStack.getItem();
                 bow.a(itemStack, ePlayer.world, ePlayer, 0);
             }
         }
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getText(int level, Player player) {
         return cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ? "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(cooldown.get(player.getUniqueId()).getRemaining()).replace(" ", "");

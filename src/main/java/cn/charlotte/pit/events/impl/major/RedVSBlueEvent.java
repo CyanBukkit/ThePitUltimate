@@ -283,9 +283,9 @@ public class RedVSBlueEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
     private void sendPacket(Player player) {
         PacketPlayOutEntityEquipment packet = null;
         if (redTeam.contains(player.getUniqueId())) {
-            packet = new PacketPlayOutEntityEquipment(player.getEntityId(), 4, CraftItemStack.asNMSCopy(new ItemBuilder(Material.WOOL).durability(14).build()));
+            packet = new PacketPlayOutEntityEquipment(player.getEntityId(), 4, Utils.toNMStackQuick(new ItemBuilder(Material.WOOL).durability(14).build()));
         } else if (blueTeam.contains(player.getUniqueId())) {
-            packet = new PacketPlayOutEntityEquipment(player.getEntityId(), 4, CraftItemStack.asNMSCopy(new ItemBuilder(Material.WOOL).durability(11).build()));
+            packet = new PacketPlayOutEntityEquipment(player.getEntityId(), 4, Utils.toNMStackQuick(new ItemBuilder(Material.WOOL).durability(11).build()));
         }
         if (packet == null) {
             return;
@@ -303,7 +303,7 @@ public class RedVSBlueEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
             PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
             for (Player target : Bukkit.getOnlinePlayers()) {
                 if (player.equals(target)) continue;
-                connection.sendPacket(new PacketPlayOutEntityEquipment(target.getEntityId(), 4, CraftItemStack.asNMSCopy(target.getInventory().getHelmet())));
+                connection.sendPacket(new PacketPlayOutEntityEquipment(target.getEntityId(), 4, Utils.toNMStackQuick(target.getInventory().getHelmet())));
             }
         }
     }

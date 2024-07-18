@@ -29,8 +29,11 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
-
-    compileOnly(libs.spigot.get8())
+    //we uses the local library from the paper 1.8.8 to get more efficient because
+    //
+    //    public net.minecraft.server.v1_8_R3.ItemStack handle; // Paper - public
+    //
+    //compileOnly(libs.spigot.get8())
     compileOnly(libs.protocollib)
     compileOnly(libs.luckperms)
 
@@ -45,6 +48,10 @@ dependencies {
     compileOnly(libs.websocket)
     // fawe /we
     compileOnly(fileTree("libs"))
+    // to get the proper api
+    compileOnly("it.unimi.dsi:fastutil:8.5.13")
+
+    compileOnly(libs.spigot.get8())
     compileOnly(libs.luckperms)
     compileOnly(libs.playerpoints)
     compileOnly(libs.decentholograms)
