@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +51,16 @@ public class PetFactory implements Listener {
             }
         }
     }
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        final LivingEntity entity = e.getPlayer();
+        final PetData data = entityToPetData.get(entity.getUniqueId());
+        if (data == null) {
+            return;
+        }
 
+        data.removeThis();
+    }
     @SneakyThrows
     public void spawnPet(String internal, Player owner) {
         try {

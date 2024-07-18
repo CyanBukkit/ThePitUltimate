@@ -30,6 +30,14 @@ public class BountyRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
+        animationDataMap.forEach((i,a) -> {
+            Player player = Bukkit.getPlayer(i);
+            if(player == null || !player.isOnline()){
+                a.holograms.forEach(s -> {
+                    s.hologram.deSpawn();
+                });
+            }
+        });
         if (Bukkit.getOnlinePlayers().size() == 0) {
             return;
         }
