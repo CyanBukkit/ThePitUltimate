@@ -20,6 +20,7 @@ public abstract class HologramAPI {
     protected static final List<Hologram> holograms = new ArrayList<>();
     protected static boolean is1_8/*Or 1.9*/ = Minecraft.VERSION.newerThan(Minecraft.Version.v1_8_R1);
     protected static boolean packetsEnabled = false;
+    public static boolean isMAGA = true;
     protected static boolean useProtocolSupport = false;
     //Protocol Support
     static Class<?> ProtocolSupportAPI;
@@ -71,7 +72,7 @@ public abstract class HologramAPI {
         if (hologram.isSpawned()) {
             hologram.deSpawn();
         }
-        if(hologram instanceof PacketHologram){
+        if(hologram instanceof PacketHologram && isMAGA){
             ((PacketHologram) hologram).getHologram().recycleEntity();
         }
         return holograms.remove(hologram);
