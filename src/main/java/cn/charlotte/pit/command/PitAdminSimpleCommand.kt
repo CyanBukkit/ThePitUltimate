@@ -358,7 +358,7 @@ class PitAdminSimpleCommand {
                 )
             )
         }
-        player.sendMessage(CC.translate("&7以上记录最多展示5条"))
+        player.sendMessage(CC.translate("§7以上记录最多展示5条"))
     }
 
     @Execute(name = "addSquadsLoc")
