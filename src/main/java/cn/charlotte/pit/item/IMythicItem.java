@@ -12,7 +12,10 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -47,13 +50,15 @@ public abstract class IMythicItem extends AbstractPitItem {
     public UUID uuid;
     // 0=false 1=true -1=unset
     public int forceCanTrade = -1;
+    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = CacheBuilder.newBuilder().weakKeys().weakValues().build();
 
+    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = CacheBuilder.newBuilder().weakKeys().weakValues().build();
     public IMythicItem() {
     }
 
     @Override
     public ItemStack toItemStack() {
-        List<String> lore = new ArrayList<>();
+        List<String> lore = new ObjectArrayList<>();
         String name = getItemDisplayName();
         if (this.color == null) {
             this.color = (MythicColor) RandomUtil.helpMeToChooseOne(MythicColor.RED, MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
@@ -315,51 +320,63 @@ public abstract class IMythicItem extends AbstractPitItem {
             }
         }
 
-        this.enchantments = new Object2ObjectArrayMap<>();
-
-        if (!extra.hasKey("ench")) {
+        if (!extra.hasKey("ench")) { //TODO
             return;
         }
 
         final String recordsString = extra.getString("records");
         if (recordsString != null) {
-            for (String recordString : Utils.splitByCharAt(recordsString,';')) {
-                final String[] split = recordString.split("\\|");
-                if (split.length >= 3) {
-                    enchantmentRecords.add(
-                            new EnchantmentRecord(
-                                    split[0],
-                                    split[1],
-                                    Long.parseLong(split[2])
-                            )
-                    );
+            ObjectArrayList<EnchantmentRecord> recordFromCache = recordCache.getIfPresent(recordsString);
+            if(recordFromCache != null){
+                enchantmentRecords.addAll(recordFromCache);
+            } else {
+                for (String recordString : Utils.splitByCharAt(recordsString, ';')) {
+                    final String[] split = recordString.split("\\|");
+                    if (split.length >= 3) {
+                        enchantmentRecords.add(
+                                new EnchantmentRecord(
+                                        split[0],
+                                        split[1],
+                                        Long.parseLong(split[2])
+                                )
+                        );
+                        recordCache.put(recordsString, (ObjectArrayList<EnchantmentRecord>) enchantmentRecords);
+                    }
                 }
             }
         }
-
         NBTTagList ench = extra.getList("ench", 8);
+        int o = ench.hashCode();
+        Object2ObjectArrayMap<AbstractEnchantment, Integer> ifPresent = enchCache.getIfPresent(o);
+        if(ifPresent != null){
+            this.enchantments = ifPresent;
+        } else {
+            this.enchantments = new Object2ObjectArrayMap<>();
 
-        for (int i = 0; i < ench.size(); i++) {
-            String[] split = Utils.splitByCharAt(ench.getString(i),':');
-            AbstractEnchantment enchantment = ThePit.getInstance()
-                    .getEnchantmentFactor()
-                    .getEnchantmentMap()
-                    .get(split[0]);
 
-            if (enchantment == null) {
-                continue;
+            for (int i = 0; i < ench.size(); i++) {
+                AbstractEnchantment enchantment;
+                String[] split = Utils.splitByCharAt(ench.getString(i), ':');
+                enchantment = ThePit.getInstance()
+                        .getEnchantmentFactor()
+                        .getEnchantmentMap()
+                        .get(split[0]);
+
+                if (enchantment == null) {
+                    continue;
+                }
+
+                int level;
+                try {
+                    level = Integer.parseInt(split[1]);
+                } catch (Exception ignore) {
+                    continue;
+                }
+
+                enchantments.put(enchantment, level);
+                enchCache.put(o, (Object2ObjectArrayMap<AbstractEnchantment, Integer>) enchantments);
             }
-
-            int level;
-            try {
-                level = Integer.parseInt(split[1]);
-            } catch (Exception ignore) {
-                continue;
-            }
-
-            enchantments.put(enchantment, level);
         }
-
         if (!extra.hasKey("tier") && isEnchanted()) {
             if (color == MythicColor.DARK) {
                 this.tier = 2;

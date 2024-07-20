@@ -101,10 +101,11 @@ public class PlayerUtil {
 
     //自身对其他人使用附魔时附魔是否应该失效 (适用于有目标附魔)
     public static boolean shouldIgnoreEnchant(Player self, Player target) {
-        if (PlayerUtil.isSinkingMoonlight(self)) return true;
+        boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self);
+        if (sinkingMoonlight) return true;
 
         //自身穿黑裤时必定失效 && 自身被沉默时必定生效 && 其他人穿黑裤且自身没有鞋子时失效 && 对方被沉默时失效
-        return isEquippingSomber(self) || isVenom(self) || isSinkingMoonlight(self) || (isEquippingSomber(target) && !isEquippingArmageddon(self)) || isVenom(target);
+        return isEquippingSomber(self) || isVenom(self) || (isEquippingSomber(target) && !isEquippingArmageddon(self)) || isVenom(target);
     }
 
     public static boolean isSinkingMoonlight(Player player) {
