@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -20,7 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 public class ComboBacktrackEnchant extends AbstractEnchantment implements IAttackEntity {
 
-    private Random random = new Random();
+    //For safety and efficienct
+    private Random random = ThreadLocalRandom.current();
 
     @Override
     public String getEnchantName() {
