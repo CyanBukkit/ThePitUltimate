@@ -111,7 +111,7 @@ public class RankUtil {
 
     public static String getNameFormatWithPrefix(UUID uuid) {
         if (getPlayerName(uuid) == null || getPlayerName(uuid).equals("null")){
-            return "§b[人机] §c颗粒";
+            return "§d喵喵";
         }
         return LuckPermsUtil.getPrefix(uuid) + getPlayerName(uuid);
     }
