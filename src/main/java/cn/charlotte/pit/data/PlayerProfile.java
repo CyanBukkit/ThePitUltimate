@@ -20,17 +20,24 @@ import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
+import cn.klee.backports.utils.SWMRHashTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -73,7 +80,7 @@ public class PlayerProfile {
 
     public final static PlayerProfile NONE_PROFILE = new PlayerProfile(UUID.randomUUID(), "NotLoadPlayer");
 
-    private final static Map<UUID, PlayerProfile> cacheProfile = new HashMap<>();
+    private final static Map<UUID, PlayerProfile> cacheProfile = new SWMRHashTable<>();
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(PlayerProfile.class);
     public int prestige;
     public List<String> claimedMail;
@@ -124,10 +131,10 @@ public class PlayerProfile {
     //所以专用Map降低大O复杂度
     @Deprecated
     private List<PerkData> unlockedPerk;
-    private Map<String, PerkData> unlockedPerkMap = new HashMap<>();
+    private Map<String, PerkData> unlockedPerkMap = new SWMRHashTable<>();
     @Deprecated
     private List<PerkData> boughtPerk;
-    private Map<String, PerkData> boughtPerkMap = new HashMap<>();
+    private Map<String, PerkData> boughtPerkMap = new SWMRHashTable<>();
 
     private Set<String> usedCdk;
     private Map<Integer, PerkData> chosePerk;
@@ -213,7 +220,7 @@ public class PlayerProfile {
 
     private long lastDamageAt = -1L;
 
-    private HashMap<String, Double> extraMaxHealth = new HashMap<>();
+    private Map<String, Double> extraMaxHealth = new SWMRHashTable<>();
 
     public KingsQuestsData kingsQuestsData = new KingsQuestsData();
 
@@ -235,11 +242,11 @@ public class PlayerProfile {
         this.killRecap = new KillRecap();
         this.buffData = new BuffData();
         this.combatTimer = new Cooldown(0);
-        this.damageMap = new HashMap<>();
-        this.unlockedPerk = new ArrayList<>();
-        this.boughtPerk = new ArrayList<>();
+        this.damageMap = new SWMRHashTable<>();
+        this.unlockedPerk = new ObjectArrayList<>();
+        this.boughtPerk = new ObjectArrayList<>();
         this.strengthTimer = new Cooldown(0);
-        this.usedCdk = new HashSet<>();
+        this.usedCdk = new ObjectOpenHashSet<>();
         this.enderChestRow = 3;
         this.respawnTime = 0.1;
 
@@ -255,9 +262,9 @@ public class PlayerProfile {
         this.screenShare = false;
         this.screenShareQQ = "none";
 
-        this.chosePerk = new HashMap<>();
+        this.chosePerk = new SWMRHashTable<>();
 
-        this.autoBuyButtons = new ArrayList<>();
+        this.autoBuyButtons = new ObjectArrayList<>();
 
         this.medalData = new MedalData();
 
@@ -268,10 +275,10 @@ public class PlayerProfile {
         this.playerOption = new PlayerOption();
         this.playerBanData = new PlayerBanData();
         this.bountyCooldown = new Cooldown(0);
-        this.currentQuestList = new ArrayList<>();
+        this.currentQuestList = new ObjectArrayList<>();
         this.genesisData = new GenesisData();
-        this.invBackups = new ArrayList<>();
-        this.claimedMail = new ArrayList<>();
+        this.invBackups = new ObjectArrayList<>();
+        this.claimedMail = new ObjectArrayList<>();
 
         this.nightQuestEnable = false;
 
@@ -332,10 +339,17 @@ public class PlayerProfile {
         }
         return loadPlayerProfileByUuid(uuid);
     }
-
+    /**
+     * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
+     * 注意！请异步调用本方法，如果在主线程上调用会抛异常
+     * 简称阻塞
+     *
+     * @param uuid 目标玩家 UUID
+     * @return 目标玩家玩家档案，如果该玩家未注册，则返回null
+     */
     public static PlayerProfile loadPlayerProfileByUuid(UUID uuid) {
         if (Bukkit.getServer().isPrimaryThread()) {
-            throw new RuntimeException("Shouldn't load profile on primary thread!");
+            new RuntimeException("Shouldn't load profile on primary thread!").printStackTrace();
         }
 
         PlayerProfile playerProfile = ThePit.getInstance()
@@ -379,6 +393,7 @@ public class PlayerProfile {
     /**
      * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
      * 注意！请异步调用本方法，如果在主线程上调用会抛异常
+     * 简称阻塞
      *
      * @param name 目标玩家名字
      * @return 目标玩家玩家档案，如果该玩家未注册，则返回null
@@ -391,16 +406,28 @@ public class PlayerProfile {
             }
         }
         if (Bukkit.getServer().isPrimaryThread()) {
-            throw new RuntimeException("Shouldn't load profile on primary thread!");
+            new RuntimeException("Shouldn't load profile on primary thread!").printStackTrace();
         }
 
-        PlayerProfile playerProfile = ThePit.getInstance()
+        return ThePit.getInstance()
                 .getMongoDB()
                 .getProfileCollection()
                 .find(Filters.eq("lowerName", name.toLowerCase()))
-                .first();
+                .first(); //PlayerProfile lookup
+    }
 
-        return playerProfile;
+    /**
+     * 自带一些魔法的查找玩家 =w=
+     * @param name 目标玩家名字
+     * @return 目标玩家玩家档案，如果该玩家未注册，则返回null (Future)
+     */
+    @JsonIgnore
+    public static Future<PlayerProfile> getOrLoadPlayerProfileByNameAsync(String name){
+        return CompletableFuture.supplyAsync(() -> getOrLoadPlayerProfileByName(name));
+    }
+    @JsonIgnore
+    public static Future<PlayerProfile> getOrLoadPlayerProfileByUUIDAsync(String name){
+        return CompletableFuture.supplyAsync(() -> getOrLoadPlayerProfileByName(name));
     }
 
     @JsonIgnore
@@ -1703,7 +1730,7 @@ public class PlayerProfile {
         this.lastDamageAt = lastDamageAt;
     }
 
-    public HashMap<String, Double> getExtraMaxHealth() {
+    public Map<String, Double> getExtraMaxHealth() {
         return extraMaxHealth;
     }
 

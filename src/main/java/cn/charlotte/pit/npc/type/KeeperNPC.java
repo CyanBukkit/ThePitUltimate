@@ -3,6 +3,7 @@ package cn.charlotte.pit.npc.type;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.menu.hub.HubMenu;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class KeeperNPC extends SkinNPC {
 
     @Override
     public List<String> getNpcDisplayName(Player player) {
-        List<String> lines = new ArrayList<>();
+        List<String> lines = new ObjectArrayList<>(3);
         lines.add("&6&l武林盟主");
         lines.add("&7加入武林争霸RPG");
         return lines;

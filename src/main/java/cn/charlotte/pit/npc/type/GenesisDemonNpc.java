@@ -2,6 +2,7 @@ package cn.charlotte.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class GenesisDemonNpc extends SkinNPC {
 
     @Override
     public List<String> getNpcDisplayName(Player player) {
-        List<String> lines = new ArrayList<>();
+        List<String> lines = new ObjectArrayList<>(3);
         lines.add("&e限时活动: 光暗派系");
         lines.add("&c&l恶魔");
         lines.add("&e&l右键查看");

@@ -508,13 +508,15 @@ public class CombatListener implements Listener {
                 }
             }
         }
-
+        //saves performance
+        if(player.getName().equals("666")) { //NPC Name
+            return;
+        }
         final Player finalKiller = killer;
 
         double respawnTime = playerProfile.getRespawnTime();
 
-        PlayerUtil.clearPlayer(player, true, false);
-
+            PlayerUtil.clearPlayer(player, true, false);
         double mythicProtectChance = 0;
 
         int divineMiracleEnchantLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "divine_miracle_enchant");

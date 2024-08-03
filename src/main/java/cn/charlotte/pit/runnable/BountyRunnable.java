@@ -38,7 +38,7 @@ public class BountyRunnable extends BukkitRunnable {
                 });
             }
         });
-        if (Bukkit.getOnlinePlayers().size() == 0) {
+        if (Bukkit.getOnlinePlayers().isEmpty()) {
             return;
         }
 
@@ -95,7 +95,7 @@ public class BountyRunnable extends BukkitRunnable {
                 hologram.getHologram().setLocation(location);
             }
         }
-        holograms.removeAll(shouldRemove);
+        shouldRemove.forEach(holograms::remove);
     }
 
     private double generatorLocDouble() {

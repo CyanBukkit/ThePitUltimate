@@ -6,6 +6,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.mail.Mail;
 import cn.charlotte.pit.menu.mail.MailMenu;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +29,7 @@ public class MailNpc extends SkinNPC {
 
     @Override
     public List<String> getNpcDisplayName(Player player) {
-        List<String> hologram = new ArrayList<>();
+        List<String> hologram = new ObjectArrayList<>(3);
         final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         final PlayerMailData mailData = profile.getMailData();
 

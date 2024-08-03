@@ -12,8 +12,7 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AccessLevel;
@@ -26,7 +25,11 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: EmptyIrony
@@ -50,9 +53,9 @@ public abstract class IMythicItem extends AbstractPitItem {
     public UUID uuid;
     // 0=false 1=true -1=unset
     public int forceCanTrade = -1;
-    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = CacheBuilder.newBuilder().weakKeys().weakValues().build();
+    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).maximumSize(1000).build();
 
-    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = CacheBuilder.newBuilder().weakKeys().weakValues().build();
+    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).maximumSize(1000).build();
     public IMythicItem() {
     }
 
@@ -340,7 +343,7 @@ public abstract class IMythicItem extends AbstractPitItem {
                                         Long.parseLong(split[2])
                                 )
                         );
-                        recordCache.put(recordsString, (ObjectArrayList<EnchantmentRecord>) enchantmentRecords);
+                        recordCache.put(recordsString,  (ObjectArrayList<EnchantmentRecord>) enchantmentRecords);
                     }
                 }
             }

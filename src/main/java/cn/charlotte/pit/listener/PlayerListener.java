@@ -82,7 +82,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
 
         PlayerUtil.clearPlayer(player, true);
-        if (pit.getPitConfig().getSpawnLocations().size() != 0) {
+        if (!pit.getPitConfig().getSpawnLocations().isEmpty()) {
             Location location = pit.getPitConfig()
                     .getSpawnLocations()
                     .get(random.nextInt(pit.getPitConfig().getSpawnLocations().size()));

@@ -8,6 +8,7 @@ import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.Utils;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  */
 public class GameRunnable extends BukkitRunnable {
     @Getter
-    private final static List<TradeRequest> tradeRequests = new ArrayList<>();
+    private final static List<TradeRequest> tradeRequests = new ObjectArrayList<>();
 
 
     private long tick = 0;
@@ -92,7 +93,7 @@ public class GameRunnable extends BukkitRunnable {
                 }
             }
 
-            List<TradeRequest> collect = tradeRequests.stream()
+            List<TradeRequest> collect = tradeRequests.parallelStream()
                     .filter(tradeRequest -> tradeRequest.getCooldown().hasExpired())
                     .collect(Collectors.toList());
 

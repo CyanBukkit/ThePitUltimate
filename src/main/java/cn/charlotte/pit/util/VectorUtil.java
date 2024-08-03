@@ -1,6 +1,8 @@
 package cn.charlotte.pit.util;
 
 
+import net.jafama.FastMath;
+import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -26,8 +28,8 @@ public class VectorUtil {
     public static Item itemDrop(Player player, ItemStack itemStack, double bulletSpread, double radius) {
         Location location = player.getLocation().add(0.0D, 1.5D, 0.0D);
         Item item = player.getWorld().dropItem(location, itemStack);
-        double yaw = Math.toRadians(-player.getLocation().getYaw() - 90.0F);
-        double pitch = Math.toRadians(-player.getLocation().getPitch());
+        float yaw = MathHelper.fastToRadians(-player.getLocation().getYaw() - 90.0F);
+        float pitch = MathHelper.fastToRadians(-player.getLocation().getPitch());
         double x;
         double y;
         double z;
@@ -35,13 +37,13 @@ public class VectorUtil {
             double[] spread = new double[]{1.0D, 1.0D, 1.0D};
 
             IntStream.range(0, 3).forEach((t) -> spread[t] = (random.nextDouble() - random.nextDouble()) * bulletSpread * 0.1D);
-            x = Math.cos(pitch) * Math.cos(yaw) + spread[0];
-            y = Math.sin(pitch) + spread[1];
-            z = -Math.sin(yaw) * Math.cos(pitch) + spread[2];
+            x = MathHelper.cos(pitch) * MathHelper.cos(yaw) + spread[0];
+            y = MathHelper.sin(pitch) + spread[1];
+            z = -MathHelper.sin(yaw) * MathHelper.cos(pitch) + spread[2];
         } else {
-            x = Math.cos(pitch) * Math.cos(yaw);
-            y = Math.sin(pitch);
-            z = -Math.sin(yaw) * Math.cos(pitch);
+            x = MathHelper.cos(pitch) * MathHelper.cos(yaw);
+            y = MathHelper.sin(pitch);
+            z = -MathHelper.sin(yaw) * MathHelper.cos(pitch);
         }
 
         Vector dirVel = new Vector(x, y, z);
@@ -53,7 +55,11 @@ public class VectorUtil {
         Location from = entity.getLocation();
         Vector vector = getPushVector(from, to, velocity);
         if (vector.getX() != 0 && vector.getY() != 0 && vector.getZ() != 0) {
+            if(entity.isOnGround()){
+                entity.getLocation().add(0,0.1,0);
+            }
             entity.setVelocity(vector);
+
         }
     }
 
@@ -86,17 +92,17 @@ public class VectorUtil {
     }
 
     private static Vector normalizeVector(Vector victor) {
-        double mag = Math.sqrt(Math.pow(victor.getX(), 2.0D) + Math.pow(victor.getY(), 2.0D) + Math.pow(victor.getZ(), 2.0D));
+        double mag = MathHelper.sqrt(MathHelper.pow(victor.getX(), 2.0D) + MathHelper.pow(victor.getY(), 2.0D) + MathHelper.pow(victor.getZ(), 2.0D));
         return mag != 0.0D ? victor.multiply(1.0D / mag) : victor.multiply(0);
     }
 
     private static Double calculateLaunchAngle(Location from, Location to, double v, double elevation) {
         Vector vector = from.clone().subtract(to).toVector();
-        double distance = Math.sqrt(Math.pow(vector.getX(), 2.0D) + Math.pow(vector.getZ(), 2.0D));
-        double v2 = Math.pow(v, 2.0D);
-        double v4 = Math.pow(v, 4.0D);
-        double check = 20.0 * (20.0 * Math.pow(distance, 2.0D) + 2.0D * elevation * v2);
-        return v4 < check ? null : Math.atan((v2 - Math.sqrt(v4 - check)) / (20.0 * distance));
+        double distance = MathHelper.sqrt(MathHelper.pow(vector.getX(), 2.0D) + MathHelper.pow(vector.getZ(), 2.0D));
+        double v2 = MathHelper.pow(v, 2.0D);
+        double v4 = MathHelper.pow(v, 4.0D);
+        double check = 20.0 * (20.0 * MathHelper.pow(distance, 2.0D) + 2.0D * elevation * v2);
+        return v4 < check ? null : FastMath.atan((v2 - MathHelper.sqrt(v4 - check)) / (20.0 * distance));
     }
 }
 

@@ -105,7 +105,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
             try {
                 if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
                     //shoot 5 arrows need 400ms u suck why u set it to 200ms
-                    cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.SECONDS));
+                    cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.MILLISECONDS));
                     event.setCancelled(true);
 
                     final ItemStack item = Utils.toNMStackQuick(itemInHand);
@@ -130,7 +130,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                             }
                             tick++;
                             isShooting.put(player.getUniqueId(), true);
-                            bow.a(item, entityPlayer.world, entityPlayer, value);
+                            bow.performShoot(item, entityPlayer.world, entityPlayer, value,false);
                             isShooting.put(player.getUniqueId(), false);
                         }
                     }.runTaskTimer(ThePit.getInstance(), 0, 2);

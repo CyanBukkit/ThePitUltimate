@@ -39,12 +39,11 @@ public class Utils {
         //字符串截取的开始位置
         int begin = 0;
         //截取分割得到的字符串
-        String splitStr = "";
+        String splitStr;
         List<String> strL = new ObjectArrayList<>();
         int length = str.length();
         //计数器
-        int i = 0;
-        int splitted;
+        int i;
         for (i = 0; i < length;i++ ) {
             if (str.charAt(i) == regx) {
                 splitStr = str.substring(begin, i);

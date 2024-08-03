@@ -2,6 +2,7 @@ package cn.charlotte.pit.buff;
 
 import cn.charlotte.pit.UtilKt;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
 import lombok.Data;
 import org.bukkit.entity.Player;
 
@@ -26,13 +27,13 @@ public class BuffData {
 
     @Data
     public class Buff {
-        private List<Long> buff;
+        private LongArrayList buff;
 
         public Buff() {
-            this.buff = new ArrayList<>();
+            this.buff = new LongArrayList();
         }
 
-        public Buff(List<Long> buff) {
+        public Buff(LongArrayList buff) {
             this.buff = buff;
         }
 

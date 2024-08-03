@@ -1,5 +1,7 @@
 package cn.charlotte.pit.data;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +11,7 @@ import java.util.UUID;
  * @Date: 2021/1/3 12:57
  */
 public class LeaderBoardEntry {
-    private static List<LeaderBoardEntry> leaderBoardEntries = new ArrayList<>();
+    private static List<LeaderBoardEntry> leaderBoardEntries = new ObjectArrayList<>();
 
     private final String name;
     private final UUID uuid;

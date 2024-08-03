@@ -6,6 +6,7 @@ import cn.charlotte.pit.menu.perk.normal.choose.PerkChooseMenu;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.level.LevelUtil;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class PerkNPC extends SkinNPC {
 
     @Override
     public List<String> getNpcDisplayName(Player player) {
-        List<String> lines = new ArrayList<>();
+        List<String> lines = new ObjectArrayList<>(3);
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         lines.add("&c&l天赋");
         if (profile.getLevel() >= 10) {

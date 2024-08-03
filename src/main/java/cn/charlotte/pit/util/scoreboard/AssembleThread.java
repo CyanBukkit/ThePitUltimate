@@ -27,7 +27,7 @@ public class AssembleThread implements Runnable {
         this.assemble = assemble;
         Plugin protocolLib = Bukkit.getPluginManager().getPlugin("ProtocolLib");
         if (protocolLib.getDescription().getVersion().startsWith("5")) {
-            taskId = Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
+            taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
         } else {
             taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
         }

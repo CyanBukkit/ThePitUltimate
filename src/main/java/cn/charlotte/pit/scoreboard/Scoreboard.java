@@ -74,15 +74,15 @@ public class Scoreboard implements AssembleAdapter {
     public List<String> getLines(Player player) {
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        List<String> lines = new ObjectArrayList<>();
+        List<String> lines = new ObjectArrayList<>(16);
 
         if (!profile.isLoaded()) {
             lines.add("");
-            lines.add("&c我们正在加载您的档案...");
+            lines.add("&c正在加载您的档案...");
             lines.add("&c请稍等片刻...");
             lines.add("");
-            lines.add("&c如等待长时间仍在加载,");
-            lines.add("&c请尝试重新进入服务器.");
+            lines.add("&c如等待长时仍在加载,");
+            lines.add("&c请重新进入服务器.");
             lines.add("");
             lines.add("&c公告群: ");
             lines.add("&e425831669");
@@ -147,7 +147,7 @@ public class Scoreboard implements AssembleAdapter {
         if (level >= 120) {
             lines.add("&f经验值: &b经验值已满!");
         } else {
-            lines.add("&f下一等级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
+            lines.add("&f下一级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
         }
 
         if (profile.getCurrentQuest() != null) {
@@ -205,7 +205,7 @@ public class Scoreboard implements AssembleAdapter {
                 final double streakKills = profile.getStreakKills();
                 final double multiple = Math.min(1.0, (streakKills - 100) * 0.005);
 
-                lines.add("&f已存储经验: &b" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
+                lines.add("&f已储经验: &b" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
             }
         }
         //if Player have a bounty:
@@ -245,7 +245,7 @@ public class Scoreboard implements AssembleAdapter {
 
         lines.add(" ");
         if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c此房间即将重启! &7(" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后)");
+            lines.add("&c房间即将重启! &7(" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后)");
         }
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&eTEST " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));

@@ -3,6 +3,7 @@ package cn.charlotte.pit.enchantment.type.rare;
 import cn.charlotte.pit.PitMain;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
+import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
 import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
@@ -11,6 +12,7 @@ import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
+import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
@@ -41,7 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Include
 @BowOnly
 @AutoRegister
-public class DemonHenEnchant extends AbstractEnchantment implements IPlayerShootEntity, Listener, IPlayerKilledEntity {
+public class DemonHenEnchant extends AbstractEnchantment implements IActionDisplayEnchant, IPlayerShootEntity, Listener, IPlayerKilledEntity {
     private static final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();
     Set<Entity> masters = new CopyOnWriteArraySet<>();
     Set<Map.Entry<Entity,Entity>> entitySet = new CopyOnWriteArraySet<>();
@@ -61,7 +63,7 @@ public class DemonHenEnchant extends AbstractEnchantment implements IPlayerShoot
                 Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
                     masters.add(s.getKey());
                     ((CraftWorld)world).getHandle().createExplosion(((CraftEntity)s.getKey()).getHandle(),location.getX(),location.getY(),location.getZ(), 1, false,false);
-                    float xyz = (float) ((Math.random() - 0.5) * 2);
+                    float xyz = (float) ((Math.random() - 0.5) * 2) ;
                     nearbyEntities.forEach(a -> {
                         a.setVelocity(new Vector(xyz, Math.abs(xyz), xyz));
                     });
@@ -127,7 +129,7 @@ public class DemonHenEnchant extends AbstractEnchantment implements IPlayerShoot
     }
     @EventHandler
     public void onQuit(PlayerQuitEvent e){
-        this.cooldown.remove(e.getPlayer().getUniqueId());
+        cooldown.remove(e.getPlayer().getUniqueId());
     }
     public Location getHenLocation(Location location){
         Location clone = location.clone();
@@ -153,5 +155,10 @@ public class DemonHenEnchant extends AbstractEnchantment implements IPlayerShoot
             coins.set(coins.get() * 0.2);
             experience.set(experience.get() * 0.2);
         }
+    }
+
+    @Override
+    public String getText(int level, Player player) {
+        return (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ? "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).getRemaining()).replace(" ", ""));
     }
 }

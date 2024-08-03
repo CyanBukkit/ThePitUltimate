@@ -90,7 +90,7 @@ public class NameTagImpl implements NametagAdapter {
                     }
                     if (profile.getChosePerk().get(5).getPerkInternalName().equalsIgnoreCase("uber_streak") && profile.getStreakKills() >= 100) {
                         final int level = Math.min(400, (((int) profile.getStreakKills()) / 100) * 100);
-                        displayName = CC.translate("&d&l登峰造极" + level + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
+                        displayName = CC.translate("&d&l登峰造极" + " " + level + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
                     }
                     if (profile.getChosePerk().get(5).getPerkInternalName().equalsIgnoreCase("to_the_moon") && profile.getStreakKills() >= 100) {
                         displayName = CC.translate("&b&l月球之旅" + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));

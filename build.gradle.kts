@@ -36,6 +36,7 @@ dependencies {
     //compileOnly(libs.spigot.get8())
     compileOnly(libs.protocollib)
     compileOnly(libs.luckperms)
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
     compileOnly(libs.papi)
     compileOnly(libs.narshorn)

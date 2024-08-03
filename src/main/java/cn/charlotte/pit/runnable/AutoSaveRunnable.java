@@ -2,12 +2,13 @@ package cn.charlotte.pit.runnable;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/2 12:16
  */
-public class AutoSaveRunnable implements Runnable {
+public class AutoSaveRunnable extends BukkitRunnable {
     @Override
     public void run() {
         PlayerProfile.saveAll();

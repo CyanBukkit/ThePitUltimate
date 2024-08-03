@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -18,17 +20,21 @@ public class RandomUtil {
         random = new Random();
     }
     public static String randomStr() {
-        Random random = new Random();
         String s = "ABCDEFGHIJKLMNPQRSTUVXYZ1234567890";
         char[] c = s.toCharArray();
         StringBuilder numbers = new StringBuilder();
 
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 2; ++i) {
             numbers.append(c[random.nextInt(c.length)]);
         }
         return numbers.toString();
     }
-
+    public static String forRandomScoreboardString(){
+        Date from = Date.from(Instant.now());
+        int year = from.getYear();
+        int mon = from.getMonth();
+        return year + "" + mon + randomStr();
+    }
 
     /**
      * 参数范围为0-1

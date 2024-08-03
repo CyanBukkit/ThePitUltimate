@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,7 +29,7 @@ public class ProfileLoadRunnable extends BukkitRunnable {
     @Getter
     private static ProfileLoadRunnable instance;
     @Getter
-    private final Map<UUID, Cooldown> cooldownMap = new HashMap<>();
+    private final Map<UUID, Cooldown> cooldownMap = new ConcurrentHashMap<>();
 
     public ProfileLoadRunnable(ThePit plugin) {
         instance = this;
@@ -38,8 +39,7 @@ public class ProfileLoadRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        final Map<UUID, Cooldown> map = new HashMap<>(cooldownMap);
-        for (Map.Entry<UUID, Cooldown> entry : map.entrySet()) {
+        for (Map.Entry<UUID, Cooldown> entry : cooldownMap.entrySet()) {
             final Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null || !player.isOnline()) {
                 cooldownMap.remove(entry.getKey());

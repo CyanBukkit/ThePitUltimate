@@ -74,7 +74,6 @@ public abstract class Menu {
             if (inventory == null) {
                 inventory = Bukkit.createInventory(player, size, title);
             }
-
             inventory.setContents(new ItemStack[inventory.getSize()]);
 
             currentlyOpenedMenus.put(player.getName(), this);

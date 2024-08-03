@@ -146,6 +146,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         if (dupeItemButton.isDupe() == DupeItemButton.DumpType.SUCCESSFULLY) {
             if (h()) {
                 instance = this;
+                //Draw Banner
                 sendLogs("\n" +
                         "§d////////////////////////////////////////////////////////////////////\n" +
                         "§d//                          _ooOoo_                               //\n" +
@@ -169,9 +170,26 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                         "§d//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //\n" +
                         "§d//            佛祖保佑       永不宕机      永无BUG                //\n" +
                         "§d////////////////////////////////////////////////////////////////////");
-                sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal.");
+                sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal KleeLoveLife.");
                 sendLogs("§cSupport to §bNyacho NetWork.");
-                serverId = RandomUtil.randomStr();
+                sendLogs("\n#################################################################################\n" +
+                        "███╗   ██╗███████╗████████╗███████╗ █████╗ ███████╗███████╗\n" +
+                        "████╗  ██║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝██╔═\n" +
+                        "██╔██╗ ██║█████╗     ██║   █████╗  ███████║███████╗█████╗\n" +
+                        "██║╚██╗██║██╔══╝     ██║   ██╔══╝  ██╔══██║╚════██║██╔\n" +
+                        "██║ ╚████║███████╗   ██║   ███████╗██║  ██║███████║███████\n" +
+                        "\n" +
+                        "\n" +
+                        "§cWarning:You have loaded a important plugin. All actions will be logged.\n" +
+                        "§f警告：你已经加载了一个重要插件，所有操作将被记录.\n" +
+                        "\n" +
+                        "§cIllegal operation will be investigated for legal responsibility according to law!\n" +
+                        "§f非法操作将依法追究法律责任！！\n" +
+                        "\n" +
+                        "§cPlease be careful!\n" +
+                        "§f请慎重操作！\n" +
+                        "#################################################################################");
+                serverId = RandomUtil.forRandomScoreboardString();
 
                 saveDefaultConfig();
 
@@ -218,16 +236,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.miniGameController = new MiniGameController();
                 this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
 
-                new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new AutoSaveRunnable(), 1, 1, TimeUnit.MINUTES);
-                new ScheduledThreadPoolExecutor(1).scheduleWithFixedDelay(new DayNightCycleRunnable(), 1, 1, TimeUnit.SECONDS);
+                new AutoSaveRunnable().runTaskTimerAsynchronously(this,1200,1200);
+                new DayNightCycleRunnable().runTaskTimerAsynchronously(this,20,20);
 
-                Bukkit.getWorlds().forEach(w -> {
-                    w.getEntities().forEach(e -> {
-                        if (e instanceof ArmorStand) {
-                            e.remove();
-                        }
-                    });
-                });
+                Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
+                    if (e instanceof ArmorStand) {
+                        e.remove();
+                    }
+                }));
 //            this.printBanner();
 
                 new Thread(new LeaderBoardRunnable()).start();

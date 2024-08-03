@@ -4,6 +4,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerOption;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -167,7 +168,7 @@ public class CC {
     }
 
     public static List<String> translate(List<String> lines) {
-        List<String> toReturn = new ArrayList<>();
+        List<String> toReturn = new ObjectArrayList<>(3);
 
         for (String line : lines) {
             toReturn.add(ChatColor.translateAlternateColorCodes('&', line));
@@ -177,7 +178,7 @@ public class CC {
     }
 
     public static List<String> translate(String[] lines) {
-        List<String> toReturn = new ArrayList<>();
+        List<String> toReturn = new ObjectArrayList<>(3);
 
         for (String line : lines) {
             if (line != null) {

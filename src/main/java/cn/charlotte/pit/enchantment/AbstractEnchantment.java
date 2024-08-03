@@ -74,7 +74,7 @@ public abstract class AbstractEnchantment {
         }
         for (int i = 0; i < list.size(); i++) {
             String string = list.getString(i);
-            String[] split = string.split(":");
+            String[] split = Utils.splitByCharAt(string,':');
             if (split.length != 2) {
                 return -1;
             }
