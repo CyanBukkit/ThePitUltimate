@@ -60,7 +60,7 @@ public class MongoDB {
             if (mongoUser != null && mongoPassword != null) {
                 final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
 
-                this.mongoClient = new MongoClient(serverAddress, credential, new MongoClientOptions.Builder().build());
+                this.mongoClient = new MongoClient(serverAddress, credential, new MongoClientOptions.Builder().connectionsPerHost(3000).build());
             } else {
                 this.mongoClient = new MongoClient(serverAddress);
             }

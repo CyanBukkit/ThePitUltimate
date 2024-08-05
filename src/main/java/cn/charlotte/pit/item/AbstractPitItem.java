@@ -86,7 +86,7 @@ public abstract class AbstractPitItem {
         if (o == this) return true;
         if (!(o instanceof AbstractPitItem)) return false;
         final AbstractPitItem other = (AbstractPitItem) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$enchantments = this.getEnchantments();
         final Object other$enchantments = other.getEnchantments();
         if (this$enchantments == null ? other$enchantments != null : !this$enchantments.equals(other$enchantments))

@@ -27,6 +27,7 @@ import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.random.RandomUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -41,6 +42,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -51,7 +53,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/2/11 16:51
  */
 public class EnchantButton extends Button {
-    private static final Random random = new Random();
+    SecureRandom random = RandomUtil.random;
     private final ItemStack item;
     private final MythicWellMenu menu;
 
@@ -238,6 +240,7 @@ public class EnchantButton extends Button {
         if (level > 0) {
             maxLive = mythicItem.getMaxLive();
         }
+        RandomUtil.switchSeed();
         //根据附魔物品颜色的不同,maxLive也有所不同
         if (color == MythicColor.DARK) {
             switch (level) {
@@ -255,6 +258,7 @@ public class EnchantButton extends Button {
                     break;
             }
         } else {
+            RandomUtil.switchSeed();
             if (color == MythicColor.RAGE && level == 0) {
                 mythicItem.setMaxLive(((Integer) RandomUtil.helpMeToChooseOne(4, 5, 6, 7, 8, 9)));
             } else {
@@ -281,9 +285,11 @@ public class EnchantButton extends Button {
         if (level > 0) {
             mythicItem.setLive(mythicItem.getLive() + mythicItem.getMaxLive() - maxLive);
         } else {
+
             mythicItem.setLive(mythicItem.getMaxLive());
         }
         level++;
+
         mythicItem.setTier(level);
 
         List<AbstractEnchantment> list = ThePit.getInstance()
@@ -292,21 +298,26 @@ public class EnchantButton extends Button {
                 .stream()
                 .filter(abstractEnchantment -> abstractEnchantment.canApply(item))
                 .collect(Collectors.toList());
-        List<AbstractEnchantment> enchantments = new ArrayList<>();
+        List<AbstractEnchantment> enchantments = new ObjectArrayList<>();
         if (level > 1) {
-            enchantments = new ArrayList<>(mythicItem.getEnchantments().keySet());
+            enchantments = new ObjectArrayList<>(mythicItem.getEnchantments().keySet());
         }
         boolean announcement = false;
 
-        List<AbstractEnchantment> results = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.NORMAL).collect(Collectors.toList());
-        List<AbstractEnchantment> rareResults = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RARE).collect(Collectors.toList());
+        List<AbstractEnchantment> results = list.stream()
+                .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.NORMAL).collect(Collectors.toList());
+        List<AbstractEnchantment> rareResults = list.stream()
+                .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RARE).collect(Collectors.toList());
 
         //different type of mythic item have different rarity enchantments
         if (color == MythicColor.DARK) {
-            results = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.DARK_NORMAL).collect(Collectors.toList());
-            rareResults = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.DARK_RARE).collect(Collectors.toList());
+            results = list.stream()
+                    .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.DARK_NORMAL).collect(Collectors.toList());
+            rareResults = list.stream()
+                    .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.DARK_RARE).collect(Collectors.toList());
         } else if (color == MythicColor.RAGE && level == 1) {
-            results = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RAGE).collect(Collectors.toList());
+            results = list.stream()
+                    .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RAGE).collect(Collectors.toList());
             rareResults = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RAGE_RARE).collect(Collectors.toList());
         }
         rareResults = rareResults.stream().filter(abstractEnchantment -> !isBlackList(player, abstractEnchantment)).collect(Collectors.toList());
@@ -314,6 +325,7 @@ public class EnchantButton extends Button {
         //Enchant Start
         switch (color) {
             case DARK: {
+                RandomUtil.switchSeed();
                 if (level == 1) {
                     //t1 dark pants have only somber1
                     mythicItem.getEnchantments().put(ThePit.getInstance().getEnchantmentFactor().getEnchantmentMap().get("somber_enchant"), 1);
@@ -346,13 +358,14 @@ public class EnchantButton extends Button {
                 }
             }
             default: {
+                RandomUtil.switchSeed();
                 if (level == 1) {
                     //Tier 1 Enchant Start
-                    int choice = random.nextInt(3);
+                    int choice = random.nextInt(4);
 
                     boolean useBook = getPlayerMythicBook(player, item);
                     if (useBook) {
-                        choice = 3;
+                        choice = 5;
                         AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
                         mythicItem.getEnchantments().put(enchantment, 3);
                         announcement = true;
@@ -363,12 +376,14 @@ public class EnchantButton extends Button {
 
                     switch (choice) {
                         case 0: { //choice 0: 1 of Lv1 Enchantment
+
                             AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
                             enchantments.add(enchantment);
                             mythicItem.getEnchantments().put(enchantment, 1);
                             break;
                         }
-                        case 1: { //choice 0: 2 of Lv1 Enchantment
+                        case 3: { //choice 0: 2 of Lv1 Enchantment
+
                             for (int i = 0; i < 2; i++) {
                                 results.removeAll(enchantments);
                                 AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
@@ -377,7 +392,15 @@ public class EnchantButton extends Button {
                             }
                             break;
                         }
-                        case 2: { //choice 0: 1 of Lv2 Enchantment
+                        case 1: { //choice 0: 1 of Lv2 Enchantment
+
+                            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                            enchantments.add(enchantment);
+                            mythicItem.getEnchantments().put(enchantment, Math.min(enchantment.getMaxEnchantLevel(), 2));
+                            break;
+                        }
+                        case 2: { //choice 0: 2 of Lv2 Enchantment
+
                             AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
                             enchantments.add(enchantment);
                             mythicItem.getEnchantments().put(enchantment, Math.min(enchantment.getMaxEnchantLevel(), 2));

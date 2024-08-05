@@ -500,7 +500,7 @@ public class PlayerProfile {
     public void saveData() {
         final long now = System.currentTimeMillis();
 
-        if (invBackups.size() == 0 || invBackups.stream().noneMatch(backup -> now - backup.getTimeStamp() < 10 * 60 * 1000)) {
+        if (invBackups.isEmpty() || invBackups.stream().noneMatch(backup -> now - backup.getTimeStamp() < 10 * 60 * 1000)) {
             final PlayerInvBackup backup = new PlayerInvBackup();
 
             backup.setUuid(this.uuid);

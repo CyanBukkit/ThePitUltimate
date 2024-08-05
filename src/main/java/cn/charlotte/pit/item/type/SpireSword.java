@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -40,10 +41,11 @@ public class SpireSword extends AbstractPitItem {
 
     @Override
     public ItemStack toItemStack() {
-        final List<String> lore = new ArrayList<>();
+        List<String> enchantLore = this.getEnchantLore();
+        final List<String> lore = new ObjectArrayList<>(enchantLore.size() + 4);
         lore.add("&7事件物品");
         lore.add("");
-        lore.addAll(this.getEnchantLore());
+        lore.addAll(enchantLore);
         lore.remove(lore.size() - 1);
 
         return new ItemBuilder(this.getItemDisplayMaterial())

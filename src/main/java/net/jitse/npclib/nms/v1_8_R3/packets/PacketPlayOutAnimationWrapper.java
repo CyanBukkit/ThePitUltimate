@@ -4,16 +4,31 @@ import com.comphenix.tinyprotocol.Reflection;
 import net.jitse.npclib.api.state.NPCAnimation;
 import net.minecraft.server.v1_8_R3.PacketPlayOutAnimation;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.Method;
+
 public class PacketPlayOutAnimationWrapper {
+    static VarHandle varHandle;
+    static VarHandle varHandle2;
+
+    {
+        try {
+            MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(PacketPlayOutAnimation.class,MethodHandles.lookup());
+            varHandle = lookup.findVarHandle(PacketPlayOutAnimation.class, "a", int.class);
+            varHandle2 = lookup.findVarHandle(PacketPlayOutAnimation.class, "b", int.class);
+        } catch (Throwable e){
+            e.printStackTrace();
+        }
+    }
+
+
 
     public PacketPlayOutAnimation create(NPCAnimation npcAnimation, int entityId)  {
         PacketPlayOutAnimation packetPlayOutAnimation = new PacketPlayOutAnimation();
-
-        Reflection.getField(packetPlayOutAnimation.getClass(), "a", int.class)
-                .set(packetPlayOutAnimation, entityId);
-        Reflection.getField(packetPlayOutAnimation.getClass(), "b", int.class)
-                .set(packetPlayOutAnimation, npcAnimation.getId());
-
+        varHandle.set(packetPlayOutAnimation,entityId);
+        varHandle2.set(packetPlayOutAnimation, npcAnimation.getId());
         return packetPlayOutAnimation;
     }
 

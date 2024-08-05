@@ -16,6 +16,7 @@ import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
 import cn.charlotte.pit.util.menu.buttons.DisplayButton;
 import cn.charlotte.pit.util.random.RandomUtil;
+import cn.klee.backports.utils.SWMRHashTable;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
@@ -59,7 +60,7 @@ public class MythicWellMenu extends Menu {
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
-        Map<Integer, Button> button = new HashMap<>();
+        Map<Integer, Button> button = new SWMRHashTable<>();
         if (animationData.isFinished()) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
             String mythic_color = ItemUtil.getItemStringData(InventoryUtil.deserializeItemStack(profile.getEnchantingItem()), "mythic_color");

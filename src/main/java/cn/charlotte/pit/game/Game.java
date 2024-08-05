@@ -5,6 +5,7 @@ import cn.charlotte.pit.game.runnable.TradeMonitorRunnable;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.runnable.ClearRunnable;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 @AutoRegister
 @Getter
 public class Game {
-    private final List<AbstractPerk> disabledPerks = new ArrayList<>();
+    private final List<AbstractPerk> disabledPerks = new ObjectArrayList<>();
 
 
     public void initRunnable() {

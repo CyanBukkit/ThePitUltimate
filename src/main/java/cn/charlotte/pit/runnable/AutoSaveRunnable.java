@@ -1,5 +1,6 @@
 package cn.charlotte.pit.runnable;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,7 +23,9 @@ public class AutoSaveRunnable extends BukkitRunnable {
                     .getLastActionTimestamp();
 
             if (now - lastActionTimestamp >= 10 * 60 * 1000) {
-                player.kickPlayer("在加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试.");
+                Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+                    player.kickPlayer("在加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试.");
+                });
             }
         });
     }

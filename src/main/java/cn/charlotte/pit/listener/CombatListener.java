@@ -532,7 +532,7 @@ public class CombatListener implements Listener {
 
         //Promotion effect
         if (PlayerUtil.isPlayerChosePerk(player, "assistant_to_the_streaker") && PlayerUtil.isPlayerUnlockedPerk(player, "promotion")) {
-            if (playerProfile.getStreakKills() > 50) {
+            if (playerProfile.getStreakKills() >= 50) {
                 if (PlayerUtil.isPlayerChosePerk(player, "over_drive") || PlayerUtil.isPlayerChosePerk(player, "high_lander") || PlayerUtil.isPlayerChosePerk(player, "beast_mode_mega_streak") || PlayerUtil.isPlayerChosePerk(player, "hermit")) {
                     mythicProtectChance = 1;
                 }

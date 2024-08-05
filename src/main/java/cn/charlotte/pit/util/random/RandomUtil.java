@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Random;
@@ -14,10 +15,10 @@ import java.util.Random;
  * 4
  */
 public class RandomUtil {
-    public static final Random random;
+    public static final SecureRandom random;
 
     static {
-        random = new Random();
+        random = new SecureRandom();
     }
     public static String randomStr() {
         String s = "ABCDEFGHIJKLMNPQRSTUVXYZ1234567890";
@@ -49,13 +50,18 @@ public class RandomUtil {
         if (chance <= 0) {
             return false;
         }
+
         double i = (random.nextInt(1000000000) / 1000000000D);
 
         return i <= chance;
     }
 
     public static Object helpMeToChooseOne(Object... entry) {
+        switchSeed();
         return entry[random.nextInt(entry.length)];
+    }
+    public static void switchSeed(){
+        random.setSeed(System.nanoTime());
     }
 
     public static Location generateRandomLocation() {

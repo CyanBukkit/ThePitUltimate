@@ -10,6 +10,7 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
+import cn.klee.backports.utils.SWMRHashTable;
 import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.EntityHuman;
@@ -40,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @AutoRegister
 @BowOnly
 public class VolleyEnchant extends AbstractEnchantment implements Listener {
-    private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
+    private static final Map<UUID, Cooldown> cooldown = new SWMRHashTable<>();
 
     private final Field playerUsingFiled;
 
@@ -80,7 +81,8 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
         return "&7射箭时同时射出 &e" + (enchantLevel + 2) + " &7支箭矢";
     }
 
-    private Map<UUID, Boolean> isShooting = new HashMap<>();
+    private Map<UUID, Boolean> isShooting = new SWMRHashTable<>();
+
     @EventHandler
     public void onQuit(PlayerQuitEvent e){
         cooldown.remove(e.getPlayer().getUniqueId());
@@ -104,8 +106,8 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
         if (itemInHand.getType() == Material.BOW) {
             try {
                 if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
+
                     //shoot 5 arrows need 400ms u suck why u set it to 200ms
-                    cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.MILLISECONDS));
                     event.setCancelled(true);
 
                     final ItemStack item = Utils.toNMStackQuick(itemInHand);
@@ -121,17 +123,19 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
 
                     new BukkitRunnable() {
                         int tick = 0;
-
+                        {
+                            isShooting.put(player.getUniqueId(), true);
+                        }
                         @Override
                         public void run() {
                             if (tick >= level + 1) {
-                                cooldown.put(player.getUniqueId(), new Cooldown(0, TimeUnit.MILLISECONDS));
+                                cooldown.put(player.getUniqueId(), new Cooldown(5, TimeUnit.MILLISECONDS));
+                                isShooting.remove(player.getUniqueId());
                                 this.cancel();
                             }
                             tick++;
-                            isShooting.put(player.getUniqueId(), true);
-                            bow.performShoot(item, entityPlayer.world, entityPlayer, value,false);
-                            isShooting.put(player.getUniqueId(), false);
+                            bow.performShoot(item, entityPlayer.world, entityPlayer, value,true);
+
                         }
                     }.runTaskTimer(ThePit.getInstance(), 0, 2);
                 }

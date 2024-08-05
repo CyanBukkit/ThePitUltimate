@@ -11,6 +11,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.music.NBSDecoder;
 import cn.charlotte.pit.util.music.PositionSongPlayer;
 import cn.charlotte.pit.util.music.Song;
+import cn.klee.backports.utils.SWMRHashTable;
 import dev.jnic.annotation.Include;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
@@ -31,7 +32,7 @@ import java.util.*;
 @Include
 @ArmorOnly
 public class JerryEnchant2 extends AbstractEnchantment implements ITickTask, MovementHandler {
-    private final Map<UUID, PositionSongPlayer> playerMap = new HashMap<>();
+    private final Map<UUID, PositionSongPlayer> playerMap = new SWMRHashTable<>();
     private final Song demon;
     private final Song angle;
 

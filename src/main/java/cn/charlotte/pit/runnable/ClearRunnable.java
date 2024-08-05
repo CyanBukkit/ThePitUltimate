@@ -31,7 +31,7 @@ public class ClearRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        List<PlacedBlockData> shouldRemove = new ArrayList<>();
+        List<PlacedBlockData> shouldRemove = new ObjectArrayList<>(placedBlock.size() / 2);
 
         for (PlacedBlockData data : this.placedBlock) {
             if (data.getCooldown().hasExpired()) {
@@ -45,7 +45,7 @@ public class ClearRunnable extends BukkitRunnable {
         this.placedBlock.removeAll(shouldRemove);
 
 
-        List<DroppedEntityData> shouldRemoveEntity = new ArrayList<>();
+        List<DroppedEntityData> shouldRemoveEntity = new ObjectArrayList<>(entityData.size() / 2);
         for (DroppedEntityData data : entityData) {
             if (data.getTimer().hasExpired()) {
                 data.getEntity().remove();

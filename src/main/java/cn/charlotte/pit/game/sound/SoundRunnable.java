@@ -9,6 +9,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class SoundRunnable extends BukkitRunnable {
     @Override
     public void run() {
-
+        //我又不知道咋写
     }
 }

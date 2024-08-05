@@ -10,6 +10,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.util.Utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -96,7 +97,7 @@ public class ItemBuilder {
         ItemMeta meta = this.is.getItemMeta();
         List<String> lore = meta.getLore();
         if (lore == null) {
-            lore = new ArrayList<>();
+            lore = new ObjectArrayList<>(2);
         }
 
         lore.add(ChatColor.translateAlternateColorCodes('&', name));
@@ -106,7 +107,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder lore(String... lore) {
-        List<String> toSet = new ArrayList<>();
+        List<String> toSet = new ObjectArrayList<>(lore.length);
         ItemMeta meta = this.is.getItemMeta();
 
         for (String string : lore) {
@@ -132,7 +133,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder lore(List<String> lore) {
-        List<String> toSet = new ArrayList<>();
+        List<String> toSet = new ObjectArrayList<>(lore.size());
         ItemMeta meta = this.is.getItemMeta();
 
         for (String string : lore) {

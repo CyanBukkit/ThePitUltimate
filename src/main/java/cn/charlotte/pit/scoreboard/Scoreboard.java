@@ -34,25 +34,21 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
-            Arrays.asList("&d&l神话天坑",
-                    "&5&l神&d&l话天坑",
-                    "&f&l神&5&l话&d&l天坑",
-                    "&f&l神话&5&l天&d&l坑",
-                    "&f&l神话天&5&l坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑");
+            Arrays.asList("&d&l绝区零",
+                    "&5&l绝&d&l区零",
+                    "&f&l绝&5&l区&d&l零",
+                    "&f&l绝区&5&l零",
+                    "&d&l绝区零",
+                    "&f&l绝区零",
+                    "&d&l绝区零",
+                    "&f&l绝区零",
+                    "&d&l绝区零",
+                    "&f&l绝区零",
+                    "&d&l绝区零",
+                    "&f&l绝区零",
+                    "&d&l绝区零",
+                    "&f&l绝区零",
+                    "&d&l绝区零");
     private long lastAnimationTime = 0;
     private int animationTick = 0;
 
@@ -226,9 +222,11 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         if (gladiator && profile.isInArena()) {
-
-            double boost = PlayerUtil.getNearbyPlayers(player.getLocation(), 8).size();
-
+            double boost = 114514;
+            try {
+                 boost = PlayerUtil.getNearbyPlayers(player.getLocation(), 8).size();
+            } catch (Exception ignored){
+            }
             int sybilLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "sybil");
             if (sybilLevel > 0) {
                 boost += sybilLevel + 1;

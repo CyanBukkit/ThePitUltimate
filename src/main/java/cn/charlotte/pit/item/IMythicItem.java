@@ -53,9 +53,9 @@ public abstract class IMythicItem extends AbstractPitItem {
     public UUID uuid;
     // 0=false 1=true -1=unset
     public int forceCanTrade = -1;
-    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).maximumSize(1000).build();
+    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
 
-    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).maximumSize(1000).build();
+    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
     public IMythicItem() {
     }
 
@@ -352,7 +352,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         int o = ench.hashCode();
         Object2ObjectArrayMap<AbstractEnchantment, Integer> ifPresent = enchCache.getIfPresent(o);
         if(ifPresent != null){
-            this.enchantments = ifPresent;
+            this.enchantments = new Object2ObjectArrayMap<>(ifPresent);
         } else {
             this.enchantments = new Object2ObjectArrayMap<>();
 

@@ -2,6 +2,7 @@ package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.util.item.ItemBuilder;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class PitCactus {
 
     public static ItemStack toItemStack() {
-        List<String> lore = new ArrayList<>();
+        List<String> lore = new ObjectArrayList<>(5);
         lore.add("&e特殊物品");
         lore.add("&7手持并右键可以从九件未附魔的");
         lore.add("&7随机 &a神&c话&e之&6甲 &7选择其一.");
