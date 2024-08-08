@@ -32,6 +32,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -79,6 +80,11 @@ import java.util.concurrent.TimeUnit;
 public class PlayerProfile {
 
     public final static PlayerProfile NONE_PROFILE = new PlayerProfile(UUID.randomUUID(), "NotLoadPlayer");
+    //两张表
+
+    public static Map<UUID, BukkitRunnable> loadingMap = new SWMRHashTable<>(); // do it static
+
+    public static final Map<UUID, BukkitRunnable> savingMap = new SWMRHashTable<>(); // do it static
 
     private final static Map<UUID, PlayerProfile> cacheProfile = new SWMRHashTable<>();
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(PlayerProfile.class);
@@ -451,7 +457,16 @@ public class PlayerProfile {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 if (profile.isLoaded()) {
                     profile.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
-                    profile.save();
+                    if(!(savingMap.containsKey(player.getUniqueId()) || loadingMap.containsKey(player.getUniqueId()))) {
+                        savingMap.put(player.getUniqueId(), new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Thread.yield();
+                            }
+                        });
+                        profile.save();
+                        savingMap.remove(player.getUniqueId());
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -496,7 +511,6 @@ public class PlayerProfile {
 
         saveData();
     }
-
     public void saveData() {
         final long now = System.currentTimeMillis();
 

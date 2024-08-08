@@ -2,6 +2,7 @@ package cn.charlotte.pit.runnable;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.listener.DataListener;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -15,7 +16,6 @@ public class AutoSaveRunnable extends BukkitRunnable {
         PlayerProfile.saveAll();
 
         final long now = System.currentTimeMillis();
-
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (player.hasPermission("pit.admin")) return;
             final long lastActionTimestamp = PlayerProfile

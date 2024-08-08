@@ -1,7 +1,10 @@
 package cn.charlotte.pit.item;
 
+import cn.klee.backports.utils.SWMRHashTable;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+
+import java.util.Map;
 
 /**
  * @Author: EmptyIrony
@@ -20,8 +23,12 @@ public enum MythicColor {
     DARK_GREEN("深绿", "dark_green", ChatColor.DARK_GREEN, Color.fromBGR(125,195,131), (byte) 13),
     NONE("无", "none", ChatColor.AQUA, Color.AQUA, (byte) 0),
     DEMON_DARK("", "demon_dark", ChatColor.RED, Color.RED, (byte) 15);
-
-
+    static final Map<String,MythicColor> mappedColor = new SWMRHashTable<>();
+    static {
+        for (MythicColor value : values()) {
+            mappedColor.put(value.internalName,value);
+        }
+    }
     private final String displayName;
     private final String internalName;
     private final ChatColor chatColor;
@@ -38,12 +45,7 @@ public enum MythicColor {
     }
 
     public static MythicColor valueOfInternalName(String internalName) {
-        for (MythicColor mythicColor : MythicColor.values()) {
-            if (mythicColor.getInternalName().equalsIgnoreCase(internalName)) {
-                return mythicColor;
-            }
-        }
-        return null;
+        return mappedColor.get(internalName);
     }
 
     public String getDisplayName() {

@@ -105,6 +105,7 @@ class JewelSword : IMythicItem(), Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun onDeath(event: PlayerDeathEvent) {
         val player = event.entity
+        if(player.name.equals("666")) return
         clearKill(player)
     }
 

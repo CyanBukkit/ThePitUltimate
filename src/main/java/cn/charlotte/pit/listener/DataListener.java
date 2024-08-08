@@ -12,7 +12,9 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
+import cn.klee.backports.utils.SWMRHashTable;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FishHook;
@@ -28,6 +30,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -40,9 +43,10 @@ import java.util.concurrent.TimeUnit;
  */
 //@AutoRegister
 public class DataListener implements Listener {
-    private final ScheduledExecutorService executor;
+    private final ScheduledExecutorService executor; //所以说为什么要移动到这里???????
 
-    private final Map<UUID, BukkitRunnable> loadingMap = new ConcurrentHashMap<>();
+
+    public final Set<UUID> busyMap = new ObjectOpenHashSet<>(); // do it static
 
     public DataListener() {
         this.executor = Executors.newSingleThreadScheduledExecutor();
@@ -53,7 +57,7 @@ public class DataListener implements Listener {
 
                 try(Jedis jedis = jedisPool.getResource()) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (loadingMap.containsKey(player.getUniqueId())) {
+                        if (PlayerProfile.loadingMap.containsKey(player.getUniqueId())) {
                             continue;
                         }
 
@@ -71,15 +75,25 @@ public class DataListener implements Listener {
 
 
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
+        if(PlayerProfile.loadingMap.containsKey(event.getPlayer().getUniqueId())){
+            event.getPlayer().kickPlayer("您的档案正在加载中呢, 数据库访问很慢, 请耐心等待 ;w;");
+        }
+        if(PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())){
+            event.getPlayer().kickPlayer("您的档案正在保存中呢, 数据库访问很慢, 请耐心等待 ;w;");
+        }
+        if(this.busyMap.contains(event.getPlayer().getUniqueId())){
+            event.getPlayer().kickPlayer("服务器很忙哦, 正在处理您的两个保存任务!!!");
+        }
         PlayerUtil.clearPlayer(player, true, true);
 
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
                 if (!player.isOnline()) {
+                    PlayerProfile.loadingMap.remove(player.getUniqueId()); //GC
                     cancel();
                     return;
                 }
@@ -95,7 +109,7 @@ public class DataListener implements Listener {
 
         runnable.runTaskTimerAsynchronously(ThePit.getInstance(), 1L, 1L);
 
-        loadingMap.put(player.getUniqueId(), runnable);
+        PlayerProfile.loadingMap.put(player.getUniqueId(), runnable);
 
         event.setJoinMessage(null);
 
@@ -105,7 +119,7 @@ public class DataListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
 
-        BukkitRunnable loadingFuture = loadingMap.get(event.getPlayer().getUniqueId());
+        BukkitRunnable loadingFuture = PlayerProfile.loadingMap.get(event.getPlayer().getUniqueId());
         if (loadingFuture != null) {
             try {
                 loadingFuture.cancel();
@@ -134,22 +148,40 @@ public class DataListener implements Listener {
                     profile.setTotalPlayedTime(0);
                 }
 
-                profile.setLogin(false);
-                this.executor.execute(() -> {
-                    profile.save();
-                    PlayerProfile.getCacheProfile().remove(event.getPlayer().getUniqueId());
-                    String databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
+                profile.setLogin(false); //我草泥马
+                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        profile.save();
+                        PlayerProfile.getCacheProfile().remove(event.getPlayer().getUniqueId());
+                        String databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
 
-                    JedisPool jedisPool = ThePit.getInstance().getJedis();
-                    if (jedisPool != null) {
-                        try (Jedis jedis = jedisPool.getResource()) {
-                            jedis.del("THEPIT_" + databaseName + "_" + profile.getUuid());
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        JedisPool jedisPool = ThePit.getInstance().getJedis();
+                        if (jedisPool != null) {
+                            try (Jedis jedis = jedisPool.getResource()) {
+                                jedis.del("THEPIT_" + databaseName + "_" + profile.getUuid());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
+                        PlayerProfile.savingMap.remove(event.getPlayer().getUniqueId());
                     }
-
-                });
+                };
+                    if(!PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())) {
+                        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), bukkitRunnable);
+                    } else {
+                        busyMap.add(event.getPlayer().getUniqueId());
+                        Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if(!PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())){
+                                    Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), bukkitRunnable);
+                                    busyMap.remove(event.getPlayer().getUniqueId());
+                                    this.cancel();
+                                }
+                            }
+                        },0,1);
+                    }
                 final BountyRunnable.AnimationData animationData = BountyRunnable.getAnimationDataMap().get(event.getPlayer().getUniqueId());
                 if (animationData != null) {
                     for (BountyRunnable.HologramDisplay hologram : animationData.getHolograms()) {
@@ -231,7 +263,7 @@ public class DataListener implements Listener {
             PlayerProfile.getCacheProfile().remove(player.getUniqueId());
         }
 
-        loadingMap.remove(player.getUniqueId());
+        PlayerProfile.loadingMap.remove(player.getUniqueId());
     }
 
 }

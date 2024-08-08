@@ -53,6 +53,7 @@ public class AbsorptionEnchant extends AbstractEnchantment implements IPlayerKil
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
+
         float heart = (((CraftPlayer) myself).getHandle()).getAbsorptionHearts();
         (((CraftPlayer) myself).getHandle()).setAbsorptionHearts(Math.min(heart + (enchantLevel + (enchantLevel >= 3 ? 1 : 0)), (2 * enchantLevel + 6)));
     }

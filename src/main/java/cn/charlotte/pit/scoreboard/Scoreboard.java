@@ -15,6 +15,7 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
+import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.scoreboard.AssembleAdapter;
 import cn.charlotte.pit.util.time.TimeUtil;
 import dev.jnic.annotation.Include;
@@ -33,7 +34,7 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
-    private final List<String> animationTitle =
+    private final List<List<String>> animationTitle =Arrays.asList(
             Arrays.asList("&d&l绝区零",
                     "&5&l绝&d&l区零",
                     "&f&l绝&5&l区&d&l零",
@@ -48,17 +49,89 @@ public class Scoreboard implements AssembleAdapter {
                     "&f&l绝区零",
                     "&d&l绝区零",
                     "&f&l绝区零",
-                    "&d&l绝区零");
+                    "&d&l绝区零")
+            ,
+            Arrays.asList("&d&l神话天坑",
+                    "&5&l神&d&l话天坑",
+                    "&f&l神&5&l话&d&l天坑",
+                    "&f&l神话&5&l天&d&l坑",
+                    "&f&l神话天&5&l坑",
+                    "&f&l神话天坑",
+                    "&d&l神话天坑",
+                    "&f&l神话天坑",
+                    "&d&l神话天坑",
+                    "&f&l神话天坑",
+                    "&d&l神话天坑",
+                    "&f&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑",
+                    "&d&l神话天坑")
+            ,Arrays.asList("&d&l迷你世界",
+                    "&5&l迷&d&l你世界",
+                    "&f&l迷&5&l你&d&l世界",
+                    "&f&l迷你&5&l世&d&l界",
+                    "&f&l迷你世&5&l界",
+                    "&f&l迷你世界",
+                    "&d&l迷你世界",
+                    "&f&l迷你世界",
+                    "&d&l迷你世界",
+                    "&f&l迷你世界",
+                    "&d&l迷你世界",
+                    "&f&l迷你世界",
+                    "&d&l迷你世界",
+                    "&d&l迷你世界",
+                    "&d&l迷你世界",
+                    "&d&l迷你世界",
+                    "&d&l迷你世界",
+                    "&d&l迷你世界",
+                    "&d&l迷你世界"),
+            Arrays.asList("&d&l原神",
+                    "&5&l原&d&l神",
+                    "&f&l原&5&l神",
+                    "&f&l原&5&l神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神"
+                    ,
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神"
+                    ,
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神",
+                    "&f&l原神",
+                    "&d&l原神")
+            );
+    int randomSel = RandomUtil.random.nextInt(this.animationTitle.size());
+
     private long lastAnimationTime = 0;
     private int animationTick = 0;
 
     @Override
     public String getTitle(Player player) {
-        String text = animationTitle.get(animationTick);
+        String text = animationTitle.get(randomSel).get(animationTick);
         if (System.currentTimeMillis() - lastAnimationTime >= 125) {
             animationTick++;
             if (animationTick + 1 >= animationTitle.size()) {
                 animationTick = 0;
+                randomSel = RandomUtil.random.nextInt(this.animationTitle.size());
             }
             lastAnimationTime = System.currentTimeMillis();
         }
@@ -108,7 +181,7 @@ public class Scoreboard implements AssembleAdapter {
                 }
                 int killed = RagePitEvent.getKilled();
 
-                lines.add("&f全部击杀: " + (killed >= 600 ? "&a" : "&c") + killed + "&7/600");
+                lines.add("&f总击杀: " + (killed >= 600 ? "&a" : "&c") + killed + "&7/600");
             } else if (event instanceof IScoreBoardInsert) {
 
                 IScoreBoardInsert insert = (IScoreBoardInsert) event;
@@ -141,7 +214,7 @@ public class Scoreboard implements AssembleAdapter {
         lines.add("&f等级: " + LevelUtil.getLevelTag(prestige, level) + genesisTeam);
 
         if (level >= 120) {
-            lines.add("&f经验值: &b经验值已满!");
+            lines.add("&f经验值: &b已满!");
         } else {
             lines.add("&f下一级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
         }

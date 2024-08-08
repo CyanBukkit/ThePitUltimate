@@ -19,8 +19,10 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.server.v1_8_R3.NBTBase;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
@@ -268,67 +270,63 @@ public abstract class IMythicItem extends AbstractPitItem {
             return;
         }
 
-        if (extra.hasKey("prefix")) {
-            this.prefix = extra.getString("prefix");
+        //natives
+        this.boostedByGem = extra.getBoolean("boostedByGem");
+
+        this.boostedByBook = extra.getBoolean("boostedByBook");
+
+        //for raw type opti
+        NBTBase prefix1 = extra.get("prefix");
+        if (prefix1 instanceof NBTTagString) {
+            this.prefix = ((NBTTagString) prefix1).a_();
         }
 
-        if (extra.hasKey("boostedByGem")) {
-            this.boostedByGem = extra.getBoolean("boostedByGem");
+
+        NBTBase customName1 = extra.get("customName");
+        if (customName1 instanceof NBTTagString) {
+            this.customName = ((NBTTagString) customName1).a_();
+        }
+
+
+        NBTBase dyeColor1 = extra.get("dyeColor");
+        if (dyeColor1 instanceof NBTTagString) {
+            this.dyeColor = DyeColor.valueOf(((NBTTagString) dyeColor1).a_());
+
+        }
+
+        NBTBase uuid1 = extra.get("uuid");
+        if (uuid1 instanceof NBTTagString) {
+            this.uuid = UUID.fromString(((NBTTagString) uuid1).a_());
+        }
+
+        NBTBase mythicColor = extra.get("mythic_color");
+        if (mythicColor == null) {
+            this.color = (MythicColor) RandomUtil.helpMeToChooseOne(
+                    MythicColor.RED, MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
         } else {
-            this.boostedByGem = false;
-        }
-
-        if (extra.hasKey("customName")) {
-            this.customName = extra.getString("customName");
-        }
-
-        if (extra.hasKey("boostedByBook")) {
-            this.boostedByBook = extra.getBoolean("boostedByBook");
-        } else {
-            this.boostedByBook = false;
-        }
-
-        if (extra.hasKey("dyeColor")) {
-            this.dyeColor = DyeColor.valueOf(extra.getString("dyeColor"));
-        }
-
-        if (extra.hasKey("uuid")) {
-            this.uuid = UUID.fromString(extra.getString("uuid"));
-        }
-
-        if (!extra.hasKey("mythic_color")) {
-            this.color = (MythicColor) RandomUtil.helpMeToChooseOne(MythicColor.RED, MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
-        } else {
-            String internalColor = extra.getString("mythic_color");
-            boolean colorFound = false;
-            for (MythicColor value : MythicColor.values()) {
-                if (value.getInternalName().equals(internalColor)) {
-                    this.color = value;
-                    colorFound = true;
-                    break;
+            if(mythicColor instanceof NBTTagString) {
+                String internalColor = ((NBTTagString) mythicColor).a_();
+                this.color = MythicColor.valueOfInternalName(internalColor);
+                if (color == null) {
+                    this.color = (MythicColor) RandomUtil.helpMeToChooseOne(
+                            MythicColor.RED, MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
                 }
-            }
-            if (!colorFound) {
-                this.color = (MythicColor) RandomUtil.helpMeToChooseOne(MythicColor.RED, MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
             }
         }
 
         this.maxLive = extra.getInt("maxLive");
         this.live = extra.getInt("live");
         if (extra.hasKey("forceCanTrade")) {
-            if (extra.getBoolean("forceCanTrade")) {
-                this.forceCanTrade = 1;
-            } else {
-                this.forceCanTrade = 0;
-            }
+            this.forceCanTrade = extra.getBoolean("forceCanTrade") ? 1 : 0;
         }
 
         if (!extra.hasKey("ench")) { //TODO
             return;
         }
 
-        final String recordsString = extra.getString("records");
-        if (recordsString != null) {
+        final NBTBase recordsStringRaw = extra.get("records");
+        if (recordsStringRaw instanceof NBTTagString) {
+            String recordsString = ((NBTTagString) recordsStringRaw).a_();
             ObjectArrayList<EnchantmentRecord> recordFromCache = recordCache.getIfPresent(recordsString);
             if(recordFromCache != null){
                 enchantmentRecords.addAll(recordFromCache);

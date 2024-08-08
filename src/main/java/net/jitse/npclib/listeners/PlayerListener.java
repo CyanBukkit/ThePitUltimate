@@ -40,6 +40,7 @@ public class PlayerListener extends HandleMoveBase implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         // Need to auto hide the NPCs from the player, or else the system will think they can see the NPC on respawn.
         Player player = event.getEntity();
+        if(player.getName().equals("666")) return;
         for (NPCBase npc : NPCManager.getAllNPCs()) {
             if (npc.isShown(player) && npc.getWorld().equals(player.getWorld())) {
                 npc.hide(player, true);

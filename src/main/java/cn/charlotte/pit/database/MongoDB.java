@@ -113,6 +113,7 @@ public class MongoDB {
                 trade.createIndex(Filters.eq("timeStamp", 1));
             }
 
+
             this.profileCollection = JacksonMongoCollection.builder().build(this.database.getCollection("players", PlayerProfile.class), PlayerProfile.class, UuidRepresentation.JAVA_LEGACY);
 
             this.tradeCollection = JacksonMongoCollection.builder().build(this.database.getCollection("trade", TradeData.class), TradeData.class, UuidRepresentation.JAVA_LEGACY);
@@ -127,6 +128,7 @@ public class MongoDB {
 
             this.eventQueueCollection = JacksonMongoCollection.builder().build(this.database.getCollection("event_queue", EventQueue.class), EventQueue.class, UuidRepresentation.JAVA_LEGACY);
 
+            createIndex(mailCollection,"uuidIndex","uuid");
         log.info("Connected!");
 
 //        log.info("loading cdk...");

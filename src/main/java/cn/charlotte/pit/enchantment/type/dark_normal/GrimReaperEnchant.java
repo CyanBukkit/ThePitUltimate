@@ -11,6 +11,8 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.klee.backports.utils.SWMRHashTable;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.server.v1_8_R3.DamageSource;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
@@ -57,7 +59,9 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
         return "&7击杀玩家时释放冲击波,对周围10格内所有玩家造成 &c2❤ &7普通伤害"
                 + "/s&c击杀获得的奖励 -80%";
     }
-    Map<UUID, Object> taskMap = new SWMRHashTable<>();
+
+    Set<UUID> taskMap = new ObjectOpenHashSet<>();
+
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
@@ -65,38 +69,41 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
         coins.getAndAdd(-0.8 * coins.get());
         experience.getAndAdd(-0.8 * experience.get());
         Player targetPlayer = (Player) target;
-        Collection<Player> nearbyPlayers = PlayerUtil.getNearbyPlayers(myself.getLocation(), 10);
-        int shouldDamageForCount = 4;
-        if (taskMap.get(myself.getUniqueId()) == null) {
-            Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), new BukkitRunnable() {
-                final Object object = new Object();
-                final Iterator<Player> iterator = nearbyPlayers.iterator();
-                {
-                    taskMap.put(myself.getUniqueId(),object);
-                }
-                @Override
-                public void run() {
-                    boolean flag = false;
-                    for (int i = 0; i < shouldDamageForCount; i++) {
-                        if (!iterator.hasNext()) {
-                            flag = true;
-                            break;
+        if (!taskMap.contains(myself.getUniqueId())) {
+            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+                Collection<Player> nearbyPlayers = PlayerUtil.getNearbyPlayers(myself.getLocation(), 10);
+                int shouldDamageForCount = 4;
+                Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), new BukkitRunnable() {
+                    final Iterator<Player> iterator = nearbyPlayers.iterator();
+
+                    {
+                        taskMap.add(myself.getUniqueId());
+                    }
+
+                    @Override
+                    public void run() {
+                        boolean flag = false;
+                        for (int i = 0; i < shouldDamageForCount; i++) {
+                            if (!iterator.hasNext()) {
+                                flag = true;
+                                break;
+                            }
+                            Player player = iterator.next();
+                            if (!myself.canSee(player)) {
+                                iterator.remove();
+                                return;
+                            }
+                            if (!player.isDead() && player != myself && player != targetPlayer) {
+                                player.damage(4, myself);
+                            }
                         }
-                        Player player = iterator.next();
-                        if(!myself.canSee(player)){
-                            iterator.remove();
-                            return;
-                        }
-                        if (!player.isDead() && player != myself && player != targetPlayer) {
-                            player.damage(4, myself);
+                        if (flag) {
+                            this.cancel();
+                            taskMap.remove(myself.getUniqueId());
                         }
                     }
-                    if (flag) {
-                        this.cancel();
-                        taskMap.remove(myself.getUniqueId());
-                    }
-                }
-            }, 1, 1);
+                }, 1, 1);
+            });
         }
     }
 }
