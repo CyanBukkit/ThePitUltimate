@@ -375,19 +375,7 @@ public class PlayerProfile {
                         .getInvCollection()
                         .find(Filters.eq("uuid", uuid.toString()));
 
-                long lastTime = 0;
-                for (PlayerInvBackup backup : invBackups) {
-                    if (Math.abs(backup.getTimeStamp() - lastTime) < 10 * 60 * 1000) {
-                        lastTime = backup.getTimeStamp();
-                        ThePit.getInstance()
-                                .getMongoDB()
-                                .getInvCollection()
-                                .deleteOne(Filters.eq("backupUuid", backup.getBackupUuid()));
-                        continue;
-                    }
-                    lastTime = backup.getTimeStamp();
-                    playerProfile.getInvBackups().add(backup);
-                }
+                gcBackups(invBackups,playerProfile,true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -396,6 +384,29 @@ public class PlayerProfile {
         return playerProfile;
     }
 
+    /**
+     * 进行垃圾回收。。。, 可能会误回收, 我存在哥牛逼
+     * @param invBackups
+     * @param playerProfile
+     * @param add
+     */
+    public static void gcBackups(Iterable<PlayerInvBackup> invBackups,PlayerProfile playerProfile, boolean add){
+        long lastTime = 0;
+        for (PlayerInvBackup backup : invBackups) {
+            if (Math.abs(backup.getTimeStamp() - lastTime) < 10 * 60 * 1000) {
+                lastTime = backup.getTimeStamp();
+                ThePit.getInstance()
+                        .getMongoDB()
+                        .getInvCollection()
+                        .deleteOne(Filters.eq("backupUuid", backup.getBackupUuid()));
+                continue;
+            }
+            lastTime = backup.getTimeStamp();
+            if(add){
+                playerProfile.getInvBackups().add(backup);
+            }
+        }
+    }
     /**
      * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
      * 注意！请异步调用本方法，如果在主线程上调用会抛异常
@@ -452,7 +463,7 @@ public class PlayerProfile {
     }
 
     public static void saveAll() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : new ObjectArrayList<>(Bukkit.getOnlinePlayers())) {
             try {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 if (profile.isLoaded()) {
@@ -525,6 +536,7 @@ public class PlayerProfile {
             backup.setTimeStamp(System.currentTimeMillis());
 
             backup.save();
+            gcBackups(invBackups,this,false);
         }
 
         ThePit.getInstance()
@@ -581,7 +593,7 @@ public class PlayerProfile {
     }
 
     private void refreshQuest() {
-        if (this.getCurrentQuestList().size() == 0) {
+        if (this.getCurrentQuestList().isEmpty()) {
             List<AbstractQuest> quests = ThePit.getInstance()
                     .getQuestFactory()
                     .getQuests();

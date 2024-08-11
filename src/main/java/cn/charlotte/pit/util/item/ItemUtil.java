@@ -1,7 +1,10 @@
 package cn.charlotte.pit.util.item;
 
 import cn.charlotte.pit.util.Utils;
+import net.minecraft.server.v1_8_R3.NBTBase;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagInt;
+import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
@@ -213,16 +216,17 @@ public class ItemUtil {
         if (tag == null) {
             return null;
         }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
+        NBTBase extra = tag.get("extra");
+        if (!(extra instanceof NBTTagCompound)) {
             return null;
         }
 
-        if (!extra.hasKey("internal")) {
+        NBTBase internal = ((NBTTagCompound) extra).get("internal");
+        if (!(internal instanceof NBTTagString)) {
             return null;
         }
 
-        return extra.getString("internal");
+        return ((NBTTagString) internal).a_();
     }
 
     public static Integer getItemIntData(ItemStack item, String key) {
@@ -240,11 +244,12 @@ public class ItemUtil {
             return null;
         }
 
-        if (!extra.hasKey(key)) {
+        NBTBase nbtBase = extra.get(key);
+        if (!(nbtBase instanceof NBTTagInt)) {
             return null;
         }
 
-        return extra.getInt(key);
+        return ((NBTTagInt) nbtBase).d();
     }
 
     public static String getItemStringData(ItemStack item, String key) {
@@ -262,11 +267,12 @@ public class ItemUtil {
             return null;
         }
 
-        if (!extra.hasKey(key)) {
+        NBTBase nbtBase = extra.get(key);
+        if (!(nbtBase instanceof NBTTagString)) {
             return null;
         }
 
-        return extra.getString(key);
+        return ((NBTTagString) nbtBase).a_();
     }
 
 }

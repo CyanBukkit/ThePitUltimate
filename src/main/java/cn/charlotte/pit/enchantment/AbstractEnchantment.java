@@ -63,10 +63,11 @@ public abstract class AbstractEnchantment {
         if (tag == null) {
             return -1;
         }
-        if (!tag.hasKey("extra") || !tag.getCompound("extra").hasKey("ench")) {
+        NBTBase extra = tag.get("extra");
+        if (!(extra instanceof NBTTagCompound) || !((NBTTagCompound) extra).hasKey("ench")) {
             return -1;
         }
-        NBTTagList list = tag.getCompound("extra")
+        NBTTagList list = ((NBTTagCompound) extra)
                 .getList("ench", 8);
 
         if (list == null || list.isEmpty()) {

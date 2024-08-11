@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.VectorUtil;
 import cn.charlotte.pit.util.aabb.AxisAlignedBB;
 import cn.charlotte.pit.util.chat.ActionBarUtil;
 import cn.charlotte.pit.util.chat.CC;
+import cn.hutool.core.collection.ConcurrentHashSet;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
@@ -33,7 +34,7 @@ import java.util.Set;
  * @Date: 2021/1/16 23:49
  */
 public class PlayerMoveHandler implements MovementHandler, Listener {
-    private static final Set<Player> cantMoveList = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<Player> cantMoveList = new ConcurrentHashSet<>();
 
     public PlayerMoveHandler() {
         Bukkit.getServer().getPluginManager().registerEvents(this, ThePit.getInstance());

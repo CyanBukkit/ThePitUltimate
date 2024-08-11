@@ -4,7 +4,9 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.*;
+import cn.klee.backports.utils.SWMRHashTable;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
@@ -35,18 +37,18 @@ public class EnchantmentFactor {
     private final Map<String, IActionDisplayEnchant> actionDisplayEnchants;
 
     public EnchantmentFactor() {
-        this.enchantments = new ArrayList<>();
-        this.enchantmentMap = new HashMap<>();
-        this.playerDamageds = new ArrayList<>();
-        this.iItemDamages = new ArrayList<>();
-        this.attackEntities = new ArrayList<>();
-        this.playerBeKilledByEntities = new ArrayList<>();
-        this.playerKilledEntities = new ArrayList<>();
-        this.playerRespawns = new ArrayList<>();
-        this.tickTasks = new HashMap<>();
-        this.playerShootEntities = new ArrayList<>();
-        this.playerAssists = new ArrayList<>();
-        this.actionDisplayEnchants = new HashMap<>();
+        this.enchantments = new ObjectArrayList<>();
+        this.enchantmentMap = new SWMRHashTable<>();
+        this.playerDamageds = new ObjectArrayList<>();
+        this.iItemDamages = new ObjectArrayList<>();
+        this.attackEntities = new ObjectArrayList<>();
+        this.playerBeKilledByEntities = new ObjectArrayList<>();
+        this.playerKilledEntities = new ObjectArrayList<>();
+        this.playerRespawns = new ObjectArrayList<>();
+        this.tickTasks = new SWMRHashTable<>();
+        this.playerShootEntities = new ObjectArrayList<>();
+        this.playerAssists = new ObjectArrayList<>();
+        this.actionDisplayEnchants = new SWMRHashTable<>(); //keep sync!!!
     }
 
     public void init(Collection<Class<? extends AbstractEnchantment>> classes) {

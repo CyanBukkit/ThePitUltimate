@@ -236,7 +236,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.miniGameController = new MiniGameController();
                 this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
 
-                new AutoSaveRunnable().runTaskTimerAsynchronously(this,1200,1200);
+                new AutoSaveRunnable().runTaskTimerAsynchronously(this,1200,72000);
                 new DayNightCycleRunnable().runTaskTimerAsynchronously(this,20,20);
 
                 Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
@@ -270,6 +270,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                     sendLogs("§c???");
                 }
             }
+            sendLogs("宝马启动");
         }
     }
 

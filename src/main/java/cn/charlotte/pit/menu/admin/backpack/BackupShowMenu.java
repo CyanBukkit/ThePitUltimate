@@ -11,6 +11,7 @@ import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
 import cn.charlotte.pit.util.menu.buttons.BackButton;
 import cn.charlotte.pit.util.menu.menus.PagedMenu;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -64,7 +65,7 @@ public class BackupShowMenu extends Menu {
             buttonMap.put(40, new RollbackButton(new ItemBuilder(Material.CHEST).name("&a回滚至该背包").shiny().build(), playerProfile, backup));
         }
 
-        List<Button> buttons = new ArrayList<>();
+        List<Button> buttons = new ObjectArrayList<>();
         int i = 0;
         for (PlayerInvBackup invBackup : playerProfile.getInvBackups()) {
             buttons.add(new ShowInvBackupButton(

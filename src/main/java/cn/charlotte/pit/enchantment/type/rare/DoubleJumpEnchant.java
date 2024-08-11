@@ -109,10 +109,15 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
     public void handleUpdateLocation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
         if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
             if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
-                player.setAllowFlight(player.getInventory().getLeggings() != null && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings())) && doubleJumpEnchant.isItemHasEnchant(player.getInventory().getLeggings()));
+                boolean flag = player.getInventory().getLeggings() != null && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings())) && doubleJumpEnchant.isItemHasEnchant(player.getInventory().getLeggings());
+                if (player.getAllowFlight() != flag) {
+                    player.setAllowFlight(flag);
+                }
             }
         } else {
-            player.setAllowFlight(true);
+            if(!player.getAllowFlight()) {
+                player.setAllowFlight(true);
+            }
         }
     }
 

@@ -67,14 +67,24 @@ public class TrotEnchant extends AbstractEnchantment implements MovementHandler 
         if (player.getInventory().getLeggings() != null && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings())) && trotEnchant.isItemHasEnchant(player.getInventory().getLeggings())) {
             int level = trotEnchant.getItemEnchantLevel(player.getInventory().getLeggings());
             if (level == 1) {
-                player.setWalkSpeed(0.21F);
+                if(player.getWalkSpeed() != 0.21F) {
+                    player.setWalkSpeed(0.21F);
+                }
             } else if (level == 2) {
-                player.setWalkSpeed(0.22F);
+                if(player.getWalkSpeed() != 0.22F) {
+                    player.setWalkSpeed(0.22F);
+                }
             } else if (level == 3) {
-                player.setWalkSpeed(0.24F);
+
+                if(player.getWalkSpeed() != 0.24F) {
+                    player.setWalkSpeed(0.24F);
+                }
             }
         } else {
-            player.setWalkSpeed(0.2F);
+
+            if(player.getWalkSpeed() != 0.2F) {
+                player.setWalkSpeed(0.2F);
+            }
         }
     }
 

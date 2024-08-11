@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.LeaderBoardEntry;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import org.bson.Document;
 
@@ -41,7 +42,7 @@ public class LeaderBoardRunnable implements Runnable {
                 .sort(Filters.eq("totalExp", -1))
                 .filter(Filters.gte("lastLogoutTime", System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000));
 
-        List<LeaderBoardEntry> entries = new ArrayList<>();
+        List<LeaderBoardEntry> entries = new ObjectArrayList<>();
         int i = 1;
         for (Document document : documents) {
             try {

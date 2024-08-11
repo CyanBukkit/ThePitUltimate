@@ -14,7 +14,9 @@ import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.github.benmanes.caffeine.cache.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayIndirectPriorityQueue;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayPriorityQueue;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -26,12 +28,12 @@ import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @Author: EmptyIrony
@@ -55,9 +57,12 @@ public abstract class IMythicItem extends AbstractPitItem {
     public UUID uuid;
     // 0=false 1=true -1=unset
     public int forceCanTrade = -1;
-    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
+    static Executor executor = new ThreadPoolExecutor(2,4,3000,TimeUnit.SECONDS,new SynchronousQueue<>(), r -> new Thread(r,"ThePit IMythicItem - Cache Executor")); //For no park unparks
+    static Executor executor2 = new ThreadPoolExecutor(2,4,3000,TimeUnit.SECONDS,new SynchronousQueue<>(), r -> new Thread(r,"ThePit IMythicItem - Cache Executor")); //For no park unparks
 
-    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = Caffeine.newBuilder().expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
+    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = Caffeine.newBuilder().executor(executor).expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
+
+    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = Caffeine.newBuilder().executor(executor2).expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
     public IMythicItem() {
     }
 

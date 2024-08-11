@@ -1,5 +1,8 @@
 package cn.charlotte.pit.util.level;
 
+import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.config.NewConfiguration;
+import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import net.jafama.FastMath;
 
@@ -11,7 +14,7 @@ import net.jafama.FastMath;
 public class LevelUtil {
 
     public static void main(String[] args) {
-        System.out.println(getLevelExpRequired(28, 71));
+        System.out.println(getLevelExpRequired(35, 120));
     }
 
     /**
@@ -92,43 +95,67 @@ public class LevelUtil {
         }
         return "&7";
     }
-
+    /**
+     * For max performance
+     */
+    static double[][] plevelMapping = null;
+    static boolean booted = false;
     /**
      * @param prestige 玩家当前精通等级
      * @param level    玩家当前等级
      * @return 某一等级所需经验值(level)
      */
     public static double getLevelExpRequired(int prestige, int level) {
+        if (plevelMapping == null) {
+            bootCache();
+        } else if (booted) {
+            if(plevelMapping.length >= prestige) {
+                double[] doubles = plevelMapping[prestige];
+                if(doubles.length >= level) {
+                    return doubles[level];
+                }
+            }
+        }
         double boost = 1.1;
         if (level >= 10) {
             switch ((level - level % 10) / 10) {
                 case 1:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 30);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 30);
                 case 2:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 50);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 50);
                 case 3:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 75);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 75);
                 case 4:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 125);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 125);
                 case 5:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 250);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 250);
                 case 6:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 600);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 600);
                 case 7:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 800);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 800);
                 case 8:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 900);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 900);
                 case 9:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 1000);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 1000);
                 case 10:
-                    return FastMath.round(FastMath.pow(boost, prestige) * 1200);
+                    return FastMath.round(FastMath.powFast(boost, prestige) * 1200);
             }
             //>=110
-            return FastMath.round(FastMath.pow(boost, prestige) * 1500);
+            return FastMath.round(FastMath.powFast(boost, prestige) * 1500);
         } else {
             // 0~9
-            return FastMath.round(FastMath.pow(boost, prestige) * 15);
+            return FastMath.round(FastMath.powFast(boost, prestige) * 15);
         }
+    }
+    public static void bootCache(){
+        int limit = PrestigeStatusButton.limit;
+        plevelMapping = new double[limit + 1][121];
+        for (int i = 0; i < limit; i++) {
+            for (int ia = 0; ia < 120; ia++) {
+                plevelMapping[i][ia] = getLevelExpRequired(i,ia);
+            }
+        }
+        booted = true;
     }
 
     /**

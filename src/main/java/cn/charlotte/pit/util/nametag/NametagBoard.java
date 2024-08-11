@@ -1,5 +1,8 @@
 package cn.charlotte.pit.util.nametag;
 
+import cn.klee.backports.utils.SWMRHashTable;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
@@ -20,8 +23,8 @@ public class NametagBoard {
 
     private NametagHandler handler;
 
-    private Set<String> bufferedTeams = new HashSet<>();
-    private Map<String, List<String>> bufferedPlayers = new ConcurrentHashMap<>();
+    private Set<String> bufferedTeams = new ObjectOpenHashSet<>();
+    private Map<String, List<String>> bufferedPlayers = new SWMRHashTable<>();
 
     /**
      * Nametag Board.
@@ -116,8 +119,8 @@ public class NametagBoard {
             return;
         }
 
-        Set<String> toReturn = new HashSet<>();
-        Map<String, List<String>> strings = new HashMap<>();
+        Set<String> toReturn = new ObjectOpenHashSet<>();
+        Map<String, List<String>> strings = new SWMRHashTable<>();
 
         for (BufferedNametag bufferedNametag : nametags) {
             Team team = this.getOrRegisterTeam(scoreboard, bufferedNametag.getGroupName());
@@ -135,7 +138,7 @@ public class NametagBoard {
                 if (!team.hasEntry(bufferedNametag.getPlayer().getName())) {
                     team.addEntry(bufferedNametag.getPlayer().getName());
                 }
-                List<String> inner = new ArrayList<>();
+                List<String> inner = new ObjectArrayList<>();
                 if (strings.containsKey(team.getName())) {
                     inner = strings.get(team.getName());
                 }

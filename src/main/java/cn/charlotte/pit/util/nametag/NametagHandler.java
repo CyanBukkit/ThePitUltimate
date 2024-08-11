@@ -1,5 +1,6 @@
 package cn.charlotte.pit.util.nametag;
 
+import cn.klee.backports.utils.SWMRHashTable;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -38,7 +39,7 @@ public class NametagHandler {
 
         this.plugin = plugin;
         this.adapter = adapter;
-        this.boards = new ConcurrentHashMap<>();
+        this.boards = new SWMRHashTable<>();
 
         this.setup();
     }

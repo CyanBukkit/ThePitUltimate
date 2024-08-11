@@ -4,9 +4,12 @@ import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.util.chat.ActionBarUtil
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.toMythicItem
+import net.minecraft.server.v1_8_R3.MinecraftServer
 import org.bukkit.Bukkit
+import org.bukkit.entity.Minecart
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.inventivetalent.reflection.minecraft.Minecraft
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -17,10 +20,16 @@ object ActionBarDisplayRunnable {
             .enchantmentFactor
             .actionDisplayEnchants
     }
-
+    @JvmStatic
+    val shutdownStr = CC.translate("&c&l服务器关闭中")
     fun start() {
-        Executors.newSingleThreadScheduledExecutor()
-            .scheduleAtFixedRate({
+        Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(),{
+                if(!MinecraftServer.getServer().isRunning){
+                    for (player in Bukkit.getOnlinePlayers()) {
+                        ActionBarUtil.sendActionBar(player, shutdownStr);
+                    }
+                    return@runTaskTimerAsynchronously
+                }
                 val now = System.currentTimeMillis()
 
                 for (player in Bukkit.getOnlinePlayers()) {
@@ -47,7 +56,7 @@ object ActionBarDisplayRunnable {
 
                     ActionBarUtil.sendActionBar(player, CC.translate(builder.toString()))
                 }
-            }, 5000L, 50L, TimeUnit.MILLISECONDS)
+            }, 100L, 20L)
     }
 
     private fun Player.handleActionDisplay(itemStack: ItemStack, builder: StringBuilder) {

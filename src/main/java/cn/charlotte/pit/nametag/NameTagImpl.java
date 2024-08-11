@@ -11,6 +11,7 @@ import cn.charlotte.pit.util.nametag.BufferedNametag;
 import cn.charlotte.pit.util.nametag.NametagAdapter;
 import cn.charlotte.pit.util.rank.RankUtil;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -25,8 +26,8 @@ import java.util.List;
 public class NameTagImpl implements NametagAdapter {
     @Override
     public List<BufferedNametag> getPlate(Player player) {
-        List<BufferedNametag> tags = new ArrayList<>();
-        List<PlayerProfile> profiles = new ArrayList<>();
+        List<BufferedNametag> tags = new ObjectArrayList<>();
+        List<PlayerProfile> profiles = new ObjectArrayList<>();
 
         for (Player target : Bukkit.getOnlinePlayers()) {
             profiles.add(PlayerProfile.getPlayerProfileByUuid(target.getUniqueId()));

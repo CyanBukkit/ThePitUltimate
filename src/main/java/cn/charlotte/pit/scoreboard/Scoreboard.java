@@ -34,104 +34,37 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
-    private final List<List<String>> animationTitle =Arrays.asList(
-            Arrays.asList("&d&l绝区零",
-                    "&5&l绝&d&l区零",
-                    "&f&l绝&5&l区&d&l零",
-                    "&f&l绝区&5&l零",
-                    "&d&l绝区零",
-                    "&f&l绝区零",
-                    "&d&l绝区零",
-                    "&f&l绝区零",
-                    "&d&l绝区零",
-                    "&f&l绝区零",
-                    "&d&l绝区零",
-                    "&f&l绝区零",
-                    "&d&l绝区零",
-                    "&f&l绝区零",
-                    "&d&l绝区零")
-            ,
-            Arrays.asList("&d&l神话天坑",
-                    "&5&l神&d&l话天坑",
-                    "&f&l神&5&l话&d&l天坑",
-                    "&f&l神话&5&l天&d&l坑",
-                    "&f&l神话天&5&l坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&f&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑",
-                    "&d&l神话天坑")
-            ,Arrays.asList("&d&l迷你世界",
-                    "&5&l迷&d&l你世界",
-                    "&f&l迷&5&l你&d&l世界",
-                    "&f&l迷你&5&l世&d&l界",
-                    "&f&l迷你世&5&l界",
-                    "&f&l迷你世界",
-                    "&d&l迷你世界",
-                    "&f&l迷你世界",
-                    "&d&l迷你世界",
-                    "&f&l迷你世界",
-                    "&d&l迷你世界",
-                    "&f&l迷你世界",
-                    "&d&l迷你世界",
-                    "&d&l迷你世界",
-                    "&d&l迷你世界",
-                    "&d&l迷你世界",
-                    "&d&l迷你世界",
-                    "&d&l迷你世界",
-                    "&d&l迷你世界"),
-            Arrays.asList("&d&l原神",
-                    "&5&l原&d&l神",
-                    "&f&l原&5&l神",
-                    "&f&l原&5&l神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神"
-                    ,
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神"
-                    ,
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神",
-                    "&f&l原神",
-                    "&d&l原神")
-            );
-    int randomSel = RandomUtil.random.nextInt(this.animationTitle.size());
+    private final List<String> animationTitle =
+            Arrays.asList("&9&l宝马乱斗",
+                    "&3&l宝&9&l马乱斗",
+                    "&f&l宝&3&l马&9&l乱斗",
+                    "&f&l宝马&3&l乱&9&l斗",
+                    "&f&l宝马乱&3&l斗",
+                    "&f&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&f&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&f&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&f&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&9&l宝马乱斗",
+                    "&9&l宝马乱斗");
 
     private long lastAnimationTime = 0;
     private int animationTick = 0;
 
     @Override
     public String getTitle(Player player) {
-        String text = animationTitle.get(randomSel).get(animationTick);
+        String text = animationTitle.get(animationTick);
         if (System.currentTimeMillis() - lastAnimationTime >= 125) {
             animationTick++;
             if (animationTick + 1 >= animationTitle.size()) {
                 animationTick = 0;
-                randomSel = RandomUtil.random.nextInt(this.animationTitle.size());
             }
             lastAnimationTime = System.currentTimeMillis();
         }
@@ -216,7 +149,7 @@ public class Scoreboard implements AssembleAdapter {
         if (level >= 120) {
             lines.add("&f经验值: &b已满!");
         } else {
-            lines.add("&f下一级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " 经验值");
+            lines.add("&f下一级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + "/Exp");
         }
 
         if (profile.getCurrentQuest() != null) {
@@ -256,7 +189,7 @@ public class Scoreboard implements AssembleAdapter {
                 lines.add("&f状态: " + currentStreak);
             } else {
                 lines.add("&f状态: " + (profile.getCombatTimer().hasExpired()
-                        ? "&a不在占坑中" : "&c占坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                        ? "&a空闲" : "&c占坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
                         ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
                         : (profile.getBounty() != 0
                         ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
@@ -309,14 +242,14 @@ public class Scoreboard implements AssembleAdapter {
                 boost = 10;
             }
             if (boost >= 3) {
-                lines.add("&f角坑士: &9-" + boost * 3 + "%");
+                lines.add("&f脚坑士: &9-" + boost * 3 + "%");
             }
 
         }
 
         lines.add(" ");
         if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c房间即将重启! &7(" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后)");
+            lines.add("&c房间重启! &7(" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后)");
         }
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&eTEST " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));

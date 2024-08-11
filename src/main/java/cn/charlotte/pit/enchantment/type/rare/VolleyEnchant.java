@@ -129,7 +129,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                         @Override
                         public void run() {
                             if (tick >= level + 1) {
-                                cooldown.put(player.getUniqueId(), new Cooldown(5, TimeUnit.MILLISECONDS));
+                                cooldown.put(player.getUniqueId(), new Cooldown(15, TimeUnit.MILLISECONDS));
                                 isShooting.remove(player.getUniqueId());
                                 this.cancel();
                             }

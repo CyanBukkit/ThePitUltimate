@@ -165,6 +165,7 @@ public class DataListener implements Listener {
                             }
                         }
                         PlayerProfile.savingMap.remove(event.getPlayer().getUniqueId());
+                        busyMap.remove(event.getPlayer().getUniqueId());
                     }
                 };
                     if(!PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())) {
@@ -176,7 +177,6 @@ public class DataListener implements Listener {
                             public void run() {
                                 if(!PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())){
                                     Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), bukkitRunnable);
-                                    busyMap.remove(event.getPlayer().getUniqueId());
                                     this.cancel();
                                 }
                             }

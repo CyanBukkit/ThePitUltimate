@@ -5,7 +5,7 @@ import java.util.*
 
 class KingsQuestsData {
 
-    var currentKingQuestsUuid: UUID? = null
+    var currentKingQuestsUuid: String? = null
 
     var accepted = false
     var completed = false
@@ -16,12 +16,12 @@ class KingsQuestsData {
 
     fun checkUpdate() {
         if (currentKingQuestsUuid == null) {
-            currentKingQuestsUuid = ThePit.getApi().runningKingsQuestsUuid
+            currentKingQuestsUuid = ThePit.getApi().runningKingsQuestsUuid.toString()
             return
         }
 
-        if (currentKingQuestsUuid != ThePit.getApi().runningKingsQuestsUuid) {
-            currentKingQuestsUuid = ThePit.getApi().runningKingsQuestsUuid
+        if (currentKingQuestsUuid != ThePit.getApi().runningKingsQuestsUuid.toString()) {
+            currentKingQuestsUuid = ThePit.getApi().runningKingsQuestsUuid.toString()
             accepted = false
             completed = false
             killedPlayer = 0
