@@ -65,19 +65,13 @@ public class PlayerUtil {
         if (profile.getChosePerk().get(5) == null) {
             return null;
         }
-
-        final Optional<AbstractPerk> first = ThePit.getInstance()
-                .getPerkFactory()
-                .getPerks()
-                .stream()
-                .filter(abstractPerk -> abstractPerk.getPerkType() == PerkType.MEGA_STREAK && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName()))
-                .findFirst();
-
-        if (first.isPresent()) {
-            final AbstractPerk perk = first.get();
-            if (perk instanceof MegaStreak) {
-                if (profile.getStreakKills() >= ((MegaStreak) perk).getStreakNeed()) {
-                    return CC.translate(perk.getDisplayName());
+        for (AbstractPerk abstractPerk : ThePit.getInstance().getPerkFactory().getPerks()) { //无意义stream
+            if(abstractPerk.getPerkType() == PerkType.MEGA_STREAK
+                    && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName())){
+                if (abstractPerk instanceof MegaStreak mega) {
+                    if (profile.getStreakKills() >= mega.getStreakNeed()) {
+                        return CC.translate(abstractPerk.getDisplayName());
+                    }
                 }
             }
         }
