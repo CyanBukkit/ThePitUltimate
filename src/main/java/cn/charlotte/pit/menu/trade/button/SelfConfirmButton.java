@@ -85,7 +85,7 @@ public class SelfConfirmButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        if (tradeManager.getACoins() == 0 && tradeManager.getAItems().size() == 0 && tradeManager.getBCoins() == 0 && tradeManager.getBItems().size() == 0) {
+        if (tradeManager.getACoins() == 0 && tradeManager.getAItems().isEmpty() && tradeManager.getBCoins() == 0 && tradeManager.getBItems().size() == 0) {
             //还没有任何交易内容时 不允许点击
             return;
         }

@@ -9,10 +9,7 @@ import cn.charlotte.pit.data.sub.*;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.EnchantmentFactor;
 import cn.charlotte.pit.enchantment.type.op.RealManEnchant;
-import cn.charlotte.pit.event.PitAssistEvent;
-import cn.charlotte.pit.event.PitKillEvent;
-import cn.charlotte.pit.event.PitQuestCompleteEvent;
-import cn.charlotte.pit.event.PitStreakKillChangeEvent;
+import cn.charlotte.pit.event.*;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.item.AbstractPitItem;
@@ -169,7 +166,7 @@ public class CombatListener implements Listener {
                 playerProfile.setLastDamageAt(System.currentTimeMillis());
             } else if (event.getDamager() instanceof TNTPrimed && event.getEntity() instanceof Player) {
                 List<MetadataValue> metadata = event.getDamager().getMetadata("internal");
-                if (metadata != null && !metadata.isEmpty()) {
+                if (!metadata.isEmpty()) {
                     if ("tnt".equals(metadata.get(0).asString())) {
                         event.setDamage(event.getDamage() * (1 / 5F));
                     } else if ("red_packet".equals(metadata.get(0).asString())) {
@@ -180,7 +177,7 @@ public class CombatListener implements Listener {
                             return;
                         }
                         List<MetadataValue> tntDamage = event.getDamager().getMetadata("damage");
-                        if (tntDamage != null && tntDamage.size() > 0) {
+                        if (!tntDamage.isEmpty()) {
                             event.setDamage(1 + tntDamage.get(0).asInt());
                             if (PlayerUtil.getDistance(event.getDamager().getLocation(), event.getEntity().getLocation()) > 3) {
                                 event.setCancelled(true);
@@ -192,7 +189,7 @@ public class CombatListener implements Listener {
                             return;
                         }
                         List<MetadataValue> tntDamage = event.getDamager().getMetadata("damage");
-                        if (tntDamage != null && tntDamage.size() > 0) {
+                        if (!tntDamage.isEmpty()) {
                             event.setDamage(0.5 * tntDamage.get(0).asInt());
                             if (PlayerUtil.getDistance(event.getDamager().getLocation(), event.getEntity().getLocation()) > 4) {
                                 event.setCancelled(true);
@@ -311,14 +308,9 @@ public class CombatListener implements Listener {
         damagerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
 
 
-        List<KillRecap.DamageData> remove = damagerProfile.getKillRecap()
-                .getDamageLogs()
-                .stream()
-                .filter(data -> data.getTimer().hasExpired())
-                .collect(Collectors.toList());
         damagerProfile.getKillRecap()
                 .getDamageLogs()
-                .removeAll(remove);
+                .removeIf(data -> data.getTimer().hasExpired());
         damagerProfile.getKillRecap()
                 .getDamageLogs()
                 .add(damagerData);
@@ -332,15 +324,9 @@ public class CombatListener implements Listener {
         playerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
         playerData.setDamage(event.getFinalDamage());
 
-        List<KillRecap.DamageData> shouldRemove = playerProfile.getKillRecap()
-                .getDamageLogs()
-                .stream()
-                .filter(data -> data.getTimer().hasExpired())
-                .collect(Collectors.toList());
-
         List<KillRecap.DamageData> damageLogs = playerProfile.getKillRecap()
                 .getDamageLogs();
-        damageLogs.removeAll(shouldRemove);
+        damageLogs.removeIf(data -> data.getTimer().hasExpired());
         damageLogs.add(playerData);
         //handle kill recap - end
     }
@@ -494,8 +480,9 @@ public class CombatListener implements Listener {
                     this.handleKill(killer, killerProfile, player, playerProfile);
                 } else if (entityEvent.getDamager() instanceof TNTPrimed) {
                     TNTPrimed tntPrimed = (TNTPrimed) entityEvent.getDamager();
-                    if (tntPrimed.getMetadata("shooter") != null && !tntPrimed.getMetadata("shooter").isEmpty()) {
-                        UUID uuid = UUID.fromString(tntPrimed.getMetadata("shooter").get(0).asString());
+                    List<MetadataValue> shooter = tntPrimed.getMetadata("shooter");
+                    if (!shooter.isEmpty()) {
+                        UUID uuid = UUID.fromString(shooter.get(0).asString());
                         if (uuid.equals(player.getUniqueId())) {
                             return;
                         }
@@ -531,20 +518,28 @@ public class CombatListener implements Listener {
         }
 
         //Promotion effect
-        if (PlayerUtil.isPlayerChosePerk(player, "assistant_to_the_streaker") && PlayerUtil.isPlayerUnlockedPerk(player, "promotion")) {
+        if (PlayerUtil.isPlayerChosePerk(player, "assistant_to_the_streaker")
+                && PlayerUtil.isPlayerUnlockedPerk(player, "promotion")) {
             if (playerProfile.getStreakKills() >= 50) {
-                if (PlayerUtil.isPlayerChosePerk(player, "over_drive") || PlayerUtil.isPlayerChosePerk(player, "high_lander") || PlayerUtil.isPlayerChosePerk(player, "beast_mode_mega_streak") || PlayerUtil.isPlayerChosePerk(player, "hermit")) {
+                if (PlayerUtil.isPlayerChosePerk(player, "over_drive")
+                        || PlayerUtil.isPlayerChosePerk(player, "high_lander")
+                        || PlayerUtil.isPlayerChosePerk(player, "beast_mode_mega_streak")
+                        || PlayerUtil.isPlayerChosePerk(player, "hermit")) {
                     mythicProtectChance = 1;
                 }
             }
             if (playerProfile.getStreakKills() > 100) {
-                if ((PlayerUtil.isPlayerChosePerk(player, "uber_streak") && playerProfile.getStreakKills() >= 400) || PlayerUtil.isPlayerChosePerk(player, "to_the_moon")) {
+                if ((PlayerUtil.isPlayerChosePerk(player, "uber_streak") && playerProfile.getStreakKills() >= 400)
+                        || PlayerUtil.isPlayerChosePerk(player, "to_the_moon")) {
                     mythicProtectChance = 1;
                 }
             }
         }
         //Funky Feather Item
-        if (mythicProtectChance < 1) {
+        ItemLiveDropEvent itemLiveDropEvent = new ItemLiveDropEvent(mythicProtectChance);
+        itemLiveDropEvent.callEvent();
+        mythicProtectChance = itemLiveDropEvent.getChance();
+        if (mythicProtectChance < 1 && !itemLiveDropEvent.isCancelled()) {
             for (int i = 0; i < 9; i++) {
                 ItemStack item = player.getInventory().getItem(i);
                 if ("funky_feather".equals(ItemUtil.getInternalName(item))) {
@@ -559,26 +554,25 @@ public class CombatListener implements Listener {
                 }
             }
         }
+        boolean noProtect = !itemLiveDropEvent.isCancelled() && RandomUtil.hasSuccessfullyByChance(1 - mythicProtectChance);
+        if(!itemLiveDropEvent.isCancelled()) {
+            for (int i = 0; i < 36; i++) {
+                ItemStack item = player.getInventory().getItem(i);
+                if (item == null || item.getType() == Material.AIR) continue;
 
-        boolean noProtect = RandomUtil.hasSuccessfullyByChance(1 - mythicProtectChance);
-
-        for (int i = 0; i < 36; i++) {
-            ItemStack item = player.getInventory().getItem(i);
-            if (item == null || item.getType() == Material.AIR) continue;
-
-            final IMythicItem mythicSwordItem = Utils.getMythicItem(item);
-            if (mythicSwordItem == null) {
-                continue;
-            }
-
-            if (!noProtect) {
-                if ((mythicSwordItem instanceof LuckyChestplate) || mythicSwordItem.getEnchantments().containsKey(new RealManEnchant())) {
-                    noProtect = true;
+                final IMythicItem mythicSwordItem = Utils.getMythicItem(item);
+                if (mythicSwordItem == null) {
+                    continue;
                 }
-            }
 
-            if (noProtect) {
-                player.getInventory().setItem(i, Utils.subtractLive(item));
+                if (!noProtect) {
+                    if ((mythicSwordItem instanceof LuckyChestplate) /*|| mythicSwordItem.getEnchantments().containsKey(new RealManEnchant())*/) {
+                        noProtect = true;
+                    }
+                }
+                if (noProtect) {
+                    player.getInventory().setItem(i, Utils.subtractLive(item));
+                }
             }
         }
 
@@ -587,7 +581,8 @@ public class CombatListener implements Listener {
             player.getInventory().setChestplate(Utils.subtractLive(player.getInventory().getChestplate()));
         }
         IMythicItem leggings = MythicUtil.getMythicItem(player.getInventory().getLeggings());
-        if (leggings != null && (noProtect || MythicUtil.getMythicItem(player.getInventory().getLeggings()) instanceof LuckyChestplate || leggings.getEnchantments().containsKey(new RealManEnchant()))) {
+        if (leggings != null && (noProtect || MythicUtil.getMythicItem(player.getInventory().getLeggings()) instanceof LuckyChestplate
+                /*|| leggings.getEnchantments().containsKey(new RealManEnchant())*/)) {
             player.getInventory().setLeggings(Utils.subtractLive(player.getInventory().getLeggings()));
         }
         if (noProtect) {
@@ -595,7 +590,7 @@ public class CombatListener implements Listener {
         }
 
         if (!noProtect) {
-            player.sendMessage(CC.translate("&d&l物品保护! &7由于一个天赋/附魔/物品提供的概率保护,本次死亡没有损失背包内神话物品生命."));
+            player.sendMessage(CC.translate("&d&l物品保护! &7由于一个天赋/附魔/物品/事件提供的概率保护,本次死亡没有损失背包内神话物品生命."));
         }
         for (ItemStack itemStack : player.getInventory()) {
             if (ItemUtil.isDeathDrop(itemStack)) {
@@ -658,6 +653,7 @@ public class CombatListener implements Listener {
         }
 
         if (shouldRespawn) {
+            ((CraftPlayer)player).getHandle().invulnerableTicks = 40;
             // player.setHealth(player.getMaxHealth());
             Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> player.spigot().respawn(), 10);
             player.setGameMode(GameMode.SPECTATOR);
@@ -1110,18 +1106,19 @@ public class CombatListener implements Listener {
         } else {
             CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()).replace("null","BOT") + " &6+" + numFormat.format(totalCoins) + "硬币" + genesisStatus + (eventBoost > 1 ? boostString : "")));
         }
+        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+            String deathString = CC.translate("&c&l死亡! &7被 " + killerProfile.getFormattedName() + " &7击杀.");
 
-        String deathString = CC.translate("&c&l死亡! &7被 " + killerProfile.getFormattedName() + " &7击杀.");
+            ChatComponentBuilder deathMsg = new ChatComponentBuilder(deathString)
+                    .append(new ChatComponentBuilder(CC.translate(" &e&l死亡回放"))
+                            .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&7点击查看你的死亡回放")).create()))
+                            .setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/killRecap"))
+                            .create());
 
-        ChatComponentBuilder deathMsg = new ChatComponentBuilder(deathString)
-                .append(new ChatComponentBuilder(CC.translate(" &e&l死亡回放"))
-                        .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&7点击查看你的死亡回放")).create()))
-                        .setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/killRecap"))
-                        .create());
-
-        if (beKilledPlayer instanceof Player) {
-            CC.send(MessageType.COMBAT, (Player) beKilledPlayer, deathMsg.create());
-        }
+            if (beKilledPlayer instanceof Player) {
+                CC.send(MessageType.COMBAT, (Player) beKilledPlayer, deathMsg.create());
+            }
+        });
 
     }
 

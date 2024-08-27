@@ -61,7 +61,11 @@ public class PerkBuyButton extends Button {
                 } else if (perk.getInternalPerkName().equalsIgnoreCase("grand_finale") || perk.getInternalPerkName().equalsIgnoreCase("leech_kill_streak") || perk.getInternalPerkName().equalsIgnoreCase("assured_strike_kill_streak") || perk.getInternalPerkName().equalsIgnoreCase("rn_gesus_kill_streak")) {
                     unlocked = PlayerUtil.isPlayerUnlockedPerk(player, "grand_finale_bundle");
                     //grand finale
-                } else if (perk.getInternalPerkName().equalsIgnoreCase("monster") || perk.getInternalPerkName().equalsIgnoreCase("r_and_r") || perk.getInternalPerkName().equalsIgnoreCase("tough_skin") || perk.getInternalPerkName().equalsIgnoreCase("tactical_retreat") || perk.getInternalPerkName().equalsIgnoreCase("beast_mode_mega_streak")) {
+                } else if (perk.getInternalPerkName().equalsIgnoreCase("monster")
+                        || perk.getInternalPerkName().equalsIgnoreCase("r_and_r")
+                        || perk.getInternalPerkName().equalsIgnoreCase("tough_skin")
+                        || perk.getInternalPerkName().equalsIgnoreCase("tactical_retreat")
+                        || perk.getInternalPerkName().equalsIgnoreCase("beast_mode_mega_streak")) {
                     unlocked = PlayerUtil.isPlayerUnlockedPerk(player, "beast_mode_bundle");
                 } else if (perk.getInternalPerkName().equalsIgnoreCase("hermit") || perk.getInternalPerkName().equalsIgnoreCase("pungent_kill_streak") || perk.getInternalPerkName().equalsIgnoreCase("aura_of_protection_kill_streak") || perk.getInternalPerkName().equalsIgnoreCase("glass_pickaxe_kill_streak") || perk.getInternalPerkName().equalsIgnoreCase("ice_cube_kill_streak")) {
                     unlocked = PlayerUtil.isPlayerUnlockedPerk(player, "hermit_bundle");

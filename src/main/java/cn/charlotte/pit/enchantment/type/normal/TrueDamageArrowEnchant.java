@@ -5,11 +5,17 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
+import cn.charlotte.pit.parm.listener.IPlayerAssist;
+import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -86,22 +92,27 @@ public class TrueDamageArrowEnchant extends AbstractEnchantment implements Liste
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTrueShotTrigger(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player && event.getEntity() instanceof Player) {
+        if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player && event.getEntity() instanceof Player victim) {
             if (event.getDamager().hasMetadata("true_shot")) {
                 final Player player = (Player) ((Projectile) event.getDamager()).getShooter();
-                if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player) || PlayerUtil.isEquippingSomber((Player) event.getEntity()))
+                if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player) || PlayerUtil.isEquippingSomber((Player) event.getEntity())) {
                     return;
-                final org.bukkit.inventory.ItemStack itemInHand = player.getItemInHand();
-                if (itemInHand == null) return;
-                final int level = this.getItemEnchantLevel(itemInHand);
+                }
+                final int level = event.getDamager().getMetadata("true_shot_level").get(0).asInt();
                 if (level == -1) {
                     return;
                 }
                 Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
                     final int noDamageTicks = player.getNoDamageTicks();
-                    player.setNoDamageTicks(0);
-                    PlayerUtil.damage(player, (Player) event.getEntity(), PlayerUtil.DamageType.TRUE, getTrueDamageRate(level) * event.getFinalDamage(), true);
-                    player.setNoDamageTicks(noDamageTicks);
+                    victim.setNoDamageTicks(0);
+                    EntityPlayer handle = ((CraftPlayer) victim).getHandle();
+                    float absorptionHearts = handle.getAbsorptionHearts();
+                    double v = getTrueDamageRate(level) * event.getFinalDamage();
+                    handle.setAbsorptionHearts((float)Math.max(0,absorptionHearts - v));
+                    if(handle.getAbsorptionHearts() <= 0) {
+                       victim.setHealth (Math.max(0, Math.min(player.getMaxHealth(),player.getHealth() - (v - absorptionHearts))));
+                    }
+                    victim.setNoDamageTicks(noDamageTicks);
                 });
             }
         }
@@ -109,8 +120,7 @@ public class TrueDamageArrowEnchant extends AbstractEnchantment implements Liste
 
     @EventHandler
     public void onBowShot(EntityShootBowEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
-        final Player player = (Player) event.getEntity();
+        if (!(event.getEntity() instanceof Player player)) return;
         if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) return;
         final org.bukkit.inventory.ItemStack itemInHand = player.getItemInHand();
         if (itemInHand == null) return;
@@ -120,6 +130,8 @@ public class TrueDamageArrowEnchant extends AbstractEnchantment implements Liste
         }
         if (itemInHand.getType() == Material.BOW) {
             event.getProjectile().setMetadata("true_shot", new FixedMetadataValue(ThePit.getInstance(), true));
+            event.getProjectile().setMetadata("true_shot_level", new FixedMetadataValue(ThePit.getInstance(),level));
         }
     }
+
 }

@@ -1,6 +1,7 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.util.bossbar.BossBar;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
@@ -136,14 +137,12 @@ public class EventFactory {
 
                 final String title = CC.translate(start + "&6&l" + iEvent.getEventName() + " &7将在 &e" + TimeUtil.millisToTimer(normalEnd.getRemaining()) + " &7后结束!");
 
-                ThePit.getInstance()
+                BossBar bossBar = ThePit.getInstance()
                         .getBossBar()
-                        .getBossBar()
+                        .getBossBar();
+                bossBar
                         .setTitle(title);
-                ThePit.getInstance()
-                        .getBossBar()
-                        .getBossBar()
-                        .setProgress(normalEnd.getRemaining() / (5 * 1000 * 60f));
+                bossBar.setProgress(normalEnd.getRemaining() / (5 * 1000 * 60f));
 
                 tick++;
             }

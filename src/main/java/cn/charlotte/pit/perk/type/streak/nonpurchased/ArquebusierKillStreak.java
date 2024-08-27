@@ -8,6 +8,7 @@ import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -65,7 +66,7 @@ public class ArquebusierKillStreak extends AbstractPerk implements Listener {
 
     @Override
     public List<String> getDescription(Player player) {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ObjectArrayList<>(8);
         list.add("&7此天赋每 &c3 连杀 &7触发一次.");
         list.add(" ");
         list.add("&7触发时:");

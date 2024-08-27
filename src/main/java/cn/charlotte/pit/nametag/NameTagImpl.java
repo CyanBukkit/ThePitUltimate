@@ -73,9 +73,9 @@ public class NameTagImpl implements NametagAdapter {
                 }
             } else if ("red_vs_blue".equals(activeEpicEventName)) {
                 RedVSBlueEvent activeEpicEvent = (RedVSBlueEvent) ThePit.getInstance().getEventFactory().getActiveEpicEvent();
-                displayName = activeEpicEvent.isRedTeam(profile.getPlayerUuid()) ? CC.translate(profile.getFormattedLevelTag() + " &c") : CC.translate(profile.getFormattedLevelTag() + " &9");
+                displayName = activeEpicEvent.isRedTeam(profile.getPlayerUuid()) ? CC.translate(profile.getFormattedLevelTagTabSpec() + " &c") : CC.translate(profile.getFormattedLevelTagTabSpec() + " &9");
             } else {
-                displayName = CC.translate(profile.getFormattedLevelTag() + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
+                displayName = CC.translate(profile.getFormattedLevelTagTabSpec() + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
                 if (profile.getChosePerk().get(5) != null) {
                     if (profile.getChosePerk().get(5).getPerkInternalName().equalsIgnoreCase("over_drive") && profile.getStreakKills() >= 50) {
                         displayName = CC.translate("&e&l超速传动" + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
@@ -137,6 +137,10 @@ public class NameTagImpl implements NametagAdapter {
                 } else {
                     suffix.append(" ");
                 }
+            }
+            if(displayName.length() > 16){
+                displayName = displayName.substring(0,15);
+
             }
             tags.add(new BufferedNametag(
                     i + "",

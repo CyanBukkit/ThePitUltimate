@@ -65,7 +65,7 @@ public class ComboHealEnchant extends AbstractEnchantment implements IAttackEnti
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 4 == 0) {
             float heart = (((CraftPlayer) attacker).getHandle()).getAbsorptionHearts();
-            float heal = new Double(enchantLevel * 0.8).floatValue();
+            float heal = enchantLevel * 0.8F;
             if (heart <= heal) {
                 (((CraftPlayer) attacker).getHandle()).setAbsorptionHearts(Math.min(heart + heal, heal));
             }
@@ -78,7 +78,7 @@ public class ComboHealEnchant extends AbstractEnchantment implements IAttackEnti
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getBowHit() % 4 == 0) {
             float heart = (((CraftPlayer) attacker).getHandle()).getAbsorptionHearts();
-            float heal = new Double(enchantLevel * 0.8).floatValue();
+            float heal = enchantLevel * 0.8F;
             if (heart <= heal) {
                 (((CraftPlayer) attacker).getHandle()).setAbsorptionHearts(Math.min(heart + heal, heal));
             }

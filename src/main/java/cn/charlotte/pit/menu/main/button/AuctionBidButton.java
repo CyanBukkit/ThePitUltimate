@@ -100,7 +100,7 @@ public class AuctionBidButton extends Button {
                         .open(player, new String[]{"", "~~~~~~~~~~~~~", "请在此输入", "你的出价"}, (player1, lines) -> {
                             player.closeInventory();
                             try {
-                                final int bidPrice = Integer.parseInt(lines[0]);
+                                final long bidPrice = Long.parseLong(lines[0]);
                                 event.playerBid(PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()), bidPrice);
                             } catch (Exception ignore) {
                                 player.sendMessage(CC.translate("&c你只能输入一个整数!"));

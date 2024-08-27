@@ -2,6 +2,7 @@ package cn.charlotte.pit.util.bossbar;
 
 import cn.charlotte.pit.ThePit;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -21,7 +22,7 @@ public class BossBar {
 
     public void addPlayer(Player player) {
         if (viewers.add(player.getUniqueId())) {
-            ThePit.getInstance().getAudiences().player(player).showBossBar(bar);
+            update(player);
         }
     }
 
@@ -36,9 +37,18 @@ public class BossBar {
     }
 
     public void update() {
+        viewers.forEach(this::update);
     }
 
     public void update(Player player) {
+        ThePit.getInstance().getAudiences().player(player).showBossBar(bar);
+    }
+
+    public void update(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) {
+            ThePit.getInstance().getAudiences().player(player).showBossBar(bar);
+        }
     }
 
     public Location getWitherLocation(Location location) {

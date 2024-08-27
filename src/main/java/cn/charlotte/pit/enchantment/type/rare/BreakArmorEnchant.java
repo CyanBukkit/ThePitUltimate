@@ -3,9 +3,13 @@ package cn.charlotte.pit.enchantment.type.rare;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.parm.listener.IPlayerAssist;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
+import net.minecraft.server.v1_8_R3.ItemBow;
+import net.minecraft.server.v1_8_R3.ItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -50,11 +54,15 @@ public class BreakArmorEnchant extends AbstractEnchantment implements IPlayerSho
     @Override
     @BowOnly
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player targetPlayer = (Player) target;
-        if (targetPlayer.getHealth() > enchantLevel) {
-            targetPlayer.setHealth(Math.max(0.1, targetPlayer.getHealth() - enchantLevel));
-        } else {
-            targetPlayer.damage(targetPlayer.getMaxHealth() * 100);
+        if (target instanceof Player) {
+            Player targetPlayer = (Player) target;
+            if (targetPlayer.getHealth() > enchantLevel) {
+                targetPlayer.setHealth(Math.max(0.1, targetPlayer.getHealth() - enchantLevel));
+            } else {
+                targetPlayer.damage(targetPlayer.getMaxHealth() * 100);
+            }
         }
     }
+
+
 }

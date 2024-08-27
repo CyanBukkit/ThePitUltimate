@@ -5,6 +5,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
@@ -15,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
@@ -28,8 +30,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Date: 2021/3/6 22:22
  */
 @Include
+@AutoRegister
 @cn.charlotte.pit.enchantment.param.item.BowOnly
-public class PullBowEnchant extends AbstractEnchantment implements IPlayerShootEntity, IActionDisplayEnchant {
+public class PullBowEnchant extends AbstractEnchantment implements Listener,IPlayerShootEntity, IActionDisplayEnchant {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
 

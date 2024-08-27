@@ -3,6 +3,7 @@ package cn.charlotte.pit.api;
 import cn.charlotte.pit.data.PlayerInvBackup;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
+import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.util.hologram.Hologram;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public interface PitInternalHook {
     ItemStack generateItem(String item);
 
     int getItemEnchantLevel(ItemStack item, String enchantName);
-
+    boolean openEvent(IEvent event,Player player);
     default boolean isLoaded(){
         return false;
     }

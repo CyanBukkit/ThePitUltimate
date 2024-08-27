@@ -4,6 +4,7 @@ import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.util.chat.RomanUtil;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Setter;
@@ -19,11 +20,12 @@ import java.util.*;
  */
 public abstract class AbstractPitItem {
     @Setter
-    protected Map<AbstractEnchantment, Integer> enchantments = new Object2ObjectArrayMap<>();
+    protected Object2IntOpenHashMap<AbstractEnchantment> enchantments = new Object2IntOpenHashMap<>();
 
     protected List<EnchantmentRecord> enchantmentRecords = new ObjectArrayList<>();
 
     public AbstractPitItem() {
+        enchantments.defaultReturnValue(-1);
     }
 
     public abstract String getInternalName();
@@ -51,10 +53,10 @@ public abstract class AbstractPitItem {
                     lore.add("&7" + s);
                 }
             } else {
-                lore.add("&7此附魔已被移除.");
+                lore.add("&7此附魔已被移除. | &bNyacho @ 2022 - Future");
             }
             if (entry.getKey().getRarity() == EnchantmentRarity.DISABLED) {
-                lore.add("&7此附魔暂时被管理员停用.");
+                lore.add("&7此附魔暂时被管理员停用. | &bNyacho @ 2022 - Future");
             }
             lore.add(" ");
         }
@@ -78,10 +80,13 @@ public abstract class AbstractPitItem {
     }
 
 
-    public Map<AbstractEnchantment, Integer> getEnchantments() {
+    public Object2IntOpenHashMap<AbstractEnchantment> getEnchantments() {
         return this.enchantments;
     }
-
+    public void resetEnch(){
+        this.enchantments = new Object2IntOpenHashMap<>();
+        this.enchantments.defaultReturnValue(-1);
+    }
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof AbstractPitItem)) return false;

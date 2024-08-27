@@ -5,14 +5,18 @@ import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.data.mail.Mail;
+import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.INormalEvent;
+import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.type.MythicRepairKit;
+import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
+import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.medal.impl.challenge.FirstBidMedal;
 import cn.charlotte.pit.medal.impl.challenge.HighestBidMedal;
 import cn.charlotte.pit.util.chat.CC;
@@ -22,8 +26,12 @@ import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
+import io.papermc.paper.util.maplist.ObjectMapList;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.val;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
@@ -35,6 +43,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -46,14 +55,14 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
     private static final String prefix = "&6&l竞拍! &7";
     private static final double rate = 1.15;
-    public static boolean isCustom = false;
-    private static LotsData lots;
-    private static List<BidHistory> bidHistories;
-    private static List<UUID> allowedParticipants;
-    private static BukkitRunnable runnable;
-    private static Cooldown timer;
-    private static boolean startByAdmin = false;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    public boolean isCustom = false;
+    private LotsData lots;
+    private List<BidHistory> bidHistories;
+    private List<UUID> allowedParticipants;
+    private BukkitRunnable runnable;
+    private Cooldown timer;
+    private boolean startByAdmin = false;
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
     public static LotsData getRandomLots() {
         try {
@@ -111,16 +120,19 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             MythicLeggingsItem abstractPitItem = new MythicLeggingsItem();
             abstractPitItem.setLive(RandomUtil.random.nextInt(3) + 3);
             abstractPitItem.setMaxLive(abstractPitItem.getLive());
-            Map<AbstractEnchantment, Integer> enchantments = new HashMap<>();
+            Object2IntOpenHashMap enchantments = new Object2IntOpenHashMap<>();
+            enchantments.defaultReturnValue(-1);
             List<AbstractEnchantment> list = ThePit.getInstance()
                     .getEnchantmentFactor()
                     .getEnchantments()
                     .stream()
                     .filter(abstractEnchantment -> abstractEnchantment.canApply(abstractPitItem.toItemStack()))
-                    .collect(Collectors.toList());
-            List<AbstractEnchantment> results = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.AUCTION_LIMITED).collect(Collectors.toList());
+                    .toList();
+            List<AbstractEnchantment> results = list.stream().filter(
+                    abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.AUCTION_LIMITED).collect(Collectors.toList());
             if (RandomUtil.hasSuccessfullyByChance(0.02)) {
-                results = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.AUCTION_LIMITED_RARE).collect(Collectors.toList());
+                results = list.stream()
+                        .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.AUCTION_LIMITED_RARE).toList();
             }
             enchantments.put((AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray()), 1);
             abstractPitItem.setEnchantments(enchantments);
@@ -177,7 +189,6 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                 0
         );
     }
-
     public static void sendMail(UUID uuid, Mail mail) {
         Player player = Bukkit.getPlayer(uuid);
         if (player != null && player.isOnline()) {
@@ -193,35 +204,275 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             }.runTaskAsynchronously(ThePit.getInstance());
         }
     }
+    private static int getRandomLevel() {
+        if (RandomUtil.hasSuccessfullyByChance(0.6)) {
+            return 1;
+        } else {
+            return ThreadLocalRandom.current().nextInt(2) + 2;
+        }
+    }
+    public static LotsData randomEnchantment(){
 
+        IMythicItem mythicItem = null;
+
+        //        if ("mythic_sword".equals(internalName)) {
+        //            mythicItem = new MythicSwordItem();
+        //        } else if ("mythic_bow".equals(internalName)) {
+        //            mythicItem = new MythicBowItem();
+        //        } else if ("mythic_leggings".equals(internalName)) {
+        //            mythicItem = new MythicLeggingsItem();
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        switch(random.nextInt(3)){
+            case 0 -> mythicItem = new MythicBowItem();
+            case 1 -> mythicItem = new MythicSwordItem();
+            case 2 -> mythicItem = new MythicLeggingsItem();
+        }
+
+        IMythicItem finalMythicItem = mythicItem;
+        if (RandomUtil.hasSuccessfullyByChance(0.01)) { //Artifact Prefix -> 100 Lives
+            mythicItem.setMaxLive(100);
+        } else {
+            mythicItem.setMaxLive(random.nextInt(8) + 16); //16-23
+        }
+        mythicItem.setLive(mythicItem.getMaxLive());
+        int level = 0;
+        for (int j = 0; j < 3; j++) {
+            List<AbstractEnchantment> list = ThePit.getInstance()
+                    .getEnchantmentFactor()
+                    .getEnchantments()
+                    .stream()
+                    .filter(abstractEnchantment -> abstractEnchantment.canApply(finalMythicItem.toItemStack()))
+                    .toList();
+            List<AbstractEnchantment> collect = list.stream()
+                    .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.NORMAL).collect(Collectors.toList());
+
+            List<AbstractEnchantment> results = list.stream()
+                    .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.NORMAL || abstractEnchantment.getRarity() == EnchantmentRarity.RARE).collect(Collectors.toList());
+            for (int i = 0; i < 4; i++) {
+                results.addAll(collect);
+            }
+            level++;
+            List<AbstractEnchantment> enchantments = new ObjectArrayList<>();
+            if (level > 1) {
+                enchantments = new ObjectArrayList<>(mythicItem.getEnchantments().keySet());
+            }
+            if (level == 1) {
+                //Tier 1 Enchant Start
+                int choice = random.nextInt(4);
+
+                switch (choice) {
+                    case 0: { //choice 0: 1 of Lv1 Enchantment
+
+                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                        enchantments.add(enchantment);
+                        mythicItem.getEnchantments().put(enchantment, 1);
+                        break;
+                    }
+                    case 3: { //choice 0: 2 of Lv1 Enchantment
+
+                        for (int i = 0; i < 2; i++) {
+                            results.removeAll(enchantments);
+                            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                            enchantments.add(enchantment);
+                            mythicItem.getEnchantments().put(enchantment, 1);
+                        }
+                        break;
+                    }
+                    case 1: { //choice 0: 1 of Lv2 Enchantment
+
+                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                        enchantments.add(enchantment);
+                        mythicItem.getEnchantments().put(enchantment, Math.min(enchantment.getMaxEnchantLevel(), 2));
+                        break;
+                    }
+                    case 2: { //choice 0: 2 of Lv2 Enchantment
+
+                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                        enchantments.add(enchantment);
+                        mythicItem.getEnchantments().put(enchantment, Math.min(enchantment.getMaxEnchantLevel(), 2));
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                //Tier 1 Enchant End
+            } else if (level == 2) {
+                int amount = mythicItem.getEnchantments().size();
+
+                if (amount == 1) { // If this item has only 1 enchantment
+
+                        int singleLevel = 0;
+                        AbstractEnchantment enchantment = null;
+                        for (Integer i : mythicItem.getEnchantments().values()) {
+                            singleLevel = i;
+                        }
+                        for (AbstractEnchantment ae : mythicItem.getEnchantments().keySet()) {
+                            enchantment = ae;
+                        }
+                        if (singleLevel == 1) { //Condition: 1 (Only 1 Lv1 Enchantment)
+                            int choice = random.nextInt(3);
+                            switch (choice) {
+                                case 0: { // 1->3
+                                    mythicItem.getEnchantments().put(enchantment, 3);
+
+                                    break;
+                                }
+                                case 1: { // 1->21
+                                    mythicItem.getEnchantments().put(enchantment, 2);
+                                  break;
+                                }
+                                case 2: { // 1->211
+                                    mythicItem.getEnchantments().put(enchantment, 2);
+                                }
+                                default:
+                                    break;
+                            }
+                        } else if (singleLevel == 2) {
+                            int choice = random.nextInt(2);
+                            switch (choice) {
+                                case 0: { // 2->3
+                                    mythicItem.getEnchantments().put(enchantment, 3);
+
+                                    break;
+                                }
+                                case 1: { // 2->21
+                                 break;
+                                }
+                                default:
+                                    break;
+                            }
+                        } else {
+                     }
+                } else if (amount == 2) { //11
+                    int choice = random.nextInt(2);
+
+                    switch (choice) {
+                        case 0: { // 11->21
+                            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(enchantments.toArray());
+                            mythicItem.getEnchantments().put(enchantment, 2);
+                            break;
+                        }
+                        case 1: { // 11->111
+                            results.removeAll(enchantments);
+                            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                            enchantments.add(enchantment);
+                            mythicItem.getEnchantments().put(enchantment, 1);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            } else if (level == 3) {
+                int amount = mythicItem.getEnchantments().size();
+                if (amount == 1) { // If this item have only 1 enchantment
+                    AbstractEnchantment enchantment = null;
+                        for (int i = 0; i < 2; i++) {
+                            results.removeAll(enchantments);
+                                enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                            enchantments.add(enchantment);
+                            mythicItem.getEnchantments().put(enchantment, 1);
+                        }
+                        for (AbstractEnchantment abstractEnchantment : enchantments) {
+                            mythicItem.getEnchantments().put(abstractEnchantment, Math.max(mythicItem.getEnchantments().get(abstractEnchantment), getRandomLevel()));
+                        }
+                        //set level of a new enchant to 1/2 (3 excluded cuz the limit)
+                        Integer totalLevel = 0;
+                        for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
+                            totalLevel += mythicItem.getEnchantments().get(abstractEnchantment);
+                        }
+                        if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
+                            if (enchantment != null) {
+                                mythicItem.getEnchantments().put(enchantment, RandomUtil.hasSuccessfullyByChance(0.1) ? 2 : 1);
+                            }
+                    }
+                } else if (amount == 2) { //21 -> 311
+                        results.removeAll(enchantments);
+                        AbstractEnchantment enchantment;
+                        enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                        enchantments.add(enchantment);
+                        mythicItem.getEnchantments().put(enchantment, 1);
+                        for (AbstractEnchantment abstractEnchantment : enchantments) {
+                            final int currentLevel = Math.max(mythicItem.getEnchantments().get(abstractEnchantment), getRandomLevel());
+                            mythicItem.getEnchantments().put(abstractEnchantment, currentLevel);
+                        }
+                        Integer totalLevel = 0;
+                        for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
+                            totalLevel += mythicItem.getEnchantments().get(abstractEnchantment);
+                        }
+                        if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
+                            //set level of new enchant to 1/2 (3 excluded cuz the limit)
+                            if (enchantment != null) {
+                                mythicItem.getEnchantments().put(enchantment, RandomUtil.hasSuccessfullyByChance(0.1) ? 2 : 1);
+                            }
+                        }
+
+
+                } else if (amount == 3) { // 111 -> 211/311
+                    for (AbstractEnchantment abstractEnchantment : enchantments) {
+                        final int currentLevel = Math.max(mythicItem.getEnchantments().get(abstractEnchantment), getRandomLevel());
+                        mythicItem.getEnchantments().put(abstractEnchantment, currentLevel);
+
+                    }
+                    Integer totalLevel = 0;
+                    for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
+                        totalLevel += mythicItem.getEnchantments().get(abstractEnchantment);
+                    }
+                    if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
+                        mythicItem.getEnchantments().put((AbstractEnchantment) RandomUtil.helpMeToChooseOne(mythicItem.getEnchantments().keySet().toArray()), 1);
+                    }
+                }
+                boolean badLuck = true;
+                for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
+                    if (mythicItem.getEnchantments().get(abstractEnchantment) >= 3) {
+                        badLuck = false;
+                        break;
+                    }
+                }
+                if (badLuck) {
+                    AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(mythicItem.getEnchantments().keySet().toArray());
+                    mythicItem.getEnchantments().put(enchantment, 3);
+                }
+            }
+
+        mythicItem.getEnchantmentRecords()
+                .add(new EnchantmentRecord(
+            "CONSOLE_EVENT",
+                        "AUCTION",
+                                System.currentTimeMillis()
+                                ));
+        }
+        ItemStack itemStack = mythicItem.toItemStack();
+        return new LotsData(new ItemStack[]{itemStack},8000,0,itemStack);
+    }
     public double getRate() {
         return AuctionEvent.rate;
     }
 
     public LotsData getLots() {
-        return AuctionEvent.lots;
+        return lots;
     }
 
     public void setLots(LotsData lotsData) {
-        AuctionEvent.lots = lotsData;
+        lots = lotsData;
     }
 
     public List<BidHistory> getBidHistories() {
-        return AuctionEvent.bidHistories;
+        return bidHistories;
     }
 
     public Cooldown getTimer() {
-        return AuctionEvent.timer;
+        return timer;
     }
 
     public void setTimer(Cooldown cooldown) {
-        AuctionEvent.timer = cooldown;
+        this.timer = cooldown;
         EventFactory eventFactory = ThePit.getInstance().getEventFactory();
         eventFactory.setNormalEnd(cooldown);
     }
 
     public void setStartByAdmin(boolean startByAdmin) {
-        AuctionEvent.startByAdmin = startByAdmin;
+        this.startByAdmin = startByAdmin;
     }
 
     @Override
@@ -242,7 +493,11 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
     @Override
     public void onActive() {
         if (!isCustom || lots == null) {
-            lots = getRandomLots();
+            if (RandomUtil.hasSuccessfullyByChance(0.25)) {
+                lots = randomEnchantment();
+            } else {
+                lots = getRandomLots();
+            }
         }
 
         //event settings init
@@ -256,7 +511,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                         .sendMessage(new ChatComponentBuilder(CC.translate(prefix + "当前正在竞拍: " + (lots.getIcon().getAmount() > 1 ? "&f" + lots.getIcon().getAmount() + "x " : "") + (lots.getIcon().getItemMeta().getDisplayName() == null ? "&f" + lots.getIcon().getType().toString() : lots.getIcon().getItemMeta().getDisplayName()) + " &8(&6" + (int) (getHighestBidHistory() == null ? getLots().getStartPrice() : getHighestBidHistory().getCoins()) + " 硬币&8) ")
                                 ).append(new ChatComponentBuilder(CC.translate("&e&l点击查看"))
                                                 .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&f点击访问拍卖行")).create()))
-                                                .setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/AuctionGui"))
+                                                .setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/auctionGui"))
                                                 .create())
                                         .create()
                         );
@@ -265,11 +520,13 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                 @Override
                 public void run() {
                     if (getTimer().hasExpired()) {
+                        this.cancel(); // cancel first
                         ThePit.getInstance()
                                 .getEventFactory()
                                 .inactiveEvent(AuctionEvent.this);
                         return;
                     }
+
                     if (Math.floorDiv(getTimer().getRemaining(), 1000L) % 10 == 0 && getTimer().getRemaining() > 5 * 1000L) {
                         Bukkit.getOnlinePlayers().forEach(player ->
                                 player.spigot()
@@ -296,10 +553,10 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             runnable.cancel();
         } catch (Exception ignored) {
         }
-        if (!startByAdmin && ThePit.getInstance().getPitConfig().isGenesisEnable() && bidHistories.size() == 0) {
+        if (!startByAdmin && ThePit.getInstance().getPitConfig().isGenesisEnable() && bidHistories.isEmpty()) {
             return;
         }
-        if (bidHistories.size() == 0) {
+        if (bidHistories.isEmpty()) {
             CC.boardCast(prefix + "流拍! 无人参与竞拍.");
             return;
         }
@@ -320,7 +577,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                                 mail.setExpireTime(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000L);
                                 mail.setSendTime(System.currentTimeMillis());
                                 mail.setCoins((int) getHighestBidHistory(uuid).getCoins());
-                                mail.setTitle("&e【拍卖行】 竞拍硬币退还");
+                                mail.setTitle("&e[拍卖行] 竞拍硬币退还");
                                 mail.setContent("&f你在 " + dateFormat.format(System.currentTimeMillis()) + " 参与的拍卖被取消, \\n&f于当时投入的硬币现已退还.");
                                 sendMail(uuid, mail);
                             }
@@ -345,7 +602,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                             contents.setContents(lots.getContents());
                             mail.setItem(contents);
                             mail.setRenown(lots.getRenown());
-                            mail.setTitle("&e【拍卖行】 竞拍物品发放");
+                            mail.setTitle("&e[拍卖行] 竞拍物品发放");
                             mail.setContent("&f你在 " + dateFormat.format(System.currentTimeMillis()) + " 参与的拍卖中竞拍成功.\\n&f请注意及时收取竞拍物品.");
                             sendMail(uuid, mail);
                             if (player != null && player.isOnline()) {
@@ -358,7 +615,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                                 player.sendMessage(CC.translate(prefix + "参与竞拍的 &6" + (int) getHighestBidHistory(player.getUniqueId()).getCoins() + " 硬币 &7已直接退还到您的账户当中."));
                             } else {
                                 mail.setCoins(getHighestBidHistory(player.getUniqueId()).getCoins());
-                                mail.setTitle("&e【拍卖行】 竞拍硬币退还");
+                                mail.setTitle("&e[拍卖行] 竞拍硬币退还");
                                 mail.setContent("&f你在 " + dateFormat.format(System.currentTimeMillis()) + " 参与的拍卖中未能拍下物品. \\n&f于当时投入的硬币现已退还.");
                                 sendMail(uuid, mail);
                             }
@@ -382,7 +639,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             }
             Player player = Bukkit.getPlayer(profile.getPlayerUuid());
             BidHistory highestBid = getHighestBidHistory();
-            double price = getParticipants().size() > 0 ? rate * highestBid.getCoins() : lots.getStartPrice();
+            double price = !getParticipants().isEmpty() ? rate * highestBid.getCoins() : lots.getStartPrice();
             //check if player is holding highest bid
             if (highestBid != null) {
                 if (System.currentTimeMillis() - highestBid.getTime() < 1000) {
@@ -463,10 +720,10 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                 finalBidHistories.add(bidHistory);
             }
         }
-        if (finalBidHistories.size() == 0) {
+        if (finalBidHistories.isEmpty()) {
             return null;
         }
-        List<Double> bidCoins = new ArrayList<>();
+        List<Double> bidCoins = new ObjectMapList<>();
         for (BidHistory bidHistory : finalBidHistories) {
             bidCoins.add(bidHistory.getCoins());
         }
@@ -484,7 +741,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
     }
 
     public List<UUID> getParticipants() {
-        List<UUID> participants = new ArrayList<>();
+        List<UUID> participants = new ObjectMapList<>();
         for (BidHistory bidHistory : bidHistories) {
             if (!participants.contains(bidHistory.getUuid())) {
                 participants.add(bidHistory.getUuid());
@@ -494,10 +751,10 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
     }
 
     public BidHistory getHighestBidHistory() {
-        if (bidHistories.size() == 0) {
+        if (bidHistories.isEmpty()) {
             return null;
         }
-        List<Double> bidCoins = new ArrayList<>();
+        List<Double> bidCoins = new ObjectArrayList<>();
         for (BidHistory bidHistory : bidHistories) {
             bidCoins.add(bidHistory.getCoins());
         }

@@ -8,6 +8,7 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.command.util.ClassUtil;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.Bukkit;
@@ -60,6 +61,7 @@ public class PetFactory implements Listener {
         }
 
         data.removeThis();
+        entityToPetData.remove(entity.getUniqueId()); // 垃圾回收我能行。。。
     }
     @SneakyThrows
     public void spawnPet(String internal, Player owner) {
@@ -159,8 +161,7 @@ public class PetFactory implements Listener {
         final PetData data = entityToPetData.get(event.getDamager().getUniqueId());
         if (data != null) {
             final Player killer = Bukkit.getPlayer(data.ownerUuid);
-            if (event.getEntity() instanceof LivingEntity) {
-                final LivingEntity entity = (LivingEntity) event.getEntity();
+            if (event.getEntity() instanceof LivingEntity entity) {
                 if (entity.getHealth() < event.getFinalDamage()) {
                     final EntityLiving player = ((CraftLivingEntity) entity).getHandle();
                     player.killer = ((CraftPlayer) killer).getHandle();
@@ -206,7 +207,7 @@ public class PetFactory implements Listener {
         }
 
         final Optional<Player> first = PlayerUtil.getNearbyPlayers(entity.getLocation(), 10)
-                .stream()
+                .parallelStream()
                 .filter(player -> !player.getUniqueId().equals(pet.getOwner().getUniqueId()))
                 .findFirst();
 
@@ -230,6 +231,7 @@ public class PetFactory implements Listener {
     }
 
 
+    @Getter
     public static class PetData {
         private UUID ownerUuid;
         private UUID entityUuid;
@@ -248,27 +250,9 @@ public class PetFactory implements Listener {
 
             factory.petMap.remove(this.ownerUuid);
             factory.entityToPetData.remove(entityUuid);
+            hologram = null;
         }
 
-        public UUID getOwnerUuid() {
-            return this.ownerUuid;
-        }
-
-        public UUID getEntityUuid() {
-            return this.entityUuid;
-        }
-
-        public Hologram getHologram() {
-            return this.hologram;
-        }
-
-        public Entity getEntity() {
-            return this.entity;
-        }
-
-        public IPet getPet() {
-            return this.pet;
-        }
     }
 
 }

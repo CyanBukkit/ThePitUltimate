@@ -15,6 +15,7 @@ import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -141,7 +142,7 @@ public class BeastModeMegaStreak extends AbstractPerk implements Listener, ITick
 
     @Override
     public List<String> getDescription(Player player) {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ObjectArrayList<>(16);
         list.add("&7激活要求连杀数: &c50 连杀");
         list.add(" ");
         list.add("&7激活后:");

@@ -2,6 +2,7 @@ package cn.charlotte.pit.data.sub;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -40,10 +41,10 @@ public class KillRecap {
 
 
     //assist
-    private List<AssistData> assistData = new ArrayList<>();
+    private List<AssistData> assistData = new ObjectArrayList<>();
 
     //damage log
-    private List<DamageData> damageLogs = new ArrayList<>();
+    private List<DamageData> damageLogs = new ObjectArrayList<>();
 
     public KillRecap() {
     }

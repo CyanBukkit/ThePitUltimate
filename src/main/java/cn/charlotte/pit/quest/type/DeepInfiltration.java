@@ -78,8 +78,8 @@ public class DeepInfiltration extends AbstractQuest implements Listener {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
             if (profile.getCurrentQuest() != null && profile.getCurrentQuest().getInternalName().equalsIgnoreCase(this.getQuestInternalName())) {
                 event.setCancelled(false);
-                double level = 20 * (1 - (Math.min(0.35 * profile.getCurrentQuest().getLevel(), 1)));
-                event.setFoodLevel(new Double(level).intValue());
+                float level = 20F * (1F - (Math.min(0.35F * profile.getCurrentQuest().getLevel(), 1F)));
+                event.setFoodLevel((int)level);
             }
         }
     }

@@ -5,15 +5,18 @@ import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
+import com.google.common.util.concurrent.ListenableFuture;
 import dev.jnic.annotation.Include;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
@@ -27,7 +30,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Include
 @ArmorOnly
-public class AssassinEnchant extends AbstractEnchantment implements IPlayerDamaged, IActionDisplayEnchant {
+@AutoRegister
+public class AssassinEnchant extends AbstractEnchantment implements Listener, IPlayerDamaged, IActionDisplayEnchant {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
 

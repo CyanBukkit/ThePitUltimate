@@ -4,6 +4,8 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.command.util.ClassUtil;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +39,11 @@ public class BuffFactory {
         for (Class<?> clazz : classes) {
             if (AbstractPitBuff.class.isAssignableFrom(clazz)) {
                 Object instance = clazz.newInstance();
+                if(Listener.class.isAssignableFrom(clazz)){
+                    Bukkit.getPluginManager().registerEvents((Listener) instance,ThePit.getInstance());
+                }
                 buffs.add((AbstractPitBuff) instance);
+
             }
         }
     }

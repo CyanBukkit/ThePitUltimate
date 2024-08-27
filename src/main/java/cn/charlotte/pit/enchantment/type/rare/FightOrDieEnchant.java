@@ -4,6 +4,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
@@ -12,6 +13,7 @@ import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -28,7 +30,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Include
 @ArmorOnly
-public class FightOrDieEnchant extends AbstractEnchantment implements IPlayerDamaged, IActionDisplayEnchant {
+@AutoRegister
+public class FightOrDieEnchant extends AbstractEnchantment implements Listener,IPlayerDamaged, IActionDisplayEnchant {
     private final Map<UUID, Cooldown> cooldown = new HashMap<>();
 
     @Override

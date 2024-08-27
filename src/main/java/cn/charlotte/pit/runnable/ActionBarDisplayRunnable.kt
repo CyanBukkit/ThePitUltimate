@@ -53,8 +53,7 @@ object ActionBarDisplayRunnable {
                         val itemStack = armorContent ?: continue
                         player.handleActionDisplay(itemStack, builder)
                     }
-
-                    ActionBarUtil.sendActionBar(player, CC.translate(builder.toString()))
+                    if(builder.isNotBlank()) ActionBarUtil.sendActionBar(player, CC.translate(builder.toString()))
                 }
             }, 100L, 20L)
     }

@@ -60,7 +60,7 @@ public class DiamondBootsShopButton extends AbstractShopButton {
     public int getPrice(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
-            return new Double(0.35 * 300).intValue();
+            return (int)(0.35 * 300);
         }
         return 300;
     }

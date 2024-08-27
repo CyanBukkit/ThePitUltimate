@@ -35,25 +35,25 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
-            Arrays.asList("&9&l宝马乱斗",
-                    "&3&l宝&9&l马乱斗",
-                    "&f&l宝&3&l马&9&l乱斗",
-                    "&f&l宝马&3&l乱&9&l斗",
-                    "&f&l宝马乱&3&l斗",
-                    "&f&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&f&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&f&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&f&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&9&l宝马乱斗",
-                    "&9&l宝马乱斗");
+            Arrays.asList("&8&l黑神话 &0: &9&l宝马",
+                    "&8&l黑&6&l神&8&l话 &0: &9&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马",
+                    "&8&l黑神话 &0: &3&l宝&9&l马",
+                    "&8&l黑&6&l神话 &0: &f&l宝&3&l马",
+                    "&8&l黑神话 &0: &f&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马",
+                    "&8&l黑神话 &0: &f&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马",
+                    "&8&l黑神话 &0: &f&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马",
+                    "&8&l黑神话 &0: &f&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马",
+                    "&8&l黑神话 &0: &f&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马",
+                    "&8&l黑神话 &0: &f&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马",
+                    "&8&l黑神话 &0: &f&l宝马",
+                    "&8&l黑&6&l神话 &0: &9&l宝马");
 
     private long lastAnimationTime = 0;
     private int animationTick = 0;
@@ -61,7 +61,7 @@ public class Scoreboard implements AssembleAdapter {
     @Override
     public String getTitle(Player player) {
         String text = animationTitle.get(animationTick);
-        if (System.currentTimeMillis() - lastAnimationTime >= 125) {
+        if (System.currentTimeMillis() - lastAnimationTime >= 250) {
             animationTick++;
             if (animationTick + 1 >= animationTitle.size()) {
                 animationTick = 0;
@@ -80,10 +80,10 @@ public class Scoreboard implements AssembleAdapter {
 
         if (!profile.isLoaded()) {
             lines.add("");
-            lines.add("&c正在加载您的档案...");
+            lines.add("&c正在加载档案...");
             lines.add("&c请稍等片刻...");
             lines.add("");
-            lines.add("&c如等待长时仍在加载,");
+            lines.add("&c如长时仍在加载,");
             lines.add("&c请重新进入服务器.");
             lines.add("");
             lines.add("&c公告群: ");
@@ -115,16 +115,14 @@ public class Scoreboard implements AssembleAdapter {
                 int killed = RagePitEvent.getKilled();
 
                 lines.add("&f总击杀: " + (killed >= 600 ? "&a" : "&c") + killed + "&7/600");
-            } else if (event instanceof IScoreBoardInsert) {
+            } else if (event instanceof IScoreBoardInsert insert) {
 
-                IScoreBoardInsert insert = (IScoreBoardInsert) event;
                 lines.addAll(insert.insert(player));
 
             }
         } else if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() != null) {
             INormalEvent event = ThePit.getInstance().getEventFactory().getActiveNormalEvent();
-            if (event instanceof IScoreBoardInsert) {
-                IScoreBoardInsert insert = (IScoreBoardInsert) event;
+            if (event instanceof IScoreBoardInsert insert) {
                 lines.add(" ");
                 lines.add("&f事件: &a" + ((IEvent) event).getEventName());
                 lines.addAll(insert.insert(player));
@@ -147,21 +145,21 @@ public class Scoreboard implements AssembleAdapter {
         lines.add("&f等级: " + LevelUtil.getLevelTag(prestige, level) + genesisTeam);
 
         if (level >= 120) {
-            lines.add("&f经验值: &b已满!");
+            lines.add("&f经验: &b已满!");
         } else {
-            lines.add("&f下一级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + "/Exp");
+            lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + "/Exp");
         }
 
         if (profile.getCurrentQuest() != null) {
             lines.add(" ");
-            lines.add("&f击杀玩家: &a" + profile.getCurrentQuest().getCurrent() + "/" + profile.getCurrentQuest().getTotal());
+            lines.add("&f击杀: &a" + profile.getCurrentQuest().getCurrent() + "/" + profile.getCurrentQuest().getTotal());
             if (profile.getCurrentQuest().getCurrent() == profile.getCurrentQuest().getTotal()) {
-                lines.add("&f剩余时间: &a已完成");
+                lines.add("&f剩余时间: &a完成");
             } else {
                 if (profile.getCurrentQuest().getEndTime() > System.currentTimeMillis()) {
                     lines.add("&f剩余时间: &a" + TimeUtil.millisToTimer(profile.getCurrentQuest().getEndTime() - System.currentTimeMillis()));
                 } else {
-                    lines.add("&f剩余时间: &c已超时");
+                    lines.add("&f剩余时间: &c超时");
                 }
             }
         }
@@ -207,7 +205,7 @@ public class Scoreboard implements AssembleAdapter {
                 final double streakKills = profile.getStreakKills();
                 final double multiple = Math.min(1.0, (streakKills - 100) * 0.005);
 
-                lines.add("&f已储经验: &b" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
+                lines.add("&f已储: &b" + df.format(storedExp) + "&7 (&a" + numFormat.format(multiple) + "x&7)");
             }
         }
         //if Player have a bounty:
@@ -228,7 +226,7 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         if (gladiator && profile.isInArena()) {
-            double boost = 114514;
+            int boost = 0;
             try {
                  boost = PlayerUtil.getNearbyPlayers(player.getLocation(), 8).size();
             } catch (Exception ignored){
@@ -249,7 +247,7 @@ public class Scoreboard implements AssembleAdapter {
 
         lines.add(" ");
         if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c房间重启! &7(" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后)");
+            lines.add("&c重启! &7(" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后)");
         }
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&eTEST " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));

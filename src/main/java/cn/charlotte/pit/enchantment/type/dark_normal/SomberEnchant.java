@@ -20,6 +20,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Include
 @ArmorOnly
 public class SomberEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
+    public static SomberEnchant INSTANCE; //Faster to get somber ench raw Obj
+    public SomberEnchant(){
+        INSTANCE = this;
+    }
     @Override
     public String getEnchantName() {
         return "无尽黑暗";

@@ -1,13 +1,14 @@
 package cn.charlotte.pit.util.item;
 
+import cn.charlotte.pit.PitHook;
 import cn.charlotte.pit.util.Utils;
-import net.minecraft.server.v1_8_R3.NBTBase;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagInt;
-import net.minecraft.server.v1_8_R3.NBTTagString;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 /**
  * @Author: EmptyIrony
@@ -17,38 +18,51 @@ public class ItemUtil {
 
 
     public static String getUUID(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return null;
+        return getItemStringData(item,"uuid");
+    }
+    public static UUID getUUIDObj(ItemStack stack){
+        String uuid = getUUID(stack);
+        if(uuid == null) return null;
+        return UUID.fromString(uuid);
+    }
+    public static void setUUIDObj(ItemStack stack, UUID uuid) {
+        setUUID(stack,uuid.toString());
+    }
+    public static void setUUID(ItemStack stack, String uuid) {
+        NBTTagCompound extra = getExtra(stack);
+        if (extra != null) {
+            extra.setString("uuid", uuid);
         }
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return null;
+    }
+    public static void setVer(ItemStack stack, String ver) {
+        NBTTagCompound extra = getExtra(stack);
+        if (extra != null) {
+            extra.setString("version", ver);
         }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return null;
+    }
+    public static String getVer(ItemStack stack) {
+        NBTTagCompound extra = getExtra(stack);
+        if(extra != null){
+            return extra.getString("version");
         }
-
-        if (!extra.hasKey("uuid")) {
-            return null;
-        }
-
-        return extra.getString("uuid");
+        return null;
+    }
+    public static boolean shouldUpdateItem(ItemStack stack){
+        String ver = getVer(stack);
+        return ver == null || ver.equals("NULL") || !PitHook.getGitVersion().equals(ver);
+    }
+    public static void randomUUIDItem(ItemStack stack){
+        setUUIDObj(stack,UUID.randomUUID());
+    }
+    public static void signVer(ItemStack stack){
+        setVer(stack,PitHook.getGitVersion());
     }
 
-
+    public static boolean shouldUpdateUUIDAndItem(ItemStack stack){
+        return shouldUpdateItem(stack) && PitHook.getGitVersion().endsWith("uuid");
+    }
     public static boolean isIllegalItem(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return true;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
+        NBTTagCompound extra = getExtra(item);
         if (extra == null) {
             return true;
         }
@@ -57,222 +71,98 @@ public class ItemUtil {
     }
 
     public static boolean canDrop(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return false;
-        }
-
-        return extra.hasKey("tradeAllow") && extra.getBoolean("tradeAllow");
+        return getItemBoolData(item,"tradeAllow");
     }
 
     public static boolean isHealingItem(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return false;
-        }
-
-        return extra.hasKey("isHealingItem") && extra.getBoolean("isHealingItem");
+        return getItemBoolData(item,"isHealingItem");
     }
 
     public static boolean canTrade(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
+        NBTTagCompound extra = getExtra(item);
         if (extra == null) {
+
             return false;
         }
 
-        if (!forceCanTrade(item)) {
-            return false;
+        if (forceCanTrade(item)) {
+           return true;
         }
-
-        return (extra.hasKey("canTrade") && extra.getBoolean("canTrade")) || (getInternalName(item) != null && getInternalName(item).startsWith("mythic_"));
+        String internalName = getInternalName(item);
+        boolean b = extra.hasKey("canTrade") && extra.getBoolean("canTrade");
+        boolean b1 = (internalName != null && internalName.startsWith("mythic_"));
+        return b1 || b;
     }
 
     public static boolean forceCanTrade(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return false;
-        }
-
-        if (extra.hasKey("forceCanTrade")) {
-            return extra.getBoolean("forceCanTrade");
-        }
-        return true;
+        return getItemBoolData(item,"forceCanTrade");
     }
 
     public static boolean canSaveEnderChest(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return false;
-        }
-
-        return extra.hasKey("enderChest") && extra.getBoolean("enderChest");
+        return getItemBoolData(item,"enderChest");
     }
 
     public static boolean isDefaultItem(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return false;
-        }
-
-        return extra.hasKey("defaultItem") && extra.getBoolean("defaultItem");
+        return getItemBoolData(item,"defaultItem");
     }
-
-    public static boolean isDeathDrop(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
+    @Nullable
+    public static NBTTagCompound getExtra(ItemStack item){
+        if (item == null || item.getTypeId() == 0) { //Faster
+            return null;
         }
 
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
         NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
+        if(tag == null){
+            return null;
         }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return false;
+        if(tag.get("extra") instanceof NBTTagCompound extra){
+            return extra;
         }
-
-        return extra.hasKey("deathDrop") && extra.getBoolean("deathDrop");
+        return null;
+    }
+    public static boolean isDeathDrop(ItemStack item) {
+        return getItemBoolData(item,"deathDrop");
     }
 
     public static boolean isRemovedOnJoin(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return false;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return false;
-        }
-
-        return extra.hasKey("removeOnJoin") && extra.getBoolean("removeOnJoin");
+        return getItemBoolData(item,"removeOnJoin");
     }
 
     public static String getInternalName(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return null;
-        }
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return null;
-        }
-        NBTBase extra = tag.get("extra");
-        if (!(extra instanceof NBTTagCompound)) {
-            return null;
-        }
-
-        NBTBase internal = ((NBTTagCompound) extra).get("internal");
-        if (!(internal instanceof NBTTagString)) {
-            return null;
-        }
-
-        return ((NBTTagString) internal).a_();
+        return getItemStringData(item,"internal");
     }
 
     public static Integer getItemIntData(ItemStack item, String key) {
-        if (item == null || item.getType() == Material.AIR) {
-            return null;
+        NBTTagCompound extra = getExtra(item);
+        if(extra != null){
+            NBTBase nbtBase = extra.get(key);
+            if(nbtBase instanceof NBTTagInt intData){
+                return intData.d();
+            }
         }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return null;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return null;
-        }
-
-        NBTBase nbtBase = extra.get(key);
-        if (!(nbtBase instanceof NBTTagInt)) {
-            return null;
-        }
-
-        return ((NBTTagInt) nbtBase).d();
+        return null;
     }
+    public static boolean getItemBoolData(ItemStack item, String key){
+        NBTTagCompound extra = getExtra(item);
+        if(extra != null){
+            NBTBase nbtBase = extra.get(key);
+            if(nbtBase instanceof NBTTagByte byted){
+                return byted.f() != 0;
+            }
+        }
 
+        return false;
+    }
     public static String getItemStringData(ItemStack item, String key) {
-        if (item == null || item.getType() == Material.AIR) {
-            return null;
+        NBTTagCompound extra = getExtra(item);
+        if(extra != null){
+            NBTBase nbtBase = extra.get(key);
+            if(nbtBase instanceof NBTTagString string){
+                return string.a_();
+            }
         }
-
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return null;
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            return null;
-        }
-
-        NBTBase nbtBase = extra.get(key);
-        if (!(nbtBase instanceof NBTTagString)) {
-            return null;
-        }
-
-        return ((NBTTagString) nbtBase).a_();
+        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package cn.charlotte.pit.util.chat;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerOption;
 import com.google.gson.Gson;
@@ -219,13 +220,12 @@ public class CC {
         return !type.equals(MessageType.MISC) || option.isOtherMsg();
     }
 
-
     public static void boardCast(MessageType type, String text) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (canPlayerSeeMessage(player, type)) {
-                player.sendMessage(CC.translate(text));
+        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                send(type,player,text);
             }
-        }
+        });
     }
 
     public static void send(MessageType type, Player player, String text) {

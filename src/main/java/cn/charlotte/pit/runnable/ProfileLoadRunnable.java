@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2021/4/2 23:40
  */
-public class ProfileLoadRunnable extends BukkitRunnable {
+public class ProfileLoadRunnable extends BukkitRunnable { //这是什么用的? 没啥用(个人猜测AntiDupe
     @Getter
     private static ProfileLoadRunnable instance;
     @Getter
@@ -61,7 +61,7 @@ public class ProfileLoadRunnable extends BukkitRunnable {
                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                 out.writeUTF("ConnectOther");
                 out.writeUTF(player.getName());
-                out.writeUTF("lobby" + (20 + RandomUtil.random.nextInt(11)));
+                out.writeUTF("L_MainLobby#1"); //大唐王朝大厅。
                 Objects.requireNonNull(Iterables.getFirst(Bukkit.getOnlinePlayers(), null)).sendPluginMessage(ThePit.getInstance(), "BungeeCord", out.toByteArray());
                 cooldownMap.remove(entry.getKey());
             }

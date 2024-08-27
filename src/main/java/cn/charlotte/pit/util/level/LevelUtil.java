@@ -12,6 +12,9 @@ import net.jafama.FastMath;
  */
 
 public class LevelUtil {
+    public static void dropCache(){
+        plevelMapping = null;
+    }
 
     public static void main(String[] args) {
         System.out.println(getLevelExpRequired(35, 120));
@@ -53,9 +56,27 @@ public class LevelUtil {
             return "&2";
         } else if (prestige >= 86 && prestige <= 90) {
             return "&2";
-        } else if (prestige >= 91) {
+        } else if (prestige >= 91 && prestige <= 120) {
             return "&8&l";
+        } else if (prestige >= 121 && prestige <= 240) {
+            return "&b&l";
+        } else if (prestige >= 241 && prestige <= 300) {
+            return "&4&l";
+        }else if (prestige >= 301 && prestige <= 400) {
+            return "&f&l";
+        }else if (prestige >= 401 && prestige <= 512) {
+            return "&c&l";
+        }else if (prestige >= 513 && prestige <= 700) {
+                return "&e&l";
+        }else if (prestige >= 701 && prestige <= 800) {
+            return "&2&l";
+        }else if (prestige >= 801 && prestige <= 999) {
+            return "&3&l";
+        }else if (prestige >= 1000) {
+            return "&3&l";
         }
+
+
 
         return "&7";
     }
@@ -105,13 +126,16 @@ public class LevelUtil {
      * @param level    玩家当前等级
      * @return 某一等级所需经验值(level)
      */
+    public static long fromCache = 0;
+    public static long fromRaw = 0;
+    static boolean booting = false;
     public static double getLevelExpRequired(int prestige, int level) {
-        if (plevelMapping == null) {
+        if (plevelMapping == null && !booting) {
             bootCache();
-        } else if (booted) {
-            if(plevelMapping.length >= prestige) {
+        } else if (booted && plevelMapping != null) {
+            if(plevelMapping.length > prestige) {
                 double[] doubles = plevelMapping[prestige];
-                if(doubles.length >= level) {
+                if(doubles.length > level) {
                     return doubles[level];
                 }
             }
@@ -148,14 +172,18 @@ public class LevelUtil {
         }
     }
     public static void bootCache(){
+        booting = true;
+        booted = false;
         int limit = PrestigeStatusButton.limit;
-        plevelMapping = new double[limit + 1][121];
+        double[][] plevelMappingRaw = new double[limit + 40][130];
         for (int i = 0; i < limit; i++) {
-            for (int ia = 0; ia < 120; ia++) {
-                plevelMapping[i][ia] = getLevelExpRequired(i,ia);
+            for (int ia = 0; ia < 130; ia++) {
+                plevelMappingRaw[i][ia] = getLevelExpRequired(i,ia);
             }
         }
+        plevelMapping = plevelMappingRaw;
         booted = true;
+        booting = false;
     }
 
     /**
@@ -168,8 +196,9 @@ public class LevelUtil {
         int level = 0;
         for (int i = 0; i <= 120; i++) {
             level = i;
-            if (experience >= getLevelExpRequired(prestige, i)) {
-                experience = experience - getLevelExpRequired(prestige, i);
+            double levelExpRequired = getLevelExpRequired(prestige, i);
+            if (experience >= levelExpRequired) {
+                experience = experience - levelExpRequired;
             } else {
                 return i;
             }
@@ -195,7 +224,8 @@ public class LevelUtil {
         if (level >= 120) {
             return 1;
         } else {
-            return (float) ((getLevelExpRequired(prestige, level) - getLevelTotalExperience(prestige, level + 1) + experience) / getLevelExpRequired(prestige, level));
+            double levelExpRequired = getLevelExpRequired(prestige, level);
+            return (float) ((levelExpRequired - getLevelTotalExperience(prestige, level + 1) + experience) / levelExpRequired);
         }
     }
 
@@ -210,7 +240,8 @@ public class LevelUtil {
         if (prestige > 0 && pre < 10) {
             pre = 10;
         }
-        return getPrestigeColor(prestige) + "[" + getLevelColor(level) + level + getPrestigeColor(prestige) + "]";
+        String prestigeColor = getPrestigeColor(prestige);
+        return prestigeColor + "[" + getLevelColor(level) + level + prestigeColor + "]";
     }
 
 
@@ -219,7 +250,20 @@ public class LevelUtil {
         if (prestige > 0 && pre < 10) {
             pre = 10;
         }
-        return getPrestigeColor(prestige) + "[" + getLevelColor(level) + level + getPrestigeColor(prestige) + "]";
+        String prestigeColor = getPrestigeColor(prestige);
+        return prestigeColor + "[" + getLevelColor(level) + level + prestigeColor + "]";
+    }
+    public static String getLevelTagTabListSpec(int prestige, int level) {
+        int pre = 120 * prestige / 30;
+        if (prestige > 0 && pre < 10) {
+            pre = 10;
+        }
+        if (prestige < 91) {
+            String prestigeColor = getPrestigeColor(prestige);
+            return prestigeColor + "[" + getLevelColor(level) + level + prestigeColor + "]";
+        } else {
+            return getPrestigeColor(prestige) + "P" + getLevelColor(level) + level;
+        }
     }
 
     public static String getLevelTagWithRoman(int prestige, double experience) {

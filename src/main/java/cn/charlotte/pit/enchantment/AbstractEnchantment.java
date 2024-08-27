@@ -1,14 +1,17 @@
 package cn.charlotte.pit.enchantment;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.param.item.RodOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
@@ -17,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -55,6 +59,10 @@ public abstract class AbstractEnchantment {
     //Todo: 需要一个判断玩家身上附魔是否生效中(持续时间内)的方法 (虽然也许不应该写在这里)
 
     public int getItemEnchantLevel(ItemStack item) {
+        IMythicItem iMythicItem = ThePit.getInstance().getItemFactory().getIMythicItem(item); //更快Or 更慢
+        if(iMythicItem != null){
+            return iMythicItem.getEnchantments().getInt(this);
+        } //更快的解析
         if (item == null || item.getType() == Material.AIR) {
             return -1;
         }

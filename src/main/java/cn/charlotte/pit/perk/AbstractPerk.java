@@ -47,13 +47,13 @@ public abstract class AbstractPerk {
     public void onUpgrade(Player player) {
 
     }
-
+    int passiveFound = -1;
     public int getPlayerLevel(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-
-        boolean passiveFound = this.getClass().isAnnotationPresent(Passive.class);
-
-        if (passiveFound) {
+        if(passiveFound == -1) {
+            passiveFound = this.getClass().isAnnotationPresent(Passive.class) ? 0 : 1;
+        }
+        if (passiveFound == 0) {
             PerkData perkData = profile.getUnlockedPerkMap().get(getInternalPerkName());
             if (perkData != null) {
                 return perkData.getLevel();

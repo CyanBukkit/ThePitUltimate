@@ -14,6 +14,7 @@ import cn.charlotte.pit.events.EventsHandler;
 import cn.charlotte.pit.game.Game;
 import cn.charlotte.pit.hologram.HologramFactory;
 import cn.charlotte.pit.item.ItemFactor;
+import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.medal.MedalFactory;
 import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import cn.charlotte.pit.minigame.MiniGameController;
@@ -80,7 +81,6 @@ import java.util.concurrent.*;
 public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     public static PitInternalHook api;
-
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
     private static boolean DEBUG_SERVER = false;
     private static String bungeeServerName;
@@ -103,11 +103,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private QuestFactory questFactory;
     private SignGui signGui;
     private BossBarHandler bossBar;
-    private ItemFactor itemFactor = new ItemFactor();
+    private ItemFactor itemFactor;
     private RebootRunnable rebootRunnable;
     private MiniGameController miniGameController;
     private SoundFactory soundFactory;
     private PetFactory petFactory;
+    private ItemFactory itemFactory;
 
     private PlayerPointsAPI playerPoints;
     private LuckPerms luckPerms;
@@ -205,7 +206,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.loadConfig();
 
                 this.loadDatabase();
-
+                this.loadItemFactor();
                 this.loadMenu();
                 this.loadNpc();
                 this.loadGame();
@@ -217,7 +218,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.loadEnchantment();
                 this.loadQuest();
                 this.loadEvents();
-
+                this.loadItemFactory();
                 try {
                     this.loadMoveHandler();
                 } catch (Exception ignored) {
@@ -246,7 +247,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 }));
 //            this.printBanner();
 
-                new Thread(new LeaderBoardRunnable()).start();
+               new LeaderBoardRunnable().runTaskTimerAsynchronously(this,0,12000);
 
                 try {
                     EventsHandler.INSTANCE.loadFromDatabase();
@@ -272,6 +273,17 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
             }
             sendLogs("宝马启动");
         }
+    }
+
+    private void loadItemFactor() {
+        this.itemFactor = new ItemFactor();
+    }
+
+    private void loadItemFactory() {
+        this.itemFactory = new ItemFactory();
+    }
+    public ItemFactory getItemFactory(){
+        return this.itemFactory;
     }
 
     public void sendLogs(String s) {

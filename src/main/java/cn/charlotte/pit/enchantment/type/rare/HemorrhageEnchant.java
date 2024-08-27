@@ -6,19 +6,24 @@ import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
+import cn.klee.backports.utils.SWMRHashTable;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
+import net.kyori.adventure.util.Listenable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,10 +34,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Include
 @WeaponOnly
-public class HemorrhageEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+@AutoRegister
+public class HemorrhageEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IActionDisplayEnchant {
 
-    private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-    private static final HashMap<UUID, Cooldown> immune = new HashMap<>();
+    private static final Map<UUID, Cooldown> cooldown = new SWMRHashTable<>();
+    private static final Map<UUID, Cooldown> immune = new SWMRHashTable<>();
     private static final HemorrhageDeBuff buff = new HemorrhageDeBuff();
 
 

@@ -100,18 +100,7 @@ public class EnchantButton extends Button {
     }
 
     public IMythicItem getMythicItem(ItemStack item) {
-        IMythicItem mythicItem;
-        if (Utils.toNMStackQuick(item).getItem() instanceof ItemSword) {
-            mythicItem = new MythicSwordItem();
-        } else if (Utils.toNMStackQuick(item).getItem() instanceof ItemBow) {
-            mythicItem = new MythicBowItem();
-        } else {
-            mythicItem = new MythicLeggingsItem();
-        }
-
-        mythicItem.loadFromItemStack(item);
-
-        return mythicItem;
+        return Utils.getMythicItem(item);
     }
 
     @Override
@@ -120,16 +109,7 @@ public class EnchantButton extends Button {
             if (item == null || item.getType() == Material.AIR) {
                 return getDefaultDisplayItem();
             }
-            IMythicItem mythicItem;
-            if (Utils.toNMStackQuick(item).getItem() instanceof ItemSword) {
-                mythicItem = new MythicSwordItem();
-            } else if (Utils.toNMStackQuick(item).getItem() instanceof ItemBow) {
-                mythicItem = new MythicBowItem();
-            } else {
-                mythicItem = new MythicLeggingsItem();
-            }
-
-            mythicItem.loadFromItemStack(item);
+            IMythicItem mythicItem = getMythicItem(item);
             MythicColor color = MythicColor.valueOf(ItemUtil.getItemStringData(mythicItem.toItemStack(), "mythic_color").toUpperCase());
             int level = mythicItem.getTier();
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -232,6 +212,8 @@ public class EnchantButton extends Button {
     }
 
     private void doEnchant(ItemStack item, Player player, IMythicItem mythicItem) {
+
+        IMythicItem.clearCache(item);//clear cache
         mythicItem.loadFromItemStack(item);
         IMythicItem beforeItem = mythicItem;
         MythicColor color = MythicColor.valueOf(ItemUtil.getItemStringData(item, "mythic_color").toUpperCase());
@@ -297,7 +279,7 @@ public class EnchantButton extends Button {
                 .getEnchantments()
                 .stream()
                 .filter(abstractEnchantment -> abstractEnchantment.canApply(item))
-                .collect(Collectors.toList());
+                .toList();
         List<AbstractEnchantment> enchantments = new ObjectArrayList<>();
         if (level > 1) {
             enchantments = new ObjectArrayList<>(mythicItem.getEnchantments().keySet());
@@ -657,7 +639,7 @@ public class EnchantButton extends Button {
     }
 
     private static boolean isBlackList(Player player, AbstractEnchantment abstractEnchantment) {
-        return abstractEnchantment instanceof ILimit && player.getName().equalsIgnoreCase("L1YuUwU");
+        return abstractEnchantment instanceof ILimit;
     }
 
 
@@ -683,7 +665,7 @@ public class EnchantButton extends Button {
 
     public ItemStack getDefaultDisplayItem() {
         return new ItemBuilder(Material.ENCHANTMENT_TABLE)
-                .name("&d神话之井")
+                .name("&d神话之井").internalName("enchant_table_mobile")
                 .lore("&7通过击杀玩家来获得", "&e神话之剑&7, &b神话之弓 &7以及", "&c神&6话&9之&a甲 &7等物品.", " ", "&7在神话之井中为这些物品附魔", "&7可以赋予其大量的强大增益.", " ", "&d放入一件神话物品到左侧空格中以开始!")
                 .build();
     }

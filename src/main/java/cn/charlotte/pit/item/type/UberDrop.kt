@@ -37,6 +37,7 @@ class UberDrop: AbstractPitItem(), Listener{
                 return
             }
 
+            val hasSuccessfullyByChance = RandomUtil.hasSuccessfullyByChance(0.75);
             val itemStack = RandomUtil.helpMeToChooseOne(
                 FunkyFeather.toItemStack().also {
                     it.amount = Random.nextInt(2, 3)
@@ -48,7 +49,7 @@ class UberDrop: AbstractPitItem(), Listener{
                     it.amount = Random.nextInt(5, 20)
                 },
                 JewelSword().toItemStack(),
-                TotallyLegitGem().toItemStack()
+                if(hasSuccessfullyByChance) TotallyLegitGem().toItemStack() else GlobalAttentionGem().toItemStack()
             ) as ItemStack
 
             var ticks = 0.3f

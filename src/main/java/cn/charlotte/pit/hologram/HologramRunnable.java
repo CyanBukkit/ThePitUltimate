@@ -44,7 +44,9 @@ public class HologramRunnable implements Runnable {
                     continue;
                 }
 
-                if (tick % abstractHologram.loopTicks() != 0) {
+                int i1 = Math.max(1,abstractHologram.loopTicks());
+
+                if (tick % i1 != 0) {
                     continue;
                 }
 

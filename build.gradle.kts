@@ -8,6 +8,8 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+
+    maven("https://repo.crazycrew.us/releases")
     maven("https://repo.codemc.io/repository/nms/")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://repo.dmulloy2.net/repository/public/")
@@ -26,7 +28,7 @@ dependencies {
     api(libs.slf4j)
     api(libs.litecommands)
     api(libs.adventure.bukkit)
-
+    compileOnly("com.caoccao.javet:javet:3.1.4") // Linux and Windows (x86_64)
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     //we uses the local library from the paper 1.8.8 to get more efficient because
@@ -52,6 +54,7 @@ dependencies {
     // to get the proper api
     compileOnly("it.unimi.dsi:fastutil:8.5.13")
 
+    compileOnly("us.crazycrew.crazycrates:api:0.7")
     compileOnly(libs.spigot.get8())
     compileOnly(libs.luckperms)
     compileOnly(libs.playerpoints)
@@ -63,7 +66,7 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(20)
 }
 
 tasks.withType<JavaCompile> {

@@ -140,29 +140,7 @@ fun submit(
 }
 
 fun org.bukkit.inventory.ItemStack?.toMythicItem(): cn.charlotte.pit.item.IMythicItem? {
-    if (this == null) {
-        return null
-    }
-
-    return when (ItemUtil.getInternalName(this)) {
-        "mythic_sword" -> {
-            cn.charlotte.pit.item.type.mythic.MythicSwordItem()
-        }
-
-        "mythic_bow" -> {
-            cn.charlotte.pit.item.type.mythic.MythicBowItem()
-        }
-
-        "mythic_leggings" -> {
-            cn.charlotte.pit.item.type.mythic.MythicLeggingsItem()
-        }
-
-        else -> {
-            null
-        }
-    }?.also {
-        it.loadFromItemStack(this)
-    }
+    return Utils.getMythicItem(this) //修正
 }
 
 val Player.isSpecial: Boolean

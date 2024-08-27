@@ -6,11 +6,17 @@ import cn.charlotte.pit.config.NewConfiguration.load
 import cn.charlotte.pit.config.NewConfiguration.loadFile
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.TradeData
+import cn.charlotte.pit.events.impl.QuickMathEvent
+import cn.charlotte.pit.item.AbstractPitItem
+import cn.charlotte.pit.item.MythicColor
 import cn.charlotte.pit.medal.impl.challenge.hidden.KaboomMedal
+import cn.charlotte.pit.nbt
 import cn.charlotte.pit.runnable.RebootRunnable.RebootTask
 import cn.charlotte.pit.sendMessage
 import cn.charlotte.pit.util.MythicUtil
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
+import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.level.LevelUtil
 import cn.charlotte.pit.util.rank.RankUtil
@@ -31,6 +37,10 @@ import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.max
+import kotlin.math.min
 
 
 /**
@@ -42,7 +52,11 @@ import org.bukkit.util.Vector
 @Command(name = "pitAdmin")
 @Permission("pit.admin")
 class PitAdminCommands {
-
+    @Execute(name = "createEquation")
+    @Shortcut("eq")
+    fun eqEvent(@Context player: Player, @Arg("eqQuest") eq : String, @Arg("eqAns") ans : String){
+        ThePit.getApi().openEvent(QuickMathEvent(eq,ans),null)
+    }
     @Execute(name = "giveItemInHand")
     @Shortcut("give")
     fun giveItemInHand(@Context player: Player, @Arg("target") target: Player) {
@@ -105,6 +119,13 @@ class PitAdminCommands {
         ThePit.getInstance().pitConfig.save()
 
         return CC.translate("&a成功设置全息位置!")
+    }
+
+    @Execute(name = "statics")
+    @Async
+    fun statics(@Context player: Player): String {
+        player.sendMessage("IS REMOVED")
+        return "LevelUtils: Cache|Raw:${LevelUtil.fromCache}|${LevelUtil.fromRaw}"
     }
 
     @Execute(name = "keeperLoc")
@@ -377,28 +398,159 @@ class PitAdminCommands {
     @HandHasItem(mythic = true)
     fun changeLives(@Context player: Player, @Arg("lives") lives: Int) {
         try {
-            val stack = ItemBuilder(player.itemInHand).live(lives).build()
-            player.itemInHand = MythicUtil.getMythicItem(stack).toItemStack()
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                it.live = lives
+            }.toItemStack()
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
+    @Execute(name = "changeItemInHand nolive")
+    @HandHasItem(mythic = true)
+    fun nolive(@Context player: Player) {
+        try {
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                it.live = 0
+                it.maxLive = 0
+            }.toItemStack()
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
+    @Execute(name = "nocache")
+    fun executeBrokeCache(@Context player: Player){
+        ThePit.getInstance().itemFactory.clientSide = !ThePit.getInstance().itemFactory.clientSide
+        player.sendMessage("&a成功设置客户端主导服务端 值为: " + ThePit.getInstance().itemFactory.clientSide,true)
+    }
+    @Execute(name = "changeItemInHand color")
+    @HandHasItem(mythic = true)
+    fun changeColor(@Context player: Player, @Arg("color") color: String) {
+        try {
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                it.color = MythicColor.valueOf(color.uppercase(Locale.getDefault()))
+            }.toItemStack()
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
+    @Execute(name = "changeItemInHand randomUUID")
+    @HandHasItem(mythic = true)
+    fun randomUUID(@Context player: Player) {
+        try {
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                it.uuid = UUID.randomUUID()
+            }.toItemStack()
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
+    @Execute(name = "changeItemInHand uuid")
+    @HandHasItem(mythic = true)
+    fun uuid(@Context player: Player,@Arg("uuid") uuid: String) {
+        try {
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                it.uuid = UUID.fromString(uuid)
+            }.toItemStack()
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
+    @Execute(name = "changeItemInHand resetEnch")
+    @HandHasItem(mythic = true)
+    fun rstEnch(@Context player: Player) {
+        try {
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                it.resetEnch()
+            }.toItemStack()
         } catch (ignored: Exception) {
             player.sendMessage("Error")
         }
     }
 
+    @Execute(name = "changeItemInHand ench")
+    @HandHasItem(mythic = true)
+    fun ench(@Context player: Player, @Arg("enchName") ench: String, @Arg("level") level: String) {
+        try {
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+                val enchObj = ThePit.getInstance().enchantmentFactor.enchantmentMap.get(ench)
+                val levelInt = Integer.valueOf(level)
+                if(levelInt == 0){
+                    it.enchantments.remove(enchObj)
+                } else {
+                    it.enchantments[enchObj] = enchObj?.let { it1 -> min(it1.maxEnchantLevel, levelInt) }
+                }
+            }.toItemStack()
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
     @Execute(name = "changeItemInHand maxLive")
     @HandHasItem(mythic = true)
     fun changeMaxLive(@Context player: Player, @Arg("maxLive") maxLive: Int) {
         try {
-            val stack = ItemBuilder(player.itemInHand).maxLive(maxLive).build()
-            player.itemInHand = MythicUtil.getMythicItem(stack).toItemStack()
+            val stack = player.itemInHand
+            player.itemInHand = MythicUtil.getMythicItem(stack).also {
+               it.maxLive = maxLive
+            }.toItemStack()
         } catch (ignored: Exception) {
             player.sendMessage("Error")
+        }
+    }
+
+    @Execute(name = "itemNbtDump")
+    fun nbtDump(@Context player: Player) {
+        try {
+            val stack = player.itemInHand
+            player.sendMessage(Utils.dumpNBTOnString(stack),true)
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
+    @Execute(name = "flushMythicItems")
+    fun flushPlayerItem(@Context player: Player, @Arg("player_name") playerName: String) {
+        try {
+            val player1 = Bukkit.getPlayer(playerName)
+            val inventory = player1.inventory
+            inventory.forEachIndexed { index, itemStack ->
+                val mmItem = ThePit.getInstance().itemFactory.getIMythicItem(itemStack)
+                if (mmItem != null) {
+                    inventory.remove(index)
+                    inventory.setItem(index, mmItem.toItemStack())
+                }
+            }
+            player1.updateInventory()
+            player.sendMessage("成功刷新.", true)
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
+    @Execute(name = "give")
+
+    fun give(@Context player: Player, @Arg("nbtName") nbtName: String, @Arg("amount") amount: String) {
+        try {
+            val clazz = ThePit.getInstance().itemFactor.itemMap[nbtName]
+            for (i in 0..Integer.valueOf(amount)) {
+                val abstractPitItem = clazz?.newInstance() as AbstractPitItem
+                player.inventory.addItem(abstractPitItem.toItemStack())
+            }
+            val instance = clazz?.newInstance()
+            player.sendMessage("成功给予x" + amount + " " + (instance as AbstractPitItem).itemDisplayName)
+        } catch (ignored: Exception) {
+            player.sendMessage("Error, 神话系物品并没有注册进factor")
         }
     }
     @Execute(name = "changeItemInHand tier")
     @HandHasItem(mythic = true)
     fun changeTier(@Context player: Player, @Arg("tier") tier: Int) {
         try {
-            val stack = ItemBuilder(player.itemInHand).maxLive(tier).build()
+            val stack = player.itemInHand
             player.itemInHand = MythicUtil.getMythicItem(stack).also {
                 it.tier = tier
             }.toItemStack()

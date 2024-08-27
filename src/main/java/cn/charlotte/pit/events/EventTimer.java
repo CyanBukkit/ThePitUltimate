@@ -41,12 +41,14 @@ public class EventTimer implements Runnable {
                     .ifPresent(iEvent -> factory.pushEvent((IEpicEvent) iEvent));
         }
 
-        if (min != 55 && min != 50 && min % 5 == 0) {
+        boolean b = min != 55 && min != 50;
+        if (b) {
             if (factory.getActiveEpicEvent() == null && factory.getNextEpicEvent() == null && System.currentTimeMillis() - factory.getLastNormalEvent() >= 3 * 60 * 1000) {
                 if (factory.getActiveNormalEvent() == null) {
                     String mini = EventsHandler.INSTANCE.nextEvent(false);
-                    if(mini.equals("NULL"))
+                    if(mini.equals("NULL")) {
                         return;
+                    }
                     cooldown = new Cooldown(1, TimeUnit.MINUTES);
 
                     factory.getNormalEvents()

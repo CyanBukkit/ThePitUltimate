@@ -52,8 +52,7 @@ public class SacredArrowEnchant extends AbstractEnchantment implements IPlayerSh
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         boostDamage.getAndAdd(enchantLevel * 0.2);
-        if (target instanceof Player) {
-            Player player = (Player) target;
+        if (target instanceof Player player) {
             player.removePotionEffect(PotionEffectType.SPEED);
             player.removePotionEffect(PotionEffectType.JUMP);
             attacker.sendMessage(CC.translate("&a&l净化！ &7你移除了敌人的&b速度&7与&a跳跃&7效果!"));

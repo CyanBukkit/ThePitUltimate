@@ -771,6 +771,12 @@ public class PlayerProfile {
         }
         return LevelUtil.getLevelTag(this.getPrestige(), this.getLevel());
     }
+    public String getFormattedLevelTagTabSpec() {
+        if (nicked) {
+            return LevelUtil.getLevelTagTabListSpec(this.nickPrestige, this.nickLevel);
+        }
+        return LevelUtil.getLevelTagTabListSpec(this.getPrestige(), this.getLevel());
+    }
 
     public String getFormattedLevelTagWithRoman() {
         if (nicked) {
