@@ -2,6 +2,7 @@ package cn.charlotte.pit.menu.cdk.generate.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.callback.Callback;
+import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
 import cn.charlotte.pit.util.menu.buttons.DisplayButton;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author: EmptyIrony
@@ -64,12 +66,19 @@ public class CDKEditItemsButton extends Button {
                 public void onClickEvent(InventoryClickEvent event) {
                     event.setCancelled(false);
                 }
-
                 @Override
                 public void onClose(Player player) {
                     for (int i = 0; i < 18; i++) {
                         if (player.getOpenInventory().getItem(i) != null && player.getOpenInventory().getItem(i).getType() != Material.AIR) {
-                            items.set(i, player.getOpenInventory().getItem(i));
+                            ItemStack item = player.getOpenInventory().getItem(i);
+                            String internalName = ItemUtil.getInternalName(item);
+                            if(internalName != null){
+                                String uuid = ItemUtil.getUUID(item);
+                                if(uuid != null){
+                                    ItemUtil.setUUID(item,"00000000-0000-0000-0000-000000000001");
+                                }
+                            }
+                            items.set(i, item);
                         }
                     }
                     callback.call(items);

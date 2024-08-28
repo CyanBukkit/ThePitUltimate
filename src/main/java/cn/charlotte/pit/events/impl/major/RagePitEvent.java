@@ -29,6 +29,7 @@ import com.sk89q.worldedit.bukkit.BukkitWorld;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -240,7 +241,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
             }
             if (enchantBoostLevel > 0) {
                 rewardCoins += 0.5 * enchantBoostLevel * rewardCoins;
-                rewardRenown += Math.floor(0.5 * enchantBoostLevel * rewardRenown);
+                rewardRenown += MathHelper.floor(0.5 * enchantBoostLevel * rewardRenown);
                 MythicLeggingsItem mythicLeggings = new MythicLeggingsItem();
                 mythicLeggings.loadFromItemStack(player.getInventory().getLeggings());
                 if (mythicLeggings.isEnchanted()) {

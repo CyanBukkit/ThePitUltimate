@@ -1,5 +1,6 @@
 package cn.charlotte.pit.menu.admin.item.button;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
@@ -7,6 +8,8 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.param.item.RodOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.IMythicSword;
 import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
@@ -51,13 +54,13 @@ public class EnchantButton extends Button {
                 || (ItemUtil.getInternalName(player.getItemInHand()).equalsIgnoreCase("mythic_leggings") && !armor)
                 || (ItemUtil.getInternalName(player.getItemInHand()).equals("magic_fishing_rod") && !rod)) {
             return new ItemBuilder(Material.BARRIER)
-                    .name("&9" + enchantment.getEnchantName())
+                    .name("&9" + enchantment.getEnchantName() + " &7(" + enchantment.getNbtName()+ ")")
                     .lore("", s.substring(0, s.length() - 1))
                     .build();
         }
         ItemBuilder itemBuilder = new ItemBuilder(Material.WOOL)
-                .name("&9" + enchantment.getEnchantName())
-                .lore("", "&7点击附魔或者升级一级物品", s.substring(0, s.length() - 1))
+                .name("&9" + enchantment.getEnchantName() + " &7(" + enchantment.getNbtName()+ ")")
+                .lore("", "&7点击附魔 (右键去除) 或者升级一级物品", s.substring(0, s.length() - 1))
                 .durability(rarity.getItemColor());
         if (rarity.getParentType() == EnchantmentRarity.RarityType.RARE) {
             itemBuilder.shiny();
@@ -71,20 +74,27 @@ public class EnchantButton extends Button {
         boolean canApply = true;
         if ("mythic_sword".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MythicSwordItem swordItem = new MythicSwordItem();
-                swordItem.loadFromItemStack(item);
+                MythicSwordItem swordItem = (MythicSwordItem) ThePit.getInstance().getItemFactory().getIMythicItem(item);
                 swordItem.setMaxLive(RandomUtil.random.nextInt(8) + 16);
                 swordItem.setLive(swordItem.getMaxLive());
                 int level;
                 if (swordItem.getEnchantments().containsKey(enchantment)) {
-                    level = swordItem.getEnchantments().get(enchantment) + 1;
-                    if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
-                        player.sendMessage(CC.translate("&c已到达最大等级!"));
-                        player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
-                        return;
+                    level = swordItem.getEnchantments().getInt(enchantment) + (clickType.isRightClick() ? -1 : 1);
+                    if (level <= 0) {
+                        swordItem.getEnchantments().removeInt(enchantment);
+                    } else {
+                        if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
+                            player.sendMessage(CC.translate("&c已到达最大等级!"));
+                            player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
+                            return;
+                        }
                     }
                 } else {
-                    level = 1;
+                    if (!clickType.isRightClick()) {
+                        level = 1;
+                    } else {
+                        level = -1;
+                    }
                 }
 
                 swordItem.getEnchantmentRecords().add(
@@ -94,7 +104,9 @@ public class EnchantButton extends Button {
                                 System.currentTimeMillis()
                         )
                 );
-                swordItem.getEnchantments().put(enchantment, level);
+                if(level != -1) {
+                    swordItem.getEnchantments().put(enchantment, level);
+                }
                 player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 99);
                 player.sendMessage(CC.translate("&a成功"));
                 player.setItemInHand(swordItem.toItemStack());
@@ -102,20 +114,27 @@ public class EnchantButton extends Button {
             }
         } else if ("mythic_bow".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MythicBowItem bowItem = new MythicBowItem();
-                bowItem.loadFromItemStack(item);
+                MythicBowItem bowItem = (MythicBowItem) ThePit.getInstance().getItemFactory().getIMythicItem(item);
                 bowItem.setMaxLive(RandomUtil.random.nextInt(8) + 16);
                 bowItem.setLive(bowItem.getMaxLive());
                 int level;
                 if (bowItem.getEnchantments().containsKey(enchantment)) {
-                    level = bowItem.getEnchantments().get(enchantment) + 1;
-                    if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
-                        player.sendMessage(CC.translate("&c已到达最大等级!"));
-                        player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
-                        return;
+                    level = bowItem.getEnchantments().getInt(enchantment) + (clickType.isRightClick() ? -1 : 1);
+                    if(level <= 0){
+                        bowItem.getEnchantments().removeInt(enchantment);
+                    } else {
+                        if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
+                            player.sendMessage(CC.translate("&c已到达最大等级!"));
+                            player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
+                            return;
+                        }
                     }
                 } else {
-                    level = 1;
+                    if (!clickType.isRightClick()) {
+                        level = 1;
+                    } else {
+                        level = -1;
+                    }
                 }
                 bowItem.getEnchantmentRecords().add(
                         new EnchantmentRecord(
@@ -124,28 +143,39 @@ public class EnchantButton extends Button {
                                 System.currentTimeMillis()
                         )
                 );
-                bowItem.getEnchantments().put(enchantment, level);
+
+                if(level != -1) {
+                    bowItem.getEnchantments().put(enchantment, level);
+                }
                 player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 99);
                 player.sendMessage(CC.translate("&a成功"));
                 player.setItemInHand(bowItem.toItemStack());
+                IMythicItem.clearCache(item);
                 return;
             }
         } else if ("mythic_leggings".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MythicLeggingsItem leggingsItem = new MythicLeggingsItem();
-                leggingsItem.loadFromItemStack(item);
-                leggingsItem.setMaxLive(40);
-                leggingsItem.setLive(40);
+                MythicLeggingsItem leggingsItem = (MythicLeggingsItem) ThePit.getInstance().getItemFactory().getIMythicItem(item);
+                leggingsItem.setMaxLive(RandomUtil.random.nextInt(17) + 24);
+                leggingsItem.setLive(leggingsItem.getMaxLive());
                 int level;
                 if (leggingsItem.getEnchantments().containsKey(enchantment)) {
-                    level = leggingsItem.getEnchantments().get(enchantment) + 1;
-                    if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
-                        player.sendMessage(CC.translate("&c已到达最大等级!"));
-                        player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
-                        return;
+                    level = leggingsItem.getEnchantments().getInt(enchantment) + (clickType.isRightClick() ? -1 : 1);
+                    if(level <= 0){
+                        leggingsItem.getEnchantments().removeInt(enchantment);
+                    } else {
+                        if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
+                            player.sendMessage(CC.translate("&c已到达最大等级!"));
+                            player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
+                            return;
+                        }
                     }
                 } else {
-                    level = 1;
+                    if (!clickType.isRightClick()) {
+                        level = 1;
+                    } else {
+                        level = -1;
+                    }
                 }
                 leggingsItem.getEnchantmentRecords().add(
                         new EnchantmentRecord(
@@ -154,7 +184,10 @@ public class EnchantButton extends Button {
                                 System.currentTimeMillis()
                         )
                 );
-                leggingsItem.getEnchantments().put(enchantment, level);
+
+                if(level != -1) {
+                    leggingsItem.getEnchantments().put(enchantment, level);
+                }
                 player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 99);
                 player.sendMessage(CC.translate("&a成功"));
                 player.setItemInHand(leggingsItem.toItemStack());
@@ -162,22 +195,32 @@ public class EnchantButton extends Button {
             }
         } else if ("magic_fishing_rod".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MagicFishingRod fishingRod = new MagicFishingRod();
-                fishingRod.loadFromItemStack(item);
-                fishingRod.setMaxLive(40);
-                fishingRod.setLive(40);
+                MagicFishingRod fishingRod = (MagicFishingRod) ThePit.getInstance().getItemFactory().getIMythicItem(item);
+                fishingRod.setMaxLive(RandomUtil.random.nextInt(17) + 24);
+                fishingRod.setLive(fishingRod.getMaxLive());
                 int level;
                 if (fishingRod.getEnchantments().containsKey(enchantment)) {
-                    level = fishingRod.getEnchantments().get(enchantment) + 1;
-                    if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
-                        player.sendMessage(CC.translate("&c已到达最大等级!"));
-                        player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
-                        return;
+                    level = fishingRod.getEnchantments().getInt(enchantment) + (clickType.isRightClick() ? -1 : 1);
+                    if(level <= 0){
+                        fishingRod.getEnchantments().removeInt(enchantment);
+                    } else {
+                        if (level > enchantment.getMaxEnchantLevel() && !clickType.isShiftClick()) {
+                            player.sendMessage(CC.translate("&c已到达最大等级!"));
+                            player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 1, 99);
+                            return;
+                        }
                     }
                 } else {
-                    level = 1;
+                    if (!clickType.isRightClick()) {
+                        level = 1;
+                    } else {
+                        level = -1;
+                    }
                 }
-                fishingRod.getEnchantments().put(enchantment, level);
+
+                if(level != -1) {
+                    fishingRod.getEnchantments().put(enchantment, level);
+                }
                 player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 99);
                 player.sendMessage(CC.translate("&a成功"));
                 player.setItemInHand(fishingRod.toItemStack());

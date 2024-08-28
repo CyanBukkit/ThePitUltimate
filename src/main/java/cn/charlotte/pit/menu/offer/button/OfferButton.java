@@ -80,7 +80,7 @@ public class OfferButton extends Button {
         PlayerInv bInv = new PlayerInv();
         bInv.setContents(itemStacks.toArray(new ItemStack[36]));
         tradeData.setBPaidItem(bInv);
-        tradeData.setAPaidCoin(new Double(targetProfile.getOfferData().getPrice()).longValue());
+        tradeData.setAPaidCoin((long)(targetProfile.getOfferData().getPrice()));
         PlayerInv aInv = new PlayerInv();
         aInv.setContents(new ItemStack[36]);
         tradeData.setAPaidItem(aInv);

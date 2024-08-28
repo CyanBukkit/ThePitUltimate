@@ -53,7 +53,7 @@ public final class TimeUtil {
         } else {
             percent = 1 + ((double) time - 24 * 60 * 1000) / (12 * 60 * 1000);
         }
-        return new Double(percent * 12000).longValue();
+        return (long) (percent * 12000);
     }
 
     public static long getMinecraftTick() {

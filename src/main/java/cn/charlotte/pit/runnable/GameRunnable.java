@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,7 +52,7 @@ public class GameRunnable extends BukkitRunnable {
             for (Map.Entry<String, PerkData> entry : profile.getUnlockedPerkMap().entrySet()) {
                 final ITickTask task = ticksPerk.get(entry.getValue().getPerkInternalName());
                 if (task != null) {
-                    if (tick % task.loopTick(entry.getValue().getLevel()) == 0) {
+                    if (tick % Math.max(0,task.loopTick(entry.getValue().getLevel())) == 0) {
                         task.handle(entry.getValue().getLevel(), player);
                     }
                 }
@@ -71,7 +72,9 @@ public class GameRunnable extends BukkitRunnable {
                         }
 
                         final Integer level = entry.getValue();
-                        if (tick % task.loopTick(level) == 0) {
+                        int i = Math.max(1,task.loopTick(level)); //KleeLoveLife byZero Fix
+
+                        if (tick % i == 0) {
                             task.handle(level, player);
                         }
                     }
@@ -86,20 +89,18 @@ public class GameRunnable extends BukkitRunnable {
                         final ITickTask task = enchantTicks.get(entry.getKey().getNbtName());
                         if (task == null) continue;
                         final Integer level = entry.getValue();
-                        if (tick % task.loopTick(level) == 0) {
+                        if (tick % Math.max(1,task.loopTick(level)) == 0) {
                             task.handle(level, player);
                         }
                     }
                 }
             }
 
-            List<TradeRequest> collect = tradeRequests.parallelStream()
-                    .filter(tradeRequest -> tradeRequest.getCooldown().hasExpired())
-                    .collect(Collectors.toList());
-
-            tradeRequests.removeAll(collect);
+            tradeRequests.removeIf(next -> next.getCooldown().hasExpired());
         }
-
-        tick++;
+        //潜在风险 unsigned!
+        if(++tick==Long.MIN_VALUE){
+            tick = 0; //从头开始
+        }
     }
 }

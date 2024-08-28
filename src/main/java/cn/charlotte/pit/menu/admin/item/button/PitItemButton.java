@@ -1,6 +1,9 @@
 package cn.charlotte.pit.menu.admin.item.button;
 
+import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.menu.Button;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -18,11 +21,16 @@ public class PitItemButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return itemStack;
+        return CraftItemStack.asCraftCopy(itemStack).clone();
     }
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        player.getInventory().addItem(getButtonItem(player));
+        ItemStack buttonItem = getButtonItem(player);
+        if(clickType.isRightClick()){
+            player.sendMessage("这个物品的NBTName为: " + ItemUtil.getInternalName(buttonItem));
+            return;
+        }
+        player.getInventory().addItem(buttonItem);
     }
 }

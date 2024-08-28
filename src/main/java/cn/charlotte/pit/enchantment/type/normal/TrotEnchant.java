@@ -3,6 +3,7 @@ package cn.charlotte.pit.enchantment.type.normal;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
 import lombok.SneakyThrows;
@@ -23,7 +24,6 @@ import java.util.UUID;
 @ArmorOnly
 public class TrotEnchant extends AbstractEnchantment implements MovementHandler {
     private static final TrotEnchant trotEnchant = new TrotEnchant();
-    private final Map<UUID, Boolean> playerMap = new HashMap<>();
 
     @SneakyThrows
     public TrotEnchant() {
@@ -64,7 +64,9 @@ public class TrotEnchant extends AbstractEnchantment implements MovementHandler 
 
     @Override
     public void handleUpdateLocation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
-        if (player.getInventory().getLeggings() != null && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings())) && trotEnchant.isItemHasEnchant(player.getInventory().getLeggings())) {
+        if (player.getInventory().getLeggings() != null
+                && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings()))
+                && trotEnchant.isItemHasEnchant(player.getInventory().getLeggings())) {
             int level = trotEnchant.getItemEnchantLevel(player.getInventory().getLeggings());
             if (level == 1) {
                 if(player.getWalkSpeed() != 0.21F) {

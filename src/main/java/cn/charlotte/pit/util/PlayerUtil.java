@@ -4,8 +4,10 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
+import cn.charlotte.pit.enchantment.type.dark_normal.SomberEnchant;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
 import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.MegaStreak;
 import cn.charlotte.pit.perk.PerkType;
@@ -21,7 +23,9 @@ import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -61,19 +65,13 @@ public class PlayerUtil {
         if (profile.getChosePerk().get(5) == null) {
             return null;
         }
-
-        final Optional<AbstractPerk> first = ThePit.getInstance()
-                .getPerkFactory()
-                .getPerks()
-                .stream()
-                .filter(abstractPerk -> abstractPerk.getPerkType() == PerkType.MEGA_STREAK && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName()))
-                .findFirst();
-
-        if (first.isPresent()) {
-            final AbstractPerk perk = first.get();
-            if (perk instanceof MegaStreak) {
-                if (profile.getStreakKills() >= ((MegaStreak) perk).getStreakNeed()) {
-                    return CC.translate(perk.getDisplayName());
+        for (AbstractPerk abstractPerk : ThePit.getInstance().getPerkFactory().getPerks()) { //无意义stream
+            if(abstractPerk.getPerkType() == PerkType.MEGA_STREAK
+                    && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName())){
+                if (abstractPerk instanceof MegaStreak mega) {
+                    if (profile.getStreakKills() >= mega.getStreakNeed()) {
+                        return CC.translate(abstractPerk.getDisplayName());
+                    }
                 }
             }
         }
@@ -81,12 +79,15 @@ public class PlayerUtil {
     }
 
     public static boolean isVenom(Player player) {
-        return player.hasMetadata("combo_venom") && player.getMetadata("combo_venom").get(0).asLong() > System.currentTimeMillis();
+        List<MetadataValue> comboVenom = player.getMetadata("combo_venom");
+        return !comboVenom.isEmpty() && comboVenom.get(0).asLong() > System.currentTimeMillis();
     }
 
     public static boolean isEquippingSomber(Player player) {
-        return player.getInventory().getLeggings() != null && ThePit.getApi().getItemEnchantLevel(player.getInventory().getLeggings(), "somber_enchant") > 0;
+        ItemStack leggings = player.getInventory().getLeggings();
+        return leggings != null && Utils.getEnchantLevel(leggings, SomberEnchant.INSTANCE) > 0;
     }
+
 
     public static boolean isCritical(Player player) {
         final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
@@ -95,10 +96,28 @@ public class PlayerUtil {
 
     //如果自身穿着黑裤/被毒则无法使用附魔 (适用于无目标附魔)
     public static boolean shouldIgnoreEnchant(Player self) {
-        if (PlayerUtil.isSinkingMoonlight(self)) return true;
-        return isEquippingSomber(self) || isVenom(self) || isSinkingMoonlight(self);
+        boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self);
+        if (sinkingMoonlight) return true;
+        return isEquippingSomber(self) || isVenom(self); //|| sinkingMoonlight; always false plz
     }
-
+    public static boolean shouldIgnoreEnchant(Player self, org.bukkit.entity.Entity target){ //大合集
+        boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self); //缓存结果
+        if (sinkingMoonlight) return true;
+        if(target instanceof Player player){ //对其他人使用
+            boolean equipSomberTarget;
+            boolean isVenom;
+            if(isNPC(player)){
+                equipSomberTarget = false;
+                isVenom = false;
+            } else {
+                equipSomberTarget = isEquippingSomber(player);
+                isVenom = isVenom(player);
+            }
+            return isEquippingSomber(self) || isVenom(self) || (equipSomberTarget && !isEquippingArmageddon(self)) || isVenom;
+        } else { //如果他不是人或者null
+            return isEquippingSomber(self) || isVenom(self);
+        }
+    }
     //自身对其他人使用附魔时附魔是否应该失效 (适用于有目标附魔)
     public static boolean shouldIgnoreEnchant(Player self, Player target) {
         boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self);
@@ -107,9 +126,13 @@ public class PlayerUtil {
         //自身穿黑裤时必定失效 && 自身被沉默时必定生效 && 其他人穿黑裤且自身没有鞋子时失效 && 对方被沉默时失效
         return isEquippingSomber(self) || isVenom(self) || (isEquippingSomber(target) && !isEquippingArmageddon(self)) || isVenom(target);
     }
-
+    //进行合并方法
+    public static boolean isNPC(org.bukkit.entity.Entity entity){
+        return entity.getName().equals("666");
+    }
     public static boolean isSinkingMoonlight(Player player) {
-        return player.hasMetadata("sinking_moonlight") && player.getMetadata("sinking_moonlight").get(0).asLong() > System.currentTimeMillis();
+        List<MetadataValue> sinkingMoonlight = player.getMetadata("sinking_moonlight");
+        return !sinkingMoonlight.isEmpty() && sinkingMoonlight.get(0).asLong() > System.currentTimeMillis();
     }
 
     public static boolean isEquippingArmageddon(Player player) {
@@ -513,6 +536,10 @@ public class PlayerUtil {
     public static Collection<Player> getNearbyPlayers(Location location, double radius) {
         return location.getWorld()
                 .getNearbyPlayers(location, radius, radius, radius);
+    }
+    public static Collection<LivingEntity> getNearbyPlayersAndChicken(Location location, double radius) {
+        return location.getWorld()
+                .getNearbyLivingEntities(location, radius, radius, radius, e -> e instanceof Chicken || e instanceof Player);
     }
 
     public static void heal(Player player, double heal) {

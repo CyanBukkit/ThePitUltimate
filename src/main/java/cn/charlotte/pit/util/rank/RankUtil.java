@@ -110,10 +110,11 @@ public class RankUtil {
     }
 
     public static String getNameFormatWithPrefix(UUID uuid) {
-        if (getPlayerName(uuid) == null || getPlayerName(uuid).equals("null")){
-            return "§d喵喵";
+        String playerName = getPlayerName(uuid);
+        if (playerName == null || playerName.equals("null")){
+            return "§d咱喵";
         }
-        return LuckPermsUtil.getPrefix(uuid) + getPlayerName(uuid);
+        return LuckPermsUtil.getPrefix(uuid) + playerName;
     }
 
     public static ChatColor getNameColor(UUID uuid) {

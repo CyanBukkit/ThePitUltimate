@@ -5,6 +5,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -15,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -31,8 +33,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Created_In: 2021/2/27 17:01
  */
 @Include
+@AutoRegister
 @WeaponOnly
-public class ComboStunEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+public class ComboStunEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IActionDisplayEnchant {
 
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();

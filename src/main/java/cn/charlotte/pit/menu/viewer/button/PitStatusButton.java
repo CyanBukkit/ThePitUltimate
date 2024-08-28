@@ -38,7 +38,7 @@ public class PitStatusButton extends Button {
         for (int i = 0; i < prestige; i++) {
             experience = experience + LevelUtil.getLevelTotalExperience(i, 120);
         }
-        lores.add("&7总经验值: &b" + StringUtil.getFormatLong(new Double(experience).longValue()));
+        lores.add("&7总经验值: &b" + StringUtil.getFormatLong((long)(experience)));
         lores.add(" ");
         lores.add("&7总击杀: &c" + profile.getKills());
         if (Bukkit.getOfflinePlayer(profile.getPlayerUuid()).isOnline()) {

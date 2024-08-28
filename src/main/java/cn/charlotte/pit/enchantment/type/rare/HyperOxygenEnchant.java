@@ -18,12 +18,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class HyperOxygenEnchant extends AbstractEnchantment implements IPlayerDamaged {
-    private static PotionEffect potionEffectLevel1 = new PotionEffect(PotionEffectType.REGENERATION, 4, 1);
+    private static PotionEffect potionEffectLevel1 = new PotionEffect(PotionEffectType.REGENERATION, 80, 0);
 
-    private static PotionEffect potionEffectLevel2 = new PotionEffect(PotionEffectType.REGENERATION, 8, 1);
+    private static PotionEffect potionEffectLevel2 = new PotionEffect(PotionEffectType.REGENERATION, 20 * 8, 0);
 
 
-    private static PotionEffect potionEffectLevel3 = new PotionEffect(PotionEffectType.REGENERATION, 8, 2);
+    private static PotionEffect potionEffectLevel3 = new PotionEffect(PotionEffectType.REGENERATION, 20 * 8, 1);
 
     @Override
     public String getEnchantName() {
@@ -55,35 +55,31 @@ public class HyperOxygenEnchant extends AbstractEnchantment implements IPlayerDa
     public String getUsefulnessLore(int i) {
         switch (i) {
             case 1:
-                return "受到攻击时如自身没有“生命恢复”效果，则为自身添加“生命恢复 I (00：04)”效果";
+                return "受到攻击时如自身没有 &c生命恢复 &7效果/s则为自身添加 &c生命恢复 I &f(00：04) &7效果";
             case 2:
-                return "受到攻击时如自身没有“生命恢复”效果，则为自身添加“生命恢复 I (00：08)”效果";
+                return "受到攻击时如自身没有 &c生命恢复 &7效果/s则为自身添加 &c生命恢复 I &f(00：08) &7效果";
             case 3:
-                return "受到攻击时如自身没有“生命恢复”效果，则为自身添加“生命恢复 II (00：08)”效果";
+                return "受到攻击时如自身没有 &c生命恢复 &7效果/s则为自身添加 &c生命恢复 II &f(00：08) &7效果";
             default:
                 return "&c请提交至管理员寻求帮助 (INVALID LEVEL | + " + i + ")";
         }
     }
+
     @Override
     public void handlePlayerDamaged(int level, Player player, Entity entity, double v, AtomicDouble atomicDouble, AtomicDouble atomicDouble1, AtomicBoolean atomicBoolean) {
-        System.out.println("Damaged");
-        boolean canExecuteAsMythic = "mythic_leggings".equals(ItemUtil.getInternalName(player.getItemInHand()));
-        if(canExecuteAsMythic) {
-            if (! player.hasPotionEffect( PotionEffectType.REGENERATION)) {
-                System.out.println("ADDED");
-                switch (level) {
-                    case 1:
-                        player.addPotionEffect(potionEffectLevel1);
-                        break;
-                    case 2:
-                        player.addPotionEffect(potionEffectLevel2);
-                        break;
-                    case 3:
-                        player.addPotionEffect(potionEffectLevel3);
-                        break;
-                    default:
-                        player.sendMessage("INVALID POTION LEVEL");
-                }
+        if (!player.hasPotionEffect(PotionEffectType.REGENERATION)) {
+            switch (level) {
+                case 1:
+                    player.addPotionEffect(potionEffectLevel1);
+                    break;
+                case 2:
+                    player.addPotionEffect(potionEffectLevel2);
+                    break;
+                case 3:
+                    player.addPotionEffect(potionEffectLevel3);
+                    break;
+                default:
+                    player.sendMessage("INVALID POTION LEVEL",true);
             }
         }
     }

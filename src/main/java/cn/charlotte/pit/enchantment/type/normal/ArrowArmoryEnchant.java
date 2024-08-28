@@ -19,8 +19,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -115,10 +117,11 @@ public class ArrowArmoryEnchant extends AbstractEnchantment implements Listener 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
-            if (event.getDamager().hasMetadata("arrow_armory")) {
+            List<MetadataValue> arrowArmory = event.getDamager().getMetadata("arrow_armory");
+            if (!arrowArmory.isEmpty()) {
                 Player shooter = (Player) ((Projectile) event.getDamager()).getShooter();
                 if (PlayerUtil.isVenom(shooter)) return;
-                event.setDamage((1 + 0.01 * event.getDamager().getMetadata("arrow_armory").get(0).asInt()) * event.getDamage());
+                event.setDamage((1 + 0.01 * arrowArmory.get(0).asInt()) * event.getDamage());
             }
         }
     }

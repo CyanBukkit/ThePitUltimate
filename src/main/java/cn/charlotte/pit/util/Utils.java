@@ -1,8 +1,10 @@
 package cn.charlotte.pit.util;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.item.MythicColor;
 import cn.charlotte.pit.item.type.*;
 import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
@@ -11,9 +13,11 @@ import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -32,32 +36,29 @@ public class Utils {
     /**
      * 超级高效的split方法。
      *
-     * @param str regx
+     * @param line string
      * @return a array of strings
      */
-    public static String[] splitByCharAt(String str, char regx) {
-        //字符串截取的开始位置
-        int begin = 0;
-        //截取分割得到的字符串
-        String splitStr;
-        List<String> strL = new ObjectArrayList<>();
-        int length = str.length();
-        //计数器
-        int i;
-        for (i = 0; i < length;i++ ) {
-            if (str.charAt(i) == regx) {
-                splitStr = str.substring(begin, i);
-                strL.add(splitStr);
-                str = str.substring(i + 1, length);
-                length = str.length();
-                i = 0;
+    public static String[] splitByCharAt(final String line, final char delimiter)
+    {
+        CharSequence[] temp = new CharSequence[(line.length() / 2) + 1];
+        int wordCount = 0;
+        int i = 0;
+        int j = line.indexOf(delimiter, 0); // first substring
 
-            }
+        while (j >= 0)
+        {
+            temp[wordCount++] = line.substring(i, j);
+            i = j + 1;
+            j = line.indexOf(delimiter, i); // rest of substrings
         }
-        if (!str.isBlank()) {
-            strL.add(str);
-        }
-        return strL.toArray(new String[0]);
+
+        temp[wordCount++] = line.substring(i); // last substring
+
+        String[] result = new String[wordCount];
+        System.arraycopy(temp, 0, result, 0, wordCount);
+
+        return result;
     }
     /**
      * 返回-1为没有
@@ -72,44 +73,65 @@ public class Utils {
             return -1;
         }
 
+        return getEnchantLevel(mythicItem,enchantName);
+    }
+    public static int getEnchantLevel(ItemStack item, AbstractEnchantment enchObj) {
+        final IMythicItem mythicItem = getMythicItem(item);
+        if (mythicItem == null) {
+            return -1;
+        }
+
+        return mythicItem.getEnchantments().getInt(enchObj);
+    }
+    public static int getEnchantLevel(IMythicItem mythicItem, String enchantName){
         for (Map.Entry<AbstractEnchantment, Integer> entry : mythicItem.getEnchantments().entrySet()) {
             if (entry.getKey().getNbtName().equals(enchantName)) {
                 return entry.getValue();
             }
         }
-
         return -1;
     }
-
-    public static IMythicItem getMythicItem(ItemStack item) {
-        final String internalName = ItemUtil.getInternalName(item);
-        IMythicItem mythicItem = null;
-        if ("mythic_sword".equals(internalName)) {
-            mythicItem = new MythicSwordItem();
-        } else if ("mythic_bow".equals(internalName)) {
-            mythicItem = new MythicBowItem();
-        } else if ("mythic_leggings".equals(internalName)) {
-            mythicItem = new MythicLeggingsItem();
-        } else if ("angel_chestplate".equals(internalName)) {
-            mythicItem = new AngelChestplate();
-        } else if ("armageddon_boots".equals(internalName)) {
-            mythicItem = new ArmageddonBoots();
-        } else if ("kings_helmet".equals(internalName)) {
-            mythicItem = new GoldenHelmet();
-        } else if ("lucky_chestplate".equals(internalName)) {
-            mythicItem = new LuckyChestplate();
-        } else if ("jewel_sword".equals(internalName)) {
-            mythicItem = new JewelSword();
-        } else if ("magic_fishing_rod".equals(internalName)) {
-            mythicItem = new MagicFishingRod();
+    public static String dumpNBTOnString(ItemStack stack){
+        NBTTagCompound tag = Utils.toNMStackQuick(stack).getTag();
+        return tag.toString();
+    }
+    public static IMythicItem getMythicItem(ItemStack item){
+        ThePit instance = ThePit.getInstance();
+        if(instance != null){
+            ItemFactory itemFactory = instance.getItemFactory();
+            if(itemFactory != null){
+                return itemFactory.getIMythicItem(item);
+            }
         }
-        else {
+        return getMythicItem0(item);
+    }
+    public static IMythicItem getMythicItem0(ItemStack item, String internalName){
+        IMythicItem mythicItem = null;
+        if(internalName == null){ //提前skip, 不需要name。
             return null;
+        }
+        switch (internalName) {
+            case "mythic_sword" -> mythicItem = new MythicSwordItem();
+            case "mythic_bow" -> mythicItem = new MythicBowItem();
+            case "mythic_leggings" -> mythicItem = new MythicLeggingsItem();
+            case "angel_chestplate" -> mythicItem = new AngelChestplate();
+            case "armageddon_boots" -> mythicItem = new ArmageddonBoots();
+            case "kings_helmet" -> mythicItem = new GoldenHelmet();
+            case "lucky_chestplate" -> mythicItem = new LuckyChestplate();
+            case "jewel_sword" -> mythicItem = new JewelSword();
+            case "magic_fishing_rod" -> mythicItem = new MagicFishingRod();
+            default -> {
+                return null;
+            }
         }
 
         mythicItem.loadFromItemStack(item);
 
         return mythicItem;
+    }
+    public static IMythicItem getMythicItem0(ItemStack item) {
+        final String internalName = ItemUtil.getInternalName(item);
+        return getMythicItem0(item,internalName);
     }
 
     public static boolean canUseGen(ItemStack item) {
@@ -118,7 +140,7 @@ public class Utils {
         }
 
         final IMythicItem mythicItem = FuncsKt.toMythicItem(item);
-        if (mythicItem == null || !mythicItem.isEnchanted() || mythicItem.isBoostedByGem()) {
+        if (mythicItem == null || !mythicItem.isEnchanted() || mythicItem.isBoostedByGem() || mythicItem.isBoostedByGlobalGem()) {
             return false;
         }
 
@@ -128,6 +150,27 @@ public class Utils {
 
         for (Map.Entry<AbstractEnchantment, Integer> entry : mythicItem.getEnchantments().entrySet()) {
             if (entry.getKey().getRarity().getParentType() != EnchantmentRarity.RarityType.RARE && entry.getValue() < entry.getKey().getMaxEnchantLevel()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public static boolean canUseGlobalAttGem(ItemStack item) {
+        if (item == null) {
+            return false;
+        }
+
+        final IMythicItem mythicItem = FuncsKt.toMythicItem(item);
+        if (mythicItem == null || !mythicItem.isEnchanted() || mythicItem.isBoostedByGem() || mythicItem.isBoostedByGlobalGem()) {
+            return false;
+        }
+        if (mythicItem.getColor() == MythicColor.DARK) {
+            return false;
+        }
+
+        for (Map.Entry<AbstractEnchantment, Integer> entry : mythicItem.getEnchantments().entrySet()) {
+            if (entry.getKey().getRarity().getParentType() == EnchantmentRarity.RarityType.RARE && entry.getValue() < entry.getKey().getMaxEnchantLevel()) {
                 return true;
             }
         }

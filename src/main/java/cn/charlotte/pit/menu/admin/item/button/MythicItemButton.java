@@ -12,6 +12,7 @@ import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.util.item.ItemBuilder;
+import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.menu.Button;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public class MythicItemButton extends Button {
         } else if (i == 4) {
             ItemStack itemStack = new MythicLeggingsItem().toItemStack();
             itemStack = new ItemBuilder(itemStack).changeNbt("mythic_color", "dark").build();
-            AbstractPitItem mythicItem = new MythicLeggingsItem();
+            IMythicItem mythicItem = new MythicLeggingsItem();
             mythicItem.loadFromItemStack(itemStack);
             return mythicItem.toItemStack();
         } else if (i == 5) {
@@ -62,7 +63,7 @@ public class MythicItemButton extends Button {
         } else if (i == 8) {
             ItemStack itemStack = new MythicLeggingsItem().toItemStack();
             itemStack = new ItemBuilder(itemStack).changeNbt("dyeColor", DyeColor.WHITE.name()).build();
-            AbstractPitItem mythicItem = new MythicLeggingsItem();
+            IMythicItem mythicItem = new MythicLeggingsItem();
             mythicItem.loadFromItemStack(itemStack);
             return mythicItem.toItemStack();
         } else if (i == 9) {
@@ -78,6 +79,10 @@ public class MythicItemButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
+        if(clickType.isRightClick()){
+            player.sendMessage("这个物品的NBTName是: " + ItemUtil.getInternalName(currentItem));
+            return;
+        }
         player.getInventory().addItem(currentItem);
     }
 

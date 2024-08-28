@@ -73,10 +73,8 @@ public class ChatComponentBuilder extends ComponentBuilder {
     }
 
     public ChatComponentBuilder attachToEachPart(HoverEvent hoverEvent) {
-        Iterator var2 = this.getParts().iterator();
 
-        while (var2.hasNext()) {
-            Object part = var2.next();
+        for (Object part : this.getParts()) {
             TextComponent component = (TextComponent) part;
             if (component.getHoverEvent() == null) {
                 component.setHoverEvent(hoverEvent);
@@ -88,10 +86,8 @@ public class ChatComponentBuilder extends ComponentBuilder {
     }
 
     public ChatComponentBuilder attachToEachPart(ClickEvent clickEvent) {
-        Iterator var2 = this.getParts().iterator();
 
-        while (var2.hasNext()) {
-            Object part = var2.next();
+        for (Object part : this.getParts()) {
             TextComponent component = (TextComponent) part;
             if (component.getClickEvent() == null) {
                 component.setClickEvent(clickEvent);
@@ -101,11 +97,11 @@ public class ChatComponentBuilder extends ComponentBuilder {
         this.getCurrent().setClickEvent(clickEvent);
         return this;
     }
-
+    static Pattern pattern = Pattern.compile("[&ยง]{1}([a-fA-Fl-oL-O0-9-r]){1}");
     public ChatComponentBuilder parse(String text) {
-        String regex = "[&ยง]{1}([a-fA-Fl-oL-O0-9-r]){1}";
-        text = text.replaceAll(regex, "ยง$1");
-        if (!Pattern.compile(regex).matcher(text).find()) {
+
+        text = pattern.matcher(text).replaceAll("ยง$1");
+        if (!pattern.matcher(text).find()) {
             if (this.getParts().isEmpty() && this.getCurrent() != null && this.getCurrent().getText().isEmpty()) {
                 this.getCurrent().setText(text);
             } else {
@@ -114,14 +110,11 @@ public class ChatComponentBuilder extends ComponentBuilder {
 
             return this;
         } else {
-            String[] words = text.split(regex);
+            String[] words = pattern.split(text);
             int index = words[0].length();
-            String[] var5 = words;
             int var6 = words.length;
 
-            for (int var7 = 0; var7 < var6; ++var7) {
-                String word = var5[var7];
-
+            for (String word : words) {
                 try {
                     if (index != words[0].length()) {
                         if (this.getParts().isEmpty() && this.getCurrent() != null && this.getCurrent().getText().isEmpty()) {

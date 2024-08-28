@@ -15,6 +15,7 @@ import cn.charlotte.pit.enchantment.type.aqua.GrandmasterEnchant
 import cn.charlotte.pit.enchantment.type.aqua.LuckOfPondEnchant
 import cn.charlotte.pit.enchantment.type.aqua.RogueEnchant
 import cn.charlotte.pit.enchantment.type.dark_normal.*
+import cn.charlotte.pit.enchantment.type.dark_rare.ComboDustEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboVenomEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
 import cn.charlotte.pit.enchantment.type.genesis.*
@@ -67,7 +68,6 @@ import cn.charlotte.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak
 import cn.charlotte.pit.perk.type.streak.uber.UberStreak
 import cn.charlotte.pit.quest.type.*
 import cn.charlotte.pit.runnable.*
-import cn.charlotte.pit.runnable.dupe.CleanupDupeEnch0525Runnable
 import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
 import cn.charlotte.pit.util.getInstance
@@ -85,8 +85,8 @@ import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
 
 object PitHook {
-
-    val gitVersion = "4604d1b"
+    @JvmStatic
+    val gitVersion = "ShanguanLingV1uuid"
 
     fun init() {
         try {
@@ -184,7 +184,7 @@ object PitHook {
 
         EventRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 60L, 120L)
 
-        AnnouncementRunnable.runTaskTimer(ThePit.getInstance(), 0, 40 * 60)
+        AnnouncementRunnable.runTaskTimerAsynchronously(ThePit.getInstance(), 0, 40 * 60)
         GoldDropRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
         ProtectRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
@@ -212,7 +212,9 @@ object PitHook {
             SpireArmor::class.java,
             SuperPackage::class.java,
             TotallyLegitGem::class.java,
-            UberDrop::class.java
+            GlobalAttentionGem::class.java,
+            UberDrop::class.java,
+            MythicEnchantingTable::class.java
         )) {
             try {
                 val pitItem = clazz.getInstance()
@@ -325,6 +327,7 @@ object PitHook {
             SniperEnchant::class.java,
             SpeedyKillEnchant::class.java,
             SprintDrainEnchant::class.java,
+            CriticalMomentEnchant::class.java,
             StrikeGoldEnchant::class.java,
             ThornsEnchant::class.java,
             ThumpEnchant::class.java,
@@ -351,10 +354,11 @@ object PitHook {
             AbsorptionEnchant::class.java,
             ArchangelEnchant::class.java,
             AssassinEnchant::class.java,
+            ComboDustEnchant::class.java,
             BillionaireEnchant::class.java,
             ComboStrikeEnchant::class.java,
             ComboStunEnchant::class.java,
-       //unstable     MicroDegravityEnchant::class.java,
+           MicroDegravityEnchant::class.java,
             DivineMiracleEnchant::class.java,
             EnderBowEnchant::class.java,
             ExecutionerEnchant::class.java,
@@ -374,13 +378,15 @@ object PitHook {
             SolitudeEnchant::class.java,
             SpeedyHitEnchant::class.java,
             ThePunchEnchant::class.java,
-           // HyperOxygenEnchant::class.java,
+            HyperOxygenEnchant::class.java,
             VolleyEnchant::class.java,
             AegisEnchant::class.java,
             SoulRipperEnchant::class.java,
             DemonHenEnchant::class.java,
             AceOfSpades::class.java,
+            CricketEnchant::class.java,
             Brakes::class.java,
+            SeriousSituationEnchant::class.java,
             BreachingChargeEnchant::class.java
         )
 
@@ -586,7 +592,8 @@ object PitHook {
             EveOneBountyEvent::class.java,
             QuickMathEvent::class.java,
             SquadsEvent::class.java,
-            DoubleRewardsEvent::class.java
+            DoubleRewardsEvent::class.java,
+            RespawnFamilyEvent::class.java
         )
 
         eventFactory.init(classes)

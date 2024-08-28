@@ -70,6 +70,9 @@ public class AdminItemMenu extends Menu {
 
             if (admin) {
                 buttonMap.put(9, new ShopItemButton(Material.TNT, "tnt", 64));
+
+                buttonMap.put(10, new PitItemButton(new GlobalAttentionGem().toItemStack()));
+                buttonMap.put(11,new PitItemButton(new MythicEnchantingTable().toItemStack()));
                 buttonMap.put(16, new PitItemButton(JumpBoostPotion.toItemStack()));
                 buttonMap.put(17, new PitItemButton(BountySolventPotion.toItemStack()));
                 buttonMap.put(18, new PitItemButton(FourInARowGadget.toItemStack()));

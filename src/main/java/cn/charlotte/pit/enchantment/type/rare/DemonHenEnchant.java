@@ -26,6 +26,7 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,23 +47,25 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DemonHenEnchant extends AbstractEnchantment implements IActionDisplayEnchant, IPlayerShootEntity, Listener, IPlayerKilledEntity {
     private static final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();
     Set<Entity> masters = new CopyOnWriteArraySet<>();
-    Set<Map.Entry<Entity,Entity>> entitySet = new CopyOnWriteArraySet<>();
+    Set<Map.Entry<Entity,LivingEntity>> entitySet = new CopyOnWriteArraySet<>();
     BukkitTask scheduledTask = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(),() -> {
-        Set<Map.Entry<Entity,Entity>> entities = new HashSet<>();
+        Set<Map.Entry<Entity, LivingEntity>> entities = new HashSet<>();
         entitySet.forEach(s -> {
-            Entity i = s.getValue();
+            LivingEntity i = s.getValue();
             if (i.isOnGround()) {
                 entities.add(s);
                 Location location = i.getLocation();
                 if(i.isDead()){
                     return;
                 }
+                final float healthScaled = (float) (i.getHealth() / i.getMaxHealth());
                 i.remove();
                 World world = location.getWorld();
                 Collection<Entity> nearbyEntities = world.getNearbyEntities(location, 3, 3, 3);
                 Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
                     masters.add(s.getKey());
-                    ((CraftWorld)world).getHandle().createExplosion(((CraftEntity)s.getKey()).getHandle(),location.getX(),location.getY(),location.getZ(), 1, false,false);
+                    ((CraftWorld)world).getHandle().createExplosion(((CraftEntity)s.getKey()).getHandle(),location.getX(),location.getY(),location.getZ(),
+                            (1.25F * healthScaled), false,false);
                     float xyz = (float) ((Math.random() - 0.5) * 2) ;
                     nearbyEntities.forEach(a -> {
                         a.setVelocity(new Vector(xyz, Math.abs(xyz), xyz));
@@ -120,7 +123,7 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
             }
             for (int level = 0; level < i; level++) {
                 Location henLocation = getHenLocation(location);
-                Entity entity1 = henLocation.getWorld().spawnEntity(henLocation, EntityType.CHICKEN);
+                LivingEntity entity1 = (LivingEntity) henLocation.getWorld().spawnEntity(henLocation, EntityType.CHICKEN);
                 entity1.setCustomNameVisible(true);
                 entity1.setCustomName("§c恶魔鸡");
                 entitySet.add(Maps.immutableEntry(player, entity1));
@@ -133,8 +136,8 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
     }
     public Location getHenLocation(Location location){
         Location clone = location.clone();
-        float rad = (float) Math.toRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
-        float rad2 = (float) Math.toRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
+        float rad = MathHelper.fastToRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
+        float rad2 = MathHelper.fastToRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
         float range = 2;
         float x = MathHelper.sin(rad) * range;
         float z = MathHelper.cos(rad2) * range;

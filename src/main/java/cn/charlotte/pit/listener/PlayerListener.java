@@ -54,6 +54,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
@@ -75,7 +76,6 @@ public class PlayerListener implements Listener {
     private final Map<UUID, Cooldown> firstAidEggCooldown = new HashMap<>();
     private final Random random = new Random();
     private final DecimalFormat numFormat = new DecimalFormat("0.00");
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         ThePit pit = ThePit.getInstance();
@@ -559,7 +559,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPreExplosion(ExplosionPrimeEvent event) {
         if (event.getEntity() instanceof TNTPrimed) {
-            if (event.getEntity().hasMetadata("internal") && event.getEntity().getMetadata("internal").size() > 0 && "red_packet".equals(event.getEntity().getMetadata("internal").get(0).asString())) {
+            List<MetadataValue> internal = event.getEntity().getMetadata("internal");
+            if (!internal.isEmpty() && "red_packet".equals(internal.get(0).asString())) {
                 Location location = event.getEntity().getLocation();
                 float radius = event.getRadius();
 
@@ -595,10 +596,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onTntExplode(EntityExplodeEvent event) {
-        if (event.getEntity().hasMetadata("shooter") && event.getEntity().getMetadata("shooter").size() > 0) {
+        if (!event.getEntity().getMetadata("shooter").isEmpty()) {
             event.setYield(0);
             event.blockList().clear();
-            if (event.getEntity().hasMetadata("internal") && event.getEntity().getMetadata("internal").size() > 0 && (event.getEntity().getMetadata("internal").get(0).asString().equalsIgnoreCase("tnt_enchant_item") || event.getEntity().getMetadata("internal").get(0).asString().equalsIgnoreCase("insta_boom_enchant_item"))) {
+            List<MetadataValue> internal = event.getEntity().getMetadata("internal");
+            if (!internal.isEmpty() && (internal.get(0).asString().equalsIgnoreCase("tnt_enchant_item") || internal.get(0).asString().equalsIgnoreCase("insta_boom_enchant_item"))) {
                 return;
             }
             List<EntityFallingBlock> fallingBlocks = new ArrayList<>();

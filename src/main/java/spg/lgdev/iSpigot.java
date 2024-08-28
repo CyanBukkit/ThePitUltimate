@@ -1,5 +1,6 @@
 package spg.lgdev;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class iSpigot implements Listener {
     public static iSpigot INSTANCE;
-    private final List<MovementHandler> movementHandlers = new ArrayList<>();
+    private final List<MovementHandler> movementHandlers = new ObjectArrayList<>();
     public iSpigot() {
         INSTANCE = this;
     }
@@ -24,12 +25,13 @@ public class iSpigot implements Listener {
     public void onMove(PlayerMoveEvent event) {
         Location from = event.getFrom();
         Location to = event.getTo();
-
+        boolean shouldUpdateRot = from.getPitch() != to.getPitch() || from.getYaw() != to.getYaw();
+        boolean shouldUpdatePos = from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ();
         for (MovementHandler move : movementHandlers) {
-            if (from.getPitch() != to.getPitch() || from.getYaw() != to.getYaw()) {
+            if (shouldUpdateRot) {
                 move.handleUpdateRotation(event.getPlayer(), from, to, null);
             }
-            if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
+            if (shouldUpdatePos) {
                 move.handleUpdateLocation(event.getPlayer(), from, to, null);
             }
         }
@@ -39,12 +41,13 @@ public class iSpigot implements Listener {
     public void onMove(PlayerTeleportEvent event) {
         Location from = event.getFrom();
         Location to = event.getTo();
-
+        boolean shouldUpdateRot = from.getPitch() != to.getPitch() || from.getYaw() != to.getYaw();
+        boolean shouldUpdatePos = from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ();
         for (MovementHandler move : movementHandlers) {
-            if (from.getPitch() != to.getPitch() || from.getYaw() != to.getYaw()) {
+            if (shouldUpdateRot) {
                 move.handleUpdateRotation(event.getPlayer(), from, to, null);
             }
-            if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
+            if (shouldUpdatePos) {
                 move.handleUpdateLocation(event.getPlayer(), from, to, null);
             }
         }

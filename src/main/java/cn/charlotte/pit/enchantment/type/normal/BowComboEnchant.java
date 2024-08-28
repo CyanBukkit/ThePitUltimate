@@ -22,11 +22,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -101,10 +103,10 @@ public class BowComboEnchant extends AbstractEnchantment implements IPlayerShoot
 
     @EventHandler
     public void onBowHit(ProjectileHitEvent event) {
-        if (event.getEntity().hasMetadata("bow_combo_enchant_uuid") && event.getEntity().getShooter() != null) {
-            if (event.getEntity().getShooter() instanceof Player) {
-                Player player = (Player) event.getEntity().getShooter();
-                UUID uuid = UUID.fromString(event.getEntity().getMetadata("bow_combo_enchant_uuid").get(0).asString());
+        List<MetadataValue> bowComboEnchantUuid = event.getEntity().getMetadata("bow_combo_enchant_uuid");
+        if (!bowComboEnchantUuid.isEmpty() && event.getEntity().getShooter() != null) {
+            if (event.getEntity().getShooter() instanceof Player player) {
+                UUID uuid = UUID.fromString(bowComboEnchantUuid.get(0).asString());
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -123,8 +125,9 @@ public class BowComboEnchant extends AbstractEnchantment implements IPlayerShoot
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
-            if (event.getDamager().hasMetadata("bow_combo_enchant_uuid")) {
-                UUID uuid = UUID.fromString(event.getDamager().getMetadata("bow_combo_enchant_uuid").get(0).asString());
+            List<MetadataValue> bowComboEnchantUuid = event.getDamager().getMetadata("bow_combo_enchant_uuid");
+            if (!bowComboEnchantUuid.isEmpty()) {
+                UUID uuid = UUID.fromString(bowComboEnchantUuid.get(0).asString());
                 hitCheck.put(uuid, System.currentTimeMillis());
             }
         }

@@ -2,6 +2,7 @@ package cn.charlotte.pit.util
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.item.type.ChunkOfVileItem
+import cn.charlotte.pit.item.type.GlobalAttentionGem
 import cn.charlotte.pit.item.type.PitCactus
 import cn.charlotte.pit.item.type.TotallyLegitGem
 import cn.charlotte.pit.item.type.UberDrop
@@ -15,7 +16,11 @@ fun String.findItem(amount: Int): ItemStack? {
     if (this.equals("gem", ignoreCase = true)) {
         val gem = TotallyLegitGem()
         return gem.toItemStack()
-    } else if (this.equals("chunkofvile", ignoreCase = true)) {
+    } else if (this.equals("ggem")){
+        val gem = GlobalAttentionGem()
+        return gem.toItemStack()
+
+    }else if (this.equals("chunkofvile", ignoreCase = true)) {
         return ItemBuilder(ChunkOfVileItem.toItemStack()).amount(amount).build()
     } else if (this.equals("funkyfeather", ignoreCase = true)) {
         val lore: MutableList<String> = ArrayList()

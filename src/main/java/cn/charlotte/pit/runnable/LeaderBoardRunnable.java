@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import org.bson.Document;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,20 +19,12 @@ import static java.lang.Thread.sleep;
  * @Author: EmptyIrony
  * @Date: 2021/1/3 12:57
  */
-public class LeaderBoardRunnable implements Runnable {
+public class LeaderBoardRunnable extends BukkitRunnable {
     @SneakyThrows
     @Override
     public void run() {
 
-        while (true) {
-            try {
-                updateLeaderboardData();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                sleep(30 * 1000);
-            }
-        }
+        updateLeaderboardData();
     }
 
     public static void updateLeaderboardData() {

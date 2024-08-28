@@ -3,6 +3,7 @@ package cn.charlotte.pit.runnable.dupe
 import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.util.MythicUtil
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -20,7 +21,7 @@ object CleanupDupeEnch0525Runnable : BukkitRunnable() {
                 if (checkDupe(itemStack)) {
                     val mythicItem = MythicUtil.getMythicItem(itemStack)
                     if (mythicItem != null) {
-                        player.sendMessage("§c检测到您的背包中存在于5月26日20时的错误附魔，以为您清除。")
+                        player.sendMessage("§c检测到您的背包中存在于8/13 20时的神经附魔，以为您清除。")
                         player.inventory.setItem(i, rollback(mythicItem))
                     }
                 }
@@ -33,6 +34,16 @@ object CleanupDupeEnch0525Runnable : BukkitRunnable() {
         val mythicItem = MythicUtil.getMythicItem(itemStack) ?: return false
         mythicItem.enchantmentRecords?.forEach { record ->
             if (record.timestamp in 1716724860000..1716725400000) {
+                return true
+            }
+        }
+        return false
+    }
+    fun checkDupe2(itemStack: ItemStack?): Boolean {
+        if (itemStack == null) return false
+        val mythicItem = MythicUtil.getMythicItem(itemStack) ?: return false
+        mythicItem.enchantmentRecords?.forEach { record ->
+            if (record.enchanter == "outingOF") {
                 return true
             }
         }

@@ -8,6 +8,7 @@ import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.TradeData
 import cn.charlotte.pit.enchantment.menu.MythicWellMenu
 import cn.charlotte.pit.events.IEpicEvent
+import cn.charlotte.pit.events.IEvent
 import cn.charlotte.pit.events.INormalEvent
 import cn.charlotte.pit.events.genesis.team.GenesisTeam
 import cn.charlotte.pit.events.impl.*
@@ -89,6 +90,9 @@ object PitInternalImpl : PitInternalHook {
     override fun openEvent(player: Player, eventName: String?): Boolean {
         eventName ?: return false
         val event = when (eventName.lowercase()) {
+            "rspf" -> {
+                RespawnFamilyEvent()
+            }
             "rage" -> {
                 RagePitEvent()
             }
@@ -147,13 +151,21 @@ object PitInternalImpl : PitInternalHook {
             else -> return false
         }
 
-        val factory = ThePit.getInstance().eventFactory
+        return openEvent(event,player)
+    }
+    override fun openEvent(event: IEvent,player: Player?): Boolean {
 
+        val factory = ThePit.getInstance().eventFactory
         if (event is IEpicEvent) {
-            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-            if (profile.playerOption.isDebugDamageMessage) {
-                factory.activeEvent(event)
+            if(player != null) {
+                val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+                if (profile.playerOption.isDebugDamageMessage) {
+                    factory.activeEvent(event)
+                } else {
+                    factory.pushEvent(event, true)
+                }
             } else {
+
                 factory.pushEvent(event, true)
             }
         } else {
@@ -166,10 +178,8 @@ object PitInternalImpl : PitInternalHook {
                 return false
             }
         }
-
-        return true
+        return true;
     }
-
     override fun createHologram(location: Location, text: String): Hologram {
         return PacketHologram(text, location)
 //        val plugin = Bukkit.getPluginManager().getPlugin("DecentHolograms")

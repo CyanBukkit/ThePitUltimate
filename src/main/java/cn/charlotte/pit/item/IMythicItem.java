@@ -13,10 +13,7 @@ import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.github.benmanes.caffeine.cache.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayIndirectPriorityQueue;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectArrayPriorityQueue;
+import it.unimi.dsi.fastutil.objects.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -48,8 +45,12 @@ public abstract class IMythicItem extends AbstractPitItem {
     public int tier;
     public MythicColor color;
     public DyeColor dyeColor;
+    public String version;
     public String prefix;
     public boolean boostedByGem = false;
+    @Getter
+    private final static UUID defUUID = UUID.fromString("00000000-0000-0000-0000-000000000001");
+    public boolean boostedByGlobalGem = false;
     public String customName = null;
 
     public boolean boostedByBook = false;
@@ -57,21 +58,20 @@ public abstract class IMythicItem extends AbstractPitItem {
     public UUID uuid;
     // 0=false 1=true -1=unset
     public int forceCanTrade = -1;
-    static Executor executor = new ThreadPoolExecutor(2,4,3000,TimeUnit.SECONDS,new SynchronousQueue<>(), r -> new Thread(r,"ThePit IMythicItem - Cache Executor")); //For no park unparks
-    static Executor executor2 = new ThreadPoolExecutor(2,4,3000,TimeUnit.SECONDS,new SynchronousQueue<>(), r -> new Thread(r,"ThePit IMythicItem - Cache Executor")); //For no park unparks
-
-    static Cache<String,ObjectArrayList<EnchantmentRecord>> recordCache = Caffeine.newBuilder().executor(executor).expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
-
-    static Cache<Integer,Object2ObjectArrayMap<AbstractEnchantment,Integer>> enchCache = Caffeine.newBuilder().executor(executor2).expireAfterWrite(Duration.of(10, ChronoUnit.MINUTES)).expireAfterAccess(Duration.of(10, ChronoUnit.MINUTES)).build();
     public IMythicItem() {
     }
-
+    public static void clearCache(ItemStack e){
+    }
+    public void resetUUID(){
+        this.uuid = defUUID;
+    }
     @Override
     public ItemStack toItemStack() {
         List<String> lore = new ObjectArrayList<>();
         String name = getItemDisplayName();
         if (this.color == null) {
-            this.color = (MythicColor) RandomUtil.helpMeToChooseOne(MythicColor.RED, MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
+            this.color = (MythicColor) RandomUtil.helpMeToChooseOne(MythicColor.RED
+                    , MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
         }
 
         //Guardian Enchant for Archangel Chestplate
@@ -140,7 +140,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         if (maxLive != 0) {
-            lore.add(("&7生命: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive) + (isBoostedByGem() ? "&a ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
+            lore.add(("&7保质期: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive) + (isBoostedByGem() ? "&a ♦" : "") + (isBoostedByGlobalGem() ? "&b ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
             lore.add("");
         }
 
@@ -160,10 +160,12 @@ public abstract class IMythicItem extends AbstractPitItem {
 
             if (this instanceof MythicLeggingsItem) {
                 if (color != MythicColor.DARK) {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果");
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果 &7| &bNyacho @ 2022 - Future");
                 } else {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果");
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &7| &bNyacho @ 2022 - Future");
                 }
+            } else {
+                lore.add("&bNyacho @ 2022 - Future");
             }
 
             if (genesisFound) {
@@ -171,13 +173,13 @@ public abstract class IMythicItem extends AbstractPitItem {
             }
 
         } else {
-            lore.add("&7死亡后保留");
+            lore.add("&7死后保留");
             lore.add("");
             if (this instanceof MythicLeggingsItem) {
                 lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "在神话之井中附魔");
-                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种潮流的象征");
+                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种食品级的象征 | &bNyacho @ 2022 - Future");
             } else {
-                lore.add("&7在神话之井中附魔");
+                lore.add("&7在神话之井中附魔 | &bNyacho @ 2022 - Future");
             }
             this.tier = 0;
         }
@@ -195,15 +197,15 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (customName != null) {
             builder.customName(customName);
         }
-        if (this instanceof IMythicSword) {
-            IMythicSword mythicSword = (IMythicSword) this;
+        if (this instanceof IMythicSword mythicSword) {
             builder
                     .lore(lore)
                     .internalName(getInternalName())
                     .deathDrop(false)
+                    .version(version == null ? "NULL" : version)
                     .canSaveToEnderChest(true)
                     .removeOnJoin(false)
-                    .uuid(uuid == null ? UUID.randomUUID() : uuid)
+                    .uuid(uuid == null ? defUUID : uuid)
                     .canDrop(false)
                     .canTrade(true)
                     .enchant(enchantments)
@@ -211,6 +213,7 @@ public abstract class IMythicItem extends AbstractPitItem {
                     .maxLive(this.maxLive)
                     .tier(this.tier)
                     .makeBoostedByGem(this.boostedByGem)
+                    .makeBoostedByGlobalGem(this.boostedByGlobalGem)
                     .makeBoostedByBook(boostedByBook)
                     .live(this.live)
                     .recordEnchantments(enchantmentRecords);
@@ -219,7 +222,8 @@ public abstract class IMythicItem extends AbstractPitItem {
                     .lore(lore)
                     .internalName(getInternalName())
                     .deathDrop(false)
-                    .uuid(uuid == null ? UUID.randomUUID() : uuid)
+                    .version(version == null ? "NULL" : version)
+                    .uuid(uuid == null ? defUUID: uuid)
                     .canDrop(false)
                     .canTrade(true)
                     .canSaveToEnderChest(true)
@@ -228,6 +232,7 @@ public abstract class IMythicItem extends AbstractPitItem {
                     .maxLive(this.maxLive)
                     .live(this.live)
                     .makeBoostedByGem(this.boostedByGem)
+                    .makeBoostedByGlobalGem(this.boostedByGlobalGem)
                     .makeBoostedByBook(boostedByBook)
                     .tier(this.tier)
                     .recordEnchantments(enchantmentRecords);
@@ -278,6 +283,8 @@ public abstract class IMythicItem extends AbstractPitItem {
         //natives
         this.boostedByGem = extra.getBoolean("boostedByGem");
 
+        this.boostedByGlobalGem = extra.getBoolean("boostedByGlobalGem");
+
         this.boostedByBook = extra.getBoolean("boostedByBook");
 
         //for raw type opti
@@ -291,6 +298,10 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (customName1 instanceof NBTTagString) {
             this.customName = ((NBTTagString) customName1).a_();
         }
+        NBTBase version = extra.get("version");
+        if (version instanceof NBTTagString verStr) {
+            this.version = verStr.a_();
+        }
 
 
         NBTBase dyeColor1 = extra.get("dyeColor");
@@ -300,8 +311,8 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         NBTBase uuid1 = extra.get("uuid");
-        if (uuid1 instanceof NBTTagString) {
-            this.uuid = UUID.fromString(((NBTTagString) uuid1).a_());
+        if (uuid1 instanceof NBTTagString gg) {
+            this.uuid = UUID.fromString(gg.a_());
         }
 
         NBTBase mythicColor = extra.get("mythic_color");
@@ -332,10 +343,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         final NBTBase recordsStringRaw = extra.get("records");
         if (recordsStringRaw instanceof NBTTagString) {
             String recordsString = ((NBTTagString) recordsStringRaw).a_();
-            ObjectArrayList<EnchantmentRecord> recordFromCache = recordCache.getIfPresent(recordsString);
-            if(recordFromCache != null){
-                enchantmentRecords.addAll(recordFromCache);
-            } else {
+
                 for (String recordString : Utils.splitByCharAt(recordsString, ';')) {
                     final String[] split = recordString.split("\\|");
                     if (split.length >= 3) {
@@ -346,19 +354,12 @@ public abstract class IMythicItem extends AbstractPitItem {
                                         Long.parseLong(split[2])
                                 )
                         );
-                        recordCache.put(recordsString,  (ObjectArrayList<EnchantmentRecord>) enchantmentRecords);
-                    }
                 }
-            }
+                }
         }
         NBTTagList ench = extra.getList("ench", 8);
-        int o = ench.hashCode();
-        Object2ObjectArrayMap<AbstractEnchantment, Integer> ifPresent = enchCache.getIfPresent(o);
-        if(ifPresent != null){
-            this.enchantments = new Object2ObjectArrayMap<>(ifPresent);
-        } else {
-            this.enchantments = new Object2ObjectArrayMap<>();
-
+            this.enchantments = new Object2IntOpenHashMap<>();
+            this.enchantments.defaultReturnValue(-1);
 
             for (int i = 0; i < ench.size(); i++) {
                 AbstractEnchantment enchantment;
@@ -380,9 +381,7 @@ public abstract class IMythicItem extends AbstractPitItem {
                 }
 
                 enchantments.put(enchantment, level);
-                enchCache.put(o, (Object2ObjectArrayMap<AbstractEnchantment, Integer>) enchantments);
-            }
-        }
+          }
         if (!extra.hasKey("tier") && isEnchanted()) {
             if (color == MythicColor.DARK) {
                 this.tier = 2;
@@ -406,7 +405,10 @@ public abstract class IMythicItem extends AbstractPitItem {
 
 
     public String toString() {
-        return "IMythicItem(maxLive=" + this.getMaxLive() + ", live=" + this.getLive() + ", tier=" + this.getTier() + ", color=" + this.getColor() + ", dyeColor=" + this.getDyeColor() + ", prefix=" + this.getPrefix() + ")";
+        return "IMythicItem(maxLive=" +
+                this.getMaxLive() + ", live=" +
+                this.getLive() + ", tier=" + this.getTier() + "" +
+                ", color=" + this.getColor() + ", dyeColor=" + this.getDyeColor() + ", prefix=" + this.getPrefix() + ")";
     }
 
     public boolean equals(final Object o) {

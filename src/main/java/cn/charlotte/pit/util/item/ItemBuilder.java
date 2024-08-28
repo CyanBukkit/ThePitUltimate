@@ -159,6 +159,10 @@ public class ItemBuilder {
         this.changeNbt("boostedByGem", boosted);
         return this;
     }
+    public ItemBuilder makeBoostedByGlobalGem(boolean boosted) {
+        this.changeNbt("boostedByGlobalGem", boosted);
+        return this;
+    }
 
     public ItemBuilder makeBoostedByBook(boolean boosted) {
         this.changeNbt("boostedByBook", boosted);
@@ -384,6 +388,10 @@ public class ItemBuilder {
 
     public ItemBuilder deathDrop(boolean drop) {
         this.changeNbt("deathDrop", drop);
+        return this;
+    }
+    public ItemBuilder version(String version) {
+        this.changeNbt("version", version);
         return this;
     }
 

@@ -74,12 +74,10 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 3 == 0) {
             Player targetPlayer = (Player) target;
             targetPlayer.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 12 * 1000L));
-            targetPlayer.removePotionEffect(PotionEffectType.POISON);
-            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0));
+            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0),true);
 
             attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 20 * 1000L));
-            attacker.removePotionEffect(PotionEffectType.POISON);
-            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 20, 0));
+            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 20, 0),true);
         }
     }
 
@@ -90,12 +88,10 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getBowHit() % 3 == 0) {
             Player targetPlayer = (Player) target;
             targetPlayer.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 12 * 1000L));
-            targetPlayer.removePotionEffect(PotionEffectType.POISON);
-            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0));
+            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0),true);
 
             attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 20 * 1000L));
-            attacker.removePotionEffect(PotionEffectType.POISON);
-            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 20, 0));
+            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0),true);
         }
     }
 

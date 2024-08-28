@@ -361,12 +361,14 @@ public class PitAdminCommand {
             async = true
     )
     public void changeLives(Player player, @Parameter(name = "amount") String amount) {
+        System.out.println(2);
         if (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR)) {
             player.sendMessage(CC.translate("&c请先手持要修改的物品!"));
         }
         try {
-            ItemStack stack = new ItemBuilder(player.getItemInHand()).live(Integer.parseInt(amount)).build();
-            player.setItemInHand(MythicUtil.getMythicItem(stack).toItemStack());
+            IMythicItem mythicItem = MythicUtil.getMythicItem(player.getItemInHand());
+            mythicItem.setLive(Integer.parseInt(amount));
+            player.setItemInHand(mythicItem.toItemStack());
         } catch (Exception ignored) {
             player.sendMessage("Error");
         }
@@ -378,12 +380,14 @@ public class PitAdminCommand {
             async = true
     )
     public void changeMaxLives(Player player, @Parameter(name = "amount") String amount) {
+        System.out.println(1);
         if (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR)) {
             player.sendMessage(CC.translate("&c请先手持要修改的物品!"));
         }
         try {
-            ItemStack stack = new ItemBuilder(player.getItemInHand()).maxLive(Integer.parseInt(amount)).build();
-            player.setItemInHand(MythicUtil.getMythicItem(stack).toItemStack());
+            IMythicItem mythicItem = MythicUtil.getMythicItem(player.getItemInHand());
+            mythicItem.setMaxLive(Integer.parseInt(amount));
+            player.setItemInHand(mythicItem.toItemStack());
         } catch (Exception ignored) {
             player.sendMessage("Error");
         }

@@ -5,6 +5,7 @@ import cn.charlotte.pit.enchantment.type.rare.ThePunchEnchant
 import cn.charlotte.pit.item.MythicColor
 import cn.charlotte.pit.listener.CombatListener
 import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton
+import cn.charlotte.pit.util.level.LevelUtil
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import java.io.File
@@ -75,7 +76,7 @@ object NewConfiguration {
         customChatFormat = config.getString("custom-chat-format.format", "%pit_level_tag_roman% %s&f: %s")
 
         PrestigeStatusButton.limit = config.getInt("highest-prestige")
-
+        patchCaches()
         config.getConfigurationSection("event-online-required")?.let {
             it.getKeys(false).forEach { eventName ->
                 eventOnlineRequired[eventName] = it.getInt(eventName)
@@ -163,6 +164,9 @@ object NewConfiguration {
             }
         }
 
+    }
+    fun patchCaches(): Unit {
+        LevelUtil.dropCache();
     }
 
     fun Player.getMythicDropChance(): Double {

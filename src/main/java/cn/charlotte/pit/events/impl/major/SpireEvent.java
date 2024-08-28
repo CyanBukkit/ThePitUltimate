@@ -33,6 +33,7 @@ import com.sk89q.worldedit.patterns.SingleBlockPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
 import com.sk89q.worldedit.schematic.SchematicFormat;
+import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -405,7 +406,7 @@ public class SpireEvent implements IEvent, IEpicEvent, Listener, IPrepareEvent, 
         //由x^2 + y^2 = r^2得
         //y^2 = r^2 - x^2
         //开根后得到y值
-        double randomZ = Math.sqrt(radius * radius - randomX * randomX);
+        double randomZ = MathHelper.sqrt(radius * radius - randomX * randomX);
         //因x,y均为正，所以随机取负值
         if (RandomUtil.hasSuccessfullyByChance(0.5)) {
             randomX = -randomX;
@@ -435,45 +436,23 @@ public class SpireEvent implements IEvent, IEpicEvent, Listener, IPrepareEvent, 
     }
 
     private int getKillRewardSouls(PlayerSpireData data) {
-        switch (data.floor) {
-            case 4:
-            case 5: {
-                return 5;
-            }
-            case 6: {
-                return 8;
-            }
-            case 7: {
-                return 10;
-            }
-            case 8: {
-                return 25;
-            }
-            default: {
-                return 1;
-            }
-        }
+        return switch (data.floor) {
+            case 4, 5 -> 5;
+            case 6 -> 8;
+            case 7 -> 10;
+            case 8 -> 25;
+            default -> 1;
+        };
     }
 
     private int getDeadPunishmentSouls(PlayerSpireData data) {
-        switch (data.floor) {
-            case 4:
-            case 5: {
-                return -3;
-            }
-            case 6: {
-                return -5;
-            }
-            case 7: {
-                return -6;
-            }
-            case 8: {
-                return -20;
-            }
-            default: {
-                return 0;
-            }
-        }
+        return switch (data.floor) {
+            case 4, 5 -> -3;
+            case 6 -> -5;
+            case 7 -> -6;
+            case 8 -> -20;
+            default -> 0;
+        };
     }
 
     @Override
@@ -550,7 +529,7 @@ public class SpireEvent implements IEvent, IEpicEvent, Listener, IPrepareEvent, 
             }
             if (enchantBoostLevel > 0) {
                 rewardCoins += 0.5 * enchantBoostLevel * rewardCoins;
-                rewardRenown += Math.floor(0.5 * enchantBoostLevel * rewardRenown);
+                rewardRenown += MathHelper.floor(0.5 * enchantBoostLevel * rewardRenown);
                 MythicLeggingsItem mythicLeggings = new MythicLeggingsItem();
                 mythicLeggings.loadFromItemStack(player.getInventory().getLeggings());
                 if (mythicLeggings.isEnchanted()) {

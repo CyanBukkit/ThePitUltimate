@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.scoreboard;
 
 import cn.charlotte.pit.util.scoreboard.events.AssembleBoardCreateEvent;
+import cn.klee.backports.utils.SWMRHashTable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -21,7 +22,7 @@ public class Assemble {
 
     private Map<UUID, AssembleBoard> boards;
 
-    private long ticks = 2;
+    private long ticks = 5;
     private boolean hook = false, debugMode = true;
 
     /**
@@ -37,7 +38,7 @@ public class Assemble {
 
         this.plugin = plugin;
         this.adapter = adapter;
-        this.boards = new ConcurrentHashMap<>();
+        this.boards = new SWMRHashTable<>();
 
         this.setup();
     }

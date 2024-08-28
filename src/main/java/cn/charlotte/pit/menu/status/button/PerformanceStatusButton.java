@@ -29,7 +29,7 @@ public class PerformanceStatusButton extends Button {
             experience = experience + LevelUtil.getLevelTotalExperience(i, 120);
         }
         List<String> lores = new ArrayList<>();
-        lores.add("&7总经验值: &b" + StringUtil.getFormatLong(new Double(experience).longValue()));
+        lores.add("&7总经验值: &b" + StringUtil.getFormatLong((long)(experience)));
         lores.add("&7注册时间: &d" + TimeUtil.millisToRoundedTime(System.currentTimeMillis() - profile.getRegisterTime()) + "前");
         if (TimeUtil.millisToRoundedTime(System.currentTimeMillis() - profile.getRegisterTime()).equalsIgnoreCase("55 年")) {
             lores.add("&7debug: &d" + profile.getRegisterTime());
