@@ -16,8 +16,12 @@ import dev.jnic.annotation.Include;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.conversions.Bson;
+import org.bukkit.Bukkit;
 import org.mongojack.JacksonMongoCollection;
-import org.slf4j.Logger;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.logging.Logger;
 
 /**
  * 2 * @Author: EmptyIrony
@@ -26,7 +30,7 @@ import org.slf4j.Logger;
  */
 
 public class MongoDB {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(MongoDB.class);
+    private static final Logger log = ThePit.getInstance().getLogger();
 
     private MongoClient mongoClient;
     private MongoDatabase database;
@@ -41,95 +45,98 @@ public class MongoDB {
     private JacksonMongoCollection<EventQueue> eventQueueCollection;
 
     public void connect() {
-        log.info("Connecting to database...");
+        log.info("Connecting to database... (正在连接数据库<<<<)");
+        Instant connects = Instant.now();
 
-            String address = ThePit.getInstance().getPitConfig().getMongoDBAddress();
-            int port = ThePit.getInstance().getPitConfig().getMongoDBPort();
+        String address = ThePit.getInstance().getPitConfig().getMongoDBAddress();
+        int port = ThePit.getInstance().getPitConfig().getMongoDBPort();
 
-            final String mongoUser = ThePit.getInstance().getPitConfig().getMongoUser();
-            final String mongoPassword = ThePit.getInstance().getPitConfig().getMongoPassword();
+        final String mongoUser = ThePit.getInstance().getPitConfig().getMongoUser();
+        final String mongoPassword = ThePit.getInstance().getPitConfig().getMongoPassword();
 
-            final String databaseName;
-            if (ThePit.getInstance().getPitConfig().getDatabaseName() == null) {
-                databaseName = "thePit";
-            } else {
-                databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
-            }
+        final String databaseName;
+        if (ThePit.getInstance().getPitConfig().getDatabaseName() == null) {
+            databaseName = "thePit";
+        } else {
+            databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
+        }
 
-            final ServerAddress serverAddress = new ServerAddress(address, port);
-            if (mongoUser != null && mongoPassword != null) {
-                final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
+        final ServerAddress serverAddress = new ServerAddress(address, port);
+        if (mongoUser != null && mongoPassword != null) {
+            final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
 
-                this.mongoClient = new MongoClient(serverAddress, credential, new MongoClientOptions.Builder().connectionsPerHost(3000).build());
-            } else {
-                this.mongoClient = new MongoClient(serverAddress);
-            }
+            this.mongoClient = new MongoClient(serverAddress, credential, new MongoClientOptions.Builder().connectionsPerHost(3000).build());
+        } else {
+            this.mongoClient = new MongoClient(serverAddress);
+        }
 
-            this.database = mongoClient.getDatabase(databaseName);
-            this.collection = database.getCollection("players");
+        this.database = mongoClient.getDatabase(databaseName);
+        this.collection = database.getCollection("players");
 
-            createIndex(collection, "uuidIndex", "uuid");
+        createIndex(collection, "uuidIndex", "uuid");
 
-            createIndex(collection, "lowerNameIndex", "lowerName");
+        createIndex(collection, "lowerNameIndex", "lowerName");
 
-            final MongoCollection<Document> tradeCollection = database.getCollection("trade");
-            createIndex(tradeCollection, "playerAIndex", "playerA");
-            createIndex(tradeCollection, "playerBIndex", "playerB");
-            createIndex(tradeCollection, "tradeUuidIndex", "tradeUuid");
+        final MongoCollection<Document> tradeCollection = database.getCollection("trade");
+        createIndex(tradeCollection, "playerAIndex", "playerA");
+        createIndex(tradeCollection, "playerBIndex", "playerB");
+        createIndex(tradeCollection, "tradeUuidIndex", "tradeUuid");
 
 
-            final MongoCollection<Document> invCollection = database.getCollection("inv");
-            createIndex(invCollection, "uuidIndex", "uuid");
-            createIndex(invCollection, "backupUuidIndex", "backupUuid");
+        final MongoCollection<Document> invCollection = database.getCollection("inv");
+        createIndex(invCollection, "uuidIndex", "uuid");
+        createIndex(invCollection, "backupUuidIndex", "backupUuid");
 
-            //create trade index
-            MongoCollection<Document> trade = database.getCollection("trade");
-            boolean indexFound = false;
-            for (Document listIndex : trade.listIndexes()) {
-                if (listIndex.get("completeTime") != null) {
-                    indexFound = true;
-                    if (listIndex.getInteger("completeTime") == -1) {
-                        trade.createIndex(Filters.eq("completeTime", 1));
-                    }
+        //create trade index
+        MongoCollection<Document> trade = database.getCollection("trade");
+        boolean indexFound = false;
+        for (Document listIndex : trade.listIndexes()) {
+            if (listIndex.get("completeTime") != null) {
+                indexFound = true;
+                if (listIndex.getInteger("completeTime") == -1) {
+                    trade.createIndex(Filters.eq("completeTime", 1));
                 }
             }
+        }
 
-            if (!indexFound) {
-                trade.createIndex(Filters.eq("timeStamp", 1));
-            }
+        if (!indexFound) {
+            trade.createIndex(Filters.eq("timeStamp", 1));
+        }
 
 
-            MongoCollection<Document> inv = database.getCollection("inv");
-            indexFound = false;
-            for (Document listIndex : inv.listIndexes()) {
-                if (listIndex.get("timeStamp") != null) {
-                    indexFound = true;
-                    if (listIndex.getInteger("timeStamp") == -1) {
-                        trade.createIndex(Filters.eq("timeStamp", 1));
-                    }
+        MongoCollection<Document> inv = database.getCollection("inv");
+        indexFound = false;
+        for (Document listIndex : inv.listIndexes()) {
+            if (listIndex.get("timeStamp") != null) {
+                indexFound = true;
+                if (listIndex.getInteger("timeStamp") == -1) {
+                    trade.createIndex(Filters.eq("timeStamp", 1));
                 }
             }
-            if (!indexFound) {
-                trade.createIndex(Filters.eq("timeStamp", 1));
-            }
+        }
+        if (!indexFound) {
+            trade.createIndex(Filters.eq("timeStamp", 1));
+        }
 
 
-            this.profileCollection = JacksonMongoCollection.builder().build(this.database.getCollection("players", PlayerProfile.class), PlayerProfile.class, UuidRepresentation.JAVA_LEGACY);
+        JacksonMongoCollection.JacksonMongoCollectionBuilder builder = JacksonMongoCollection.builder();
+        this.profileCollection = builder.build(this.database.getCollection("players", PlayerProfile.class), PlayerProfile.class, UuidRepresentation.JAVA_LEGACY);
 
-            this.tradeCollection = JacksonMongoCollection.builder().build(this.database.getCollection("trade", TradeData.class), TradeData.class, UuidRepresentation.JAVA_LEGACY);
+        this.tradeCollection = builder.build(this.database.getCollection("trade", TradeData.class), TradeData.class, UuidRepresentation.JAVA_LEGACY);
 
-            this.mailCollection = JacksonMongoCollection.builder().build(this.database.getCollection("mail", PlayerMailData.class), PlayerMailData.class, UuidRepresentation.JAVA_LEGACY);
+        this.mailCollection = builder.build(this.database.getCollection("mail", PlayerMailData.class), PlayerMailData.class, UuidRepresentation.JAVA_LEGACY);
 
-            this.invCollection = JacksonMongoCollection.builder().build(this.database.getCollection("inv", PlayerInvBackup.class), PlayerInvBackup.class, UuidRepresentation.JAVA_LEGACY);
+        this.invCollection = builder.build(this.database.getCollection("inv", PlayerInvBackup.class), PlayerInvBackup.class, UuidRepresentation.JAVA_LEGACY);
 
-            this.cdkCollection = JacksonMongoCollection.builder().build(this.database.getCollection("cdk", CDKData.class), CDKData.class, UuidRepresentation.JAVA_LEGACY);
+        this.cdkCollection = builder.build(this.database.getCollection("cdk", CDKData.class), CDKData.class, UuidRepresentation.JAVA_LEGACY);
 
-            this.rewardCollection = JacksonMongoCollection.builder().build(this.database.getCollection("reward", FixedRewardData.class), FixedRewardData.class, UuidRepresentation.JAVA_LEGACY);
+        this.rewardCollection = builder.build(this.database.getCollection("reward", FixedRewardData.class), FixedRewardData.class, UuidRepresentation.JAVA_LEGACY);
 
-            this.eventQueueCollection = JacksonMongoCollection.builder().build(this.database.getCollection("event_queue", EventQueue.class), EventQueue.class, UuidRepresentation.JAVA_LEGACY);
+        this.eventQueueCollection = builder.build(this.database.getCollection("event_queue", EventQueue.class), EventQueue.class, UuidRepresentation.JAVA_LEGACY);
 
-            createIndex(mailCollection,"uuidIndex","uuid");
-        log.info("Connected!");
+        createIndex(mailCollection, "uuidIndex", "uuid");
+        log.info("Connected! (连接成功>>>>)");
+        log.info("Costs " + ChronoUnit.MILLIS.between(connects,Instant.now()));
 
 //        log.info("loading cdk...");
 //        CDKData.loadAllCDKFromData();
@@ -176,7 +183,7 @@ public class MongoDB {
         return eventQueueCollection;
     }
 
-    private void createIndex(MongoCollection collection, String indexName, String fieldName) {
+    private void createIndex(MongoCollection<?> collection, String indexName, String fieldName) {
         try {
             IndexOptions indexOptions = new IndexOptions().name(indexName);
             Bson index = Indexes.ascending(fieldName);

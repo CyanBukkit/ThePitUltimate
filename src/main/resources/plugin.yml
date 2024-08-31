@@ -1,7 +1,7 @@
 name: ThePitPremium
 version: 3.21
 description: A Bukkit mini-game plugin.
-authors: [ EmptyIrony,huanmeng_qwq,Araykal ]
+authors: [ EmptyIrony,huanmeng_qwq,Araykal,KleeLoveLife ]
 
 api-version: 1.8
 main: cn.charlotte.pit.ThePit

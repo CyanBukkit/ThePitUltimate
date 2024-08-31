@@ -23,21 +23,23 @@ import cn.charlotte.pit.util.rank.RankUtil;
 import cn.klee.backports.utils.SWMRHashTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.mongojack.JacksonMongoCollection;
 import org.slf4j.Logger;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -82,9 +84,9 @@ public class PlayerProfile {
     public final static PlayerProfile NONE_PROFILE = new PlayerProfile(UUID.randomUUID(), "NotLoadPlayer");
     //两张表
 
-    public static Map<UUID, BukkitRunnable> loadingMap = new SWMRHashTable<>(); // do it static
+    public static Map<UUID, BukkitRunnable> LOADING_MAP = new SWMRHashTable<>(); // do it static
 
-    public static final Map<UUID, BukkitRunnable> savingMap = new SWMRHashTable<>(); // do it static
+    public static final Map<UUID, BukkitRunnable> SAVING_MAP = new SWMRHashTable<>(); // do it static
 
     private final static Map<UUID, PlayerProfile> cacheProfile = new SWMRHashTable<>();
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(PlayerProfile.class);
@@ -361,8 +363,7 @@ public class PlayerProfile {
         PlayerProfile playerProfile = ThePit.getInstance()
                 .getMongoDB()
                 .getProfileCollection()
-                .find(Filters.eq("uuid", uuid.toString()))
-                .first();
+                .findOne(Filters.eq("uuid", uuid.toString()));
 
         if (playerProfile != null) {
             //load mail
@@ -370,12 +371,14 @@ public class PlayerProfile {
 
             //load inv backup
             try {
-                final FindIterable<PlayerInvBackup> invBackups = ThePit.getInstance()
-                        .getMongoDB()
-                        .getInvCollection()
-                        .find(Filters.eq("uuid", uuid.toString()));
-
-                gcBackups(invBackups,playerProfile,true);
+                Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+                    final FindIterable<PlayerInvBackup> invBackups = ThePit.getInstance()
+                            .getMongoDB()
+                            .getInvCollection()
+                            .find(Filters.eq("uuid", uuid.toString()));
+                    invBackups.batchSize(1000);
+                    gcBackups(invBackups, playerProfile, true);
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -392,20 +395,26 @@ public class PlayerProfile {
      */
     public static void gcBackups(Iterable<PlayerInvBackup> invBackups,PlayerProfile playerProfile, boolean add){
         long lastTime = 0;
-        for (PlayerInvBackup backup : invBackups) {
-            if (Math.abs(backup.getTimeStamp() - lastTime) < 10 * 60 * 1000) {
+        JacksonMongoCollection<PlayerInvBackup> invCollection = ThePit.getInstance().getMongoDB().getInvCollection();
+        synchronized (playerProfile.getInvBackups()) { //keep sync to wait for the back up done
+            for (PlayerInvBackup backup : invBackups) {
+                long between = Math.abs(ChronoUnit.DAYS.between(Instant.now(), Instant.ofEpochMilli(backup.getTimeStamp())));
+                if (Math.abs(backup.getTimeStamp() - lastTime) < 10 * 60 * 1000
+                        || between > 20) {
+                    lastTime = backup.getTimeStamp();
+                    invCollection.deleteOne(Filters.eq("backupUuid", backup.getBackupUuid()));
+                    if (add) {
+                        playerProfile.getInvBackups().remove(backup);
+                    }
+                    continue;
+                }
                 lastTime = backup.getTimeStamp();
-                ThePit.getInstance()
-                        .getMongoDB()
-                        .getInvCollection()
-                        .deleteOne(Filters.eq("backupUuid", backup.getBackupUuid()));
-                continue;
-            }
-            lastTime = backup.getTimeStamp();
-            if(add){
-                playerProfile.getInvBackups().add(backup);
+                if (add) {
+                    playerProfile.getInvBackups().add(backup);
+                }
             }
         }
+
     }
     /**
      * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
@@ -429,8 +438,7 @@ public class PlayerProfile {
         return ThePit.getInstance()
                 .getMongoDB()
                 .getProfileCollection()
-                .find(Filters.eq("lowerName", name.toLowerCase()))
-                .first(); //PlayerProfile lookup
+                .findOne(Filters.eq("lowerName", name.toLowerCase())); //PlayerProfile lookup
     }
 
     /**
@@ -468,15 +476,15 @@ public class PlayerProfile {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 if (profile.isLoaded()) {
                     profile.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
-                    if(!(savingMap.containsKey(player.getUniqueId()) || loadingMap.containsKey(player.getUniqueId()))) {
-                        savingMap.put(player.getUniqueId(), new BukkitRunnable() {
+                    if(!(SAVING_MAP.containsKey(player.getUniqueId()) || LOADING_MAP.containsKey(player.getUniqueId()))) {
+                        SAVING_MAP.put(player.getUniqueId(), new BukkitRunnable() {
                             @Override
                             public void run() {
                                 Thread.yield();
                             }
                         });
                         profile.save();
-                        savingMap.remove(player.getUniqueId());
+                        SAVING_MAP.remove(player.getUniqueId());
                     }
                 }
             } catch (Exception e) {
@@ -490,8 +498,7 @@ public class PlayerProfile {
         PlayerMailData mailData = ThePit.getInstance()
                 .getMongoDB()
                 .getMailCollection()
-                .find(Filters.eq("uuid", uuid.toString()))
-                .first();
+                .findOne(Filters.eq("uuid", uuid.toString()));
 
         if (mailData == null) {
             mailData = new PlayerMailData();

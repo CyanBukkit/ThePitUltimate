@@ -5,8 +5,10 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
 import lombok.SneakyThrows;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,17 +22,19 @@ import java.util.concurrent.TimeUnit;
  * @Author: EmptyIrony
  * @Date: 2021/1/4 13:25
  */
-public class HologramRunnable implements Runnable {
+public class HologramRunnable extends BukkitRunnable {
     private long tick = 0;
 
     public HologramRunnable() {
-        Executors.newSingleThreadScheduledExecutor()
-                .scheduleAtFixedRate(this, 50L, 50L, TimeUnit.MILLISECONDS);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, 0, 2L);
     }
 
     @Override
     @SneakyThrows
     public void run() {
+        if(!MinecraftServer.getServer().isRunning()){
+            this.cancel();
+        }
         for (Player player : Bukkit.getOnlinePlayers()) {
             HologramListener.PlayerHologram hologram = HologramListener.hologramMap.get(player.getUniqueId());
             if (hologram == null) {

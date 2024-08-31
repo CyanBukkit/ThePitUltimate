@@ -5,15 +5,12 @@ import cn.charlotte.pit.data.FixedRewardData;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
-import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.runnable.BountyRunnable;
 import cn.charlotte.pit.util.PitProfileUpdater;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
-import cn.klee.backports.utils.SWMRHashTable;
-import dev.jnic.annotation.Include;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
@@ -29,10 +26,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +52,7 @@ public class DataListener implements Listener {
 
                 try(Jedis jedis = jedisPool.getResource()) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (PlayerProfile.loadingMap.containsKey(player.getUniqueId())) {
+                        if (PlayerProfile.LOADING_MAP.containsKey(player.getUniqueId())) {
                             continue;
                         }
 
@@ -78,10 +73,10 @@ public class DataListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        if(PlayerProfile.loadingMap.containsKey(event.getPlayer().getUniqueId())){
+        if(PlayerProfile.LOADING_MAP.containsKey(event.getPlayer().getUniqueId())){
             event.getPlayer().kickPlayer("您的档案正在加载中呢, 数据库访问很慢, 请耐心等待 ;w;");
         }
-        if(PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())){
+        if(PlayerProfile.SAVING_MAP.containsKey(event.getPlayer().getUniqueId())){
             event.getPlayer().kickPlayer("您的档案正在保存中呢, 数据库访问很慢, 请耐心等待 ;w;");
         }
         if(this.busyMap.contains(event.getPlayer().getUniqueId())){
@@ -93,7 +88,7 @@ public class DataListener implements Listener {
             @Override
             public void run() {
                 if (!player.isOnline()) {
-                    PlayerProfile.loadingMap.remove(player.getUniqueId()); //GC
+                    PlayerProfile.LOADING_MAP.remove(player.getUniqueId()); //GC
                     cancel();
                     return;
                 }
@@ -109,7 +104,7 @@ public class DataListener implements Listener {
 
         runnable.runTaskTimerAsynchronously(ThePit.getInstance(), 1L, 1L);
 
-        PlayerProfile.loadingMap.put(player.getUniqueId(), runnable);
+        PlayerProfile.LOADING_MAP.put(player.getUniqueId(), runnable);
 
         event.setJoinMessage(null);
 
@@ -119,7 +114,7 @@ public class DataListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
 
-        BukkitRunnable loadingFuture = PlayerProfile.loadingMap.get(event.getPlayer().getUniqueId());
+        BukkitRunnable loadingFuture = PlayerProfile.LOADING_MAP.get(event.getPlayer().getUniqueId());
         if (loadingFuture != null) {
             try {
                 loadingFuture.cancel();
@@ -164,19 +159,19 @@ public class DataListener implements Listener {
                                 e.printStackTrace();
                             }
                         }
-                        PlayerProfile.savingMap.remove(event.getPlayer().getUniqueId());
+                        PlayerProfile.SAVING_MAP.remove(event.getPlayer().getUniqueId());
                         busyMap.remove(event.getPlayer().getUniqueId());
                     }
                 };
-                    if(!PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())) {
+                    if(!PlayerProfile.SAVING_MAP.containsKey(event.getPlayer().getUniqueId())) {
                         Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), bukkitRunnable);
                     } else {
                         busyMap.add(event.getPlayer().getUniqueId());
                         Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if(!PlayerProfile.savingMap.containsKey(event.getPlayer().getUniqueId())){
-                                    Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), bukkitRunnable);
+                                if(!PlayerProfile.SAVING_MAP.containsKey(event.getPlayer().getUniqueId())){
+                                    bukkitRunnable.run();
                                     this.cancel();
                                 }
                             }
@@ -195,14 +190,12 @@ public class DataListener implements Listener {
 
     @EventHandler
     public void onShoot(ProjectileLaunchEvent event) {
-        if (event.getEntity() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getEntity();
+        if (event.getEntity() instanceof Arrow arrow) {
             if (arrow.getShooter() instanceof Player) {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(((Player) arrow.getShooter()).getUniqueId());
                 profile.setShootAttack(profile.getShootAttack() + 1);
             }
-        } else if (event.getEntity() instanceof FishHook) {
-            FishHook hook = (FishHook) event.getEntity();
+        } else if (event.getEntity() instanceof FishHook hook) {
             if (hook.getShooter() instanceof Player) {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(((Player) hook.getShooter()).getUniqueId());
                 profile.setRodUsed(profile.getRodUsed() + 1);
@@ -263,7 +256,7 @@ public class DataListener implements Listener {
             PlayerProfile.getCacheProfile().remove(player.getUniqueId());
         }
 
-        PlayerProfile.loadingMap.remove(player.getUniqueId());
+        PlayerProfile.LOADING_MAP.remove(player.getUniqueId());
     }
 
 }

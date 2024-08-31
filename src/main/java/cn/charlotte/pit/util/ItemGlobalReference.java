@@ -17,14 +17,14 @@ import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 import java.util.function.LongSupplier;
 
-public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<UUID, IMythicItem> {
+public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, IMythicItem> {
     ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     AtomicBoolean removeLast = new AtomicBoolean(false);
     LongSupplier limit;
     public ItemGlobalReference(LongSupplier limit){
         this.limit = limit;
     }
-    public IMythicItem getValue(UUID key) {
+    public IMythicItem getValue(String key) {
         try {
             lock.readLock().lock();
             return get(key);
@@ -32,8 +32,11 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<UUID, IM
             lock.readLock().unlock();
         }
     }
+    public IMythicItem getValue(UUID key){
+        return getValue(key.toString());
+    }
 
-    public void putValue(UUID key, IMythicItem value) {
+    public void putValue(String key, IMythicItem value) {
         boolean opaque = removeLast.get();
         if(!opaque) {
             long asLong = limit.getAsLong();
@@ -50,13 +53,16 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<UUID, IM
         put(key, value);
     }
     @Override
-    public IMythicItem put(UUID uuid, IMythicItem mythicItem) {
+    public IMythicItem put(String uuid, IMythicItem mythicItem) {
         try {
             lock.writeLock().lock();
             return super.put(uuid, mythicItem);
         } finally {
             lock.writeLock().unlock();
         }
+    }
+    public void putValue(UUID uuid, IMythicItem item){
+        putValue(uuid.toString(),item);
     }
 
     @Override

@@ -7,6 +7,7 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.*;
 import org.bson.internal.Base64;
 import org.bukkit.Bukkit;
@@ -66,8 +67,9 @@ public class InventoryUtil {
         int amount = 0;
         for (int i = 0; i < 36; i++) {
             ItemStack itemStack = player.getInventory().getItem(i);
-            if (itemStack != null && ItemUtil.getInternalName(itemStack) != null && ItemUtil.getInternalName(itemStack).equals(internalName)) {
-                amount += player.getInventory().getItem(i).getAmount();
+            String internalName1 = ItemUtil.getInternalName(itemStack);
+            if (itemStack != null && internalName1 != null && internalName1.equals(internalName)) {
+                amount += itemStack.getAmount();
             }
         }
         return amount;
@@ -76,13 +78,15 @@ public class InventoryUtil {
     public static boolean removeItem(Player player, ItemStack item, Integer amount) {
         if (getAmountOfItem(player, item) < amount) return false;
         int requirement = amount;
+        PlayerInventory inventory = player.getInventory();
         for (int i = 0; i < 36; i++) {
-            if (player.getInventory().getItem(i) != null && player.getInventory().getItem(i).isSimilar(item)) {
-                if (player.getInventory().getItem(i).getAmount() <= requirement) {
-                    requirement -= player.getInventory().getItem(i).getAmount();
-                    player.getInventory().setItem(i, new ItemBuilder(Material.AIR).build());
+            ItemStack item1 = inventory.getItem(i);
+            if (item1 != null && item1.isSimilar(item)) {
+                if (item1.getAmount() <= requirement) {
+                    requirement -= item1.getAmount();
+                    inventory.setItem(i, null);
                 } else {
-                    player.getInventory().setItem(i, new ItemBuilder(item).amount(player.getInventory().getItem(i).getAmount() - requirement).build());
+                    inventory.setItem(i, new ItemBuilder(item).amount(item1.getAmount() - requirement).build());
                     return true;
                 }
             }
@@ -93,13 +97,15 @@ public class InventoryUtil {
     public static boolean removeItem(Player player, String internalName, Integer amount) {
         if (getAmountOfItem(player, internalName) < amount) return false;
         int requirement = amount;
+        PlayerInventory inventory = player.getInventory();
         for (int i = 0; i < 36; i++) {
-            if (player.getInventory().getItem(i) != null && internalName.equals(ItemUtil.getInternalName(player.getInventory().getItem(i)))) {
-                if (player.getInventory().getItem(i).getAmount() <= requirement) {
-                    requirement -= player.getInventory().getItem(i).getAmount();
-                    player.getInventory().setItem(i, new ItemBuilder(Material.AIR).build());
+            ItemStack item = inventory.getItem(i);
+            if (item != null && internalName.equals(ItemUtil.getInternalName(item))) {
+                if (item.getAmount() <= requirement) {
+                    requirement -= item.getAmount();
+                    inventory.setItem(i, null);
                 } else {
-                    player.getInventory().setItem(i, new ItemBuilder(player.getInventory().getItem(i)).amount(player.getInventory().getItem(i).getAmount() - requirement).build());
+                    inventory.setItem(i, new ItemBuilder(item).amount(item.getAmount() - requirement).build());
                     return true;
                 }
             }
@@ -112,25 +118,25 @@ public class InventoryUtil {
             return;
         }
         if (name.equals(ItemUtil.getInternalName(player.getItemOnCursor()))) {
-            player.setItemOnCursor(new ItemStack(Material.AIR));
+            player.setItemOnCursor(null);
         }
 
         if (name.equals(ItemUtil.getInternalName(player.getInventory().getHelmet()))) {
-            player.getInventory().setHelmet(new ItemStack(Material.AIR));
+            player.getInventory().setHelmet(null);
         }
         if (name.equals(ItemUtil.getInternalName(player.getInventory().getChestplate()))) {
-            player.getInventory().setChestplate(new ItemStack(Material.AIR));
+            player.getInventory().setChestplate(null);
         }
         if (name.equals(ItemUtil.getInternalName(player.getInventory().getLeggings()))) {
-            player.getInventory().setLeggings(new ItemStack(Material.AIR));
+            player.getInventory().setLeggings(null);
         }
         if (name.equals(ItemUtil.getInternalName(player.getInventory().getBoots()))) {
-            player.getInventory().setBoots(new ItemStack(Material.AIR));
+            player.getInventory().setBoots(null);
         }
 
         int index = 0;
         final PlayerInventory inventory = player.getInventory();
-        final List<ItemStack> contents = new ArrayList<>(Arrays.asList(inventory.getContents()));
+        final List<ItemStack> contents = new ObjectArrayList<>(inventory.getContents());
         for (ItemStack itemStack : contents) {
             if (name.equals(ItemUtil.getInternalName(itemStack))) {
                 inventory.setItem(index, null);

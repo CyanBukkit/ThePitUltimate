@@ -2,6 +2,7 @@ package cn.charlotte.pit.util.command;
 
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.command.param.ParameterData;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public final class CommandData {
     private final List<ParameterData> parameters;
     private Object caller = null;
 
-    public static List<Class> classes = new ArrayList<>();
+    public static List<Class> classes = new ObjectArrayList<>();
 
     public CommandData(Command commandAnnotation, List<ParameterData> parameters, Method method,
                        boolean consoleAllowed) {
@@ -95,7 +96,7 @@ public final class CommandData {
 
     public void execute(CommandSender sender, String[] params) {
         // We start to build the parameters we call the method with here.
-        List<Object> transformedParameters = new ArrayList<>();
+        List<Object> transformedParameters = new ObjectArrayList<>();
 
         // Add the sender.
         // If the method is expecting a Player or a general CommandSender will be handled by Java.

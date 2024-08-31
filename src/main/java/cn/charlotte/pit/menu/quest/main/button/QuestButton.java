@@ -10,6 +10,8 @@ import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.time.TimeUtil;
+import io.papermc.paper.util.maplist.ObjectMapList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -41,7 +43,7 @@ public class QuestButton extends Button {
         ItemBuilder builder = new ItemBuilder(Material.BOOK)
                 .name("&a挑战任务: " + quest.getQuestDisplayName() + " " + RomanUtil.convert(level)).amount(level);
 
-        List<String> lore = new ArrayList<>();
+        List<String> lore = new ObjectArrayList<>(16);
         lore.add("&8每日挑战");
         lore.add(" ");
 

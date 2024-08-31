@@ -108,9 +108,11 @@ public class TrueDamageArrowEnchant extends AbstractEnchantment implements Liste
                     EntityPlayer handle = ((CraftPlayer) victim).getHandle();
                     float absorptionHearts = handle.getAbsorptionHearts();
                     double v = getTrueDamageRate(level) * event.getFinalDamage();
-                    handle.setAbsorptionHearts((float)Math.max(0,absorptionHearts - v));
+                    double b = absorptionHearts - v;
+                    handle.setAbsorptionHearts((float)Math.max(0, b));
                     if(handle.getAbsorptionHearts() <= 0) {
-                       victim.setHealth (Math.max(0, Math.min(player.getMaxHealth(),player.getHealth() - (v - absorptionHearts))));
+                        PlayerUtil.damage(player, (Player) event.getEntity(), PlayerUtil.DamageType.TRUE, v + b, true);
+
                     }
                     victim.setNoDamageTicks(noDamageTicks);
                 });

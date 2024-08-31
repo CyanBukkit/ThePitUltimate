@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.sub.PlayerInv;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -16,7 +17,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TradeData {
-    private static ExecutorService executor = new ScheduledThreadPoolExecutor(3);
 
     private String tradeUuid;
     private String playerA;
@@ -45,17 +45,13 @@ public class TradeData {
 
     }
 
-    public static ExecutorService getExecutor() {
-        return TradeData.executor;
-    }
 
     public void save() {
-        executor.execute(() -> {
-            ThePit.getInstance()
-                    .getMongoDB()
-                    .getTradeCollection()
-                    .replaceOne(Filters.eq("tradeUuid", tradeUuid), this, new ReplaceOptions().upsert(true));
-        });
+        ThePit instance = ThePit.getInstance();
+        Bukkit.getScheduler().runTaskAsynchronously(instance,() -> instance
+                .getMongoDB()
+                .getTradeCollection()
+                .replaceOne(Filters.eq("tradeUuid", tradeUuid), this, new ReplaceOptions().upsert(true)));
     }
 
     public String getTradeUuid() {

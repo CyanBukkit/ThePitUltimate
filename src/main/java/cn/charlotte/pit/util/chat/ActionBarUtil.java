@@ -30,7 +30,7 @@ public class ActionBarUtil {
                 public void run() {
                     sendActionBar(player, "");
                 }
-            }.runTaskLater(ThePit.getInstance(), duration + 1);
+            }.runTaskLaterAsynchronously(ThePit.getInstance(), duration + 1);
         }
 
         // Re-sends the messages every 3 seconds so it doesn't go away from the player's screen.
@@ -41,7 +41,7 @@ public class ActionBarUtil {
                 public void run() {
                     sendActionBar(player, message);
                 }
-            }.runTaskLater(ThePit.getInstance(), duration);
+            }.runTaskLaterAsynchronously(ThePit.getInstance(), duration);
         }
     }
 

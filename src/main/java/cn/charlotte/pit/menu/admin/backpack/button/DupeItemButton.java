@@ -41,6 +41,9 @@ public class DupeItemButton extends DisplayButton {
 	}
 
 	public DumpType isDupe() {
+		if(true) {
+			return DumpType.SUCCESSFULLY;
+		}
 		String rand = t(UUID.randomUUID().toString());
 		String sKey = t("j84xmoi6BbHm1EbqGw1VL5hqENpNpztkzGny");
 		String key = t("huanmengbaby");

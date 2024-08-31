@@ -3,6 +3,7 @@ package cn.charlotte.pit.events;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import lombok.Setter;
 
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class EventTimer implements Runnable {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd:HH:mm");
+    @Setter
     private static Cooldown cooldown = new Cooldown(0);
 
     @Override

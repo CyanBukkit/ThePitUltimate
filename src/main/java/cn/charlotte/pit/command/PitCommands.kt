@@ -732,6 +732,10 @@ class PitCommands {
 
     @Execute(name = "offer")
     fun offer(@Context player: Player, @Arg("target") targetPlayer: String, @Arg("price") price: String) {
+        if(!player.hasPermission("pit.admin")){
+            player.sendMessage(CC.translate("&c该指令已经弃用, 请使用 /trade"),true)
+            return
+        }
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
 
 

@@ -8,6 +8,7 @@ import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.medal.impl.challenge.QuickMathsMedal;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.TitleUtil;
+import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.homo.HomoGenerator;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
@@ -21,6 +22,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -63,13 +65,31 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
 
     @Override
     public void onActive() {
+        Cooldown normalEnd = ThePit.getInstance().getEventFactory().getNormalEnd();
         HomoGenerator homoGenerator = HomoGenerator.getGeneratorInst();
         try {
             if(TheEquation == null || TheEquationQuests == null) {
                 int homo = ThreadLocalRandom.current().nextInt(1919);
                 this.TheEquationQuests = homoGenerator.homo(homo);
+                Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if(normalEnd.hasExpired()) {
+                                    if (!ended || ThePit.getInstance().getEventFactory().getActiveNormalEvent() == QuickMathEvent.this || true) {
+                                        ThePit.getInstance().getEventFactory().cooldown();
+                                        ThePit.getInstance()
+                                                .getEventFactory()
+                                                .inactiveEvent(QuickMathEvent.this);
+                                        System.out.println("Cooldown");
+                                        this.cancel();
+                                    }
+                                }
+                            }
+                        }
+                        , 120L,5L);
                 this.TheEquation = String.valueOf(homo);
             }
+
             } catch (Exception e) {
             e.printStackTrace();
             ThePit.getInstance()
@@ -86,13 +106,6 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
             }
             Bukkit.getPluginManager()
                     .registerEvents(this, ThePit.getInstance());
-            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
-                if (!ended) {
-                    ThePit.getInstance()
-                            .getEventFactory()
-                            .inactiveEvent(QuickMathEvent.this);
-                }
-            }, 5 * 60 * 20L);
     }
 
     @EventHandler(priority = EventPriority.LOW)

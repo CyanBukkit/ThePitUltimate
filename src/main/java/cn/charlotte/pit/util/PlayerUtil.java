@@ -39,6 +39,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -79,8 +81,8 @@ public class PlayerUtil {
     }
 
     public static boolean isVenom(Player player) {
-        List<MetadataValue> comboVenom = player.getMetadata("combo_venom");
-        return !comboVenom.isEmpty() && comboVenom.get(0).asLong() > System.currentTimeMillis();
+        MetadataValue comboVenom = ((CraftPlayer)player).getMetadata(ThePit.getInstance(),"combo_venom");
+        return comboVenom != null && comboVenom.asLong() > System.currentTimeMillis();
     }
 
     public static boolean isEquippingSomber(Player player) {
@@ -131,8 +133,8 @@ public class PlayerUtil {
         return entity.getName().equals("666");
     }
     public static boolean isSinkingMoonlight(Player player) {
-        List<MetadataValue> sinkingMoonlight = player.getMetadata("sinking_moonlight");
-        return !sinkingMoonlight.isEmpty() && sinkingMoonlight.get(0).asLong() > System.currentTimeMillis();
+        MetadataValue sinkingMoonlight = ((CraftPlayer)player).getMetadata(ThePit.getInstance(),"sinking_moonlight");
+        return sinkingMoonlight != null && sinkingMoonlight.asLong() > System.currentTimeMillis();
     }
 
     public static boolean isEquippingArmageddon(Player player) {
@@ -425,9 +427,6 @@ public class PlayerUtil {
         if (clearInventory) {
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
-
-            player.setItemOnCursor(new ItemStack(Material.AIR));
-
             player.getEnderChest().clear();
         }
         if (closeInventory) {
@@ -471,66 +470,10 @@ public class PlayerUtil {
         }
     }
 
-    public static void lightningEffect(Player player, Player target) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntityWeather(new EntityLightning(((CraftPlayer) target).getHandle().getWorld(), target.getLocation().getX(), target.getLocation().getY(), target.getLocation().getZ(), true, false)));
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect("ambient.weather.thunder", target.getLocation().getX(), target.getLocation().getY(), target.getLocation().getZ(), 100F, 100));
-    }
-
-    public static void lightningEffect(Player player) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntityWeather(new EntityLightning(((CraftPlayer) player).getHandle().getWorld(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), true, false)));
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect("ambient.weather.thunder", player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), 1.0F, 63));
-    }
-
-    public static void sendFirework(FireworkEffect effect, Location location) {
-        Firework f = location.getWorld().spawn(location, Firework.class);
-        FireworkMeta fm = f.getFireworkMeta();
-        fm.addEffect(effect);
-        f.setFireworkMeta(fm);
-
-        try {
-            Class<?> entityFireworkClass = getClass("net.minecraft.server.", "EntityFireworks");
-            Class<?> craftFireworkClass = getClass("org.bukkit.craftbukkit.", "entity.CraftFirework");
-            Object firework = craftFireworkClass.cast(f);
-            Method handle = firework.getClass().getMethod("getHandle");
-            Object entityFirework = handle.invoke(firework);
-            Field expectedLifespan = entityFireworkClass.getDeclaredField("expectedLifespan");
-            Field ticksFlown = entityFireworkClass.getDeclaredField("ticksFlown");
-            ticksFlown.setAccessible(true);
-            ticksFlown.setInt(entityFirework, expectedLifespan.getInt(entityFirework) - 1);
-            ticksFlown.setAccessible(false);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void respawnPlayer(PlayerDeathEvent event) { //it useless??
-        new BukkitRunnable() {
-            public void run() {
-                try {
-                    Object nmsPlayer = event.getEntity().getClass().getMethod("getHandle").invoke(event.getEntity());
-                    Object con = nmsPlayer.getClass().getDeclaredField("playerConnection").get(nmsPlayer);
-
-                    Class<?> EntityPlayer = Class.forName(nmsPlayer.getClass().getPackage().getName() + ".EntityPlayer");
-
-                    Field minecraftServer = con.getClass().getDeclaredField("minecraftServer");
-                    minecraftServer.setAccessible(true);
-                    Object mcserver = minecraftServer.get(con);
-
-                    Object playerlist = mcserver.getClass().getDeclaredMethod("getPlayerList").invoke(mcserver);
-                    Method moveToWorld = playerlist.getClass().getMethod("moveToWorld", EntityPlayer, int.class, boolean.class);
-                    moveToWorld.invoke(playerlist, nmsPlayer, 0, false);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }.runTaskLater(ThePit.getInstance(), 2L);
-    }
-
     private static Class<?> getClass(String prefix, String nmsClassString) throws ClassNotFoundException {
         String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
         String name = prefix + version + nmsClassString;
-        Class<?> nmsClass = Class.forName(name);
-        return nmsClass;
+        return Class.forName(name);
     }
 
     public static Collection<Player> getNearbyPlayers(Location location, double radius) {

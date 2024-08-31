@@ -5,7 +5,10 @@ import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.ReflectUtil;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -182,11 +185,12 @@ public class PacketArmorStand {
         clean();
         updateView();
         setText(text, false);
-        WrapperPlayServerEntityMetadata entityMetadata = new WrapperPlayServerEntityMetadata();
-        entityMetadata.setEntityID(entity.getEntityId());
-        entityMetadata.setMetadata(WrappedDataWatcher.getEntityWatcher(entity).getWatchableObjects());
+        ArmorStand entity1 = this.entity;
+        CraftArmorStand entity11 = (CraftArmorStand) entity1;
+        PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(
+                entity1.getEntityId(),entity11.getHandle().getDataWatcher(),true);
         for (Player user : viewing) {
-            entityMetadata.sendPacket(user);
+            ((CraftPlayer)user).getHandle().playerConnection.sendPacket(packetPlayOutEntityMetadata);
         }
     }
 

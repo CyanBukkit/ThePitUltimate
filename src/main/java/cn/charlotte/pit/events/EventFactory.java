@@ -156,7 +156,9 @@ public class EventFactory {
         IEvent iEvent = (IEvent) event;
         iEvent.onInactive();
     }
-
+    public void cooldown(){
+        EventTimer.setCooldown(new Cooldown(1,TimeUnit.MINUTES));
+    }
     public void readyEpicEvent(IEpicEvent event) {
         this.nextEpicEvent = event;
         this.nextEpicEventTimer = new Cooldown(5, TimeUnit.MINUTES);

@@ -128,6 +128,6 @@ public abstract class AbstractEnchantment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getNbtName());
+        return this.getNbtName().hashCode();
     }
 }

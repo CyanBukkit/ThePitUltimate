@@ -22,6 +22,8 @@ import cn.charlotte.pit.util.time.TimeUtil
 import eu.decentsoftware.holograms.api.DHAPI
 import eu.decentsoftware.holograms.api.holograms.Hologram
 import eu.decentsoftware.holograms.api.holograms.HologramLine
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.*
 import org.bukkit.Material
@@ -78,10 +80,10 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
     }
 
     lateinit var timer: Cooldown
-    val globalCache = HashMap<Location, BlockCache>()
-    val locationToPlayer = HashMap<Location, UUID>()
-    val cache = HashMap<UUID, BlockHeadData>()
-    val buffCache = ArrayList<BuffData>()
+    val globalCache = Object2ObjectOpenHashMap<Location, BlockCache>()
+    val locationToPlayer = Object2ObjectOpenHashMap<Location, UUID>()
+    val cache = Object2ObjectOpenHashMap<UUID, BlockHeadData>()
+    val buffCache = ObjectArrayList<BuffData>()
     val runnable: BukkitRunnable by lazy {
         val runnable = object : BukkitRunnable() {
             override fun run() {

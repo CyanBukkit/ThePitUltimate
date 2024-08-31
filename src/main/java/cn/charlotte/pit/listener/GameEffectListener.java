@@ -188,6 +188,7 @@ public class GameEffectListener implements Listener {
 
         final Game game = ThePit.getInstance().getGame();
 
+        Set<AbstractPerk> disabledPerks = game.getDisabledPerks();
         if (event.getDamager() instanceof Player) {
             damager = (Player) event.getDamager();
 
@@ -199,7 +200,8 @@ public class GameEffectListener implements Listener {
             //perk handler
             for (IAttackEntity ins : perkFactory.getAttackEntities()) {
                 AbstractPerk perk = (AbstractPerk) ins;
-                if (game.getDisabledPerks().stream().anyMatch(ignoredPerk -> ignoredPerk.getInternalPerkName().equals(perk.getInternalPerkName()))) {
+
+                if(disabledPerks.contains(perk)){
                     continue;
                 }
                 int level = perk.getPlayerLevel(damager);
@@ -330,7 +332,7 @@ public class GameEffectListener implements Listener {
                 damager = (Player) event.getDamager();
                 for (IPlayerDamaged ins : perkFactory.getPlayerDamageds()) {
                     AbstractPerk perk = (AbstractPerk) ins;
-                    if (game.getDisabledPerks().stream().anyMatch(ignoredPerk -> ignoredPerk.getInternalPerkName().equals(perk.getInternalPerkName()))) {
+                    if(disabledPerks.contains(perk)){
                         continue;
                     }
                     int level = perk.getPlayerLevel(player);
@@ -377,7 +379,7 @@ public class GameEffectListener implements Listener {
                 damager = (Player) ((Projectile) event.getDamager()).getShooter();
                 for (IPlayerDamaged ins : perkFactory.getPlayerDamageds()) {
                     AbstractPerk perk = (AbstractPerk) ins;
-                    if (game.getDisabledPerks().stream().anyMatch(ignoredPerk -> ignoredPerk.getInternalPerkName().equals(perk.getInternalPerkName()))) {
+                    if(disabledPerks.contains(perk)){
                         continue;
                     }
                     int level = perk.getPlayerLevel(player);

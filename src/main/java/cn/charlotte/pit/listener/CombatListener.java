@@ -39,6 +39,7 @@ import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
+import lombok.val;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.minecraft.server.v1_8_R3.ItemArmor;
@@ -59,6 +60,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.refinedev.spigot.CarbonSpigot;
+import xyz.refinedev.spigot.async.threading.TaskQueueWorker;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -221,7 +224,6 @@ public class CombatListener implements Listener {
         handlePlayerDeath(event.getEntity(), event.getEntity().getKiller(), true);
     }
 
-
     private void handleDamage(EntityDamageByEntityEvent event, Player player, Player damager, PlayerProfile playerProfile, PlayerProfile damagerProfile, double damage, boolean isShoot) {
         playerProfile.setCombatTimer(new Cooldown((playerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
         damagerProfile.setCombatTimer(new Cooldown((damagerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
@@ -323,12 +325,14 @@ public class CombatListener implements Listener {
         playerData.setUsedItem(damager.getItemInHand());
         playerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
         playerData.setDamage(event.getFinalDamage());
-
-        List<KillRecap.DamageData> damageLogs = playerProfile.getKillRecap()
-                .getDamageLogs();
-        damageLogs.removeIf(data -> data.getTimer().hasExpired());
-        damageLogs.add(playerData);
+        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(),() -> {
+                    List<KillRecap.DamageData> damageLogs = playerProfile.getKillRecap()
+                            .getDamageLogs();
+                    damageLogs.removeIf(data -> data.getTimer().hasExpired());
+                    damageLogs.add(playerData);
+                });
         //handle kill recap - end
+
     }
 
     public void handleKill(Player killer, PlayerProfile killerProfile, LivingEntity player, PlayerProfile playerProfile) {
@@ -1267,14 +1271,15 @@ public class CombatListener implements Listener {
             levelAddon = 0.5 * levelAddon;
         }
 
-        if (hasPremiumItem(killer)) {
-            if (!hasPremiumItem(killer)) {
-                totalCoins += 10;
-                totalXp += 10;
+        //val b = hasPremiumItem(killer);
+        //if (b) {
+        //    if (!b) {
+        //        totalCoins += 10;
+        //        totalXp += 10;
 
-                levelAddon += 10;
-            }
-        }
+        //        levelAddon += 10;
+        //    }
+        //}
 
         killRecap.setLevelDisparityExp(levelAddon);
         killRecap.setLevelDisparityCoin(levelAddon);

@@ -52,9 +52,9 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             if (!profile.isLoaded() && ProfileLoadRunnable.getInstance() != null && ProfileLoadRunnable.getInstance().getCooldownMap() != null && ProfileLoadRunnable.getInstance().getCooldownMap().containsKey(player.getUniqueId())) {
                 ActionBarUtil.sendActionBar(player, "&c正在加载您的游戏数据,如长时间等待请尝试重新进入...");
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 9999999, 1, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, -100, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999999, -100, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 9999999, 1, false),true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, -100, false),true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999999, -100, false),true);
                 return;
             }
         }

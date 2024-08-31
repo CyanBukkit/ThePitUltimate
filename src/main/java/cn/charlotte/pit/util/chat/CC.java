@@ -169,7 +169,7 @@ public class CC {
     }
 
     public static List<String> translate(List<String> lines) {
-        List<String> toReturn = new ObjectArrayList<>(3);
+        List<String> toReturn = new ObjectArrayList<>(lines.size());
 
         for (String line : lines) {
             toReturn.add(ChatColor.translateAlternateColorCodes('&', line));
@@ -179,7 +179,7 @@ public class CC {
     }
 
     public static List<String> translate(String[] lines) {
-        List<String> toReturn = new ObjectArrayList<>(3);
+        List<String> toReturn = new ObjectArrayList<>(lines.length);
 
         for (String line : lines) {
             if (line != null) {
@@ -191,9 +191,14 @@ public class CC {
     }
 
     public static void boardCast(String text) {
+
+        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> boardCast0(text));
+    }
+    public static void boardCast0(String text) {
+
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(CC.translate(text));
-        }
+                player.sendMessage(CC.translate(text));
+            }
     }
 
     public static boolean canPlayerSeeMessage(Player player, MessageType type) {

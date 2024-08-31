@@ -87,32 +87,22 @@ public class LevelUtil {
      */
     public static String getLevelColor(int level) {
         if (level >= 10) {
-            switch ((level - level % 10) / 10) {
-                case 1:
-                    return "&9";
-                case 2:
-                    return "&3";
-                case 3:
-                    return "&2";
-                case 4:
-                    return "&a";
-                case 5:
-                    return "&e";
-                case 6:
-                    return "&6&l";
-                case 7:
-                    return "&c&l";
-                case 8:
-                    return "&4&l";
-                case 9:
-                    return "&5&l";
-                case 10:
-                    return "&d&l";
-                case 11:
-                    return "&f&l";
-            }
-            //>=120
-            return "&b&l";
+            return switch ((level - level % 10) / 10) {
+                case 1 -> "&9";
+                case 2 -> "&3";
+                case 3 -> "&2";
+                case 4 -> "&a";
+                case 5 -> "&e";
+                case 6 -> "&6&l";
+                case 7 -> "&c&l";
+                case 8 -> "&4&l";
+                case 9 -> "&5&l";
+                case 10 -> "&d&l";
+                case 11 -> "&f&l";
+                default ->
+                    //>=120
+                        "&b&l";
+            };
         }
         return "&7";
     }
@@ -142,30 +132,21 @@ public class LevelUtil {
         }
         double boost = 1.1;
         if (level >= 10) {
-            switch ((level - level % 10) / 10) {
-                case 1:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 30);
-                case 2:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 50);
-                case 3:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 75);
-                case 4:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 125);
-                case 5:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 250);
-                case 6:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 600);
-                case 7:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 800);
-                case 8:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 900);
-                case 9:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 1000);
-                case 10:
-                    return FastMath.round(FastMath.powFast(boost, prestige) * 1200);
-            }
-            //>=110
-            return FastMath.round(FastMath.powFast(boost, prestige) * 1500);
+            return switch ((level - level % 10) / 10) {
+                case 1 -> FastMath.round(FastMath.powFast(boost, prestige) * 30);
+                case 2 -> FastMath.round(FastMath.powFast(boost, prestige) * 50);
+                case 3 -> FastMath.round(FastMath.powFast(boost, prestige) * 75);
+                case 4 -> FastMath.round(FastMath.powFast(boost, prestige) * 125);
+                case 5 -> FastMath.round(FastMath.powFast(boost, prestige) * 250);
+                case 6 -> FastMath.round(FastMath.powFast(boost, prestige) * 600);
+                case 7 -> FastMath.round(FastMath.powFast(boost, prestige) * 800);
+                case 8 -> FastMath.round(FastMath.powFast(boost, prestige) * 900);
+                case 9 -> FastMath.round(FastMath.powFast(boost, prestige) * 1000);
+                case 10 -> FastMath.round(FastMath.powFast(boost, prestige) * 1200);
+                default ->
+                    //>=110
+                        FastMath.round(FastMath.powFast(boost, prestige) * 1500);
+            };
         } else {
             // 0~9
             return FastMath.round(FastMath.powFast(boost, prestige) * 15);

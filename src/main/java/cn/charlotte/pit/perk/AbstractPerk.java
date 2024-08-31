@@ -62,8 +62,7 @@ public abstract class AbstractPerk {
             }
         }
 
-        for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
-            PerkData perkData = entry.getValue();
+        for (PerkData perkData : profile.getChosePerk().values()) {
             if (perkData.getPerkInternalName().equals(this.getInternalPerkName())) {
                 return perkData.getLevel();
             }

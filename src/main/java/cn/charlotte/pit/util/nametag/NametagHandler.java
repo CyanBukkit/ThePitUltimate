@@ -65,7 +65,7 @@ public class NametagHandler {
     public void cleanup() {
         // Unregister Thread.
         if (this.thread != null) {
-            this.thread.stop();
+            this.thread.cancel();
             this.thread = null;
         }
 

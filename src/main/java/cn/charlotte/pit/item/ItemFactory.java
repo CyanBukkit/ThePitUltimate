@@ -29,28 +29,26 @@ public class ItemFactory {
     //简易LRU
     public IMythicItem getIMythicItem(ItemStack stack) {
 
-        UUID uuidObj = ItemUtil.getUUIDObj(stack); //提前判断节约0.6%
-        if (uuidObj == null) {
+        Object[] objects = ItemUtil.getInternalNameAndUUID(stack); //提前判断节约0.6%
+        if (objects[0] == null || objects[1] == null) {
             return null;
         }
-        final String internalName = ItemUtil.getInternalName(stack);
-        if (internalName == null) {
-            return null;
-        }
-        if(ItemUtil.shouldUpdateItem(stack)){
-            if(ItemUtil.shouldUpdateUUIDAndItem(stack)){
-                ItemUtil.randomUUIDItem(stack);
-            }
-            ItemUtil.signVer(stack);
-        }
-        IMythicItem iMythicItem = theReference.get(uuidObj);
+        String internalName = (String) objects[0];
+        String uuidString = (String) objects[1];
+        IMythicItem iMythicItem = theReference.get(uuidString);
         if (iMythicItem == null || clientSide) {
+            if(ItemUtil.shouldUpdateItem(stack)){
+                if(ItemUtil.shouldUpdateUUID()){
+                    ItemUtil.randomUUIDItem(stack);
+                }
+                ItemUtil.signVer(stack);
+            }
             IMythicItem mythicItem = Utils.getMythicItem0(stack, internalName);
             if(mythicItem.uuid != null) {
                 if (mythicItem.uuid.equals(IMythicItem.getDefUUID())) {
-                        UUID uuid = UUID.randomUUID();
-                        ItemUtil.setUUIDObj(stack, uuid);
-                        mythicItem.uuid = uuid;
+                    UUID uuid = UUID.randomUUID();
+                    ItemUtil.setUUID(stack, uuid.toString());
+                    mythicItem.uuid = uuid;
                 }
                 theReference.putValue(mythicItem.uuid, mythicItem);
             }

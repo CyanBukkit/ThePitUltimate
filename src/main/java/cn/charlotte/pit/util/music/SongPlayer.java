@@ -78,48 +78,45 @@ public abstract class SongPlayer {
         fadeDone++;
     }
 
-    protected void createThread() {
-        playerThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!destroyed) {
-                    long startTime = System.currentTimeMillis();
-                    synchronized (SongPlayer.this) {
-                        if (playing) {
-                            calculateFade();
-                            tick++;
-                            if (tick > song.getLength()) {
-                                if (loop) {
-                                    tick = 0;
-                                    continue;
-                                }
-                                playing = false;
-                                tick = -1;
-                                SongEndEvent event = new SongEndEvent(SongPlayer.this);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (autoDestroy) {
-                                    destroy();
-                                    return;
-                                }
+    protected void createThread() { //答辩了...
+        playerThread = new Thread(() -> {
+            while (!destroyed) {
+                long startTime = System.currentTimeMillis();
+                synchronized (SongPlayer.this) {
+                    if (playing) {
+                        calculateFade();
+                        tick++;
+                        if (tick > song.getLength()) {
+                            if (loop) {
+                                tick = 0;
+                                continue;
                             }
-                            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                                playTick(onlinePlayer, tick);
+                            playing = false;
+                            tick = -1;
+                            SongEndEvent event = new SongEndEvent(SongPlayer.this);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (autoDestroy) {
+                                destroy();
+                                return;
                             }
+                        }
+                        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                            playTick(onlinePlayer, tick);
                         }
                     }
-                    long duration = System.currentTimeMillis() - startTime;
-                    float delayMillis = song.getDelay() * 50;
-                    if (duration < delayMillis) {
-                        try {
-                            Thread.sleep((long) (delayMillis - duration));
-                        } catch (InterruptedException e) {
-                            // do nothing
-                        }
+                }
+                long duration = System.currentTimeMillis() - startTime;
+                float delayMillis = song.getDelay() * 50;
+                if (duration < delayMillis) {
+                    try {
+                        Thread.sleep((long) (delayMillis - duration));
+                    } catch (InterruptedException e) {
+                        // do nothing
                     }
                 }
             }
         });
-        playerThread.setPriority(Thread.MAX_PRIORITY);
+        playerThread.setPriority(Thread.MIN_PRIORITY);
         playerThread.start();
     }
 

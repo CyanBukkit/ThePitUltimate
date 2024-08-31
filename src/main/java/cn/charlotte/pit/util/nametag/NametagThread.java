@@ -1,9 +1,11 @@
 package cn.charlotte.pit.util.nametag;
 
 import cn.charlotte.pit.ThePit;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class NametagThread extends Thread {
+public class NametagThread extends BukkitRunnable {
 
     private NametagHandler handler;
 
@@ -14,22 +16,15 @@ public class NametagThread extends Thread {
      */
     public NametagThread(NametagHandler handler) {
         this.handler = handler;
-        this.start();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(),this,0,20);
     }
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                if (!ThePit.getInstance().isEnabled()) {
-                    return;
-                }
-                tick();
-                sleep(50 * handler.getTicks());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (!ThePit.getInstance().isEnabled()) {
+            return;
         }
+        tick();
     }
 
     /**

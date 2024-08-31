@@ -68,11 +68,11 @@ public class TNTEnchant extends AbstractEnchantment implements IPlayerKilledEnti
                 + "/s&7TNT放置后立刻被点燃并在1.5秒后爆炸,对周围3格内的所有敌人造成 &c" + (0.5 + enchantLevel * 0.5) + "❤ &7普通伤害."
                 + "/s&7(TNT爆炸时如自身未装备此附魔,则TNT不会造成伤害)";
     }
-
+    ItemBuilder itemBuilder = getTNTBuilder();
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
-        myself.getInventory().addItem(getTNTBuilder().amount(enchantLevel >= 3 ? 2 : 1).build());
+        myself.getInventory().addItem(itemBuilder.amount(enchantLevel >= 3 ? 2 : 1).build());
         int amount = InventoryUtil.getAmountOfItem(myself, "tnt_enchant_item");
         if (amount > 9) {
             InventoryUtil.removeItem(myself, "tnt_enchant_item", amount - 9);

@@ -43,7 +43,8 @@ public class ItemUtil {
     public static String getVer(ItemStack stack) {
         NBTTagCompound extra = getExtra(stack);
         if(extra != null){
-            return extra.getString("version");
+            NBTBase nbtBase = extra.get("version");
+            return nbtBase instanceof NBTTagString ? ((NBTTagString) nbtBase).a_() : null;
         }
         return null;
     }
@@ -59,7 +60,10 @@ public class ItemUtil {
     }
 
     public static boolean shouldUpdateUUIDAndItem(ItemStack stack){
-        return shouldUpdateItem(stack) && PitHook.getGitVersion().endsWith("uuid");
+        return shouldUpdateItem(stack) && shouldUpdateUUID();
+    }
+    public static boolean shouldUpdateUUID(){
+        return PitHook.getGitVersion().endsWith("uuid");
     }
     public static boolean isIllegalItem(ItemStack item) {
         NBTTagCompound extra = getExtra(item);
@@ -132,6 +136,15 @@ public class ItemUtil {
     public static String getInternalName(ItemStack item) {
         return getItemStringData(item,"internal");
     }
+    public static Object[] getInternalNameAndUUID(ItemStack stack){
+        NBTTagCompound extra = getExtra(stack);
+        Object[] objects = new Object[2];
+        String internal = getItemStringData0(extra, "internal");
+        String uuid = getItemStringData0(extra,"uuid");
+        objects[0] = internal;
+        objects[1] = uuid;
+        return objects;
+    }
 
     public static Integer getItemIntData(ItemStack item, String key) {
         NBTTagCompound extra = getExtra(item);
@@ -154,8 +167,7 @@ public class ItemUtil {
 
         return false;
     }
-    public static String getItemStringData(ItemStack item, String key) {
-        NBTTagCompound extra = getExtra(item);
+    public static String getItemStringData0(NBTTagCompound extra, String key){
         if(extra != null){
             NBTBase nbtBase = extra.get(key);
             if(nbtBase instanceof NBTTagString string){
@@ -163,6 +175,10 @@ public class ItemUtil {
             }
         }
         return null;
+    }
+    public static String getItemStringData(ItemStack item, String key) {
+        return getItemStringData0(getExtra(item),key);
+
     }
 
 }

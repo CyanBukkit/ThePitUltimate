@@ -177,7 +177,7 @@ public class ItemBuilder {
         }
 
         for (EnchantmentRecord record : records) {
-            if (builder.length() > 0) {
+            if (!builder.isEmpty()) {
                 builder.append(";");
             }
 

@@ -30,10 +30,11 @@ public abstract class AbstractMedal {
     public void setProgress(PlayerProfile profile, int progress) {
         MedalData medalData = profile.getMedalData();
         for (int i = 1; i <= getMaxLevel(); i++) {
-            medalData.getMedalStatus(getInternalName(), i).setProgress(Math.min(progress, getProgressRequirement(i)));
-            if (!medalData.getMedalStatus(getInternalName(), i).isUnlocked() && progress >= getProgressRequirement(i)) {
-                medalData.getMedalStatus(getInternalName(), i).setUnlocked(true);
-                medalData.getMedalStatus(getInternalName(), i).setFinishedTime(System.currentTimeMillis());
+            MedalData.MedalStatus medalStatus = medalData.getMedalStatus(getInternalName(), i);
+            medalStatus.setProgress(Math.min(progress, getProgressRequirement(i)));
+            if (!medalStatus.isUnlocked() && progress >= getProgressRequirement(i)) {
+                medalStatus.setUnlocked(true);
+                medalStatus.setFinishedTime(System.currentTimeMillis());
                 Player player = Bukkit.getPlayer(profile.getPlayerUuid());
                 if (player != null && player.isOnline()) {
                     player.sendMessage(CC.translate("&e&l成就解锁! &7你解锁了成就 &e" + getDisplayName(i) + (getMaxLevel() > 1 ? " " + RomanUtil.convert(i) : "") + " &7."));
@@ -43,7 +44,8 @@ public abstract class AbstractMedal {
     }
 
     public void addProgress(PlayerProfile profile, int progress) {
-        int newProgress = profile.getMedalData().getMedalStatus(getInternalName(), profile.getMedalData().getMedalLevel(getInternalName())).getProgress() + progress;
+        MedalData medalData = profile.getMedalData();
+        int newProgress = medalData.getMedalStatus(getInternalName(), medalData.getMedalLevel(getInternalName())).getProgress() + progress;
         setProgress(profile, newProgress);
     }
 

@@ -6,10 +6,12 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.runnable.ClearRunnable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: EmptyIrony
@@ -18,7 +20,7 @@ import java.util.List;
 @AutoRegister
 @Getter
 public class Game {
-    private final List<AbstractPerk> disabledPerks = new ObjectArrayList<>();
+    private final Set<AbstractPerk> disabledPerks = new ObjectOpenHashSet<>();
 
 
     public void initRunnable() {
