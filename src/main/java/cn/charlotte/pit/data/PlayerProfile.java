@@ -1520,6 +1520,22 @@ public class PlayerProfile {
 
         this.streakKills = kills;
     }
+    public static synchronized final void saveAllSync(boolean silent){
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            try {
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+                if (profile.isLoaded()) {
+                    profile.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
+                    profile.save();
+                    if (!silent) {
+                        CC.boardCast0("&6&l公告! &7正在保存 " + player.getDisplayName() + " 玩家的数据...");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public Cooldown getCombatTimer() {
         return this.combatTimer;

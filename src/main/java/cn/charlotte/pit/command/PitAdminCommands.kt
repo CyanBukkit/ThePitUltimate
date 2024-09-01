@@ -6,17 +6,16 @@ import cn.charlotte.pit.config.NewConfiguration.load
 import cn.charlotte.pit.config.NewConfiguration.loadFile
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.TradeData
+import cn.charlotte.pit.events.EventTimer
 import cn.charlotte.pit.events.impl.QuickMathEvent
 import cn.charlotte.pit.item.AbstractPitItem
 import cn.charlotte.pit.item.MythicColor
 import cn.charlotte.pit.medal.impl.challenge.hidden.KaboomMedal
-import cn.charlotte.pit.nbt
 import cn.charlotte.pit.runnable.RebootRunnable.RebootTask
 import cn.charlotte.pit.sendMessage
 import cn.charlotte.pit.util.MythicUtil
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
-import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.level.LevelUtil
 import cn.charlotte.pit.util.rank.RankUtil
@@ -38,8 +37,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.max
 import kotlin.math.min
 
 
@@ -648,5 +645,35 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+    @Execute(name = "skipNormalEvent")
+    fun skipNormalEvent(@Context player: Player){
+        ThePit.getInstance().eventFactory.activeNormalEvent?.let {
 
+            player.sendMessage(CC.translate("已经跳过事件 $it" ),true)
+            CC.boardCast("&c&l事件跳过! &c管理员已经跳过该普通事件")
+            ThePit.getInstance().eventFactory.safeInactiveEvent(it)
+        }
+        EventTimer.getCooldown().fastExpired()
+    }
+
+
+    @Execute(name = "skipEpicEvent")
+    fun skipEpicEvent(@Context player: Player){
+        ThePit.getInstance().eventFactory.activeEpicEvent?.let {
+
+            player.sendMessage(CC.translate("已经跳过事件 $it" ),true)
+            CC.boardCast("&c&l事件跳过! &c管理员已经跳过该Epic事件")
+            ThePit.getInstance().eventFactory.inactiveEvent(it)
+
+        }
+        EventTimer.getCooldown().fastExpired()
+    }
+    @Execute(name = "saveAll")
+    fun saveAll(@Context player: Player, @Arg("announce") shouldAnnounce: String) {
+        try {
+            PlayerProfile.saveAllSync(shouldAnnounce.toBoolean());
+        } catch (t: Throwable){
+            player.sendMessage("失败 $shouldAnnounce",true)
+        }
+    }
 }

@@ -3,6 +3,7 @@ package cn.charlotte.pit.events;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.text.SimpleDateFormat;
@@ -15,8 +16,11 @@ import java.util.concurrent.TimeUnit;
 public class EventTimer implements Runnable {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd:HH:mm");
     @Setter
-    private static Cooldown cooldown = new Cooldown(0);
 
+    private static Cooldown cooldown = new Cooldown(0);
+    public static Cooldown getCooldown(){
+        return cooldown;
+    }
     @Override
     public void run() {
 
@@ -44,8 +48,14 @@ public class EventTimer implements Runnable {
         }
 
         boolean b = min != 55 && min != 50;
+        if(factory.getNormalEnd().hasExpired() && cooldown.hasExpired()) { // patch
+            INormalEvent activeNormalEvent = factory.getActiveNormalEvent();
+            if (activeNormalEvent != null) {
+                factory.inactiveEvent(activeNormalEvent);
+            }
+        }
         if (b) {
-            if (factory.getActiveEpicEvent() == null && factory.getNextEpicEvent() == null && System.currentTimeMillis() - factory.getLastNormalEvent() >= 3 * 60 * 1000) {
+            if (factory.getActiveEpicEvent() == null && factory.getNextEpicEvent() == null) {
                 if (factory.getActiveNormalEvent() == null) {
                     String mini = EventsHandler.INSTANCE.nextEvent(false);
                     if(mini.equals("NULL")) {

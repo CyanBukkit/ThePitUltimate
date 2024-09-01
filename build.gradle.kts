@@ -1,5 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.lombok") version "2.0.20"
+    id("io.freefair.lombok") version "8.10"
+    kotlin("jvm") version "2.0.20"
     alias(libs.plugins.shadow)
 }
 
@@ -7,6 +9,8 @@ group = "me.huanmeng"
 version = "1.0-SNAPSHOT"
 
 repositories {
+
+    maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
 
     maven("https://repo.crazycrew.us/releases")

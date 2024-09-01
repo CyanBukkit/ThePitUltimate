@@ -50,7 +50,6 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
     private static CuboidRegion[] regions;
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
-    private BukkitRunnable runnable;
     private EditSession session;
     private AxisAlignedBB alignedBB;
     private Map<UUID, CakePlayerData> dataCache;
@@ -110,14 +109,8 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
         Bukkit.getPluginManager()
                 .registerEvents(this, ThePit.getInstance());
 
-        this.runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                ThePit.getInstance().getEventFactory().inactiveEvent(CakeEvent.this);
-            }
-        };
 
-        this.runnable.runTaskLater(ThePit.getInstance(), 20 * 60 * 5);
+
     }
 
     @Override
@@ -128,8 +121,6 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
         });
 
         HandlerList.unregisterAll(this);
-
-        this.runnable.cancel();
 
         for (UUID uuid : dataCache.keySet()) {
             if (dataCache.get(uuid).coins >= 5000 && Bukkit.getPlayer(uuid) != null) {
@@ -176,7 +167,6 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
             if (block.getType() == Material.CAKE_BLOCK) {
                 int baseCoins = 1;
 
-                final BlockState state = block.getState();
                 if (block.getData() == 6) {
                      baseCoins += 5;
                     block.setType(Material.AIR);

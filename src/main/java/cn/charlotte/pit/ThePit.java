@@ -277,23 +277,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     public void onDisable() {
         PacketHologramRunnable.deSpawnAll();
         synchronized (Bukkit.getOnlinePlayers()) {
-            CC.boardCast("&6&l公告! &7正在执行关闭服务器...");
-
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                try {
-                    PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-                    if (profile.isLoaded()) {
-                        profile.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
-                        profile.save();
-                        CC.boardCast("&6&l公告! &7正在保存 " + player.getDisplayName() + " 玩家的数据...");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            CC.boardCast("&6&l公告! &7正在关闭服务器...");
+            CC.boardCast0("&6&l公告! &7正在执行关闭服务器...");
+            PlayerProfile.saveAllSync(false);
+            CC.boardCast0("&6&l公告! &7正在关闭服务器...");
         }
     }
+
 
     public static boolean h() {
         try {

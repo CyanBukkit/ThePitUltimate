@@ -13,7 +13,9 @@ import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.type.FunkyFeather;
 import cn.charlotte.pit.item.type.MythicRepairKit;
+import cn.charlotte.pit.item.type.PitCactus;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
@@ -31,7 +33,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.val;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
@@ -72,35 +73,12 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             possibleLots.add(
                     new LotsData(
                             new ItemStack[]{
-                                    new ItemBuilder(Material.FEATHER)
-                                            .name("&3时髦的羽毛")
-                                            .lore("&e特殊物品",
-                                                    "&7放于物品栏时,可以保护",
-                                                    "&7背包内的神话物品不会在死亡后扣除生命.",
-                                                    "&7&o此物品会在死亡后消耗")
-                                            .internalName("funky_feather")
-                                            .canTrade(true)
-                                            .canSaveToEnderChest(true)
-                                            .amount(randomItemAmount)
-                                            .build()},
+                                    FunkyFeather.toItemStack()},
                             randomItemAmount * 2000,
                             0
                     ));
             possibleLots.add(
-                    new LotsData(
-                            new ItemStack[]{
-                                    new ItemBuilder(Material.CACTUS)
-                                            .name("&a哲学仙人掌")
-                                            .lore("&e特殊物品",
-                                                    "&7手持并右键可以从九件未附魔的",
-                                                    "&7随机 &a神&c话&e之&6甲 &7选择其一.",
-                                                    " ",
-                                                    "&7(部分特殊颜色不可选择)")
-                                            .internalName("cactus")
-                                            .canTrade(true)
-                                            .canSaveToEnderChest(true)
-                                            .amount(randomItemAmount)
-                                            .build()},
+                    new LotsData(new ItemStack[]{PitCactus.toItemStack()},
                             randomItemAmount * 2000,
                             0
                     ));
@@ -120,7 +98,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             MythicLeggingsItem abstractPitItem = new MythicLeggingsItem();
             abstractPitItem.setLive(RandomUtil.random.nextInt(3) + 3);
             abstractPitItem.setMaxLive(abstractPitItem.getLive());
-            Object2IntOpenHashMap enchantments = new Object2IntOpenHashMap<>();
+            Object2IntOpenHashMap<AbstractEnchantment> enchantments = new Object2IntOpenHashMap<>();
             enchantments.defaultReturnValue(-1);
             List<AbstractEnchantment> list = ThePit.getInstance()
                     .getEnchantmentFactor()
@@ -174,17 +152,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
         return new LotsData(
                 new ItemStack[]{
-                        new ItemBuilder(Material.FEATHER)
-                                .name("&3时髦的羽毛")
-                                .lore("&e特殊物品",
-                                        "&7放于物品栏时,可以保护",
-                                        "&7背包内的神话物品不会在死亡后扣除生命.",
-                                        "&7&o此物品会在死亡后消耗")
-                                .internalName("funky_feather")
-                                .canTrade(true)
-                                .canSaveToEnderChest(true)
-                                .amount(1)
-                                .build()},
+                       FunkyFeather.toItemStack()},
                 2000,
                 0
         );
@@ -519,11 +487,8 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (getTimer().hasExpired()) {
+                    if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() != AuctionEvent.this) {
                         this.cancel(); // cancel first
-                        ThePit.getInstance()
-                                .getEventFactory()
-                                .inactiveEvent(AuctionEvent.this);
                         return;
                     }
 

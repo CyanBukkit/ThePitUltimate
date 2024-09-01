@@ -52,15 +52,15 @@ import java.util.stream.Collectors;
 
 public class RagePitEvent implements IEvent, IEpicEvent, Listener {
     @Getter
-    private static final Map<UUID, DamageData> damageMap = new HashMap<>();
-    private static EditSession session;
+    private final Map<UUID, DamageData> damageMap = new HashMap<>();
+    private EditSession session;
     @Getter
-    private static int killed = 0;
-    private static BukkitRunnable runnable;
+    private int killed = 0;
+    private BukkitRunnable runnable;
     @Getter
-    private static Cooldown timer;
+    private Cooldown timer;
 
-    public static int getDamageRank(Player player) {
+    public int getDamageRank(Player player) {
         DamageData damage = damageMap.get(player.getUniqueId());
         HashSet<Map.Entry<UUID, DamageData>> entry = new HashSet<>(damageMap.entrySet());
 
@@ -70,7 +70,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
         for (DamageData en : entry.stream()
                 .map(Map.Entry::getValue)
                 .sorted(Comparator.comparingDouble(DamageData::getDamage).reversed())
-                .collect(Collectors.toList())) {
+                .toList()) {
             rank.put(en.getDamage(), i);
             i++;
         }

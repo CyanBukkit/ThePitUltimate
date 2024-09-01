@@ -17,7 +17,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DoubleRewardsEvent implements IEvent, INormalEvent, IPlayerKilledEntity {
 
-    private BukkitRunnable runnable;
     private boolean isActive = false;
 
     @Override
@@ -39,15 +38,6 @@ public class DoubleRewardsEvent implements IEvent, INormalEvent, IPlayerKilledEn
     public void onActive() {
         isActive = true;
         Bukkit.broadcastMessage(CC.translate("&a&l双倍奖励! &7现在你可以获得双倍的击杀&b经验&7与&6硬币&7加成!"));
-
-        this.runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                ThePit.getInstance().getEventFactory().inactiveEvent(DoubleRewardsEvent.this);
-            }
-        };
-
-        this.runnable.runTaskLater(ThePit.getInstance(), 20 * 60 * 4);
     }
 
     @Override

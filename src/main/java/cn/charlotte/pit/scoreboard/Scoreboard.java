@@ -86,8 +86,7 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&c如长时仍在加载,");
             lines.add("&c请重新进入服务器.");
             lines.add("");
-            lines.add("&c公告群: ");
-            lines.add("&e425831669");
+            lines.add("&c公告群: &e425831669");
             lines.add("");
             lines.add("&enyacho.cn");
             return lines;
@@ -105,14 +104,14 @@ public class Scoreboard implements AssembleAdapter {
 //            lines.add("&f事件: &c" + event.getEventName());
             lines.add(" ");
             lines.add("&f事件: &6" + event.getEventName());
-            if (event.getEventInternalName().equals("rage_pit")) {
-                lines.add("&f剩余: &a" + TimeUtil.millisToTimer(RagePitEvent.getTimer().getRemaining()));
-                if (RagePitEvent.getDamageMap().get(player.getUniqueId()) != null) {
-                    int damage = (int) (RagePitEvent.getDamageMap().get(player.getUniqueId()).getDamage() / 2);
-                    int rank = RagePitEvent.getDamageRank(player);
+            if (event instanceof RagePitEvent ragePit) {
+                lines.add("&f剩余: &a" + TimeUtil.millisToTimer(ragePit.getTimer().getRemaining()));
+                if (ragePit.getDamageMap().get(player.getUniqueId()) != null) {
+                    int damage = (int) (ragePit.getDamageMap().get(player.getUniqueId()).getDamage() / 2);
+                    int rank = ragePit.getDamageRank(player);
                     lines.add("&f伤害: &c" + damage + "❤ &7(#" + rank + ")");
                 }
-                int killed = RagePitEvent.getKilled();
+                int killed = ragePit.getKilled();
 
                 lines.add("&f总击杀: " + (killed >= 600 ? "&a" : "&c") + killed + "&7/600");
             } else if (event instanceof IScoreBoardInsert insert) {

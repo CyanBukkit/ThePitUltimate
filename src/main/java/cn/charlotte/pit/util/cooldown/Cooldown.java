@@ -50,7 +50,9 @@ public class Cooldown {
             this.notified = true;
         }
     }
-
+    public void fastExpired(){
+        this.expire = System.currentTimeMillis();
+    }
     public long getStart() {
         return this.start;
     }

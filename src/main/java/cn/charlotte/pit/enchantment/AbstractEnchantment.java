@@ -125,9 +125,14 @@ public abstract class AbstractEnchantment {
         AbstractEnchantment that = (AbstractEnchantment) o;
         return that.getNbtName().equals(this.getNbtName());
     }
-
+    //return the hashcode ewe
+    int hashCode = 0,cached = -1;
     @Override
     public int hashCode() {
-        return this.getNbtName().hashCode();
+        if(cached == -1){
+            hashCode = this.getNbtName().hashCode();
+            cached = 0;
+        }
+        return hashCode;
     }
 }

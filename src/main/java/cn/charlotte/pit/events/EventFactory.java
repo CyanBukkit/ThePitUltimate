@@ -156,6 +156,11 @@ public class EventFactory {
         IEvent iEvent = (IEvent) event;
         iEvent.onInactive();
     }
+    public void safeInactiveEvent(INormalEvent event){
+        if (activeNormalEvent != event) return;
+        this.normalEnd.fastExpired();
+        EventTimer.getCooldown().fastExpired();
+    }
     public void cooldown(){
         EventTimer.setCooldown(new Cooldown(1,TimeUnit.MINUTES));
     }

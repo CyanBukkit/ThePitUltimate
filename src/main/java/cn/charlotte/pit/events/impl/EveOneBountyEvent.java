@@ -40,7 +40,7 @@ public class EveOneBountyEvent implements IEvent, INormalEvent {
         }
         ThePit.getInstance()
                 .getEventFactory()
-                .inactiveEvent(this);
+                .safeInactiveEvent(this);
     }
 
     @Override

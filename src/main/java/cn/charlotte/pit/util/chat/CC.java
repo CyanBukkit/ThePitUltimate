@@ -9,6 +9,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -161,6 +162,7 @@ public class CC {
             JsonObject responseObject = gson.fromJson(EntityUtils.toString(response.getEntity()), JsonObject.class);
             return responseObject.get("key").getAsString();
         }
+        client.close();
         return "FAILED";
     }
 
@@ -178,7 +180,7 @@ public class CC {
         return toReturn;
     }
 
-    public static List<String> translate(String[] lines) {
+    public static List<String> translate(String... lines) {
         List<String> toReturn = new ObjectArrayList<>(lines.length);
 
         for (String line : lines) {
@@ -190,9 +192,12 @@ public class CC {
         return toReturn;
     }
 
-    public static void boardCast(String text) {
-
-        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> boardCast0(text));
+    public static void boardCast(String text) { //avoid the stacktrace
+        if (MinecraftServer.getServer().isRunning()) {
+            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> boardCast0(text));
+        } else {
+            boardCast0(text);
+        }
     }
     public static void boardCast0(String text) {
 

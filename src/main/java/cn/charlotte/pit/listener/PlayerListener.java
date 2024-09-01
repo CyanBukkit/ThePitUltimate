@@ -1,5 +1,6 @@
 package cn.charlotte.pit.listener;
 
+import cn.charlotte.pit.PitHook;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
@@ -83,11 +84,13 @@ public class PlayerListener implements Listener {
 
         PlayerUtil.clearPlayer(player, true);
         if (!pit.getPitConfig().getSpawnLocations().isEmpty()) {
-            Location location = pit.getPitConfig()
-                    .getSpawnLocations()
-                    .get(random.nextInt(pit.getPitConfig().getSpawnLocations().size()));
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                Location location = pit.getPitConfig()
+                        .getSpawnLocations()
+                        .get(random.nextInt(pit.getPitConfig().getSpawnLocations().size()));
 
-            player.teleport(location);
+                player.teleport(location);
+            },3L);
         } else {
             player.sendMessage(CC.translate("&cNo spawn found "));
         }
@@ -493,6 +496,11 @@ public class PlayerListener implements Listener {
     }
 
     private void welcomePlayer(Player player) {
+        player.sendMessage("欢迎回来!",true);
+        player.sendMessage("ThePitStudy " + PitHook.getGitVersion(),true);
+        player.sendMessage("感谢您支持本玩法, 玩法仅供学习参考, 健康游戏你我他",true);
+        player.sendMessage(" ");
+
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.isNicked()) {
             player.sendMessage(CC.translate("&2&l匿名模式! &7你现在对外显示的游戏名为: " + profile.getFormattedNameWithRoman()));

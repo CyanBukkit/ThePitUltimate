@@ -80,6 +80,9 @@ public class MicroDegravityEnchant extends AbstractEnchantment implements Listen
     @ArmorOnly
     @Override
     public void handlePlayerDamaged(int level, Player player, Entity entity, double v, AtomicDouble atomicDouble, AtomicDouble atomicDouble1, AtomicBoolean atomicBoolean) {
+        if(!player.isOnGround()){
+            return;
+        }
         Byte hurtTime;
         if ((hurtTime = entityByteMap.getIfPresent(player)) == null) {
             entityByteMap.put(player, (byte) 0);

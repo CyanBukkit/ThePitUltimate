@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -172,7 +173,8 @@ public class AnimationRunnable extends BukkitRunnable {
 
     public void sendReset(Player player) {
         for (Location location : animationLocations) {
-            player.sendBlockChange(location, Material.SEA_LANTERN, (byte) 0);
+            Block block = location.getBlock();
+            player.sendBlockChange(location, block.getType(),block.getData());
         }
     }
 

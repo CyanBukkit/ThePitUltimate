@@ -43,13 +43,12 @@ import java.util.concurrent.TimeUnit;
 
 public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreBoardInsert {
     @Getter
-    private static Location chest;
+    private Location chest;
     @Getter
-    private static ChestData chestData;
+    private ChestData chestData;
 
-    private static BukkitRunnable runnable;
 
-    private static Cooldown endTimer;
+    private Cooldown endTimer;
 
     @Override
     public String getEventInternalName() {
@@ -189,17 +188,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
             chestData.getFirstHologram().spawn();
             chestData.getSecondHologram().spawn();
-
-            runnable = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ThePit.getInstance()
-                            .getEventFactory()
-                            .inactiveEvent(CarePackageEvent.this);
-                }
-            };
-            runnable.runTaskLaterAsynchronously(ThePit.getInstance(), 20 * 60 * 5);
-            endTimer = new Cooldown(5, TimeUnit.MINUTES);
+            endTimer = ThePit.getInstance().getEventFactory().getNormalEnd();
         });
     }
 
@@ -215,8 +204,6 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
             chest.getBlock().setType(Material.AIR);
             chestData = null;
             chest = null;
-            runnable.cancel();
-            runnable = null;
         });
     }
 
