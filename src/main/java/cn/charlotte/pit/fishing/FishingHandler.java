@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.random.RandomUtil;
 import net.minecraft.server.v1_8_R3.EntityItem;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.WorldServer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -40,6 +41,7 @@ public class FishingHandler implements Listener {
             EntityItem entityItem = this.generateEntity(event.getPlayer(), location, itemStack);
             CraftEntity item = entityItem.getBukkitEntity();
             item.setMetadata("gold", new FixedMetadataValue(ThePit.getInstance(), RandomUtil.random.nextInt(5) + 5));
+
         } else if (event.getState() == PlayerFishEvent.State.FISHING) {
             ItemStack item = event.getPlayer().getItemInHand();
 
@@ -64,11 +66,10 @@ public class FishingHandler implements Listener {
 
         return entityItem;
     }
-
+    ItemBuilder build = new ItemBuilder(Material.GOLD_INGOT);
     private ItemStack generateItem(Player player, Location location) {
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
-        return new ItemBuilder(Material.GOLD_INGOT)
+        return build
                 .build();
     }
 

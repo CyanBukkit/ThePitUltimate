@@ -14,8 +14,11 @@ import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +35,17 @@ public class Utils {
         } else {
             return CraftItemStack.asNMSCopy(item);
         }
+    }
+    /**
+     * 标记GC and Exit
+     * @param projectile current Entity
+     */
+    public static void pointMetadataAndRemove(Entity projectile, int later, String... metadata){
+    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(),() -> {
+            for (String metadatum : metadata) {
+                projectile.removeMetadata(metadatum,ThePit.getInstance());
+            }
+        },later);
     }
     /**
      * 超级高效的split方法。

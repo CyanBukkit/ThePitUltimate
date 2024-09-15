@@ -216,6 +216,7 @@ public class CombatListener implements Listener {
             }
             profile.setBounty(0);
         }
+        runGCOnMetadatas(player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -224,6 +225,29 @@ public class CombatListener implements Listener {
         handlePlayerDeath(event.getEntity(), event.getEntity().getKiller(), true);
     }
 
+    /**
+     * Should be garbage collected params
+     * @param player
+     */
+    public void runGCOnMetadatas(Player player){
+        player.removeMetadata("showing_damage_data",ThePit.getInstance());
+        player.removeMetadata("mirror_latest_active",ThePit.getInstance());
+        //"STAFF_SPECTATOR"
+        //lucky_chestplate
+        //backing
+        //sinking_moonlight
+        player.removeMetadata("lastThroughTheHeart",ThePit.getInstance());
+        player.removeMetadata("STAFF_SPECTATOR",ThePit.getInstance());
+        player.removeMetadata("sinking_moonlight",ThePit.getInstance());
+        player.removeMetadata("assured_strike",ThePit.getInstance());
+        player.removeMetadata("lucky_chestplate",ThePit.getInstance());
+        player.removeMetadata("backing",ThePit.getInstance());
+        player.removeMetadata("combo_venom",ThePit.getInstance());
+        player.removeMetadata("vanished",ThePit.getInstance());
+        player.removeMetadata("leech_hit",ThePit.getInstance());
+        player.removeMetadata("true_damage_immune",ThePit.getInstance());
+
+    }
     private void handleDamage(EntityDamageByEntityEvent event, Player player, Player damager, PlayerProfile playerProfile, PlayerProfile damagerProfile, double damage, boolean isShoot) {
         playerProfile.setCombatTimer(new Cooldown((playerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
         damagerProfile.setCombatTimer(new Cooldown((damagerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
@@ -287,7 +311,7 @@ public class CombatListener implements Listener {
             for (int i = 0; i < heats; i++) {
                 builder.append("❤");
             }
-            ActionBarUtil.sendActionBar(damager, builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""), 60);
+            ActionBarUtil.sendActionBar1(damager,"heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""),1);
 
             player.setMetadata("showing_damage_data", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
         }
@@ -342,7 +366,7 @@ public class CombatListener implements Listener {
             final String coloredName = RankUtil.getPlayerColoredName(player.getUniqueId());
 
             if (killerProfile.getPlayerOption().getBarPriority() != PlayerOption.BarPriority.ENCHANT_ONLY) {
-                ActionBarUtil.sendActionBar(killer, " &a&l击杀! " + coloredName);
+                ActionBarUtil.sendActionBar1(killer, "game"," &a&l击杀! " + coloredName,2);
             }
 
             //process drop armor - start

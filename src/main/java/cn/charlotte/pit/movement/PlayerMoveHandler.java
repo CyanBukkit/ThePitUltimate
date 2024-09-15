@@ -50,7 +50,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
         //when X/Z Loc change
         if (to.getBlockX() != from.getBlockX() || to.getBlockZ() != from.getBlockZ()) {
             if (!profile.isLoaded() && ProfileLoadRunnable.getInstance() != null && ProfileLoadRunnable.getInstance().getCooldownMap() != null && ProfileLoadRunnable.getInstance().getCooldownMap().containsKey(player.getUniqueId())) {
-                ActionBarUtil.sendActionBar(player, "&c正在加载您的游戏数据,如长时间等待请尝试重新进入...");
+                ActionBarUtil.sendActionBar1(player,"system", "&c正在加载您的游戏数据,如长时间等待请尝试重新进入...",2);
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 9999999, 1, false),true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, -100, false),true);
@@ -189,30 +189,31 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
                 player.setAllowFlight(true);
             }
         }
-
-        boolean backing = player.hasMetadata("backing");
-        if (backing) {
-            if (to.getBlockX() != from.getBlockX() ||
-                    to.getBlockY() != from.getBlockY() ||
-                    to.getBlockZ() != from.getBlockZ()) {
-                player.removeMetadata("backing", ThePit.getInstance());
-                player.sendMessage(CC.translate("&c回城被取消."));
+        if(player.isOnGround()) {
+            boolean backing = player.hasMetadata("backing");
+            if (backing) {
+                if (to.getBlockX() != from.getBlockX() ||
+                        to.getBlockY() != from.getBlockY() ||
+                        to.getBlockZ() != from.getBlockZ()) {
+                    player.removeMetadata("backing", ThePit.getInstance());
+                    player.sendMessage(CC.translate("&c回城被取消."));
+                }
             }
-        }
 
 
-        if (to.clone().add(0, -1, 0).getBlock().getType() == Material.SLIME_BLOCK) {
-            BlockIterator blockIterator = new BlockIterator(player.getLocation());
-            for (int i = 0; i < 30; i++) {
-                blockIterator.next();
+            if (to.clone().add(0, -1, 0).getBlock().getType() == Material.SLIME_BLOCK) {
+                BlockIterator blockIterator = new BlockIterator(player.getLocation());
+                for (int i = 0; i < 30; i++) {
+                    blockIterator.next();
+                }
+                to.setPitch(-30);
+                player.getLocation().setPitch(-30);
+                VectorUtil.entityPush(player, blockIterator.next().getLocation(), 110);
+
+                player.playSound(player.getLocation(), Sound.EXPLODE, 1, 1);
+                PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.EXPLOSION_LARGE, true, (float) to.getX(), (float) to.getY(), (float) to.getZ(), 0, 0, 0, 0, 1, 1);
+                ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             }
-            to.setPitch(-30);
-            player.getLocation().setPitch(-30);
-            VectorUtil.entityPush(player, blockIterator.next().getLocation(), 110);
-
-            player.playSound(player.getLocation(), Sound.EXPLODE, 1, 1);
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.EXPLOSION_LARGE, true, (float) to.getX(), (float) to.getY(), (float) to.getZ(), 0, 0, 0, 0, 1, 1);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         }
 
     }

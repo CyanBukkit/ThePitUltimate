@@ -62,6 +62,9 @@ class WitheredAndPiercingThroughTheHeart: AbstractEnchantment(), IPlayerShootEnt
         if (PlayerProfile.getPlayerProfileByUuid(attacker.uniqueId).bowHit % 4 == 0) {
             val metadata = victim.getMetadata("lastThroughTheHeart")
             val lastTimeStamp = metadata.firstOrNull()?.asLong() ?: -1L
+            if(lastTimeStamp != -1L){
+                victim.removeMetadata("lastThroughTheHeart",ThePit.getInstance());
+            }
             if (System.currentTimeMillis() - lastTimeStamp >= 10 * 1000L) {
                 victim.addPotionEffect(
                     PotionEffect(

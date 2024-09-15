@@ -8,6 +8,7 @@ import cn.charlotte.pit.item.MythicColor;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.menu.Menu;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -58,7 +59,7 @@ public class AnimationRunnable extends BukkitRunnable {
     @Override
     public void run() {
         synchronized (animations) {
-            final HashMap<UUID, AnimationData> removeMap = new HashMap<>(animations);
+            final Object2ObjectOpenHashMap<UUID, AnimationData> removeMap = new Object2ObjectOpenHashMap<>(animations);
             removeMap.forEach((uuid, animationData) -> {
                 if (!animationData.getPlayer().isOnline() ||
                         !(Menu.currentlyOpenedMenus.get(animationData.getPlayer().getName()) instanceof MythicWellMenu)) {

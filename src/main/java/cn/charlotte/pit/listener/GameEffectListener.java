@@ -147,10 +147,12 @@ public class GameEffectListener implements Listener {
                 }
             }
 
-            if (sb.length() == 0) {
+            if (sb.isEmpty()) {
                 return;
             }
             event.getProjectile().setMetadata("enchant", new FixedMetadataValue(ThePit.getInstance(), sb.substring(0, sb.length() - 1)));
+            //for gc
+            Utils.pointMetadataAndRemove(event.getProjectile(),500,"enchant");
         }
     }
 
@@ -305,6 +307,7 @@ public class GameEffectListener implements Listener {
                     this.processShootEntity((IPlayerShootEntity) enchantment, enchantValue, damager, event.getEntity(), event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
                 }
             }
+            projectile.removeMetadata("enchant",ThePit.getInstance()); //garbage collector
 
 
             for (IPlayerShootEntity ins : questFactory.getPlayerShootEntities()) {

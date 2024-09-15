@@ -6,13 +6,19 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
+import cn.charlotte.pit.util.hologram.packet.PacketHologram;
 import cn.hutool.core.collection.ConcurrentHashSet;
+import cn.klee.backports.utils.SWMRHashTable;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import spg.lgdev.handler.PacketHandler;
 
 import java.util.*;
 
@@ -22,7 +28,7 @@ import java.util.*;
  */
 public class BountyRunnable extends BukkitRunnable {
     private final Random random = new Random();
-    private static final Map<UUID, AnimationData> animationDataMap = new HashMap<>();
+    private static final Map<UUID, AnimationData> animationDataMap = new SWMRHashTable<>();
 
     public static Map<UUID, AnimationData> getAnimationDataMap() {
         return animationDataMap;
@@ -30,14 +36,22 @@ public class BountyRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
+        Set<UUID> shouldRemove = new ObjectOpenHashSet<>();
         animationDataMap.forEach((i,a) -> {
             Player player = Bukkit.getPlayer(i);
             if(player == null || !player.isOnline()){
+                Set<HologramDisplay> holoShouldRemo = new ObjectOpenHashSet<>();
                 a.holograms.forEach(s -> {
                     s.hologram.deSpawn();
+                    holoShouldRemo.add(s);
                 });
+                a.holograms.removeAll(holoShouldRemo);
+                if(a.holograms.size() <= 0){
+                    shouldRemove.add(i);
+                }
             }
         });
+        shouldRemove.forEach(animationDataMap::remove);
         if (Bukkit.getOnlinePlayers().isEmpty()) {
             return;
         }
@@ -70,7 +84,7 @@ public class BountyRunnable extends BukkitRunnable {
             Location playerLocation = player.getLocation();
             double x = generatorLocDouble();
             double z = generatorLocDouble();
-            Hologram newHologram = HologramAPI.createHologram(playerLocation.clone().add(x, 0, z), CC.translate(color + "&l" + bounty + "g"));
+            Hologram newHologram = HologramAPI.createHologram(playerLocation.clone().add(x, 0.1, z), CC.translate(color + "&l" + bounty + "g"));
 
             List<Player> reviewers = new ArrayList<>(Bukkit.getOnlinePlayers());
             reviewers.remove(player);
@@ -90,9 +104,10 @@ public class BountyRunnable extends BukkitRunnable {
             } else {
                 Location location = player.getLocation().clone();
                 location.setX(location.getX() + hologram.boostX);
-                location.setY(hologram.getHologram().getLocation().getY() + 0.1);
+                Hologram hologram1 = hologram.getHologram();
+                location.setY(hologram1.getLocation().getY() + 0.1);
                 location.setZ(location.getZ() + hologram.boostZ);
-                hologram.getHologram().setLocation(location);
+                hologram1.setLocation(location);
             }
         }
         shouldRemove.forEach(holograms::remove);

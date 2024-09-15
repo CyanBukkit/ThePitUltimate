@@ -180,7 +180,6 @@ object PitHook {
     }
 
     private fun loadRunnable() {
-        GameRunnable().runTaskTimer(ThePit.getInstance(), 1L, 1L)
 
         EventRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 60L, 120L)
 
@@ -194,7 +193,7 @@ object PitHook {
 
         PacketHologramRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20)
 
-        BountyRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 2, 2)
+        BountyRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 5, 5)
     }
 
     private fun loadItems() {
@@ -619,6 +618,8 @@ object PitHook {
             FixListeners::class.java,
             TradeListener::class.java,
             HologramListener::class.java,
+            TickHandler::class.java,
+            AsyncTickHandler::class.java
         )
         for (aClass in classes) {
             try {

@@ -1,5 +1,9 @@
 package cn.charlotte.pit.data.sub;
 
+import cn.charlotte.pit.parm.listener.ITickTask;
+
+import java.util.Map;
+
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/1 21:44
@@ -8,6 +12,7 @@ public class PerkData {
     private String perkInternalName;
     private int level;
 
+    private ITickTask iTickTask;
     public PerkData(String perkInternalName, int level) {
         this.perkInternalName = perkInternalName;
         this.level = level;
@@ -18,6 +23,13 @@ public class PerkData {
 
     public String getPerkInternalName() {
         return this.perkInternalName;
+    }
+    public ITickTask getITickTask(Map<String, ITickTask> tickTasks){
+        if(iTickTask != null){
+            return iTickTask;
+        }
+        iTickTask = tickTasks.get(getPerkInternalName());
+        return iTickTask;
     }
 
     public void setPerkInternalName(String perkInternalName) {

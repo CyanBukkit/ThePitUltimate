@@ -26,7 +26,7 @@ object ActionBarDisplayRunnable {
         Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(),{
                 if(!MinecraftServer.getServer().isRunning){
                     for (player in Bukkit.getOnlinePlayers()) {
-                        ActionBarUtil.sendActionBar(player, shutdownStr);
+                        ActionBarUtil.sendActionBar1(player,"system", shutdownStr,2);
                     }
                     return@runTaskTimerAsynchronously
                 }
@@ -53,7 +53,7 @@ object ActionBarDisplayRunnable {
                         val itemStack = armorContent ?: continue
                         player.handleActionDisplay(itemStack, builder)
                     }
-                    if(builder.isNotBlank()) ActionBarUtil.sendActionBar(player, CC.translate(builder.toString()))
+                    if(builder.isNotBlank()) ActionBarUtil.sendActionBar1(player,"skill", CC.translate(builder.toString()),4)
                 }
             }, 100L, 20L)
     }

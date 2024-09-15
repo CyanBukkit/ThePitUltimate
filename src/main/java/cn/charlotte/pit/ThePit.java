@@ -1,5 +1,6 @@
 package cn.charlotte.pit;
 
+import cn.charlotte.pit.actionbar.ActionBarManager;
 import cn.charlotte.pit.api.PitInternalHook;
 import cn.charlotte.pit.api.PointsAPI;
 import cn.charlotte.pit.buff.BuffFactory;
@@ -52,8 +53,10 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -118,6 +121,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private String serverId;
 
     private BukkitAudiences audiences;
+    private ActionBarManager actionBarManager;
 
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
@@ -211,6 +215,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.initBossBar();
 
                 this.initPet();
+                this.loadActionBarManager();
 
                 this.signGui = new SignGui(this);
 
@@ -219,13 +224,17 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
                 this.miniGameController = new MiniGameController();
                 this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
-
                 new AutoSaveRunnable().runTaskTimerAsynchronously(this,1200,72000);
                 new DayNightCycleRunnable().runTaskTimerAsynchronously(this,20,20);
 
                 Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
                     if (e instanceof ArmorStand) {
                         e.remove();
+                    }
+                    if(e instanceof Item it){
+                        if (it.getItemStack().getType() == Material.GOLD_INGOT) {
+                            it.remove(); //garbage remove pieces 修复内存碎片整合慢问题
+                        }
                     }
                 }));
 //            this.printBanner();
@@ -248,6 +257,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 FixedRewardData.Companion.refreshAll();
                 Bukkit.getServer().setWhitelist(whiteList);
                 new ProfileLoadRunnable(this);
+                new AsyncTickHandler().runTaskTimerAsynchronously(this,1,1);
                 PitMain.start();
             } else {
                 while (!h()) {
@@ -257,7 +267,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
             sendLogs("宝马启动");
         }
     }
-
+    public ActionBarManager getActionBarManager(){
+        return actionBarManager;
+    }
     private void loadItemFactor() {
         this.itemFactor = new ItemFactor();
     }
@@ -272,7 +284,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     public void sendLogs(String s) {
         Bukkit.getConsoleSender().sendMessage(s);
     }
-
+    public void loadActionBarManager(){
+        this.actionBarManager = new ActionBarManager();
+    }
     @Override
     public void onDisable() {
         PacketHologramRunnable.deSpawnAll();

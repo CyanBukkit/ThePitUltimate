@@ -25,12 +25,12 @@ public class AssembleThread implements Runnable {
      */
     AssembleThread(Assemble assemble) {
         this.assemble = assemble;
-        Plugin protocolLib = Bukkit.getPluginManager().getPlugin("ProtocolLib");
-        if (protocolLib.getDescription().getVersion().startsWith("5")) {
+//        Plugin protocolLib = Bukkit.getPluginManager().getPlugin("ProtocolLib");
+//        if (protocolLib.getDescription().getVersion().startsWith("5")) {
             taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
-        } else {
-            taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
-        }
+//        } else {
+//            taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
+//        } useless check
     }
 
     @Override
@@ -75,8 +75,8 @@ public class AssembleThread implements Runnable {
                     board.getEntries().forEach(AssembleBoardEntry::remove);
                     board.getEntries().clear();
                 } else {
-                    if (newLines.size() > 15) {
-                        newLines = this.assemble.getAdapter().getLines(player).subList(0, 15);
+                    if (newLines.size() > 16) {
+                        newLines = newLines.subList(0,15); //EmptyIrony u sucks
                     }
 
                     // Reverse the lines because scoreboard scores are in descending order.

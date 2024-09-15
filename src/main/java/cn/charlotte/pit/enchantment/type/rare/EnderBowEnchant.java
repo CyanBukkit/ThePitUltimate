@@ -8,6 +8,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -110,6 +111,7 @@ public class EnderBowEnchant extends AbstractEnchantment implements IPlayerShoot
                 cooldown.put(player.getUniqueId(), new Cooldown(getCooldownInt(level), TimeUnit.SECONDS));
                 Entity projectile = event.getProjectile();
                 event.getProjectile().setMetadata("ender_bow", new FixedMetadataValue(ThePit.getInstance(), true));
+                Utils.pointMetadataAndRemove(projectile,500,"ender_bow");
                 //event.setProjectile(projectile);
             }
         }

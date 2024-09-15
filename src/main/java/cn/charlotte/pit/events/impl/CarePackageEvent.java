@@ -17,6 +17,7 @@ import cn.charlotte.pit.util.hologram.HologramAPI;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
+import io.papermc.paper.util.maplist.ObjectMapList;
 import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -71,7 +72,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if ("care_package".equals(ThePit.getInstance().getEventFactory().getActiveNormalEventName())) {
+        if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() == this) {
             final Hologram firstHologram = chestData.getFirstHologram();
             if (firstHologram != null) {
                 firstHologram.spawn(Collections.singletonList(event.getPlayer()));
@@ -86,7 +87,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if ("care_package".equals(ThePit.getInstance().getEventFactory().getActiveNormalEventName())) {
+        if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() == this) {
             if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.CHEST && event.getClickedBlock().getLocation().equals(chest)) {
                 event.setCancelled(true);
                 if (chestData == null) {
@@ -110,10 +111,11 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
     }
 
     private void click(Player player, ChestData data) {
+        Hologram secondHologram = data.getSecondHologram();
         if (data.getNum() <= 0) {
             new PackageMenu().openMenu(player);
             data.getFirstHologram().deSpawn();
-            data.getSecondHologram().setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "开启"));
+            secondHologram.setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "开启"));
             return;
         }
         data.setNum(data.getNum() - 1);
@@ -124,13 +126,13 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         Hologram hologram = data.getFirstHologram();
         if (data.getNum() > 150) {
             hologram.setText(CC.translate("&a&l" + data.getNum()));
-            data.getSecondHologram().setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
+            secondHologram.setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
         } else if (data.getNum() > 35) {
             hologram.setText(CC.translate("&e&l" + data.getNum()));
-            data.getSecondHologram().setText(CC.translate("&e&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
+            secondHologram.setText(CC.translate("&e&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
         } else {
             hologram.setText(CC.translate("&c&l" + data.getNum()));
-            data.getSecondHologram().setText(CC.translate("&c&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
+            secondHologram.setText(CC.translate("&c&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
         }
     }
 
@@ -147,64 +149,62 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
         Bukkit.getPluginManager()
                 .registerEvents(this, ThePit.getInstance());
-        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-            location.getWorld().strikeLightningEffect(location);
-            CC.boardCast("&6&l空投! &7一个新的空投已在地图降落!打开可以获得神话物品,声望等稀有物资!");
-            location.getBlock().setType(Material.CHEST);
-            chest = location;
+        location.getWorld().strikeLightningEffect(location);
+        CC.boardCast("&6&l空投! &7一个新的空投已在地图降落!打开可以获得神话物品,声望等稀有物资!");
+        Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+                    location.getBlock().setType(Material.CHEST);
+                });
+        chest = location;
 
-            Map<Integer, ItemStack> items = PackageMenu.getItems();
-            for (int i = 0; i < RandomUtil.random.nextInt(3) + 3; i++) {
-                int nextInt = RandomUtil.random.nextInt(27);
-                while (items.get(nextInt) != null && items.get(nextInt).getType() != Material.AIR) {
-                    nextInt = RandomUtil.random.nextInt(27);
-                }
-                items.put(nextInt, (ItemStack) RandomUtil.helpMeToChooseOne(
-                        new MythicLeggingsItem().toItemStack(),
-                        new MythicSwordItem().toItemStack(),
-                        new MythicBowItem().toItemStack(),
-                        new MythicSwordItem().toItemStack(),
-                        new MythicBowItem().toItemStack()
-                ));
+        Map<Integer, ItemStack> items = PackageMenu.getItems();
+        for (int i = 0; i < RandomUtil.random.nextInt(3) + 3; i++) {
+            int nextInt = RandomUtil.random.nextInt(27);
+            while (items.get(nextInt) != null && items.get(nextInt).getType() != Material.AIR) {
+                nextInt = RandomUtil.random.nextInt(27);
             }
+            items.put(nextInt, (ItemStack) RandomUtil.helpMeToChooseOne(
+                    new MythicLeggingsItem().toItemStack(),
+                    new MythicSwordItem().toItemStack(),
+                    new MythicBowItem().toItemStack(),
+                    new MythicSwordItem().toItemStack(),
+                    new MythicBowItem().toItemStack()
+            ));
+        }
 
-            for (int i = 0; i < RandomUtil.random.nextInt(3) + 3; i++) {
-                int nextInt = RandomUtil.random.nextInt(27);
-                while (items.get(nextInt) != null && items.get(nextInt).getType() != Material.AIR) {
-                    nextInt = RandomUtil.random.nextInt(27);
-                }
-                items.put(nextInt, new ItemBuilder(Material.GOLD_BLOCK).name("&e+2声望").internalName("renown_reward").shiny().build());
+        for (int i = 0; i < RandomUtil.random.nextInt(3) + 3; i++) {
+            int nextInt = RandomUtil.random.nextInt(27);
+            while (items.get(nextInt) != null && items.get(nextInt).getType() != Material.AIR) {
+                nextInt = RandomUtil.random.nextInt(27);
             }
+            items.put(nextInt, new ItemBuilder(Material.GOLD_BLOCK).name("&e+2声望").internalName("renown_reward").shiny().build());
+        }
 
-            for (int i = 0; i < RandomUtil.random.nextInt(3) + 3; i++) {
-                if (items.get(i) == null) {
-                    items.put(i, (ItemStack) RandomUtil.helpMeToChooseOne(new ItemBuilder(Material.EXP_BOTTLE).name("&b+1000经验值").internalName("xp_reward").shiny().build(), new ItemBuilder(Material.GOLD_INGOT).name("&6+1000硬币").internalName("coin_reward").shiny().build()));
-                }
+        for (int i = 0; i < RandomUtil.random.nextInt(3) + 3; i++) {
+            if (items.get(i) == null) {
+                items.put(i, (ItemStack) RandomUtil.helpMeToChooseOne(new ItemBuilder(Material.EXP_BOTTLE).name("&b+1000经验值").internalName("xp_reward").shiny().build(), new ItemBuilder(Material.GOLD_INGOT).name("&6+1000硬币").internalName("coin_reward").shiny().build()));
             }
+        }
 
-            chestData = new ChestData();
-            chestData.setFirstHologram(HologramAPI.createHologram(location.getBlock().getLocation().clone().add(0.5, 2.4, 0.5), CC.translate("&a&l200")));
-            chestData.setSecondHologram(HologramAPI.createHologram(location.getBlock().getLocation().clone().add(0.5, 2.0, 0.5), CC.translate("&a&l左键点击")));
+        chestData = new ChestData();
+        chestData.setFirstHologram(HologramAPI.createHologram(location.getBlock().getLocation().clone().add(0.5, 2.4, 0.5), CC.translate("&a&l200")));
+        chestData.setSecondHologram(HologramAPI.createHologram(location.getBlock().getLocation().clone().add(0.5, 2.0, 0.5), CC.translate("&a&l左键点击")));
 
-            chestData.getFirstHologram().spawn();
-            chestData.getSecondHologram().spawn();
-            endTimer = ThePit.getInstance().getEventFactory().getNormalEnd();
-        });
+        chestData.getFirstHologram().spawn();
+        chestData.getSecondHologram().spawn();
+        endTimer = ThePit.getInstance().getEventFactory().getNormalEnd();
     }
+
 
     @Override
     public void onInactive() {
+        HandlerList.unregisterAll(this);
+        chestData.getSecondHologram().deSpawn();
+        chestData.getFirstHologram().deSpawn();
+        PackageMenu.getItems().clear();
         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-            HandlerList.unregisterAll(this);
-            chestData.getSecondHologram().deSpawn();
-            if (chestData.getFirstHologram().isSpawned()) {
-                chestData.getFirstHologram().deSpawn();
-            }
-            PackageMenu.getItems().clear();
-            chest.getBlock().setType(Material.AIR);
-            chestData = null;
-            chest = null;
-        });
+                    chest.getBlock().setType(Material.AIR);
+                });
+        //we didnt have to set chestData = null;
     }
 
     @Override
@@ -243,6 +243,6 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         private int num = 200;
         private Hologram firstHologram;
         private Hologram secondHologram;
-        private List<UUID> rewarded = new ArrayList<>();
+        private List<UUID> rewarded = new ObjectMapList<>();
     }
 }

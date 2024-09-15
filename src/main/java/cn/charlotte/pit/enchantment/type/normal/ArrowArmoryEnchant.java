@@ -6,11 +6,13 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import dev.jnic.annotation.Include;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -110,16 +112,18 @@ public class ArrowArmoryEnchant extends AbstractEnchantment implements Listener 
         boolean success = InventoryUtil.removeItem(player, arrowBuilder.build(), getExtraArrowRequirement(level));
         if (success) {
             event.getProjectile().setMetadata("arrow_armory", new FixedMetadataValue(ThePit.getInstance(), getBoostDamage(level)));
+            Utils.pointMetadataAndRemove(event.getProjectile(),500,"arrow_armory");
             cooldown.put(player.getUniqueId(), new Cooldown(500, TimeUnit.MILLISECONDS));
         }
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
-            List<MetadataValue> arrowArmory = event.getDamager().getMetadata("arrow_armory");
+        Entity damager = event.getDamager();
+        if (damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof Player) {
+            List<MetadataValue> arrowArmory = damager.getMetadata("arrow_armory");
             if (!arrowArmory.isEmpty()) {
-                Player shooter = (Player) ((Projectile) event.getDamager()).getShooter();
+                Player shooter = (Player) ((Projectile) damager).getShooter();
                 if (PlayerUtil.isVenom(shooter)) return;
                 event.setDamage((1 + 0.01 * arrowArmory.get(0).asInt()) * event.getDamage());
             }

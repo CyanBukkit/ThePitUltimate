@@ -81,6 +81,8 @@ class Regularity : AbstractEnchantment(), Listener {
             metadata.firstOrNull()?.asLong()?.let {
                 if (System.currentTimeMillis() < it) {
                     return
+                } else {
+                    victim.removeMetadata("regularity_cooldown",ThePit.getInstance())
                 }
             }
 

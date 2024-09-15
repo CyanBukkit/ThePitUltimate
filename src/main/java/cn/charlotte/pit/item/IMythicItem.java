@@ -187,7 +187,6 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (dyeColor != null && this instanceof MythicLeggingsItem) {
             lore.add("&7原: " + color.getChatColor() + color.getDisplayName() + "色神话之甲");
         }
-
         //Dark Pants
 
         ItemBuilder builder = new ItemBuilder(this.getItemDisplayMaterial());

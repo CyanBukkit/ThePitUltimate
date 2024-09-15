@@ -82,7 +82,12 @@ public class PlayerUtil {
 
     public static boolean isVenom(Player player) {
         MetadataValue comboVenom = ((CraftPlayer)player).getMetadata(ThePit.getInstance(),"combo_venom");
-        return comboVenom != null && comboVenom.asLong() > System.currentTimeMillis();
+        if (comboVenom == null) return false;
+        boolean b = comboVenom.asLong() > System.currentTimeMillis();
+        if(!b){
+            player.removeMetadata("combo_venom",ThePit.getInstance()); //garbages
+        }
+        return b;
     }
 
     public static boolean isEquippingSomber(Player player) {
@@ -179,6 +184,7 @@ public class PlayerUtil {
                 if (victim.getHealth() > damage) {
                     victim.setHealth(Math.min(victim.getMaxHealth(), Math.max(victim.getHealth() - damage, 0.0)));
                 } else {
+                    victim.setNoDamageTicks(0);
                     victim.damage(victim.getMaxHealth() * 100);
                 }
                 break;

@@ -55,11 +55,7 @@ public class VectorUtil {
         Location from = entity.getLocation();
         Vector vector = getPushVector(from, to, velocity);
         if (vector.getX() != 0 && vector.getY() != 0 && vector.getZ() != 0) {
-            if(entity.isOnGround()){
-                entity.getLocation().add(0,0.1,0);
-            }
             entity.setVelocity(vector);
-
         }
     }
 

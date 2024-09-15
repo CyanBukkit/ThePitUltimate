@@ -7,7 +7,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.Utils;
-import dev.jnic.annotation.Include;
+import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
@@ -15,20 +15,20 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import xyz.refinedev.spigot.async.utils.ResettableLatch;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/5 0:30
  */
-public class GameRunnable extends BukkitRunnable {
-    @Getter
-    private final static ObjectArrayList<TradeRequest> tradeRequests = new ObjectArrayList<>();
+public class TickHandler implements Listener {
+    //@Getter
+    //private final static ObjectArrayList<TradeRequest> tradeRequests = new ObjectArrayList<>();
 
     final Map<String, ITickTask> enchantTicks = ThePit.getInstance().getEnchantmentFactor().getTickTasks();
 
@@ -36,15 +36,15 @@ public class GameRunnable extends BukkitRunnable {
 
     private long tick = 0;
     @SneakyThrows
-    @Override
-    public void run() {
+    @EventHandler
+    public void onTick(ServerTickEndEvent event) { //PostTick
 
         Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
         for (Player player : onlinePlayers) {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
                 for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
-                    final ITickTask task = ticksPerk.get(entry.getValue().getPerkInternalName());
+                    final ITickTask task = entry.getValue().getITickTask(ticksPerk);
                     if (task != null) {
                         if (tick % task.loopTick(entry.getValue().getLevel()) == 0) {
                             task.handle(entry.getValue().getLevel(), player);
@@ -63,17 +63,19 @@ public class GameRunnable extends BukkitRunnable {
 
 
                 //裤子
-                final ItemStack leggings = player.getInventory().getLeggings();
+            PlayerInventory inventory = player.getInventory();
+            final ItemStack leggings = inventory.getLeggings();
                 if (leggings != null) {
                     handleIMythicItemTickTasks(leggings,player);
                 }
 
-                ItemStack itemInHand = player.getInventory().getItemInHand();
-                if (itemInHand != null && itemInHand.getType() != Material.AIR && itemInHand.getType() != Material.LEATHER_LEGGINGS && itemInHand.getType() != Material.PAPER) {
-                    handleIMythicItemTickTasks(itemInHand,player);
+                ItemStack itemInHand = inventory.getItemInHand();
+                if (itemInHand != null) {
+                    Material type = itemInHand.getType();
+                    if (type != Material.AIR && type != Material.LEATHER_LEGGINGS && type != Material.PAPER) {
+                        handleIMythicItemTickTasks(itemInHand, player);
+                    }
                 }
-
-                tradeRequests.removeIf(next -> next.getCooldown().hasExpired());
         }
         //潜在风险 unsigned!
         if(++tick==Long.MIN_VALUE){

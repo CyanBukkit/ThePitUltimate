@@ -378,6 +378,7 @@ public class PlayerProfile {
                             .find(Filters.eq("uuid", uuid.toString()));
                     invBackups.batchSize(1000);
                     gcBackups(invBackups, playerProfile, true);
+
                 });
             } catch (Exception e) {
                 e.printStackTrace();

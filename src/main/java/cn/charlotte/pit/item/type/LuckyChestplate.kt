@@ -100,7 +100,7 @@ class LuckyChestplate: IMythicItem(), Listener {
             e.damage += 20.0
         }
 
-        player.removeMetadata("lcuky_chestplate", ThePit.getInstance())
+        player.removeMetadata("lucky_chestplate", ThePit.getInstance())
 
         val success = RandomUtil.hasSuccessfullyByChance(0.2)
         if (success) {

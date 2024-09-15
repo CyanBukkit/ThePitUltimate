@@ -3,6 +3,7 @@ package cn.charlotte.pit.perk;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -26,7 +27,7 @@ public class PerkFactory {
     private final Map<String, ITickTask> tickTasks;
     private final List<IPlayerAssist> playerAssists;
 
-    private final Map<String, AbstractPerk> perkMap = new HashMap<>();
+    private final Map<String, AbstractPerk> perkMap = new Object2ObjectOpenHashMap<>();
 
 
     public PerkFactory() {
@@ -37,7 +38,7 @@ public class PerkFactory {
         this.playerBeKilledByEntities = new ArrayList<>();
         this.playerKilledEntities = new ArrayList<>();
         this.playerRespawns = new ArrayList<>();
-        this.tickTasks = new HashMap<>();
+        this.tickTasks = new Object2ObjectOpenHashMap<>();
         this.playerShootEntities = new ArrayList<>();
         this.playerAssists = new ArrayList<>();
     }

@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
@@ -41,8 +42,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @BowOnly
 public class BowComboEnchant extends AbstractEnchantment implements IPlayerShootEntity, Listener, IActionDisplayEnchant {
 
-    public static final HashMap<UUID, Long> hitCheck = new HashMap<>();
-    public static final HashMap<UUID, Integer> combo = new HashMap<>();
+    public final HashMap<UUID, Long> hitCheck = new HashMap<>();
+    public final HashMap<UUID, Integer> combo = new HashMap<>();
 
     @Override
     public String getEnchantName() {
@@ -99,6 +100,7 @@ public class BowComboEnchant extends AbstractEnchantment implements IPlayerShoot
             return;
         }
         event.getProjectile().setMetadata("bow_combo_enchant_uuid", new FixedMetadataValue(ThePit.getInstance(), UUID.randomUUID().toString()));
+        Utils.pointMetadataAndRemove(event.getProjectile(),500,"bow_combo_enchant_uuid");
     }
 
     @EventHandler
@@ -128,6 +130,7 @@ public class BowComboEnchant extends AbstractEnchantment implements IPlayerShoot
             List<MetadataValue> bowComboEnchantUuid = event.getDamager().getMetadata("bow_combo_enchant_uuid");
             if (!bowComboEnchantUuid.isEmpty()) {
                 UUID uuid = UUID.fromString(bowComboEnchantUuid.get(0).asString());
+                event.getEntity().removeMetadata("bow_combo_enchant_uuid",ThePit.getInstance());
                 hitCheck.put(uuid, System.currentTimeMillis());
             }
         }

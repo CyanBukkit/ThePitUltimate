@@ -2,6 +2,7 @@ package cn.charlotte.pit.util;
 
 import cn.charlotte.pit.item.IMythicItem;
 import cn.klee.backports.utils.SWMRHashTable;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
@@ -22,15 +23,11 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
     AtomicBoolean removeLast = new AtomicBoolean(false);
     LongSupplier limit;
     public ItemGlobalReference(LongSupplier limit){
+        super();
         this.limit = limit;
     }
     public IMythicItem getValue(String key) {
-        try {
-            lock.readLock().lock();
-            return get(key);
-        } finally {
-            lock.readLock().unlock();
-        }
+        return get(key);
     }
     public IMythicItem getValue(UUID key){
         return getValue(key.toString());

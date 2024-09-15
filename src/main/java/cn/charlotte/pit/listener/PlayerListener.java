@@ -277,6 +277,7 @@ public class PlayerListener implements Listener {
                 profile.setGoldPicked(profile.getGoldPicked() + 1);
                 player.sendMessage(CC.translate("&6&l捡起硬币! &7从地上找到了&6 " + gold + " &7硬币!"));
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1.8F);
+                event.getItem().removeMetadata("gold",ThePit.getInstance()); // for garbage clear
             }
         }
     }
@@ -528,7 +529,7 @@ public class PlayerListener implements Listener {
 
                 tntPrimed.setMetadata("internal", new FixedMetadataValue(ThePit.getInstance(), "tnt"));
                 tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
-
+                Utils.pointMetadataAndRemove(tntPrimed,100,"internal","shooter");
                 VectorUtil.entityPush(tntPrimed, blockIterator.next().getLocation(), 25);
             }
         } else if ("red_packet".equals(ItemUtil.getInternalName(event.getItem()))) {
@@ -558,7 +559,7 @@ public class PlayerListener implements Listener {
                 tntPrimed.setMetadata("money", new FixedMetadataValue(ThePit.getInstance(), money));
                 tntPrimed.setMetadata("internal", new FixedMetadataValue(ThePit.getInstance(), "red_packet"));
                 tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
-
+                Utils.pointMetadataAndRemove(tntPrimed,100,"money,","internal","shooter");
                 VectorUtil.entityPush(tntPrimed, blockIterator.next().getLocation(), 25);
             }
         }
