@@ -51,20 +51,20 @@ public class ItemUtil {
     }
     public static boolean shouldUpdateItem(ItemStack stack){
         String ver = getVer(stack);
-        return ver == null || ver.equals("NULL") || !PitHook.getGitVersion().equals(ver);
+        return ver == null || ver.equals("NULL") || !PitHook.getItemVersion().equals(ver);
     }
     public static void randomUUIDItem(ItemStack stack){
         setUUIDObj(stack,UUID.randomUUID());
     }
     public static void signVer(ItemStack stack){
-        setVer(stack,PitHook.getGitVersion());
+        setVer(stack,PitHook.getItemVersion());
     }
 
     public static boolean shouldUpdateUUIDAndItem(ItemStack stack){
         return shouldUpdateItem(stack) && shouldUpdateUUID();
     }
     public static boolean shouldUpdateUUID(){
-        return PitHook.getGitVersion().endsWith("uuid");
+        return PitHook.getItemVersion().endsWith("uuid");
     }
     public static boolean isIllegalItem(ItemStack item) {
         NBTTagCompound extra = getExtra(item);

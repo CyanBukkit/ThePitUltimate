@@ -87,7 +87,8 @@ import org.bukkit.plugin.PluginDescriptionFile
 object PitHook {
     @JvmStatic
     val gitVersion = "ShanguanLingV1uuid"
-
+    @JvmStatic
+    val itemVersion = "ShanguanLingV1uuid"
     fun init() {
         try {
             NewConfiguration.loadFile()

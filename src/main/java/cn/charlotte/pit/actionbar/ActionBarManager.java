@@ -32,10 +32,10 @@ public class ActionBarManager{
     }
     public void tick() {
         Set<UUID> uuids = new ObjectOpenHashSet<>();
-        multiMap.forEach((uuid, mappedString) -> {
-            Player player = Bukkit.getPlayer(uuid);
+        multiMap.forEach((uuid, mappedString) -> { //forEach as multimap
+            Player player = Bukkit.getPlayer(uuid); //get Players
             if (mappedString.size() <= 0 || player == null || !player.isOnline()) {
-                uuids.add(uuid);
+                uuids.add(uuid); //point to gc
                 return;
             }
             StringBuilder builder = new StringBuilder();
@@ -49,7 +49,7 @@ public class ActionBarManager{
                 builder.append(" &7| ");
                 int i1 = --repeat;
                 if (i1 <= 0) {
-                    removal.add(key);
+                    removal.add(key); //point to gc
                     return;
                 }
                 mappedString.put(key, Map.entry(rawString, i1));
@@ -57,8 +57,8 @@ public class ActionBarManager{
             if (ab.get()) {
                 builder.delete(builder.length() - 5, builder.length());
                 ActionBarUtil.sendActionBar0(player, builder.toString());
-                removal.forEach(mappedString::remove);
             }
+            removal.forEach(mappedString::remove);
         });
         uuids.forEach(multiMap::remove);
     }
