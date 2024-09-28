@@ -7,6 +7,7 @@ import cn.charlotte.pit.config.PitConfig;
 import cn.charlotte.pit.data.PlayerInvBackup;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
+import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.events.EventsHandler;
 import cn.charlotte.pit.item.IMythicItem;
@@ -49,6 +50,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import dev.jnic.annotation.Include;
 import io.lumine.xikage.mythicmobs.items.MythicItem;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -361,7 +363,6 @@ public class PitAdminCommand {
             async = true
     )
     public void changeLives(Player player, @Parameter(name = "amount") String amount) {
-        System.out.println(2);
         if (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR)) {
             player.sendMessage(CC.translate("&c请先手持要修改的物品!"));
         }
@@ -380,7 +381,6 @@ public class PitAdminCommand {
             async = true
     )
     public void changeMaxLives(Player player, @Parameter(name = "amount") String amount) {
-        System.out.println(1);
         if (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR)) {
             player.sendMessage(CC.translate("&c请先手持要修改的物品!"));
         }
@@ -727,7 +727,7 @@ public class PitAdminCommand {
             if (confirmDrop.size() < 3) {
                 player.sendMessage(CC.translate("&c&l你已确认Drop数据库，还需要&e&l" + (3 - confirmDrop.size()) + "&c&l管理员确认！"));
             } else {
-                PlayerProfile.getCacheProfile().clear();
+                ThePit.getInstance().getProfileOperator().wipe();
                 ThePit.getInstance()
                         .getMongoDB()
                         .getProfileCollection()
@@ -823,16 +823,17 @@ public class PitAdminCommand {
             async = true
     )
     public void wipePlayer(Player player, @Parameter(name = "player") String target, @Parameter(name = "reason") String reason) {
-        PlayerProfile profile = PlayerProfile.getOrLoadPlayerProfileByName(target);
+        PlayerProfile profile = ThePit.getInstance().getProfileOperator()
+                .namedOperator(target).profile();
         if (profile == null) {
-            player.sendMessage(CC.translate("&cすみません！あのプレイヤーは見つかりませんでした！もう一度確認してください！"));
+            player.sendMessage(CC.translate("&c并没有这个玩家"));
             return;
         }
         boolean wipe = profile.wipe(reason);
         if (wipe) {
-            player.sendMessage(CC.translate("&a成功しました！あのプレイヤーはワイプされました！ID: " + profile.getPlayerName()));
+            player.sendMessage(CC.translate("&a成功, 已成功Wipe该玩家 ！ID: " + profile.getPlayerName()));
         } else {
-            player.sendMessage(CC.translate("&c&lすみません！ワイプが失敗しました！いくつかのエラーがありました！"));
+            player.sendMessage(CC.translate("&c&lWipe 失败！"));
         }
     }
 
@@ -841,8 +842,9 @@ public class PitAdminCommand {
             permissionNode = "pit.admin",
             async = true
     )
-    public void wipePlayer(Player player, @Parameter(name = "player") String target) {
-        PlayerProfile profile = PlayerProfile.getOrLoadPlayerProfileByName(target);
+    public void unwipePlayer(Player player, @Parameter(name = "player") String target) {
+        PlayerProfile profile = ThePit.getInstance().getProfileOperator()
+                .namedOperator(target).profile();
         if (profile == null) {
             player.sendMessage(CC.translate("&cすみません！あのプレイヤーは見つかりませんでした！もう一度確認してください！"));
             return;
@@ -870,7 +872,8 @@ public class PitAdminCommand {
             async = true
     )
     public void onTestWorldEdit(Player player, @Parameter(name = "value") String name) {
-        PlayerProfile profile = PlayerProfile.getOrLoadPlayerProfileByName(name);
+        PlayerProfile profile = ThePit.getInstance().getProfileOperator()
+                .namedOperator(name).profile();
         FindIterable<TradeData> tradeA = ThePit.getInstance()
                 .getMongoDB()
                 .getTradeCollection()
@@ -899,21 +902,23 @@ public class PitAdminCommand {
             async = true
     )
     public void onRollbackInv(Player player, @Parameter(name = "name") String name) {
-        PlayerProfile profile = PlayerProfile.getOrLoadPlayerProfileByName(name);
+        PackedOperator packedOperator = ThePit.getInstance().getProfileOperator()
+                .lookupOnline(name);
+        PlayerProfile profile = packedOperator.profile();
         if (profile == null) {
             player.sendMessage(CC.translate("&c该玩家不存在"));
             return;
         }
 
-        final FindIterable<PlayerInvBackup> backups = ThePit.getInstance().getMongoDB()
+        final List<PlayerInvBackup> backups = new ObjectArrayList<>(ThePit.getInstance().getMongoDB()
                 .getInvCollection()
-                .find(Filters.eq("uuid", profile.getUuid()));
+                .find(Filters.eq("uuid", profile.getUuid())).iterator());
 
         List<Button> buttons = new ArrayList<>();
         int i = 0;
         for (PlayerInvBackup invBackup : backups) {
             if (invBackup.getInv() == null) continue;
-            buttons.add(new ShowInvBackupButton(
+            buttons.add(new ShowInvBackupButton(backups,
                     new ItemBuilder(Material.BOOK)
                             .name("&a备份时间: " + format.format(invBackup.getTimeStamp()))
                             .lore(("&e物品数: " + InventoryUtil.getInventoryFilledSlots(invBackup.getInv().getContents())))

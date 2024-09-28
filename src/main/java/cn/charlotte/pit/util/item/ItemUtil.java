@@ -1,14 +1,21 @@
 package cn.charlotte.pit.util.item;
 
 import cn.charlotte.pit.PitHook;
+import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.util.Utils;
+import cn.hutool.core.lang.generator.UUIDGenerator;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.spigotmc.AsyncCatcher;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Author: EmptyIrony
@@ -53,8 +60,24 @@ public class ItemUtil {
         String ver = getVer(stack);
         return ver == null || ver.equals("NULL") || !PitHook.getItemVersion().equals(ver);
     }
-    public static void randomUUIDItem(ItemStack stack){
-        setUUIDObj(stack,UUID.randomUUID());
+    public static UUID randomUUIDItem(ItemStack stack) {
+        UUID uuid;
+
+        ItemFactory itemFactory = ThePit.getInstance().getItemFactory();
+        if (itemFactory != null) {
+            while (true) {
+                uuid = UUID.randomUUID();
+                IMythicItem item = itemFactory.getItem(uuid);
+                if (item == null) {
+                    break;
+                }
+
+            }
+        } else {
+            uuid = UUID.randomUUID();
+        }
+        setUUIDObj(stack, uuid); //async? I think never will have bugs on here
+        return uuid;
     }
     public static void signVer(ItemStack stack){
         setVer(stack,PitHook.getItemVersion());

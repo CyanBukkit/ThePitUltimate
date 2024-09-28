@@ -5,6 +5,7 @@ import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.data.mail.Mail;
+import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
@@ -158,19 +159,12 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
         );
     }
     public static void sendMail(UUID uuid, Mail mail) {
-        Player player = Bukkit.getPlayer(uuid);
-        if (player != null && player.isOnline()) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(uuid);
-            profile.getMailData().sendMail(mail);
-        } else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    PlayerProfile profile = PlayerProfile.getOrLoadPlayerProfileByUuid(uuid);
-                    profile.getMailData().sendMail(mail);
-                }
-            }.runTaskAsynchronously(ThePit.getInstance());
-        }
+       ProfileOperator profileOperator = ThePit.getInstance().getProfileOperator();
+
+        profileOperator.operator(uuid).ifPresent(operator -> {
+            operator.pendingUntilLoaded(prof -> prof.getMailData().sendMail(mail));
+        });
+
     }
     private static int getRandomLevel() {
         if (RandomUtil.hasSuccessfullyByChance(0.6)) {

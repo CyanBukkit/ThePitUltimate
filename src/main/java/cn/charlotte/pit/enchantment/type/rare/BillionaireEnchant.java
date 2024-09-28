@@ -1,6 +1,8 @@
 package cn.charlotte.pit.enchantment.type.rare;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
@@ -54,22 +56,26 @@ public class BillionaireEnchant extends AbstractEnchantment implements IAttackEn
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId());
-
-        if (profile.getCoins() >= enchantLevel * 100) {
-            boostDamage.getAndAdd(enchantLevel * 0.35);
-            profile.setCoins(profile.getCoins() - enchantLevel * 100 - (enchantLevel >= 3 ? 50 : 0));
+        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(attacker);
+        if(operator != null) {
+            PlayerProfile profile = operator.profile();
+            if (profile.getCoins() >= enchantLevel * 100) {
+                boostDamage.getAndAdd(enchantLevel * 0.35);
+                profile.setCoins(profile.getCoins() - enchantLevel * 100 - (enchantLevel >= 3 ? 50 : 0));
+            }
         }
     }
 
     @Override
     @cn.charlotte.pit.parm.type.BowOnly
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId());
-
-        if (profile.getCoins() >= enchantLevel * 100) {
-            boostDamage.getAndAdd(enchantLevel * 0.35);
-            profile.setCoins(profile.getCoins() - enchantLevel * 100 - (enchantLevel >= 3 ? 50 : 0));
+        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(attacker);
+        if(operator != null) {
+            PlayerProfile profile = operator.profile();
+            if (profile.getCoins() >= enchantLevel * 100) {
+                boostDamage.getAndAdd(enchantLevel * 0.35);
+                profile.setCoins(profile.getCoins() - enchantLevel * 100 - (enchantLevel >= 3 ? 50 : 0));
+            }
         }
     }
 }

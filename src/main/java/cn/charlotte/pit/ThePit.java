@@ -7,6 +7,7 @@ import cn.charlotte.pit.buff.BuffFactory;
 import cn.charlotte.pit.config.PitConfig;
 import cn.charlotte.pit.data.FixedRewardData;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.database.MongoDB;
 import cn.charlotte.pit.enchantment.EnchantmentFactor;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
@@ -32,7 +33,6 @@ import cn.charlotte.pit.util.dependencies.DependencyManager;
 import cn.charlotte.pit.util.dependencies.loaders.LoaderType;
 import cn.charlotte.pit.util.dependencies.loaders.ReflectionClassLoader;
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
-import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.menu.MenuUpdateTask;
 import cn.charlotte.pit.util.nametag.NametagHandler;
 import cn.charlotte.pit.util.random.RandomUtil;
@@ -112,7 +112,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private SoundFactory soundFactory;
     private PetFactory petFactory;
     private ItemFactory itemFactory;
-
+    private ProfileOperator profileOperator;
     private PlayerPointsAPI playerPoints;
     private LuckPerms luckPerms;
 
@@ -134,7 +134,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     public static String getBungeeServerName() {
         return bungeeServerName == null ? "THEPIT" : bungeeServerName.toUpperCase();
     }
-
+    public ProfileOperator getProfileOperator(){
+        return profileOperator;
+    }
     private static void setBungeeServerName(String name) {
         bungeeServerName = name;
     }
@@ -193,6 +195,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.loadConfig();
 
                 this.loadDatabase();
+                this.loadOperator(); //operator
                 this.loadItemFactor();
                 this.loadMenu();
                 this.loadNpc();
@@ -216,7 +219,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
                 this.initPet();
                 this.loadActionBarManager();
-
                 this.signGui = new SignGui(this);
 
                 this.rebootRunnable = new RebootRunnable();
@@ -224,7 +226,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
                 this.miniGameController = new MiniGameController();
                 this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
-                new AutoSaveRunnable().runTaskTimerAsynchronously(this,1200,72000);
+                new AutoSaveRunnable().runTaskTimerAsynchronously(this,1200,6000);
                 new DayNightCycleRunnable().runTaskTimerAsynchronously(this,20,20);
 
                 Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
@@ -258,6 +260,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 Bukkit.getServer().setWhitelist(whiteList);
                 new ProfileLoadRunnable(this);
                 new AsyncTickHandler().runTaskTimerAsynchronously(this,1,1);
+
                 PitMain.start();
             } else {
                 while (!h()) {
@@ -266,6 +269,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
             }
             sendLogs("宝马启动");
         }
+    }
+    public void loadOperator(){
+        profileOperator = new ProfileOperator(this);
     }
     public ActionBarManager getActionBarManager(){
         return actionBarManager;

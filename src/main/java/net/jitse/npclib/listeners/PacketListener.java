@@ -8,7 +8,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.tinyprotocol.Reflection;
+import cn.charlotte.pit.util.proto.Reflection;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.events.NPCInteractEvent;
 import net.jitse.npclib.internal.NPCBase;

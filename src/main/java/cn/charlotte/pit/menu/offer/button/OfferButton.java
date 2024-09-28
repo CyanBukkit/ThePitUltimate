@@ -1,7 +1,9 @@
 package cn.charlotte.pit.menu.offer.button;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
+import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.data.sub.OfferData;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.medal.impl.challenge.FirstTradeMedal;
@@ -30,15 +32,17 @@ public class OfferButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        PlayerProfile targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.getUniqueId());
+        PackedOperator orLoadOperatorOffline = ThePit.getInstance().getProfileOperator().getOrConstructOperator(target);
+        ItemBuilder builder = new ItemBuilder(Material.STAINED_CLAY)
+                .name("&e交易报价");
+
+        PlayerProfile targetProfile = orLoadOperatorOffline.profile();
         List<String> lines = new ArrayList<>();
         lines.add("&7来自: " + targetProfile.getFormattedName());
         lines.add("");
         lines.add("&7价格: &6" + (int) targetProfile.getOfferData().getPrice() + " 硬币");
         lines.add("&7过期: &e" + (TimeUtil.millisToRoundedTime(targetProfile.getOfferData().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后"));
         lines.add("");
-        ItemBuilder builder = new ItemBuilder(Material.STAINED_CLAY)
-                .name("&e交易报价");
         if (targetProfile.getOfferData().getPrice() > profile.getCoins()) {
             lines.add("&c你的硬币不足!");
             builder.durability(14);

@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.hologram.AbstractHologram;
 import cn.charlotte.pit.util.level.LevelUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,7 @@ public class HelperHologram extends AbstractHologram {
     @Override
     public List<String> getText(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        List<String> hologramText = new ArrayList<>();
+        List<String> hologramText = new ObjectArrayList<>();
         hologramText.add("&e&l已解锁的功能");
         hologramText.add("");
         hologramText.add(LevelUtil.getLevelTag(0, 1) + " &b/spawn 回城");

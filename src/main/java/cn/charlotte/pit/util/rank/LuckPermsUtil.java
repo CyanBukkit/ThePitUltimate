@@ -21,7 +21,11 @@ public class LuckPermsUtil {
 
     public static String getPrefix(UUID uuid) {
         User user = getUser(uuid);
-        return user != null && user.getCachedData().getMetaData().getPrefix() != null ? ChatColor.translateAlternateColorCodes('&', user.getCachedData().getMetaData().getPrefix()) + " " : "§7";
+        if ( user != null) {
+            String prefix = user.getCachedData().getMetaData().getPrefix();
+            return prefix != null ? ChatColor.translateAlternateColorCodes('&', prefix) + " " : "§7";
+        }
+        return "§7";
     }
 
     public static String getSuffix(UUID uuid) {

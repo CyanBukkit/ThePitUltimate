@@ -169,7 +169,7 @@ class PitAdminDupeFixCommands {
                     }
 
                     profile.isLoaded = true
-                    profile.save()
+                    profile.save(null)
                     scanned.addAndGet(1)
                 }
             sender.sendMessage("Completed (${index + 1}/64)")

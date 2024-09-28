@@ -3,6 +3,7 @@ package cn.charlotte.pit.perk.type.shop;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
+import cn.charlotte.pit.events.impl.major.RagePitEvent;
 import cn.charlotte.pit.medal.impl.challenge.VampireMedal;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
@@ -96,12 +97,12 @@ public class VampirePerk extends AbstractPerk implements IAttackEntity, IPlayerS
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if ("rage_pit".equals(ThePit.getInstance().getEventFactory().getActiveEpicEventName())) {
+        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() instanceof RagePitEvent) {
             return;
         }
         if (PlayerUtil.isPlayerChosePerk(attacker, "rambo")) {
             return;
-        }
+        } //什么逼玩意
         new VampireMedal().addProgress(PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()), (int) Math.max(0, attacker.getMaxHealth() - Math.min(attacker.getHealth() + 1, attacker.getMaxHealth())));
         attacker.setHealth(Math.min(attacker.getHealth() + 1, attacker.getMaxHealth()));
     }
@@ -110,7 +111,7 @@ public class VampirePerk extends AbstractPerk implements IAttackEntity, IPlayerS
     @BowOnly
     @PlayerOnly
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if ("rage_pit".equals(ThePit.getInstance().getEventFactory().getActiveEpicEventName())) {
+        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() instanceof RagePitEvent) {
             return;
         }
         if (PlayerUtil.isPlayerChosePerk(attacker, "rambo")) {
@@ -127,7 +128,7 @@ public class VampirePerk extends AbstractPerk implements IAttackEntity, IPlayerS
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
-        if ("rage_pit".equals(ThePit.getInstance().getEventFactory().getActiveEpicEventName())) {
+        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() instanceof RagePitEvent) {
             return;
         }
         if (PlayerUtil.isPlayerChosePerk(myself, "rambo")) {

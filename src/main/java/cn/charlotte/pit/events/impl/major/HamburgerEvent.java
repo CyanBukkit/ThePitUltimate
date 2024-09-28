@@ -1047,11 +1047,11 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
 
     @Override
     public List<String> insert(Player player) {
-        List<String> lines = new ArrayList<>();
         final PizzaData data = pizzaDataMap.get(player.getUniqueId());
         if (data == null) {
-            return lines;
+            return null;
         }
+        List<String> lines = new ArrayList<>();
         lines.add("&f活动结束: &e" + TimeUtil.millisToTimer(timer.getRemaining()));
         lines.add("&f现金: &6" + data.money + "$");
         lines.add("&f已交付: &a" + data.paidMoney + "$");

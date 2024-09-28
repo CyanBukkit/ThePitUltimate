@@ -79,6 +79,27 @@ public class PlayerUtil {
         }
         return null;
     }
+    public static AbstractPerk getActiveMegaStreakObj(Player player) {
+        final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        if (!profile.isLoaded()) {
+            return null;
+        }
+
+        if (profile.getChosePerk().get(5) == null) {
+            return null;
+        }
+        for (AbstractPerk abstractPerk : ThePit.getInstance().getPerkFactory().getPerks()) { //无意义stream
+            if(abstractPerk.getPerkType() == PerkType.MEGA_STREAK
+                    && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName())){
+                if (abstractPerk instanceof MegaStreak mega) {
+                    if (profile.getStreakKills() >= mega.getStreakNeed()) {
+                    return abstractPerk;
+                  }
+                }
+            }
+        }
+        return null;
+    }
 
     public static boolean isVenom(Player player) {
         MetadataValue comboVenom = ((CraftPlayer)player).getMetadata(ThePit.getInstance(),"combo_venom");
@@ -93,6 +114,9 @@ public class PlayerUtil {
     public static boolean isEquippingSomber(Player player) {
         ItemStack leggings = player.getInventory().getLeggings();
         return leggings != null && Utils.getEnchantLevel(leggings, SomberEnchant.INSTANCE) > 0;
+    }
+    public static boolean isEquippingSomberFast(PlayerProfile profile) {
+        return profile.leggings != null && Utils.getEnchantLevel0(profile.leggings, SomberEnchant.INSTANCE) > 0;
     }
 
 
@@ -125,6 +149,28 @@ public class PlayerUtil {
             return isEquippingSomber(self) || isVenom(self);
         }
     }
+    public static boolean shouldIgnoreEnchant(PlayerProfile selfPro,PlayerProfile targetProf,Player self, org.bukkit.entity.Entity target){ //大合集
+        boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self); //缓存结果
+        if (sinkingMoonlight) return true;
+        if(target instanceof Player player){ //对其他人使用
+            boolean equipSomberTarget;
+            boolean isVenom;
+            if(isNPC(player)){
+                equipSomberTarget = false;
+                isVenom = false;
+            } else {
+                if(targetProf != null) {
+                    equipSomberTarget = isEquippingSomberFast(targetProf);
+                } else {
+                    equipSomberTarget = isEquippingSomber(player);
+                }
+                isVenom = isVenom(player);
+            }
+            return isEquippingSomberFast(selfPro) || isVenom(self) || (equipSomberTarget && !isEquippingArmageddon(self)) || isVenom;
+        } else { //如果他不是人或者null
+            return isEquippingSomberFast(selfPro) || isVenom(self);
+        }
+    } //无影响
     //自身对其他人使用附魔时附魔是否应该失效 (适用于有目标附魔)
     public static boolean shouldIgnoreEnchant(Player self, Player target) {
         boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self);
@@ -210,7 +256,7 @@ public class PlayerUtil {
      * @param canImmune  此伤害能否被免疫 / 降低
      * @return 此伤害是否被免疫
      */
-    public static void damage(Player attacker, Player victim, DamageType damageType, Double damage, Boolean canImmune) {
+    public static void damage(Player attacker, Player victim, DamageType damageType, Double damage, boolean canImmune) {
         boolean immune = damage(victim, damageType, damage, canImmune);
         if (immune) {
             //Mirror附魔反弹伤害
@@ -233,8 +279,8 @@ public class PlayerUtil {
         if (player == null) return false;
         if (UtilKt.hasRealMan(player)) return false;
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
-            if (entry.getValue().getPerkInternalName().equals(internal)) {
+        for (PerkData entry : profile.getChosePerk().values()) {
+            if (entry.getPerkInternalName().equals(internal)) {
                 return true;
             }
         }
@@ -247,7 +293,8 @@ public class PlayerUtil {
         boolean ramboPresent = PlayerUtil.isPlayerChosePerk(player, "rambo");
         boolean overHeal = isPlayerChosePerk(player, "OverHeal");
         boolean olympusPresent = PlayerUtil.isPlayerChosePerk(player, "Olympus");
-        int overHealEnchant = ThePit.getApi().getItemEnchantLevel(player.getInventory().getLeggings(), "over_heal_enchant");
+        IMythicItem leggings = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
+        int overHealEnchant = leggings == null ? -1 : leggings.getEnchantmentLevel("over_heal_enchant");
         if (olympusPresent) {
             limit = 1;
         }
@@ -476,16 +523,12 @@ public class PlayerUtil {
         }
     }
 
-    private static Class<?> getClass(String prefix, String nmsClassString) throws ClassNotFoundException {
-        String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
-        String name = prefix + version + nmsClassString;
-        return Class.forName(name);
-    }
 
     public static Collection<Player> getNearbyPlayers(Location location, double radius) {
         return location.getWorld()
                 .getNearbyPlayers(location, radius, radius, radius);
     }
+
     public static Collection<LivingEntity> getNearbyPlayersAndChicken(Location location, double radius) {
         return location.getWorld()
                 .getNearbyLivingEntities(location, radius, radius, radius, e -> e instanceof Chicken || e instanceof Player);
@@ -514,39 +557,6 @@ public class PlayerUtil {
         }
         itemStack.setAmount(itemStack.getAmount() - 1);
         player.setItemInHand(itemStack);
-    }
-
-    public static void denyMovement(Player player) {
-        player.setFlying(false);
-        player.setWalkSpeed(0.0F);
-        player.setFoodLevel(0);
-        player.setSprinting(false);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 200));
-    }
-
-    public static void allowMovement(Player player) {
-        player.setFlying(false);
-        player.setWalkSpeed(0.2F);
-        player.setFoodLevel(20);
-        player.setSprinting(true);
-        player.removePotionEffect(PotionEffectType.JUMP);
-    }
-
-    public static void deathEffect(Player player, Player attacker) {
-        MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
-        WorldServer world = ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle();
-
-        EntityPlayer npc;
-
-        npc = new EntityPlayer(server, world, new GameProfile(player.getUniqueId(), player.getName()), new PlayerInteractManager(world));
-
-        Location loc = player.getLocation();
-        npc.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-
-        PlayerConnection connection = ((CraftPlayer) attacker).getHandle().playerConnection;
-        // connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
-        connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
-        connection.sendPacket(new PacketPlayOutEntityStatus(npc, (byte) 3));
     }
 
     public static void playThunderEffect(Location thunderLocation) {

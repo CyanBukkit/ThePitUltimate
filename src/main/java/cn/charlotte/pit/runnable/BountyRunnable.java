@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.hologram.HologramAPI;
 import cn.charlotte.pit.util.hologram.packet.PacketHologram;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.klee.backports.utils.SWMRHashTable;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -28,47 +29,44 @@ import java.util.*;
  */
 public class BountyRunnable extends BukkitRunnable {
     private final Random random = new Random();
-    private static final Map<UUID, AnimationData> animationDataMap = new SWMRHashTable<>();
+    private static final SWMRHashTable<UUID, AnimationData> animationDataMap = new SWMRHashTable<>();
 
     public static Map<UUID, AnimationData> getAnimationDataMap() {
         return animationDataMap;
     }
-
+    public void gc(Set<HologramDisplay> sets){
+        sets.removeIf(holo -> {
+            if(!holo.hologram.isSpawned()){
+                return false;
+            }
+            holo.hologram.deSpawn();
+            return true;
+        });
+    }
     @Override
     public void run() {
         Set<UUID> shouldRemove = new ObjectOpenHashSet<>();
-        animationDataMap.forEach((i,a) -> {
+        animationDataMap.forEach((i, a) -> {
             Player player = Bukkit.getPlayer(i);
-            if(player == null || !player.isOnline()){
-                Set<HologramDisplay> holoShouldRemo = new ObjectOpenHashSet<>();
-                a.holograms.forEach(s -> {
-                    s.hologram.deSpawn();
-                    holoShouldRemo.add(s);
-                });
-                a.holograms.removeAll(holoShouldRemo);
-                if(a.holograms.size() <= 0){
+            if (player == null || !player.isOnline()) {
+                gc(a.holograms);
+                if (a.holograms.isEmpty()) {
                     shouldRemove.add(i);
                 }
             }
         });
         shouldRemove.forEach(animationDataMap::remove);
-        if (Bukkit.getOnlinePlayers().isEmpty()) {
-            return;
-        }
-
         for (Player player : Bukkit.getOnlinePlayers()) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+            UUID uniqueId = player.getUniqueId();
+            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(uniqueId);
             if (profile.getBounty() >= 500 || profile.getBounty() < 0) {
-                animationDataMap.putIfAbsent(player.getUniqueId(), new AnimationData());
+                animationDataMap.putIfAbsent(uniqueId, new AnimationData());
                 String color = profile.bountyColor();
                 playAnimation(player, profile.getBounty(), color);
             } else {
-                AnimationData animationData = animationDataMap.get(player.getUniqueId());
+                AnimationData animationData = animationDataMap.get(uniqueId);
                 if (animationData != null) {
-                    for (HologramDisplay hologram : animationData.holograms) {
-                        hologram.hologram.deSpawn();
-                    }
-                    animationData.holograms.clear();
+                    gc(animationData.holograms);
                 }
             }
         }
@@ -84,11 +82,16 @@ public class BountyRunnable extends BukkitRunnable {
             Location playerLocation = player.getLocation();
             double x = generatorLocDouble();
             double z = generatorLocDouble();
-            Hologram newHologram = HologramAPI.createHologram(playerLocation.clone().add(x, 0.1, z), CC.translate(color + "&l" + bounty + "g"));
+            Hologram newHologram = HologramAPI
+                    .createHologram(playerLocation.clone().add(x, 0.1, z)
+                            , CC.translate(color + "&l" + bounty + "g"));
 
-            List<Player> reviewers = new ArrayList<>(Bukkit.getOnlinePlayers());
+            List<Player> reviewers = new ObjectArrayList<>(Bukkit.getOnlinePlayers());
             reviewers.remove(player);
-            reviewers.removeIf(target -> PlayerProfile.getPlayerProfileByUuid(target.getUniqueId()).getPlayerOption().isBountyHiddenWhenNear() && PlayerUtil.getDistance(target, player) < 8);
+            reviewers.removeIf(
+                    target -> PlayerProfile.getPlayerProfileByUuid(target.getUniqueId())
+                            .getPlayerOption().isBountyHiddenWhenNear()
+                            && PlayerUtil.getDistance(target, player) < 8);
 
             newHologram.spawn(reviewers);
             holograms.add(new HologramDisplay(newHologram, x, z));

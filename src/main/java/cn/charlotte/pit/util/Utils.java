@@ -1,6 +1,8 @@
 package cn.charlotte.pit.util;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.item.IMythicItem;
@@ -12,9 +14,13 @@ import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.util.item.ItemUtil;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
@@ -23,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
     /**
@@ -37,6 +44,13 @@ public class Utils {
         }
     }
     /**
+     * 随机color
+     */
+    private static ChatColor[] CHAT_COLORS = ChatColor.values();
+    public static ChatColor randomColor(){
+        return CHAT_COLORS[ThreadLocalRandom.current().nextInt(Math.max(0,CHAT_COLORS.length - 1))];
+    }
+    /**
      * 标记GC and Exit
      * @param projectile current Entity
      */
@@ -46,6 +60,41 @@ public class Utils {
                 projectile.removeMetadata(metadatum,ThePit.getInstance());
             }
         },later);
+    }
+    /**
+     * 超级快，nano respond o(":".length())
+     */
+    public static void readEnchantments(Object2IntMap<AbstractEnchantment> ment,NBTTagList nbtTagList) {
+        nbtTagList.list.forEach(nbtBase -> {
+            if (nbtBase instanceof NBTTagString nbtTagString) {
+                String s = nbtTagString.a_(); //read NBT
+                final int offset = 2;
+                final int strLen = s.length();
+                for (int length = strLen - offset; length > 0; length--) {
+                    char splitArg = s.charAt(length);
+                    boolean fastEqual = splitArg == ':'; //check equal
+                    if (fastEqual) { //nano respond 10x faster
+                        int lengthUnsigned = length + 1;
+                        int level;
+                        if (lengthUnsigned + 1 == strLen) {
+                            level = Character.getNumericValue(s.charAt(length + 1)); //read level as char
+                        } else {
+                            String substring = s.substring(length + 1, strLen);
+                            level = Integer.parseInt(substring); //read Level as string
+                        }
+                        String substring = s.substring(0, length);
+                        AbstractEnchantment enchantment = ThePit.getInstance()
+                                .getEnchantmentFactor()
+                                .getEnchantmentMap()
+                                .get(substring);
+                        if (enchantment == null) {
+                            return;
+                        }
+                        ment.put(enchantment, level);
+                    }
+                }
+            }
+        });
     }
     /**
      * 超级高效的split方法。
@@ -58,7 +107,7 @@ public class Utils {
         CharSequence[] temp = new CharSequence[(line.length() / 2) + 1];
         int wordCount = 0;
         int i = 0;
-        int j = line.indexOf(delimiter, 0); // first substring
+        int j = line.indexOf(delimiter); // first substring
 
         while (j >= 0)
         {
@@ -94,16 +143,20 @@ public class Utils {
         if (mythicItem == null) {
             return -1;
         }
-
         return mythicItem.getEnchantments().getInt(enchObj);
     }
-    public static int getEnchantLevel(IMythicItem mythicItem, String enchantName){
-        for (Map.Entry<AbstractEnchantment, Integer> entry : mythicItem.getEnchantments().entrySet()) {
-            if (entry.getKey().getNbtName().equals(enchantName)) {
-                return entry.getValue();
-            }
+    public static int getEnchantLevel0(IMythicItem item, AbstractEnchantment enchObj) {
+        if (item == null) {
+            return -1;
         }
-        return -1;
+
+        return item.getEnchantmentLevel(enchObj);
+    }
+    public static int getEnchantLevel(IMythicItem mythicItem, String enchantName){
+        if(mythicItem == null)
+            return -1;
+
+        return mythicItem.getEnchantmentLevel(enchantName);
     }
     public static String dumpNBTOnString(ItemStack stack){
         NBTTagCompound tag = Utils.toNMStackQuick(stack).getTag();
@@ -118,6 +171,15 @@ public class Utils {
             }
         }
         return getMythicItem0(item);
+    }
+    public static PackedOperator constructUnsafeOperator(String searchName){
+        PlayerProfile playerProfile = PlayerProfile.loadPlayerProfileByName(searchName);
+        PackedOperator packedOperator = new PackedOperator(ThePit.getInstance());
+        if(playerProfile == null){
+            return packedOperator;
+        }
+        packedOperator.loadAs(playerProfile);
+        return packedOperator;
     }
     public static IMythicItem getMythicItem0(ItemStack item, String internalName){
         IMythicItem mythicItem = null;
@@ -196,18 +258,22 @@ public class Utils {
         if (item == null) {
             return null;
         }
+        return subtractLive(ThePit.getInstance().getItemFactory().getIMythicItemSync(item));
+    }
 
-        final IMythicItem mythicLeggings = MythicUtil.getMythicItem(item);
-        if (mythicLeggings == null) return null;
-        if (mythicLeggings.isEnchanted()) {
-            if (mythicLeggings.getLive() <= 1) {
+    public static ItemStack subtractLive(IMythicItem item) {
+
+
+        if (item == null) return null;
+        if (item.isEnchanted()) {
+            if (item.getLive() <= 1) {
                 return new ItemStack(Material.AIR);
             } else {
-                mythicLeggings.setLive(mythicLeggings.getLive() - 1);
-                return mythicLeggings.toItemStack();
+                item.setLive(item.getLive() - 1);
+                return item.toItemStack();
             }
         }
-        return item;
+        return item.toItemStack();
     }
 
 }

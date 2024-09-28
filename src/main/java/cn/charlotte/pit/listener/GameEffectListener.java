@@ -14,6 +14,8 @@ import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.event.PitDamageEvent;
 import cn.charlotte.pit.event.PitDamagePlayerEvent;
 import cn.charlotte.pit.game.Game;
+import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.parm.listener.*;
 import cn.charlotte.pit.parm.type.BowOnly;
 import cn.charlotte.pit.parm.type.ThrowOnly;
@@ -26,6 +28,7 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.EnchantmentManager;
@@ -44,6 +47,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
@@ -132,25 +136,12 @@ public class GameEffectListener implements Listener {
 
     @EventHandler
     public void addEnchantToArrow(EntityShootBowEvent event) {
-        if (event.getEntity() instanceof Player) {
-            StringBuilder sb = new StringBuilder();
-            for (IPlayerShootEntity instance : ThePit.getInstance()
-                    .getEnchantmentFactor()
-                    .getPlayerShootEntities()) {
-                final AbstractEnchantment enchant = (AbstractEnchantment) instance;
-                final int level = enchant.getItemEnchantLevel(event.getBow());
-                if (level > 0) {
-                    sb.append(enchant.getNbtName())
-                            .append(":")
-                            .append(level)
-                            .append(";");
-                }
+        if (event.getEntity() instanceof Player player) {
+            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+            if(profile.heldItem instanceof MythicBowItem bowItem) {
+                event.getProjectile().setMetadata("enchant",
+                        new FixedMetadataValue(ThePit.getInstance(), bowItem.getEnchantments()));
             }
-
-            if (sb.isEmpty()) {
-                return;
-            }
-            event.getProjectile().setMetadata("enchant", new FixedMetadataValue(ThePit.getInstance(), sb.substring(0, sb.length() - 1)));
             //for gc
             Utils.pointMetadataAndRemove(event.getProjectile(),500,"enchant");
         }
@@ -178,17 +169,18 @@ public class GameEffectListener implements Listener {
         }
 
 
-        PerkFactory perkFactory = ThePit.getInstance()
+        ThePit instance = ThePit.getInstance();
+        PerkFactory perkFactory = instance
                 .getPerkFactory();
-        EnchantmentFactor enchantmentFactor = ThePit.getInstance().getEnchantmentFactor();
-        QuestFactory questFactory = ThePit.getInstance().getQuestFactory();
+        EnchantmentFactor enchantmentFactor = instance.getEnchantmentFactor();
+        QuestFactory questFactory = instance.getQuestFactory();
 
         AtomicDouble finalDamage = new AtomicDouble(0);
         AtomicDouble boostDamage = new AtomicDouble(1);
         AtomicBoolean cancel = new AtomicBoolean(false);
         Player damager = null;
 
-        final Game game = ThePit.getInstance().getGame();
+        final Game game = instance.getGame();
 
         Set<AbstractPerk> disabledPerks = game.getDisabledPerks();
         if (event.getDamager() instanceof Player) {
@@ -198,7 +190,7 @@ public class GameEffectListener implements Listener {
             if (NewConfiguration.INSTANCE.getNoobProtect() && profile.getPrestige() <= 0 && profile.getLevel() < NewConfiguration.INSTANCE.getNoobProtectLevel()) {
                 boostDamage.getAndAdd(NewConfiguration.INSTANCE.getNoobDamageBoost() - 1);
             }
-
+            //TODO perk handlers
             //perk handler
             for (IAttackEntity ins : perkFactory.getAttackEntities()) {
                 AbstractPerk perk = (AbstractPerk) ins;
@@ -209,42 +201,35 @@ public class GameEffectListener implements Listener {
                 int level = perk.getPlayerLevel(damager);
                 processAttackEntity(ins, level, damager, event.getEntity(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
             }
-            //useless code KleeLoveLife
-            //enchant handler
-            //we should check has somber enchant on leggings
-          /*  boolean somberFound = PlayerUtil.isEquippingSomber(damager);
-
-            if (!somberFound && event.getEntity() instanceof Player) {
-                somberFound = PlayerUtil.isEquippingSomber((Player) event.getEntity());
+            //TODO heldItem -- leggings handlers
+            boolean shouldIgnoreEnchant = false;
+            List<IAttackEntity> attackEntities = enchantmentFactor.getAttackEntities();
+            if (!attackEntities.isEmpty()) {
+                shouldIgnoreEnchant = PlayerUtil.shouldIgnoreEnchant(damager
+                        , event.getEntity());
             }
-
-            //checking damager has marked combo venom?
-            boolean comboVenomFound = false;
-            if (damager.hasMetadata("combo_venom")) {
-                if (damager.getMetadata("combo_venom").get(0).asLong() > System.currentTimeMillis()) {
-                    comboVenomFound = true;
-                }
-            }
-            PlayerProfile damagerProfile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
-            */
-            //if found, dont process enchant
-
-            for (IAttackEntity ins : enchantmentFactor.getAttackEntities()) {
+            IMythicItem heldItem = profile.heldItem;
+            IMythicItem leggings = profile.leggings;
+            for (IAttackEntity ins : attackEntities) {
                 AbstractEnchantment enchant = (AbstractEnchantment) ins;
                 //修正在Bot下打人的高耗能问题
-                    if ((PlayerUtil.shouldIgnoreEnchant(damager,event.getEntity())) && (enchant.getRarity() != EnchantmentRarity.DARK_NORMAL && enchant.getRarity() != EnchantmentRarity.DARK_RARE)) {
+                    if ((shouldIgnoreEnchant)
+                            && (enchant.getRarity() != EnchantmentRarity.DARK_NORMAL
+                            && enchant.getRarity() != EnchantmentRarity.DARK_RARE)) {
                             continue;
                     }
 
-                int level = enchant.getItemEnchantLevel(damager.getItemInHand());
-                if (damager.getItemInHand() != null && damager.getItemInHand().getType() != Material.AIR && damager.getItemInHand().getType() != Material.LEATHER_LEGGINGS) {
+                if (heldItem != null) {
+                    int level = enchant.getItemEnchantLevel(heldItem);
                     processAttackEntity(ins, level, damager, event.getEntity(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
                 }
-                if (damager.getInventory().getLeggings() != null && damager.getInventory().getLeggings().getType() != Material.AIR) {
-                    level = enchant.getItemEnchantLevel(damager.getInventory().getLeggings());
-                    processAttackEntity(ins, level, damager, event.getEntity(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+              if (leggings != null) {
+                    int level = enchant.getItemEnchantLevel(leggings);
+                    processAttackEntity(ins, level, damager, event.getEntity()
+                            , event.getFinalDamage(), finalDamage, boostDamage, cancel);
                 }
             }
+            //TODO quest handler
 
 
             for (IAttackEntity ins : questFactory.getAttackEntities()) {
@@ -254,6 +239,7 @@ public class GameEffectListener implements Listener {
                     processAttackEntity(ins, currentQuest.getLevel(), damager, event.getEntity(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
                 }
             }
+            //When you were hurt by a projectile
         } else if (event.getDamager() instanceof Projectile projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
             damager = (Player) (((Projectile) event.getDamager()).getShooter());
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
@@ -267,49 +253,30 @@ public class GameEffectListener implements Listener {
                 int level = perk.getPlayerLevel(damager);
                 processShootEntity(ins, level, damager, event.getEntity(), event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
             }
-            //无调用 删除。
-            //enchant handler
-            //we should check has somber enchant on leggings
-            //boolean somberFound = PlayerUtil.isEquippingSomber(damager);
-           // if (!somberFound && event.getEntity() instanceof Player) {
-            //    somberFound = PlayerUtil.isEquippingSomber((Player) event.getEntity());
-           // }
-            //checking damager has marked combo venom?
-           /* //boolean comboVenomFound = false;
-            List<MetadataValue> comboVenom = damager.getMetadata("combo_venom");
-            if (comboVenom != null) {
-                final long now = System.currentTimeMillis();
-                final Optional<MetadataValue> first = comboVenom.stream()
-                        .filter(metadataValue -> metadataValue.getOwningPlugin() instanceof ThePit && now <= metadataValue.asLong())
-                        .findFirst();
-                if (first.isPresent()) {
-                    comboVenomFound = true;
-                }
-            }
-            //if found, dont process enchant
-            */
+            //projectile handler
             List<MetadataValue> enchant = projectile.getMetadata("enchant");
             if (!enchant.isEmpty()) {
                 final MetadataValue value = enchant.get(0);
-                final String enchants = value.asString();
-                final String[] split = Utils.splitByCharAt(enchants, ';');
-                for (String enchantStr : split) {
-                    final String[] enchStr = Utils.splitByCharAt(enchantStr, ':');
-                    final String enchantName = enchStr[0];
-                    final int enchantValue = Integer.parseInt(enchStr[1]);
+                final Object enchants = value.value();
+                if(enchants instanceof Object2IntOpenHashMap) {
+                    Object2IntOpenHashMap<AbstractEnchantment> ench = (Object2IntOpenHashMap<AbstractEnchantment>) enchants;
+                    boolean shouldIgnoreEnchant = PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity());
+                    Player finalDamager = damager;
+                    ench.forEach((enchantment, level) -> {
+                        if (enchantment instanceof IPlayerShootEntity enchantmentCasted) {
+                            EnchantmentRarity rarity = enchantment.getRarity();
+                            if (shouldIgnoreEnchant && (rarity != EnchantmentRarity.DARK_NORMAL && rarity != EnchantmentRarity.DARK_RARE)) {
+                                return;
+                            }
 
-                    final AbstractEnchantment enchantment = enchantmentFactor.getEnchantmentMap().get(enchantName);
-
-                    if ((PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity())) && (enchantment.getRarity() != EnchantmentRarity.DARK_NORMAL && enchantment.getRarity() != EnchantmentRarity.DARK_RARE)) {
-                        continue;
-                    }
-
-                    this.processShootEntity((IPlayerShootEntity) enchantment, enchantValue, damager, event.getEntity(), event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                            this.processShootEntity(enchantmentCasted, level, finalDamager, event.getEntity(), event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                        }
+                    });
                 }
             }
-            projectile.removeMetadata("enchant",ThePit.getInstance()); //garbage collector
+            projectile.removeMetadata("enchant", instance); //garbage collector
 
-
+            //quest
             for (IPlayerShootEntity ins : questFactory.getPlayerShootEntities()) {
                 AbstractQuest quest = (AbstractQuest) ins;
                 QuestData currentQuest = profile.getCurrentQuest();
@@ -351,22 +318,24 @@ public class GameEffectListener implements Listener {
                 //}
 
                 //if found, dont process enchant
-
-                for (IPlayerDamaged ins : enchantmentFactor.getPlayerDamageds()) {
-                    AbstractEnchantment enchant = (AbstractEnchantment) ins;
+                if(!enchantmentFactor.getPlayerDamageds().isEmpty()) {
+                    boolean b = PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity());
+                    for (IPlayerDamaged ins : enchantmentFactor.getPlayerDamageds()) {
+                        AbstractEnchantment enchant = (AbstractEnchantment) ins;
                         //合并性能好
-                        if ((PlayerUtil.shouldIgnoreEnchant(damager,event.getEntity())) && (enchant.getRarity() != EnchantmentRarity.DARK_NORMAL && enchant.getRarity() != EnchantmentRarity.DARK_RARE)) {
+                        if (b && (enchant.getRarity() != EnchantmentRarity.DARK_NORMAL && enchant.getRarity() != EnchantmentRarity.DARK_RARE)) {
                             continue;
                         }
 
-                    //当神话之甲手持时不应该触发附魔
-                    int level = enchant.getItemEnchantLevel(player.getItemInHand());
-                    if (player.getItemInHand() != null && player.getItemInHand().getType() != Material.AIR && player.getItemInHand().getType() != Material.LEATHER_LEGGINGS) {
-                        processPlayerDamaged(ins, level, player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
-                    }
-                    if (player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getType() != Material.AIR) {
-                        level = enchant.getItemEnchantLevel(player.getInventory().getLeggings());
-                        processPlayerDamaged(ins, level, player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                        //当神话之甲手持时不应该触发附魔
+                        int level = enchant.getItemEnchantLevel(player.getItemInHand());
+                        if (player.getItemInHand() != null && player.getItemInHand().getType() != Material.AIR && player.getItemInHand().getType() != Material.LEATHER_LEGGINGS) {
+                            processPlayerDamaged(ins, level, player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                        }
+                        if (player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getType() != Material.AIR) {
+                            level = enchant.getItemEnchantLevel(player.getInventory().getLeggings());
+                            processPlayerDamaged(ins, level, player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                        }
                     }
                 }
 
@@ -399,22 +368,24 @@ public class GameEffectListener implements Listener {
 
 
                 //if found, dont process enchant
+                if(!enchantmentFactor.getPlayerDamageds().isEmpty()) {
+                    boolean b = PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity());
+                    for (IPlayerDamaged ins : enchantmentFactor.getPlayerDamageds()) {
+                        AbstractEnchantment enchant = (AbstractEnchantment) ins;
 
-                for (IPlayerDamaged ins : enchantmentFactor.getPlayerDamageds()) {
-                    AbstractEnchantment enchant = (AbstractEnchantment) ins;
-
-                    if(!PlayerUtil.isNPC(event.getEntity())) {
-                        if ((PlayerUtil.shouldIgnoreEnchant(damager,event.getEntity())) && (enchant.getRarity() != EnchantmentRarity.DARK_NORMAL && enchant.getRarity() != EnchantmentRarity.DARK_RARE)) {
-                            continue;
+                        if (!PlayerUtil.isNPC(event.getEntity())) {
+                            if (b && (enchant.getRarity() != EnchantmentRarity.DARK_NORMAL && enchant.getRarity() != EnchantmentRarity.DARK_RARE)) {
+                                continue;
+                            }
                         }
-                    }
-                    int level = enchant.getItemEnchantLevel(player.getItemInHand());
-                    if (player.getItemInHand() != null && player.getItemInHand().getType() != Material.AIR && player.getItemInHand().getType() != Material.LEATHER_LEGGINGS) {
-                        processPlayerDamaged(ins, level, player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
-                    }
-                    if (player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getType() != Material.AIR) {
-                        level = enchant.getItemEnchantLevel(player.getInventory().getLeggings());
-                        processPlayerDamaged(ins, level, player, damager, event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                        int level = enchant.getItemEnchantLevel(player.getItemInHand());
+                        if (player.getItemInHand() != null && player.getItemInHand().getType() != Material.AIR && player.getItemInHand().getType() != Material.LEATHER_LEGGINGS) {
+                            processPlayerDamaged(ins, level, player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                        }
+                        if (player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getType() != Material.AIR) {
+                            level = enchant.getItemEnchantLevel(player.getInventory().getLeggings());
+                            processPlayerDamaged(ins, level, player, damager, event.getFinalDamage(), finalDamage, boostDamage, cancel);
+                        }
                     }
                 }
 
@@ -480,7 +451,7 @@ public class GameEffectListener implements Listener {
                     List<MetadataValue> mirrorLatestActive = player.getMetadata("mirror_latest_active");
                     if (event.getDamager() instanceof Player && (mirrorLatestActive == null || (!mirrorLatestActive.isEmpty() && System.currentTimeMillis() - player.getMetadata("mirror_latest_active").get(0).asLong() > 500L))) {
                         //damage giveback
-                        player.setMetadata("mirror_latest_active", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
+                        player.setMetadata("mirror_latest_active", new FixedMetadataValue(instance, System.currentTimeMillis()));
                         damager = (Player) event.getDamager();
                         if (!player.getUniqueId().equals(damager.getUniqueId())) {
                             damager.damage(0.01, player);
@@ -552,7 +523,8 @@ public class GameEffectListener implements Listener {
     @SneakyThrows
     private void processShootEntity(IPlayerShootEntity ins, int level, Player damager, Entity target, Entity damageSource, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (level != -1) {
-            Method handleShootEntity = ins.getClass().getMethod("handleShootEntity", int.class, Player.class, Entity.class, double.class, AtomicDouble.class, AtomicDouble.class, AtomicBoolean.class);
+            Class<? extends IPlayerShootEntity> aClass = ins.getClass();
+            Method handleShootEntity = aClass.getMethod("handleShootEntity", int.class, Player.class, Entity.class, double.class, AtomicDouble.class, AtomicDouble.class, AtomicBoolean.class);
 
             if (handleShootEntity.isAnnotationPresent(BowOnly.class) && !(damageSource instanceof Arrow)) {
                 return;
@@ -561,11 +533,11 @@ public class GameEffectListener implements Listener {
                 return;
             }
 
-            if (ins.getClass().isAnnotationPresent(PlayerOnly.class) || handleShootEntity.isAnnotationPresent(PlayerOnly.class)) {
+            if (aClass.isAnnotationPresent(PlayerOnly.class) || handleShootEntity.isAnnotationPresent(PlayerOnly.class)) {
                 if (target instanceof Player player) {
                     ins.handleShootEntity(level, damager, player, damage, finalDamage, boostDamage, cancel);
                 }
-            } else if (ins.getClass().isAnnotationPresent(NotPlayerOnly.class)) {
+            } else if (aClass.isAnnotationPresent(NotPlayerOnly.class)) {
                 if (!(target instanceof Player)) {
                     ins.handleShootEntity(level, damager, target, damage, finalDamage, boostDamage, cancel);
                 }

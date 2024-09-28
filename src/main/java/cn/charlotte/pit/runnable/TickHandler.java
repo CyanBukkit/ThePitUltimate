@@ -66,14 +66,19 @@ public class TickHandler implements Listener {
             PlayerInventory inventory = player.getInventory();
             final ItemStack leggings = inventory.getLeggings();
                 if (leggings != null) {
-                    handleIMythicItemTickTasks(leggings,player);
+                    profile.leggings = handleIMythicItemTickTasks(leggings,player);
+                } else {
+                    profile.leggings = null;
                 }
 
                 ItemStack itemInHand = inventory.getItemInHand();
                 if (itemInHand != null) {
                     Material type = itemInHand.getType();
                     if (type != Material.AIR && type != Material.LEATHER_LEGGINGS && type != Material.PAPER) {
-                        handleIMythicItemTickTasks(itemInHand, player);
+                        profile.heldItem = handleIMythicItemTickTasks(itemInHand, player);
+
+                    } else {
+                        profile.heldItem = null;
                     }
                 }
         }
@@ -82,9 +87,11 @@ public class TickHandler implements Listener {
             tick = 0; //从头开始
         }
     }
-    public void handleIMythicItemTickTasks(ItemStack stack,Player player) {
+    public IMythicItem handleIMythicItemTickTasks(ItemStack stack,Player player) {
 
         final IMythicItem imythicItem = Utils.getMythicItem(stack);
+
+        //U can set it on your profile
         if (imythicItem != null) {
             for (Object2IntMap.Entry<AbstractEnchantment> entry : imythicItem.getEnchantments().object2IntEntrySet()) {
                 final ITickTask task = enchantTicks.get(entry.getKey().getNbtName());
@@ -93,13 +100,14 @@ public class TickHandler implements Listener {
                 }
 
                 final int level = entry.getIntValue();
-                int i = Math.max(1, task.loopTick(level)); //KleeLoveLife byZero Fix
+                int i = Math.max(1, task.loopTick(level)); //KaMa byZero Fix
 
                 if (tick % i == 0) {
                     task.handle(level, player);
                 }
             }
         }
+        return imythicItem;
     }
 
 }

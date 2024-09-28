@@ -29,6 +29,9 @@ fun Inventory.countItem(matcher: (itemStack: ItemStack) -> Boolean): Int {
     }
     return amount
 }
+inline fun ItemStack.toNMS(): net.minecraft.server.v1_8_R3.ItemStack{
+    return Utils.toNMStackQuick(this);
+}
 
 
 /**
@@ -138,9 +141,12 @@ fun submit(
 
     return runnable
 }
-
+//sync method
 fun org.bukkit.inventory.ItemStack?.toMythicItem(): cn.charlotte.pit.item.IMythicItem? {
-    return Utils.getMythicItem(this) //修正
+    return ThePit.getInstance().itemFactory.getIMythicItemSync(this) //修正
+}
+fun org.bukkit.inventory.ItemStack?.toMythicItemAsync(): cn.charlotte.pit.item.IMythicItem? {
+    return ThePit.getInstance().itemFactory.getIMythicItem(this)
 }
 
 val Player.isSpecial: Boolean

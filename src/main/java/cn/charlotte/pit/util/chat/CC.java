@@ -200,9 +200,9 @@ public class CC {
         }
     }
     public static void boardCast0(String text) {
-
+        String translate = CC.translate(text);
         for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(CC.translate(text));
+                player.sendMessage(translate);
             }
     }
 

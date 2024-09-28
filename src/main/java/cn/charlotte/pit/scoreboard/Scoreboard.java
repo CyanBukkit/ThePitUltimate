@@ -4,11 +4,13 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
+import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.events.impl.major.RagePitEvent;
+import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
@@ -71,36 +73,33 @@ public class Scoreboard implements AssembleAdapter {
 
         return text;
     }
-
+    private static final List<String> LOADING = new ObjectArrayList<>(List.of("","&c正在加载档案...","&c请稍等片刻...",""
+            ,"&c如长时仍在加载,"
+            ,"&c请重新进入服务器.","","&c公告群: &e425831669","","&enyacho.cn"));
+    private final ObjectArrayList<String> carrierList = new ObjectArrayList<>(16);
     @Override
     public List<String> getLines(Player player) {
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        List<String> lines = new ObjectArrayList<>(16);
-
         if (!profile.isLoaded()) {
-            lines.add("");
-            lines.add("&c正在加载档案...");
-            lines.add("&c请稍等片刻...");
-            lines.add("");
-            lines.add("&c如长时仍在加载,");
-            lines.add("&c请重新进入服务器.");
-            lines.add("");
-            lines.add("&c公告群: &e425831669");
-            lines.add("");
-            lines.add("&enyacho.cn");
-            return lines;
+            return LOADING;
         }
+        List<String> lines = carrierList;
+        lines.clear();
 
         int prestige = profile.getPrestige();
         int level = profile.getLevel();
 
+        long currentSystemTime = System.currentTimeMillis();
         if (NewConfiguration.INSTANCE.getScoreboardShowtime()) {
-            lines.add("&7" + dateFormat.format(System.currentTimeMillis()) + " &8" + ThePit.getInstance().getServerId());
+            lines.add("&7" +
+                    dateFormat.format(currentSystemTime) + " &8" + ThePit.getInstance().getServerId());
         }
 
-        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() != null) {
-            IEvent event = (IEvent) ThePit.getInstance().getEventFactory().getActiveEpicEvent();
+        IEpicEvent activeEpicEvent = ThePit.getInstance().getEventFactory().getActiveEpicEvent();
+        INormalEvent activeNormalEvent = ThePit.getInstance().getEventFactory().getActiveNormalEvent();
+        if (activeEpicEvent != null) {
+            IEvent event = (IEvent) activeEpicEvent;
 //            lines.add("&f事件: &c" + event.getEventName());
             lines.add(" ");
             lines.add("&f事件: &6" + event.getEventName());
@@ -116,15 +115,20 @@ public class Scoreboard implements AssembleAdapter {
                 lines.add("&f总击杀: " + (killed >= 600 ? "&a" : "&c") + killed + "&7/600");
             } else if (event instanceof IScoreBoardInsert insert) {
 
-                lines.addAll(insert.insert(player));
+                List<String> insert1 = insert.insert(player);
+                if(insert1 != null) {
+                    lines.addAll(insert1);
+                }
 
             }
-        } else if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() != null) {
-            INormalEvent event = ThePit.getInstance().getEventFactory().getActiveNormalEvent();
-            if (event instanceof IScoreBoardInsert insert) {
+        } else if (activeNormalEvent != null) {
+            if (activeNormalEvent instanceof IScoreBoardInsert insert) {
                 lines.add(" ");
-                lines.add("&f事件: &a" + ((IEvent) event).getEventName());
-                lines.addAll(insert.insert(player));
+                lines.add("&f事件: &a" + ((IEvent) activeNormalEvent).getEventName());
+                List<String> insert1 = insert.insert(player);
+                if (insert1 != null) {
+                    lines.addAll(insert1);
+                }
             }
         }
         lines.add("");
@@ -141,24 +145,26 @@ public class Scoreboard implements AssembleAdapter {
         if (prestige > 0 ) {
             lines.add("&f精通: &e" + RomanUtil.convert(prestige));
         }
-        lines.add("&f等级: " + LevelUtil.getLevelTag(prestige, level) + genesisTeam);
+        lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
 
         if (level >= 120) {
             lines.add("&f经验: &b已满!");
         } else {
-            lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + "/Exp");
+            lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Ex");
         }
 
         if (profile.getCurrentQuest() != null) {
             lines.add(" ");
             lines.add("&f击杀: &a" + profile.getCurrentQuest().getCurrent() + "/" + profile.getCurrentQuest().getTotal());
             if (profile.getCurrentQuest().getCurrent() == profile.getCurrentQuest().getTotal()) {
-                lines.add("&f剩余时间: &a完成");
+                lines.add("&f剩时: &a完成");
             } else {
-                if (profile.getCurrentQuest().getEndTime() > System.currentTimeMillis()) {
-                    lines.add("&f剩余时间: &a" + TimeUtil.millisToTimer(profile.getCurrentQuest().getEndTime() - System.currentTimeMillis()));
+                if (profile.getCurrentQuest().getEndTime() > currentSystemTime) {
+                    lines.add("&f剩时: &a"
+                            + TimeUtil.millisToTimer(
+                                    profile.getCurrentQuest().getEndTime() - currentSystemTime));
                 } else {
-                    lines.add("&f剩余时间: &c超时");
+                    lines.add("&f剩时: &c超时");
                 }
             }
         }
@@ -171,32 +177,32 @@ public class Scoreboard implements AssembleAdapter {
         }
         //if Player is in Fight:
         boolean statusToggle = true;
-        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() == null) {
-            if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() != null) {
-                INormalEvent event = ThePit.getInstance().getEventFactory().getActiveNormalEvent();
-                statusToggle = !(event instanceof IScoreBoardInsert);
+        if (activeEpicEvent == null) {
+            if (activeNormalEvent != null) {
+                statusToggle = !(activeNormalEvent instanceof IScoreBoardInsert);
             }
         } else {
             statusToggle = false;
         }
         if (statusToggle) {
             lines.add(" ");
-            final String currentStreak = PlayerUtil.getActiveMegaStreak(player);
+            final AbstractPerk currentStreak = PlayerUtil.getActiveMegaStreakObj(player);
             if (currentStreak != null) {
-                lines.add("&f状态: " + currentStreak);
+                lines.add("&f状态: " + CC.translate(currentStreak.getDisplayName()));
             } else {
+                String combatTimerFormatted = numFormat.format(profile.getCombatTimer().getRemaining() / 1000D);
                 lines.add("&f状态: " + (profile.getCombatTimer().hasExpired()
                         ? "&a空闲" : "&c占坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
-                        ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
+                        ? "&7 " + combatTimerFormatted
                         : (profile.getBounty() != 0
-                        ? "&7 (" + numFormat.format(profile.getCombatTimer().getRemaining() / 1000D) + ")"
+                        ? "&7 " + combatTimerFormatted
                         : "")))); // status: 占坑中 (%duration%秒) / 不在占坑中
             }
             if (!profile.getCombatTimer().hasExpired()) {
                 lines.add("&f连杀: &a" + numFormat.format(profile.getStreakKills()));
             }
 
-            if (CC.translate("&b月球之旅").equals(currentStreak)) {
+            if (currentStreak == ToTheMoonMegaStreak.getInstance()) {
                 Double storedExp = ToTheMoonMegaStreak.getCache().get(player.getUniqueId());
                 if (storedExp == null) {
                     storedExp = 0.0;
@@ -217,20 +223,15 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&f力量: &c+" + profile.getStrengthNum() * 4 + "% &7 (" + numFormat.format(profile.getStrengthTimer().getRemaining() / 1000D) + ")");
         }
 
-        boolean gladiator = false;
-        for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
-            if (entry.getValue().getPerkInternalName().equals("Gladiator")) {
-                gladiator = true;
-                break;
-            }
-        }
+        boolean gladiator = profile.isChoosePerk("Gladiator");
+
         if (gladiator && profile.isInArena()) {
             int boost = 0;
             try {
                  boost = PlayerUtil.getNearbyPlayers(player.getLocation(), 8).size();
             } catch (Exception ignored){
             }
-            int sybilLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "sybil");
+            int sybilLevel = Utils.getEnchantLevel(profile.leggings, "sybil");
             if (sybilLevel > 0) {
                 boost += sybilLevel + 1;
             }
@@ -246,10 +247,10 @@ public class Scoreboard implements AssembleAdapter {
 
         lines.add(" ");
         if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c重启! &7(" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - System.currentTimeMillis()).replace(" ", "") + "后)");
+            lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
         }
         if (ThePit.isDEBUG_SERVER()) {
-            lines.add("&eTEST " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
+            lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
             lines.add("&enyacho.cn");
         }

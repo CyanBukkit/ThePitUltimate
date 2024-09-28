@@ -45,7 +45,8 @@ public abstract class AbstractMedal {
 
     public void addProgress(PlayerProfile profile, int progress) {
         MedalData medalData = profile.getMedalData();
-        int newProgress = medalData.getMedalStatus(getInternalName(), medalData.getMedalLevel(getInternalName())).getProgress() + progress;
+        int newProgress = medalData.getMedalStatus(getInternalName()
+                , medalData.getMedalLevel(getInternalName())).getProgress() + progress;
         setProgress(profile, newProgress);
     }
 

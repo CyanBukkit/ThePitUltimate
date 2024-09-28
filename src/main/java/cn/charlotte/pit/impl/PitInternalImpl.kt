@@ -61,10 +61,11 @@ object PitInternalImpl : PitInternalHook {
     override fun openBackupShowMenu(
         player: Player?,
         profile: PlayerProfile?,
+        backups: List<PlayerInvBackup>?,
         backup: PlayerInvBackup?,
         enderChest: Boolean
     ) {
-        BackupShowMenu(profile, backup, enderChest).openMenu(player)
+        BackupShowMenu(profile, backups,backup, enderChest).openMenu(player)
     }
 
     override fun openMenu(player: Player, menuName: String) {

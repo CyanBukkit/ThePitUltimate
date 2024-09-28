@@ -37,7 +37,7 @@ public class DoubleRewardsEvent implements IEvent, INormalEvent, IPlayerKilledEn
     @Override
     public void onActive() {
         isActive = true;
-        Bukkit.broadcastMessage(CC.translate("&a&l双倍奖励! &7现在你可以获得双倍的击杀&b经验&7与&6硬币&7加成!"));
+        CC.boardCast("&a&l双倍奖励! &7现在你可以获得双倍的击杀&b经验&7与&6硬币&7加成!");
     }
 
     @Override

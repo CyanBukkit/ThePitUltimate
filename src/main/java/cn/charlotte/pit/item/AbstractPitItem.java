@@ -7,6 +7,7 @@ import cn.charlotte.pit.util.chat.RomanUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -67,14 +68,17 @@ public abstract class AbstractPitItem {
     public abstract void loadFromItemStack(ItemStack item);
 
     public List<String> getEnchantLore() {
-        List<String> lore = new ArrayList<>();
+        List<String> lore = new ObjectArrayList<>();
         if (!isEnchanted()) {
             return lore;
         }
+        ObjectSet<Map.Entry<AbstractEnchantment, Integer>> entries = enchantments.entrySet();
 
-        for (Map.Entry<AbstractEnchantment, Integer> entry : enchantments.entrySet()) {
-            getEnchantLore(lore, entry, enchantments.entrySet());
-        }
+        enchantments.object2IntEntrySet().fastForEach(i ->
+                getEnchantLore(lore, i, entries)
+
+        );
+
 
         return lore;
     }

@@ -120,7 +120,7 @@ public class MarathonPerk extends AbstractPerk implements IAttackEntity, IPlayer
     @Override
     public void handle(int enchantLevel, Player player) {
         if (player.getInventory().getBoots() != null && player.getInventory().getBoots().getType() != Material.AIR && PlayerUtil.isPlayerChosePerk(player, getInternalPerkName())) {
-            ActionBarUtil.sendActionBar1(player,"system", "&c请取消装备靴子类护甲,否则天赋 马拉松 无法正常生效!",20);
+            ActionBarUtil.sendActionBar1(player,"system", "&c请取消装备靴子类护甲,否则天赋 马拉松 无法正常生效!",4);
         }
     }
 

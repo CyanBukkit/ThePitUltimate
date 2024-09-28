@@ -1,10 +1,12 @@
 package cn.charlotte.pit.enchantment.type.normal;
 
+import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
@@ -61,7 +63,9 @@ public class PitMBAEnchant extends AbstractEnchantment implements IPlayerKilledE
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
         double boost = PlayerUtil.getNearbyPlayers(myself.getLocation(), 15).size();
 
-        int sybilLevel = Utils.getEnchantLevel(myself.getInventory().getLeggings(), "sybil");
+        IMythicItem leggings = PlayerProfile.getPlayerProfileByUuid(myself.getUniqueId()).leggings;
+
+        int sybilLevel = Utils.getEnchantLevel(leggings, "sybil");
         if (sybilLevel > 0) {
             boost += sybilLevel + 1;
         }

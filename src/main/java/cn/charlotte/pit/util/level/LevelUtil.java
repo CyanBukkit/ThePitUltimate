@@ -227,12 +227,11 @@ public class LevelUtil {
 
 
     public static String getLevelTag(int prestige, int level) {
-        int pre = 120 * prestige / 30;
-        if (prestige > 0 && pre < 10) {
-            pre = 10;
-        }
         String prestigeColor = getPrestigeColor(prestige);
         return prestigeColor + "[" + getLevelColor(level) + level + prestigeColor + "]";
+    }
+    public static String getLevelTagWithOutAnyPS(int level) {
+        return getLevelColor(level) + level;
     }
     public static String getLevelTagTabListSpec(int prestige, int level) {
         int pre = 120 * prestige / 30;

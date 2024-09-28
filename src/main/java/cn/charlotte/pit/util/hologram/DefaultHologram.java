@@ -3,6 +3,7 @@ package cn.charlotte.pit.util.hologram;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.hologram.touch.TouchHandler;
 import cn.charlotte.pit.util.hologram.view.ViewHandler;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -65,7 +66,7 @@ public class DefaultHologram extends CraftHologram {
             }
         }
         try {
-            this.spawned = HologramAPI.spawn(this, new ArrayList<>(receivers));
+            this.spawned = HologramAPI.spawn(this, new ObjectArrayList<>(receivers));
         } catch (Exception e) {
             e.printStackTrace();
         }

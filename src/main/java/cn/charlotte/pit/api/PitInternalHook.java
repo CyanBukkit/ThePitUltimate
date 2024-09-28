@@ -24,7 +24,7 @@ public interface PitInternalHook {
 
     void openTradeTrackMenu(Player player, PlayerProfile profile, List<TradeData> data);
 
-    void openBackupShowMenu(Player player, PlayerProfile profile , PlayerInvBackup backup, boolean enderChest);
+    void openBackupShowMenu(Player player, PlayerProfile profile,List<PlayerInvBackup> backups , PlayerInvBackup backup, boolean enderChest);
 
     void openMenu(Player player, String menuName);
 

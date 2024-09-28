@@ -81,9 +81,10 @@ public class PacketArmorStand {
         hiding.remove(user);
         viewing.remove(user);
     }
-    //MUST DO THIS AFTER THE USE IT CAN BE A C4 for YOUR SERVER!!!!
+    //MUST DO THIS AFTER THE USE IT CAN BE A FUCKING CRASHER for YOUR SERVER SILENT!!!!
+    //The dumb huanmeng_qwq
     public void recycleEntity(){
-        this.entity.remove();
+        this.entity.remove(); //remove the memory entity from the list.
 
     }
 

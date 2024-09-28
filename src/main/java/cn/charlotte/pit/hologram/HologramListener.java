@@ -5,6 +5,7 @@ import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +28,7 @@ public class HologramListener implements Listener {
                 .runTaskAsynchronously(ThePit.getInstance(), () -> {
                     Player player = Bukkit.getPlayer(event.getPlayerProfile().getPlayerUuid());
                     if (player != null && player.isOnline()) {
-                        PlayerHologram playerHologram = new PlayerHologram(new ArrayList<>());
+                        PlayerHologram playerHologram = new PlayerHologram(new ObjectArrayList<>());
                         hologramMap.put(player.getUniqueId(), playerHologram);
 
                         for (AbstractHologram hologram : ThePit.getInstance().getHologramFactory().loopHologram) {
@@ -55,7 +56,9 @@ public class HologramListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Bukkit.getScheduler()
-                .runTaskAsynchronously(ThePit.getInstance(), () -> {
+                .runTaskAsynchronously(
+                        ThePit.getInstance()
+                        , () -> {
                     PlayerHologram playerHologram = hologramMap.remove(event.getPlayer().getUniqueId());
                     if (playerHologram == null) {
                         return;

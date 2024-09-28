@@ -1,5 +1,6 @@
 package cn.charlotte.pit.menu.offer;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.menu.offer.button.OfferButton;
 import cn.charlotte.pit.util.chat.CC;
@@ -34,7 +35,7 @@ public class OfferMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
-        PlayerProfile targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.getUniqueId());
+        PlayerProfile targetProfile = ThePit.getInstance().getProfileOperator().getOrConstructOperator(target).profile();
         if (targetProfile.getOfferData().getBuyer() == null || !targetProfile.getOfferData().getBuyer().equals(player.getUniqueId())) {
             player.closeInventory();
         } else {

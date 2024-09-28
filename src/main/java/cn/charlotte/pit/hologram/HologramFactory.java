@@ -2,6 +2,7 @@ package cn.charlotte.pit.hologram;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.command.util.ClassUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ public class HologramFactory {
     protected final List<AbstractHologram> normalHologram;
 
     public HologramFactory() {
-        this.loopHologram = new ArrayList<>();
-        this.normalHologram = new ArrayList<>();
+        this.loopHologram = new ObjectArrayList<>();
+        this.normalHologram = new ObjectArrayList<>();
     }
 
     @SneakyThrows

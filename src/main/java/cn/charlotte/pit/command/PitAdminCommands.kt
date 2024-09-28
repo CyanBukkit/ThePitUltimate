@@ -19,6 +19,7 @@ import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.level.LevelUtil
 import cn.charlotte.pit.util.rank.RankUtil
+import cn.charlotte.pit.util.toNMS
 import com.mongodb.client.model.Filters
 import dev.jnic.annotation.Include
 import dev.rollczi.litecommands.annotations.argument.Arg
@@ -510,6 +511,18 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+    @Execute(name = "itemPointCheck")
+    fun itemPointCheck(@Context player: Player) {
+        try {
+            val stack = player.itemInHand
+            player.sendMessage("Bukkit Pointer", true)
+            player.sendMessage(stack.javaPointer,true)
+            player.sendMessage("NMS")
+            player.sendMessage(stack.toNMS()?.javaSignedPoint,true);
+        } catch (ignored: Exception) {
+            player.sendMessage("Error")
+        }
+    }
     @Execute(name = "flushMythicItems")
     fun flushPlayerItem(@Context player: Player, @Arg("player_name") playerName: String) {
         try {
@@ -559,7 +572,8 @@ class PitAdminCommands {
     @Execute(name = "trade")
     @Async
     fun trade(@Context player: Player, @Arg("target") target: String) {
-        val profile = PlayerProfile.getOrLoadPlayerProfileByName(target)
+        val profile = ThePit.getInstance().profileOperator
+            .namedOperator(target).profile()
         if (profile == null) {
             player.sendMessage("§c玩家不存在!")
             return
@@ -629,7 +643,7 @@ class PitAdminCommands {
             player.sendMessage("§a已更新玩家血量")
         }
         if (save) {
-            profile.saveData()
+            profile.saveData(null)
             player.sendMessage("§a已保存玩家数据")
         }
     }
@@ -671,7 +685,7 @@ class PitAdminCommands {
     @Execute(name = "saveAll")
     fun saveAll(@Context player: Player, @Arg("announce") shouldAnnounce: String) {
         try {
-            PlayerProfile.saveAllSync(shouldAnnounce.toBoolean());
+            PlayerProfile.saveAllSync(!shouldAnnounce.toBoolean());
         } catch (t: Throwable){
             player.sendMessage("失败 $shouldAnnounce",true)
         }

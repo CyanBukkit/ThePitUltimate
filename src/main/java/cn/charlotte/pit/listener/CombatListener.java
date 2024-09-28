@@ -5,6 +5,8 @@ import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.buff.impl.BountySolventBuff;
 import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.PackedOperator;
+import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.data.sub.*;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.EnchantmentFactor;
@@ -43,6 +45,7 @@ import lombok.val;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.minecraft.server.v1_8_R3.ItemArmor;
+import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -57,14 +60,18 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.refinedev.spigot.CarbonSpigot;
 import xyz.refinedev.spigot.async.threading.TaskQueueWorker;
+import xyz.refinedev.spigot.async.utils.ResettableLatch;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -73,10 +80,8 @@ import java.util.stream.Collectors;
  * @Date: 2021/1/1 11:16
  */
 @AutoRegister
-public class CombatListener implements Listener {
-    private static final BountySolventBuff bountySolventBuff = new BountySolventBuff();
+public class CombatListener implements Listener {;
     public static CombatListener INSTANCE;
-    private final Random random = new Random();
     private final DecimalFormat numFormat = new DecimalFormat("0.00");
     private final DecimalFormat intFormat = new DecimalFormat("0");
     public static double eventBoost = 2.0; //1.0 to close
@@ -101,8 +106,13 @@ public class CombatListener implements Listener {
 
         //debug code
 
-        if (Math.floor(event.getFrom()) % 5 != 0 && Math.floor(event.getTo()) % 5 == 0 && event.getTo() > 0 && Math.floor(event.getFrom()) != Math.floor(event.getTo())) {
-            CC.boardCast(MessageType.STREAK, "&c&l连杀! " + profile.getFormattedName() + " &7已经 &c" + intFormat.format(Math.floor(event.getTo())) + "&7 连杀了!");
+        double floor = MathHelper.floor(event.getFrom());
+        double floor1 = MathHelper.floor(event.getTo());
+        if (floor % 5 != 0
+                && floor1 % 5 == 0 && event.getTo() > 0
+                && floor != floor1) {
+            CC.boardCast(MessageType.STREAK, "&c&l连杀! " + profile.getFormattedName()
+                    + " &7已经 &c" + intFormat.format(floor1) + "&7 连杀了!");
         }
     }
 
@@ -118,9 +128,8 @@ public class CombatListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onCombat(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
-            if (event.getDamager() instanceof Player) {
+            if (event.getDamager() instanceof Player damager) {
                 Player player = (Player) event.getEntity();
-                Player damager = (Player) event.getDamager();
 
                 PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 PlayerProfile damagerProfile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
@@ -132,7 +141,8 @@ public class CombatListener implements Listener {
                 }
 
                 //DiamondSword Boost
-                if (damager.getItemInHand() != null && damager.getItemInHand().getType() == Material.DIAMOND_SWORD && "shopItem".equals(ItemUtil.getInternalName(damager.getItemInHand()))) {
+                ItemStack itemInHand = damager.getItemInHand();
+                if (itemInHand != null && itemInHand.getType() == Material.DIAMOND_SWORD && "shopItem".equals(ItemUtil.getInternalName(itemInHand))) {
                     PlayerProfile targetProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                     if (targetProfile.getBounty() != 0) {
                         event.setDamage(event.getDamage() * 1.2);
@@ -140,15 +150,15 @@ public class CombatListener implements Listener {
                 }
 
                 //CombatSpade Boost
-                if (damager.getItemInHand() != null && damager.getItemInHand().getType() == Material.DIAMOND_SPADE && "shopItem".equalsIgnoreCase(ItemUtil.getInternalName(damager.getItemInHand()))) {
+                if (itemInHand != null
+                        && itemInHand.getType() == Material.DIAMOND_SPADE && "shopItem".equalsIgnoreCase(ItemUtil.getInternalName(itemInHand))) {
                     for (ItemStack is : player.getInventory().getArmorContents()) {
-                        if (is.getType().name().contains("DIAMOND")) {
+                        if (is.getType().name().startsWith("DIAMOND")) {
                             event.setDamage(event.getDamage() + 0.5);
                         }
                     }
                 }
-
-                if (player.getItemInHand() != null && !PlayerUtil.isVenom(player) && !PlayerUtil.isEquippingSomber(player)) {
+                if (itemInHand != null && !PlayerUtil.isVenom(player) && !PlayerUtil.isEquippingSomber(player)) {
                     int enchantLevel = Utils.getEnchantLevel(player.getItemInHand(), "bruiser_enchant");
                     if (enchantLevel > 0 && player.isBlocking()) {
                         event.setDamage(event.getDamage() - (enchantLevel / 2F) - (enchantLevel >= 3 ? 0.5 : 0));
@@ -157,12 +167,14 @@ public class CombatListener implements Listener {
 
                 this.handleDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), false);
                 playerProfile.setLastDamageAt(System.currentTimeMillis());
-            } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
+            } else if (event.getDamager() instanceof Projectile
+                    && ((Projectile) event.getDamager()).getShooter() instanceof Player damager) {
                 Player player = (Player) event.getEntity();
-                Player damager = (Player) ((Projectile) event.getDamager()).getShooter();
 
-                PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-                PlayerProfile damagerProfile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
+                PlayerProfile playerProfile
+                        = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+                PlayerProfile damagerProfile
+                        = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
 
                 handleDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), true);
 
@@ -208,14 +220,6 @@ public class CombatListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         ProfileLoadRunnable.getInstance().handleQuit(player);
-        if (PlayerProfile.getCacheProfile().containsKey(player.getUniqueId()) && !PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getCombatTimer().hasExpired()) {
-            handlePlayerDeath(player, null, false);
-            final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-            if (!profile.isTempInvUsing()) {
-                profile.setInventory(PlayerInv.fromPlayerInventory(event.getPlayer().getInventory()));
-            }
-            profile.setBounty(0);
-        }
         runGCOnMetadatas(player);
     }
 
@@ -291,27 +295,19 @@ public class CombatListener implements Listener {
             StringBuilder builder = new StringBuilder();
             builder.append(RankUtil.getPlayerColoredName(player.getUniqueId()));
             builder.append(" &4");
-            for (int i = 0; i < nowHearts; i++) {
-                builder.append("❤");
-            }
+            builder.append("❤".repeat(Math.max(0, nowHearts)));
 
             if (absorptionHearts > 0) {
                 builder.append("&e");
             }
-            for (int i = 0; i < absorptionHearts; i++) {
-                builder.append("❤");
-            }
+            builder.append("❤".repeat(Math.max(0, absorptionHearts)));
 
             builder.append("&c");
-            for (int i = 0; i < damageHearts; i++) {
-                builder.append("❤");
-            }
+            builder.append("❤".repeat(Math.max(0, damageHearts)));
             builder.append("&7");
             int heats = totalHearts - nowHearts - damageHearts;
-            for (int i = 0; i < heats; i++) {
-                builder.append("❤");
-            }
-            ActionBarUtil.sendActionBar1(damager,"heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""),1);
+            builder.append("❤".repeat(Math.max(0, heats)));
+            ActionBarUtil.sendActionBar1(damager,"heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""),7);
 
             player.setMetadata("showing_damage_data", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
         }
@@ -366,7 +362,7 @@ public class CombatListener implements Listener {
             final String coloredName = RankUtil.getPlayerColoredName(player.getUniqueId());
 
             if (killerProfile.getPlayerOption().getBarPriority() != PlayerOption.BarPriority.ENCHANT_ONLY) {
-                ActionBarUtil.sendActionBar1(killer, "game"," &a&l击杀! " + coloredName,2);
+                ActionBarUtil.sendActionBar1(killer, "kill","&a&l击杀! " + coloredName + " ",7);
             }
 
             //process drop armor - start
@@ -481,7 +477,8 @@ public class CombatListener implements Listener {
             if (itemStack == null) {
                 continue;
             }
-            if (itemStack.getType().name().contains("LEATHER") || itemStack.getType().name().contains("DIAMOND")) {
+            Material type = itemStack.getType();
+            if (type.name().contains("LEATHER") || type.name().contains("DIAMOND")) {
                 return true;
             }
         }
@@ -500,14 +497,12 @@ public class CombatListener implements Listener {
             }
         } else {
             EntityDamageEvent damageEvent = player.getLastDamageCause();
-            if (damageEvent instanceof EntityDamageByEntityEvent) {
-                EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) damageEvent;
+            if (damageEvent instanceof EntityDamageByEntityEvent entityEvent) {
                 if (entityEvent.getDamager() instanceof Player) {
                     killer = (Player) entityEvent.getDamager();
                     PlayerProfile killerProfile = PlayerProfile.getPlayerProfileByUuid(killer.getUniqueId());
                     this.handleKill(killer, killerProfile, player, playerProfile);
-                } else if (entityEvent.getDamager() instanceof TNTPrimed) {
-                    TNTPrimed tntPrimed = (TNTPrimed) entityEvent.getDamager();
+                } else if (entityEvent.getDamager() instanceof TNTPrimed tntPrimed) {
                     List<MetadataValue> shooter = tntPrimed.getMetadata("shooter");
                     if (!shooter.isEmpty()) {
                         UUID uuid = UUID.fromString(shooter.get(0).asString());
@@ -534,7 +529,8 @@ public class CombatListener implements Listener {
             PlayerUtil.clearPlayer(player, true, false);
         double mythicProtectChance = 0;
 
-        int divineMiracleEnchantLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "divine_miracle_enchant");
+        PlayerInventory inventory = player.getInventory();
+        int divineMiracleEnchantLevel = Utils.getEnchantLevel(inventory.getLeggings(), "divine_miracle_enchant");
         if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) {
             divineMiracleEnchantLevel = 0;
         }
@@ -569,13 +565,13 @@ public class CombatListener implements Listener {
         mythicProtectChance = itemLiveDropEvent.getChance();
         if (mythicProtectChance < 1 && !itemLiveDropEvent.isCancelled()) {
             for (int i = 0; i < 9; i++) {
-                ItemStack item = player.getInventory().getItem(i);
+                ItemStack item = inventory.getItem(i);
                 if ("funky_feather".equals(ItemUtil.getInternalName(item))) {
                     if (item.getAmount() <= 1) {
-                        player.getInventory().setItem(i, new ItemBuilder(Material.AIR).build());
+                        inventory.setItem(i, new ItemBuilder(Material.AIR).build());
                     } else {
                         item.setAmount(item.getAmount() - 1);
-                        player.getInventory().setItem(i, item);
+                        inventory.setItem(i, item);
                     }
                     mythicProtectChance = 1;
                     break;
@@ -585,10 +581,10 @@ public class CombatListener implements Listener {
         boolean noProtect = !itemLiveDropEvent.isCancelled() && RandomUtil.hasSuccessfullyByChance(1 - mythicProtectChance);
         if(!itemLiveDropEvent.isCancelled()) {
             for (int i = 0; i < 36; i++) {
-                ItemStack item = player.getInventory().getItem(i);
+                ItemStack item = inventory.getItem(i);
                 if (item == null || item.getType() == Material.AIR) continue;
 
-                final IMythicItem mythicSwordItem = Utils.getMythicItem(item);
+                final IMythicItem mythicSwordItem = ThePit.getInstance().getItemFactory().getIMythicItemSync(item);
                 if (mythicSwordItem == null) {
                     continue;
                 }
@@ -599,67 +595,60 @@ public class CombatListener implements Listener {
                     }
                 }
                 if (noProtect) {
-                    player.getInventory().setItem(i, Utils.subtractLive(item));
+                    inventory.setItem(i, Utils.subtractLive(mythicSwordItem));
                 }
             }
         }
 
         if (noProtect) {
-            player.getInventory().setHelmet(Utils.subtractLive(player.getInventory().getHelmet()));
-            player.getInventory().setChestplate(Utils.subtractLive(player.getInventory().getChestplate()));
+            inventory.setHelmet(Utils.subtractLive(inventory.getHelmet()));
+            inventory.setChestplate(Utils.subtractLive(inventory.getChestplate()));
         }
-        IMythicItem leggings = MythicUtil.getMythicItem(player.getInventory().getLeggings());
-        if (leggings != null && (noProtect || MythicUtil.getMythicItem(player.getInventory().getLeggings()) instanceof LuckyChestplate
+        IMythicItem leggings = MythicUtil.getMythicItem(inventory.getLeggings());
+        if (leggings != null && (noProtect || leggings instanceof LuckyChestplate
                 /*|| leggings.getEnchantments().containsKey(new RealManEnchant())*/)) {
-            player.getInventory().setLeggings(Utils.subtractLive(player.getInventory().getLeggings()));
+            inventory.setLeggings(Utils.subtractLive(leggings));
         }
         if (noProtect) {
-            player.getInventory().setBoots(Utils.subtractLive(player.getInventory().getBoots()));
+            inventory.setBoots(Utils.subtractLive(inventory.getBoots()));
         }
 
         if (!noProtect) {
             player.sendMessage(CC.translate("&d&l物品保护! &7由于一个天赋/附魔/物品/事件提供的概率保护,本次死亡没有损失背包内神话物品生命."));
         }
-        for (ItemStack itemStack : player.getInventory()) {
+        for (ItemStack itemStack : inventory) {
             if (ItemUtil.isDeathDrop(itemStack)) {
-                player.getInventory().remove(itemStack);
+                inventory.remove(itemStack);
             }
         }
 
-        if (ItemUtil.isDeathDrop(player.getInventory().getHelmet())) {
-            player.getInventory().setHelmet(new ItemStack(Material.AIR));
+        if (ItemUtil.isDeathDrop(inventory.getHelmet())) {
+            inventory.setHelmet(new ItemStack(Material.AIR));
         }
-        if (ItemUtil.isDeathDrop(player.getInventory().getChestplate())) {
-            player.getInventory().setChestplate(new ItemStack(Material.AIR));
+        if (ItemUtil.isDeathDrop(inventory.getChestplate())) {
+            inventory.setChestplate(new ItemStack(Material.AIR));
         }
-        if (ItemUtil.isDeathDrop(player.getInventory().getLeggings())) {
-            player.getInventory().setLeggings(new ItemStack(Material.AIR));
+        if (ItemUtil.isDeathDrop(inventory.getLeggings())) {
+            inventory.setLeggings(new ItemStack(Material.AIR));
         }
-        if (ItemUtil.isDeathDrop(player.getInventory().getBoots())) {
-            player.getInventory().setBoots(new ItemStack(Material.AIR));
+        if (ItemUtil.isDeathDrop(inventory.getBoots())) {
+            inventory.setBoots(new ItemStack(Material.AIR));
         }
 
         //process assist - start
-        try {
-            Map<UUID, DamageData> damageMap = new HashMap<>(playerProfile.getDamageMap());
+
+            double totalDamage = 0;
             List<DamageData> activeDamage = new ArrayList<>();
-            for (Map.Entry<UUID, DamageData> entry : damageMap.entrySet()) {
-                if (!entry.getValue().getTimer().hasExpired()) {
-                    activeDamage.add(entry.getValue());
+            for (DamageData it : playerProfile.getDamageMap().values()) {
+                if(it.getTimer().hasExpired()){
+                    totalDamage+= it.getDamage();
+                    activeDamage.add(it);
                 }
             }
-
-            double totalDamage = activeDamage
-                    .stream()
-                    .mapToDouble(DamageData::getDamage)
-                    .sum();
-
             if (totalDamage > 0) {
                 this.handleAssist(player, finalKiller, activeDamage, (long) totalDamage);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
         //process assist - end
 
@@ -675,11 +664,12 @@ public class CombatListener implements Listener {
         //save status - end
 
         InventoryUtil.supplyItems(player);
-
-        if (!playerProfile.isTempInvUsing()) {
-            playerProfile.setInventory(PlayerInv.fromPlayerInventory(player.getInventory()));
+        PackedOperator operator = playerProfile.toOperator();
+        if(operator != null) {
+            operator.pending(i -> {
+                playerProfile.setInventory(PlayerInv.fromPlayerInventory(inventory));
+            });
         }
-
         if (shouldRespawn) {
             ((CraftPlayer)player).getHandle().invulnerableTicks = 40;
             // player.setHealth(player.getMaxHealth());
@@ -709,7 +699,7 @@ public class CombatListener implements Listener {
 
         Location location = ThePit.getInstance().getPitConfig()
                 .getSpawnLocations()
-                .get(random.nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
+                .get(ThreadLocalRandom.current().nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
 
         player.teleport(location);
 
@@ -1190,16 +1180,16 @@ public class CombatListener implements Listener {
             AbstractEnchantment enchant = (AbstractEnchantment) ins;
 
 
-            int level = enchant.getItemEnchantLevel(killer.getItemInHand());
+            int level = enchant.getItemEnchantLevel(killerProfile.heldItem);
             GameEffectListener.processKilled(ins, level, killer, player, coinsAtomic, expAtomic);
-            if (killer.getInventory().getLeggings() != null && killer.getInventory().getLeggings().getType() != Material.AIR) {
-                level = enchant.getItemEnchantLevel(killer.getInventory().getLeggings());
+            IMythicItem leggingItem = killerProfile.leggings;
+            if (leggingItem != null) {
+                level = enchant.getItemEnchantLevel(leggingItem);
                 GameEffectListener.processKilled(ins, level, killer, player, coinsAtomic, expAtomic);
             }
         }
 
-        if (player instanceof Player) {
-            Player beKilledPlayer = ((Player) player);
+        if (player instanceof Player beKilledPlayer) {
             for (IPlayerBeKilledByEntity ins : ThePit.getInstance().getPerkFactory().getPlayerBeKilledByEntities()) {
                 AbstractPerk perk = (AbstractPerk) ins;
                 int perkPlayerLevel = perk.getPlayerLevel(beKilledPlayer);
@@ -1211,10 +1201,13 @@ public class CombatListener implements Listener {
                 AbstractEnchantment enchant = (AbstractEnchantment) ins;
 
                 int level = enchant.getItemEnchantLevel(beKilledPlayer.getItemInHand());
-                if (beKilledPlayer.getItemInHand() != null && beKilledPlayer.getItemInHand().getType() != Material.AIR && beKilledPlayer.getItemInHand().getType() != Material.LEATHER_LEGGINGS) {
+                if (beKilledPlayer.getItemInHand() != null
+                        && beKilledPlayer.getItemInHand().getType() != Material.AIR
+                        && beKilledPlayer.getItemInHand().getType() != Material.LEATHER_LEGGINGS) {
                     GameEffectListener.processBeKilledByEntity(ins, level, beKilledPlayer, killer, coinsAtomic, expAtomic);
                 }
-                if (beKilledPlayer.getInventory().getLeggings() != null && beKilledPlayer.getInventory().getLeggings().getType() != Material.AIR) {
+                if (beKilledPlayer.getInventory().getLeggings() != null
+                        && beKilledPlayer.getInventory().getLeggings().getType() != Material.AIR) {
                     level = enchant.getItemEnchantLevel(beKilledPlayer.getInventory().getLeggings());
                     GameEffectListener.processBeKilledByEntity(ins, level, beKilledPlayer, killer, coinsAtomic, expAtomic);
                 }

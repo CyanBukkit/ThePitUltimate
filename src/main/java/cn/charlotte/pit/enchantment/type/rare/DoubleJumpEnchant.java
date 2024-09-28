@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import org.bukkit.GameMode;
@@ -21,6 +22,7 @@ import spg.lgdev.handler.MovementHandler;
 import spg.lgdev.iSpigot;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, IActionDisplayEnchant, MovementHandler {
 
     private static final DoubleJumpEnchant doubleJumpEnchant = new DoubleJumpEnchant();
-    private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
+    private static final Map<UUID, Cooldown> cooldown = new Object2ObjectOpenHashMap<>();
 
     @SneakyThrows
     public DoubleJumpEnchant() {
@@ -68,14 +70,11 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
     }
 
     private static int getCooldownInt(int enchantLevel) {
-        switch (enchantLevel) {
-            case 2:
-                return 10;
-            case 3:
-                return 5;
-            default:
-                return 20;
-        }
+        return switch (enchantLevel) {
+            case 2 -> 10;
+            case 3 -> 5;
+            default -> 20;
+        };
     }
 
     @Override

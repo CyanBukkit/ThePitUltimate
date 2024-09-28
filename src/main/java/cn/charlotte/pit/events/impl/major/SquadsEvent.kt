@@ -631,8 +631,8 @@ class SquadsEvent : IEpicEvent, IEvent, IPrepareEvent, Listener, IScoreBoardInse
 
     private val format = DecimalFormat("###,###,###,###,###")
 
-    override fun insert(player: Player): MutableList<String> {
-        val data = teamMap[player.uniqueId] ?: return arrayListOf()
+    override fun insert(player: Player): MutableList<String>? {
+        val data = teamMap[player.uniqueId] ?: return null
 
         return arrayListOf(
             "&f剩余时间: &a${TimeUtil.millisToTimer(timer.getRemaining())}",

@@ -49,6 +49,8 @@ public abstract class IMythicItem extends AbstractPitItem {
     public String prefix;
     public boolean boostedByGem = false;
     @Getter
+    private final static String defUUIDString = "00000000-0000-0000-0000-000000000001";
+    @Getter
     private final static UUID defUUID = UUID.fromString("00000000-0000-0000-0000-000000000001");
     public boolean boostedByGlobalGem = false;
     public String customName = null;
@@ -188,6 +190,7 @@ public abstract class IMythicItem extends AbstractPitItem {
             lore.add("&7原: " + color.getChatColor() + color.getDisplayName() + "色神话之甲");
         }
         //Dark Pants
+        lore.add(defUUID.equals(uuid) ? "&8请放入附魔台再取出进行刷新操作" : "&8" + uuid);
 
         ItemBuilder builder = new ItemBuilder(this.getItemDisplayMaterial());
         if (name != null) {
@@ -359,28 +362,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         NBTTagList ench = extra.getList("ench", 8);
             this.enchantments = new Object2IntOpenHashMap<>();
             this.enchantments.defaultReturnValue(-1);
-
-            for (int i = 0; i < ench.size(); i++) {
-                AbstractEnchantment enchantment;
-                String[] split = Utils.splitByCharAt(ench.getString(i), ':');
-                enchantment = ThePit.getInstance()
-                        .getEnchantmentFactor()
-                        .getEnchantmentMap()
-                        .get(split[0]);
-
-                if (enchantment == null) {
-                    continue;
-                }
-
-                int level;
-                try {
-                    level = Integer.parseInt(split[1]);
-                } catch (Exception ignore) {
-                    continue;
-                }
-
-                enchantments.put(enchantment, level);
-          }
+            Utils.readEnchantments(enchantments,ench);
         if (!extra.hasKey("tier") && isEnchanted()) {
             if (color == MythicColor.DARK) {
                 this.tier = 2;
@@ -402,7 +384,16 @@ public abstract class IMythicItem extends AbstractPitItem {
         builder.changeNbt("mythic_color", color.getInternalName());
     }
 
-
+    public int getEnchantmentLevel(String name){
+        AbstractEnchantment abstractEnchantment = ThePit.getInstance().getEnchantmentFactor().getEnchantmentMap().get(name);
+        if(abstractEnchantment != null){
+            return this.enchantments.getInt(abstractEnchantment);
+        }
+        return -1;
+    }
+    public int getEnchantmentLevel(AbstractEnchantment abstractEnchantment){
+            return this.enchantments.getInt(abstractEnchantment);
+    }
     public String toString() {
         return "IMythicItem(maxLive=" +
                 this.getMaxLive() + ", live=" +

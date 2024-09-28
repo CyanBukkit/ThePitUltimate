@@ -67,7 +67,13 @@ public class DiamondSwordShopButton extends AbstractShopButton {
     public boolean shouldUpdate(Player player, int slot, ClickType clickType) {
         return true;
     }
-
+    ItemStack stack = new ItemBuilder(Material.DIAMOND_SWORD)
+                .deathDrop(true)
+                .canSaveToEnderChest(true)
+                .canDrop(true)
+                .canTrade(true)
+                .internalName("shopItem")
+                .buildWithUnbreakable();
     @Override
     public ItemStack[] getResultItem(Player player) {
         if (getButtonItem(player).getType().equals(Material.DIAMOND_AXE)) {
@@ -77,13 +83,7 @@ public class DiamondSwordShopButton extends AbstractShopButton {
                     .itemDamage(8)
                     .buildWithUnbreakable()};
         }
-        return new ItemStack[]{new ItemBuilder(Material.DIAMOND_SWORD)
-                .deathDrop(true)
-                .canSaveToEnderChest(true)
-                .canDrop(true)
-                .canTrade(true)
-                .internalName("shopItem")
-                .buildWithUnbreakable()};
+        return new ItemStack[]{stack};
     }
 
     @Override
@@ -93,21 +93,5 @@ public class DiamondSwordShopButton extends AbstractShopButton {
             return (int) (0.35 * 150);
         }
         return 150;
-    }
-
-    //@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    private void onCombat(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player) {
-            if (event.getDamager() instanceof Player) {
-                Player player = (Player) event.getEntity();
-                Player damager = (Player) event.getDamager();
-                if (damager.getItemInHand() != null && damager.getItemInHand().getType() == Material.DIAMOND_SWORD && ItemUtil.getInternalName(damager.getItemInHand()).equalsIgnoreCase("shopItem")) {
-                    PlayerProfile targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(player.getUniqueId());
-                    if (targetProfile.getBounty() != 0) {
-                        event.setDamage(event.getDamage() * 1.2);
-                    }
-                }
-            }
-        }
     }
 }

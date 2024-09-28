@@ -592,8 +592,8 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
         }
     }
 
-    override fun insert(player: Player): MutableList<String> {
-        val data = cache[player.uniqueId] ?: return ArrayList()
+    override fun insert(player: Player): MutableList<String>? {
+        val data = cache[player.uniqueId] ?: return null
         val size = data.gotBlocks.size
 
         return arrayListOf(

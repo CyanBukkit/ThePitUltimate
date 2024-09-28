@@ -7,19 +7,19 @@ import org.bukkit.inventory.ItemStack;
 
 @Include
 public class ChunkOfVileItem {
-
-    public static ItemStack toItemStack() {
-        return new ItemBuilder(Material.COAL)
+ static ItemBuilder builder = new ItemBuilder(Material.COAL)
                 .name("&5暗聚块")
                 .lore(
                         "&7死亡后保留",
-                        "",
-                        "&c邪术收藏品"
-                )
+                                "",
+                                "&c邪术收藏品"
+    )
                 .canSaveToEnderChest(true)
                 .canTrade(true)
                 .internalName(getInternalName())
-                .build();
+            ;
+    public static ItemStack toItemStack() {
+        return builder.build();
     }
 
     public static String getInternalName() {

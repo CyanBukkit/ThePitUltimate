@@ -86,7 +86,7 @@ import org.bukkit.plugin.PluginDescriptionFile
 
 object PitHook {
     @JvmStatic
-    val gitVersion = "ShanguanLingV1uuid"
+    val gitVersion = "53c934dac"
     @JvmStatic
     val itemVersion = "ShanguanLingV1uuid"
     fun init() {

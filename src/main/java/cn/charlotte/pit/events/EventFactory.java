@@ -5,6 +5,7 @@ import cn.charlotte.pit.util.bossbar.BossBar;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,8 +33,8 @@ public class EventFactory {
     private Cooldown nextEpicEventTimer;
 
     public EventFactory() {
-        this.normalEvents = new ArrayList<>();
-        this.epicEvents = new ArrayList<>();
+        this.normalEvents = new ObjectArrayList<>();
+        this.epicEvents = new ObjectArrayList<>();
         this.normalEnd = new Cooldown(0);
     }
 

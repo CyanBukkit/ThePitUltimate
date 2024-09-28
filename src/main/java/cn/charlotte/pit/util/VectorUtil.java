@@ -4,6 +4,7 @@ package cn.charlotte.pit.util;
 import net.jafama.FastMath;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -58,15 +59,39 @@ public class VectorUtil {
             entity.setVelocity(vector);
         }
     }
+    public static void entityPushBack(Entity entity,double power){
+        Location location = entity.getLocation();
+        Location location1 = calculateBackwardVector(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        entityPush(entity, location1,power);
+    }
 
+    public static Location calculateBackwardVector(World world, double x, double y, double z, float yaw, float pitch) {
+        // 计算方向向量的分量
+        float dx = MathHelper.cos(MathHelper.fastToRadians(pitch)) * MathHelper.sin(MathHelper.fastToRadians(MathHelper.normalizeYaw(yaw + 90)));
+        float dy = MathHelper.sin(MathHelper.fastToRadians(30));
+        float dz = MathHelper.cos(MathHelper.fastToRadians(pitch)) * MathHelper.sin(MathHelper.fastToRadians(MathHelper.normalizeYaw(yaw + 90)));
+
+        // 归一化方向向量
+        float magnitude = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+        dx /= magnitude;
+        dy /= magnitude;
+        dz /= magnitude;
+
+        // 计算向后退的向量
+        double backwardX = (-dx) * 6.2;
+        double backwardY = -dy * 3.14;
+        double backwardZ = (-dz) * 6.28;
+
+        return new Location(world,x + backwardX,y - backwardY,z + backwardZ,MathHelper.normalizeYaw(yaw+180F),-30);
+    }
     public static Vector getPushVector(Location from, Location to, double velocity) {
         Vector test = to.clone().subtract(from).toVector();
         double elevation = test.getY();
         Double launchAngle = calculateLaunchAngle(from, to, velocity, elevation);
-        double distance = Math.sqrt(Math.pow(test.getX(), 2.0D) + Math.pow(test.getZ(), 2.0D));
+        double distance = MathHelper.sqrt(FastMath.pow2(test.getX()) + FastMath.pow2(test.getZ()));
         if (distance != 0.0D) {
             if (launchAngle == null) {
-                launchAngle = Math.atan((40.0D * elevation + Math.pow(velocity, 2.0D)) / (40.0D * elevation + 2.0D * Math.pow(velocity, 2.0D)));
+                launchAngle = FastMath.atan((40.0D * elevation + Math.pow(velocity, 2.0D)) / (40.0D * elevation + 2.0D * Math.pow(velocity, 2.0D)));
             }
             double hangTime = calculateHangTime(launchAngle, velocity, elevation);
             test.setY(Math.tan(launchAngle) * distance);

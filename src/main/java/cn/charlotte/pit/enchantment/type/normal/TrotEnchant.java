@@ -1,9 +1,12 @@
 package cn.charlotte.pit.enchantment.type.normal;
 
+import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.command.param.defaults.PlayerParameterType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
 import lombok.SneakyThrows;
@@ -64,10 +67,9 @@ public class TrotEnchant extends AbstractEnchantment implements MovementHandler 
 
     @Override
     public void handleUpdateLocation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
-        if (player.getInventory().getLeggings() != null
-                && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings()))
-                && trotEnchant.isItemHasEnchant(player.getInventory().getLeggings())) {
-            int level = trotEnchant.getItemEnchantLevel(player.getInventory().getLeggings());
+        IMythicItem leggings = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
+        if (leggings != null){
+            int level = trotEnchant.getItemEnchantLevel(leggings);
             if (level == 1) {
                 if(player.getWalkSpeed() != 0.21F) {
                     player.setWalkSpeed(0.21F);
@@ -81,7 +83,12 @@ public class TrotEnchant extends AbstractEnchantment implements MovementHandler 
                 if(player.getWalkSpeed() != 0.24F) {
                     player.setWalkSpeed(0.24F);
                 }
+            } else {
+                if(player.getWalkSpeed() != 0.2F) {
+                    player.setWalkSpeed(0.2F);
+                }
             }
+
         } else {
 
             if(player.getWalkSpeed() != 0.2F) {

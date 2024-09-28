@@ -1,7 +1,10 @@
 package cn.charlotte.pit.util.music;
 
+import cn.charlotte.pit.ThePit;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +19,7 @@ public abstract class SongPlayer {
     protected boolean loop;
     protected boolean autoDestroy = false;
     protected boolean destroyed = false;
-    protected Thread playerThread;
+    protected BukkitTask playerThread;
     protected byte fadeTarget = 100;
     protected byte volume = 100;
     protected byte fadeStart = volume;
@@ -78,9 +81,10 @@ public abstract class SongPlayer {
         fadeDone++;
     }
 
-    protected void createThread() { //答辩了...
-        playerThread = new Thread(() -> {
-            while (!destroyed) {
+    protected void createThread() { //答辩了... 切个虚拟线程plz
+
+        playerThread = Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+            while (!destroyed && MinecraftServer.getServer().isRunning()) {
                 long startTime = System.currentTimeMillis();
                 synchronized (SongPlayer.this) {
                     if (playing) {
@@ -116,8 +120,6 @@ public abstract class SongPlayer {
                 }
             }
         });
-        playerThread.setPriority(Thread.MIN_PRIORITY);
-        playerThread.start();
     }
 
     public List<String> getPlayerList() {

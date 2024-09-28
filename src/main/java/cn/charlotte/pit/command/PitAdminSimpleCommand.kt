@@ -1,7 +1,6 @@
 package cn.charlotte.pit.command
 
 import cn.charlotte.pit.ThePit
-import cn.charlotte.pit.addon.impl.EnchantBook
 import cn.charlotte.pit.command.handler.HandHasItem
 import cn.charlotte.pit.config.NewConfiguration
 import cn.charlotte.pit.data.CDKData
@@ -38,6 +37,7 @@ import dev.rollczi.litecommands.annotations.context.Context
 import dev.rollczi.litecommands.annotations.execute.Execute
 import dev.rollczi.litecommands.annotations.optional.OptionalArg
 import dev.rollczi.litecommands.annotations.permission.Permission
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.apache.commons.lang3.time.DateFormatUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -178,14 +178,14 @@ class PitAdminSimpleCommand {
     @Execute(name = "wipe")
     @Permission("pit.admin")
     fun wipe(@Context player: Player, @Arg("target") target: String, @Arg("reason") reason: String) {
-        val profile = PlayerProfile.getOrLoadPlayerProfileByName(target)
+        val profile = ThePit.getInstance().profileOperator.namedOperator(target)
         if (profile == null) {
             player.sendMessage(CC.translate("&cすみません！あのプレイヤーは見つかりませんでした！もう一度確認してください！"))
             return
         }
-        val wipe = profile.wipe(reason)
+        val wipe = profile.profile().wipe(reason)
         if (wipe) {
-            player.sendMessage(CC.translate("&a成功しました！あのプレイヤーはワイプされました！ID: " + profile.playerName))
+            player.sendMessage(CC.translate("&a成功しました！あのプレイヤーはワイプされました！ID: " + profile.profile().playerName))
         } else {
             player.sendMessage(CC.translate("&c&lすみません！ワイプが失敗しました！いくつかのエラーがありました！"))
         }
@@ -195,14 +195,14 @@ class PitAdminSimpleCommand {
     @Permission("pit.admin")
     @Async
     fun unWipe(@Context player: Player, @Arg("target") target: String) {
-        val profile = PlayerProfile.getOrLoadPlayerProfileByName(target)
+        val profile = ThePit.getInstance().profileOperator.namedOperator(target)
         if (profile == null) {
             player.sendMessage(CC.translate("&cすみません！あのプレイヤーは見つかりませんでした！もう一度確認してください！"))
             return
         }
-        val wipe = profile.unWipe()
+        val wipe = profile.profile().unWipe()
         if (wipe) {
-            player.sendMessage(CC.translate("&a成功しました！ID: " + profile.playerName))
+            player.sendMessage(CC.translate("&a成功しました！ID: " + profile.profile().playerName))
         } else {
             player.sendMessage(CC.translate("&c&l失敗しました！あのプレイヤーはワイプダークがありませんでした"))
         }
@@ -219,22 +219,26 @@ class PitAdminSimpleCommand {
     @Permission("pit.admin")
     @Async
     fun rollback(@Context player: Player, @Arg("name") name: String): String {
-        val profile = PlayerProfile.getOrLoadPlayerProfileByName(name) ?: return CC.translate("&c该玩家不存在")
+        val profile = ThePit.getInstance().profileOperator.namedOperator(name)
+            ?: ThePit.getInstance().profileOperator.lookupOnline(name)
+        if (profile.profile() == null) {
+            return CC.translate("&c该玩家不存在")
+        }
+        val backups = ObjectArrayList(profile.profile().invBackups.iterator())
 
-        val backups = ThePit.getInstance().mongoDB.invCollection.find(Filters.eq("uuid", profile.uuid))
-
-        val buttons: MutableList<Button?> = ArrayList()
+        val buttons: MutableList<Button?> = ObjectArrayList()
         var i = 0
         for (invBackup in backups) {
             if (invBackup.inv == null) continue
             buttons.add(
                 ShowInvBackupButton(
+                    backups,
                     ItemBuilder(Material.BOOK).name("&a备份时间: " + format.format(invBackup.timeStamp))
                         .lore(("&e物品数: " + InventoryUtil.getInventoryFilledSlots(invBackup.inv.contents))).amount(
                             min(
                                 64.0, InventoryUtil.getInventoryFilledSlots(invBackup.inv.contents).toDouble()
                             ).toInt()
-                        ).build(), invBackup, profile
+                        ).build(), invBackup, profile.profile()
                 )
             )
             i++
@@ -242,7 +246,7 @@ class PitAdminSimpleCommand {
 
         buttons.reverse()
 
-        PagedMenu(profile.playerName + " 的背包备份", buttons).openMenu(player)
+        PagedMenu(profile.profile().playerName + " 的背包备份", buttons).openMenu(player)
         return CC.translate("总计: $i 个")
     }
 

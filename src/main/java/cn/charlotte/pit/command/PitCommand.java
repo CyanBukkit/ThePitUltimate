@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.CDKData;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.mail.Mail;
+import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.data.sub.KillRecap;
 import cn.charlotte.pit.data.sub.OfferData;
 import cn.charlotte.pit.data.temp.TradeRequest;
@@ -31,7 +32,8 @@ import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
-import com.google.common.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.cache.CacheBuilder;
 import dev.jnic.annotation.Include;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -76,7 +78,7 @@ public class PitCommand {
         }
     }
 
-    private final Cache<UUID, Long> viewCooldown = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
+    private final Cache<UUID, Long> viewCooldown = Caffeine.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
 
     @Command(names = "view")
     public void viewProfile(Player player, @Parameter(name = "查询目标") String id) {
@@ -95,7 +97,8 @@ public class PitCommand {
                 return;
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
-                PlayerProfile targetProfile = PlayerProfile.getOrLoadPlayerProfileByName(id);
+                PlayerProfile targetProfile =       ThePit.getInstance().getProfileOperator()
+                        .namedOperator(id).profile();
                 if (targetProfile == null) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."));
                     return;
@@ -506,7 +509,7 @@ public class PitCommand {
     @Command(names = "viewOffer")
     public void viewOffer(Player player, @Parameter(name = "玩家") Player target) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        PlayerProfile targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.getUniqueId());
+        PlayerProfile targetProfile = ThePit.getInstance().getProfileOperator().getOrLoadOperatorOffline(target.getUniqueId(),target.getName()).profile();
         if (targetProfile.getOfferData().getBuyer() == null || !targetProfile.getOfferData().getBuyer().equals(player.getUniqueId())) {
             player.sendMessage(CC.translate("&c你没有来自此玩家的交易报价!"));
             return;
@@ -580,8 +583,8 @@ public class PitCommand {
             return;
         }
         Player target = Bukkit.getPlayer(targetPlayer);
-        PlayerProfile targetProfile = PlayerProfile.getOrLoadPlayerProfileByUuid(target.getUniqueId());
-
+        ThePit.getInstance().getProfileOperator().operatorStrict(target).ifPresentOrElse(operator -> {
+        PlayerProfile targetProfile = operator.profile();
         if (player.getUniqueId().equals(target.getUniqueId())) {
             player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"));
             return;
@@ -648,6 +651,10 @@ public class PitCommand {
             player.sendMessage(CC.translate("&e&l交易报价发送! &7成功向 " + LevelUtil.getLevelTag(targetProfile.getPrestige(), targetProfile.getLevel()) + " " + RankUtil.getPlayerColoredName(target.getUniqueId()) + " &7发送了交易报价!"));
             target.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&e&l交易报价! " + LevelUtil.getLevelTag(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerColoredName(player.getUniqueId()) + " &7向你发送了交易报价,请")).append(new ChatComponentBuilder(CC.translate(" &e点击这里")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&6点击以接受")).create())).setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/viewOffer " + player.getName())).create()).append(CC.translate(" &r&7以查看此交易报价.")).create());
         }
+        }, () -> {
+            player.sendMessage(CC.translate("&c您选择的玩家的档案正在加载中!"));
+
+        });
     }
 
     @Command(names = "AuctionGui")

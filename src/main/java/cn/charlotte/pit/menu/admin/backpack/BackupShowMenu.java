@@ -28,11 +28,12 @@ public class BackupShowMenu extends Menu {
     private final DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private final PlayerProfile playerProfile;
     private final PlayerInvBackup backup;
+    private final List<PlayerInvBackup> backups;
     private final boolean right;
-
-    public BackupShowMenu(PlayerProfile playerProfile, PlayerInvBackup backup, boolean right) {
+    public BackupShowMenu(PlayerProfile playerProfile,List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean right) {
         this.playerProfile = playerProfile;
         this.backup = backup;
+        this.backups = backups;
         this.right = right;
     }
 
@@ -40,7 +41,6 @@ public class BackupShowMenu extends Menu {
     public String getTitle(Player player) {
         return playerProfile.getPlayerName() + " 的背包备份";
     }
-
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttonMap = new HashMap<>();
@@ -67,8 +67,8 @@ public class BackupShowMenu extends Menu {
 
         List<Button> buttons = new ObjectArrayList<>();
         int i = 0;
-        for (PlayerInvBackup invBackup : playerProfile.getInvBackups()) {
-            buttons.add(new ShowInvBackupButton(
+        for (PlayerInvBackup invBackup : backups) {
+            buttons.add(new ShowInvBackupButton(backups,
                     new ItemBuilder(Material.BOOK)
                             .name("&a备份时间: " + format.format(invBackup.getTimeStamp()))
                             .lore(("&e物品数: " + InventoryUtil.getInventoryFilledSlots(invBackup.getInv().getContents())))

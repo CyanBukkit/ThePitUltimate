@@ -4,7 +4,7 @@
 
 package net.jitse.npclib.hologram;
 
-import com.comphenix.tinyprotocol.Reflection;
+import cn.charlotte.pit.util.proto.Reflection;
 import net.jitse.npclib.internal.MinecraftVersion;
 import org.bukkit.Location;
 import org.bukkit.World;

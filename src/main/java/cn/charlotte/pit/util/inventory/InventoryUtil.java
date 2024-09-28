@@ -369,51 +369,45 @@ public class InventoryUtil {
         }
         return true;
     }
-
-
+    private static final ItemStack DEFAULT_SWORD =  new ItemBuilder(Material.IRON_SWORD).internalName("default_sword").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable();
+    private static final ItemStack DEFAULT_BOW = new ItemBuilder(Material.BOW).internalName("default_bow").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable();
+    //THERE IS NO SUPPLY ITEMS TO DETECT UNFAIR ITEMS
     public static void supplyItems(Player player) {
         int arrowAmount = 0;
         boolean swordFound = false;
         boolean bowFound = false;
-        int arrowSlot = 8;
         boolean miner = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getChosePerk().entrySet().stream().anyMatch(entry -> entry.getValue().getPerkInternalName().equals("Miner"));
         int cobblestone = 0;
 
-        int illegalItems = 0;
 
         int slot = 0;
-        for (ItemStack item : player.getInventory()) {
+        PlayerInventory inventory = player.getInventory();
+        for (ItemStack item : inventory) {
             if (item == null) {
                 slot++;
                 continue;
             }
-            if (ItemUtil.isIllegalItem(item)) {
-                player.getInventory().remove(item);
-                illegalItems++;
-                slot++;
-                continue;
-            }
-
             //fixme: why remove the default item (sword & bow slot will reset)
 
             if (ItemUtil.isDefaultItem(item)) {
                 //player.getInventory().remove(item);
-                if (Utils.toNMStackQuick(item).getItem() instanceof ItemArmor) {
-                    player.getInventory().remove(item);
+                net.minecraft.server.v1_8_R3.ItemStack nmStackQuick = Utils.toNMStackQuick(item);
+                if (nmStackQuick.getItem() instanceof ItemArmor) {
+                    inventory.remove(item);
                 }
-                if (Utils.toNMStackQuick(item).getItem() instanceof ItemSword && swordFound) {
-                    player.getInventory().remove(item);
+                if (nmStackQuick.getItem() instanceof ItemSword && swordFound) {
+                    inventory.remove(item);
                     swordFound = false;
                 }
-                if (Utils.toNMStackQuick(item).getItem() instanceof ItemBow && bowFound) {
-                    player.getInventory().remove(item);
+                if (nmStackQuick.getItem() instanceof ItemBow && bowFound) {
+                    inventory.remove(item);
                     swordFound = false;
                 }
             }
 
 
             if (ItemUtil.isRemovedOnJoin(item)) {
-                player.getInventory().remove(item);
+                inventory.remove(item);
                 slot++;
                 continue;
             }
@@ -434,52 +428,30 @@ public class InventoryUtil {
 
         if (miner) {
             if (cobblestone < 32) {
-                player.getInventory().addItem(new ItemBuilder(Material.COBBLESTONE).deathDrop(true).amount(32 - cobblestone).canDrop(false).canSaveToEnderChest(false).internalName("perk_miner").build());
+                inventory.addItem(new ItemBuilder(Material.COBBLESTONE).deathDrop(true).amount(32 - cobblestone).canDrop(false).canSaveToEnderChest(false).internalName("perk_miner").build());
             }
         }
 
-        PlayerInventory inventory = player.getInventory();
-        if (ItemUtil.isIllegalItem(inventory.getHelmet()) || ItemUtil.isRemovedOnJoin(inventory.getHelmet())) {
-            inventory.setHelmet(null);
-            illegalItems++;
+        if (ItemUtil.isDefaultItem(inventory.getHelmet())) {
+            inventory.setHelmet(new ItemStack(Material.AIR));
         }
-        if (ItemUtil.isIllegalItem(inventory.getChestplate()) || ItemUtil.isRemovedOnJoin(inventory.getChestplate())) {
-            inventory.setChestplate(null);
-            illegalItems++;
+        if (ItemUtil.isDefaultItem(inventory.getChestplate())) {
+            inventory.setChestplate(new ItemStack(Material.AIR));
         }
-        if (ItemUtil.isIllegalItem(inventory.getLeggings()) || ItemUtil.isRemovedOnJoin(inventory.getLeggings())) {
-            inventory.setLeggings(null);
-            illegalItems++;
+        if (ItemUtil.isDefaultItem(inventory.getLeggings())) {
+            inventory.setLeggings(new ItemStack(Material.AIR));
         }
-        if (ItemUtil.isIllegalItem(inventory.getBoots()) || ItemUtil.isRemovedOnJoin(inventory.getBoots())) {
-            inventory.setBoots(null);
-            illegalItems++;
-        }
-
-        if (illegalItems > 0) {
-            player.sendMessage(CC.translate("&c我们从您的背包中找到 &e" + illegalItems + "&c 个异常物品，已从中移除,抱歉!"));
-        }
-
-        if (ItemUtil.isDefaultItem(player.getInventory().getHelmet())) {
-            player.getInventory().setHelmet(new ItemStack(Material.AIR));
-        }
-        if (ItemUtil.isDefaultItem(player.getInventory().getChestplate())) {
-            player.getInventory().setChestplate(new ItemStack(Material.AIR));
-        }
-        if (ItemUtil.isDefaultItem(player.getInventory().getLeggings())) {
-            player.getInventory().setLeggings(new ItemStack(Material.AIR));
-        }
-        if (ItemUtil.isDefaultItem(player.getInventory().getBoots())) {
-            player.getInventory().setBoots(new ItemStack(Material.AIR));
+        if (ItemUtil.isDefaultItem(inventory.getBoots())) {
+            inventory.setBoots(new ItemStack(Material.AIR));
         }
 
         if (!swordFound) {
-            player.getInventory()
-                    .addItem(new ItemBuilder(Material.IRON_SWORD).internalName("default_sword").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable());
+          inventory
+                    .addItem(DEFAULT_SWORD);
         }
         if (!bowFound) {
-            player.getInventory()
-                    .addItem(new ItemBuilder(Material.BOW).internalName("default_bow").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable());
+            inventory
+                    .addItem(DEFAULT_BOW);
         }
         /*
         player.getInventory()
@@ -492,42 +464,43 @@ public class InventoryUtil {
         int maxArrow = 32 + Math.max(0, PlayerUtil.getPlayerUnlockedPerkLevel(player, "arrow_armory_perk") * 8);
         if (arrowAmount > 0 && arrowAmount <= maxArrow) {
             if (arrowAmount != maxArrow) {
-                ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
-                player.getInventory().addItem(
+                    ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
+
+                    inventory.addItem(
                         arrowBuilder.amount(maxArrow - arrowAmount).build()
                 );
             }
         } else {
             if (arrowAmount > maxArrow) {
-                player.getInventory().remove(Material.ARROW);
+                inventory.remove(Material.ARROW);
             }
             ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
-            InventoryUtil.addInvReverse(player.getInventory(),
+            InventoryUtil.addInvReverse(inventory,
                     (arrowBuilder.amount(maxArrow).build()));
         }
 
 
         int ironArmorSlot = random.nextInt(3);
 
-        if (player.getInventory().getChestplate() == null || ItemUtil.isDefaultItem(player.getInventory().getChestplate())) {
+        if (inventory.getChestplate() == null || ItemUtil.isDefaultItem(inventory.getChestplate())) {
             if (ironArmorSlot == 0) {
-                player.getInventory().setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                inventory.setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
             } else {
-                player.getInventory().setChestplate(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                inventory.setChestplate(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
             }
         }
-        if (player.getInventory().getLeggings() == null || ItemUtil.isDefaultItem(player.getInventory().getLeggings())) {
+        if (inventory.getLeggings() == null || ItemUtil.isDefaultItem(inventory.getLeggings())) {
             if (ironArmorSlot == 1) {
-                player.getInventory().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                inventory.setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
             } else {
-                player.getInventory().setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                inventory.setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
             }
         }
-        if (player.getInventory().getBoots() == null || ItemUtil.isDefaultItem(player.getInventory().getBoots())) {
+        if (inventory.getBoots() == null || ItemUtil.isDefaultItem(inventory.getBoots())) {
             if (ironArmorSlot == 2) {
-                player.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                inventory.setBoots(new ItemBuilder(Material.IRON_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
             } else {
-                player.getInventory().setBoots(new ItemBuilder(Material.CHAINMAIL_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                inventory.setBoots(new ItemBuilder(Material.CHAINMAIL_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
             }
         }
     }

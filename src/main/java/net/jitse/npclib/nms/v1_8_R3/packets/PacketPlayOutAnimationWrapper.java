@@ -1,13 +1,10 @@
 package net.jitse.npclib.nms.v1_8_R3.packets;
 
-import com.comphenix.tinyprotocol.Reflection;
 import net.jitse.npclib.api.state.NPCAnimation;
 import net.minecraft.server.v1_8_R3.PacketPlayOutAnimation;
 
-import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.lang.reflect.Method;
 
 public class PacketPlayOutAnimationWrapper {
     static VarHandle varHandle;

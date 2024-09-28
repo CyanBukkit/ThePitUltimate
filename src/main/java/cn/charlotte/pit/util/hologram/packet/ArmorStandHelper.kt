@@ -32,7 +32,7 @@ object ArmorStandHelper {
             entityTeleport.sendPacket(it)
         }
     }
-
+    //傻逼幻梦。
     @JvmStatic
     fun memoryEntity(location: Location): ArmorStand {
         val worldServer = (location.world as CraftWorld).handle
@@ -43,6 +43,8 @@ object ArmorStandHelper {
     @JvmStatic
     fun setEntityLocation(entity: Entity, to: Location) {
         entity as CraftEntity
-        entity.handle.setLocation(to.x, to.y, to.z, to.yaw, to.pitch)
+        entity.handle.setLocation(to.x, to.y, to.z, to.yaw, to.pitch) //crasher code -->
+        //locate to public void entityJoinedWorld(Entity entity, boolean flag)
+        //it will not add to Minecraft Server Entity System, but it will be added to the chunk, that is bug from bukkit
     }
 }

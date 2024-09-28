@@ -4,6 +4,8 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.hologram.packet.PacketHologram;
 import cn.charlotte.pit.util.hologram.reflection.NMUClass;
 import cn.charlotte.pit.util.hologram.reflection.Reflection;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectLists;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.inventivetalent.reflection.minecraft.Minecraft;
@@ -17,7 +19,7 @@ import java.util.List;
 
 public abstract class HologramAPI {
 
-    protected static final List<Hologram> holograms = new ArrayList<>();
+    protected static final List<Hologram> holograms = ObjectLists.synchronize(new ObjectArrayList<>());
     protected static boolean is1_8/*Or 1.9*/ = Minecraft.VERSION.newerThan(Minecraft.Version.v1_8_R1);
     protected static boolean packetsEnabled = false;
     public static boolean isMAGA = true;

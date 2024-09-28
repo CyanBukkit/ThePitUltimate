@@ -4,7 +4,7 @@
 
 package net.jitse.npclib.nms.v1_8_R3.packets;
 
-import com.comphenix.tinyprotocol.Reflection;
+import cn.charlotte.pit.util.proto.Reflection;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -23,7 +23,7 @@ public class PacketPlayOutPlayerInfoWrapper {
         Reflection.getField(packetPlayOutPlayerInfo.getClass(), "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.class)
                 .set(packetPlayOutPlayerInfo, action);
 
-        PacketPlayOutPlayerInfo.PlayerInfoData playerInfoData = packetPlayOutPlayerInfo.new PlayerInfoData(gameProfile, 1,
+        PacketPlayOutPlayerInfo.PlayerInfoData playerInfoData = new PacketPlayOutPlayerInfo.PlayerInfoData(gameProfile, 1,
                 WorldSettings.EnumGamemode.NOT_SET, IChatBaseComponent.ChatSerializer.a("{\"text\":\"[NPC] " + name + "\",\"color\":\"dark_gray\"}"));
 
         Reflection.FieldAccessor<List> fieldAccessor = Reflection.getField(packetPlayOutPlayerInfo.getClass(), "b", List.class);

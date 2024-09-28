@@ -2,6 +2,7 @@ package cn.charlotte.pit.util;
 
 import cn.charlotte.pit.item.IMythicItem;
 import cn.klee.backports.utils.SWMRHashTable;
+import com.google.common.annotations.Beta;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap;
@@ -20,6 +21,7 @@ import java.util.function.LongSupplier;
 
 public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, IMythicItem> {
     ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    AtomicBoolean shouldLRU = new AtomicBoolean(false);
     AtomicBoolean removeLast = new AtomicBoolean(false);
     LongSupplier limit;
     public ItemGlobalReference(LongSupplier limit){
@@ -27,38 +29,64 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
         this.limit = limit;
     }
     public IMythicItem getValue(String key) {
-        return get(key);
+        removeLast.setOpaque(true);
+        IMythicItem andMoveToFirst = get(key);
+        removeLast.setOpaque(false);
+        return andMoveToFirst;
     }
     public IMythicItem getValue(UUID key){
         return getValue(key.toString());
     }
-
+    @Beta
     public void putValue(String key, IMythicItem value) {
-        boolean opaque = removeLast.get();
+        putAndMoveToFirst(key, value);
+    }
+    public void executeLRU(){
+        if(!shouldLRU.getAcquire()){
+            return;
+        }
+        boolean opaque = removeLast.getAcquire();
         if(!opaque) {
             long asLong = limit.getAsLong();
             if (size > asLong) {
 
                 removeLast.setOpaque(true);
                 for (int i = size; i > asLong; i--) {
+                    if(size == limit.getAsLong() || size == 0){
+                        break; //effectively
+                    }
                     this.removeLast();
                 }
-
                 removeLast.setOpaque(false);
             }
+            shouldLRU.setOpaque(false);
         }
-        put(key, value);
     }
+
+    @Override
+    public IMythicItem putAndMoveToFirst(String string, IMythicItem mythicItem) {
+        removeLast.setOpaque(true);
+        lock.writeLock().lock();
+        IMythicItem iMythicItem = super.putAndMoveToFirst(string, mythicItem);
+        lock.writeLock().unlock();
+        removeLast.setOpaque(false);
+        shouldLRU.setOpaque(true);
+        return iMythicItem;
+
+    }
+
     @Override
     public IMythicItem put(String uuid, IMythicItem mythicItem) {
         try {
             lock.writeLock().lock();
+            shouldLRU.setOpaque(true);
             return super.put(uuid, mythicItem);
         } finally {
             lock.writeLock().unlock();
         }
     }
     public void putValue(UUID uuid, IMythicItem item){
+
         putValue(uuid.toString(),item);
     }
 

@@ -92,18 +92,26 @@ public class AssembleBoardEntry {
             if (suffix.length() > 16) {
                 suffix = suffix.substring(0, 16);
             }
-
-            this.team.setPrefix(prefix);
-            this.team.setSuffix(suffix);
+            setPrefixCheckEqual(team,prefix);
+            setSuffixCheckEqual(team,suffix);
         } else {
-            this.team.setPrefix(this.text);
-            this.team.setSuffix("");
+            setPrefixCheckEqual(team,text);
+            setSuffixCheckEqual(team,"");
         }
 
         Score score = this.board.getObjective().getScore(this.identifier);
         score.setScore(position);
     }
-
+    public void setPrefixCheckEqual(Team team, String prefix){
+        if(!team.getPrefix().equals(prefix)) {
+            team.setPrefix(prefix);
+        }
+    }
+    public void setSuffixCheckEqual(Team team, String suffix){
+        if(!team.getSuffix().equals(suffix)) {
+            team.setSuffix(suffix);
+        }
+    }
     /**
      * Remove Board Entry from Board.
      */

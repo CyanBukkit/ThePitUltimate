@@ -6,6 +6,7 @@ import cn.charlotte.pit.hologram.AbstractHologram;
 import cn.charlotte.pit.util.chat.StringUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -26,13 +27,13 @@ public class LeaderBoardHologram extends AbstractHologram {
 
     @Override
     public List<String> getText(Player player) {
-        List<String> hologramText = new ArrayList<>();
+        List<String> hologramText = new ObjectArrayList<>();
         hologramText.add("&b&l顶级活跃玩家");
         hologramText.add("&7天坑乱斗等级排名");
         hologramText.add("");
 
 
-        List<LeaderBoardEntry> entries = new ArrayList<>(LeaderBoardEntry.getLeaderBoardEntries());
+        List<LeaderBoardEntry> entries = new ObjectArrayList<>(LeaderBoardEntry.getLeaderBoardEntries());
         for (int b = 0; b < 10; b++) {
             if (b + 1 > entries.size()) {
                 hologramText.add("&e" + (b + 1) + "&7. &7暂无");
@@ -51,30 +52,26 @@ public class LeaderBoardHologram extends AbstractHologram {
             }
         }
 
-        Optional<LeaderBoardEntry> first = LeaderBoardEntry.getLeaderBoardEntries()
+        LeaderBoardEntry.getLeaderBoardEntries()
                 .stream()
                 .filter(leaderBoardEntry -> leaderBoardEntry.getUuid().equals(player.getUniqueId()))
-                .findFirst();
+                .findFirst().ifPresentOrElse(entry -> {
+                    double top = 100D * entry.getRank() / LeaderBoardEntry.getLeaderBoardEntries().size();
+                    int prestige = entry.getPrestige();
+                    double experience = entry.getExperience();
+                    for (int i = 0; i < prestige; i++) {
+                        experience = experience + LevelUtil.getLevelTotalExperience(i, 120);
+                    }
+                    String formattedExp = StringUtil.getFormatLong((long) experience);
 
-        if (first.isPresent()) {
-            LeaderBoardEntry entry = first.get();
-            double top = 100D * entry.getRank() / LeaderBoardEntry.getLeaderBoardEntries().size();
-            int prestige = entry.getPrestige();
-            double experience = entry.getExperience();
-            for (int i = 0; i < prestige; i++) {
-                experience = experience + LevelUtil.getLevelTotalExperience(i, 120);
-            }
-            String formattedExp = StringUtil.getFormatLong((long) experience);
-
-            hologramText.add("");
-            hologramText.add("&7你的经验值: &b" + formattedExp + " 经验值");
-            hologramText.add("&7排名: " + "&e#" + entry.getRank() + " &7(前&e" + new DecimalFormat("0.0").format(top) + "%&7)");
-            hologramText.add("&7本排名仅显示 &f7天 &7内登录过的玩家 (&f" + entries.size() + "&7名)");
-        } else {
-            hologramText.add("");
-            hologramText.add("&7&o还没有你的排行数据,请等会再来...");
-        }
-
+                    hologramText.add("");
+                    hologramText.add("&7你的经验值: &b" + formattedExp + " 经验值");
+                    hologramText.add("&7排名: " + "&e#" + entry.getRank() + " &7(前&e" + new DecimalFormat("0.0").format(top) + "%&7)");
+                    hologramText.add("&7本排名仅显示 &f7天 &7内登录过的玩家 (&f" + entries.size() + "&7名)");
+                }, () -> {
+                    hologramText.add("");
+                    hologramText.add("&7&o还没有你的排行数据,请等会再来...");
+                });
         return hologramText;
     }
 

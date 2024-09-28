@@ -35,9 +35,15 @@ import kotlin.random.Random
 @Include
 @AutoRegister
 class ToTheMoonMegaStreak: AbstractPerk() , IPlayerKilledEntity, IPlayerDamaged, IPlayerBeKilledByEntity, MegaStreak, Listener {
+    init {
+        instance = this;
+    }
     companion object {
         @JvmStatic
         val cache = HashMap<UUID, Double>()
+
+        @JvmStatic
+        var instance: ToTheMoonMegaStreak? = null
     }
 
     override fun getInternalPerkName(): String {

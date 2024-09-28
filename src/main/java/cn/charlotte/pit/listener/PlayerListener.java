@@ -154,14 +154,18 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerInventoryClose(InventoryCloseEvent event) {
-        if (event.getPlayer() instanceof Player) {
-            if (PlayerUtil.isStaffSpectating((Player) event.getPlayer())) {
+        if (event.getPlayer() instanceof Player player) {
+            if (PlayerUtil.isStaffSpectating(player)) {
                 return;
             }
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getPlayer().getUniqueId());
-            if (!profile.isTempInvUsing()) {
-                profile.setInventory(PlayerInv.fromPlayerInventory(event.getPlayer().getInventory()));
-            }
+            ThePit.getInstance().getProfileOperator().operatorStrict(player).ifPresent(opera -> {
+                PlayerProfile profile = opera.profile();
+                if (profile.isLogin()) { //有IO操作时要保持原子性。
+                    opera.pendingIfLoaded(prof -> {
+                        prof.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
+                });
+                }
+            });
         }
     }
 
@@ -498,9 +502,10 @@ public class PlayerListener implements Listener {
 
     private void welcomePlayer(Player player) {
         player.sendMessage("欢迎回来!",true);
-        player.sendMessage("ThePitStudy " + PitHook.getGitVersion(),true);
+        player.sendMessage("ThePitStudy #" + PitHook.getItemVersion() + " @" + PitHook.getGitVersion(),true);
         player.sendMessage("感谢您支持本玩法, 玩法仅供学习参考, 健康游戏你我他",true);
         player.sendMessage(" ");
+        player.sendMessage(System.currentTimeMillis() + ">> " + System.nanoTime(),true);
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.isNicked()) {

@@ -46,7 +46,7 @@ public class ActionBarManager{
                 String rawString = value.getKey();
                 Integer repeat = value.getValue();
                 builder.append(rawString);
-                builder.append(" &7| ");
+                builder.append("&7| ");
                 int i1 = --repeat;
                 if (i1 <= 0) {
                     removal.add(key); //point to gc
@@ -55,7 +55,7 @@ public class ActionBarManager{
                 mappedString.put(key, Map.entry(rawString, i1));
             });
             if (ab.get()) {
-                builder.delete(builder.length() - 5, builder.length());
+                builder.delete(builder.length() - 4, builder.length());
                 ActionBarUtil.sendActionBar0(player, builder.toString());
             }
             removal.forEach(mappedString::remove);

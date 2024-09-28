@@ -1,6 +1,9 @@
 package cn.charlotte.pit.runnable
 
 import cn.charlotte.pit.ThePit
+import cn.charlotte.pit.data.PlayerProfile
+import cn.charlotte.pit.item.IMythicItem
+import cn.charlotte.pit.item.ItemFactory
 import cn.charlotte.pit.util.chat.ActionBarUtil
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.toMythicItem
@@ -21,12 +24,12 @@ object ActionBarDisplayRunnable {
             .actionDisplayEnchants
     }
     @JvmStatic
-    val shutdownStr = CC.translate("&c&l服务器关闭中")
+    val shutdownStr: String = CC.translate("&c&l服务器关闭中 ")
     fun start() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(),{
                 if(!MinecraftServer.getServer().isRunning){
                     for (player in Bukkit.getOnlinePlayers()) {
-                        ActionBarUtil.sendActionBar1(player,"system", shutdownStr,2);
+                        ActionBarUtil.sendActionBar1(player,"system", shutdownStr,20);
                     }
                     return@runTaskTimerAsynchronously
                 }
@@ -45,29 +48,29 @@ object ActionBarDisplayRunnable {
 
                     val builder = StringBuilder()
 
-                    player.itemInHand?.apply {
-                        player.handleActionDisplay(this, builder)
+                    PlayerProfile.getPlayerProfileByUuid(player.uniqueId)?.apply {
+                        player.handleActionDisplay(this.heldItem, builder)
+                        player.handleActionDisplay(this.leggings, builder)
+
                     }
 
-                    for (armorContent in player.inventory.armorContents) {
-                        val itemStack = armorContent ?: continue
-                        player.handleActionDisplay(itemStack, builder)
-                    }
-                    if(builder.isNotBlank()) ActionBarUtil.sendActionBar1(player,"skill", CC.translate(builder.toString()),4)
+
+                  if(builder.isNotBlank()) ActionBarUtil.sendActionBar1(player,"skill", CC.translate(builder.toString()),4)
                 }
             }, 100L, 20L)
     }
 
-    private fun Player.handleActionDisplay(itemStack: ItemStack, builder: StringBuilder) {
-        val item = itemStack.toMythicItem() ?: return
-        for (enchantment in item.enchantments) {
-            val displayEnchant = enchants[enchantment.key.nbtName] ?: continue
-            builder
-                .append("&b&l")
-                .append(enchantment.key.enchantName)
-                .append(" ")
-                .append(displayEnchant.getText(enchantment.value, player))
-                .append(" ")
+    private fun Player.handleActionDisplay(itemStack: IMythicItem?, builder: StringBuilder) {
+        itemStack?.run {
+            for (enchantment in enchantments) {
+                val displayEnchant = enchants[enchantment.key.nbtName] ?: continue
+                builder
+                    .append("&b&l")
+                    .append(enchantment.key.enchantName)
+                    .append(" ")
+                    .append(displayEnchant.getText(enchantment.value, player))
+                    .append(" ")
+            }
         }
     }
 

@@ -4,12 +4,14 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.api.PitInternalHook;
 import cn.charlotte.pit.buff.BuffData;
+import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.data.sub.*;
 import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench;
 import cn.charlotte.pit.event.PitGainCoinsEvent;
 import cn.charlotte.pit.event.PitGainRenownEvent;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.medal.impl.challenge.HundredLevelMedal;
 import cn.charlotte.pit.quest.AbstractQuest;
 import cn.charlotte.pit.util.chat.CC;
@@ -23,25 +25,29 @@ import cn.charlotte.pit.util.rank.RankUtil;
 import cn.klee.backports.utils.SWMRHashTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.annotations.Beta;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.ReplaceOptions;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.Warning;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.mongojack.JacksonMongoCollection;
 import org.slf4j.Logger;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Author: EmptyIrony
@@ -77,18 +83,27 @@ import java.util.concurrent.TimeUnit;
         "streakCooldown",
         "streakCount",
         "bot",
-        "lastDamageAt"
+        "lastDamageAt",
+        "heldItem",
+        "leggings"
 })
 public class PlayerProfile {
 
-    public final static PlayerProfile NONE_PROFILE = new PlayerProfile(UUID.randomUUID(), "NotLoadPlayer");
+    public final static PlayerProfile NONE_PROFILE = new PlayerProfile(UUID.randomUUID(), "NotLoadPlayer") {
+        public boolean isLoaded(){
+            return false;
+        }
+    };
+
     //两张表
+    public PackedOperator toOperator(){
+        return ThePit.getInstance().getProfileOperator().getOperator(getPlayerUuid());
+    }
+   // public static Map<UUID, BukkitRunnable> LOADING_MAP = new SWMRHashTable<>(); // do it static
 
-    public static Map<UUID, BukkitRunnable> LOADING_MAP = new SWMRHashTable<>(); // do it static
+   // public static final Map<UUID, BukkitRunnable> SAVING_MAP = new SWMRHashTable<>(); // do it static
 
-    public static final Map<UUID, BukkitRunnable> SAVING_MAP = new SWMRHashTable<>(); // do it static
-
-    private final static Map<UUID, PlayerProfile> cacheProfile = new SWMRHashTable<>();
+    //private final static Map<UUID, PlayerProfile> cacheProfile = new SWMRHashTable<>();
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(PlayerProfile.class);
     public int prestige;
     public List<String> claimedMail;
@@ -131,8 +146,8 @@ public class PlayerProfile {
     private int bounty;
     private int actionBounty;
     private double respawnTime;
-    private PlayerInv inventory;
-    private PlayerEnderChest enderChest;
+    private volatile PlayerInv inventory; //原子写入
+    private volatile PlayerEnderChest enderChest;
     private int enderChestRow;
 
     //每次都遍历查询，效率低下
@@ -214,7 +229,7 @@ public class PlayerProfile {
     private double xpStackAddon = 0.0;
     private double xpStackMax = 1.0;
 
-    private List<PlayerInvBackup> invBackups;
+   // private List<PlayerInvBackup> invBackups;
 
     private int todayCompletedUber;
     private long todayCompletedUberLastRefreshed;
@@ -233,7 +248,8 @@ public class PlayerProfile {
     public KingsQuestsData kingsQuestsData = new KingsQuestsData();
 
     private long lastRenameTime = 0;
-
+    public IMythicItem heldItem; //make it public because it didn't have any synch operation
+    public IMythicItem leggings; //make it public because it didn't have any synch operation
     public PlayerProfile(UUID uuid, String playerName) {
         //调用默认构造函数，初始化赋值
         this();
@@ -285,7 +301,7 @@ public class PlayerProfile {
         this.bountyCooldown = new Cooldown(0);
         this.currentQuestList = new ObjectArrayList<>();
         this.genesisData = new GenesisData();
-        this.invBackups = new ObjectArrayList<>();
+       // this.invBackups = new ObjectArrayList<>();
         this.claimedMail = new ObjectArrayList<>();
 
         this.nightQuestEnable = false;
@@ -312,16 +328,27 @@ public class PlayerProfile {
 
         this.loaded = false;
     }
-
-    public static Map<UUID, PlayerProfile> getCacheProfile() {
-        return PlayerProfile.cacheProfile;
+    public boolean isChoosePerk(String intName){
+        for (PerkData value : chosePerk.values()) {
+            if (value.getPerkInternalName().equals(intName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    /**
+     * 本方法仅作为兼容桥, 向下兼容存在代码, 已最大保证线程安全性以及最大解决bug等问题
+     * 重定向于 PackedOperator
+     * @param uuid
+     * @return the raw profile, if it exists and loaded
+     */
+    @Deprecated
     @JsonIgnore
     public static PlayerProfile getPlayerProfileByUuid(UUID uuid) {
 
-        PlayerProfile profile = cacheProfile.get(uuid);
-        if (profile == null) {
+        PlayerProfile rawCache = getRawCache(uuid);
+        if (rawCache == null) {
 //            Player player = Bukkit.getPlayer(uuid);
 //            if (player != null && player.isOnline()) {
 //                player.kickPlayer("你的档案因未知异常没有被加载,请尝试稍等一会儿重新进入游戏!");
@@ -329,24 +356,37 @@ public class PlayerProfile {
 //            throw new RuntimeException(uuid.toString() + "'s Player profile is not loaded");
             return NONE_PROFILE;
         }
-        return profile;
+        return rawCache;
+    }
+    public static PlayerProfile getRawCache(UUID uuid){
+        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(uuid);
+        if (operator == null || !operator.isLoaded()) {
+//            Player player = Bukkit.getPlayer(uuid);
+//            if (player != null && player.isOnline()) {
+//                player.kickPlayer("你的档案因未知异常没有被加载,请尝试稍等一会儿重新进入游戏!");
+//            }
+//            throw new RuntimeException(uuid.toString() + "'s Player profile is not loaded");
+            return null;
+        }
+
+        return operator.profile();
     }
 
-    /**
-     * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
-     * 注意！请异步调用本方法，如果在主线程上调用会抛异常
-     *
-     * @param uuid 寻找的玩家UUID
-     * @return 目标玩家玩家档案，如果该玩家未注册，则返回null
-     */
-    @JsonIgnore
-    public static PlayerProfile getOrLoadPlayerProfileByUuid(UUID uuid) {
-        PlayerProfile profile = cacheProfile.get(uuid);
-        if (profile != null) {
-            return profile;
-        }
-        return loadPlayerProfileByUuid(uuid);
-    }
+//    /**
+//     * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
+//     * 注意！请异步调用本方法，如果在主线程上调用会抛异常
+//     *
+//     * @param uuid 寻找的玩家UUID
+//     * @return 目标玩家玩家档案，如果该玩家未注册，则返回null
+//     */
+//    @JsonIgnore
+//    public static PlayerProfile getOrLoadPlayerProfileByUuid(UUID uuid) {
+//        PlayerProfile profile = cacheProfile.get(uuid);
+//        if (profile != null) {
+//            return profile;
+//        }
+//        return loadPlayerProfileByUuid(uuid);
+//    }
     /**
      * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
      * 注意！请异步调用本方法，如果在主线程上调用会抛异常
@@ -368,18 +408,10 @@ public class PlayerProfile {
         if (playerProfile != null) {
             //load mail
             loadMail(playerProfile, uuid);
+            //playerProfile.loadInvBackups();
 
             //load inv backup
             try {
-                Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
-                    final FindIterable<PlayerInvBackup> invBackups = ThePit.getInstance()
-                            .getMongoDB()
-                            .getInvCollection()
-                            .find(Filters.eq("uuid", uuid.toString()));
-                    invBackups.batchSize(1000);
-                    gcBackups(invBackups, playerProfile, true);
-
-                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -387,35 +419,25 @@ public class PlayerProfile {
 
         return playerProfile;
     }
-
     /**
      * 进行垃圾回收。。。, 可能会误回收, 我存在哥牛逼
      * @param invBackups
      * @param playerProfile
      * @param add
      */
-    public static void gcBackups(Iterable<PlayerInvBackup> invBackups,PlayerProfile playerProfile, boolean add){
+    public static void gcBackups(Iterable<PlayerInvBackup> invBackups,PlayerProfile playerProfile, boolean add) {
         long lastTime = 0;
         JacksonMongoCollection<PlayerInvBackup> invCollection = ThePit.getInstance().getMongoDB().getInvCollection();
-        synchronized (playerProfile.getInvBackups()) { //keep sync to wait for the back up done
-            for (PlayerInvBackup backup : invBackups) {
-                long between = Math.abs(ChronoUnit.DAYS.between(Instant.now(), Instant.ofEpochMilli(backup.getTimeStamp())));
-                if (Math.abs(backup.getTimeStamp() - lastTime) < 10 * 60 * 1000
-                        || between > 20) {
-                    lastTime = backup.getTimeStamp();
-                    invCollection.deleteOne(Filters.eq("backupUuid", backup.getBackupUuid()));
-                    if (add) {
-                        playerProfile.getInvBackups().remove(backup);
-                    }
-                    continue;
-                }
+        for (PlayerInvBackup backup : invBackups) {
+            long between = Math.abs(ChronoUnit.DAYS.between(Instant.now(), Instant.ofEpochMilli(backup.getTimeStamp())));
+            if (Math.abs(backup.getTimeStamp() - lastTime) < 10 * 60 * 1000
+                    || between > 20) {
                 lastTime = backup.getTimeStamp();
-                if (add) {
-                    playerProfile.getInvBackups().add(backup);
-                }
+                invCollection.deleteOne(Filters.eq("backupUuid", backup.getBackupUuid()));
+                continue;
             }
+            lastTime = backup.getTimeStamp();
         }
-
     }
     /**
      * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
@@ -426,75 +448,30 @@ public class PlayerProfile {
      * @return 目标玩家玩家档案，如果该玩家未注册，则返回null
      */
     @JsonIgnore
-    public static PlayerProfile getOrLoadPlayerProfileByName(String name) {
-        for (Map.Entry<UUID, PlayerProfile> entry : cacheProfile.entrySet()) {
-            if (entry.getValue().getPlayerName().equalsIgnoreCase(name)) {
-                return entry.getValue();
-            }
-        }
-        if (Bukkit.getServer().isPrimaryThread()) {
-            new RuntimeException("Shouldn't load profile on primary thread!").printStackTrace();
-        }
-
+    public static PlayerProfile loadPlayerProfileByName(String name) {
         return ThePit.getInstance()
                 .getMongoDB()
                 .getProfileCollection()
                 .findOne(Filters.eq("lowerName", name.toLowerCase())); //PlayerProfile lookup
     }
-
-    /**
-     * 自带一些魔法的查找玩家 =w=
-     * @param name 目标玩家名字
-     * @return 目标玩家玩家档案，如果该玩家未注册，则返回null (Future)
-     */
-    @JsonIgnore
-    public static Future<PlayerProfile> getOrLoadPlayerProfileByNameAsync(String name){
-        return CompletableFuture.supplyAsync(() -> getOrLoadPlayerProfileByName(name));
-    }
-    @JsonIgnore
-    public static Future<PlayerProfile> getOrLoadPlayerProfileByUUIDAsync(String name){
-        return CompletableFuture.supplyAsync(() -> getOrLoadPlayerProfileByName(name));
-    }
-
-    @JsonIgnore
-    public static PlayerProfile getPlayerProfileByName(String name) {
-        for (Map.Entry<UUID, PlayerProfile> entry : cacheProfile.entrySet()) {
-            if (entry.getValue().getPlayerName().equalsIgnoreCase(name)) {
-                return entry.getValue();
-            }
-        }
-        Player player = Bukkit.getPlayer(name);
-        if (player != null && player.isOnline()) {
-            player.sendMessage(CC.translate("&c在加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试."));
-            player.kickPlayer("加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试.");
-        }
-        throw new RuntimeException(name + "'s Player profile not load");
-    }
-
+//
+//    @JsonIgnore
+//    public static PlayerProfile getPlayerProfileByName(String name) {
+//        for (Map.Entry<UUID, PlayerProfile> entry : cacheProfile.entrySet()) {
+//            if (entry.getValue().getPlayerName().equalsIgnoreCase(name)) {
+//                return entry.getValue();
+//            }
+//        }
+//        Player player = Bukkit.getPlayer(name);
+//        if (player != null && player.isOnline()) {
+//            player.sendMessage(CC.translate("&c在加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试."));
+//            player.kickPlayer("加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试.");
+//        }
+//        throw new RuntimeException(name + "'s Player profile not load");
+//    }
     public static void saveAll() {
-        for (Player player : new ObjectArrayList<>(Bukkit.getOnlinePlayers())) {
-            try {
-                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-                if (profile.isLoaded()) {
-                    profile.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
-                    if(!(SAVING_MAP.containsKey(player.getUniqueId()) || LOADING_MAP.containsKey(player.getUniqueId()))) {
-                        SAVING_MAP.put(player.getUniqueId(), new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                Thread.yield();
-                            }
-                        });
-                        profile.save();
-                        SAVING_MAP.remove(player.getUniqueId());
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                CC.printError(player, e);
-            }
-        }
+        ThePit.getInstance().getProfileOperator().doSaveProfiles();
     }
-
     public static void loadMail(PlayerProfile playerProfile, UUID uuid) {
         PlayerMailData mailData = ThePit.getInstance()
                 .getMongoDB()
@@ -513,11 +490,7 @@ public class PlayerProfile {
         playerProfile.setMailData(mailData);
     }
 
-    public void init() {
-        cacheProfile.put(this.getPlayerUuid(), this);
-    }
-
-    public void save() {
+    public void save(Player player) {
         this.totalExp = experience;
         for (int i = 0; i < prestige; i++) {
             this.totalExp = totalExp + LevelUtil.getLevelTotalExperience(i, 120);
@@ -528,53 +501,38 @@ public class PlayerProfile {
         }
 
 
-        saveData();
+        saveData(player);
     }
-    public void saveData() {
+    public void saveData(Player player) {
         final long now = System.currentTimeMillis();
-
-        if (invBackups.isEmpty() || invBackups.stream().noneMatch(backup -> now - backup.getTimeStamp() < 10 * 60 * 1000)) {
-            final PlayerInvBackup backup = new PlayerInvBackup();
-
-            backup.setUuid(this.uuid);
-            backup.setTimeStamp(now);
-            backup.setBackupUuid(UUID.randomUUID().toString());
-            backup.setInv(this.inventory);
-            backup.setChest(this.enderChest);
-            backup.setTimeStamp(System.currentTimeMillis());
-
-            backup.save();
-            gcBackups(invBackups,this,false);
+        if(player != null){
+            this.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
         }
+        //if (invBackups.isEmpty() || invBackups.stream().noneMatch(backup -> now - backup.getTimeStamp() < 10 * 60 * 1000)) {
+        final PlayerInvBackup backup = new PlayerInvBackup();
+        backup.setUuid(this.uuid);
+        backup.setTimeStamp(now);
+        backup.setBackupUuid(UUID.randomUUID().toString());
+        backup.setInv(this.inventory);
+        backup.setChest(this.enderChest);
+        backup.setTimeStamp(System.currentTimeMillis());
+
+        backup.save();
+        gcBackups(gcBackupIterators(), this, true);
+        //   gcBackups(invBackups,this,false);
+        // }
 
         ThePit.getInstance()
                 .getMongoDB()
                 .getProfileCollection()
                 .replaceOne(Filters.eq("uuid", this.uuid), this, new ReplaceOptions().upsert(true));
     }
-
-    public PlayerProfile load() {
-
-        PlayerProfile profile = PlayerProfile.loadPlayerProfileByUuid(this.getPlayerUuid());
-        if (profile == null) {
-            this.registerTime = System.currentTimeMillis();
-            //refresh quests - start
-            this.refreshQuest();
-            //refresh quests - end
-
-
-            this.loaded = true;
-
-            return this;
-        }
-
-
+    public static void bootstrapProfile(PlayerProfile profile){
         //refresh quests - start
         profile.refreshQuest();
         profile.refreshGenesisData();
         //refresh quests - end
 
-        profile.loaded = true;
 
         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
             try {
@@ -596,6 +554,24 @@ public class PlayerProfile {
                         .forEach(player -> CC.printError(player, e));
             }
         });
+        profile.loaded = true;
+    }
+    public PlayerProfile load() {
+
+        PlayerProfile profile = PlayerProfile.loadPlayerProfileByUuid(this.getPlayerUuid());
+        if (profile == null) {
+            this.registerTime = System.currentTimeMillis();
+            //refresh quests - start
+            this.refreshQuest();
+            //refresh quests - end
+
+
+            this.loaded = true;
+
+            return this;
+        }
+
+        bootstrapProfile(profile);
 
         return profile;
     }
@@ -730,16 +706,9 @@ public class PlayerProfile {
             profile.setWipedData(wipedData);
             profile.setLoaded(true);
 
-            ThePit.getInstance()
-                    .getMongoDB()
-                    .getProfileCollection()
-                    .replaceOne(Filters.eq("uuid", this.uuid), profile, new ReplaceOptions().upsert(true));
-
-            cacheProfile.put(this.getPlayerUuid(), profile);
-
-            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-                player.kickPlayer("working..");
-            });
+           // cacheProfile.put(this.getPlayerUuid(), profile);
+            //TODO edit
+            ThePit.getInstance().getProfileOperator().getOperator(uuid).wipe(profile);
         }
         return true;
     }
@@ -1169,11 +1138,15 @@ public class PlayerProfile {
         return this.inventory;
     }
 
+
     public void setInventory(PlayerInv inv) {
         if (this.tempInvUsing) {
             return;
         }
-
+        this.inventory = inv;
+    }
+    @Beta
+    public void setInventoryUnsafe(PlayerInv inv) {
         this.inventory = inv;
     }
 
@@ -1527,7 +1500,7 @@ public class PlayerProfile {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 if (profile.isLoaded()) {
                     profile.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
-                    profile.save();
+                    profile.save(player);
                     if (!silent) {
                         CC.boardCast0("&6&l公告! &7正在保存 " + player.getDisplayName() + " 玩家的数据...");
                     }
@@ -1697,13 +1670,23 @@ public class PlayerProfile {
     public void setLastActionTimestamp(long lastActionTimestamp) {
         this.lastActionTimestamp = lastActionTimestamp;
     }
-
-    public List<PlayerInvBackup> getInvBackups() {
-        return this.invBackups;
+    @Beta
+    @Warning
+    public Iterable<PlayerInvBackup> getInvBackups() {
+        if(Bukkit.isPrimaryThread()){
+            Bukkit.getLogger().warning("Executing fetch inventory backups on main thread for " + this.playerName);
+        }
+        return ThePit.getInstance().getMongoDB().
+                getInvCollection().find(Filters.eq("uuid",uuid));
     }
-
-    public void setInvBackups(List<PlayerInvBackup> invBackups) {
-        this.invBackups = invBackups;
+    @Beta
+    @Warning
+    public Iterable<PlayerInvBackup> gcBackupIterators() {
+        if(Bukkit.isPrimaryThread()){
+            Bukkit.getLogger().warning("Executing fetch inventory backups on main thread for " + this.playerName);
+        }
+        return ThePit.getInstance().getMongoDB().
+                getInvCollection().find(Filters.eq("uuid",uuid)).projection(Projections.include("timeStamp","backupUuid","uuid"));
     }
 
     public double getGoldStackAddon() {
@@ -1795,11 +1778,12 @@ public class PlayerProfile {
     }
 
     public double getExtraMaxHealthValue() {
-        return extraMaxHealth
-                .values()
-                .stream()
-                .mapToDouble(Double::doubleValue)
-                .sum();
+        Collection<Double> values = extraMaxHealth.values();
+        double valued = 0D;
+        for (Double value : values) {
+            valued+=value;
+        }
+        return valued;
     }
 
     public String getEnchantingBook() {

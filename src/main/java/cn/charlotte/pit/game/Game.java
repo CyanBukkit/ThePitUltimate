@@ -19,6 +19,7 @@ import java.util.Set;
  */
 @AutoRegister
 @Getter
+//What is the game used for
 public class Game {
     private final Set<AbstractPerk> disabledPerks = new ObjectOpenHashSet<>();
 

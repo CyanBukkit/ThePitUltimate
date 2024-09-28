@@ -57,7 +57,12 @@ public abstract class AbstractEnchantment {
     }
 
     //Todo: 需要一个判断玩家身上附魔是否生效中(持续时间内)的方法 (虽然也许不应该写在这里)
-
+    public int getItemEnchantLevel(IMythicItem im){
+        if(im == null)
+            return -1;
+        int anInt = im.getEnchantments().getInt(this);
+        return anInt;
+    }
     public int getItemEnchantLevel(ItemStack item) {
         IMythicItem iMythicItem = ThePit.getInstance().getItemFactory().getIMythicItem(item); //更快Or 更慢
         if(iMythicItem != null){
@@ -114,6 +119,7 @@ public abstract class AbstractEnchantment {
     public boolean isItemHasEnchant(ItemStack itemStack) {
         return this.getItemEnchantLevel(itemStack) != -1;
     }
+
 
 
     public abstract String getUsefulnessLore(int enchantLevel);

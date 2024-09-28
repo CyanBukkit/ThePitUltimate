@@ -10,6 +10,7 @@ import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.menu.pack.PackageMenu;
 import cn.charlotte.pit.util.DirectionUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.hologram.Hologram;
@@ -18,12 +19,10 @@ import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import io.papermc.paper.util.maplist.ObjectMapList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -115,7 +114,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         if (data.getNum() <= 0) {
             new PackageMenu().openMenu(player);
             data.getFirstHologram().deSpawn();
-            secondHologram.setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "开启"));
+            secondHologram.setText(CC.translate("&a&l右键开启"));
             return;
         }
         data.setNum(data.getNum() - 1);
@@ -124,23 +123,15 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
         data.setLeft(!data.isLeft());
         Hologram hologram = data.getFirstHologram();
-        if (data.getNum() > 150) {
-            hologram.setText(CC.translate("&a&l" + data.getNum()));
+            hologram.setText(CC.translate(Utils.randomColor().toString() +"&l" + data.getNum()));
             secondHologram.setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
-        } else if (data.getNum() > 35) {
-            hologram.setText(CC.translate("&e&l" + data.getNum()));
-            secondHologram.setText(CC.translate("&e&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
-        } else {
-            hologram.setText(CC.translate("&c&l" + data.getNum()));
-            secondHologram.setText(CC.translate("&c&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
-        }
     }
 
     @Override
     public void onActive() {
         final List<Location> locations = ThePit.getInstance().getPitConfig().getPackageLocations();
         if (locations.isEmpty()) {
-            CC.boardCast("&c警告! &6空投&7 坐标信息未配置, 请联系管理员");
+            CC.boardCast0("&c警告! &6空投&7 坐标信息未配置, 请联系管理员");
             ThePit.getInstance().getEventFactory().inactiveEvent(this);
             return;
         }
@@ -150,7 +141,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         Bukkit.getPluginManager()
                 .registerEvents(this, ThePit.getInstance());
         location.getWorld().strikeLightningEffect(location);
-        CC.boardCast("&6&l空投! &7一个新的空投已在地图降落!打开可以获得神话物品,声望等稀有物资!");
+        CC.boardCast0("&6&l空投! &7一个新的空投已在地图降落!打开可以获得神话物品,声望等稀有物资!");
         Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
                     location.getBlock().setType(Material.CHEST);
                 });
@@ -209,28 +200,28 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
     @Override
     public List<String> insert(Player player) {
-        List<String> lines = new ArrayList<>();
-        if (chest == null) return Collections.emptyList();
+        if (chest == null) return null;
 
+        List<String> lines = new ObjectArrayList<>();
         String targetDirection = DirectionUtil.getTargetDirection(player, chest);
         int distance = (int) player.getLocation().distance(chest);
 
         if (endTimer.getRemaining() > 2 * 60 * 1000L) {
-            lines.add("&f剩余时间: &a" + TimeUtil.millisToTimer(endTimer.getRemaining()));
+            lines.add("&f剩余: &a" + TimeUtil.millisToTimer(endTimer.getRemaining()));
         } else if (endTimer.getRemaining() >= 60 * 1000L) {
-            lines.add("&f剩余时间: &e" + TimeUtil.millisToTimer(endTimer.getRemaining()));
+            lines.add("&f剩余: &e" + TimeUtil.millisToTimer(endTimer.getRemaining()));
         } else {
-            lines.add("&f剩余时间: &c" + TimeUtil.millisToTimer(endTimer.getRemaining()));
+            lines.add("&f剩余: &c" + TimeUtil.millisToTimer(endTimer.getRemaining()));
         }
 
         if (!chestData.getRewarded().contains(player.getUniqueId())) {
             if (chestData.getNum() == 200) {
-                lines.add("&f追踪: &c&l? &7(&f" + distance + "m&7)");
+                lines.add("&f追踪: &c&l? &f" + distance + "m");
 
             } else if (chestData.getNum() > 0) {
-                lines.add("&f追踪: &c&l" + targetDirection + " &7(&f" + distance + "m&7)");
+                lines.add("&f追踪: &c&l" + targetDirection + " &f" + distance + "m");
             } else {
-                lines.add("&f追踪: &a&l" + targetDirection + " &7(&f" + distance + "m&7)");
+                lines.add("&f追踪: &a&l" + targetDirection + " &f" + distance + "m");
             }
         }
 
