@@ -10,6 +10,7 @@ import cn.charlotte.pit.menu.admin.item.button.PitItemButton;
 import cn.charlotte.pit.menu.admin.item.button.RedPacketButton;
 import cn.charlotte.pit.menu.admin.item.button.ShopItemButton;
 import cn.charlotte.pit.menu.shop.button.type.*;
+import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
@@ -72,7 +73,7 @@ public class AdminItemMenu extends Menu {
                 buttonMap.put(9, new ShopItemButton(Material.TNT, "tnt", 64));
 
                 buttonMap.put(10, new PitItemButton(new GlobalAttentionGem().toItemStack()));
-                buttonMap.put(11,new PitItemButton(new MythicEnchantingTable().toItemStack()));
+                buttonMap.put(11,new PitItemButton(((MythicEnchantingTable) FuncsKt.getInstance(ThePit.getInstance().getItemFactor().getItemMap().get("enchant_table_mobile"))).toItemStack()));
                 buttonMap.put(16, new PitItemButton(JumpBoostPotion.toItemStack()));
                 buttonMap.put(17, new PitItemButton(BountySolventPotion.toItemStack()));
                 buttonMap.put(18, new PitItemButton(FourInARowGadget.toItemStack()));

@@ -53,6 +53,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -157,15 +158,18 @@ public class PlayerListener implements Listener {
         if (event.getPlayer() instanceof Player player) {
             if (PlayerUtil.isStaffSpectating(player)) {
                 return;
-            }
-            ThePit.getInstance().getProfileOperator().operatorStrict(player).ifPresent(opera -> {
-                PlayerProfile profile = opera.profile();
-                if (profile.isLogin()) { //有IO操作时要保持原子性。
-                    opera.pendingIfLoaded(prof -> {
-                        prof.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
-                });
-                }
-            });
+            } //不需要
+//            if(event.getInventory() instanceof DoubleChestInventory || event.getInventory() instanceof Chest)
+//            ThePit.getInstance().getProfileOperator().operatorStrict(player).ifPresent(opera -> {
+//                PlayerProfile profile = opera.profile();
+//                if (profile.isLogin()) { //有IO操作时要保持原子性。
+//                    opera.pendingIfLoaded(prof -> {
+//                        if (player.isOnline()) {
+//                            prof.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
+//                        } //when online
+//                    });
+//                }
+//            });
         }
     }
 

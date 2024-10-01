@@ -6,10 +6,12 @@ import cn.charlotte.pit.util.hologram.reflection.NMUClass;
 import cn.charlotte.pit.util.hologram.reflection.Reflection;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 import org.inventivetalent.reflection.util.AccessUtil;
+import org.spigotmc.AsyncCatcher;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
@@ -74,8 +76,14 @@ public abstract class HologramAPI {
         if (hologram.isSpawned()) {
             hologram.deSpawn();
         }
-        if(hologram instanceof PacketHologram && isMAGA){
-            ((PacketHologram) hologram).getHologram().recycleEntity();
+        if(hologram instanceof PacketHologram && isMAGA) {
+            if (AsyncCatcher.isAsync()) {
+                Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                    ((PacketHologram) hologram).getHologram().recycleEntity();
+                });
+            } else {
+                ((PacketHologram) hologram).getHologram().recycleEntity();
+            }
         }
         return holograms.remove(hologram);
     }

@@ -3,6 +3,7 @@ package cn.charlotte.pit.util.scoreboard;
 import cn.charlotte.pit.util.scoreboard.events.AssembleBoardCreateEvent;
 import cn.charlotte.pit.util.scoreboard.events.AssembleBoardDestroyEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,13 +25,14 @@ public class AssembleListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(event.getPlayer());
+        Player player = event.getPlayer();
+        AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
 
         Bukkit.getPluginManager().callEvent(createEvent);
         if (createEvent.isCancelled()) {
             return;
         }
-            getAssemble().getBoards().put(event.getPlayer().getUniqueId(), new AssembleBoard(event.getPlayer(), getAssemble()));
+        getAssemble().getBoards().put(player.getUniqueId(), new AssembleBoard(player, getAssemble()));
     }
 
     @EventHandler

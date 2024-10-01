@@ -21,14 +21,14 @@ public enum EnchantmentRarity {
 
     GENESIS("&fGenesis! ", RarityType.LIMITED, 0), //Enchantments for event
 
-    DISABLED("", RarityType.LIMITED, 8),
-    REMOVED("", RarityType.LIMITED, 7),
+    DISABLED("&c禁!", RarityType.LIMITED, 8),
+    REMOVED("&c删!", RarityType.LIMITED, 7),
 
     SPECIAL("", RarityType.LIMITED, 14),
-    OP("&c限定! ", RarityType.LIMITED, 14),
+    OP("&c限时! ", RarityType.LIMITED, 14),
 
-    AUCTION_LIMITED("&6拍卖限定! ", RarityType.NORMAL, 1),
-    AUCTION_LIMITED_RARE("&6拍卖限定! ", RarityType.RARE, 1),
+    AUCTION_LIMITED("&6拍限! ", RarityType.NORMAL, 1),
+    AUCTION_LIMITED_RARE("&6拍限! ", RarityType.RARE, 1),
 
     NOSTALGIA("", RarityType.NORMAL, 14),
     NOSTALGIA_RARE("&d稀有! ", RarityType.RARE, 14);

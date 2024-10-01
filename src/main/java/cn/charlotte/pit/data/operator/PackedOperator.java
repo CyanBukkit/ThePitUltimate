@@ -25,7 +25,8 @@ import java.util.function.Consumer;
 public class PackedOperator {
 
     ThePit pit;
-    ReentrantLock lock = new ReentrantLock();
+    //ReentrantLock lock = new ReentrantLock();
+    //Didn't have any lock required
     long lastHeartBeat = 0;
 
     Player lastBoundPlayer = null;
@@ -46,6 +47,7 @@ public class PackedOperator {
         }
     }
     public void heartBeat(){
+
         this.lastHeartBeat = System.currentTimeMillis();
     }
     public void loadAs(UUID uuid,String name) {
@@ -53,7 +55,7 @@ public class PackedOperator {
         operations.add(() -> {
             loadAs0(uuid, name);
         });
-        this.heartBeat();
+        this.heartBeat();;
     }
     public void loadAs(PlayerProfile profile) {
 
@@ -79,7 +81,7 @@ public class PackedOperator {
     }
 
     SafeObjectMapList<Runnable> operations = new SafeObjectMapList<>(); //safer
-    Set<Runnable> pendingExecuting = new CopyOnWriteArraySet<>();
+    Set<Runnable> pendingExecuting = new CopyOnWriteArraySet<>(); //正常情况下就一个
     public boolean hasAnyOperation() {
         return !operations.isEmpty() && !this.pendingExecuting.isEmpty();
     }
@@ -117,7 +119,7 @@ public class PackedOperator {
         if(lastBoundPlayer != null){
             if(isLoaded()){
                 Player player = Bukkit.getPlayer(this.profile.getPlayerUuid());
-                if(player != null){
+                if(player != null && player.isOnline()){
                     this.lastBoundPlayer = player;
                 }
             }
@@ -125,24 +127,21 @@ public class PackedOperator {
         if (operations.isEmpty()) {
             return;
         }
+        if(!pendingExecuting.isEmpty()){
+            return; //保持有序性。。。
+        }
         Runnable operation = EMPTY_RUNNABLE;
         for (Runnable next : operations) {
-            if (!pendingExecuting.contains(next)) {
-                operation = next;
-                break;
-            }
+            operation = next;
+            break;
         }
-        if(!pendingExecuting.contains(operation)) {
-            pendingExecuting.add(operation);
-            final Runnable operationFinaled = operation;
-            Bukkit.getScheduler().runTaskAsynchronously(pit, () -> {
-                long lastTime = System.currentTimeMillis();
-                operationFinaled.run();
-                operations.remove(operationFinaled);
-                pendingExecuting.remove(operationFinaled);
-                Bukkit.getLogger().info("A io operation was finished took " + (System.currentTimeMillis() - lastTime));
-            });
-        }
+        pendingExecuting.add(operation);
+        final Runnable operationFinaled = operation;
+        Bukkit.getScheduler().runTaskAsynchronously(pit, () -> {
+            operationFinaled.run();
+            operations.remove(operationFinaled);
+            pendingExecuting.remove(operationFinaled);
+      });
     }
     private static final Runnable EMPTY_RUNNABLE = () -> {};
     public UUID getUniqueId(){

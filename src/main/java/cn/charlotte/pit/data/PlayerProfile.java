@@ -85,13 +85,29 @@ import java.util.concurrent.locks.ReentrantLock;
         "bot",
         "lastDamageAt",
         "heldItem",
-        "leggings"
+        "leggings",
+        "code"
 })
 public class PlayerProfile {
 
     public final static PlayerProfile NONE_PROFILE = new PlayerProfile(UUID.randomUUID(), "NotLoadPlayer") {
         public boolean isLoaded(){
             return false;
+        }
+
+        @Override
+        public PlayerProfile save(Player player) {
+            return this;
+        }
+
+        @Override
+        public PlayerProfile disallow() {
+            return this;
+        }
+
+        @Override
+        public PlayerProfile allow() {
+            return this;
         }
     };
 
@@ -242,6 +258,9 @@ public class PlayerProfile {
     private boolean bot;
 
     private long lastDamageAt = -1L;
+    //code = -1 = allow;
+    //code = -2 = disallow
+    public transient volatile byte code = -1;
 
     private Map<String, Double> extraMaxHealth = new SWMRHashTable<>();
 
@@ -259,7 +278,27 @@ public class PlayerProfile {
         this.lowerName = playerName.toLowerCase();
         this.mailData = new PlayerMailData(uuid, playerName);
     }
+    public synchronized PlayerProfile disallow(){
+        if(this.code == -1) {
+            this.code = -2;
+            return this;
+        }
+        return NONE_PROFILE;
+    }
+    public synchronized PlayerProfile disallowUnsafe(){
+        if(disallow() == NONE_PROFILE){
+            return this;
+        }
+        return this;
+    }
 
+    public synchronized PlayerProfile allow(){
+        if(this.code == -2) {
+            this.code = -1;
+            return this;
+        }
+        return NONE_PROFILE;
+    }
     public PlayerProfile() {
         this.inventory = new PlayerInv();
         this.enderChest = new PlayerEnderChest();
@@ -490,18 +529,19 @@ public class PlayerProfile {
         playerProfile.setMailData(mailData);
     }
 
-    public void save(Player player) {
+    public PlayerProfile save(Player player) {
         this.totalExp = experience;
         for (int i = 0; i < prestige; i++) {
             this.totalExp = totalExp + LevelUtil.getLevelTotalExperience(i, 120);
         }
 
         if (!this.loaded) {
-            return;
+            return this;
         }
 
 
         saveData(player);
+        return this;
     }
     public void saveData(Player player) {
         final long now = System.currentTimeMillis();
@@ -1146,8 +1186,9 @@ public class PlayerProfile {
         this.inventory = inv;
     }
     @Beta
-    public void setInventoryUnsafe(PlayerInv inv) {
+    public PlayerProfile setInventoryUnsafe(PlayerInv inv) {
         this.inventory = inv;
+        return this;
     }
 
     public PlayerEnderChest getEnderChest() {

@@ -154,13 +154,11 @@ public class ProfileOperator {
             operator.tick();
             if(player == null || !player.isOnline()){
                 boolean b = !operator.hasAnyOperation();
-                boolean lastFireExit = operator.fireExit; // use lastFireExit
+                boolean lastFireExit = operator.fireExit && b; // use lastFireExit and should wait all operation to remove
                 if(!operator.fireExit) {
                     if (b) {
-                        if(operator.isLoaded()) {
-                            if(!operator.profile.isTempInvUsing()) {
-                                operator.save(true, true);
-                            }
+                        if (operator.isLoaded()) {
+                            operator.save(true, true);
                         } else {
                             operator.fireExit = true;
                         }
@@ -170,7 +168,11 @@ public class ProfileOperator {
                 }
                 return lastFireExit;
             } else {
-                operator.heartBeat();
+                if (operator.fireExit) {
+                    operator.fireExit = false;
+                } else {
+                    operator.heartBeat();
+                }
             }
             return false;
         });
@@ -178,10 +180,9 @@ public class ProfileOperator {
     public void doSaveProfiles(){
         operators.forEachValue(operator -> {
             Player lastBoundPlayer = operator.lastBoundPlayer;
-            if(lastBoundPlayer != null && !(operator.quitFlag || operator.fireExit)) {
+            if(lastBoundPlayer != null && lastBoundPlayer.isOnline() && !(operator.quitFlag || operator.fireExit)) {
                 operator.pendingIfLoaded(i -> {
-
-                    i.save(lastBoundPlayer);
+                    i.disallow().save(lastBoundPlayer).allow();
                 });
             }
         });

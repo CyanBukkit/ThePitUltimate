@@ -79,7 +79,7 @@ public class VectorUtil {
 
         // 计算向后退的向量
         double backwardX = (-dx) * 6.2;
-        double backwardY = -dy * 3.14;
+        double backwardY = -dy * 1.24;
         double backwardZ = (-dz) * 6.28;
 
         return new Location(world,x + backwardX,y - backwardY,z + backwardZ,MathHelper.normalizeYaw(yaw+180F),-30);

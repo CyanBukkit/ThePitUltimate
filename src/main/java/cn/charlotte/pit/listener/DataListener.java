@@ -107,17 +107,27 @@ public class DataListener implements Listener {
 //        runnable.runTaskTimerAsynchronously(ThePit.getInstance(), 1L, 1L);
 //
 //        PlayerProfile.LOADING_MAP.put(player.getUniqueId(), runnable);
-        ThePit.getInstance().getProfileOperator().getOrLoadOperator(player).pendingUntilLoaded(this::whenLoaded);
+        PackedOperator orLoadOperator = ThePit.getInstance().getProfileOperator().getOrLoadOperator(player);
+        orLoadOperator.ifLoaded(() -> {
+            byte code = orLoadOperator.profile().code;
+
+            if(code == -2){
+                event.getPlayer().kickPlayer("Saving your latest profile, please wait :)");
+            }
+        });
+        orLoadOperator.pendingUntilLoaded(this::whenLoaded);
         event.setJoinMessage(null);
 
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
+        PlayerInv playerInv = PlayerInv.fromPlayerInventory(event.getPlayer().getInventory());
         event.setQuitMessage(null);
         ThePit.getInstance().getProfileOperator()
                 .operatorStrict(event.getPlayer()).ifPresent(profileOper -> {
                     PlayerProfile profile = profileOper.profile();
+                    profile.disallow();
                 if (!PlayerUtil.isStaffSpectating(event.getPlayer())) {
                         if (profile.isScreenShare()) {
                             CC.boardCastWithPermission("&4&l查端时退出! &7玩家 " + LevelUtil.getLevelTagWithRoman(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerRealColoredName(event.getPlayer().getUniqueId() + " &7在查端时退出了游戏!"), PlayerUtil.getStaffPermission());
@@ -133,7 +143,8 @@ public class DataListener implements Listener {
 
                         profile.setLogin(false); //我草泥马
                         profileOper.pending(i -> {
-                                    profile.setInventoryUnsafe(PlayerInv.fromPlayerInventory(event.getPlayer().getInventory()));
+                                    profile.disallowUnsafe()
+                                            .setInventoryUnsafe(playerInv).allow();
                                     //unsafe exit
                                 });
                         CombatListener instance = CombatListener.INSTANCE;

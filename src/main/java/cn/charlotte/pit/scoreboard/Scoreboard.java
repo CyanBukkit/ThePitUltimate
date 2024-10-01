@@ -143,10 +143,10 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         if (prestige > 0 ) {
-            lines.add("&f精通: &e" + RomanUtil.convert(prestige));
+            lines.add("&f精级: &e" + RomanUtil.convert(prestige) + " " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
+        } else {
+            lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
-        lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
-
         if (level >= 120) {
             lines.add("&f经验: &b已满!");
         } else {
@@ -184,6 +184,7 @@ public class Scoreboard implements AssembleAdapter {
         } else {
             statusToggle = false;
         }
+        boolean sultKill = false;
         if (statusToggle) {
             lines.add(" ");
             final AbstractPerk currentStreak = PlayerUtil.getActiveMegaStreakObj(player);
@@ -192,14 +193,24 @@ public class Scoreboard implements AssembleAdapter {
             } else {
                 String combatTimerFormatted = numFormat.format(profile.getCombatTimer().getRemaining() / 1000D);
                 lines.add("&f状态: " + (profile.getCombatTimer().hasExpired()
-                        ? "&a空闲" : "&c占坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                        ? "&a空闲" : "&c凹坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
                         ? "&7 " + combatTimerFormatted
                         : (profile.getBounty() != 0
                         ? "&7 " + combatTimerFormatted
                         : "")))); // status: 占坑中 (%duration%秒) / 不在占坑中
             }
             if (!profile.getCombatTimer().hasExpired()) {
-                lines.add("&f连杀: &a" + numFormat.format(profile.getStreakKills()));
+
+                String e;
+                if (profile.getBounty() != 0) {
+                    String genesisColor = profile.bountyColor();
+                    e = "&f连赏: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g";
+                } else {
+                    e = "&f连杀: &a" + numFormat.format(profile.getStreakKills());
+
+                }
+                lines.add(e);
+                sultKill = true;
             }
 
             if (currentStreak == ToTheMoonMegaStreak.getInstance()) {
@@ -214,9 +225,11 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         //if Player have a bounty:
-        if (profile.getBounty() != 0) {
-            String genesisColor = profile.bountyColor();
-            lines.add("&f赏金: " + genesisColor + "&l" + profile.getBounty() + "g");
+        if(!sultKill) {
+            if (profile.getBounty() != 0) {
+                String genesisColor = profile.bountyColor();
+                lines.add("&f赏金: " + genesisColor + "&l" + profile.getBounty() + "g");
+            }
         }
         //Damage reduce caused by Perks
         if (profile.getStrengthNum() > 0 && !profile.getStrengthTimer().hasExpired()) {

@@ -26,12 +26,12 @@ public class MythicEnchantingTable extends AbstractPitItem implements Listener {
     public Material getItemDisplayMaterial() {
         return Material.ENCHANTMENT_TABLE;
     }
+ItemBuilder builder = new ItemBuilder(getItemDisplayMaterial()).internalName(getInternalName()).name(getItemDisplayName())
+            .lore("&7通过击杀玩家来获得", "&e神话之剑&7, &b神话之弓 &7以及", "&c神&6话&9之&a甲 &7等物品.", " ", "&7在神话之井中为这些物品附魔", "&7可以赋予其大量的强大增益.", " ", "&d放入一件神话物品到左侧空格中以开始!");
 
     @Override
     public ItemStack toItemStack() {
-        return new ItemBuilder(getItemDisplayMaterial()).internalName(getInternalName()).name(getItemDisplayName())
-                .lore("&7通过击杀玩家来获得", "&e神话之剑&7, &b神话之弓 &7以及", "&c神&6话&9之&a甲 &7等物品.", " ", "&7在神话之井中为这些物品附魔", "&7可以赋予其大量的强大增益.", " ", "&d放入一件神话物品到左侧空格中以开始!")
-                .build();
+        return builder.build();
     }
     @EventHandler
     public void onInteract(PlayerInteractEvent e){

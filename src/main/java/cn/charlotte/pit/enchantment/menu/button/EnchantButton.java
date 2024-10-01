@@ -13,39 +13,44 @@ import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.MythicColor;
+import cn.charlotte.pit.item.type.MythicEnchantingTable;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.menu.shop.button.AbstractShopButton;
+import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.ChatComponentBuilder;
 import cn.charlotte.pit.util.chat.RomanUtil;
+import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.random.RandomUtil;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.ItemBow;
-import net.minecraft.server.v1_8_R3.ItemSword;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import org.bukkit.Bukkit;
+import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.*;
 import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -213,9 +218,7 @@ public class EnchantButton extends Button {
 
     private void doEnchant(ItemStack item, Player player, IMythicItem mythicItem) {
 
-        IMythicItem.clearCache(item);//clear cache
         mythicItem.loadFromItemStack(item);
-        IMythicItem beforeItem = mythicItem;
         MythicColor color = MythicColor.valueOf(ItemUtil.getItemStringData(item, "mythic_color").toUpperCase());
         int level = mythicItem.getTier();
         int maxLive = 0;
@@ -615,7 +618,7 @@ public class EnchantButton extends Button {
         //Check if the mythic item have a prefix and announce it
         //reload it , maybe trash code
         mythicItem.loadFromItemStack(mythicItem.toItemStack());
-        new PitPlayerEnchantEvent(player, beforeItem, mythicItem).callEvent();
+        new PitPlayerEnchantEvent(player, mythicItem, mythicItem).callEvent();
         if (mythicItem.getPrefix() != null) {
             announcement = true;
         }
@@ -629,10 +632,21 @@ public class EnchantButton extends Button {
             BaseComponent[] hoverEventComponents = new BaseComponent[]{
                     new TextComponent(tag.toString())
             };
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
-                        .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
-            }
+            new BukkitRunnable(){
+                final Cooldown cooldown = new Cooldown(10, TimeUnit.SECONDS);
+                public void run(){
+                    if(menu.getAnimationData().isFinished()) {
+                        this.cancel();
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
+                                    .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
+                            p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+                        }
+                    } else if(cooldown.hasExpired()){
+                        this.cancel();
+                    }
+                }
+            }.runTaskTimerAsynchronously(ThePit.getInstance(),50,5);
         }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         profile.setEnchantingItem(InventoryUtil.serializeItemStack(mythicItem.toItemStack()));
@@ -664,10 +678,7 @@ public class EnchantButton extends Button {
     }
 
     public ItemStack getDefaultDisplayItem() {
-        return new ItemBuilder(Material.ENCHANTMENT_TABLE)
-                .name("&d神话之井").internalName("enchant_table_mobile")
-                .lore("&7通过击杀玩家来获得", "&e神话之剑&7, &b神话之弓 &7以及", "&c神&6话&9之&a甲 &7等物品.", " ", "&7在神话之井中为这些物品附魔", "&7可以赋予其大量的强大增益.", " ", "&d放入一件神话物品到左侧空格中以开始!")
-                .build();
+        return ((MythicEnchantingTable)FuncsKt.getInstance(ThePit.getInstance().getItemFactor().getItemMap().get("enchant_table_mobile"))).toItemStack();
     }
 
     /**

@@ -78,7 +78,7 @@ public class GambleEnchant extends AbstractEnchantment implements IAttackEntity 
                 if (gamblePlayer != attacker) {
                     VectorUtil.entityPushBack(gamblePlayer, 15.0);
                 }
-                VectorUtil.entityPushBack(attacker, 20.0);
+                VectorUtil.entityPushBack(attacker, 15.0);
                 if (gamblePlayer.isDead() && gamblePlayer != attacker) {
                     attacker.addPotionEffect(SLOW_NESS);
                 }
