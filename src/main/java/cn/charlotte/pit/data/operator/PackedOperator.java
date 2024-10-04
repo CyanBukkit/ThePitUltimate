@@ -47,7 +47,11 @@ public class PackedOperator {
         }
     }
     public void heartBeat(){
-
+        Player player = Bukkit.getPlayer(profile.getPlayerUuid());
+        if(player != null && player.isOnline()) {
+            this.quitFlag = false;
+            this.fireExit = false;
+        }
         this.lastHeartBeat = System.currentTimeMillis();
     }
     public void loadAs(UUID uuid,String name) {
@@ -92,12 +96,17 @@ public class PackedOperator {
             this.fireExit = fireExit;
             if (this.fireExit) {
                 if (!quitFlag) {
-                    pending(prof -> prof.save(null));
+                    pending(prof -> {
+                        prof.disallowUnsafe();
+                        prof.save(null);
+                        prof.allow();
+                    });
                 }
             }
+            return true;
         }
         if (quitFlag && !this.quitFlag) {
-            pending(prof -> prof.save(null));
+            pending(prof -> prof.disallowUnsafe().save(null).allow());
             this.quitFlag = true;
         }
         return true;

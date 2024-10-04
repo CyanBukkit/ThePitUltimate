@@ -9,8 +9,11 @@ import com.google.common.annotations.Beta;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 public class ProfileOperator {
@@ -153,8 +156,12 @@ public class ProfileOperator {
             Player player = Bukkit.getPlayer(uniqueId);
             operator.tick();
             if(player == null || !player.isOnline()){
+                if(operator.profile.code == -2){
+                    return false;
+                }
                 boolean b = !operator.hasAnyOperation();
                 boolean lastFireExit = operator.fireExit && b; // use lastFireExit and should wait all operation to remove
+
                 if(!operator.fireExit) {
                     if (b) {
                         if (operator.isLoaded()) {
@@ -166,6 +173,7 @@ public class ProfileOperator {
                         operator.heartBeat();
                     }
                 }
+
                 return lastFireExit;
             } else {
                 if (operator.fireExit) {
@@ -177,15 +185,38 @@ public class ProfileOperator {
             return false;
         });
     }
-    public void doSaveProfiles(){
+    public void doSaveProfiles() {
         operators.forEachValue(operator -> {
             Player lastBoundPlayer = operator.lastBoundPlayer;
-            if(lastBoundPlayer != null && lastBoundPlayer.isOnline() && !(operator.quitFlag || operator.fireExit)) {
-                operator.pendingIfLoaded(i -> {
-                    i.disallow().save(lastBoundPlayer).allow();
-                });
-            }
+            operator.pendingIfLoaded(i -> {
+                if (lastBoundPlayer != null && lastBoundPlayer.isOnline() && !(operator.quitFlag || operator.fireExit)) {
+                    i.disallowUnsafe().save(lastBoundPlayer).allow();
+                }
+            });
+
         });
+        randomGC();
+
+    }
+    public void randomGC(){
+        Collection<PackedOperator> values = operators.values();
+        int randomNum = ThreadLocalRandom.current().nextInt(values.size() - 2) + 1;
+
+        Iterator<PackedOperator> iterator = values.iterator();
+        PackedOperator operator = null;
+        for (int i = 0; i < randomNum; i++) {
+            operator = iterator.next();
+        }
+        if(operator != null){
+            Player lastBoundPlayer = operator.lastBoundPlayer;
+            PackedOperator finalOperator = operator;
+            operator.pendingIfLoaded(i -> {
+                if (lastBoundPlayer != null && lastBoundPlayer.isOnline() && !(finalOperator.quitFlag || finalOperator.fireExit)) {
+
+                    PlayerProfile.gcBackups(i.gcBackupIterators(), i, false);
+                }
+            });
+        }
     }
     public void wipe(){
         operators.clear();

@@ -98,12 +98,10 @@ public class BountyRunnable extends BukkitRunnable {
 
             animationData.spawnCooldown = new Cooldown(650);
         }
-
-        List<HologramDisplay> shouldRemove = new ArrayList<>();
-        for (HologramDisplay hologram : holograms) {
+        holograms.removeIf(hologram -> {
             if (System.currentTimeMillis() > hologram.endTime) {
                 hologram.hologram.deSpawn();
-                shouldRemove.add(hologram);
+                return true;
             } else {
                 Location location = player.getLocation().clone();
                 location.setX(location.getX() + hologram.boostX);
@@ -111,9 +109,9 @@ public class BountyRunnable extends BukkitRunnable {
                 location.setY(hologram1.getLocation().getY() + 0.1);
                 location.setZ(location.getZ() + hologram.boostZ);
                 hologram1.setLocation(location);
+                return false;
             }
-        }
-        shouldRemove.forEach(holograms::remove);
+        });
     }
 
     private double generatorLocDouble() {

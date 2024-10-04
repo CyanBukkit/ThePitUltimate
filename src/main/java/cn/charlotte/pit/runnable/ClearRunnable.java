@@ -3,6 +3,8 @@ package cn.charlotte.pit.runnable;
 import cn.charlotte.pit.data.sub.DroppedEntityData;
 import cn.charlotte.pit.data.sub.PlacedBlockData;
 import cn.charlotte.pit.util.cooldown.Cooldown;
+import cn.klee.backports.utils.SWMRHashTable;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -20,40 +22,33 @@ import java.util.concurrent.TimeUnit;
 @Getter
 public class ClearRunnable extends BukkitRunnable {
     private static ClearRunnable clearRunnable;
-    public final List<PlacedBlockData> placedBlock;
+    public final SWMRHashTable<Location,PlacedBlockData> placedBlock;
     private final List<DroppedEntityData> entityData;
 
     public ClearRunnable() {
         clearRunnable = this;
-        this.placedBlock = new ObjectArrayList<>();
+        this.placedBlock = new SWMRHashTable<>();
         this.entityData = new ObjectArrayList<>();
     }
 
     @Override
     public void run() {
-        List<PlacedBlockData> shouldRemove = new ObjectArrayList<>(placedBlock.size() / 2);
-
-        for (PlacedBlockData data : this.placedBlock) {
-            if (data.getCooldown().hasExpired()) {
-                Location location = data.getLocation();
+       this.placedBlock.removeIf((i,a) -> {
+            if(a.getCooldown().hasExpired()){
+                Location location = a.getLocation();
                 location.getBlock().setType(Material.AIR);
-
-                shouldRemove.add(data);
+                return true;
             }
-        }
+            return false;
+        });
 
-        this.placedBlock.removeAll(shouldRemove);
-
-
-        List<DroppedEntityData> shouldRemoveEntity = new ObjectArrayList<>(entityData.size() / 2);
-        for (DroppedEntityData data : entityData) {
-            if (data.getTimer().hasExpired()) {
-                data.getEntity().remove();
-                shouldRemoveEntity.add(data);
+        entityData.removeIf(i -> {
+            if (i.getTimer().hasExpired()) {
+                i.getEntity().remove();
+                return true;
             }
-        }
-
-        entityData.removeAll(shouldRemoveEntity);
+            return false;
+        });
     }
 
     public void placeBlock(Location location) {
@@ -61,7 +56,7 @@ public class ClearRunnable extends BukkitRunnable {
     }
 
     public void placeBlock(Location location, Cooldown cooldown) {
-        this.placedBlock.add(new PlacedBlockData(location, cooldown));
+        this.placedBlock.put(location,new PlacedBlockData(location, cooldown));
     }
 
     public static ClearRunnable getClearRunnable() {

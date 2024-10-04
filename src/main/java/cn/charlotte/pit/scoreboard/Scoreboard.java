@@ -148,7 +148,7 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
         if (level >= 120) {
-            lines.add("&f经验: &b已满!");
+            lines.add("&f经验: &b满");
         } else {
             lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Ex");
         }
@@ -186,20 +186,25 @@ public class Scoreboard implements AssembleAdapter {
         }
         boolean sultKill = false;
         if (statusToggle) {
-            lines.add(" ");
             final AbstractPerk currentStreak = PlayerUtil.getActiveMegaStreakObj(player);
+            boolean b = profile.getCombatTimer().hasExpired();
+            if(!b){
+                lines.add(" ");
+            }
             if (currentStreak != null) {
                 lines.add("&f状态: " + CC.translate(currentStreak.getDisplayName()));
             } else {
-                String combatTimerFormatted = numFormat.format(profile.getCombatTimer().getRemaining() / 1000D);
-                lines.add("&f状态: " + (profile.getCombatTimer().hasExpired()
-                        ? "&a空闲" : "&c凹坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
-                        ? "&7 " + combatTimerFormatted
-                        : (profile.getBounty() != 0
-                        ? "&7 " + combatTimerFormatted
-                        : "")))); // status: 占坑中 (%duration%秒) / 不在占坑中
+                if (!b) {
+
+                    String combatTimerFormatted = numFormat.format(profile.getCombatTimer().getRemaining() / 1000D);
+                    lines.add("&f状态: &c凹坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                            ? "&7 " + combatTimerFormatted
+                            : (profile.getBounty() != 0
+                            ? "&7 " + combatTimerFormatted
+                            : ""))); // status: 占坑中 (%duration%秒) / 不在占坑中
+                }
             }
-            if (!profile.getCombatTimer().hasExpired()) {
+            if (!b) {
 
                 String e;
                 if (profile.getBounty() != 0) {
@@ -228,7 +233,12 @@ public class Scoreboard implements AssembleAdapter {
         if(!sultKill) {
             if (profile.getBounty() != 0) {
                 String genesisColor = profile.bountyColor();
-                lines.add("&f赏金: " + genesisColor + "&l" + profile.getBounty() + "g");
+                if (profile.getStreakKills() < 1D) {
+                    lines.add("&f赏金: " + genesisColor + "&l" + profile.getBounty() + "g");
+                } else {
+                    lines.add("&f连赏: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g");
+
+                }
             }
         }
         //Damage reduce caused by Perks

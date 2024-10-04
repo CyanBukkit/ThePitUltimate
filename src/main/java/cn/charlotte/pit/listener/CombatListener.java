@@ -23,11 +23,9 @@ import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.map.kingsquests.item.Cherry;
 import cn.charlotte.pit.movement.PlayerMoveHandler;
 import cn.charlotte.pit.parm.AutoRegister;
-import cn.charlotte.pit.parm.listener.IPlayerAssist;
-import cn.charlotte.pit.parm.listener.IPlayerBeKilledByEntity;
-import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
-import cn.charlotte.pit.parm.listener.IPlayerRespawn;
+import cn.charlotte.pit.parm.listener.*;
 import cn.charlotte.pit.perk.AbstractPerk;
+import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
 import cn.charlotte.pit.util.MythicUtil;
 import cn.charlotte.pit.util.PlayerUtil;
@@ -64,6 +62,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import xyz.refinedev.spigot.CarbonSpigot;
 import xyz.refinedev.spigot.async.threading.TaskQueueWorker;
 import xyz.refinedev.spigot.async.utils.ResettableLatch;
@@ -80,7 +79,8 @@ import java.util.stream.Collectors;
  * @Date: 2021/1/1 11:16
  */
 @AutoRegister
-public class CombatListener implements Listener {;
+public class CombatListener implements Listener {
+    ;
     public static CombatListener INSTANCE;
     private final DecimalFormat numFormat = new DecimalFormat("0.00");
     private final DecimalFormat intFormat = new DecimalFormat("0");
@@ -231,27 +231,31 @@ public class CombatListener implements Listener {;
 
     /**
      * Should be garbage collected params
+     *
      * @param player
      */
-    public void runGCOnMetadatas(Player player){
-        player.removeMetadata("showing_damage_data",ThePit.getInstance());
-        player.removeMetadata("mirror_latest_active",ThePit.getInstance());
+    public void runGCOnMetadatas(Player player) {
+        player.removeMetadata("showing_damage_data", ThePit.getInstance());
+        player.removeMetadata("mirror_latest_active", ThePit.getInstance());
         //"STAFF_SPECTATOR"
         //lucky_chestplate
         //backing
         //sinking_moonlight
-        player.removeMetadata("lastThroughTheHeart",ThePit.getInstance());
-        player.removeMetadata("STAFF_SPECTATOR",ThePit.getInstance());
-        player.removeMetadata("sinking_moonlight",ThePit.getInstance());
-        player.removeMetadata("assured_strike",ThePit.getInstance());
-        player.removeMetadata("lucky_chestplate",ThePit.getInstance());
-        player.removeMetadata("backing",ThePit.getInstance());
-        player.removeMetadata("combo_venom",ThePit.getInstance());
-        player.removeMetadata("vanished",ThePit.getInstance());
-        player.removeMetadata("leech_hit",ThePit.getInstance());
-        player.removeMetadata("true_damage_immune",ThePit.getInstance());
+        player.removeMetadata("lastThroughTheHeart", ThePit.getInstance());
+        player.removeMetadata("STAFF_SPECTATOR", ThePit.getInstance());
+        player.removeMetadata("sinking_moonlight", ThePit.getInstance());
+        player.removeMetadata("assured_strike", ThePit.getInstance());
+        player.removeMetadata("lucky_chestplate", ThePit.getInstance());
+        player.removeMetadata("backing", ThePit.getInstance());
+        player.removeMetadata("combo_venom", ThePit.getInstance());
+        player.removeMetadata("vanished", ThePit.getInstance());
+        player.removeMetadata("leech_hit", ThePit.getInstance());
+        player.removeMetadata("true_damage_immune", ThePit.getInstance());
+        player.removeMetadata("regularity_cooldown", ThePit.getInstance());
+        player.removeMetadata("mixed_combat_" + player.getUniqueId(),ThePit.getInstance());
 
     }
+
     private void handleDamage(EntityDamageByEntityEvent event, Player player, Player damager, PlayerProfile playerProfile, PlayerProfile damagerProfile, double damage, boolean isShoot) {
         playerProfile.setCombatTimer(new Cooldown((playerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
         damagerProfile.setCombatTimer(new Cooldown((damagerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
@@ -307,7 +311,7 @@ public class CombatListener implements Listener {;
             builder.append("&7");
             int heats = totalHearts - nowHearts - damageHearts;
             builder.append("❤".repeat(Math.max(0, heats)));
-            ActionBarUtil.sendActionBar1(damager,"heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""),7);
+            ActionBarUtil.sendActionBar1(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""), 7);
 
             player.setMetadata("showing_damage_data", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
         }
@@ -345,12 +349,12 @@ public class CombatListener implements Listener {;
         playerData.setUsedItem(damager.getItemInHand());
         playerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
         playerData.setDamage(event.getFinalDamage());
-        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(),() -> {
-                    List<KillRecap.DamageData> damageLogs = playerProfile.getKillRecap()
-                            .getDamageLogs();
-                    damageLogs.removeIf(data -> data.getTimer().hasExpired());
-                    damageLogs.add(playerData);
-                });
+        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+            List<KillRecap.DamageData> damageLogs = playerProfile.getKillRecap()
+                    .getDamageLogs();
+            damageLogs.removeIf(data -> data.getTimer().hasExpired());
+            damageLogs.add(playerData);
+        });
         //handle kill recap - end
 
     }
@@ -362,7 +366,7 @@ public class CombatListener implements Listener {;
             final String coloredName = RankUtil.getPlayerColoredName(player.getUniqueId());
 
             if (killerProfile.getPlayerOption().getBarPriority() != PlayerOption.BarPriority.ENCHANT_ONLY) {
-                ActionBarUtil.sendActionBar1(killer, "kill","&a&l击杀! " + coloredName + " ",7);
+                ActionBarUtil.sendActionBar1(killer, "kill", "&a&l击杀! " + coloredName + " ", 7);
             }
 
             //process drop armor - start
@@ -391,7 +395,6 @@ public class CombatListener implements Listener {;
             //process perk - start
             AtomicDouble coinsAtomic = new AtomicDouble(totalCoins);
             AtomicDouble expAtomic = new AtomicDouble(totalXp);
-
             this.handleGameEffect(killerProfile, killer, player, coinsAtomic, expAtomic);
 
             if (!isNight) {
@@ -460,9 +463,13 @@ public class CombatListener implements Listener {;
             totalCoins = event.getCoins();
             totalXp = event.getExp();
 
-            //BoardCast msg - start
-            this.handleBoardCastMessage(killerProfile, playerProfile, killer, player, totalCoins, totalXp);
-            //BoardCast msg - end
+            double finalTotalCoins = totalCoins;
+            double finalTotalXp = totalXp;
+            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+                //BoardCast msg - start
+                this.handleBoardCastMessage(killerProfile, playerProfile, killer, player, finalTotalCoins, finalTotalXp);
+                //BoardCast msg - end
+            });
 
             if (player instanceof Player) {
                 killRecap.completeLog((Player) player);
@@ -490,6 +497,7 @@ public class CombatListener implements Listener {;
     public void handlePlayerDeath(Player player, Player killer, boolean shouldRespawn) {
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (killer != null) {
+            //what
             Player reallyKiller = Bukkit.getPlayer(killer.getUniqueId());
             if (reallyKiller != null) {
                 PlayerProfile killerProfile = PlayerProfile.getPlayerProfileByUuid(killer.getUniqueId());
@@ -519,14 +527,14 @@ public class CombatListener implements Listener {;
             }
         }
         //saves performance
-        if(player.getName().equals("666")) { //NPC Name
+        if (player.getName().equals("666")) { //NPC Name
             return;
         }
         final Player finalKiller = killer;
 
         double respawnTime = playerProfile.getRespawnTime();
 
-            PlayerUtil.clearPlayer(player, true, false);
+        PlayerUtil.clearPlayer(player, true, false);
         double mythicProtectChance = 0;
 
         PlayerInventory inventory = player.getInventory();
@@ -579,7 +587,7 @@ public class CombatListener implements Listener {;
             }
         }
         boolean noProtect = !itemLiveDropEvent.isCancelled() && RandomUtil.hasSuccessfullyByChance(1 - mythicProtectChance);
-        if(!itemLiveDropEvent.isCancelled()) {
+        if (!itemLiveDropEvent.isCancelled()) {
             for (int i = 0; i < 36; i++) {
                 ItemStack item = inventory.getItem(i);
                 if (item == null || item.getType() == Material.AIR) continue;
@@ -637,17 +645,17 @@ public class CombatListener implements Listener {;
 
         //process assist - start
 
-            double totalDamage = 0;
-            List<DamageData> activeDamage = new ArrayList<>();
-            for (DamageData it : playerProfile.getDamageMap().values()) {
-                if(it.getTimer().hasExpired()){
-                    totalDamage+= it.getDamage();
-                    activeDamage.add(it);
-                }
+        double totalDamage = 0;
+        List<DamageData> activeDamage = new ArrayList<>();
+        for (DamageData it : playerProfile.getDamageMap().values()) {
+            if (it.getTimer().hasExpired()) {
+                totalDamage += it.getDamage();
+                activeDamage.add(it);
             }
-            if (totalDamage > 0) {
-                this.handleAssist(player, finalKiller, activeDamage, (long) totalDamage);
-            }
+        }
+        if (totalDamage > 0) {
+            this.handleAssist(player, finalKiller, activeDamage, (long) totalDamage);
+        }
 
 
         //process assist - end
@@ -665,13 +673,13 @@ public class CombatListener implements Listener {;
 
         InventoryUtil.supplyItems(player);
         PackedOperator operator = playerProfile.toOperator();
-        if(operator != null) {
+        if (operator != null) {
             operator.pending(i -> {
                 playerProfile.setInventory(PlayerInv.fromPlayerInventory(inventory));
             });
         }
         if (shouldRespawn) {
-            ((CraftPlayer)player).getHandle().invulnerableTicks = 40;
+            ((CraftPlayer) player).getHandle().invulnerableTicks = 40;
             // player.setHealth(player.getMaxHealth());
             Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> player.spigot().respawn(), 10);
             player.setGameMode(GameMode.SPECTATOR);
@@ -921,98 +929,111 @@ public class CombatListener implements Listener {;
     }
 
     private void handleMythicItemDrop(PlayerProfile killerProfile, Player killer, LivingEntity beKilledPlayer) {
-        int enchantPerkLevel = -1;
+        int enchantPerkLevel;
         PerkData data = killerProfile.getUnlockedPerkMap().get("Mythicism");
         if (data != null && !UtilKt.hasRealMan(killer)) {
             enchantPerkLevel = data.getLevel();
+        } else {
+            enchantPerkLevel = -1;
         }
         if (enchantPerkLevel > -1) {
-            double chance = NewConfiguration.INSTANCE.getMythicDropChance(killer) * (1 + (enchantPerkLevel - 1) * 0.02);
-            int level = Utils.getEnchantLevel(killer.getInventory().getLeggings(), "pants_radar");
-            if (level > 0) {
-                chance = (1 + level * 0.3) * chance;
-            }
-            level = Utils.getEnchantLevel(killer.getItemInHand(), "pants_radar");
-            if (level > 0) {
-                chance = (1 + level * 0.3) * chance;
-            }
-            boolean b = RandomUtil.hasSuccessfullyByChance(chance);
-            if (b) {
-                AbstractPitItem item;
-                if (enchantPerkLevel >= 4) {
-                    item = (AbstractPitItem) RandomUtil.helpMeToChooseOne(new MythicBowItem(), new MythicSwordItem(), new MythicLeggingsItem());
-                } else {
-                    item = (AbstractPitItem) RandomUtil.helpMeToChooseOne(new MythicBowItem(), new MythicSwordItem());
+            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
+                double chance = NewConfiguration.INSTANCE.getMythicDropChance(killer) * (1 + (enchantPerkLevel - 1) * 0.02);
+                int level = Utils.getEnchantLevel(killerProfile.leggings, "pants_radar");
+                if (level > 0) {
+                    chance = (1 + level * 0.3) * chance;
                 }
-
-                ItemStack itemStack = item.toItemStack();
-
-                if (InventoryUtil.isInvFull(killer.getInventory())) {
-                    beKilledPlayer.getWorld().dropItemNaturally(beKilledPlayer.getLocation(), itemStack);
-                } else {
-                    InventoryUtil.addInvReverse(killer.getInventory(), itemStack);
+                level = Utils.getEnchantLevel(killerProfile.heldItem, "pants_radar");
+                if (level > 0) {
+                    chance = (1 + level * 0.3) * chance;
                 }
-
-                CC.send(MessageType.MISC, killer, "&d&l神话武器! &7你在战斗中拾取了掉落的神话物品!");
-
-                //fixme: change to sound system
-                new BukkitRunnable() {
-                    int task = 0;
-
-                    @Override
-                    public void run() {
-                        killer.playSound(beKilledPlayer.getLocation(), Sound.NOTE_PLING, 1, 0.1F + (0.5F * task));
-                        task++;
-
-                        if (task >= 6) {
-                            cancel();
-                        }
+                boolean b = RandomUtil.hasSuccessfullyByChance(chance);
+                if (b) {
+                    AbstractPitItem item;
+                    if (enchantPerkLevel >= 4) {
+                        item = (AbstractPitItem) RandomUtil.helpMeToChooseOne(
+                                new MythicBowItem(), new MythicSwordItem(), new MythicLeggingsItem());
+                    } else {
+                        item = (AbstractPitItem) RandomUtil.helpMeToChooseOne(
+                                new MythicBowItem(), new MythicSwordItem());
                     }
-                }.runTaskTimer(ThePit.getInstance(), 10, 5);
-            }
+
+                    ItemStack itemStack = item.toItemStack();
+
+                    if (InventoryUtil.isInvFull(killer.getInventory())) {
+                        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                            beKilledPlayer.getWorld().dropItemNaturally(beKilledPlayer.getLocation(), itemStack);
+                        });
+                    } else {
+
+                        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                            InventoryUtil.addInvReverse(killer.getInventory(), itemStack);
+                        });
+                    }
+
+                    CC.send(MessageType.MISC, killer, "&d&l神话武器! &7你在战斗中拾取了掉落的神话物品!");
+                    //fixme: change to sound system
+                    new BukkitRunnable() {
+                        int task = 0;
+
+                        @Override
+                        public void run() {
+                            killer.playSound(beKilledPlayer.getLocation(), Sound.NOTE_PLING, 1, 0.1F + (0.5F * task));
+                            task++;
+
+                            if (task >= 6) {
+                                cancel();
+                            }
+                        }
+                    }.runTaskTimerAsynchronously(ThePit.getInstance(), 10, 5);
+                }
+            });
         }
     }
 
     private void handleItemDrop(PlayerProfile killerProfile, Player killer, Player beKilledPlayer) {
         try {
+            if (PlayerUtil.isNPC(beKilledPlayer)) { //check npc
+                return;
+            }
             //lucky diamond
             boolean enabledLuckyDiamond = PlayerUtil.isPlayerChosePerk(killer, "LuckyDiamond");
 
             //drop armor
             for (ItemStack itemStack : beKilledPlayer.getInventory().getArmorContents()) {
                 if (itemStack != null && itemStack.getType() != Material.AIR && Utils.toNMStackQuick(itemStack).getItem() instanceof ItemArmor) {
-                    if (itemStack.getType().name().contains("HELMET")) {
+                    if (itemStack.getType().name().endsWith("HELMET")) {
                         continue;
                     }
                     final Location killerLoc = killer.getLocation().clone();
                     //iron armor
-                    if (itemStack.getType().name().contains("IRON")) {
+                    if (itemStack.getType().name().startsWith("IRON")) {
                         if (enabledLuckyDiamond && RandomUtil.hasSuccessfullyByChance(0.3)) {
-                            itemStack = new ItemBuilder(Material.valueOf(itemStack.getType().name().replace("IRON", "DIAMOND")))
+                            ItemBuilder builder = new ItemBuilder(Material.valueOf(itemStack.getType().name().replace("IRON", "DIAMOND")))
                                     .deathDrop(true)
                                     .canDrop(false)
                                     .canSaveToEnderChest(false)
-                                    .internalName("lucky_diamond")
-                                    .build();
-                            //player.getWorld().dropItemNaturally(killer.getLocation(), itemStack);
-                            ItemStack finalItemStack = itemStack;
-
-                            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> Bukkit.getPluginManager().callEvent(new PlayerPickupItemEvent(killer, beKilledPlayer.getWorld().dropItemNaturally(killerLoc, finalItemStack), 1)));
+                                    .internalName("lucky_diamond");
+                            Bukkit.getScheduler().runTask(
+                                    ThePit.getInstance(),
+                                    () -> Bukkit.getPluginManager().callEvent(
+                                            new PlayerPickupItemEvent(
+                                                    killer,
+                                                    beKilledPlayer.getWorld().dropItemNaturally(
+                                                            killerLoc, builder.build()), 1)));
                             continue;
                         }
-                        ItemStack finalItemStack1 = itemStack;
-                        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> beKilledPlayer.getWorld().dropItemNaturally(killer.getLocation(), finalItemStack1));
+                        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> beKilledPlayer.getWorld().dropItemNaturally(killer.getLocation(), itemStack));
                         continue;
                     }
                     //diamond armor
-                    if (itemStack.getType().name().contains("DIAMOND")) {
+                    if (itemStack.getType().name().startsWith("DIAMOND")) {
                         //drop shop diamond armor only
-                        if (itemStack.getType().name().contains("HELMET")) {
+                        if (itemStack.getType().name().endsWith("HELMET")) {
                             continue;
                         }
                         if ("shopItem".equals(ItemUtil.getInternalName(itemStack))) {
-                            ItemStack finalItemStack2 = itemStack;
-                            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> beKilledPlayer.getWorld().dropItemNaturally(killerLoc, finalItemStack2));
+                            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> beKilledPlayer.getWorld().dropItemNaturally(killerLoc, itemStack));
                         }
                     }
 
@@ -1036,15 +1057,7 @@ public class CombatListener implements Listener {;
                         killerProfile.setBounty(Math.min((PlayerUtil.isPlayerChosePerk(killer, "high_lander") && killerProfile.getStreakKills() >= 50) ? 10000 : 5000, killerProfile.getBounty() + bounty));
                         killerProfile.setBountyStreak(0);
 
-                        String bountyColor = "&6";
-                        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
-                            if (killerProfile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                                bountyColor = "&b";
-                            }
-                            if (killerProfile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
-                                bountyColor = "&c";
-                            }
-                        }
+                        String bountyColor = getBountyString(killerProfile);
                         CC.boardCast(MessageType.BOUNTY, "&6&l赏金! " + killerProfile.getFormattedName() + " &7当前已经被以 " + bountyColor + killerProfile.getBounty() + bountyColor + "g &7的金额悬赏了!");
                     }
 
@@ -1056,6 +1069,21 @@ public class CombatListener implements Listener {;
 
             killerProfile.setBountyCooldown(new Cooldown(1, TimeUnit.MINUTES));
         }
+    }
+
+    @NotNull
+    private static String getBountyString(PlayerProfile killerProfile) {
+        String bountyColor = "&6";
+        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+            GenesisTeam team = killerProfile.getGenesisData().getTeam();
+            if (team == GenesisTeam.ANGEL) {
+                bountyColor = "&b";
+            }
+            if (team == GenesisTeam.DEMON) {
+                bountyColor = "&c";
+            }
+        }
+        return bountyColor;
     }
 
     private void handleBoardCastMessage(PlayerProfile killerProfile, PlayerProfile playerProfile, Player killer, LivingEntity beKilledPlayer, double totalCoins, double totalXp) {
@@ -1120,23 +1148,21 @@ public class CombatListener implements Listener {;
         }
 
         if (totalXp > 0) {
-            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()).replace("null","BOT") + " &6+" + numFormat.format(totalCoins) + "硬币 &b+" + numFormat.format(totalXp) + "经验值" + genesisStatus + (eventBoost > 1 ? boostString : "")));
+            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()).replace("null", "BOT") + " &6+" + numFormat.format(totalCoins) + "硬币 &b+" + numFormat.format(totalXp) + "经验值" + genesisStatus + (eventBoost > 1 ? boostString : "")));
         } else {
-            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()).replace("null","BOT") + " &6+" + numFormat.format(totalCoins) + "硬币" + genesisStatus + (eventBoost > 1 ? boostString : "")));
+            CC.send(MessageType.COMBAT, killer, CC.translate("&a&l" + prefix + "! " + RankUtil.getPlayerColoredName(beKilledPlayer.getUniqueId()).replace("null", "BOT") + " &6+" + numFormat.format(totalCoins) + "硬币" + genesisStatus + (eventBoost > 1 ? boostString : "")));
         }
-        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
-            String deathString = CC.translate("&c&l死亡! &7被 " + killerProfile.getFormattedName() + " &7击杀.");
-
-            ChatComponentBuilder deathMsg = new ChatComponentBuilder(deathString)
-                    .append(new ChatComponentBuilder(CC.translate(" &e&l死亡回放"))
-                            .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&7点击查看你的死亡回放")).create()))
-                            .setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/killRecap"))
-                            .create());
-
+        if (playerProfile.isLoaded()) {
             if (beKilledPlayer instanceof Player) {
+                String deathString = CC.translate("&c&l死亡! &7被 " + killerProfile.getFormattedName() + " &7击杀.");
+                ChatComponentBuilder deathMsg = new ChatComponentBuilder(deathString)
+                        .append(new ChatComponentBuilder(CC.translate(" &e&l死亡回放"))
+                                .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&7点击查看你的死亡回放")).create()))
+                                .setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/killRecap"))
+                                .create());
                 CC.send(MessageType.COMBAT, (Player) beKilledPlayer, deathMsg.create());
             }
-        });
+        }
 
     }
 
@@ -1167,14 +1193,34 @@ public class CombatListener implements Listener {;
     }
 
     private void handleGameEffect(PlayerProfile killerProfile, Player killer, LivingEntity player, AtomicDouble coinsAtomic, AtomicDouble expAtomic) {
-        for (IPlayerKilledEntity ins : ThePit.getInstance().getPerkFactory()
-                .getPlayerKilledEntities()) {
-            AbstractPerk perk = (AbstractPerk) ins;
-            int perkPlayerLevel = perk.getPlayerLevel(killer);
-            if (perkPlayerLevel != -1) {
-                ins.handlePlayerKilled(perkPlayerLevel, killer, player, coinsAtomic, expAtomic);
+        PerkFactory perkFactory = ThePit.getInstance().getPerkFactory();
+//        for (IPlayerKilledEntity ins : ThePit.getInstance().getPerkFactory()
+//                .getPlayerKilledEntities()) {
+//            AbstractPerk perk = (AbstractPerk) ins;
+//            int perkPlayerLevel = perk.getPlayerLevel(killer);
+//            if (perkPlayerLevel != -1) {
+//                ins.handlePlayerKilled(perkPlayerLevel, killer, player, coinsAtomic, expAtomic);
+//            }
+//        }
+        killerProfile.getUnlockedPerkMap().values().forEach(i -> {
+            AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
+            if(!abstractPerk.isPassive()){
+                return;
             }
-        }
+            if (abstractPerk instanceof IPlayerKilledEntity ins) {
+                ins.handlePlayerKilled(i.getLevel(), killer, player, coinsAtomic, expAtomic);
+            }
+        });
+        killerProfile.getChosePerk().values().forEach(i -> {
+            AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
+            if(abstractPerk.isPassive()){
+                return;
+            }
+            if (abstractPerk instanceof IPlayerKilledEntity ins) {
+
+                ins.handlePlayerKilled(i.getLevel(), killer, player, coinsAtomic, expAtomic);
+            }
+        });
 
         for (IPlayerKilledEntity ins : ThePit.getInstance().getEnchantmentFactor().getPlayerKilledEntities()) {
             AbstractEnchantment enchant = (AbstractEnchantment) ins;

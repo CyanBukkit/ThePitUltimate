@@ -1,5 +1,6 @@
 package cn.charlotte.pit.util.sound;
 
+import cn.klee.backports.utils.SWMRHashTable;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ public abstract class AbstractPitSound {
     private final Map<Player, Integer> playersTick;
 
     public AbstractPitSound() {
-        this.playersTick = new HashMap<>();
+        this.playersTick = new SWMRHashTable<>();
     }
 
     public abstract String getMusicInternalName();
@@ -21,8 +22,7 @@ public abstract class AbstractPitSound {
     public abstract void onSoundTick(Player player, int tick);
 
     public void tick() {
-        final HashMap<Player, Integer> map = new HashMap<>(playersTick);
-        for (Map.Entry<Player, Integer> entry : map.entrySet()) {
+        for (Map.Entry<Player, Integer> entry : playersTick.entrySet()) {
             final Player player = entry.getKey();
             if (player == null || !player.isOnline()) {
                 playersTick.remove(player);

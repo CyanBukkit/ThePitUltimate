@@ -346,9 +346,7 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
     }
 
     private fun isAir(location: Location): Boolean {
-        return location.block.type == Material.AIR || ClearRunnable.getClearRunnable().placedBlock.contains(
-            PlacedBlockData(location, Cooldown(0L))
-        )
+        return location.block.type == Material.AIR || ClearRunnable.getClearRunnable().placedBlock[location] != null;
     }
 
     private fun generateBlock(data: BlockHeadData, location: Location) {
@@ -452,7 +450,7 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
         }
 
         for (data in ClearRunnable.getClearRunnable().placedBlock) {
-            data.location.block.type = Material.AIR
+            data.key.block.type = Material.AIR
         }
 
         for (self in Bukkit.getOnlinePlayers()) {
@@ -463,7 +461,7 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
                         target.entityId,
                         4,
                         Utils.toNMStackQuick(
-                            org.bukkit.inventory.ItemStack(data.block, 1, data.data.toShort())
+                            ItemStack(data.block, 1, data.data.toShort())
                         )
                     )
                 )

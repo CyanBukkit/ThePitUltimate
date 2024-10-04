@@ -1,13 +1,16 @@
 package cn.charlotte.pit.enchantment.type.dark_normal;
 
+import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
+import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
+import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,6 +20,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * @Author: Misoryan
  * @Created_In: 2021/3/15 20:14
@@ -24,7 +30,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 @Include
 @AutoRegister
 @ArmorOnly
-public class MindAssaultEnchant extends AbstractEnchantment implements Listener {
+public class MindAssaultEnchant extends AbstractEnchantment implements IAttackEntity,Listener {
     @Override
     public String getEnchantName() {
         return "精神攻击";
@@ -52,30 +58,20 @@ public class MindAssaultEnchant extends AbstractEnchantment implements Listener 
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7你造成的伤害 &9-60% &7,同时周围11格内每有一名穿着 &6神话之甲 &7的玩家,你攻击的基础伤害 &c+0.75❤ &7(上限&c8❤&7)";
+        return "&7你造成的伤害 &9-60% &7,同时周围11格内每有一名穿着 &6神话之甲 &7的玩家,你攻击的基础伤害 &c+5% &7(上限&c100%&7)";
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onDamage(EntityDamageByEntityEvent event) {
-        Entity damagerEntity = event.getDamager();
-        Player damager;
-        if (damagerEntity instanceof Player) {
-            damager = ((Player) damagerEntity);
-        } else if (damagerEntity instanceof Projectile && ((Projectile) damagerEntity).getShooter() instanceof Player) {
-            damager = (Player) (((Projectile) damagerEntity).getShooter());
-        } else {
-            return;
-        }
-
-        final int level = Utils.getEnchantLevel(damager.getInventory().getLeggings(), "mind_assault_enchant");
-        if (level < 1) return;
-
-        event.setDamage(event.getDamage() * 0.4);
-        final long size = PlayerUtil.getNearbyPlayers(damager.getLocation(), 11.0)
-                .stream()
-                .filter(entity -> "mythic_leggings".equals(ItemUtil.getInternalName(entity.getInventory().getLeggings())))
-                .count();
-        event.setDamage(event.getDamage() + Math.min((size - 1) * 1.5, 16.0));
+    @Override
+    public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
+        Collection<Player> nearbyPlayers = PlayerUtil.getNearbyPlayers(attacker.getLocation(), 11.0);
+        nearbyPlayers.forEach(i -> {
+            PlayerProfile playerProfileByUuid = PlayerProfile.getPlayerProfileByUuid(i.getUniqueId());
+            if(playerProfileByUuid != null && playerProfileByUuid.isLoaded()){
+                if(playerProfileByUuid.leggings != null){
+                    boostDamage.getAndAdd(0.05);
+                }
+            }
+        });
+        boostDamage.set(Math.max(0,boostDamage.get() - 0.6));
     }
-
 }

@@ -1,9 +1,11 @@
 package cn.charlotte.pit.enchantment.type.rare;
 
+import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
@@ -34,8 +36,7 @@ import java.util.concurrent.TimeUnit;
 @AutoRegister
 public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, IActionDisplayEnchant, MovementHandler {
 
-    private static final DoubleJumpEnchant doubleJumpEnchant = new DoubleJumpEnchant();
-    private static final Map<UUID, Cooldown> cooldown = new Object2ObjectOpenHashMap<>();
+    private Map<UUID, Cooldown> cooldown = new Object2ObjectOpenHashMap<>();
 
     @SneakyThrows
     public DoubleJumpEnchant() {
@@ -88,8 +89,9 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
     @EventHandler
     public void onToggle(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
-        int level = doubleJumpEnchant.getItemEnchantLevel(player.getInventory().getLeggings());
-        if (player.getInventory().getLeggings() != null && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings())) && doubleJumpEnchant.isItemHasEnchant(player.getInventory().getLeggings()) && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
+        PlayerProfile playerProfileByUuid = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        int level = this.getItemEnchantLevel(playerProfileByUuid.leggings);
+        if (level != -1 && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
             if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
                 cooldown.put(player.getUniqueId(), new Cooldown(getCooldownInt(level), TimeUnit.SECONDS));
                 event.setCancelled(true);
@@ -106,9 +108,13 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
 
     @Override
     public void handleUpdateLocation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
-        if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
+        GameMode gameMode = player.getGameMode();
+        if (gameMode != GameMode.CREATIVE && gameMode != GameMode.SPECTATOR) {
             if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
-                boolean flag = player.getInventory().getLeggings() != null && "mythic_leggings".equals(ItemUtil.getInternalName(player.getInventory().getLeggings())) && doubleJumpEnchant.isItemHasEnchant(player.getInventory().getLeggings());
+                PlayerProfile playerProfileByUuid = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+                boolean flag = playerProfileByUuid.leggings instanceof MythicLeggingsItem
+                        && isItemHasEnchant(playerProfileByUuid.leggings);
+
                 if (player.getAllowFlight() != flag) {
                     player.setAllowFlight(flag);
                 }
@@ -119,7 +125,6 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
             }
         }
     }
-
     @Override
     public void handleUpdateRotation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
     }

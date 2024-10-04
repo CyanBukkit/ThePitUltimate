@@ -199,7 +199,8 @@ public class EventFactory {
                     start = "&d&l大型事件! ";
                 }
 
-                final String title = CC.translate(start + "&6&l" + iEvent.getEventName() + " &7将在 &e" + TimeUtil.millisToTimer(nextEpicEventTimer.getRemaining()) + " &7后开始!");
+                final String title = CC.translate(
+                        start + "&6&l" + iEvent.getEventName() + " &7将在 &e" + TimeUtil.millisToTimer(nextEpicEventTimer.getRemaining()) + " &7后开始!");
 
                 ThePit.getInstance()
                         .getBossBar()

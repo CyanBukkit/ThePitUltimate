@@ -115,7 +115,10 @@ public class DataListener implements Listener {
                 event.getPlayer().kickPlayer("Saving your latest profile, please wait :)");
             }
         });
-        orLoadOperator.pendingUntilLoaded(this::whenLoaded);
+        orLoadOperator.pendingUntilLoaded(prof -> {
+            orLoadOperator.heartBeat();
+            this.whenLoaded(prof);
+        });
         event.setJoinMessage(null);
 
     }
@@ -142,11 +145,15 @@ public class DataListener implements Listener {
                         }
 
                         profile.setLogin(false); //我草泥马
+
+                    profile.disallowUnsafe()
+                            .setInventoryUnsafe(playerInv).allow();
                         profileOper.pending(i -> {
-                                    profile.disallowUnsafe()
-                                            .setInventoryUnsafe(playerInv).allow();
                                     //unsafe exit
-                                });
+
+                            profile.disallowUnsafe()
+                                    .setInventoryUnsafe(playerInv).allow();
+                        });
                         CombatListener instance = CombatListener.INSTANCE;
                         if (instance != null && !profile.getCombatTimer().hasExpired()) {
                             Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {

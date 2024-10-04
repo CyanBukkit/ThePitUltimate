@@ -111,9 +111,9 @@ public class StrengthPerk extends AbstractPerk implements IPlayerKilledEntity, I
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId());
+     PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId());
         if (profile.getStrengthNum() > 0 && !profile.getStrengthTimer().hasExpired() && profile.getStrengthNum() <= 10) {
             boostDamage.set(boostDamage.get() + (profile.getStrengthNum() * 4D / 100D));
         }
-    }
+     }
 }

@@ -239,8 +239,16 @@ public class CC {
     }
 
     public static void send(MessageType type, Player player, String text) {
-        if (canPlayerSeeMessage(player, type)) {
-            player.sendMessage(CC.translate(text));
+        if(MinecraftServer.getServer().isRunning()) {
+            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(),() -> {
+                if (canPlayerSeeMessage(player, type)) {
+                    player.sendMessage(CC.translate(text));
+                }
+            });
+        } else {
+            if (canPlayerSeeMessage(player, type)) {
+                player.sendMessage(CC.translate(text));
+            }
         }
     }
 

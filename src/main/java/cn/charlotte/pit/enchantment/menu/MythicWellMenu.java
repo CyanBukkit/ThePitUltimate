@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -348,7 +349,7 @@ public class MythicWellMenu extends Menu {
     @Override
     public void onClose(Player player) {
         runnable.sendReset(player);
-
+        this.animationData.setFinished(true);
         runnable.getAnimations().remove(player.getUniqueId());
 
         //nothing to do

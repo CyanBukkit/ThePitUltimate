@@ -501,7 +501,40 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+    @Execute(name = "listavailablePerks")
+    @Async
+    fun listavailablePerks(@Context player: Player) {
+        val perkMap = ThePit.getInstance().perkFactory.perkMap
+        player.sendMessage("当前Perk数量为 " + perkMap.size,true)
 
+        perkMap.values.forEachIndexed { a,it ->
+            player.sendMessage(CC.translate("NUM: " + a + " NBT: " + it.internalPerkName + " DISPLAYNAME: " + it.displayName),true)
+        }
+    }
+
+    @Execute(name = "listitems")
+    @Async
+    fun listitems(@Context player: Player) {
+        val itemMap = ThePit.getInstance().itemFactor
+        player.sendMessage("当前Perk数量为 " + itemMap.itemMap,true)
+
+        itemMap.itemMap.keys.forEachIndexed() { a,it ->
+            player.sendMessage(CC.translate("NUM: $a NBT: $it"),true)
+        }
+    }
+    @Execute(name = "enchantments")
+    @Async
+    fun enchantments(@Context player: Player){
+        val enchs = ThePit.getInstance().getEnchantmentFactor()
+        player.sendMessage("当前Ench数量为 " + enchs.enchantmentMap.size,true)
+
+        enchs.enchantmentMap.values.forEachIndexed { index, it ->
+            player.sendMessage(
+                CC.translate("NUM: " + index + " NBT: " + it.nbtName + " DISPLAYNAME: " + it.enchantName),
+                true
+            )
+        }
+    }
     @Execute(name = "itemNbtDump")
     fun nbtDump(@Context player: Player) {
         try {

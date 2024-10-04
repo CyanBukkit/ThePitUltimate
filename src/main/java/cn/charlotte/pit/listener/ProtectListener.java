@@ -115,6 +115,7 @@ public class ProtectListener implements Listener {
                     tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
                     int enchantLevel = Utils.getEnchantLevel(event.getPlayer().getInventory().getLeggings(), "TNT");
                     tntPrimed.setMetadata("damage", new FixedMetadataValue(ThePit.getInstance(), Math.max(0, enchantLevel)));
+                    Utils.pointMetadataAndRemove(tntPrimed,500,"shooter","damage","internal");
                     return;
                 }
                 if ("insta_boom_enchant_item".equals(ItemUtil.getInternalName(event.getItemInHand()))) {
@@ -130,7 +131,7 @@ public class ProtectListener implements Listener {
                     tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
                     int enchantLevel = Utils.getEnchantLevel(event.getPlayer().getInventory().getLeggings(), "insta_boom_tnt_enchant");
                     tntPrimed.setMetadata("damage", new FixedMetadataValue(ThePit.getInstance(), Math.max(0, enchantLevel)));
-
+                    Utils.pointMetadataAndRemove(tntPrimed,500,"shooter","damage","internal");
                     return;
                 }
             }
@@ -281,13 +282,9 @@ public class ProtectListener implements Listener {
         }
         Block block = event.getBlock();
 
-        Optional<PlacedBlockData> first = ClearRunnable.getClearRunnable()
-                .getPlacedBlock()
-                .stream()
-                .filter(placedBlockData -> placedBlockData.getLocation().equals(block.getLocation()))
-                .findFirst();
-
-        if (!first.isPresent()) {
+        PlacedBlockData placedBlockData = ClearRunnable.getClearRunnable()
+                .getPlacedBlock().get(block.getLocation());
+        if (placedBlockData == null) {
             if (!profile.isEditingMode()) {
                 event.setCancelled(true);
             }
@@ -308,7 +305,7 @@ public class ProtectListener implements Listener {
             }
         }
 
-        ClearRunnable.getClearRunnable().getPlacedBlock().remove(first.get());
+        ClearRunnable.getClearRunnable().getPlacedBlock().remove(block.getLocation());
         event.setCancelled(true);
         block.setType(Material.AIR);
     }

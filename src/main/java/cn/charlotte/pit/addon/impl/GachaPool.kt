@@ -23,7 +23,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
-import org.mongojack.DBQuery
 import org.mongojack.JacksonMongoCollection
 import java.io.File
 import java.util.*
@@ -165,7 +164,7 @@ object GachaPool : Addon {
 
         if (player == null) return false
 
-        val data = keysCollections.findOne(DBQuery.`is`("playerName", player.name))
+        val data = keysCollections.findOne(Filters.eq("playerName", player.name))
         if (data == null) {
             player.sendMessage(CC.translate("&c你的钥匙不足"))
             return false

@@ -111,11 +111,10 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
             });
 
 
-            for (PlacedBlockData blockData : ClearRunnable.getClearRunnable().getPlacedBlock()) {
-                blockData.getLocation().getBlock().setType(Material.AIR);
-            }
-            ClearRunnable.getClearRunnable().getPlacedBlock().clear();
-
+            ClearRunnable.getClearRunnable().getPlacedBlock().removeIf((loc,blockData) -> {
+                loc.getBlock().setType(Material.AIR);
+                return true;
+            });
             //build wall - end
 
             //set Player's max health and teleport to spawn

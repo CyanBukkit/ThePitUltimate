@@ -6,9 +6,11 @@ import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.parm.AutoRegister
 import cn.charlotte.pit.util.PlayerUtil
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.cooldown.Cooldown
 import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -64,13 +66,22 @@ class Regularity : AbstractEnchantment(), Listener {
         val victim = event.entity
         if (victim !is Player) return
 
+
+        var level = -1
+        val operator = ThePit.getInstance().profileOperator.getOperator(attacker)
+        if(operator != null){
+            if(operator.profile().leggings != null) {
+                if (operator.isLoaded) {
+                    level = operator.profile().leggings.getEnchantmentLevel(this.nbtName)
+                }
+            }
+        }
+
+        if (level < 1) return
+
         if (PlayerUtil.shouldIgnoreEnchant(attacker, victim)) {
             return
         }
-
-        val level = ThePit.api.getItemEnchantLevel(attacker.inventory.leggings, "regularity")
-        if (level < 1) return
-
         if (event.finalDamage < when (level) {
                 1 -> 1.1
                 2 -> 1.3
@@ -85,7 +96,6 @@ class Regularity : AbstractEnchantment(), Listener {
                     victim.removeMetadata("regularity_cooldown",ThePit.getInstance())
                 }
             }
-
             if (!victim.isDead) {
                 val boost = when (level) {
                     1 -> 45
@@ -96,10 +106,12 @@ class Regularity : AbstractEnchantment(), Listener {
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
                     victim.noDamageTicks = 0
                     victim.damage(event.damage * boost, attacker)
+                    victim.noDamageTicks = 10;
                     victim.setMetadata(
                         "regularity_cooldown",
                         FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L + 2)
                     )
+                    Utils.pointMetadataAndRemove(victim,1000,"regularity_cooldown");
                 }, 5L)
             }
         }

@@ -1,6 +1,8 @@
 package cn.charlotte.pit.util.scoreboard;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.event.AssemblePostUpdateEvent;
+import cn.charlotte.pit.event.AssembleUpdateEvent;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,7 +29,7 @@ public class AssembleThread implements Runnable {
         this.assemble = assemble;
 //        Plugin protocolLib = Bukkit.getPluginManager().getPlugin("ProtocolLib");
 //        if (protocolLib.getDescription().getVersion().startsWith("5")) {
-            taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
+        taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
 //        } else {
 //            taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, assemble.getTicks(), assemble.getTicks()).getTaskId();
 //        } useless check
@@ -43,22 +45,26 @@ public class AssembleThread implements Runnable {
      * Tick logic for thread.
      */
     private void tick() {
-        for (Player player : this.assemble.getPlugin().getServer().getOnlinePlayers()) {
+        this.assemble.getBoards().forEach((uuid, board) -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null || !player.isOnline() || board == null) {
+                return;
+            }
+
             try {
-                AssembleBoard board = this.assemble.getBoards().get(player.getUniqueId());
-
                 // This shouldn't happen, but just in case.
-                if (board == null) {
-                    continue;
-                }
-
                 Scoreboard scoreboard = board.getScoreboard();
                 Objective objective = board.getObjective();
 
                 if (scoreboard == null || objective == null) {
-                    continue;
+                    return;
                 }
 
+                AssembleUpdateEvent assembleUpdateEvent = new AssembleUpdateEvent(player);
+                assembleUpdateEvent.callEvent();
+                if(assembleUpdateEvent.isCancelled()){
+                    return;
+                }
                 // Just make a variable so we don't have to
                 // process the same thing twice.
                 String title = ChatColor.translateAlternateColorCodes('&', this.assemble.getAdapter().getTitle(player));
@@ -67,26 +73,38 @@ public class AssembleThread implements Runnable {
                 if (!objective.getDisplayName().equals(title)) {
                     objective.setDisplayName(title);
                 }
-
                 List<String> newLines = this.assemble.getAdapter().getLines(player);
 
-                // Allow adapter to return null/empty list to display nothing.
+                AssemblePostUpdateEvent assemblePostUpdateEvent = new AssemblePostUpdateEvent(player, newLines);
+                assemblePostUpdateEvent.callEvent();
+                if(assemblePostUpdateEvent.isCancelled()){
+                    return;
+                }
+            // Allow adapter to return null/empty list to display nothing.
                 if (newLines == null || newLines.isEmpty()) {
-                    board.getEntries().forEach(AssembleBoardEntry::remove);
-                    board.getEntries().clear();
+                    board.getEntries().removeIf(i -> {
+                        i.remove();
+                        return true;
+                    });
                 } else {
-                    if (newLines.size() > 16) {
-                        newLines = newLines.subList(0,15); //EmptyIrony u sucks
+                    int size1 = newLines.size();
+                    if (size1 > 16) {
+                        newLines = newLines.subList(0, 15); //EmptyIrony u sucks
                     }
+                    size1 = newLines.size();
 
                     // Reverse the lines because scoreboard scores are in descending order.
-                    if (!this.assemble.getAssembleStyle().isDescending()) {
+                    boolean descending = this.assemble.getAssembleStyle().isDescending();
+                    if (!descending) {
                         Collections.reverse(newLines);
                     }
 
                     // Remove excessive amount of board entries.
-                    if (board.getEntries().size() > newLines.size()) {
-                        for (int i = newLines.size(); i < board.getEntries().size(); i++) {
+                    int size = board.getEntries().size();
+                    boolean b = size > size1;
+                    if (b) {
+                        for (int i = size1; i < size; i++) {
+
                             AssembleBoardEntry entry = board.getEntryAtPosition(i);
 
                             if (entry != null) {
@@ -97,11 +115,12 @@ public class AssembleThread implements Runnable {
 
                     // Update existing entries / add new entries.
                     int cache = this.assemble.getAssembleStyle().getStartNumber();
-                    for (int i = 0; i < newLines.size(); i++) {
+                    for (int i = 0; i < size1; i++) {
                         AssembleBoardEntry entry = board.getEntryAtPosition(i);
 
                         // Translate any colors.
-                        String line = ChatColor.translateAlternateColorCodes('&', newLines.get(i));
+                        String line = ChatColor.
+                                translateAlternateColorCodes('&', newLines.get(i));
 
                         // If the entry is null, just create a new one.
                         // Creating a new AssembleBoardEntry instance will add
@@ -113,9 +132,7 @@ public class AssembleThread implements Runnable {
                         // Update text, setup the team, and update the display values.
                         entry.setText(line);
                         entry.setup();
-                        entry.send(
-                                this.assemble.getAssembleStyle().isDescending() ? cache-- : cache++
-                        );
+                        entry.send(descending ? cache-- : cache++);
                     }
                 }
 
@@ -126,8 +143,8 @@ public class AssembleThread implements Runnable {
                 e.printStackTrace();
                 throw new AssembleException("There was an error updating " + player.getName() + "'s scoreboard.");
             }
+        });
 
-        }
     }
 
 }

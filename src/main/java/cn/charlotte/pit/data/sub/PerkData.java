@@ -1,6 +1,9 @@
 package cn.charlotte.pit.data.sub;
 
+import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.ITickTask;
+import cn.charlotte.pit.perk.AbstractPerk;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Map;
 
@@ -11,7 +14,9 @@ import java.util.Map;
 public class PerkData {
     private String perkInternalName;
     private int level;
-
+    @JsonIgnore
+    private AbstractPerk handle;
+    @JsonIgnore
     private ITickTask iTickTask;
     public PerkData(String perkInternalName, int level) {
         this.perkInternalName = perkInternalName;
@@ -30,6 +35,14 @@ public class PerkData {
         }
         iTickTask = tickTasks.get(getPerkInternalName());
         return iTickTask;
+    }
+    @JsonIgnore
+    public AbstractPerk getHandle(Map<String, AbstractPerk> tickTasks){
+        if(handle != null){
+            return handle;
+        }
+        handle = tickTasks.get(getPerkInternalName());
+        return handle;
     }
 
     public void setPerkInternalName(String perkInternalName) {

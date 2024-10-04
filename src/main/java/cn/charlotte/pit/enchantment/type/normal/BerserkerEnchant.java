@@ -4,15 +4,10 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
-import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.jnic.annotation.Include;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -52,7 +47,7 @@ public class BerserkerEnchant extends AbstractEnchantment implements IAttackEnti
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7使用时允许你不跳跃也能造成暴击伤害."
+        return "&7使用时允许你不跳跃也可能造成暴击伤害."
                 + "/s&7(在地面攻击时有 &e" + (10 * enchantLevel) + "% &7的几率造成的伤害 &c+50% &7)";
     }
 
@@ -60,11 +55,6 @@ public class BerserkerEnchant extends AbstractEnchantment implements IAttackEnti
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (RandomUtil.hasSuccessfullyByChance(0.1 * enchantLevel) && attacker.isOnGround()) {
             boostDamage.getAndAdd(0.5);
-        } else {
-            boostDamage.getAndAdd(0.5);
-            EntityPlayer handle = ((CraftPlayer) attacker).getHandle();
-            handle.fallDistance = 0.1F;
-            handle.onGround = false;
         }
     }
 }

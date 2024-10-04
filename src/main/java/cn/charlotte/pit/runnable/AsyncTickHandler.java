@@ -49,9 +49,15 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
         final long now = System.currentTimeMillis();
         Bukkit.getLogger().info("Auto saved player backups, time: " + (now - last) + "ms");
         Bukkit.getOnlinePlayers().forEach(player -> {
+
             if (player.hasPermission("pit.admin")) return;
             instance.getProfileOperator().operatorStrict(player).ifPresent(operator -> {
                 PlayerProfile playerProfileByUuid = operator.profile();
+                if(playerProfileByUuid.getCombatTimer().hasExpired()) {
+                    if (player.getLastDamageCause() != null) {
+                        player.setLastDamageCause(null); //fix memory leak
+                    }
+                }
                 final long lastActionTimestamp = playerProfileByUuid
                         .getLastActionTimestamp();
                 //AntiAFK

@@ -1,13 +1,16 @@
 package cn.charlotte.pit.util.hologram.packet
 
+import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.util.hologram.HologramAPI
 import cn.charlotte.pit.util.hologram.touch.TouchHandler
 import cn.charlotte.pit.util.hologram.view.ViewHandler
+import com.github.benmanes.caffeine.cache.AsyncCache
 import eu.decentsoftware.holograms.api.nms.NMS
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.spigotmc.AsyncCatcher
 
 /**
  * 2024/5/16<br>
@@ -35,6 +38,12 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun spawn(receivers: MutableCollection<out Player>?): Boolean {
+        if(AsyncCatcher.isAsync()){
+            Bukkit.getScheduler().runTask(ThePit.getInstance()) {
+                spawn(receivers)
+            }
+            return true;
+        }
         allPlayers = false
         receivers?.forEach {
             hologram.addUser(it)
@@ -44,16 +53,28 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun spawn(): Boolean {
+        if(AsyncCatcher.isAsync()){
+            Bukkit.getScheduler().runTask(ThePit.getInstance()) {
+                spawn()
+            }
+            return true;
+        }
         spawned = true
         PacketHologramRunnable.holograms.add(this)
         return true
     }
 
     override fun deSpawn(): Boolean {
-        hologram.removeAll()
-        spawned = false
-        HologramAPI.removeHologram(this)
-        return true
+        if(!AsyncCatcher.isAsync()) {
+            hologram.removeAll()
+            spawned = false
+            HologramAPI.removeHologram(this)
+        } else {
+            Bukkit.getScheduler().runTask(ThePit.getInstance()) {
+                deSpawn()
+            }
+        }
+            return true
     }
 
     override fun getText(): String {
@@ -88,7 +109,13 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun setLocation(loc: Location) {
-        move(loc)
+        if (AsyncCatcher.isAsync()) {
+            move(loc)
+        } else {
+            Bukkit.getScheduler().runTask(ThePit.getInstance()) {
+                move(loc)
+            }
+        }
     }
 
     override fun move(loc: Location) {

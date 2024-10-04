@@ -557,10 +557,24 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                         LoaderType.REFLECTION
                 ),
                 new Dependency(
-                        "MongoDB",
+                        "MongoDB-Driver-Core",
                         "org.mongodb",
-                        "mongo-java-driver",
-                        "3.12.2",
+                        "mongodb-driver-core",
+                        "5.2.0",
+                        LoaderType.REFLECTION
+                ),
+                new Dependency(
+                        "MongoDB-Driver-Sync",
+                        "org.mongodb",
+                        "mongodb-driver-sync",
+                        "5.2.0",
+                        LoaderType.REFLECTION
+                ),
+                new Dependency(
+                        "MongoDB-Bson",
+                        "org.mongodb",
+                        "bson",
+                        "5.2.0",
                         LoaderType.REFLECTION
                 ),
                 new Dependency(
@@ -574,7 +588,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                         "MongoJack",
                         "org.mongojack",
                         "mongojack",
-                        "4.8.1",
+                        "5.0.1",
                         LoaderType.REFLECTION
                 ),
                 new Dependency(

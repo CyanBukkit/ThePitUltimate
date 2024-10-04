@@ -764,14 +764,14 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
                 player.sendMessage(CC.translate("&c为了保证您的安全，我们已将您传送回出生点"));
             }
 
-            final List<PlacedBlockData> data = new ObjectArrayList<>(ClearRunnable.getClearRunnable().getPlacedBlock());
-            for (PlacedBlockData blockData : data) {
+            ClearRunnable.getClearRunnable().getPlacedBlock().removeIf((i,blockData) -> {
                 if (blockData.getLocation().distance(location) <= 5) {
-                    ClearRunnable.getClearRunnable().getPlacedBlock().remove(blockData);
                     blockData.getLocation().getBlock().setType(Material.AIR);
+                    return true;
                 }
-            }
-        });
+                return false;
+            });
+            });
 
         FaweAPI.getTaskManager().async(() -> {
             try {

@@ -49,9 +49,10 @@ dependencies {
     compileOnly(libs.protocollib)
     compileOnly(libs.httpclient)
     compileOnly(libs.httpcore)
-    compileOnly(libs.jedis)
-    compileOnly(libs.mongojack)
-    compileOnly(libs.mongodb)
+    compileOnly(libs.jedis)// https://mvnrepository.com/artifact/org.mongojack/mongojack
+    compileOnly("org.mongojack:mongojack:5.0.1")
+  compileOnly("org.mongodb:mongodb-driver-sync:5.2.0")
+
     compileOnly(libs.websocket)
     // fawe /we
     compileOnly(fileTree("libs"))

@@ -3,15 +3,16 @@ package cn.charlotte.pit.database;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.*;
 import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.internal.MongoClientImpl;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import com.mongodb.internal.connection.PowerOfTwoBufferPool;
 import dev.jnic.annotation.Include;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
  * 4
  */
 
-public class MongoDB {
+public final class MongoDB {
     private static final Logger log = ThePit.getInstance().getLogger();
 
     private MongoClient mongoClient;
@@ -61,13 +62,21 @@ public class MongoDB {
             databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
         }
 
-        final ServerAddress serverAddress = new ServerAddress(address, port);
+        //hook PowerOFTwo
+        ConnectionString connectionString = new ConnectionString("mongodb://" + address + ":" + port);
+        MongoClientSettings.Builder builder1 = MongoClientSettings.builder().serverApi(ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build()).applyConnectionString(connectionString);
         if (mongoUser != null && mongoPassword != null) {
             final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
-
-            this.mongoClient = new MongoClient(serverAddress, credential, new MongoClientOptions.Builder().connectionsPerHost(3000).build());
+            MongoClientSettings thePit = builder1
+                    .credential(credential).applicationName("ThePitRequiredPass")
+                    .build();
+            this.mongoClient = MongoClients.create(thePit);
         } else {
-            this.mongoClient = new MongoClient(serverAddress);
+            MongoClientSettings thePit = builder1.applicationName("ThePitUnsafe").build();
+
+            this.mongoClient = MongoClients.create(thePit);
         }
 
         this.database = mongoClient.getDatabase(databaseName);

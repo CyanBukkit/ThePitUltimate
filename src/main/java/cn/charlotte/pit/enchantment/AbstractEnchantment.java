@@ -120,6 +120,10 @@ public abstract class AbstractEnchantment {
         return this.getItemEnchantLevel(itemStack) != -1;
     }
 
+    public boolean isItemHasEnchant(IMythicItem itemStack) {
+        return this.getItemEnchantLevel(itemStack) != -1;
+    }
+
 
 
     public abstract String getUsefulnessLore(int enchantLevel);

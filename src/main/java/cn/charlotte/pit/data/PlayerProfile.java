@@ -109,6 +109,16 @@ public class PlayerProfile {
         public PlayerProfile allow() {
             return this;
         }
+
+        @Override
+        public boolean isBot() {
+            return true;
+        }
+
+        @Override
+        public int getBounty() {
+            return 0;
+        }
     };
 
     //两张表
@@ -558,9 +568,9 @@ public class PlayerProfile {
         backup.setTimeStamp(System.currentTimeMillis());
 
         backup.save();
-        gcBackups(gcBackupIterators(), this, true);
-        //   gcBackups(invBackups,this,false);
-        // }
+//        gcBackups(gcBackupIterators(), this, true);
+//           gcBackups(invBackups,this,false);
+// }
 
         ThePit.getInstance()
                 .getMongoDB()
@@ -687,10 +697,15 @@ public class PlayerProfile {
     public String geLevelColor() {
         return LevelUtil.getLevelColor(this.getLevel());
     }
-
+    @JsonIgnore
+    UUID cachedUUID;
     @JsonIgnore
     public UUID getPlayerUuid() {
-        return UUID.fromString(this.uuid);
+        if(cachedUUID == null) {
+            UUID uuid1 = UUID.fromString(this.uuid);
+            cachedUUID = uuid1;
+        }
+        return cachedUUID;
     }
 
     @JsonIgnore

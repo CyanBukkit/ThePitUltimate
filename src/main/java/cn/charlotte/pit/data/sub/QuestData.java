@@ -1,5 +1,11 @@
 package cn.charlotte.pit.data.sub;
 
+import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.parm.listener.IAttackEntity;
+import cn.charlotte.pit.quest.AbstractQuest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.squareup.moshi.Json;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +14,8 @@ import java.util.Set;
  * @Date: 2021/1/19 16:18
  */
 public class QuestData {
+    @JsonIgnore
+    AbstractQuest handle;
     private String internalName;
     private int level;
     private long startTime;
@@ -15,7 +23,17 @@ public class QuestData {
     private int current;
     private int total;
     private Set<String> killed;
-
+    @JsonIgnore
+    public AbstractQuest getHandle(){
+        if(handle == null){
+            for (AbstractQuest quest : ThePit.getInstance().getQuestFactory().getQuests()) {
+                if(quest.getQuestInternalName().equals(internalName)){
+                    this.handle =quest;
+                }
+            }
+        }
+        return handle;
+    }
     public QuestData() {
         this.killed = new HashSet<>();
     }
