@@ -4,19 +4,21 @@
 
 package net.jitse.npclib.listeners;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.proto.Reflection;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.events.NPCInteractEvent;
 import net.jitse.npclib.internal.NPCBase;
 import net.jitse.npclib.internal.NPCManager;
+import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import xyz.refinedev.spigot.CarbonSpigot;
+import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,12 +43,17 @@ public class PacketListener {
 
     public void start(NPCLib instance) {
         this.plugin = instance.getPlugin();
-
-        ProtocolLibrary.getProtocolManager()
-                .addPacketListener(new PacketAdapter(instance.getPlugin(), PacketType.Play.Client.USE_ENTITY) {
+        CarbonSpigot.getPacketAPI().registerPacketHandler(ThePit.getInstance(), new PacketHandler() {
                     @Override
-                    public void onPacketReceiving(PacketEvent event) {
-                        handleInteractPacket(event.getPlayer(), event.getPacket().getHandle());
+                    public void handleReceivedPacket(PlayerConnection playerConnection, Packet<?> packet) {
+                        if (packet instanceof PacketPlayInUseEntity) {
+                            handleInteractPacket(playerConnection.getPlayer(), packet);
+                        }
+                    }
+
+                    @Override
+                    public void handleSentPacket(PlayerConnection playerConnection, Packet<?> packet) {
+
                     }
                 });
     }

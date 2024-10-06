@@ -1,7 +1,7 @@
 package cn.charlotte.pit.util.hologram.packet
 
-import cn.charlotte.pit.util.hologram.packet.type.WrapperPlayServerEntityTeleport
 import net.minecraft.server.v1_8_R3.EntityArmorStand
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity
@@ -18,19 +18,7 @@ object ArmorStandHelper {
 
     @JvmStatic
     fun applyLocation(location: Location, armorStand: PacketArmorStand) {
-        armorStand.location = location
-        val entity = armorStand.entity() as CraftEntity
-        entity.teleport(location)
-        val entityTeleport = WrapperPlayServerEntityTeleport()
-        entityTeleport.entityID = entity.entityId
-        entityTeleport.x = location.x
-        entityTeleport.y = location.y
-        entityTeleport.z = location.z
-        entityTeleport.yaw = location.yaw
-        entityTeleport.pitch = location.pitch
-        armorStand.viewing().forEach {
-            entityTeleport.sendPacket(it)
-        }
+        armorStand.move(location,true)
     }
     //傻逼幻梦。
     @JvmStatic

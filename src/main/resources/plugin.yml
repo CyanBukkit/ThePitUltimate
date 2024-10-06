@@ -6,5 +6,4 @@ authors: [ EmptyIrony,huanmeng_qwq,Araykal,KleeLoveLife ]
 api-version: 1.8
 main: cn.charlotte.pit.ThePit
 load: POSTWORLD
-depend: [ ProtocolLib ]
-softdepend: [ WorldEdit, FastAsyncWorldEdit, PlayerPoints, LuckPerms ]
+softdepend: [ ProtocolLib, WorldEdit, FastAsyncWorldEdit, PlayerPoints, LuckPerms ]

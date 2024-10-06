@@ -120,7 +120,7 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
 
     override fun move(loc: Location) {
         hologram.location(loc)
-        this.loc = loc
+        this.loc = loc.clone();
     }
 
     override fun isTouchable(): Boolean {

@@ -824,7 +824,8 @@ public class CombatListener implements Listener {
                     AbstractPerk perk = (AbstractPerk) ins;
                     int perkPlayerLevel = perk.getPlayerLevel(assistPlayer);
                     if (perkPlayerLevel != -1) {
-                        ins.handlePlayerAssist(perkPlayerLevel, assistPlayer, player, player.getLastDamage(), player.getLastDamageCause().getFinalDamage(), coinsAtomic, expAtomic);
+                        EntityDamageEvent lastDamageCause = player.getLastDamageCause();
+                        ins.handlePlayerAssist(perkPlayerLevel, assistPlayer, player, player.getLastDamage(), lastDamageCause.getFinalDamage(), coinsAtomic, expAtomic);
                     }
                 }
                 double percentage = data.getDamage() / totalDamage; //(0.0 ~ 1.0)

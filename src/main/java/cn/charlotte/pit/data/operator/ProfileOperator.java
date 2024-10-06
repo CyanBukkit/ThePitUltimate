@@ -200,6 +200,9 @@ public class ProfileOperator {
     }
     public void randomGC(){
         Collection<PackedOperator> values = operators.values();
+        if(values.size() < 2){
+            return;
+        }
         int randomNum = ThreadLocalRandom.current().nextInt(values.size() - 2) + 1;
 
         Iterator<PackedOperator> iterator = values.iterator();
