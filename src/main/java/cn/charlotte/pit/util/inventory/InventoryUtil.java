@@ -273,22 +273,25 @@ public class InventoryUtil {
         PlayerInv inv = new PlayerInv();
 
         String[] data = in.split("\\|");
-        ItemStack[] armor = new ItemStack[data[0].split(";").length];
+        String[] split = data[0].split(";");
+        ItemStack[] armor = new ItemStack[split.length];
 
-        for (int i = 0; i < data[0].split(";").length; ++i) {
-            armor[i] = deserializeItemStack(data[0].split(";")[i]);
+        for (int i = 0; i < split.length; ++i) {
+            armor[i] = deserializeItemStack(split[i]);
         }
 
         inv.setArmorContents(armor);
-        ItemStack[] contents = new ItemStack[data[1].split(";").length];
+        String[] split1 = data[1].split(";");
+        ItemStack[] contents = new ItemStack[split1.length];
 
-        for (String s : data[1].split(";")) {
-            int slot = Integer.parseInt(s.split("#")[0]);
+        for (String s : split1) {
+            String[] split2 = s.split("#");
+            int slot = Integer.parseInt(split2[0]);
 
-            if (s.split("#").length == 1) {
+            if (split2.length == 1) {
                 contents[slot] = null;
             } else {
-                contents[slot] = deserializeItemStack(s.split("#")[1]);
+                contents[slot] = deserializeItemStack(split2[1]);
             }
         }
 
