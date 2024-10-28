@@ -167,7 +167,7 @@ public abstract class IMythicItem extends AbstractPitItem {
                     lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &7| &bNyacho @ 2022 - Future");
                 }
             } else {
-                lore.add("&bNyacho @ 2022 - Future");
+                lore.add("&bwwwNyacho @ 2022 - Future");
             }
 
             if (genesisFound) {

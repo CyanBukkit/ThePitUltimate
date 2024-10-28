@@ -68,6 +68,7 @@ public class PitCommand {
     private final DecimalFormat numFormat = new DecimalFormat("0.00");
     private final Map<UUID, Cooldown> COOLDOWN_SHOW = new HashMap<>();
 
+    private final List<String> DONT_NO_VIEW = List.of("yizhimeng728");
     @Command(names = {"option", "options", "opt", "setting", "settings"})
     public void openOption(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -101,6 +102,9 @@ public class PitCommand {
                         .namedOperator(id).profile();
                 if (targetProfile == null) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."));
+                    return;
+                }
+                if (DONT_NO_VIEW.contains(targetProfile.getPlayerName())){
                     return;
                 }
                 Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> new StatusViewerMenu(targetProfile).openMenu(player));

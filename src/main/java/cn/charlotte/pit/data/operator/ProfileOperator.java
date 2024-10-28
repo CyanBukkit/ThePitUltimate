@@ -199,6 +199,9 @@ public class ProfileOperator {
 
     }
     public void randomGC(){
+        if (Bukkit.getOnlinePlayers().size() <= 2){
+            return;
+        }
         Collection<PackedOperator> values = operators.values();
         if(values.size() < 2){
             return;
