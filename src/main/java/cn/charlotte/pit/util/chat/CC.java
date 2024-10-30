@@ -3,6 +3,7 @@ package cn.charlotte.pit.util.chat;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerOption;
+import cn.charlotte.pit.util.FuncsKt;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -233,7 +234,9 @@ public class CC {
     public static void boardCast(MessageType type, String text) {
         Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                send(type,player,text);
+                if (!FuncsKt.isSpecial(player)) {
+                    send(type, player, text);
+                }
             }
         });
     }

@@ -638,9 +638,11 @@ public class EnchantButton extends Button {
                     if(menu.getAnimationData().isFinished()) {
                         this.cancel();
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
-                                    .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
-                            p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+                            if (!FuncsKt.isSpecial(player)) {
+                                p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
+                                        .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
+                                p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+                            }
                         }
                     } else if(cooldown.hasExpired()){
                         this.cancel();

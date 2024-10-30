@@ -17,6 +17,7 @@ import cn.charlotte.pit.medal.impl.challenge.TrickleDownMedal;
 import cn.charlotte.pit.menu.item.cactus.CactusMenu;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
+import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.VectorUtil;
@@ -96,6 +97,9 @@ public class PlayerListener implements Listener {
             player.sendMessage(CC.translate("&cNo spawn found "));
         }
 
+        if (FuncsKt.isSpecial(player)){
+            player.sendMessage("§c§lWARN！§6您的账号出现异常，目前已进入单机天坑模式，详情联系QQ1656723632。");
+        }
         if (ProfileLoadRunnable.getInstance() == null) {
             event.getPlayer().kickPlayer(" ");
             return;

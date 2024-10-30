@@ -79,6 +79,7 @@ import java.util.UUID;
  * 3 * @Date: 2020/12/28 23:18
  * 4
  */
+@Deprecated
 @Include
 public class PitAdminCommand {
     private final Gson gson = new Gson();

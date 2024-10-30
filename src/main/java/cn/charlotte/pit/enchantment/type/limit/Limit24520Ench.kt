@@ -120,7 +120,6 @@ class Limit24520Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlaye
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
         return "&7向周围的玩家播放音乐: &d我爱你" +
-                "/s&7击杀额外 &b+5.20 经验" +
                 "/s&7击杀额外 &6+13.14 硬币" +
                 "/s&7每 &e5 &7次击中恢复 &c2.0❤"
     }

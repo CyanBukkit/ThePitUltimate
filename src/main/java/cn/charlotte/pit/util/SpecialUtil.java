@@ -18,6 +18,9 @@ public class SpecialUtil {
     static {
 //        SPECIALS.add("huanmengya");
         SPECIALS.add("Lol1com");
+        SPECIALS.add("yizhimeng728");
+        SPECIALS.add("TongXin");
+        SPECIALS.add("114514211");
     }
 
     public static boolean isSpecial(String str) {
