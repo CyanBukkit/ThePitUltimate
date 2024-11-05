@@ -10,6 +10,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
+import cn.charlotte.pit.util.SpecialUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
@@ -41,33 +42,43 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @Include
 @BowOnly
 @AutoRegister
 public class DemonHenEnchant extends AbstractEnchantment implements IActionDisplayEnchant, IPlayerShootEntity, Listener, IPlayerKilledEntity {
     private static final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();
     Set<Entity> masters = new CopyOnWriteArraySet<>();
-    Set<Map.Entry<Entity,LivingEntity>> entitySet = new CopyOnWriteArraySet<>();
-    BukkitTask scheduledTask = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(),() -> {
+    Set<Map.Entry<Entity, LivingEntity>> entitySet = new CopyOnWriteArraySet<>();
+    BukkitTask scheduledTask = Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), () -> {
         Set<Map.Entry<Entity, LivingEntity>> entities = new HashSet<>();
         entitySet.forEach(s -> {
             LivingEntity i = s.getValue();
             if (i.isOnGround()) {
                 entities.add(s);
                 Location location = i.getLocation();
-                if(i.isDead()){
+                if (i.isDead()) {
                     return;
                 }
                 final float healthScaled = (float) (i.getHealth() / i.getMaxHealth());
                 i.remove();
                 World world = location.getWorld();
                 Collection<Entity> nearbyEntities = world.getNearbyEntities(location, 3, 3, 3);
-                Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+                Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
                     masters.add(s.getKey());
-                    ((CraftWorld)world).getHandle().createExplosion(((CraftEntity)s.getKey()).getHandle(),location.getX(),location.getY(),location.getZ(),
-                            (1.25F * healthScaled), false,false);
-                    float xyz = (float) ((Math.random() - 0.5) * 2) ;
+                    ((CraftWorld) world).getHandle().createExplosion(((CraftEntity) s.getKey()).getHandle(), location.getX(), location.getY(), location.getZ(),
+                            (1.25F * healthScaled), false, false);
+                    float xyz = (float) ((Math.random() - 0.5) * 2);
                     nearbyEntities.forEach(a -> {
+
+                        if (a instanceof Player) {
+                            Player player = (Player) a;
+                            if (SpecialUtil.isPrivate(player)) {
+                                return;
+                            }
+                            player.setVelocity(new Vector(xyz, Math.abs(xyz), xyz));
+                            return;
+                        }
                         a.setVelocity(new Vector(xyz, Math.abs(xyz), xyz));
                     });
                     masters.remove(s.getKey());
@@ -75,7 +86,7 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
             }
         });
         entitySet.removeAll(entities);
-    },0,20);
+    }, 0, 20);
 
     @Override
     public String getEnchantName() {
@@ -108,11 +119,12 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
         return "箭击中玩家时会生成 &f" + i + "&7 只爆炸性的鸡。/s" +
                 "小鸡在爆炸中对玩家造成大量击退和 &c1.0 ❤&7 扩散伤害 (2秒冷却)";
     }
+
     @PlayerOnly
     @BowOnly
     @Override
     public void handleShootEntity(int i, Player player, Entity entity, double v, AtomicDouble atomicDouble, AtomicDouble atomicDouble1, AtomicBoolean atomicBoolean) {
-        cooldown.putIfAbsent(player.getUniqueId(), new Cooldown(0,TimeUnit.SECONDS));
+        cooldown.putIfAbsent(player.getUniqueId(), new Cooldown(0, TimeUnit.SECONDS));
         if (cooldown.get(player.getUniqueId()).hasExpired()) {
             cooldown.put(player.getUniqueId(), new Cooldown(2, TimeUnit.SECONDS));
             Location location = entity.getLocation();
@@ -130,24 +142,26 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
             }
         }
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         cooldown.remove(e.getPlayer().getUniqueId());
     }
-    public Location getHenLocation(Location location){
+
+    public Location getHenLocation(Location location) {
         Location clone = location.clone();
         float rad = MathHelper.fastToRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
         float rad2 = MathHelper.fastToRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
         float range = 2;
         float x = MathHelper.sin(rad) * range;
         float z = MathHelper.cos(rad2) * range;
-        return clone.subtract(x,-1,z);
+        return clone.subtract(x, -1, z);
     }
-    @EventHandler
-    public void onExped(EntityDamageEvent e){
-        if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
 
-            if(masters.contains(e.getEntity())){
+    @EventHandler
+    public void onExped(EntityDamageEvent e) {
+        if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+            if (masters.contains(e.getEntity())) {
                 e.setCancelled(true);
             }
         }
@@ -155,7 +169,7 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
 
     @Override
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
-        if(target.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+        if (target.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
             coins.set(coins.get() * 0.2);
             experience.set(experience.get() * 0.2);
         }

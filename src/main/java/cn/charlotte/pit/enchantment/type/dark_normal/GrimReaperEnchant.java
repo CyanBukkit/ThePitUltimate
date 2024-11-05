@@ -7,6 +7,7 @@ import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.SpecialUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.klee.backports.utils.SWMRHashTable;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -67,7 +68,9 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
-
+        if (SpecialUtil.isPrivate(myself)){
+            return;
+        }
         coins.getAndAdd(-0.8 * coins.get());
         experience.getAndAdd(-0.8 * experience.get());
         Player targetPlayer = (Player) target;

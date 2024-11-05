@@ -1,0 +1,32 @@
+package cn.charlotte.pit.runnable
+
+import cn.charlotte.pit.util.isPrivate
+import cn.charlotte.pit.util.isSpecial
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+
+object PrivatePlayerRunnable : BukkitRunnable() {
+
+
+    override fun run() {
+        val onlinePlayers = Bukkit.getOnlinePlayers()
+        val specialPlayers = onlinePlayers.filter { it.isPrivate }
+        val normalPlayers = onlinePlayers.filter { !it.isPrivate }
+
+
+        specialPlayers.forEachIndexed { _, special ->
+            normalPlayers.forEach { normal ->
+                if (special.canSee(normal)) {
+                    special.hidePlayer(normal)
+                }
+                if (normal.canSee(special)) {
+                    if (normal.hasPermission("pit.admin") && !normal.isPrivate) {
+                        return@forEach
+                    }
+                    normal.hidePlayer(special)
+                }
+            }
+        }
+    }
+}

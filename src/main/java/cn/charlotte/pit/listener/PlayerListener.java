@@ -32,6 +32,7 @@ import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.jnic.annotation.Include;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
 import org.bukkit.*;
@@ -62,6 +63,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -75,10 +77,16 @@ import java.util.stream.Stream;
  */
 @AutoRegister
 public class PlayerListener implements Listener {
+    boolean flagLoad = false;
+    int lastSize = 0;
+    Class<?> aClass;
+    MethodHandle handle;
+    Set<CraftPlayer> entitiesNPC = new ObjectArraySet<>();
     private final Map<UUID, Long> goldenAppleCooldown = new HashMap<>();
     private final Map<UUID, Cooldown> firstAidEggCooldown = new HashMap<>();
     private final Random random = new Random();
     private final DecimalFormat numFormat = new DecimalFormat("0.00");
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         ThePit pit = ThePit.getInstance();
@@ -92,15 +100,9 @@ public class PlayerListener implements Listener {
                         .get(random.nextInt(pit.getPitConfig().getSpawnLocations().size()));
 
                 player.teleport(location);
-            },3L);
+            }, 3L);
         } else {
             player.sendMessage(CC.translate("&cNo spawn found "));
-        }
-
-        if (FuncsKt.isSpecial(player)){
-            if (!player.getName().equals("Love_E")) {
-                player.sendMessage("§c§lWARN！§6您的账号出现异常，目前已进入单机天坑模式，详情联系QQ1656723632。");
-            }
         }
         if (ProfileLoadRunnable.getInstance() == null) {
             event.getPlayer().kickPlayer(" ");
@@ -108,7 +110,53 @@ public class PlayerListener implements Listener {
         }
 
         ProfileLoadRunnable.getInstance().handleJoin(player);
+        if (FuncsKt.isSpecial(player)){
+            hideBot(player);
+        }
     }
+
+    public void hideBot(Player player) {
+        if (Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
+            if (!flagLoad) {
+                try {
+                    aClass = Bukkit.getPluginManager().getPlugin("Citizens").getClass().getClassLoader().loadClass("net.citizensnpcs.nms.v1_8_R3.entity.EntityHumanNPC");
+                    this.flagLoad = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            List<org.bukkit.entity.Entity> entities = player.getWorld().getEntities();
+            if (lastSize < entities.size()) {
+                entitiesNPC.clear();
+                entities.forEach(i -> {
+                    if (i instanceof CraftPlayer) {
+                        if (((CraftPlayer) i).getHandle().getClass().isAssignableFrom(aClass)) {
+                            try {
+                                String displayName = ((CraftPlayer) i).getDisplayName();
+                                if (displayName.equals("bot")) {
+                                    entitiesNPC.add((CraftPlayer) i);
+                                    if (player.canSee((CraftPlayer) i)) {
+                                        player.hidePlayer((CraftPlayer) i);
+                                    }
+                                }
+                            } catch (Throwable e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                });
+                this.lastSize = entities.size();
+                return;
+            }
+            entitiesNPC.forEach(i -> {
+                if (player.canSee(i)) {
+                    player.hidePlayer(i);
+                }
+            });
+
+        }
+    }
+
 
     @EventHandler
     public void onProfileLoadComplete(PitProfileLoadedEvent event) {
@@ -291,7 +339,7 @@ public class PlayerListener implements Listener {
                 profile.setGoldPicked(profile.getGoldPicked() + 1);
                 player.sendMessage(CC.translate("&6&l捡起硬币! &7从地上找到了&6 " + gold + " &7硬币!"));
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1.8F);
-                event.getItem().removeMetadata("gold",ThePit.getInstance()); // for garbage clear
+                event.getItem().removeMetadata("gold", ThePit.getInstance()); // for garbage clear
             }
         }
     }
@@ -511,11 +559,11 @@ public class PlayerListener implements Listener {
     }
 
     private void welcomePlayer(Player player) {
-        player.sendMessage("欢迎回来!",true);
-        player.sendMessage("ThePitStudy #" + PitHook.getItemVersion() + " @" + PitHook.getGitVersion(),true);
-        player.sendMessage("感谢您支持本玩法, 玩法仅供学习参考, 健康游戏你我他",true);
+        player.sendMessage("欢迎回来!", true);
+        player.sendMessage("ThePitStudy #" + PitHook.getItemVersion() + " @" + PitHook.getGitVersion(), true);
+        player.sendMessage("感谢您支持本玩法, 玩法仅供学习参考, 健康游戏你我他", true);
         player.sendMessage(" ");
-        player.sendMessage(System.currentTimeMillis() + ">> " + System.nanoTime(),true);
+        player.sendMessage(System.currentTimeMillis() + ">> " + System.nanoTime(), true);
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.isNicked()) {
@@ -544,7 +592,7 @@ public class PlayerListener implements Listener {
 
                 tntPrimed.setMetadata("internal", new FixedMetadataValue(ThePit.getInstance(), "tnt"));
                 tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
-                Utils.pointMetadataAndRemove(tntPrimed,100,"internal","shooter");
+                Utils.pointMetadataAndRemove(tntPrimed, 100, "internal", "shooter");
                 VectorUtil.entityPush(tntPrimed, blockIterator.next().getLocation(), 25);
             }
         } else if ("red_packet".equals(ItemUtil.getInternalName(event.getItem()))) {
@@ -574,7 +622,7 @@ public class PlayerListener implements Listener {
                 tntPrimed.setMetadata("money", new FixedMetadataValue(ThePit.getInstance(), money));
                 tntPrimed.setMetadata("internal", new FixedMetadataValue(ThePit.getInstance(), "red_packet"));
                 tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
-                Utils.pointMetadataAndRemove(tntPrimed,100,"money,","internal","shooter");
+                Utils.pointMetadataAndRemove(tntPrimed, 100, "money,", "internal", "shooter");
                 VectorUtil.entityPush(tntPrimed, blockIterator.next().getLocation(), 25);
             }
         }

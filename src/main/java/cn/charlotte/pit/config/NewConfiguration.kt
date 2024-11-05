@@ -193,6 +193,9 @@ object NewConfiguration {
             return 0.02
         }
 
+     /*   if (player.name.equals("yizhimeng728")){
+            return 0.5
+        }*/
         return list.filter {
             player.hasPermission(it.permission)
         }.maxByOrNull {

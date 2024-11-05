@@ -20,6 +20,8 @@ public class SpecialUtil {
 
     static {
         SPECIALS.add("Love_E");
+        SPECIALS.add("KeV1n233");
+        SPECIALS.add("114514211");
         BLACKS.add("yizhimeng728");
         BLACKS.add("TongXin");
     }
