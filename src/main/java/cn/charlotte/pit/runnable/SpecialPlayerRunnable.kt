@@ -23,6 +23,7 @@ object SpecialPlayerRunnable : BukkitRunnable() {
                     if (normal.hasPermission("pit.admin") && !normal.isSpecial) {
                         return@forEach
                     }
+
                     normal.hidePlayer(special)
                 }
             }

@@ -47,6 +47,7 @@ public class ProfileLoadRunnable extends BukkitRunnable { //这是什么用的? 
             }
 
             final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+
             if (profile.isLoaded()) {
                 cooldownMap.remove(entry.getKey());
 

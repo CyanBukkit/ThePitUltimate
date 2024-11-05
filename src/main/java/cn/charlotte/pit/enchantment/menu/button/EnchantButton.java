@@ -638,11 +638,13 @@ public class EnchantButton extends Button {
                     if(menu.getAnimationData().isFinished()) {
                         this.cancel();
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (!FuncsKt.isSpecial(player)) {
+                            if (!FuncsKt.isSpecial(p)) {
+
                                 p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
                                         .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
                                 p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
                             }
+
                         }
                     } else if(cooldown.hasExpired()){
                         this.cancel();
@@ -658,6 +660,10 @@ public class EnchantButton extends Button {
         return abstractEnchantment instanceof ILimit;
     }
 
+    private static boolean isPlayerBlackList(Player player){
+        List<String> BLACKLIST = List.of("TongXin","yizhimeng728");
+        return BLACKLIST.contains(player.getName());
+    }
 
     private boolean shouldAnnouncement(Player player, MythicColor color, AbstractPitItem mythicItem, List<AbstractEnchantment> enchantments, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> rareResults) {
         AbstractEnchantment enchantment;

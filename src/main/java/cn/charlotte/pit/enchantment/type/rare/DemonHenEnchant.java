@@ -146,6 +146,7 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
     @EventHandler
     public void onExped(EntityDamageEvent e){
         if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
+
             if(masters.contains(e.getEntity())){
                 e.setCancelled(true);
             }

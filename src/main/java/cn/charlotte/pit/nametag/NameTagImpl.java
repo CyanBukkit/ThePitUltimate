@@ -6,6 +6,7 @@ import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.events.impl.major.HamburgerEvent;
 import cn.charlotte.pit.events.impl.major.RedVSBlueEvent;
 import cn.charlotte.pit.events.impl.major.SpireEvent;
+import cn.charlotte.pit.util.SpecialUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.nametag.BufferedNametag;
 import cn.charlotte.pit.util.nametag.NametagAdapter;
@@ -96,6 +97,10 @@ public class NameTagImpl implements NametagAdapter {
                     if (profile.getChosePerk().get(5).getPerkInternalName().equalsIgnoreCase("to_the_moon") && profile.getStreakKills() >= 100) {
                         displayName = CC.translate("&b&l月球之旅" + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
                     }
+                    if (SpecialUtil.isPrivate(profile)) {
+                        displayName = CC.translate("&b&lPRIVATE" + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
+                    }
+
                 }
             }
             StringBuilder suffix = new StringBuilder();
@@ -138,8 +143,8 @@ public class NameTagImpl implements NametagAdapter {
                     suffix.append(" ");
                 }
             }
-            if(displayName.length() > 16){
-                displayName = displayName.substring(0,15);
+            if (displayName.length() > 16) {
+                displayName = displayName.substring(0, 15);
 
             }
             tags.add(new BufferedNametag(

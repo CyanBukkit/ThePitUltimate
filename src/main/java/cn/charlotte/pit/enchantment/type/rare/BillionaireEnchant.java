@@ -14,6 +14,7 @@ import dev.jnic.annotation.Include;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**

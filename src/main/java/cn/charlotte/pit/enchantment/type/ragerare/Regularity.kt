@@ -8,6 +8,7 @@ import cn.charlotte.pit.parm.AutoRegister
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.cooldown.Cooldown
+import cn.charlotte.pit.util.isBlacks
 import dev.jnic.annotation.Include
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
@@ -61,10 +62,13 @@ class Regularity : AbstractEnchantment(), Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun damage(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
+
         if (attacker !is Player) return
 
         val victim = event.entity
         if (victim !is Player) return
+
+
 
 
         var level = -1
@@ -77,8 +81,12 @@ class Regularity : AbstractEnchantment(), Listener {
             }
         }
 
+
         if (level < 1) return
 
+        if (attacker.player.isBlacks){
+            level = 1;
+        }
         if (PlayerUtil.shouldIgnoreEnchant(attacker, victim)) {
             return
         }

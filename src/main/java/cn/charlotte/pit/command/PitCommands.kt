@@ -22,14 +22,11 @@ import cn.charlotte.pit.menu.trade.TradeMenu
 import cn.charlotte.pit.menu.viewer.StatusViewerMenu
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.sendMessage
-import cn.charlotte.pit.util.MythicUtil
-import cn.charlotte.pit.util.PlayerUtil
-import cn.charlotte.pit.util.Utils
+import cn.charlotte.pit.util.*
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.inventory.InventoryUtil
-import cn.charlotte.pit.util.isSpecial
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.level.LevelUtil
@@ -125,13 +122,14 @@ class PitCommands {
                 )
                 return
             }
-            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {        val lookupStrict = ThePit.getInstance().profileOperator.namedOperator(name)
-                ?: ThePit.getInstance().profileOperator.lookupOnline(name)
-                if(lookupStrict == null) {
+            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
+                val lookupStrict = ThePit.getInstance().profileOperator.namedOperator(name)
+                    ?: ThePit.getInstance().profileOperator.lookupOnline(name)
+                if (lookupStrict == null) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                     return@runTaskAsynchronously
                 }
-                    if (!player.hasPermission("pit.admin") || player.isSpecial) {
+                if (!player.hasPermission("pit.admin") || player.isSpecial || player.isBlacks) {
                     if (!name.equals(
                             player.name,
                             ignoreCase = true
@@ -198,10 +196,10 @@ class PitCommands {
             TextComponent(tag.toString())
         )
         var showPlayers = Bukkit.getOnlinePlayers()
-        if (player.isSpecial) {
+        if (player.isSpecial || player.isBlacks) {
             showPlayers = buildSet {
                 Bukkit.getOnlinePlayers().forEach {
-                    if (it.hasPermission("pit.admin") && !it.isSpecial) {
+                    if (it.hasPermission("pit.admin") && !it.isSpecial && !player.isBlacks) {
                         add(it)
                     }
                 }
@@ -222,8 +220,10 @@ class PitCommands {
         val now = System.currentTimeMillis()
         val date = profile.tradeLimit.lastRefresh
 
-        //获取今天的日期
-        val nowDay = dateFormat.format(now)
+        //获取
+        // 今天的日期
+        val
+                nowDay = dateFormat.format(now)
 
         //对比的时间
         val day = dateFormat.format(date)
@@ -248,6 +248,7 @@ class PitCommands {
                 return
             }
         }
+
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
         val targetProfile = PlayerProfile.getPlayerProfileByUuid(target.uniqueId)
         if (!profile.combatTimer.hasExpired()) {
@@ -678,7 +679,8 @@ class PitCommands {
     @Execute(name = "viewOffer")
     fun viewOffer(@Context player: Player, @Arg("target") target: Player) {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-        val targetProfile = ThePit.getInstance().profileOperator.ifPresentAndLoaded(target
+        val targetProfile = ThePit.getInstance().profileOperator.ifPresentAndLoaded(
+            target
         ) { operator: PackedOperator ->
             val targetProfile = operator.profile()
             if (player.isSpecial || target.isSpecial) {
@@ -739,8 +741,8 @@ class PitCommands {
 
     @Execute(name = "offer")
     fun offer(@Context player: Player, @Arg("target") targetPlayer: String, @Arg("price") price: String) {
-        if(!player.hasPermission("pit.admin")){
-            player.sendMessage(CC.translate("&c该指令已经弃用, 请使用 /trade"),true)
+        if (!player.hasPermission("pit.admin")) {
+            player.sendMessage(CC.translate("&c该指令已经弃用, 请使用 /trade"), true)
             return
         }
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
@@ -992,6 +994,23 @@ class PitCommands {
             .unsetForceCanTrade()
             .build()
         return "§a成功取消重命名!"
+    }
+
+    @Execute(name = "interpersonal")
+    @Permission("pit.interpersonal")
+    fun singleton(@Context player: Player) {
+        val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+
+        if (!profile.combatTimer.hasExpired()) {
+            player.sendMessage(CC.translate("&c你无法在战斗中使用此功能!"))
+            return
+        }
+
+        if (player.isPrivate) {
+            player.sendMessage(SpecialUtil.removePlayer(player))
+        } else {
+            player.sendMessage(SpecialUtil.addPlayer(player))
+        }
     }
 
     @Execute(name = "thepit")

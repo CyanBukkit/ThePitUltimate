@@ -134,6 +134,7 @@ object PitHook {
         SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
+        PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
     }
 
     private fun loadCommands() {

@@ -151,6 +151,15 @@ fun org.bukkit.inventory.ItemStack?.toMythicItemAsync(): cn.charlotte.pit.item.I
 
 val Player.isSpecial: Boolean
     get() = SpecialUtil.isSpecial(this)
-
 val PlayerProfile.isSpecial: Boolean
     get() = SpecialUtil.isSpecial(this)
+
+val Player.isPrivate : Boolean
+    get() = SpecialUtil.isPrivate(this)
+val PlayerProfile.isPrivate: Boolean
+    get() = SpecialUtil.isPrivate(this)
+val Player.isBlacks : Boolean
+    get() = SpecialUtil.isBlacks(this)
+
+val PlayerProfile.isBlacks: Boolean
+    get() = SpecialUtil.isBlacks(this)

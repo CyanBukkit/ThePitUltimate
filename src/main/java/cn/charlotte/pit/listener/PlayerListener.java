@@ -98,7 +98,9 @@ public class PlayerListener implements Listener {
         }
 
         if (FuncsKt.isSpecial(player)){
-            player.sendMessage("§c§lWARN！§6您的账号出现异常，目前已进入单机天坑模式，详情联系QQ1656723632。");
+            if (!player.getName().equals("Love_E")) {
+                player.sendMessage("§c§lWARN！§6您的账号出现异常，目前已进入单机天坑模式，详情联系QQ1656723632。");
+            }
         }
         if (ProfileLoadRunnable.getInstance() == null) {
             event.getPlayer().kickPlayer(" ");
