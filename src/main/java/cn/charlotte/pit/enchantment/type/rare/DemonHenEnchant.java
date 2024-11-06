@@ -70,10 +70,9 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
                             (1.25F * healthScaled), false, false);
                     float xyz = (float) ((Math.random() - 0.5) * 2);
                     nearbyEntities.forEach(a -> {
-
                         if (a instanceof Player) {
                             Player player = (Player) a;
-                            if (SpecialUtil.isPrivate(player)) {
+                            if (SpecialUtil.isPrivate(player) || SpecialUtil.isSpecial(player)) {
                                 return;
                             }
                             player.setVelocity(new Vector(xyz, Math.abs(xyz), xyz));
@@ -161,6 +160,12 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
     @EventHandler
     public void onExped(EntityDamageEvent e) {
         if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+            if (e.getEntity() instanceof Player){
+                Player player = (Player) e.getEntity();
+                if (SpecialUtil.isPrivate(player) || SpecialUtil.isSpecial(player)){
+                    e.setDamage(0);
+                }
+            }
             if (masters.contains(e.getEntity())) {
                 e.setCancelled(true);
             }

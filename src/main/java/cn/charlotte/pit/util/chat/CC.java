@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerOption;
 import cn.charlotte.pit.util.FuncsKt;
+import cn.charlotte.pit.util.SpecialUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -203,7 +204,9 @@ public class CC {
     public static void boardCast0(String text) {
         String translate = CC.translate(text);
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!FuncsKt.isSpecial(player)) {
                 player.sendMessage(translate);
+            }
             }
     }
 
@@ -225,7 +228,7 @@ public class CC {
         if (type.equals(MessageType.COMBAT) && !option.isCombatNotify()) {
             return false;
         }
-        if (type.equals(MessageType.CHAT) && !option.isChatMsg()) {
+        if (type.equals(MessageType.CHAT) && (!option.isChatMsg() || SpecialUtil.isSpecial(player))) {
             return false;
         }
         return !type.equals(MessageType.MISC) || option.isOtherMsg();

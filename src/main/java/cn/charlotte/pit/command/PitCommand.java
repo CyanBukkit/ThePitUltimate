@@ -20,6 +20,7 @@ import cn.charlotte.pit.menu.trade.TradeManager;
 import cn.charlotte.pit.menu.trade.TradeMenu;
 import cn.charlotte.pit.menu.viewer.StatusViewerMenu;
 import cn.charlotte.pit.perk.AbstractPerk;
+import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
@@ -98,7 +99,7 @@ public class PitCommand {
                 return;
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
-                PlayerProfile targetProfile =       ThePit.getInstance().getProfileOperator()
+                PlayerProfile targetProfile = ThePit.getInstance().getProfileOperator()
                         .namedOperator(id).profile();
                 if (targetProfile == null) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."));
@@ -141,6 +142,7 @@ public class PitCommand {
             player.sendMessage(CC.translate("&c请先手持要展示的物品!"));
             return;
         }
+
         if (player.getItemInHand().getItemMeta().getDisplayName() == null && !player.hasPermission("pit.admin")) {
             player.sendMessage(CC.translate("&c此物品无法被用于展示!"));
             return;
@@ -510,7 +512,7 @@ public class PitCommand {
     @Command(names = "viewOffer")
     public void viewOffer(Player player, @Parameter(name = "玩家") Player target) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        PlayerProfile targetProfile = ThePit.getInstance().getProfileOperator().getOrLoadOperatorOffline(target.getUniqueId(),target.getName()).profile();
+        PlayerProfile targetProfile = ThePit.getInstance().getProfileOperator().getOrLoadOperatorOffline(target.getUniqueId(), target.getName()).profile();
         if (targetProfile.getOfferData().getBuyer() == null || !targetProfile.getOfferData().getBuyer().equals(player.getUniqueId())) {
             player.sendMessage(CC.translate("&c你没有来自此玩家的交易报价!"));
             return;
@@ -585,73 +587,73 @@ public class PitCommand {
         }
         Player target = Bukkit.getPlayer(targetPlayer);
         ThePit.getInstance().getProfileOperator().operatorStrict(target).ifPresentOrElse(operator -> {
-        PlayerProfile targetProfile = operator.profile();
-        if (player.getUniqueId().equals(target.getUniqueId())) {
-            player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"));
-            return;
-        }
-        if (!profile.getCombatTimer().hasExpired()) {
-            player.sendMessage(CC.translate("&c你无法在战斗中使用此功能!"));
-            return;
-        }
+            PlayerProfile targetProfile = operator.profile();
+            if (player.getUniqueId().equals(target.getUniqueId())) {
+                player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"));
+                return;
+            }
+            if (!profile.getCombatTimer().hasExpired()) {
+                player.sendMessage(CC.translate("&c你无法在战斗中使用此功能!"));
+                return;
+            }
 
-        // 当前时间
-        long now = System.currentTimeMillis();
-        long date = profile.getTradeLimit().getLastRefresh();
-        //获取今天的日期
-        String nowDay = dateFormat.format(now);
-        //对比的时间
-        String day = dateFormat.format(date);
+            // 当前时间
+            long now = System.currentTimeMillis();
+            long date = profile.getTradeLimit().getLastRefresh();
+            //获取今天的日期
+            String nowDay = dateFormat.format(now);
+            //对比的时间
+            String day = dateFormat.format(date);
 
-        //daily reset
-        if (!day.equals(nowDay) && Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 4) {
-            profile.getTradeLimit().setLastRefresh(now);
-            profile.getTradeLimit().setAmount(0);
-            profile.getTradeLimit().setTimes(0);
-        }
+            //daily reset
+            if (!day.equals(nowDay) && Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 4) {
+                profile.getTradeLimit().setLastRefresh(now);
+                profile.getTradeLimit().setAmount(0);
+                profile.getTradeLimit().setTimes(0);
+            }
 
-        if (profile.getTradeLimit().getTimes() >= 25) {
-            player.sendMessage(CC.translate("&c你今天的交易次数已经达到上限! (25/25)"));
-            player.sendMessage(CC.translate("&c使用 &e/tradeLimits &c查看你的今日交易上限情况."));
-            return;
-        }
+            if (profile.getTradeLimit().getTimes() >= 25) {
+                player.sendMessage(CC.translate("&c你今天的交易次数已经达到上限! (25/25)"));
+                player.sendMessage(CC.translate("&c使用 &e/tradeLimits &c查看你的今日交易上限情况."));
+                return;
+            }
 
-        if (profile.getTradeLimit().getAmount() + Integer.parseInt(price) >= 50000) {
-            player.sendMessage(CC.translate("&c你的开价加上今日已交易量已超过交易上限,因此你无法发起此交易报价."));
-            player.sendMessage(CC.translate("&c使用 &e/tradeLimits &c查看你的今日交易上限情况."));
-            return;
-        }
+            if (profile.getTradeLimit().getAmount() + Integer.parseInt(price) >= 50000) {
+                player.sendMessage(CC.translate("&c你的开价加上今日已交易量已超过交易上限,因此你无法发起此交易报价."));
+                player.sendMessage(CC.translate("&c使用 &e/tradeLimits &c查看你的今日交易上限情况."));
+                return;
+            }
 
-        if (!player.getName().equalsIgnoreCase(player.getDisplayName())) {
-            player.sendMessage(CC.translate("&c你无法在匿名模式下使用交易功能!"));
-            return;
-        }
+            if (!player.getName().equalsIgnoreCase(player.getDisplayName())) {
+                player.sendMessage(CC.translate("&c你无法在匿名模式下使用交易功能!"));
+                return;
+            }
 
-        if (profile.getLevel() < 60) {
-            player.sendMessage(CC.translate("&c&l等级不足! &7此指令在 " + LevelUtil.getLevelTag(profile.getPrestige(), 60) + " &7时解锁."));
-            return;
-        }
+            if (profile.getLevel() < 60) {
+                player.sendMessage(CC.translate("&c&l等级不足! &7此指令在 " + LevelUtil.getLevelTag(profile.getPrestige(), 60) + " &7时解锁."));
+                return;
+            }
 
-        if (player.getItemInHand() == null || player.getItemInHand().getType() == Material.AIR) {
-            player.sendMessage(CC.translate("&c请手持你要出售的物品再设置出售对象与价格!"));
-            return;
-        }
+            if (player.getItemInHand() == null || player.getItemInHand().getType() == Material.AIR) {
+                player.sendMessage(CC.translate("&c请手持你要出售的物品再设置出售对象与价格!"));
+                return;
+            }
 
-        if (!ItemUtil.canTrade(player.getItemInHand())) {
-            player.sendMessage(CC.translate("&c此物品无法用于交易!"));
-            return;
-        }
+            if (!ItemUtil.canTrade(player.getItemInHand())) {
+                player.sendMessage(CC.translate("&c此物品无法用于交易!"));
+                return;
+            }
 
-        //todo: create offer
-        profile.getOfferData().createOffer(target.getUniqueId(), player.getItemInHand(), Integer.parseInt(price));
-        player.setItemInHand(new ItemStack(Material.AIR));
-        if (!targetProfile.getPlayerOption().isTradeNotify() && !player.hasPermission(PlayerUtil.getStaffPermission())) {
-            player.sendMessage(CC.translate("&c对方在游戏选项之后中设置了不接受交易请求,因此无法查看你的请求提示."));
-            player.sendMessage(CC.translate("&c但对方仍可以通过使用 &e/viewOffer " + player.getName() + " &c以同意你的请求."));
-        } else {
-            player.sendMessage(CC.translate("&e&l交易报价发送! &7成功向 " + LevelUtil.getLevelTag(targetProfile.getPrestige(), targetProfile.getLevel()) + " " + RankUtil.getPlayerColoredName(target.getUniqueId()) + " &7发送了交易报价!"));
-            target.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&e&l交易报价! " + LevelUtil.getLevelTag(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerColoredName(player.getUniqueId()) + " &7向你发送了交易报价,请")).append(new ChatComponentBuilder(CC.translate(" &e点击这里")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&6点击以接受")).create())).setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/viewOffer " + player.getName())).create()).append(CC.translate(" &r&7以查看此交易报价.")).create());
-        }
+            //todo: create offer
+            profile.getOfferData().createOffer(target.getUniqueId(), player.getItemInHand(), Integer.parseInt(price));
+            player.setItemInHand(new ItemStack(Material.AIR));
+            if (!targetProfile.getPlayerOption().isTradeNotify() && !player.hasPermission(PlayerUtil.getStaffPermission())) {
+                player.sendMessage(CC.translate("&c对方在游戏选项之后中设置了不接受交易请求,因此无法查看你的请求提示."));
+                player.sendMessage(CC.translate("&c但对方仍可以通过使用 &e/viewOffer " + player.getName() + " &c以同意你的请求."));
+            } else {
+                player.sendMessage(CC.translate("&e&l交易报价发送! &7成功向 " + LevelUtil.getLevelTag(targetProfile.getPrestige(), targetProfile.getLevel()) + " " + RankUtil.getPlayerColoredName(target.getUniqueId()) + " &7发送了交易报价!"));
+                target.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&e&l交易报价! " + LevelUtil.getLevelTag(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerColoredName(player.getUniqueId()) + " &7向你发送了交易报价,请")).append(new ChatComponentBuilder(CC.translate(" &e点击这里")).setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentBuilder(CC.translate("&6点击以接受")).create())).setCurrentClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/viewOffer " + player.getName())).create()).append(CC.translate(" &r&7以查看此交易报价.")).create());
+            }
         }, () -> {
             player.sendMessage(CC.translate("&c您选择的玩家的档案正在加载中!"));
 

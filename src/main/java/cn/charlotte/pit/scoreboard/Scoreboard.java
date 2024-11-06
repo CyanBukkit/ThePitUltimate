@@ -12,6 +12,7 @@ import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.events.impl.major.RagePitEvent;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak;
+import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
@@ -56,16 +57,49 @@ public class Scoreboard implements AssembleAdapter {
                     "&8&l黑&6&l神话 &0: &9&l宝马",
                     "&8&l黑神话 &0: &f&l宝马",
                     "&8&l黑&6&l神话 &0: &9&l宝马");
+    private final List<String> blacksAnimationTitle =
+            Arrays.asList("&d&l小鸟乱斗",
+                    "&5&l小&d&l鸟乱斗",
+                    "&f&l小&5&l鸟&d&l乱斗",
+                    "&f&小鸟&5&l乱&d&斗",
+                    "&f&l小鸟乱&5&l斗",
+                    "&f&l小鸟乱斗",
+                    "&d&l小鸟乱斗",
+                    "&f&l小鸟乱斗",
+                    "&d&l小鸟乱斗",
+                    "&f&l小鸟乱斗",
+                    "&d&l小鸟乱斗",
+                    "&f&l小鸟乱斗",
+                    "&d&l小鸟乱斗",
+                    "&a&l小鸟乱斗",
+                    "&b&l小鸟乱斗",
+                    "&c&l小鸟乱斗",
+                    "&d&l小鸟乱斗",
+                    "&1&l小鸟乱斗",
+                    "&2&l小鸟乱斗",
+                    "&3&l小鸟乱斗",
+                    "&4&l小鸟乱斗",
+                    "&5&l小鸟乱斗",
+                    "&6&l小鸟乱斗",
+                    "&7&l小鸟乱斗",
+                    "&8&l小鸟乱斗",
+                    "&9&l小鸟乱斗");
 
     private long lastAnimationTime = 0;
     private int animationTick = 0;
 
     @Override
     public String getTitle(Player player) {
-        String text = animationTitle.get(animationTick);
+        List<String> title;
+        if (FuncsKt.isSpecial(player)){
+            title = blacksAnimationTitle;
+        }else {
+            title = animationTitle;
+        }
+        String text = title.get(animationTick);
         if (System.currentTimeMillis() - lastAnimationTime >= 250) {
             animationTick++;
-            if (animationTick + 1 >= animationTitle.size()) {
+            if (animationTick + 1 >= title.size()) {
                 animationTick = 0;
             }
             lastAnimationTime = System.currentTimeMillis();
@@ -274,6 +308,7 @@ public class Scoreboard implements AssembleAdapter {
         }
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
+        } else if (FuncsKt.isSpecial(player)) {
         } else {
             lines.add("&enyacho.cn");
         }

@@ -5,6 +5,7 @@ import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.parm.AutoRegister;
+import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
@@ -66,6 +67,9 @@ public class ChatListener implements Listener {
                     player.sendMessage(CC.translate("&c使用指令 &f/settings &c调整游戏选项."));
                 }
             }
+        }
+        if (FuncsKt.isSpecial(player)){
+            event.setCancelled(true);
         }
 
         profile.setLastActionTimestamp(System.currentTimeMillis());

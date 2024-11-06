@@ -129,7 +129,7 @@ class PitCommands {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                     return@runTaskAsynchronously
                 }
-                if (!player.hasPermission("pit.admin") || player.isSpecial || player.isBlacks) {
+                if (!player.hasPermission("pit.admin") || player.isSpecial) {
                     if (!name.equals(
                             player.name,
                             ignoreCase = true
@@ -196,10 +196,10 @@ class PitCommands {
             TextComponent(tag.toString())
         )
         var showPlayers = Bukkit.getOnlinePlayers()
-        if (player.isSpecial || player.isBlacks) {
+        if (player.isSpecial) {
             showPlayers = buildSet {
                 Bukkit.getOnlinePlayers().forEach {
-                    if (it.hasPermission("pit.admin") && !it.isSpecial && !player.isBlacks) {
+                    if (it.hasPermission("pit.admin") && !it.isSpecial ) {
                         add(it)
                     }
                 }
