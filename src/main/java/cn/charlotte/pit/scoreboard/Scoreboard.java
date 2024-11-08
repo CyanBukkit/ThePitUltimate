@@ -90,12 +90,12 @@ public class Scoreboard implements AssembleAdapter {
 
     @Override
     public String getTitle(Player player) {
-        List<String> title;
-        if (FuncsKt.isSpecial(player)){
+      List<String> title;
+     /*   if (FuncsKt.isSpecial(player)){
             title = blacksAnimationTitle;
-        }else {
+        }else {*/
             title = animationTitle;
-        }
+
         String text = title.get(animationTick);
         if (System.currentTimeMillis() - lastAnimationTime >= 250) {
             animationTick++;

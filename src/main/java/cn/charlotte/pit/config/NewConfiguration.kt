@@ -5,6 +5,8 @@ import cn.charlotte.pit.enchantment.type.rare.ThePunchEnchant
 import cn.charlotte.pit.item.MythicColor
 import cn.charlotte.pit.listener.CombatListener
 import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton
+import cn.charlotte.pit.util.PlusPlayer
+import cn.charlotte.pit.util.isPlusPlayer
 import cn.charlotte.pit.util.level.LevelUtil
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -193,9 +195,11 @@ object NewConfiguration {
             return 0.02
         }
 
-     /*   if (player.name.equals("yizhimeng728")){
-            return 0.5
-        }*/
+        if (PlusPlayer.on) {
+            if (player.isPlusPlayer) {
+                return PlusPlayer.probability
+            }
+        }
         return list.filter {
             player.hasPermission(it.permission)
         }.maxByOrNull {

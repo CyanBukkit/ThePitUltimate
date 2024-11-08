@@ -90,6 +90,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private static ThePit instance;
 
 
+
     private MongoDB mongoDB;
     private JedisPool jedis;
     private PitConfig pitConfig;

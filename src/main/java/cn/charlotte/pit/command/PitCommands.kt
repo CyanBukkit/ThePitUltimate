@@ -242,8 +242,8 @@ class PitCommands {
 
     @Execute(name = "trade")
     fun onRequest(@Context player: Player, @Arg("target") target: Player) {
-        if (player.uniqueId == target.uniqueId || target.isSpecial || player.isSpecial) {
-            if (!player.hasPermission("pit.admin") || player.isSpecial) {
+        if (player.uniqueId == target.uniqueId || target.isSpecial || player.isSpecial || target.isPlusPlayer || player.isPlusPlayer) {
+            if (!player.hasPermission("pit.admin")) {
                 player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
                 return
             }
@@ -275,7 +275,7 @@ class PitCommands {
             profile.tradeLimit.times = 0
         }
 
-        if (profile.tradeLimit.times >= 25) {
+        if (profile.tradeLimit.times >= 25 ) {
             player.sendMessage(CC.translate("&c你今天的交易次数已经达到上限! (25/25)"))
             player.sendMessage(CC.translate("&c使用 &e/tradeLimits &c查看你的今日交易上限情况."))
             return
@@ -1010,6 +1010,17 @@ class PitCommands {
             player.sendMessage(SpecialUtil.removePlayer(player))
         } else {
             player.sendMessage(SpecialUtil.addPlayer(player))
+        }
+    }
+    @Execute(name = "rareplus")
+    @Permission("pit.rareplus")
+    fun rareplus(@Context player: Player){
+        if (player.isPlusPlayer){
+            PlusPlayer.getPlusPlayer().remove(player.name)
+            player.sendMessage("§a附魔稀有概率已恢复正常。")
+        }else{
+            PlusPlayer.getPlusPlayer().add(player.name)
+            player.sendMessage("§a稀有附魔概率提升！")
         }
     }
 

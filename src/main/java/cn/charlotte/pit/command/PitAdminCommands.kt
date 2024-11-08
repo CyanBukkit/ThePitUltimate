@@ -14,6 +14,7 @@ import cn.charlotte.pit.medal.impl.challenge.hidden.KaboomMedal
 import cn.charlotte.pit.runnable.RebootRunnable.RebootTask
 import cn.charlotte.pit.sendMessage
 import cn.charlotte.pit.util.MythicUtil
+import cn.charlotte.pit.util.PlusPlayer
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.item.ItemBuilder
@@ -432,7 +433,7 @@ class PitAdminCommands {
             }.toItemStack()
         } catch (ignored: Exception) {
             player.sendMessage("Error")
-        }
+        }   
     }
     @Execute(name = "changeItemInHand randomUUID")
     @HandHasItem(mythic = true)
@@ -715,6 +716,18 @@ class PitAdminCommands {
         }
         EventTimer.getCooldown().fastExpired()
     }
+
+    @Execute(name = "rareplus")
+    fun rareplus(@Context player: Player){
+        if (PlusPlayer.on){
+            PlusPlayer.on = false
+            player.sendMessage("§a关闭稀有概率提升！")
+        }else{
+            PlusPlayer.on = true
+            player.sendMessage("§a开启稀有概率提升！")
+        }
+    }
+
     @Execute(name = "saveAll")
     fun saveAll(@Context player: Player, @Arg("announce") shouldAnnounce: String) {
         try {

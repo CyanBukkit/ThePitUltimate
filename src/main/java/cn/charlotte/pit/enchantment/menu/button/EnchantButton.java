@@ -20,6 +20,7 @@ import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.menu.shop.button.AbstractShopButton;
 import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.PlusPlayer;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.ChatComponentBuilder;
@@ -639,10 +640,11 @@ public class EnchantButton extends Button {
                         this.cancel();
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (!FuncsKt.isSpecial(p)) {
-
-                                p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
-                                        .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
-                                p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+                                if (!PlusPlayer.getPlusPlayer().contains(player.getName())) {
+                                    p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
+                                            .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
+                                    p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+                                }
                             }
 
                         }
