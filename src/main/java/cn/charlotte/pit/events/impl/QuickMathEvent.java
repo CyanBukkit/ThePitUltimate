@@ -123,7 +123,10 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
     @Override
     public void onInactive() {
         ended = true;
-        HandlerList.unregisterAll(this);
+        HandlerList.unregisterAll(this);//fix static
+        TheEquationQuests = null;
+        alreadyAnswered.clear();
+        TheEquation = null;
         CC.boardCast("&5&l速算! &7活动结束! 正确答案: &e" + TheEquation);
     }
 
@@ -135,6 +138,7 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
 
     public void setTop(int top) {
         this.top = top;
+        
     }
 
     public long getStartTime() {
