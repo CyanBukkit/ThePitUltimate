@@ -721,10 +721,10 @@ class PitAdminCommands {
     fun rareplus(@Context player: Player){
         if (PlusPlayer.on){
             PlusPlayer.on = false
-            player.sendMessage("§a关闭稀有概率提升！")
+            player.sendMessage("§a平衡模式开启！")
         }else{
             PlusPlayer.on = true
-            player.sendMessage("§a开启稀有概率提升！")
+            player.sendMessage("§c平衡模式关闭！")
         }
     }
 

@@ -662,7 +662,7 @@ public class EnchantButton extends Button {
         return abstractEnchantment instanceof ILimit;
     }
 
-    private static boolean isPlayerBlackList(Player player){
+    public static boolean isPlayerBlackList(Player player){
         List<String> BLACKLIST = List.of("TongXin","yizhimeng728");
         return BLACKLIST.contains(player.getName());
     }

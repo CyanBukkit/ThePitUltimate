@@ -130,11 +130,7 @@ class PitCommands {
                     return@runTaskAsynchronously
                 }
                 if (!player.hasPermission("pit.admin") || player.isSpecial) {
-                    if (!name.equals(
-                            player.name,
-                            ignoreCase = true
-                        ) && lookupStrict.profile().isSpecial
-                    ) {
+                    if (!name.equals(player.name, ignoreCase = true) && lookupStrict.profile().isSpecial) {
                         player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                         return@runTaskAsynchronously
                     }
@@ -199,7 +195,7 @@ class PitCommands {
         if (player.isSpecial) {
             showPlayers = buildSet {
                 Bukkit.getOnlinePlayers().forEach {
-                    if (it.hasPermission("pit.admin") && !it.isSpecial ) {
+                    if (it.hasPermission("pit.admin") && !it.isSpecial) {
                         add(it)
                     }
                 }
@@ -242,7 +238,7 @@ class PitCommands {
 
     @Execute(name = "trade")
     fun onRequest(@Context player: Player, @Arg("target") target: Player) {
-        if (player.uniqueId == target.uniqueId || target.isSpecial || player.isSpecial || target.isPlusPlayer || player.isPlusPlayer) {
+        if (player.uniqueId == target.uniqueId || target.isSpecial || player.isSpecial) {
             if (!player.hasPermission("pit.admin")) {
                 player.sendMessage(CC.translate("&c你无法选择此玩家进行交易!"))
                 return
@@ -255,7 +251,6 @@ class PitCommands {
             player.sendMessage(CC.translate("&c你无法在战斗中使用此功能!"))
             return
         }
-
 
         // 当前时间
         val now = System.currentTimeMillis()
@@ -275,7 +270,7 @@ class PitCommands {
             profile.tradeLimit.times = 0
         }
 
-        if (profile.tradeLimit.times >= 25 ) {
+        if (profile.tradeLimit.times >= 25) {
             player.sendMessage(CC.translate("&c你今天的交易次数已经达到上限! (25/25)"))
             player.sendMessage(CC.translate("&c使用 &e/tradeLimits &c查看你的今日交易上限情况."))
             return
@@ -311,8 +306,15 @@ class PitCommands {
             }
         }
 
-        TradeMonitorRunnable.getTradeRequests().add(TradeRequest(player, target))
 
+
+        TradeMonitorRunnable.getTradeRequests().add(TradeRequest(player, target))
+  /*      if (PlusPlayer.on) {
+            if (player.isBlacks || target.isBlacks) {
+                TradeMonitorRunnable.getTradeRequests().remove(TradeRequest(player, target))
+                return
+            }
+        }*/
         if (!targetProfile.playerOption.isTradeNotify && !player.hasPermission(PlayerUtil.getStaffPermission())) {
             player.sendMessage(CC.translate("&c对方在游戏选项之后中设置了不接受交易请求,因此无法查看你的请求提示."))
             player.sendMessage(CC.translate("&c但对方仍可以通过使用 &e/trade " + player.name + " &c以同意你的请求."))
@@ -1012,18 +1014,20 @@ class PitCommands {
             player.sendMessage(SpecialUtil.addPlayer(player))
         }
     }
+
     @Execute(name = "rareplus")
     @Permission("pit.rareplus")
-    fun rareplus(@Context player: Player){
-        if (player.isPlusPlayer){
+    fun rareplus(@Context player: Player) {
+        if (player.isPlusPlayer) {
             PlusPlayer.getPlusPlayer().remove(player.name)
-            player.sendMessage("§a附魔稀有概率已恢复正常。")
-        }else{
+            player.sendMessage("§a稀有概率已恢复正常。")
+        } else {
             PlusPlayer.getPlusPlayer().add(player.name)
-            player.sendMessage("§a稀有附魔概率提升！")
+            player.sendMessage("§b稀有附魔概率提升。")
         }
     }
 
+    
     @Execute(name = "thepit")
     fun thepit(): String {
         return "§cPowered By §eEmptyIrony huanmeng_qwq Araykal KAMAShiroNeko Aka.ZhangYuanLang#1337 Aka.YukiEnd.\n" +

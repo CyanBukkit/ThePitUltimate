@@ -282,7 +282,6 @@ public class PlayerProfile {
     public PlayerProfile(UUID uuid, String playerName) {
         //调用默认构造函数，初始化赋值
         this();
-
         this.uuid = uuid.toString();
         this.playerName = playerName;
         this.lowerName = playerName.toLowerCase();

@@ -11,9 +11,10 @@ public class PlusPlayer {
     public static List<String> PlusPlayer = new ArrayList<>();
 
 
-    public static boolean on = false;
 
-    public static double probability = 0.7;
+    public static boolean on = true;
+
+    public static double probability = 0.50;
 
     public static boolean isPlusPlayer(Player player){
         return getPlusPlayer().contains(player.getName());

@@ -43,6 +43,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.jnic.annotation.Include;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.luckperms.api.LuckPerms;
@@ -68,6 +69,7 @@ import org.slf4j.Logger;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
+import tech.skidonion.obfuscator.annotations.NativeObfuscation;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -80,6 +82,7 @@ import java.util.concurrent.*;
  * @author EmptyIrony, Misoryan
  */
 
+@NativeObfuscation(obfuscated = true)
 @Include
 public class ThePit extends JavaPlugin implements PluginMessageListener {
 
@@ -147,6 +150,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         this.loadDepend();
     }
 
+
+    @NativeObfuscation(obfuscated = true)
     @Override
     public void onEnable() {
         audiences = BukkitAudiences.create(this);
@@ -304,6 +309,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     }
 
 
+    @NativeObfuscation(obfuscated = true)
     public static boolean h() {
         try {
             InetAddress address = InetAddress.getByName("thepitapi.nyacho.cn");

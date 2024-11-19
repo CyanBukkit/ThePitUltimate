@@ -46,6 +46,7 @@ public class ProfileLoadRunnable extends BukkitRunnable { //这是什么用的? 
                 continue;
             }
 
+
             final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
             if (profile.isLoaded()) {

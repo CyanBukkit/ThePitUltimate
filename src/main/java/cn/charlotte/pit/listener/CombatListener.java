@@ -27,6 +27,7 @@ import cn.charlotte.pit.parm.listener.*;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
+import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.MythicUtil;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
@@ -99,7 +100,9 @@ public class CombatListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onStrike(PitStreakKillChangeEvent event) {
         final PlayerProfile profile = event.getPlayerProfile();
-
+        if (FuncsKt.isPrivate(profile)){
+            return;
+        }
         if (profile.getChosePerk().get(5) == null) {
             return;
         }

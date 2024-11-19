@@ -57,19 +57,22 @@ public class GambleEnchant extends AbstractEnchantment implements IAttackEntity 
         return "&7攻击时有 &e100% &7的几率对自身或敌人"
                 + "/s&7额外造成 &c" + enchantLevel + "❤ &7的&c必中&7伤害" + "/s&7若使用1.8双倍攻击特性, 下次攻击的倍率将将为1.5-1.7x";
     }
+
     @Override
     @PlayerOnly
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player targetPlayer = (Player) target;
-        Player gamblePlayer = attacker;
-        if (RandomUtil.hasSuccessfullyByChance(0.4)) {
-            gamblePlayer = targetPlayer;
-        }
-        if (gamblePlayer.getNoDamageTicks() < 5) {
-            PlayerUtil.damage(attacker, gamblePlayer, PlayerUtil.DamageType.TRUE, (double) (enchantLevel * 2), false);
+        if (RandomUtil.hasSuccessfullyByChance(0.5)) {
+            Player targetPlayer = (Player) target;
+            Player gamblePlayer = attacker;
+            if (RandomUtil.hasSuccessfullyByChance(0.4)) {
+                gamblePlayer = targetPlayer;
+            }
+            if (gamblePlayer.getNoDamageTicks() < 5) {
+                PlayerUtil.damage(attacker, gamblePlayer, PlayerUtil.DamageType.TRUE, (double) (enchantLevel * 2), false);
 
-        } else {
-            PlayerUtil.damage(attacker, gamblePlayer, PlayerUtil.DamageType.TRUE, (double) (enchantLevel) * (Math.random() * 0.2F + 1.3), true);
+            } else {
+                PlayerUtil.damage(attacker, gamblePlayer, PlayerUtil.DamageType.TRUE, (double) (enchantLevel) * (Math.random() * 0.2F + 1.3), true);
+            }
         }
     }
 }

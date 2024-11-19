@@ -19,11 +19,9 @@ public class SpecialUtil {
     private static Set<String> BLACKS = new HashSet<>();
 
     static {
-        SPECIALS.add("Love_E");
-        SPECIALS.add("KeV1n233");
-        SPECIALS.add("114514211");
+/*        SPECIALS.add("Love_E");
+        SPECIALS.add("114514211");*/
         BLACKS.add("yizhimeng728");
-        BLACKS.add("TongXin");
     }
 
     public static String  addPlayer(Player player){

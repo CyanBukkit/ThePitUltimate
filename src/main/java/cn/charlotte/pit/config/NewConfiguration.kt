@@ -200,6 +200,7 @@ object NewConfiguration {
                 return PlusPlayer.probability
             }
         }
+
         return list.filter {
             player.hasPermission(it.permission)
         }.maxByOrNull {
