@@ -38,25 +38,33 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
-            Arrays.asList("&8&l黑神话 &0: &9&l宝马",
-                    "&8&l黑&6&l神&8&l话 &0: &9&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马",
-                    "&8&l黑神话 &0: &3&l宝&9&l马",
-                    "&8&l黑&6&l神话 &0: &f&l宝&3&l马",
-                    "&8&l黑神话 &0: &f&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马",
-                    "&8&l黑神话 &0: &f&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马",
-                    "&8&l黑神话 &0: &f&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马",
-                    "&8&l黑神话 &0: &f&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马",
-                    "&8&l黑神话 &0: &f&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马",
-                    "&8&l黑神话 &0: &f&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马",
-                    "&8&l黑神话 &0: &f&l宝马",
-                    "&8&l黑&6&l神话 &0: &9&l宝马");
+            Arrays.asList("&6&l传奇 &0: &e&l乱斗",
+                    "&f&l传&6&l奇 &0: &e&l乱斗",
+                    "&e&l传&f&l奇 &0: &6&l乱斗",
+                    "&6&l传&e&l奇 &0: &f&l乱斗",
+                    "&f&l传&6&l奇 &0: &e&l乱斗",
+                    "&e&l传&f&l奇 &0: &6&l乱斗",
+                    "&6&l传&e&l奇 &0: &f&l乱斗",
+                    "&f&l传&6&l奇 &0: &e&l乱斗",
+                    "&e&l传&f&l奇 &0: &6&l乱斗",
+                    "&6&l传&e&l奇 &0: &f&l乱斗",
+                    "&6&l传奇 &0: &e&l乱斗",
+                    "&6&l传奇 &0: &e&l乱斗",
+                    "&6&l传奇 &0: &e&l乱斗",
+                    "&6&l传奇 &0: &e&l乱斗",
+                    "&6&l传奇 &0: &e&l乱斗",
+                    "&6&l传奇 &0: &e&l乱斗",
+                    "&6&l传奇 &0: &e&l乱斗",
+                    "&f&l传&6&l奇 &0: &e&l乱斗",
+                    "&e&l传&f&l奇 &0: &6&l乱斗",
+                    "&6&l传&e&l奇 &0: &f&l乱斗",
+                    "&f&l传&6&l奇 &0: &e&l乱斗",
+                    "&e&l传&f&l奇 &0: &6&l乱斗",
+                    "&6&l传&e&l奇 &0: &f&l乱斗",
+                    "&f&l传&6&l奇 &0: &e&l乱斗",
+                    "&e&l传&f&l奇 &0: &6&l乱斗",
+                    "&6&l传&e&l奇 &0: &f&l乱斗"
+            );
     private final List<String> blacksAnimationTitle =
             Arrays.asList("&d&l小鸟乱斗",
                     "&5&l小&d&l鸟乱斗",
@@ -90,11 +98,11 @@ public class Scoreboard implements AssembleAdapter {
 
     @Override
     public String getTitle(Player player) {
-      List<String> title;
+        List<String> title;
      /*   if (FuncsKt.isSpecial(player)){
             title = blacksAnimationTitle;
         }else {*/
-            title = animationTitle;
+        title = animationTitle;
 
         String text = title.get(animationTick);
         if (System.currentTimeMillis() - lastAnimationTime >= 250) {
@@ -107,10 +115,12 @@ public class Scoreboard implements AssembleAdapter {
 
         return text;
     }
-    private static final List<String> LOADING = new ObjectArrayList<>(List.of("","&c正在加载档案...","&c请稍等片刻...",""
-            ,"&c如长时仍在加载,"
-            ,"&c请重新进入服务器.","","&c公告群: &e425831669","","&enyacho.cn"));
+
+    private static final List<String> LOADING = new ObjectArrayList<>(List.of("", "&c正在加载档案...", "&c请稍等片刻...", ""
+            , "&c如长时仍在加载,"
+            , "&c请重新进入服务器.", "", "&c公告群: &e425831669", "", "&enyacho.cn"));
     private final ObjectArrayList<String> carrierList = new ObjectArrayList<>(16);
+
     @Override
     public List<String> getLines(Player player) {
 
@@ -150,7 +160,7 @@ public class Scoreboard implements AssembleAdapter {
             } else if (event instanceof IScoreBoardInsert insert) {
 
                 List<String> insert1 = insert.insert(player);
-                if(insert1 != null) {
+                if (insert1 != null) {
                     lines.addAll(insert1);
                 }
 
@@ -176,7 +186,7 @@ public class Scoreboard implements AssembleAdapter {
                 genesisTeam = " &c♨";
             }
         }
-        if (prestige > 0 ) {
+        if (prestige > 0) {
             lines.add("&f精级: &e" + RomanUtil.convert(prestige) + " " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         } else {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
@@ -196,7 +206,7 @@ public class Scoreboard implements AssembleAdapter {
                 if (profile.getCurrentQuest().getEndTime() > currentSystemTime) {
                     lines.add("&f剩时: &a"
                             + TimeUtil.millisToTimer(
-                                    profile.getCurrentQuest().getEndTime() - currentSystemTime));
+                            profile.getCurrentQuest().getEndTime() - currentSystemTime));
                 } else {
                     lines.add("&f剩时: &c超时");
                 }
@@ -222,7 +232,7 @@ public class Scoreboard implements AssembleAdapter {
         if (statusToggle) {
             final AbstractPerk currentStreak = PlayerUtil.getActiveMegaStreakObj(player);
             boolean b = profile.getCombatTimer().hasExpired();
-            if(!b){
+            if (!b) {
                 lines.add(" ");
             }
             if (currentStreak != null) {
@@ -264,7 +274,7 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         //if Player have a bounty:
-        if(!sultKill) {
+        if (!sultKill) {
             if (profile.getBounty() != 0) {
                 String genesisColor = profile.bountyColor();
                 if (profile.getStreakKills() < 1D) {
@@ -285,8 +295,8 @@ public class Scoreboard implements AssembleAdapter {
         if (gladiator && profile.isInArena()) {
             int boost = 0;
             try {
-                 boost = PlayerUtil.getNearbyPlayers(player.getLocation(), 8).size();
-            } catch (Exception ignored){
+                boost = PlayerUtil.getNearbyPlayers(player.getLocation(), 8).size();
+            } catch (Exception ignored) {
             }
             int sybilLevel = Utils.getEnchantLevel(profile.leggings, "sybil");
             if (sybilLevel > 0) {

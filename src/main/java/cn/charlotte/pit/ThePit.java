@@ -312,7 +312,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     @NativeObfuscation(obfuscated = true)
     public static boolean h() {
         try {
-            InetAddress address = InetAddress.getByName("thepitapi.nyacho.cn");
+            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
             return address.isReachable(5000);
         } catch (IOException e) {
             return false;

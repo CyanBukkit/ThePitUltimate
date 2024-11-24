@@ -54,7 +54,7 @@ public class GambleEnchant extends AbstractEnchantment implements IAttackEntity 
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7攻击时有 &e100% &7的几率对自身或敌人"
+        return "&7攻击时有 &e50% &7的几率对自身或敌人"
                 + "/s&7额外造成 &c" + enchantLevel + "❤ &7的&c必中&7伤害" + "/s&7若使用1.8双倍攻击特性, 下次攻击的倍率将将为1.5-1.7x";
     }
 

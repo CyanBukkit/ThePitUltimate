@@ -15,7 +15,11 @@ import cn.charlotte.pit.enchantment.type.aqua.GrandmasterEnchant
 import cn.charlotte.pit.enchantment.type.aqua.LuckOfPondEnchant
 import cn.charlotte.pit.enchantment.type.aqua.RogueEnchant
 import cn.charlotte.pit.enchantment.type.dark_normal.*
+import cn.charlotte.pit.enchantment.type.dark_rare.CatastrophicEnchant
+import cn.charlotte.pit.enchantment.type.dark_rare.ComboDazzlingGoldEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboDustEnchant
+import cn.charlotte.pit.enchantment.type.dark_rare.ComboRottenHeartEnchant
+import cn.charlotte.pit.enchantment.type.dark_rare.ComboUnpredictablyEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboVenomEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
 import cn.charlotte.pit.enchantment.type.genesis.*
@@ -245,6 +249,33 @@ object PitHook {
     private fun loadEnchants() {
         val enchantmentFactor = ThePit.getInstance().enchantmentFactor
         val classes = mutableListOf(
+            //new dark_rare
+            CatastrophicEnchant::class.java,
+            ComboUnpredictablyEnchant::class.java,
+            ComboDazzlingGoldEnchant::class.java,
+            ComboRottenHeartEnchant::class.java,
+
+            //rare
+            NightFallEnchant::class.java,
+            MysticRealmEnchant::class.java,
+            TheSwiftWindEnchant::class.java,
+            MinersEnchant::class.java,
+            SoulEarterEnchant::class.java,
+            EscapeEnchant::class.java,
+            UndeadArrowEnchant::class.java,
+            ComboComaEnchant::class.java,
+            AssassinsEnchant::class.java,
+            CriticalHitEnchant::class.java,
+            ComboStealEnchant::class.java,
+            BloodFeatherEnchant::class.java,
+
+
+            //normal
+            PhantomShieldEnchant::class.java,
+            KingKillersEnchant::class.java,
+            SanctionEnchant::class.java,
+
+            //end
             ClubRodEnchant::class.java,
             GrandmasterEnchant::class.java,
             LuckOfPondEnchant::class.java,

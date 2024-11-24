@@ -12,7 +12,7 @@ public class PitMain {
     @NativeObfuscation(obfuscated = true)
     public static void start() {
         try {
-            InetAddress address = InetAddress.getByName("thepitapi.nyacho.cn");
+            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
             boolean a = address.isReachable(3000);
 
             if (a) {

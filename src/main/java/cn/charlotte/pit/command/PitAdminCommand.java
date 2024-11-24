@@ -97,7 +97,6 @@ public class PitAdminCommand {
         YamlConfiguration config = NewConfiguration.INSTANCE.getConfig();
         config.set("punch_y", parsed);
         NewConfiguration.INSTANCE.save();
-
         player.sendMessage("ok");
     }
 

@@ -66,7 +66,6 @@ dependencies {
     compileOnly(libs.decentholograms)
     compileOnly(libs.adventure.bukkit)
 }
-
 tasks.test {
     useJUnitPlatform()
 }
@@ -81,6 +80,7 @@ tasks.withType<JavaCompile> {
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
+
 
 tasks.build {
     dependsOn(tasks.shadowJar)
