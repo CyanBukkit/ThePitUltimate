@@ -2,13 +2,13 @@ package spg.lgdev;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import spg.lgdev.handler.MovementHandler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,32 +23,23 @@ public class iSpigot implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        Location from = event.getFrom();
-        Location to = event.getTo();
-        boolean shouldUpdateRot = from.getPitch() != to.getPitch() || from.getYaw() != to.getYaw();
-        boolean shouldUpdatePos = from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ();
-        for (MovementHandler move : movementHandlers) {
-            if (shouldUpdateRot) {
-                move.handleUpdateRotation(event.getPlayer(), from, to, null);
-            }
-            if (shouldUpdatePos) {
-                move.handleUpdateLocation(event.getPlayer(), from, to, null);
-            }
-        }
+        handleMove(event.getFrom(), event.getTo(), event.getPlayer(), movementHandlers, event);
     }
 
     @EventHandler
     public void onMove(PlayerTeleportEvent event) {
-        Location from = event.getFrom();
-        Location to = event.getTo();
-        boolean shouldUpdateRot = from.getPitch() != to.getPitch() || from.getYaw() != to.getYaw();
-        boolean shouldUpdatePos = from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ();
+        handleMove(event.getFrom(), event.getTo(), event.getPlayer(), movementHandlers, event);
+    }
+
+    private static void handleMove(Location from2, Location eventTo, Player player, List<MovementHandler> movementHandlers, PlayerMoveEvent event) {
+        boolean shouldUpdateRot = from2.getPitch() != eventTo.getPitch() || from2.getYaw() != eventTo.getYaw();
+        boolean shouldUpdatePos = from2.getX() != eventTo.getX() || from2.getY() != eventTo.getY() || from2.getZ() != eventTo.getZ();
         for (MovementHandler move : movementHandlers) {
             if (shouldUpdateRot) {
-                move.handleUpdateRotation(event.getPlayer(), from, to, null);
+                move.handleUpdateRotation(player, from2, eventTo, null);
             }
             if (shouldUpdatePos) {
-                move.handleUpdateLocation(event.getPlayer(), from, to, null);
+                move.handleUpdateLocation(player, from2, eventTo, null);
             }
         }
     }

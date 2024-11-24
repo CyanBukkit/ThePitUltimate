@@ -51,7 +51,10 @@ public class ProfileOperator {
         return operators.get(uuid);
     }
     public void dump(){
-        System.out.println(operators);
+        System.out.println(withString());
+    }
+    public String withString(){
+        return operators.toString();
     }
     public PackedOperator getOperator(Player player){
         return getOperator(player.getUniqueId());
@@ -219,9 +222,8 @@ public class ProfileOperator {
         if(operator != null){
             Player lastBoundPlayer = operator.lastBoundPlayer;
             PackedOperator finalOperator = operator;
-            operator.pendingIfLoaded(i -> {
+            operator.pendingUntilLoaded(i -> {
                 if (lastBoundPlayer != null && lastBoundPlayer.isOnline() && !(finalOperator.quitFlag || finalOperator.fireExit)) {
-
                     PlayerProfile.gcBackups(i.gcBackupIterators(), i, false);
                 }
             });
