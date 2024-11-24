@@ -188,10 +188,13 @@ public class ProfileOperator {
     public void doSaveProfiles() {
         operators.forEachValue(operator -> {
             Player lastBoundPlayer = operator.lastBoundPlayer;
-            operator.pendingIfLoaded(i -> {
+            operator.pendingUntilLoadedPromise(i -> {
                 if (lastBoundPlayer != null && lastBoundPlayer.isOnline() && !(operator.quitFlag || operator.fireExit)) {
-                    i.disallowUnsafe().save(lastBoundPlayer).allow();
+                    PlayerProfile playerProfile = i.disallowUnsafe();
+                    playerProfile.save(lastBoundPlayer);
                 }
+            }).promise(() -> {
+                operator.profile().allow();
             });
 
         });

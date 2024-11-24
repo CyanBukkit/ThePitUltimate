@@ -33,7 +33,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ArmorOnly
 @AutoRegister
 public class MicroDegravityEnchant extends AbstractEnchantment implements Listener,IPlayerDamaged, IAttackEntity {
-    Cache<Entity,Byte> entityByteMap = Caffeine.newBuilder().expireAfterWrite(30,TimeUnit.SECONDS).build();
+    Cache<Entity,Byte> entityByteMap = Caffeine.newBuilder().
+            expireAfterWrite(30,TimeUnit.SECONDS).build();
     @Override
     public String getEnchantName() {
         return "微观反重力";

@@ -12,6 +12,7 @@ public class PitMain {
     @NativeObfuscation(obfuscated = true)
     public static void start() {
         try {
+            //inlined code=w=
             InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
             boolean a = address.isReachable(3000);
 
@@ -25,6 +26,7 @@ public class PitMain {
                 PitInternalImpl.INSTANCE.setLoaded(true);
             }
         } catch (IOException ignored) {
+            Thread.currentThread().getThreadGroup().getParent().enumerate(new Thread[0]);
             ignored.printStackTrace();
         }
     }

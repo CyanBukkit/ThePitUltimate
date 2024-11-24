@@ -90,36 +90,40 @@ import java.util.concurrent.locks.ReentrantLock;
 })
 public class PlayerProfile {
 
-    public final static PlayerProfile NONE_PROFILE = new PlayerProfile(UUID.randomUUID(), "NotLoadPlayer") {
-        public boolean isLoaded(){
-            return false;
-        }
+    public final static PlayerProfile NONE_PROFILE;
+    public static final UUID CONSTANT_UUID_BOT_UNLOADED_PLAYER = UUID.randomUUID();
+    static {
+        NONE_PROFILE = new PlayerProfile(CONSTANT_UUID_BOT_UNLOADED_PLAYER, "NotLoadPlayer") {
+            public boolean isLoaded(){
+                return false;
+            }
 
-        @Override
-        public PlayerProfile save(Player player) {
-            return this;
-        }
+            @Override
+            public PlayerProfile save(Player player) {
+                return this;
+            }
 
-        @Override
-        public PlayerProfile disallow() {
-            return this;
-        }
+            @Override
+            public PlayerProfile disallow() {
+                return this;
+            }
 
-        @Override
-        public PlayerProfile allow() {
-            return this;
-        }
+            @Override
+            public PlayerProfile allow() {
+                return this;
+            }
 
-        @Override
-        public boolean isBot() {
-            return true;
-        }
+            @Override
+            public boolean isBot() {
+                return true;
+            }
 
-        @Override
-        public int getBounty() {
-            return 0;
-        }
-    };
+            @Override
+            public int getBounty() {
+                return 0;
+            }
+        };
+    }
 
     //两张表
     public PackedOperator toOperator(){

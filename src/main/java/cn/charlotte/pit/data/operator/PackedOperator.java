@@ -106,7 +106,13 @@ public class PackedOperator {
             return true;
         }
         if (quitFlag && !this.quitFlag) {
-            pending(prof -> prof.disallowUnsafe().save(null).allow());
+            pending(prof -> {
+                PlayerProfile playerProfile = prof.disallowUnsafe();
+                PlayerProfile save = playerProfile.save(null);
+                pending(unk -> {
+                    save.allow();
+                });
+            });
             this.quitFlag = true;
         }
         return true;
@@ -120,6 +126,14 @@ public class PackedOperator {
         offerOperation(() -> {
             profile.accept(PackedOperator.this.profile);
         });
+    }
+    public Promise promise(Consumer<PlayerProfile> profile){
+        Promise promise = new Promise();
+        offerOperation(() -> {
+            profile.accept(PackedOperator.this.profile);
+            promise.ret();
+        });
+        return promise;
     }
     public void offerOperation(Runnable runnable) {
         operations.add(runnable);
@@ -169,6 +183,14 @@ public class PackedOperator {
         while (!this.isLoaded()) {
             Thread.onSpinWait();
         }
+    }
+    public Promise pendingUntilLoadedPromise(Consumer<PlayerProfile> profileConsumer) {
+        Promise promise = new Promise();
+        pendingUntilLoaded(prof -> {
+            profileConsumer.accept(prof);
+            promise.ret();
+        });
+        return promise;
     }
     public void pendingUntilLoaded(Consumer<PlayerProfile> profileConsumer) {
         if(isLoaded()){

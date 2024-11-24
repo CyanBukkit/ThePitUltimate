@@ -63,6 +63,7 @@ public class Utils {
     }
     /**
      * 超级快，nano respond o(":".length())
+     * 0 - len
      */
     public static void readEnchantments(Object2IntMap<AbstractEnchantment> ment,NBTTagList nbtTagList) {
         nbtTagList.list.forEach(nbtBase -> {

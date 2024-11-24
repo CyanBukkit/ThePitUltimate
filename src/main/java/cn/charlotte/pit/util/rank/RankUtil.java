@@ -1,5 +1,6 @@
 package cn.charlotte.pit.util.rank;
 
+import cn.charlotte.pit.data.PlayerProfile;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.luckperms.api.model.user.User;
@@ -57,6 +58,9 @@ public class RankUtil {
     private static Boolean mmEnable = null;
 
     public static String getPlayerName(UUID uuid) {
+        if(uuid == PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER){
+            return CONSTANT_BOT_NAME;
+        }
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) {
             User user = LuckPermsUtil.getUser(uuid);
@@ -75,7 +79,7 @@ public class RankUtil {
                 }
             }
 
-            return "Bot";
+            return CONSTANT_BOT_NAME;
         }
 
         return player.getDisplayName();
@@ -109,10 +113,15 @@ public class RankUtil {
         return getNameColor(uuid) + getPlayerName(uuid);
     }
 
+    final static String CONSTANT_BOT_NAME = "§d咱喵";
+
     public static String getNameFormatWithPrefix(UUID uuid) {
+        if(uuid == PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER){
+            return CONSTANT_BOT_NAME;
+        }
         String playerName = getPlayerName(uuid);
-        if (playerName == null || playerName.equals("null")){
-            return "§d咱喵";
+        if (playerName == null || "null".equals(playerName)){
+            return CONSTANT_BOT_NAME;
         }
         return LuckPermsUtil.getPrefix(uuid) + playerName;
     }

@@ -126,11 +126,11 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     private BukkitAudiences audiences;
     private ActionBarManager actionBarManager;
-
+    @NativeObfuscation(obfuscated = false)
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
     }
-
+    @NativeObfuscation(obfuscated = false)
     public static ThePit getInstance() {
         return ThePit.instance;
     }

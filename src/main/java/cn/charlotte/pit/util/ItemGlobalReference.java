@@ -41,7 +41,7 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
     public void putValue(String key, IMythicItem value) {
         putAndMoveToFirst(key, value);
     }
-    public void executeLRU(){
+    public void executeLRU(){//CAS
         if(!shouldLRU.getAcquire()){
             return;
         }

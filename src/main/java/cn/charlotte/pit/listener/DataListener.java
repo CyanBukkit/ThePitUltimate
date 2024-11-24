@@ -40,78 +40,40 @@ import java.util.concurrent.TimeUnit;
  */
 //@AutoRegister
 public class DataListener implements Listener {
-    private final ScheduledExecutorService executor; //所以说为什么要移动到这里???????
-
-
-    public final Set<UUID> busyMap = new ObjectOpenHashSet<>(); // do it static
 
     public DataListener() {
-        this.executor = Executors.newSingleThreadScheduledExecutor();
         JedisPool jedisPool = ThePit.getInstance().getJedis(); //coming soon
-//        if (jedisPool != null) {
-//            executor.scheduleAtFixedRate(() -> {
-//                String databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
-//
-//                try(Jedis jedis = jedisPool.getResource()) {
-//                    for (Player player : Bukkit.getOnlinePlayers()) {
-//                        if (PlayerProfile.LOADING_MAP.containsKey(player.getUniqueId())) {
-//                            continue;
-//                        }
-//
-//                        jedis.expire(
-//                                "THEPIT_" + databaseName + "_" + player.getUniqueId().toString(),
-//                                15
-//                        );
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }, 10L, 10L, TimeUnit.SECONDS);
-//        }
-    }
+        if (jedisPool != null) {
+            Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), () -> {
+                String databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
 
+                try(Jedis jedis = jedisPool.getResource()) {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(player);
+                        if(operator == null) {
+
+                            jedis.expire(
+                                    "THEPIT_" + databaseName + "_" + player.getUniqueId().toString(),
+                                    15
+                            );
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, 10L, 10L);
+        }
+    }
 
 
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-//        if(PlayerProfile.LOADING_MAP.containsKey(event.getPlayer().getUniqueId())){
-//            event.getPlayer().kickPlayer("您的档案正在加载中呢, 数据库访问很慢, 请耐心等待 ;w;");
-//        }
-//        if(PlayerProfile.SAVING_MAP.containsKey(event.getPlayer().getUniqueId())){
-//            event.getPlayer().kickPlayer("您的档案正在保存中呢, 数据库访问很慢, 请耐心等待 ;w;");
-//        }
-//        if(this.busyMap.contains(event.getPlayer().getUniqueId())){
-//            event.getPlayer().kickPlayer("服务器很忙哦, 正在处理您的两个保存任务!!!");
-//        }
-//        PlayerUtil.clearPlayer(player, true, true);
-//
-//        BukkitRunnable runnable = new BukkitRunnable() {
-//            @Override
-//            public void run() {
-//                if (!player.isOnline()) {
-//                    PlayerProfile.LOADING_MAP.remove(player.getUniqueId()); //GC
-//                    cancel();
-//                    return;
-//                }
-//
-//                if (canLoad(player)) {
-//                    cancel();
-//                    load(player);
-//                }
-//
-//                //continue waiting
-//            }
-//        };
-
-//        runnable.runTaskTimerAsynchronously(ThePit.getInstance(), 1L, 1L);
-//
-//        PlayerProfile.LOADING_MAP.put(player.getUniqueId(), runnable);
         PackedOperator orLoadOperator = ThePit.getInstance().getProfileOperator().getOrLoadOperator(player);
         orLoadOperator.ifLoaded(() -> {
             byte code = orLoadOperator.profile().code;
 
-            if(code == -2){
+            if (code == -2) {
                 event.getPlayer().kickPlayer("Saving your latest profile, please wait :)");
             }
         });
@@ -131,12 +93,12 @@ public class DataListener implements Listener {
                 .operatorStrict(event.getPlayer()).ifPresent(profileOper -> {
                     PlayerProfile profile = profileOper.profile();
                     profile.disallow();
-                if (!PlayerUtil.isStaffSpectating(event.getPlayer())) {
+                    if (!PlayerUtil.isStaffSpectating(event.getPlayer())) {
                         if (profile.isScreenShare()) {
                             CC.boardCastWithPermission("&4&l查端时退出! &7玩家 " + LevelUtil.getLevelTagWithRoman(profile.getPrestige(), profile.getLevel()) + " " + RankUtil.getPlayerRealColoredName(event.getPlayer().getUniqueId() + " &7在查端时退出了游戏!"), PlayerUtil.getStaffPermission());
                         }
 
-                      profile.setLastLogoutTime(System.currentTimeMillis());
+                        profile.setLastLogoutTime(System.currentTimeMillis());
 
                         profile.setTotalPlayedTime(profile.getTotalPlayedTime() + profile.getLastLogoutTime() - profile.getLastLoginTime());
                         //reset if data have an error (old bug)
@@ -146,10 +108,10 @@ public class DataListener implements Listener {
 
                         profile.setLogin(false); //我草泥马
 
-                    profile.disallowUnsafe()
-                            .setInventoryUnsafe(playerInv).allow();
+                        profile.disallowUnsafe()
+                                .setInventoryUnsafe(playerInv).allow();
                         profileOper.pending(i -> {
-                                    //unsafe exit
+                            //unsafe exit
 
                             profile.disallowUnsafe()
                                     .setInventoryUnsafe(playerInv).allow();
@@ -173,6 +135,7 @@ public class DataListener implements Listener {
 //        }
 //        BountyRunnable.getAnimationDataMap().remove(event.getPlayer().getUniqueId());
     }
+
     @EventHandler
     public void onShoot(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Arrow arrow) {
@@ -207,22 +170,22 @@ public class DataListener implements Listener {
     }
 
     public void whenLoaded(PlayerProfile load) {
-            Player player = Bukkit.getPlayer(load.getPlayerUuid());
-            if (load.getRegisterTime() <= 1) {
-                load.setRegisterTime(System.currentTimeMillis());
-            }
-            load.setLastLoginTime(System.currentTimeMillis());
+        Player player = Bukkit.getPlayer(load.getPlayerUuid());
+        if (load.getRegisterTime() <= 1) {
+            load.setRegisterTime(System.currentTimeMillis());
+        }
+        load.setLastLoginTime(System.currentTimeMillis());
 
-            if (load.getProfileFormatVersion() == 0) {
-                PitProfileUpdater.updateVersion0(load);
-            }
-            if (player != null && player.isOnline()) {
-                load.setLogin(true);
-                Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-                    new PitProfileLoadedEvent(load).callEvent();
-                });
-                FixedRewardData.Companion.sendMail(load, player);
-            }
+        if (load.getProfileFormatVersion() == 0) {
+            PitProfileUpdater.updateVersion0(load);
+        }
+        if (player != null && player.isOnline()) {
+            load.setLogin(true);
+            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                new PitProfileLoadedEvent(load).callEvent();
+            });
+            FixedRewardData.Companion.sendMail(load, player);
+        }
 
     }
 }

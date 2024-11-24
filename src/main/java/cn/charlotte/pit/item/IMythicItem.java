@@ -31,7 +31,6 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.*;
-
 /**
  * @Author: EmptyIrony
  * @Date: 2021/3/23 23:45
@@ -142,7 +141,8 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         if (maxLive != 0) {
-            lore.add(("&7保质期: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive) + (isBoostedByGem() ? "&a ♦" : "") + (isBoostedByGlobalGem() ? "&b ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
+            lore.add(("&7保质期: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive)
+             + (isBoostedByGem() ? "&a ♦" : "") + (isBoostedByGlobalGem() ? "&b ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
             lore.add("");
         }
 
@@ -199,6 +199,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (customName != null) {
             builder.customName(customName);
         }
+
         if (this instanceof IMythicSword mythicSword) {
             builder
                     .lore(lore)
@@ -294,7 +295,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (prefix1 instanceof NBTTagString) {
             this.prefix = ((NBTTagString) prefix1).a_();
         }
-
+        //0.12% -> 0.06%
 
         NBTBase customName1 = extra.get("customName");
         if (customName1 instanceof NBTTagString) {
@@ -359,6 +360,7 @@ public abstract class IMythicItem extends AbstractPitItem {
                 }
                 }
         }
+        //nano
         NBTTagList ench = extra.getList("ench", 8);
             this.enchantments = new Object2IntOpenHashMap<>();
             this.enchantments.defaultReturnValue(-1);
