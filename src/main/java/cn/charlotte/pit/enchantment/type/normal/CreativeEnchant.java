@@ -9,7 +9,7 @@ import cn.charlotte.pit.parm.listener.IPlayerRespawn;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  * @Author: Misoryan
  * @Created_In: 2021/1/31 21:19
  */
-@Include
+
 @ArmorOnly
 public class CreativeEnchant extends AbstractEnchantment implements IPlayerKilledEntity, IPlayerRespawn {
     @Override

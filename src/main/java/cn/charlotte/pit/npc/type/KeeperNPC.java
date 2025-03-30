@@ -2,7 +2,7 @@ package cn.charlotte.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.menu.hub.HubMenu;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
@@ -16,7 +16,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/6 16:28
  */
-@Include
+
 public class KeeperNPC extends SkinNPC {
     @Override
     public String getNpcInternalName() {

@@ -8,7 +8,7 @@ import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @Author: Misoryan
  * @Created_In: 2021/1/7 17:27
  */
-@Include
+
 public class CoinBoostPerk extends AbstractPerk implements IPlayerKilledEntity, IPlayerAssist {
     @Override
     public String getInternalPerkName() {

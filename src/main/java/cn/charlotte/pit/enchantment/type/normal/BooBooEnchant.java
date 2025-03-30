@@ -7,7 +7,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: Misoryan
  * @Created_In: 2020/12/30 13:56
  */
-@Include
+
 @ArmorOnly
 public class BooBooEnchant extends AbstractEnchantment implements ITickTask, IActionDisplayEnchant {
 

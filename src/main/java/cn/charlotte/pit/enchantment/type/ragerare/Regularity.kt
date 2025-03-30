@@ -9,7 +9,7 @@ import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.isBlacks
-import dev.jnic.annotation.Include
+
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
@@ -18,8 +18,9 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.metadata.FixedMetadataValue
+import java.lang.foreign.Linker
 
-@Include
+
 @AutoRegister
 @ArmorOnly
 class Regularity : AbstractEnchantment(), Listener {
@@ -67,7 +68,6 @@ class Regularity : AbstractEnchantment(), Listener {
 
         val victim = event.entity
         if (victim !is Player) return
-
 
 
 

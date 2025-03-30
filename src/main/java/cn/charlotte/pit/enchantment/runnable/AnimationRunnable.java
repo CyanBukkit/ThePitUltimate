@@ -193,7 +193,11 @@ public class AnimationRunnable extends BukkitRunnable {
         private byte color = (byte) 6;
         private boolean startEnchanting = false;
         private boolean finished = false;
-
+        public void reset(){
+            animationTick = 0;
+            startEnchanting = false;
+            finished = false;
+        }
         public AnimationData(Player player) {
             this.player = player;
         }

@@ -12,7 +12,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import cn.klee.backports.utils.SWMRHashTable;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import net.kyori.adventure.util.Listenable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/27 16:34
  */
-@Include
+
 @WeaponOnly
 @AutoRegister
 public class HemorrhageEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IActionDisplayEnchant {

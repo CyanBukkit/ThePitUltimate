@@ -1,7 +1,7 @@
 package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.util.item.ItemBuilder;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType;
  * @Author: Misoryan
  * @Created_In: 2021/3/28 18:29
  */
-@Include
+
 public class JumpBoostPotion {
 
     public static ItemStack toItemStack() {

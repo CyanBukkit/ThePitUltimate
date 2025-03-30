@@ -9,7 +9,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/27 17:01
  */
-@Include
+
 @AutoRegister
 @WeaponOnly
 public class ComboStunEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IActionDisplayEnchant {

@@ -6,8 +6,6 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
-import cn.charlotte.pit.util.hologram.packet.PacketHologram;
-import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.klee.backports.utils.SWMRHashTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -15,11 +13,8 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import spg.lgdev.handler.PacketHandler;
 
 import java.util.*;
 
@@ -127,7 +122,7 @@ public class BountyRunnable extends BukkitRunnable {
         private Cooldown spawnCooldown;
 
         public AnimationData() {
-            this.holograms = new ConcurrentHashSet<>();
+            this.holograms = new HashSet<>();
             this.spawnCooldown = new Cooldown(0);
         }
 

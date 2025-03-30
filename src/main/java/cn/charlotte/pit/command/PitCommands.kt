@@ -11,7 +11,7 @@ import cn.charlotte.pit.data.sub.KillRecap
 import cn.charlotte.pit.data.sub.OfferData
 import cn.charlotte.pit.data.temp.TradeRequest
 import cn.charlotte.pit.event.PitPlayerSpawnEvent
-import cn.charlotte.pit.game.runnable.TradeMonitorRunnable
+import cn.charlotte.pit.trade.runnable.TradeMonitorRunnable
 import cn.charlotte.pit.map.kingsquests.ui.CakeBakeUI
 import cn.charlotte.pit.map.kingsquests.ui.KingQuestsUI
 import cn.charlotte.pit.menu.event.previewer.EventPreviewerMenu
@@ -34,7 +34,6 @@ import cn.charlotte.pit.util.rank.RankUtil
 import cn.charlotte.pit.util.time.TimeUtil
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
-import dev.jnic.annotation.Include
 import dev.rollczi.litecommands.annotations.argument.Arg
 import dev.rollczi.litecommands.annotations.command.RootCommand
 import dev.rollczi.litecommands.annotations.context.Context
@@ -52,7 +51,6 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
@@ -61,7 +59,6 @@ import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
 import java.util.stream.Collectors
 
 /**
@@ -69,7 +66,7 @@ import java.util.stream.Collectors
  * ThePitPlus<br>
  * @author huanmeng_qwq
  */
-@Include
+
 @RootCommand
 class PitCommands {
     private val viewCooldown: Cache<UUID, Long> = CacheBuilder.newBuilder()
@@ -998,39 +995,12 @@ class PitCommands {
         return "§a成功取消重命名!"
     }
 
-    @Execute(name = "interpersonal")
-    @Permission("pit.interpersonal")
-    fun singleton(@Context player: Player) {
-        val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-
-        if (!profile.combatTimer.hasExpired()) {
-            player.sendMessage(CC.translate("&c你无法在战斗中使用此功能!"))
-            return
-        }
-
-        if (player.isPrivate) {
-            player.sendMessage(SpecialUtil.removePlayer(player))
-        } else {
-            player.sendMessage(SpecialUtil.addPlayer(player))
-        }
-    }
-
-    @Execute(name = "rareplus")
-    @Permission("pit.rareplus")
-    fun rareplus(@Context player: Player) {
-        if (player.isPlusPlayer) {
-            PlusPlayer.getPlusPlayer().remove(player.name)
-            player.sendMessage("§a稀有概率已恢复正常。")
-        } else {
-            PlusPlayer.getPlusPlayer().add(player.name)
-            player.sendMessage("§b稀有附魔概率提升。")
-        }
-    }
 
     
-    @Execute(name = "thepit")
+    @Execute(name = "python")
+
     fun thepit(): String {
-        return "§cPowered By §eEmptyIrony huanmeng_qwq Araykal KAMAShiroNeko Aka.ZhangYuanLang#1337 Aka.YukiEnd.\n" +
-                "§3Nyacho §3NetWork §cCopyright §7@2024"
+        return "Python 10.0.22631.4037 (tags/v10.0.22631.4037:1414hhs, " + Calendar.getInstance().time.toGMTString() + ") [MSC v.1942 64 bit (AMD64)] on win32\n" +
+                "Type \"help\", \"copyright\", \"credits\" or \"license\" for more information."
     }
 }

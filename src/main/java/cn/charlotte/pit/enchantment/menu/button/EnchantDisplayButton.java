@@ -2,6 +2,7 @@ package cn.charlotte.pit.enchantment.menu.button;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.menu.MythicWellMenu;
+import cn.charlotte.pit.enchantment.runnable.AnimationRunnable;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.menu.Button;
@@ -53,6 +54,7 @@ public class EnchantDisplayButton extends Button {
         }
 
         menuInstance.openMenu(player);
+        menuInstance.getAnimationData().reset();
     }
 
 

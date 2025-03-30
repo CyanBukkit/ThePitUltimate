@@ -3,13 +3,13 @@ package cn.charlotte.pit.medal.impl.tier;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.medal.AbstractMedal;
 import cn.charlotte.pit.util.chat.RomanUtil;
-import dev.jnic.annotation.Include;
+
 
 /**
  * @Creator Misoryan
  * @Date 2021/6/8 20:21
  */
-@Include
+
 public class PrestigeMedal extends AbstractMedal {
 
     @Override

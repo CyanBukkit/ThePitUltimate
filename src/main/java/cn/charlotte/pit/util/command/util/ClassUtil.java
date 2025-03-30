@@ -116,5 +116,13 @@ public final class ClassUtil {
 
         throw new UnsupportedOperationException("Cannot list files for URL " + dirURL);
     }
+    public static boolean checkClassExists(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 
 }

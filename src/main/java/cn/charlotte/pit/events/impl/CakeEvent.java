@@ -8,7 +8,7 @@ import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.medal.impl.challenge.CakeEventMedal;
 import cn.charlotte.pit.util.LocationUtil;
-import cn.charlotte.pit.util.aabb.AxisAlignedBB;
+import cn.charlotte.pit.util.aabb.AABB;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
@@ -28,14 +28,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -51,7 +49,7 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private EditSession session;
-    private AxisAlignedBB alignedBB;
+    private AABB alignedBB;
     private Map<UUID, CakePlayerData> dataCache;
 
     public CakeEvent() {
@@ -90,7 +88,7 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
         final CuboidRegion region = regions[RandomUtil.random.nextInt(regions.length)];
         final Vector pos1 = region.getPos1();
         final Vector pos2 = region.getPos2();
-        this.alignedBB = new AxisAlignedBB(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
+        this.alignedBB = new AABB(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
 
         TaskManager.IMP.async(() -> {
             BukkitWorld world = new BukkitWorld(Bukkit.getWorlds().get(0));
@@ -137,7 +135,7 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
 
         final Block block = event.getClickedBlock();
         final Location location = block.getLocation();
-        final AxisAlignedBB blockAABB = new AxisAlignedBB(location.getX() - 1, location.getY() - 1, location.getZ() - 1, location.getX() + 1, location.getY() + 1, location.getZ() + 1);
+        final AABB blockAABB = new AABB(location.getX() - 1, location.getY() - 1, location.getZ() - 1, location.getX() + 1, location.getY() + 1, location.getZ() + 1);
         final Player player = event.getPlayer();
         final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 

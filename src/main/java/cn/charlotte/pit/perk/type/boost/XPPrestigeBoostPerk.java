@@ -2,7 +2,7 @@ package cn.charlotte.pit.perk.type.boost;
 
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/12 21:25
  */
-@Include
+
 public class XPPrestigeBoostPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

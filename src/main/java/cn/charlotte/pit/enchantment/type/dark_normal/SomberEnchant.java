@@ -7,7 +7,7 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/3/15 20:00
  */
-@Include
+
 @ArmorOnly
 public class SomberEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
     public static SomberEnchant INSTANCE; //Faster to get somber ench raw Obj

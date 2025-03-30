@@ -14,7 +14,7 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/1/26 11:12
  */
-@Include
+
 @ArmorOnly
 @AutoRegister
 public class TestEnchant extends AbstractEnchantment implements ITickTask, IAttackEntity, IPlayerBeKilledByEntity, IPlayerShootEntity, IPlayerKilledEntity, IPlayerAssist, IPlayerDamaged, IPlayerRespawn, Listener {

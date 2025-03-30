@@ -2,13 +2,13 @@ package cn.charlotte.pit.medal.impl.challenge;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.medal.AbstractMedal;
-import dev.jnic.annotation.Include;
+
 
 /**
  * @Creator Misoryan
  * @Date 2021/6/11 8:22
  */
-@Include
+
 public class EndlessQuiverMedal extends AbstractMedal {
     @Override
     public String getInternalName() {

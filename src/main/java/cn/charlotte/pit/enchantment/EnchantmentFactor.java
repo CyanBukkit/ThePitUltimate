@@ -5,7 +5,7 @@ import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.*;
 import cn.klee.backports.utils.SWMRHashTable;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class EnchantmentFactor {
             for (Class<?> clazz : classes) {
                 if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
                     try {
-                        AbstractEnchantment enchantment = (AbstractEnchantment) clazz.newInstance();
+                        AbstractEnchantment enchantment = (AbstractEnchantment) clazz.getConstructor().newInstance();
                         this.enchantments.add(enchantment);
                         this.enchantmentMap.put(enchantment.getNbtName(), enchantment);
 

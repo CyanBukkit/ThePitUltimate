@@ -6,13 +6,13 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import dev.jnic.annotation.Include;
+
 
 /**
  * @Author: Misoryan
  * @Created_In: 2021/2/25 14:53
  */
-@Include
+
 @ArmorOnly
 @WeaponOnly
 @BowOnly

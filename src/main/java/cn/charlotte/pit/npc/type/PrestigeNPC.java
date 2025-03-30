@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.menu.prestige.PrestigeMainMenu;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.level.LevelUtil;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
@@ -19,7 +19,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/1 13:44
  */
-@Include
+
 public class PrestigeNPC extends SkinNPC {
     @Override
     public String getNpcInternalName() {

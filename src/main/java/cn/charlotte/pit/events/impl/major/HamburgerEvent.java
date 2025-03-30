@@ -36,7 +36,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import net.jafama.FastMath;
 import net.minecraft.server.v1_8_R3.EntityVillager;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.*;
@@ -932,7 +931,7 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
             }
             if (enchantBoostLevel > 0) {
                 rewardCoins += 0.5 * enchantBoostLevel * rewardCoins;
-                rewardRenown += FastMath.floorToInt(0.5D * enchantBoostLevel * rewardRenown);
+                rewardRenown += Math.floor(0.5D * enchantBoostLevel * rewardRenown);
                 MythicLeggingsItem mythicLeggings = new MythicLeggingsItem();
                 mythicLeggings.loadFromItemStack(player.getInventory().getLeggings());
                 if (mythicLeggings.isEnchanted()) {

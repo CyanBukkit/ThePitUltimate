@@ -7,7 +7,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * @Author: Misoryan
  * @Created_In: 2021/1/29 20:20
  */
-@Include
+
 @ArmorOnly
 public class AbsorptionEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
     @Override

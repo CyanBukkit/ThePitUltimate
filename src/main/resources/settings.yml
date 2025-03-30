@@ -1,4 +1,4 @@
-Name: ThePitPremium
+Name: Python
 Version: 3.21
 EntryClass: cn.charlotte.pit.PitMain
 EntryPoint: start

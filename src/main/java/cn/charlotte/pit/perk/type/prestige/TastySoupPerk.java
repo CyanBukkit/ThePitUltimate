@@ -11,7 +11,7 @@ import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/9 11:59
  */
-@Include
+
 public class TastySoupPerk extends AbstractPerk implements IPlayerKilledEntity, IPlayerAssist, IAttackEntity, IPlayerShootEntity {
 
     private final Map<UUID, Boolean> strength = new HashMap<>();

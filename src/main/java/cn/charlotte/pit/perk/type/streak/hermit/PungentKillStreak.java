@@ -8,7 +8,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ import java.util.List;
  * @Author Misoryan
  * @Date 2022/11/22 19:47
  */
-@Include
+
 @AutoRegister
 public class PungentKillStreak extends AbstractPerk implements Listener {
 

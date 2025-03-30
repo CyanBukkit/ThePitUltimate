@@ -229,7 +229,7 @@ public abstract class NPCBase implements NPC, NPCPacketHandler {
         double distanceSquared = player.getLocation().distanceSquared(location);
         double bukkitRange = Bukkit.getViewDistance() << 4;
 
-        return distanceSquared <= MathUtil.square(hideDistance) && distanceSquared <= MathUtil.square(bukkitRange);
+        return distanceSquared <= MathUtil.squareTwo(hideDistance) && distanceSquared <= MathUtil.squareTwo(bukkitRange);
     }
 
     public boolean inViewOf(Player player) {

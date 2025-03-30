@@ -16,6 +16,7 @@ import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.bytebuddy.implementation.bytecode.Throw;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import net.minecraft.server.v1_8_R3.NBTTagString;
@@ -27,11 +28,30 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import xyz.refinedev.spigot.CarbonSpigot;
+import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
+    public static void addCommonHandler(PacketHandler packetHandler) {
+        try {
+            CarbonSpigot.getPacketAPI().registerPacketHandler(ThePit.getInstance(), packetHandler);
+        } catch (Throwable a) {
+            try {
+                Bukkit.getLogger().warning("Error in adding the packet handler from " + packetHandler + ", using the public way...");
+                Class<?> aClass = Class.forName("xyz.refinedev.spigot.api.handlers.impl.KQC");
+                Method addHandler = aClass.getMethod("addHandler", PacketHandler.class);
+                addHandler.invoke(null, packetHandler);
+            } catch (Throwable e){
+                e.printStackTrace();
+                System.out.println("Error, this plugin is buggy");
+            }
+        }
+    }
     /**
      * 需要Paper支持。
      * @return

@@ -11,7 +11,7 @@ import cn.charlotte.pit.pet.PetFactory;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
@@ -23,7 +23,7 @@ import org.bukkit.event.Listener;
  * @Creator Misoryan
  * @Date 2021/4/29 17:28
  */
-@Include
+
 @ArmorOnly
 @AutoRegister
 public class SuperSlimeEnchant extends AbstractEnchantment implements Listener {

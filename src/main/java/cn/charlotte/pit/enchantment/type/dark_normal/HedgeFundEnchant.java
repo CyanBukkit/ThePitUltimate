@@ -9,7 +9,7 @@ import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  * @Author: Misoryan
  * @Created_In: 2021/3/15 20:40
  */
-@Include
+
 @ArmorOnly
 public class HedgeFundEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
     @Override

@@ -5,7 +5,7 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Include
+
 public class ToughSkinKillStreak extends AbstractPerk implements IPlayerDamaged {
 
     @Override

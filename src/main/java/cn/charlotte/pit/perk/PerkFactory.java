@@ -47,7 +47,7 @@ public class PerkFactory {
     public void init(Collection<Class<?>> classes) {
         for (Class<?> clazz : classes) {
             if (AbstractPerk.class.isAssignableFrom(clazz)) {
-                Object instance = clazz.newInstance();
+                Object instance = clazz.getConstructor().newInstance();
                 perks.add((AbstractPerk) instance);
 
                 final AbstractPerk perk = (AbstractPerk) instance;

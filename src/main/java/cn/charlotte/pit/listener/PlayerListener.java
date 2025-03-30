@@ -31,7 +31,7 @@ import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
@@ -559,12 +559,6 @@ public class PlayerListener implements Listener {
     }
 
     private void welcomePlayer(Player player) {
-        player.sendMessage("欢迎回来!", true);
-        player.sendMessage("ThePitStudy #" + PitHook.getItemVersion() + " @" + PitHook.getGitVersion(), true);
-        player.sendMessage("感谢您支持本玩法, 玩法仅供学习参考, 健康游戏你我他", true);
-        player.sendMessage(" ");
-        player.sendMessage(System.currentTimeMillis() + ">> " + System.nanoTime(), true);
-
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.isNicked()) {
             player.sendMessage(CC.translate("&2&l匿名模式! &7你现在对外显示的游戏名为: " + profile.getFormattedNameWithRoman()));

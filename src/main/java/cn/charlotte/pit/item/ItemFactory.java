@@ -7,7 +7,6 @@ import cn.charlotte.pit.util.ItemGlobalReference;
 import cn.charlotte.pit.util.ItemReference;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.item.ItemUtil;
-import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.klee.backports.utils.SWMRHashTable;
 import com.google.common.annotations.Beta;
 import io.lumine.xikage.mythicmobs.items.MythicItem;

@@ -16,7 +16,7 @@ import cn.charlotte.pit.util.music.NBSDecoder
 import cn.charlotte.pit.util.music.PositionSongPlayer
 import cn.charlotte.pit.util.music.Song
 import com.google.common.util.concurrent.AtomicDouble
-import dev.jnic.annotation.Include
+
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying
 import org.bukkit.Bukkit
 import org.bukkit.Effect
@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @author huanmeng_qwq
  */
 @ArmorOnly
-@Include
+
 class Limit24520Ench : AbstractEnchantment(), ITickTask, MovementHandler, IPlayerKilledEntity, IAttackEntity, ILimit {
     private val playerMap: MutableMap<UUID, PositionSongPlayer> = HashMap()
     private val song: Song =

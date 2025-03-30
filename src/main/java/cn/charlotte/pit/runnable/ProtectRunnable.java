@@ -4,7 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.config.PitConfig;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.aabb.AxisAlignedBB;
+import cn.charlotte.pit.util.aabb.AABB;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -23,10 +23,10 @@ public class ProtectRunnable extends BukkitRunnable {
             if (!profile.isEditingMode() || !PlayerUtil.isStaffSpectating(player)) {
                 if (!profile.isInArena()) {
                     PitConfig config = ThePit.getInstance().getPitConfig();
-                    final AxisAlignedBB aabb = new AxisAlignedBB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
+                    final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
 
                     Location location = player.getLocation();
-                    final AxisAlignedBB playerAABB = new AxisAlignedBB(location.getX(), location.getY(), location.getZ(), location.getX() + 0.8, location.getY() + 2, location.getZ() + 0.8);
+                    final AABB playerAABB = new AABB(location.getX(), location.getY(), location.getZ(), location.getX() + 0.8, location.getY() + 2, location.getZ() + 0.8);
                     final boolean inArena = !aabb.intersectsWith(playerAABB);
 
                     if (inArena) {

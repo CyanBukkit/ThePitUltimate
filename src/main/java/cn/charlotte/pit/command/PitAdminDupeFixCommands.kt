@@ -7,7 +7,7 @@ import cn.charlotte.pit.util.inventory.InventoryUtil
 import cn.charlotte.pit.util.item.ItemUtil
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.ReplaceOptions
-import dev.jnic.annotation.Include
+
 import dev.rollczi.litecommands.annotations.async.Async
 import dev.rollczi.litecommands.annotations.command.Command
 import dev.rollczi.litecommands.annotations.context.Context
@@ -24,8 +24,8 @@ import kotlin.math.ceil
  * ThePitPlus<br>
  * @author huanmeng_qwq
  */
-@Include
-@Command(name = "dupesFix")
+
+@Command(name = "df")
 @Permission("pit.admin")
 class PitAdminDupeFixCommands {
     @Execute(name = "standard")

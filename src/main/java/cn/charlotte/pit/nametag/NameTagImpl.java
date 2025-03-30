@@ -11,7 +11,7 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.nametag.BufferedNametag;
 import cn.charlotte.pit.util.nametag.NametagAdapter;
 import cn.charlotte.pit.util.rank.RankUtil;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,7 +23,7 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2021/1/1 15:56
  */
-@Include
+
 public class NameTagImpl implements NametagAdapter {
     @Override
     public List<BufferedNametag> getPlate(Player player) {

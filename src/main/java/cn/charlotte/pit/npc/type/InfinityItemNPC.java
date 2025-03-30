@@ -2,7 +2,7 @@ package cn.charlotte.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.menu.admin.item.AdminItemMenu;
-import dev.jnic.annotation.Include;
+
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +16,7 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2021/4/21 21:58
  */
-@Include
+
 public class InfinityItemNPC extends SkinNPC {
     @Override
     public String getNpcInternalName() {

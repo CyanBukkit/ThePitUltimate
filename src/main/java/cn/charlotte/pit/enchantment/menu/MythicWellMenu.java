@@ -1,6 +1,5 @@
 package cn.charlotte.pit.enchantment.menu;
 
-import cn.charlotte.pit.addon.impl.EnchantBook;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.menu.button.*;
 import cn.charlotte.pit.enchantment.runnable.AnimationRunnable;
@@ -91,13 +90,9 @@ public class MythicWellMenu extends Menu {
             Integer tier = ItemUtil.getItemIntData(itemStack, "tier");
             if (tier != null && tier == (foundColor == MythicColor.DARK ? 1 : 2)) {
                 button.put(14, new EnchantSinceButton(this, foundColor));
-                if (EnchantBook.INSTANCE.getEnchantBook()) {
                     button.put(32, new EnchantBookButton(this, foundColor));
-                }
             } else if (tier != null && tier != (foundColor == MythicColor.DARK ? 2 : 3)) {
-                if (EnchantBook.INSTANCE.getEnchantBook()) {
-                    button.put(23, new EnchantBookButton(this, foundColor));
-                }
+                button.put(23, new EnchantBookButton(this, foundColor));
             }
 
             return button;
@@ -174,13 +169,9 @@ public class MythicWellMenu extends Menu {
                             Integer tier = ItemUtil.getItemIntData(enchantingItem, "tier");
                             if (tier != null && tier == (color == MythicColor.DARK ? 1 : 2)) {
                                 button.put(14, new EnchantSinceButton(this, color));
-                                if (EnchantBook.INSTANCE.getEnchantBook()) {
                                     button.put(32, new EnchantBookButton(this, color));
-                                }
                             } else if (tier != null && tier != (color == MythicColor.DARK ? 2 : 3)) {
-                                if (EnchantBook.INSTANCE.getEnchantBook()) {
                                     button.put(23, new EnchantBookButton(this, color));
-                                }
                             }
                             break;
                         }

@@ -44,7 +44,7 @@ public class QuestFactory {
         for (Class<?> clazz : classes) {
             if (AbstractQuest.class.isAssignableFrom(clazz)) {
                 try {
-                    AbstractQuest quest = (AbstractQuest) clazz.newInstance();
+                    AbstractQuest quest = (AbstractQuest) clazz.getConstructor().newInstance();
                     this.quests.add(quest);
                     this.questMap.put(quest.getQuestInternalName(), quest);
 

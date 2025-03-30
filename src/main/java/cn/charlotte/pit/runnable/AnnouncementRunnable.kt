@@ -1,10 +1,10 @@
 package cn.charlotte.pit.runnable
 
-import dev.jnic.annotation.Include
+
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
-@Include
+
 object AnnouncementRunnable : BukkitRunnable() {
     private var index = 0;
     val announcement = listOf("&e&l公告! &fNyacho天坑乱斗官方交流群: 697126758 &f欢迎您的加入~"

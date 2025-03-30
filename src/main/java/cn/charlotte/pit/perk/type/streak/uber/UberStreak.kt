@@ -14,7 +14,7 @@ import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.MessageType
 import cn.charlotte.pit.util.inventory.InventoryUtil
-import dev.jnic.annotation.Include
+
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -34,7 +34,7 @@ import java.util.*
  * @ Date 10/6/2021
  * @ Time 1:32 PM
  */
-@Include
+
 @AutoRegister
 class UberStreak : AbstractPerk(), Listener, MegaStreak {
 

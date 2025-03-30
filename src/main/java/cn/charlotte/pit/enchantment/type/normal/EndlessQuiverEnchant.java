@@ -7,7 +7,7 @@ import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/1/30 15:24
  */
-@Include
+
 @BowOnly
 public class EndlessQuiverEnchant extends AbstractEnchantment implements IPlayerShootEntity {
     @Override

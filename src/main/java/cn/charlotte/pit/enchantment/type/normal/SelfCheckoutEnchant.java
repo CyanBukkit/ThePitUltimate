@@ -8,7 +8,7 @@ import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
  * @Author: Misoryan
  * @Created_In: 2021/2/26 13:28
  */
-@Include
+
 @ArmorOnly
 public class SelfCheckoutEnchant extends AbstractEnchantment implements ITickTask {
     @Override

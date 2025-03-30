@@ -12,7 +12,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
  * @Author: Misoryan
  * @Created_In: 2021/2/8 20:36
  */
-@Include
+
 @ArmorOnly
 @WeaponOnly
 @BowOnly

@@ -7,7 +7,7 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -26,7 +26,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/2/21 13:50
  */
-@Include
+
 @AutoRegister
 public class ArquebusierKillStreak extends AbstractPerk implements Listener {
     @Override

@@ -9,7 +9,7 @@ import cn.charlotte.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity
 import cn.charlotte.pit.util.cooldown.Cooldown
 import com.google.common.util.concurrent.AtomicDouble
-import dev.jnic.annotation.Include
+
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffectType
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @Creator Misoryan
  * @Date 2021/5/8 19:13
  */
-@Include
+
 @ArmorOnly
 class BreachingChargeEnchant : AbstractEnchantment(), IAttackEntity, IPlayerShootEntity,
     IActionDisplayEnchant {

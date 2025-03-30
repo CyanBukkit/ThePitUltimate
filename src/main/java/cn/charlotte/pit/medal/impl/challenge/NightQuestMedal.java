@@ -6,7 +6,7 @@ import cn.charlotte.pit.event.PitQuestInactiveEvent;
 import cn.charlotte.pit.medal.AbstractMedal;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.time.TimeUtil;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
  * @Creator Misoryan
  * @Date 2021/6/10 18:22
  */
-@Include
+
 @AutoRegister
 public class NightQuestMedal extends AbstractMedal implements Listener {
     private static boolean isNightQuest(PlayerProfile profile, QuestData quest) {

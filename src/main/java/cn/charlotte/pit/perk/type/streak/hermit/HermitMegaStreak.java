@@ -17,7 +17,7 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author Misoryan
  * @Date 2022/11/22 19:00
  */
-@Include
+
 @AutoRegister
 public class HermitMegaStreak extends AbstractPerk implements Listener, IPlayerDamaged, ITickTask, IPlayerKilledEntity, IPlayerBeKilledByEntity, MegaStreak {
 

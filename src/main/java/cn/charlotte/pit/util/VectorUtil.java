@@ -1,7 +1,6 @@
 package cn.charlotte.pit.util;
 
 
-import net.jafama.FastMath;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -88,10 +87,12 @@ public class VectorUtil {
         Vector test = to.clone().subtract(from).toVector();
         double elevation = test.getY();
         Double launchAngle = calculateLaunchAngle(from, to, velocity, elevation);
-        double distance = MathHelper.sqrt(FastMath.pow2(test.getX()) + FastMath.pow2(test.getZ()));
+        double z = test.getZ();
+        double x = test.getX();
+        double distance = MathHelper.sqrt(x * x + z * z);
         if (distance != 0.0D) {
             if (launchAngle == null) {
-                launchAngle = FastMath.atan((40.0D * elevation + Math.pow(velocity, 2.0D)) / (40.0D * elevation + 2.0D * Math.pow(velocity, 2.0D)));
+                launchAngle = Math.atan((40.0D * elevation + Math.pow(velocity, 2.0D)) / (40.0D * elevation + 2.0D * Math.pow(velocity, 2.0D)));
             }
             double hangTime = calculateHangTime(launchAngle, velocity, elevation);
             test.setY(Math.tan(launchAngle) * distance);
@@ -123,7 +124,7 @@ public class VectorUtil {
         double v2 = MathHelper.pow(v, 2.0D);
         double v4 = MathHelper.pow(v, 4.0D);
         double check = 20.0 * (20.0 * MathHelper.pow(distance, 2.0D) + 2.0D * elevation * v2);
-        return v4 < check ? null : FastMath.atan((v2 - MathHelper.sqrt(v4 - check)) / (20.0 * distance));
+        return v4 < check ? null : Math.atan((v2 - MathHelper.sqrt(v4 - check)) / (20.0 * distance));
     }
 }
 

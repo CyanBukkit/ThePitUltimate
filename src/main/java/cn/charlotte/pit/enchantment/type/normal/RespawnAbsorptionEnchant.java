@@ -5,7 +5,7 @@ import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerRespawn;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @Author: Misoryan
  * @Created_In: 2021/2/24 18:58
  */
-@Include
+
 @ArmorOnly
 public class RespawnAbsorptionEnchant extends AbstractEnchantment implements IPlayerRespawn {
     @Override

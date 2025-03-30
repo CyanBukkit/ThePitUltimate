@@ -3,12 +3,12 @@ package cn.charlotte.pit.item.type
 import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.item.ItemBuilder
-import dev.jnic.annotation.Include
+
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
 
-@Include
+
 class AngelChestplate : IMythicItem() {
     init {
         this.maxLive = 100

@@ -63,14 +63,14 @@ public class EventFactory {
         for (Class<?> clazz : classes) {
             if (IEpicEvent.class.isAssignableFrom(clazz)) {
                 try {
-                    this.epicEvents.add((IEpicEvent) clazz.newInstance());
+                    this.epicEvents.add((IEpicEvent) clazz.getConstructor().newInstance());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
             if (INormalEvent.class.isAssignableFrom(clazz)) {
                 try {
-                    this.normalEvents.add((INormalEvent) clazz.newInstance());
+                    this.normalEvents.add((INormalEvent) clazz.getConstructor().newInstance());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

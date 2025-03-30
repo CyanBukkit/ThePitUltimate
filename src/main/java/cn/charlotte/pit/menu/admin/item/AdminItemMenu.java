@@ -105,6 +105,7 @@ public class AdminItemMenu extends Menu {
                 buttonMap.put(36, new PitItemButton(darkGreenLeggings.toItemStack()));
                 buttonMap.put(37, new SwordBundleShopButton());
                 buttonMap.put(38, new BowBundleShopButton());
+                buttonMap.put(39, new MythicItemButton(11));
             }
 
         } catch (Exception e) {

@@ -2,7 +2,7 @@ package cn.charlotte.pit.perk.type.prestige;
 
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @Creator Misoryan
  * @Date 2021/6/4 18:48
  */
-@Include
+
 public class ArrowArmoryPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

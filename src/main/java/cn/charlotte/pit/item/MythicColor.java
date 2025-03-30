@@ -43,7 +43,6 @@ public enum MythicColor {
         this.leatherColor = leatherColor;
         this.colorByte = colorByte;
     }
-
     public static MythicColor valueOfInternalName(String internalName) {
         return mappedColor.get(internalName);
     }

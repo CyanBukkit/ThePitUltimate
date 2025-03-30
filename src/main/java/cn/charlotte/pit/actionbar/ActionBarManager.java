@@ -1,23 +1,15 @@
 package cn.charlotte.pit.actionbar;
 
 import cn.charlotte.pit.util.chat.ActionBarUtil;
-import cn.charlotte.pit.util.item.Attributes;
 import cn.klee.backports.utils.SWMRHashTable;
-import com.comphenix.protocol.PacketType;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.MultimapBuilder;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.SetMultimap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.AbstractMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ActionBarManager{
     Map<UUID,Map<String, Map.Entry<String,Integer>>> multiMap = new SWMRHashTable<>();
@@ -28,38 +20,42 @@ public class ActionBarManager{
             stringStringMap = new SWMRHashTable<>();
             multiMap.put(uniqueId, stringStringMap);
         }
-         stringStringMap.put(arg,Map.entry(val,repeat));
+         stringStringMap.put(arg,new
+                 AbstractMap.SimpleEntry<>(val,repeat));
     }
     public void tick() {
-        Set<UUID> uuids = new ObjectOpenHashSet<>();
-        multiMap.forEach((uuid, mappedString) -> { //forEach as multimap
+
+        StringBuilder builder = new StringBuilder();
+        ((SWMRHashTable<UUID,Map<String, Map.Entry<String,Integer>>>)multiMap).removeIf((uuid, mappedString) -> { //forEach as multimap
             Player player = Bukkit.getPlayer(uuid); //get Players
-            if (mappedString.size() <= 0 || player == null || !player.isOnline()) {
-                uuids.add(uuid); //point to gc
-                return;
+            if (mappedString.isEmpty() || player == null || !player.isOnline()) {
+                //point to gc
+                return true; //save performances
             }
-            StringBuilder builder = new StringBuilder();
-            Set<String> removal = new ObjectOpenHashSet<>();
             AtomicBoolean ab = new AtomicBoolean(false);
-            mappedString.forEach((key, value) -> {
-                ab.set(true);
+            AtomicInteger index = new AtomicInteger();
+            int size = mappedString.size();
+            ((SWMRHashTable<String, Map.Entry<String,Integer>>)mappedString).removeIf((key, value) -> {
                 String rawString = value.getKey();
                 Integer repeat = value.getValue();
                 builder.append(rawString);
-                builder.append("&7| ");
+                if(index.getAndIncrement() < size) {
+                    builder.append(" ");
+                }
                 int i1 = --repeat;
                 if (i1 <= 0) {
-                    removal.add(key); //point to gc
-                    return;
+                    return true;
+                } else if(!rawString.isEmpty()){
+                    ab.set(true);
                 }
-                mappedString.put(key, Map.entry(rawString, i1));
+                value.setValue(i1); //设置指针
+                return false;
             });
             if (ab.get()) {
-                builder.delete(builder.length() - 4, builder.length());
                 ActionBarUtil.sendActionBar0(player, builder.toString());
+                builder.setLength(0); //clear it
             }
-            removal.forEach(mappedString::remove);
+            return false;
         });
-        uuids.forEach(multiMap::remove);
     }
 }

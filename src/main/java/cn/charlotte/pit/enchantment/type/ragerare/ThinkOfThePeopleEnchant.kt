@@ -4,14 +4,14 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.util.cooldown.Cooldown
-import dev.jnic.annotation.Include
+
 
 
 /**
  * @Creator Misoryan
  * @Date 2021/5/8 14:12
  */
-@Include
+
 @ArmorOnly
 class ThinkOfThePeopleEnchant : AbstractEnchantment() {
     override fun getEnchantName(): String {

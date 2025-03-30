@@ -1,7 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
-    kotlin("plugin.lombok") version "2.0.20"
+    kotlin("plugin.lombok") version "2.1.20"
     id("io.freefair.lombok") version "8.10"
-    kotlin("jvm") version "2.0.20"
+
+    kotlin("jvm") version "2.1.20"
     alias(libs.plugins.shadow)
 }
 
@@ -23,15 +26,19 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.panda-lang.org/releases")
 }
-
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("Python_")
+        exclude("kotlin/**","junit/**","org/junit/**")
+    }
+}
 dependencies {
     api(libs.reflectionhelper)
-    api(libs.hutool.core)
-    api(libs.hutool.crypto)
-    api(libs.book)
-    api(libs.slf4j)
-    api(libs.litecommands)
-    api(libs.adventure.bukkit)
+    compileOnly(libs.hutool.crypto)
+    compileOnly(libs.book)
+    compileOnly(libs.slf4j)
+    compileOnly(libs.litecommands)
+    compileOnly(libs.adventure.bukkit)
     compileOnly("com.caoccao.javet:javet:3.1.4") // Linux and Windows (x86_64)
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
@@ -40,10 +47,9 @@ dependencies {
     //    public net.minecraft.server.v1_8_R3.ItemStack handle; // Paper - public
     //
     //compileOnly(libs.spigot.get8())
-    compileOnly(libs.protocollib)
     compileOnly(libs.luckperms)
     compileOnly("com.github.ben-manes.caffeine:caffeine:3.1.8")
-    implementation("com.github.f4b6a3:uuid-creator:6.0.0")
+    compileOnly("com.github.f4b6a3:uuid-creator:6.0.0")
     compileOnly(libs.papi)
     compileOnly(libs.narshorn)
     compileOnly(libs.protocollib)
@@ -66,11 +72,8 @@ dependencies {
     compileOnly(libs.decentholograms)
     compileOnly(libs.adventure.bukkit)
 }
-tasks.test {
-    useJUnitPlatform()
-}
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(21)
 }
 
 tasks.withType<JavaCompile> {
@@ -81,7 +84,16 @@ tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
 
+tasks.register<Copy>("copyDependencies") {
 
+    from(configurations.compileClasspath)
+
+    into(layout.projectDirectory.dir("buildlib"))
+
+// 如果需要去除版本号，添加rename逻辑
+
+}
 tasks.build {
     dependsOn(tasks.shadowJar)
 }
+

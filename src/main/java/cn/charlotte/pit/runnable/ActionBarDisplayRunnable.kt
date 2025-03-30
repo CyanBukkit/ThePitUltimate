@@ -12,7 +12,6 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Minecart
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.inventivetalent.reflection.minecraft.Minecraft
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 

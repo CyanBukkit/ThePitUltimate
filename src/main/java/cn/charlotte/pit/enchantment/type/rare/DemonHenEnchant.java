@@ -16,7 +16,7 @@ import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Bukkit;
@@ -43,7 +43,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Include
+
 @BowOnly
 @AutoRegister
 public class DemonHenEnchant extends AbstractEnchantment implements IActionDisplayEnchant, IPlayerShootEntity, Listener, IPlayerKilledEntity {

@@ -5,7 +5,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
-@Include
+
 @AutoRegister
 public class RAndRKillStreak extends AbstractPerk implements Listener {
     @Override

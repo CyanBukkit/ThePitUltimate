@@ -17,7 +17,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/3/25 16:21
  */
-@Include
+
 @AutoRegister
 public class ApostleForTheGesusKillStreak extends AbstractPerk implements Listener, IAttackEntity, IPlayerShootEntity {
 

@@ -1,7 +1,7 @@
 package cn.charlotte.pit.buff;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.util.command.util.ClassUtil;
+import cn.charlotte.pit.util.ClassUtil;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;

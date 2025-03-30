@@ -3,7 +3,7 @@ package cn.charlotte.pit.perk.type.prestige;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/17 13:14
  */
-@Include
+
 public class MythicismPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

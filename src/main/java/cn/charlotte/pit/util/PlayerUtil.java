@@ -12,7 +12,6 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.MegaStreak;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.chat.CC;
-import cn.charlotte.pit.util.command.CommandData;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.mojang.authlib.GameProfile;
@@ -49,35 +48,8 @@ import java.util.*;
  */
 public class PlayerUtil {
 
-    static {
-        CommandData.classes.addAll(Arrays.asList(
-                EventHandler.class,
-                InventoryUtil.class,
-                Math.class,
-                Player.class
-        ));
-    }
-
     public static String getActiveMegaStreak(Player player) {
-        final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if (!profile.isLoaded()) {
-            return null;
-        }
-
-        if (profile.getChosePerk().get(5) == null) {
-            return null;
-        }
-        for (AbstractPerk abstractPerk : ThePit.getInstance().getPerkFactory().getPerks()) { //无意义stream
-            if(abstractPerk.getPerkType() == PerkType.MEGA_STREAK
-                    && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName())){
-                if (abstractPerk instanceof MegaStreak mega) {
-                    if (profile.getStreakKills() >= mega.getStreakNeed()) {
-                        return CC.translate(abstractPerk.getDisplayName());
-                    }
-                }
-            }
-        }
-        return null;
+        return CC.translate(getActiveMegaStreakObj(player).getDisplayName());
     }
     public static AbstractPerk getActiveMegaStreakObj(Player player) {
         final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

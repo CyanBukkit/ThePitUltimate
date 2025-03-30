@@ -1,12 +1,11 @@
 package cn.charlotte.pit.util.sign;
 
 import cn.charlotte.pit.ThePit;
-import com.google.gson.Gson;
+import cn.charlotte.pit.util.Utils;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +13,7 @@ import org.bukkit.util.Vector;
 import xyz.refinedev.spigot.CarbonSpigot;
 import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,7 +25,7 @@ public class SignGui {
     protected Map<String, Vector> signLocations = new ConcurrentHashMap<>();
     protected Map<String, SignGUIListener> listeners = new ConcurrentHashMap<>();
     public SignGui(JavaPlugin plugin) {
-        CarbonSpigot.getPacketAPI().registerPacketHandler(ThePit.getInstance(), new PacketHandler() {
+        PacketHandler packetHandler = new PacketHandler() {
             @Override
             public void handleReceivedPacket(PlayerConnection playerConnection, Packet<?> packet) {
                 if (packet instanceof PacketPlayInUpdateSign sign) {
@@ -63,9 +62,12 @@ public class SignGui {
             @Override
             public void handleSentPacket(PlayerConnection playerConnection, Packet<?> packet) {
             }
-        });
-
+        };
+        Utils.addCommonHandler(packetHandler);
     }
+
+
+
     public void open(Player player, String[] messages, SignGUIListener response) {
         Location loc = new Location(player.getWorld(), 0, 1, 0);
         player.sendBlockChange(loc, Material.SIGN_POST, (byte) 0);

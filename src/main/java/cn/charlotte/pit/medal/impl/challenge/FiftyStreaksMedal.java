@@ -4,7 +4,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
 import cn.charlotte.pit.medal.AbstractMedal;
 import cn.charlotte.pit.parm.AutoRegister;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
  * @Date 2021/6/9 23:00
  *
  */
-@Include
+
 @AutoRegister
 public class FiftyStreaksMedal extends AbstractMedal implements Listener {
     @Override

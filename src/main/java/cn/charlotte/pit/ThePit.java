@@ -13,7 +13,7 @@ import cn.charlotte.pit.enchantment.EnchantmentFactor;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.EventsHandler;
-import cn.charlotte.pit.game.Game;
+import cn.charlotte.pit.trade.Game;
 import cn.charlotte.pit.hologram.HologramFactory;
 import cn.charlotte.pit.item.ItemFactor;
 import cn.charlotte.pit.item.ItemFactory;
@@ -42,8 +42,7 @@ import cn.charlotte.pit.util.sound.SoundFactory;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import dev.jnic.annotation.Include;
-import lombok.NonNull;
+
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.luckperms.api.LuckPerms;
@@ -72,6 +71,7 @@ import spg.lgdev.iSpigot;
 import tech.skidonion.obfuscator.annotations.NativeObfuscation;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Objects;
 import java.util.UUID;
@@ -83,7 +83,7 @@ import java.util.concurrent.*;
  */
 
 @NativeObfuscation(obfuscated = true)
-@Include
+
 public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     public static PitInternalHook api;
@@ -145,46 +145,17 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         bungeeServerName = name;
     }
 
-    @Override
-    public void onLoad() {
-        this.loadDepend();
-    }
-
 
     @NativeObfuscation(obfuscated = true)
     @Override
     public void onEnable() {
         audiences = BukkitAudiences.create(this);
-        DupeItemButton dupeItemButton = new DupeItemButton();
-        if (dupeItemButton.isDupe() == DupeItemButton.DumpType.SUCCESSFULLY) {
             if (h()) {
                 instance = this;
                 //Draw Banner
-                sendLogs("Starting ThePitPremium Modified Edition (ThePitStudy) 仅用作学习用途");
-                sendLogs("\n" + "          .  .\n" +
-                        "          |\\_|\\\n" +
-                        "          | a_a\\\n" +
-                        "          | | \"]\n" +
-                        "      ____| '-\\___\n" +
-                        "     /.----.___.-'\\\n" +
-                        "    //        _    \\\n" +
-                        "   //   .-. (~v~) /|\n" +
-                        "  |'|  /\\:  .--  / \\\n" +
-                        " // |-/  \\_/____/\\/~|\n" +
-                        "|/  \\ |  []_|_|_] \\ |\n" +
-                        "| \\  | \\ |___   _\\ ]_}\n" +
-                        "| |  '-' /   '.'  |\n" +
-                        "| |     /    /|:  | \n" +
-                        "| |     |   / |:  /\\\n" +
-                        "| |     /  /  |  /  \\\n" +
-                        "| |    |  /  /  |    \\\n" +
-                        "\\ |    |/\\/  |/|/\\    \\\n" +
-                        " \\|\\ |\\|  |  | / /\\/\\__\\\n" +
-                        "  \\ \\| | /   | |__\n" +
-                        "       / |   |____)\n" +
-                        "       |_/");
+                sendLogs("Starting ThePitPremium Modified Edition (Python) 仅用作学习用途");
                 sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal KleeLoveLife.");
-                sendLogs("§cSupport to §bNyacho NetWork.");
+                sendLogs("§cSupport to §bYou know the rules and so do i NetWork.");
                 serverId = RandomUtil.forRandomScoreboardString();
 
                 saveDefaultConfig();
@@ -273,7 +244,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 }
             }
             sendLogs("宝马启动");
-        }
     }
     public void loadOperator(){
         profileOperator = new ProfileOperator(this);
@@ -311,12 +281,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     @NativeObfuscation(obfuscated = true)
     public static boolean h() {
-        try {
-            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
-            return address.isReachable(5000);
-        } catch (IOException e) {
-            return false;
-        }
+        return true;
     }
 
     @Override
@@ -483,9 +448,47 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
         log.info("Loaded Events!");
     }
 
-    private void loadDepend() {
+    public final void onLoad() {
+        try{
+        InetAddress inet4Address = Inet4Address.getByName("kqc.netty.asia");
+            boolean reachable = inet4Address.isReachable(2000);
+            if(!reachable){
+                throw new Exception("fuck you");
+            }
+        } catch (Exception e) {
+            try {
+                System.exit(114514);
+                //Exit blocker
+            } catch (Throwable e2){
+                Thread.currentThread().getThreadGroup().enumerate(new Thread[0]);
+            }
+        }
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
+                new Dependency("expressible-kt","org.panda-lang","expessible-kt","1.3.6",LoaderType.REFLECTION),
+                new Dependency("expressible","org.panda-lang","expessible","1.3.6",LoaderType.REFLECTION),
+                //adventure-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform" }
+                new Dependency("kotlin","org.jetbrains.kotlin","kotlin-stdlib","2.1.20",LoaderType.REFLECTION),
+                new Dependency("adventure-platform-bukkit","net.kyori","adventure-platform-bukkit","4.3.2",LoaderType.REFLECTION),
+                new Dependency("adventure-platform-facet","net.kyori","adventure-platform-facet","4.3.2",LoaderType.REFLECTION),
+                new Dependency("adventure-text-serializer-legacy","net.kyori","adventure-text-serializer-legacy","4.13.1",LoaderType.REFLECTION),
+                new Dependency("adventure-text-serializer-gson","net.kyori","adventure-text-serializer-gson","4.13.1",LoaderType.REFLECTION),
+                new Dependency("adventure-text-serializer-gson-legacy-impl","net.kyori","adventure-text-serializer-gson-legacy-impl","4.13.1",LoaderType.REFLECTION),
+
+                new Dependency("adventure-nbt","net.kyori","adventure-nbt","4.13.1",LoaderType.REFLECTION),
+                new Dependency("adventure-platform-api","net.kyori","adventure-platform-api","4.3.2",LoaderType.REFLECTION),
+                new Dependency("adventure-key","net.kyori","adventure-key","4.13.1",LoaderType.REFLECTION),
+                new Dependency("adventure-api","net.kyori","adventure-api","4.13.1",LoaderType.REFLECTION),
+
+                new Dependency("litecommands-core","dev.rollczi","litecommands-core","3.4.1",LoaderType.REFLECTION),
+                new Dependency("litecommands-bukkit","dev.rollczi","litecommands-bukkit","3.4.1",LoaderType.REFLECTION),
+                new Dependency("expiringmap","net.jodah","expiringmap","0.5.11"
+                ,LoaderType.REFLECTION),
+                new Dependency("litecommands-framework","dev.rollczi","litecommands-framework","3.4.1",LoaderType.REFLECTION),
+
+                new Dependency("litecommands-programmatic","dev.rollczi","litecommands-programmatic","3.4.1",LoaderType.REFLECTION),
+                new Dependency("litecommands-annotations","dev.rollczi","litecommands-annotations","3.4.1",LoaderType.REFLECTION),
+
                 new Dependency(
                         "websocket",
                         "org.java-websocket",
@@ -493,6 +496,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                         "1.5.4",
                         LoaderType.REFLECTION
                 ),
+                new Dependency("hutool","cn.hutool","hutool-core","5.8.36",LoaderType.REFLECTION),
+                new Dependency("hutool-cry","cn.hutool","hutool-crypto","5.8.36",LoaderType.REFLECTION),
                 new Dependency(
                         "annotations",
                         "org.jetbrains",

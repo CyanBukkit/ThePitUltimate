@@ -4,7 +4,7 @@ import cn.charlotte.pit.item.AbstractPitItem
 import cn.charlotte.pit.menu.gem.TotallyLegitGemMenu
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
-import dev.jnic.annotation.Include
+
 import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
@@ -12,7 +12,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
-@Include
+
 class TotallyLegitGem : AbstractPitItem(), Listener {
 
     @EventHandler

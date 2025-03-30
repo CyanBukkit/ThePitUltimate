@@ -113,7 +113,7 @@ public class RankUtil {
         return getNameColor(uuid) + getPlayerName(uuid);
     }
 
-    final static String CONSTANT_BOT_NAME = "§d咱喵";
+    final static String CONSTANT_BOT_NAME = "§cPolpot";
 
     public static String getNameFormatWithPrefix(UUID uuid) {
         if(uuid == PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER){

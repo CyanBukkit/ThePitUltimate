@@ -11,7 +11,7 @@ import cn.charlotte.pit.util.SpecialUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.klee.backports.utils.SWMRHashTable;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.server.v1_8_R3.DamageSource;
@@ -29,7 +29,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Include
+
 @ArmorOnly
 public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
     @Override

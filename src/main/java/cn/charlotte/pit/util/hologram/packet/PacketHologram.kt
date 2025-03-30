@@ -4,7 +4,6 @@ import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.util.hologram.HologramAPI
 import cn.charlotte.pit.util.hologram.touch.TouchHandler
 import cn.charlotte.pit.util.hologram.view.ViewHandler
-import com.github.benmanes.caffeine.cache.AsyncCache
 import eu.decentsoftware.holograms.api.nms.NMS
 import org.bukkit.Bukkit
 import org.bukkit.Location

@@ -4,7 +4,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitQuestInactiveEvent;
 import cn.charlotte.pit.medal.AbstractMedal;
 import cn.charlotte.pit.parm.AutoRegister;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
  * @Creator Misoryan
  * @Date 2021/6/11 0:09
  */
-@Include
+
 @AutoRegister
 public class QuestMedal extends AbstractMedal implements Listener {
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");

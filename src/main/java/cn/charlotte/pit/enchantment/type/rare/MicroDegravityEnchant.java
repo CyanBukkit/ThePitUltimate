@@ -7,17 +7,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import cn.charlotte.pit.util.item.ItemUtil;
-import cn.klee.backports.utils.SWMRHashTable;
-import com.comphenix.protocol.PacketType;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.util.concurrent.AtomicDouble;
-import net.minecraft.server.v1_8_R3.NBTBase;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagInt;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,8 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ArmorOnly
 @AutoRegister
 public class MicroDegravityEnchant extends AbstractEnchantment implements Listener,IPlayerDamaged, IAttackEntity {
-    Cache<Entity,Byte> entityByteMap = Caffeine.newBuilder().
-            expireAfterWrite(30,TimeUnit.SECONDS).build();
+    Map<Entity, Map.Entry<Long,Byte>> entityByteMap = new ConcurrentHashMap<>();
     @Override
     public String getEnchantName() {
         return "微观反重力";
@@ -84,33 +73,34 @@ public class MicroDegravityEnchant extends AbstractEnchantment implements Listen
         if(!player.isOnGround()){
             return;
         }
-        Byte hurtTime;
-        if ((hurtTime = entityByteMap.getIfPresent(player)) == null) {
-            entityByteMap.put(player, (byte) 0);
+        Map.Entry<Long, Byte> hurtTime1 = entityByteMap.get(player);
+        if (hurtTime1 == null || (System.currentTimeMillis() - hurtTime1.getKey()) > 30000) {
+            entityByteMap.put(player, Map.entry(System.currentTimeMillis(), (byte) 0));
         } else {
+            Byte hurtTime = hurtTime1.getValue();
             if (++hurtTime > 2) {
                 player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + 2));
             }
             int min = Math.min(2, hurtTime);
-            entityByteMap.put(player, (byte) min);
+            entityByteMap.put(player, Map.entry(System.currentTimeMillis(), (byte) min));
 
         }
     }
     @EventHandler
     public void onQuit(PlayerQuitEvent e){
-        entityByteMap.invalidate(e.getPlayer());
+        entityByteMap.remove(e.getPlayer());
     }
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Byte b = entityByteMap.getIfPresent(attacker);
+        Map.Entry<Long,Byte> b = entityByteMap.get(attacker);
         if (b != null) {
             if (enchantLevel <= 1) {
                 return;
             } else if (enchantLevel >= 3) {
-                boostDamage.addAndGet(0.15 * b);
+                boostDamage.addAndGet(0.15 * b.getValue());
             } else {
-                boostDamage.addAndGet(0.11 * b);
+                boostDamage.addAndGet(0.11 * b.getValue());
             }
         }
 

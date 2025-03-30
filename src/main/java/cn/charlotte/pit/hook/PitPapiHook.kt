@@ -14,7 +14,7 @@ object PitPapiHook: PlaceholderExpansion() {
     }
 
     override fun getAuthor(): String {
-        return "XiaoYuZao,EmptyIrony,YukiEnd,KleeLoveLife,Araykal,JiaoShou520,Aka. ZhangYuanLang"
+        return "XiaoYuZao,EmptyIrony"
     }
 
     override fun getVersion(): String {

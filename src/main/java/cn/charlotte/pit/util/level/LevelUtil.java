@@ -4,7 +4,6 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton;
 import cn.charlotte.pit.util.chat.RomanUtil;
-import net.jafama.FastMath;
 
 /**
  * @Author: Misoryan
@@ -133,23 +132,23 @@ public class LevelUtil {
         double boost = 1.1;
         if (level >= 10) {
             return switch ((level - level % 10) / 10) {
-                case 1 -> FastMath.round(FastMath.powFast(boost, prestige) * 30);
-                case 2 -> FastMath.round(FastMath.powFast(boost, prestige) * 50);
-                case 3 -> FastMath.round(FastMath.powFast(boost, prestige) * 75);
-                case 4 -> FastMath.round(FastMath.powFast(boost, prestige) * 125);
-                case 5 -> FastMath.round(FastMath.powFast(boost, prestige) * 250);
-                case 6 -> FastMath.round(FastMath.powFast(boost, prestige) * 600);
-                case 7 -> FastMath.round(FastMath.powFast(boost, prestige) * 800);
-                case 8 -> FastMath.round(FastMath.powFast(boost, prestige) * 900);
-                case 9 -> FastMath.round(FastMath.powFast(boost, prestige) * 1000);
-                case 10 -> FastMath.round(FastMath.powFast(boost, prestige) * 1200);
+                case 1 -> Math.round(Math.pow(boost, prestige) * 30);
+                case 2 -> Math.round(Math.pow(boost, prestige) * 50);
+                case 3 -> Math.round(Math.pow(boost, prestige) * 75);
+                case 4 -> Math.round(Math.pow(boost, prestige) * 125);
+                case 5 -> Math.round(Math.pow(boost, prestige) * 250);
+                case 6 -> Math.round(Math.pow(boost, prestige) * 600);
+                case 7 -> Math.round(Math.pow(boost, prestige) * 800);
+                case 8 -> Math.round(Math.pow(boost, prestige) * 900);
+                case 9 -> Math.round(Math.pow(boost, prestige) * 1000);
+                case 10 -> Math.round(Math.pow(boost, prestige) * 1200);
                 default ->
                     //>=110
-                        FastMath.round(FastMath.powFast(boost, prestige) * 1500);
+                        Math.round(Math.pow(boost, prestige) * 1500);
             };
         } else {
             // 0~9
-            return FastMath.round(FastMath.powFast(boost, prestige) * 15);
+            return Math.round(Math.pow(boost, prestige) * 15);
         }
     }
     public static void bootCache(){

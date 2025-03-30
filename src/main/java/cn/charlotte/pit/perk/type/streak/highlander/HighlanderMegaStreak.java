@@ -13,7 +13,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/20 22:28
  */
-@Include
+
 @AutoRegister
 public class HighlanderMegaStreak extends AbstractPerk implements Listener, IAttackEntity, IPlayerDamaged, ITickTask, IPlayerKilledEntity, IPlayerBeKilledByEntity, MegaStreak {
     @Override

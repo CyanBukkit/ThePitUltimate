@@ -119,6 +119,11 @@ public class PlayerProfile {
             }
 
             @Override
+            public void saveData(Player player) {
+                throw new UnsupportedOperationException("Never save the not loaded player");
+            }
+
+            @Override
             public int getBounty() {
                 return 0;
             }
@@ -134,7 +139,7 @@ public class PlayerProfile {
    // public static final Map<UUID, BukkitRunnable> SAVING_MAP = new SWMRHashTable<>(); // do it static
 
     //private final static Map<UUID, PlayerProfile> cacheProfile = new SWMRHashTable<>();
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PlayerProfile.class);
+
     public int prestige;
     public List<String> claimedMail;
     public PlayerMailData mailData;
@@ -1143,10 +1148,10 @@ public class PlayerProfile {
     public String bountyColor() {
         Player player = Bukkit.getPlayer(getPlayerUuid());
         if (player != null) {
-            boolean itemHasEnchant = Limit24520Ench.instance.isItemHasEnchant(player.getInventory().getLeggings());
-            if (itemHasEnchant) {
-                return "&d";
-            }
+//            boolean itemHasEnchant = Limit24520Ench.instance.isItemHasEnchant(player.getInventory().getLeggings());
+//            if (itemHasEnchant) {
+//                return "&d";
+//            }
         }
 
         if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {

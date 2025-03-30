@@ -2,7 +2,7 @@ package cn.charlotte.pit.perk.type.prestige;
 
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/30 18:13
  */
-@Include
+
 public class ExtraEnderchestPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

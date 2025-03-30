@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerMailData;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.mail.Mail;
 import cn.charlotte.pit.menu.mail.MailMenu;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
@@ -20,7 +20,7 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2021/3/25 19:03
  */
-@Include
+
 public class MailNpc extends SkinNPC {
     @Override
     public String getNpcInternalName() {

@@ -6,7 +6,7 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ import java.util.List;
  * @Author Misoryan
  * @Date 2022/11/22 20:03
  */
-@Include
+
 @AutoRegister
 public class GlassPickaxeKillStreak extends AbstractPerk implements Listener {
 

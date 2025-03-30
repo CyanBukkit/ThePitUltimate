@@ -6,7 +6,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.VectorUtil;
-import cn.charlotte.pit.util.aabb.AxisAlignedBB;
+import cn.charlotte.pit.util.aabb.AABB;
 import cn.charlotte.pit.util.chat.ActionBarUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.hutool.core.collection.ConcurrentHashSet;
@@ -25,8 +25,6 @@ import org.bukkit.util.BlockIterator;
 import spg.lgdev.handler.MovementHandler;
 import xyz.upperlevel.spigot.book.BookUtil;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -162,15 +160,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
                 );
             }
 
-            PitConfig config = ThePit.getInstance().getPitConfig();
-            final AxisAlignedBB aabb = new AxisAlignedBB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
-
-            final AxisAlignedBB playerAABB = new AxisAlignedBB(to.getX(), to.getY(), to.getZ(), to.getX() + 0.8, to.getY() + 2, to.getZ() + 0.8);
-
-
-            final boolean intersects = aabb.intersectsWith(playerAABB);
-
-            boolean isInArena = !intersects;
+            boolean isInArena = isInArena(to);
 
             profile.setInArena(isInArena);
 
@@ -216,6 +206,19 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             }
         }
 
+    }
+
+    private static boolean isInArena(Location to) {
+        PitConfig config = ThePit.getInstance().getPitConfig();
+        final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
+
+        final AABB playerAABB = new AABB(to.getX(), to.getY(), to.getZ(), to.getX() + 0.8, to.getY() + 2, to.getZ() + 0.8);
+
+
+        final boolean intersects = aabb.intersectsWith(playerAABB);
+
+        boolean isInArena = !intersects;
+        return isInArena;
     }
 
     @EventHandler

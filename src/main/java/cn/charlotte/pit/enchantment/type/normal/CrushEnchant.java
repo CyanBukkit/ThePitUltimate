@@ -10,7 +10,7 @@ import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/2/8 20:01
  */
-@Include
+
 @WeaponOnly
 public class CrushEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
 

@@ -7,7 +7,7 @@ import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ import java.util.List;
  * @Creator Misoryan
  * @Date 2021/5/7 15:39
  */
-@Include
+
 @Passive
 public class CelebrityPerk extends AbstractPerk implements IPlayerKilledEntity {
     @Override

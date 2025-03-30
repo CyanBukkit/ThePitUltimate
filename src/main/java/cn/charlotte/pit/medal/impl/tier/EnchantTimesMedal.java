@@ -3,7 +3,7 @@ package cn.charlotte.pit.medal.impl.tier;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.medal.AbstractMedal;
 import cn.charlotte.pit.parm.AutoRegister;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.event.Listener;
 
 import java.text.DecimalFormat;
@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
  * @Creator Misoryan
  * @Date 2021/6/10 19:04
  */
-@Include
+
 @AutoRegister
 public class EnchantTimesMedal extends AbstractMedal implements Listener {
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");

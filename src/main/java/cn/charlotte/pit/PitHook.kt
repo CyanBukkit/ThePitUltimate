@@ -1,6 +1,5 @@
 package cn.charlotte.pit
 
-import cn.charlotte.pit.addon.AddonHandler
 import cn.charlotte.pit.command.PitAdminCommands
 import cn.charlotte.pit.command.PitAdminDupeFixCommands
 import cn.charlotte.pit.command.PitAdminSimpleCommand
@@ -74,6 +73,7 @@ import cn.charlotte.pit.quest.type.*
 import cn.charlotte.pit.runnable.*
 import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable
 import cn.charlotte.pit.util.menu.ButtonListener
@@ -92,7 +92,7 @@ object PitHook {
     @JvmStatic
     val gitVersion = "53c934dac"
     @JvmStatic
-    val itemVersion = "ShanguanLingV1uuid"
+    val itemVersion = "Python"
     fun init() {
         try {
             NewConfiguration.loadFile()
@@ -125,8 +125,6 @@ object PitHook {
         val field = PluginDescriptionFile::class.java.getDeclaredField("version")
         field.isAccessible = true
         field.set(description, gitVersion)
-
-        AddonHandler.start()
 
         ActionBarDisplayRunnable.start()
 
@@ -187,9 +185,8 @@ object PitHook {
 
     private fun loadRunnable() {
 
-        EventRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 60L, 120L)
 
-        AnnouncementRunnable.runTaskTimerAsynchronously(ThePit.getInstance(), 0, 40 * 60)
+        //AnnouncementRunnable.runTaskTimerAsynchronously(ThePit.getInstance(), 0, 40 * 60)
         GoldDropRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
         ProtectRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
@@ -250,31 +247,188 @@ object PitHook {
         val enchantmentFactor = ThePit.getInstance().enchantmentFactor
         val classes = mutableListOf(
             //new dark_rare
-            CatastrophicEnchant::class.java,
+//            CatastrophicEnchant::class.java,
+//            ComboUnpredictablyEnchant::class.java,
+//            ComboDazzlingGoldEnchant::class.java,
+//            ComboRottenHeartEnchant::class.java,
+//
+//            //rare
+//            NightFallEnchant::class.java,
+//            MysticRealmEnchant::class.java,
+//            TheSwiftWindEnchant::class.java,
+//           // MinersEnchant::class.java,
+//            SoulEarterEnchant::class.java,
+//            EscapeEnchant::class.java,
+//            UndeadArrowEnchant::class.java,
+//            ComboComaEnchant::class.java,
+//            AssassinsEnchant::class.java,
+//          //  CriticalHitEnchant::class.java,
+//            ComboStealEnchant::class.java,
+//            //BloodFeatherEnchant::class.java,
+//
+//
+//            //normal
+//            PhantomShieldEnchant::class.java,
+//            KingKillersEnchant::class.java,
+//            SanctionEnchant::class.java,
+//
+//            //end
+//            ClubRodEnchant::class.java,
+//            GrandmasterEnchant::class.java,
+//            LuckOfPondEnchant::class.java,
+//            RogueEnchant::class.java,
+//            Regularity::class.java,
+//            ThinkOfThePeopleEnchant::class.java,
+//            NewDealEnchant::class.java,
+//            ReallyToxicEnchant::class.java,
+//            SingularityEnchant::class.java,
+//            GrimReaperEnchant::class.java,
+//            HedgeFundEnchant::class.java,
+//            MindAssaultEnchant::class.java,
+//            MiseryEnchant::class.java,
+//            SanguisugeEnchant::class.java,
+//            SomberEnchant::class.java,
+//            SpiteEnchant::class.java,
+//            ComboVenomEnchant::class.java,
+//            GoldenHandcuffsEnchant::class.java,
+//            EvilWithinEnchant::class.java,
+//            GuardianEnchant::class.java,
+//            JerryEnchant::class.java,
+//            JerryEnchant2::class.java,
+//            JerryEnchant3::class.java,
+//            JerryEnchant4::class.java,
+//            JerryEnchant5::class.java,
+//            AntiAbsorptionEnchant::class.java,
+//            AntiBowSpammerEnchantP::class.java,
+//            AntiBowSpammerEnchantW::class.java,
+//            AntiMythicismEnchant::class.java,
+//            ArrowArmoryEnchant::class.java,
+//         //   PrisonBossEnchant::class.java,
+//            BillyEnchant::class.java,
+//            BooBooEnchant::class.java,
+//            BountyHunterEnchant::class.java,
+//            BowComboEnchant::class.java,
+//            BruiserEnchant::class.java,
+//            BerserkerEnchant::class.java,
+//            BulletTimeEnchant::class.java,
+//            ComboDamageEnchant::class.java,
+//            ComboHealEnchant::class.java,
+//            ComboSwiftEnchant::class.java,
+//            CounterJanitorEnchant::class.java,
+//            CounterOffensiveEnchant::class.java,
+//            CreativeEnchant::class.java,
+//            CriticallyFunkyEnchant::class.java,
+//            CriticallyRichEnchant::class.java,
+//            CrushEnchant::class.java,
+//            DavidAndGoliathEnchant::class.java,
+//            DiamondAllergyEnchant::class.java,
+//            DiamondBreakerEnchant::class.java,
+//            ElectrolytesEnchant::class.java,
+//            EndlessQuiverEnchant::class.java,
+//            FractionalReserveEnchant::class.java,
+//            GoldExplorerEnchant::class.java,
+//            GutsEnchant::class.java,
+//            HermesEnchant::class.java,
+//            HuntTheHunterEnchant::class.java,
+//            LifeStealEnchant::class.java,
+//            LureEnchant::class.java,
+//            MirrorEnchant::class.java,
+//            MixedCombatEnchant::class.java,
+//            NotGladiatorEnchant::class.java,
+//            OverHealEnchant::class.java,
+//            PantsRadarEnchant::class.java,
+//            ParasiteEnchant::class.java,
+//            PebbleEnchant::class.java,
+//            PeroxideEnchant::class.java,
+//            PitMBAEnchant::class.java,
+//            PitPocketEnchant::class.java,
+//            PowerEnchant::class.java,
+//            ProtectionEnchant::class.java,
+//            PurpleGoldEnchant::class.java,
+//            ReaperEnchant::class.java,
+//            ResentmentEnchant::class.java,
+//            RespawnAbsorptionEnchant::class.java,
+//            RespawnResistanceEnchant::class.java,
+//            RustBowEnchant::class.java,
+//            SelfCheckoutEnchant::class.java,
+//            SharkEnchant::class.java,
+//            SharpnessEnchant::class.java,
+//            SierraEnchant::class.java,
+//            SniperEnchant::class.java,
+//            SpeedyKillEnchant::class.java,
+//            SprintDrainEnchant::class.java,
+//            CriticalMomentEnchant::class.java,
+//            StrikeGoldEnchant::class.java,
+//            ThornsEnchant::class.java,
+//            ThumpEnchant::class.java,
+//            TNTEnchant::class.java,
+//            TrueDamageArrowEnchant::class.java,
+//            UnBreakEnchant::class.java,
+//            WaspEnchant::class.java,
+//            WisdomEnchant::class.java,
+//            BlazingAngelEnchant::class.java,
+//            BounceBowEnchant::class.java,
+//            DJBundlePVZ::class.java,
+//            EchoOfSnowlandPEnchant::class.java,
+//            EchoOfSnowlandWEnchant::class.java,
+//            EmergencyColonyEnchant::class.java,
+//            KFCBoomerEnchant::class.java,
+//            LaserEnchant::class.java,
+//            MultiExchangeLocationEnchant::class.java,
+//            OPDamageEnchant::class.java,
+//            PowerAngelEnchant::class.java,
+//            StarJudgementEnchant::class.java,
+//            SuperLaserEnchant::class.java,
+//            SuperSlimeEnchant::class.java,
+//            TestEnchant::class.java,
+//            AbsorptionEnchant::class.java,
+//            ArchangelEnchant::class.java,
+//            AssassinEnchant::class.java,
+//            //ComboDustEnchant::class.java,
+//            BillionaireEnchant::class.java,
+//            ComboStrikeEnchant::class.java,
+//            ComboStunEnchant::class.java,
+//           MicroDegravityEnchant::class.java,
+//            DivineMiracleEnchant::class.java,
+//            EnderBowEnchant::class.java,
+//            ExecutionerEnchant::class.java,
+//            FightOrDieEnchant::class.java,
+//            GambleEnchant::class.java,
+//            GomrawsHeartEnchant::class.java,
+//            HealerEnchant::class.java,
+//            HealShieldEnchant::class.java,
+//            HemorrhageEnchant::class.java,
+//            InstaBoomEnchant::class.java,
+//            LuckyShotEnchant::class.java,
+//            MegaLongBowEnchant::class.java,
+//            PaparazziEnchant::class.java,
+//            PullBowEnchant::class.java,
+//            SlimeEnchant::class.java,
+//            SnowballsEnchant::class.java,
+//            SolitudeEnchant::class.java,
+//            SpeedyHitEnchant::class.java,
+//            ThePunchEnchant::class.java,
+//            //HyperOxygenEnchant::class.java,
+//            VolleyEnchant::class.java,
+//            AegisEnchant::class.java,
+//            SoulRipperEnchant::class.java,
+//            DemonHenEnchant::class.java,
+//            AceOfSpades::class.java,
+//            CricketEnchant::class.java,
+//            Brakes::class.java,
+//            SeriousSituationEnchant::class.java,
+//            BreachingChargeEnchant::class.java
+//            JudgmentShot::class.java,
+//            LastStandEnchant::class.java,
+//            BreakTheMirror::class.java,
             ComboUnpredictablyEnchant::class.java,
             ComboDazzlingGoldEnchant::class.java,
-            ComboRottenHeartEnchant::class.java,
-
-            //rare
             NightFallEnchant::class.java,
             MysticRealmEnchant::class.java,
             TheSwiftWindEnchant::class.java,
-            MinersEnchant::class.java,
             SoulEarterEnchant::class.java,
-            EscapeEnchant::class.java,
-            UndeadArrowEnchant::class.java,
-            ComboComaEnchant::class.java,
-            AssassinsEnchant::class.java,
-            CriticalHitEnchant::class.java,
-            ComboStealEnchant::class.java,
-            BloodFeatherEnchant::class.java,
-
-
-            //normal
             PhantomShieldEnchant::class.java,
             KingKillersEnchant::class.java,
-            SanctionEnchant::class.java,
-
             //end
             ClubRodEnchant::class.java,
             GrandmasterEnchant::class.java,
@@ -301,18 +455,19 @@ object PitHook {
             JerryEnchant3::class.java,
             JerryEnchant4::class.java,
             JerryEnchant5::class.java,
+            //JerryEnchant6::class.java,
+            /*            JerryEnchant7::class.java,*/
             AntiAbsorptionEnchant::class.java,
             AntiBowSpammerEnchantP::class.java,
             AntiBowSpammerEnchantW::class.java,
             AntiMythicismEnchant::class.java,
             ArrowArmoryEnchant::class.java,
-            PrisonBossEnchant::class.java,
+            BerserkerEnchant::class.java,
             BillyEnchant::class.java,
             BooBooEnchant::class.java,
             BountyHunterEnchant::class.java,
             BowComboEnchant::class.java,
             BruiserEnchant::class.java,
-            BerserkerEnchant::class.java,
             BulletTimeEnchant::class.java,
             ComboDamageEnchant::class.java,
             ComboHealEnchant::class.java,
@@ -360,7 +515,6 @@ object PitHook {
             SniperEnchant::class.java,
             SpeedyKillEnchant::class.java,
             SprintDrainEnchant::class.java,
-            CriticalMomentEnchant::class.java,
             StrikeGoldEnchant::class.java,
             ThornsEnchant::class.java,
             ThumpEnchant::class.java,
@@ -387,11 +541,9 @@ object PitHook {
             AbsorptionEnchant::class.java,
             ArchangelEnchant::class.java,
             AssassinEnchant::class.java,
-            ComboDustEnchant::class.java,
             BillionaireEnchant::class.java,
             ComboStrikeEnchant::class.java,
             ComboStunEnchant::class.java,
-           MicroDegravityEnchant::class.java,
             DivineMiracleEnchant::class.java,
             EnderBowEnchant::class.java,
             ExecutionerEnchant::class.java,
@@ -401,7 +553,6 @@ object PitHook {
             HealerEnchant::class.java,
             HealShieldEnchant::class.java,
             HemorrhageEnchant::class.java,
-            InstaBoomEnchant::class.java,
             LuckyShotEnchant::class.java,
             MegaLongBowEnchant::class.java,
             PaparazziEnchant::class.java,
@@ -411,15 +562,11 @@ object PitHook {
             SolitudeEnchant::class.java,
             SpeedyHitEnchant::class.java,
             ThePunchEnchant::class.java,
-            HyperOxygenEnchant::class.java,
             VolleyEnchant::class.java,
             AegisEnchant::class.java,
             SoulRipperEnchant::class.java,
-            DemonHenEnchant::class.java,
             AceOfSpades::class.java,
-            CricketEnchant::class.java,
             Brakes::class.java,
-            SeriousSituationEnchant::class.java,
             BreachingChargeEnchant::class.java
         )
 
@@ -428,19 +575,19 @@ object PitHook {
                 classes += LastShadowLeapForward::class.java
 
                 classes += RealManEnchant::class.java*/
-        classes += TrotEnchant::class.java
-        classes += TrytoGiveEnchant::class.java
+//        classes += TrotEnchant::class.java
+//        classes += TrytoGiveEnchant::class.java
+//
+//        classes += BreakArmorEnchant::class.java
+//        //classes += CoinGloriousEnchant::class.java
+//        classes += ComboBacktrackEnchant::class.java
+//        classes += DoubleJumpEnchant::class.java
+//        classes += SacredArrowEnchant::class.java
+//        //classes += TrashPandaEnchant::class.java
+//        classes += JerryEnchant5::class.java
 
-        classes += BreakArmorEnchant::class.java
-        classes += CoinGloriousEnchant::class.java
-        classes += ComboBacktrackEnchant::class.java
-        classes += DoubleJumpEnchant::class.java
-        classes += SacredArrowEnchant::class.java
-        classes += TrashPandaEnchant::class.java
-        classes += JerryEnchant5::class.java
-
-        classes += Limit24520Ench::class.java
-        classes += LimitXZQ1Ench::class.java
+      //  classes += Limit24520Ench::class.java
+      //  classes += LimitXZQ1Ench::class.java
 
         enchantmentFactor.init(LinkedHashSet(classes))
     }
@@ -458,6 +605,110 @@ object PitHook {
     private fun loadPerks() {
         val perkFactory = ThePit.getInstance().perkFactory
         val classes = listOf<Class<*>>(
+//            BowBoostPerk::class.java,
+//            BuildBattlerBoostPerk::class.java,
+//            CoinBoostPerk::class.java,
+//            CoinContractBoostPerk::class.java,
+//            CoinPrestigeBoostPerk::class.java,
+//            DmgReduceBoostPerk::class.java,
+//            ElGatoBoostPerk::class.java,
+//            MeleeBoostPerk::class.java,
+//            XPBoostPerk::class.java,
+//            XPContractBoostPerk::class.java,
+//            XPPrestigeBoostPerk::class.java,
+//            ArrowArmoryPerk::class.java,
+//            AssistantToTheStreakerPerk::class.java,
+//            AutoBuyPerk::class.java,
+//            BarbarianPerk::class.java,
+//            BeastModeBundlePerk::class.java,
+//            BountySolventShopPerk::class.java,
+//            CelebrityPerk::class.java,
+//            CombatSpadePerk::class.java,
+//            ContractorPerk::class.java,
+//            CoolPerk::class.java,
+//            CoopCatPerk::class.java,
+//            DiamondLeggingsShopPerk::class.java,
+//            DirtyPerk::class.java,
+//            DivineInterventionPerk::class.java,
+//            ExtraEnderchestPerk::class.java,
+//            ExtraHeartPerk::class.java,
+//            ExtraKillStreakSlotPerk::class.java,
+//            ExtraPerkSlotPerk::class.java,
+//            FastPassPerk::class.java,
+//            FirstAidEggPerk::class.java,
+//            FirstStrikePerk::class.java,
+//            FishClubPerk::class.java,
+//            GoldPickaxePerk::class.java,
+//            GrandFinaleBundlePerk::class.java,
+//            HeresyPerk::class.java,
+//            HermitBundlePerk::class.java,
+//            HighlanderBundlePerk::class.java,
+//            ImpatientPerk::class.java,
+//            IronPackShopPerk::class.java,
+//            JumpBoostShopPerk::class.java,
+////            KungFuKnowledgePerk::class.java,
+//            MarathonPerk::class.java,
+//            MonsterPerk::class.java,
+//            MythicismPerk::class.java,
+//            ObsidianStackShopPerk::class.java,
+//            OlympusPerk::class.java,
+//            PantsBundleShopPerk::class.java,
+//            SwrodBundleShopPerk::class.java,
+//            BowBundleShopPerk::class.java,
+//            PromotionPerk::class.java,
+//            PureRage::class.java,
+//            RamboPerk::class.java,
+//            RawNumbersPerk::class.java,
+//            ReconPerk::class.java,
+//            ScamArtistPerk::class.java,
+//            SelfConfidencePerk::class.java,
+//            TacticalInsertionsPerk::class.java,
+//            TastySoupPerk::class.java,
+//            TenacityPerk::class.java,
+//            TheWayPerk::class.java,
+//            ThickPerk::class.java,
+//            ToTheMoonBundle::class.java,
+//            YummyPerk::class.java,
+//            ArrowRecoveryPerk::class.java,
+//            BountyHunterPerk::class.java,
+//            FishingRodPerk::class.java,
+//            GladiatorPerk::class.java,
+//            GoldenHeadPerk::class.java,
+//            GoldMinerPerk::class.java,
+//            LuckyDiamondPerk::class.java,
+//            MinerPerk::class.java,
+//            OverHealPerk::class.java,
+//            SafetyFirstPerk::class.java,
+//            SafetySecondPerk::class.java,
+//            StrengthPerk::class.java,
+//            TrickleDownPerk::class.java,
+//            VampirePerk::class.java,
+//            BeastModeMegaStreak::class.java,
+//            RAndRKillStreak::class.java,
+//            TacticalRetreatKillStreak::class.java,
+//            ToughSkinKillStreak::class.java,
+//            ApostleForTheGesusKillStreak::class.java,
+//            AssuredStrikeKillStreak::class.java,
+//            GrandFinaleMegaStreak::class.java,
+//            LeechKillStreak::class.java,
+//            AuraOfProtectionKillStreak::class.java,
+//            GlassPickaxeKillStreak::class.java,
+//            HermitMegaStreak::class.java,
+//            IceCubeKillStreak::class.java,
+//            PungentKillStreak::class.java,
+//            GoldNanoFactoryKillStreak::class.java,
+//            HighlanderMegaStreak::class.java,
+//            KhanateKillStreak::class.java,
+//            WitherCraftKillStreak::class.java,
+//            ArquebusierKillStreak::class.java,
+//            ExpliciousKillStreak::class.java,
+//            FightOrFlightKillStreak::class.java,
+//            OverDriveMegaStreak::class.java,
+//            SecondGappleKillStreak::class.java,
+//            SpongeSteveKillStreak::class.java,
+//            UberStreak::class.java,
+//            ToTheMoonMegaStreak::class.java,
+//            SuperStreaker::class.java
             BowBoostPerk::class.java,
             BuildBattlerBoostPerk::class.java,
             CoinBoostPerk::class.java,
@@ -537,6 +788,7 @@ object PitHook {
             TrickleDownPerk::class.java,
             VampirePerk::class.java,
             BeastModeMegaStreak::class.java,
+         //   MonsterKillStreak::class.java,
             RAndRKillStreak::class.java,
             TacticalRetreatKillStreak::class.java,
             ToughSkinKillStreak::class.java,
@@ -623,7 +875,7 @@ object PitHook {
             CakeEvent::class.java,
             CarePackageEvent::class.java,
             EveOneBountyEvent::class.java,
-            QuickMathEvent::class.java,
+            //QuickMathEvent::class.java,
             SquadsEvent::class.java,
             DoubleRewardsEvent::class.java,
             RespawnFamilyEvent::class.java
@@ -657,13 +909,13 @@ object PitHook {
         )
         for (aClass in classes) {
             try {
-                val o = aClass.newInstance()
+                val o = aClass.getConstructor().newInstance()
                 Bukkit.getPluginManager().registerEvents(o as Listener, ThePit.getInstance())
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
-        CarbonSpigot.getPacketAPI().registerPacketHandler(ThePit.getInstance(),PacketListener())
+        Utils.addCommonHandler(PacketListener());
 
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
             Bukkit.getPluginManager().registerEvents(MythicMobListener, ThePit.getInstance());

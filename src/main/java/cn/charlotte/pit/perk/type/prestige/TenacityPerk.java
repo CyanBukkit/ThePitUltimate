@@ -8,7 +8,7 @@ import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/1/10 15:13
  */
-@Include
+
 @Passive
 public class TenacityPerk extends AbstractPerk implements IPlayerKilledEntity {
     @Override

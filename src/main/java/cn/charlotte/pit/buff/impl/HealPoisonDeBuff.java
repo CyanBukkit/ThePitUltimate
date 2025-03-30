@@ -5,7 +5,7 @@ import cn.charlotte.pit.buff.AbstractPitBuff;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
 import cn.charlotte.pit.parm.AutoRegister;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +20,7 @@ import java.util.List;
  * @Creator Misoryan
  * @Date 2021/5/9 16:49
  */
-@Include
+
 @AutoRegister
 public class HealPoisonDeBuff extends AbstractPitBuff implements Listener {
 

@@ -1,7 +1,7 @@
 package cn.charlotte.pit.util.sound;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.util.command.util.ClassUtil;
+import cn.charlotte.pit.util.ClassUtil;
 import lombok.SneakyThrows;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

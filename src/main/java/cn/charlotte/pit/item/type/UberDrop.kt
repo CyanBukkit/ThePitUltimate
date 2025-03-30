@@ -9,7 +9,7 @@ import cn.charlotte.pit.util.inventory.InventoryUtil
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.random.RandomUtil
-import dev.jnic.annotation.Include
+
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.event.EventHandler
@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import kotlin.random.Random
 
-@Include
+
 @AutoRegister
 class UberDrop: AbstractPitItem(), Listener{
     var index = -1

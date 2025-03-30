@@ -54,10 +54,10 @@ public abstract class AbstractPitItem {
                     lore.add("&7" + s);
                 }
             } else {
-                lore.add("&7此附魔已被移除. | &bNyacho @ 2022 - Future");
+                lore.add("&7此附魔已被移除. &8&o@thepit.cc");
             }
             if (entry.getKey().getRarity() == EnchantmentRarity.DISABLED) {
-                lore.add("&7此附魔暂时被管理员停用. | &bNyacho @ 2022 - Future");
+                lore.add("&7此附魔暂时被管理员停用. &8&o@thepit.cc");
             }
             lore.add(" ");
         }

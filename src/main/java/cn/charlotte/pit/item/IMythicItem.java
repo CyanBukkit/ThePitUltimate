@@ -12,7 +12,6 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
-import com.github.benmanes.caffeine.cache.*;
 import it.unimi.dsi.fastutil.objects.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -141,7 +140,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         if (maxLive != 0) {
-            lore.add(("&7保质期: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive)
+            lore.add(("&7寄期: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive)
              + (isBoostedByGem() ? "&a ♦" : "") + (isBoostedByGlobalGem() ? "&b ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
             lore.add("");
         }
@@ -162,12 +161,12 @@ public abstract class IMythicItem extends AbstractPitItem {
 
             if (this instanceof MythicLeggingsItem) {
                 if (color != MythicColor.DARK) {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果 &7| &bNyacho @ 2022 - Future");
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果 &8&o@thepit.cc");
                 } else {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &7| &bNyacho @ 2022 - Future");
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &8&o@thepit.cc");
                 }
             } else {
-                lore.add("&bNyacho @ 2022 - Future");
+                lore.add("&8thepit.cc");
             }
 
             if (genesisFound) {
@@ -178,10 +177,10 @@ public abstract class IMythicItem extends AbstractPitItem {
             lore.add("&7死后保留");
             lore.add("");
             if (this instanceof MythicLeggingsItem) {
-                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "在神话之井中附魔");
-                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种食品级的象征 | &bNyacho @ 2022 - Future");
+                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "在神话之井盖中附魔");
+                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种象征 &8&o@thepit.cc");
             } else {
-                lore.add("&7在神话之井中附魔 | &bNyacho @ 2022 - Future");
+                lore.add("&7在神话之井盖中附魔 &8&o@thepit.cc");
             }
             this.tier = 0;
         }
@@ -190,8 +189,6 @@ public abstract class IMythicItem extends AbstractPitItem {
             lore.add("&7原: " + color.getChatColor() + color.getDisplayName() + "色神话之甲");
         }
         //Dark Pants
-        lore.add(defUUID.equals(uuid) ? "&8请放入附魔台再取出进行刷新操作" : "&8" + uuid);
-
         ItemBuilder builder = new ItemBuilder(this.getItemDisplayMaterial());
         if (name != null) {
             builder.name(name);

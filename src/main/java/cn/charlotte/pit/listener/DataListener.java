@@ -6,14 +6,11 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
-import cn.charlotte.pit.runnable.BountyRunnable;
 import cn.charlotte.pit.util.PitProfileUpdater;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
-import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FishHook;
@@ -24,15 +21,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: EmptyIrony
@@ -42,27 +32,27 @@ import java.util.concurrent.TimeUnit;
 public class DataListener implements Listener {
 
     public DataListener() {
-        JedisPool jedisPool = ThePit.getInstance().getJedis(); //coming soon
-        if (jedisPool != null) {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), () -> {
-                String databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
-
-                try(Jedis jedis = jedisPool.getResource()) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(player);
-                        if(operator == null) {
-
-                            jedis.expire(
-                                    "THEPIT_" + databaseName + "_" + player.getUniqueId().toString(),
-                                    15
-                            );
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }, 10L, 10L);
-        }
+//        JedisPool jedisPool = ThePit.getInstance().getJedis(); //coming soon
+//        if (jedisPool != null) {
+//            Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), () -> {
+//                String databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
+//
+//                try(Jedis jedis = jedisPool.getResource()) {
+//                    for (Player player : Bukkit.getOnlinePlayers()) {
+//                        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(player);
+//                        if(operator == null) {
+//
+//                            jedis.expire(
+//                                    "THEPIT_" + databaseName + "_" + player.getUniqueId().toString(),
+//                                    15
+//                            );
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }, 10L, 10L);
+//        }
     }
 
 
@@ -108,14 +98,16 @@ public class DataListener implements Listener {
 
                         profile.setLogin(false); //我草泥马
 
-                        profile.disallowUnsafe()
-                                .setInventoryUnsafe(playerInv).allow();
-                        profileOper.pending(i -> {
-                            //unsafe exit
+                        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> { //keep synchronize
+                                    profile.disallowUnsafe()
+                                            .setInventoryUnsafe(playerInv).allow();
+                                    profileOper.pending(i -> {
+                                        //unsafe exit
 
-                            profile.disallowUnsafe()
-                                    .setInventoryUnsafe(playerInv).allow();
-                        });
+                                        profile.disallowUnsafe()
+                                                .setInventoryUnsafe(playerInv).allow();
+                                    });
+                                });
                         CombatListener instance = CombatListener.INSTANCE;
                         if (instance != null && !profile.getCombatTimer().hasExpired()) {
                             Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
@@ -149,24 +141,6 @@ public class DataListener implements Listener {
                 profile.setRodUsed(profile.getRodUsed() + 1);
             }
         }
-    }
-
-    public boolean canLoad(Player player) {
-        String databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
-        JedisPool jedisPool = ThePit.getInstance().getJedis();
-        if (jedisPool != null) {
-            try (Jedis jedis = jedisPool.getResource()) {
-                return "OK".equals(jedis.set(
-                        "THEPIT_" + databaseName + "_" + player.getUniqueId().toString(),
-                        "locked", "NX", "EX", 30L
-                ));
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public void whenLoaded(PlayerProfile load) {

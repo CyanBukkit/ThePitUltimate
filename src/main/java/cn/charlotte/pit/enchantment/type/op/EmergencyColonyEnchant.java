@@ -12,7 +12,7 @@ import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Creator Misoryan
  * @Date 2021/5/11 16:35
  */
-@Include
+
 @ArmorOnly
 public class EmergencyColonyEnchant extends AbstractEnchantment implements ITickTask, IPlayerDamaged {
 

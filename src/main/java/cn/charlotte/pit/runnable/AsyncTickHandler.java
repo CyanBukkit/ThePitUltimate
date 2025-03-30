@@ -62,7 +62,7 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
                         .getLastActionTimestamp();
                 //AntiAFK
                 if (now - lastActionTimestamp >= 10 * 60 * 1000) {
-                    player.sendMessage("=w=, 你好像在挂机哦", true);
+                    player.sendMessage("...", true);
                     operator.pending(i -> {
                         playerProfileByUuid.setLastActionTimestamp(now);
                     });

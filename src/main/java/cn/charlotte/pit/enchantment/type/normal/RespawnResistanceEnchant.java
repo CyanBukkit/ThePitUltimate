@@ -6,7 +6,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerRespawn;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
  * @Author: Misoryan
  * @Created_In: 2021/2/24 18:53
  */
-@Include
+
 @ArmorOnly
 public class RespawnResistanceEnchant extends AbstractEnchantment implements IPlayerRespawn {
     @Override

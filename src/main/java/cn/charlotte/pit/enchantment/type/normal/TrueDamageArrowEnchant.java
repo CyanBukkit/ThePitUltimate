@@ -11,7 +11,7 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ import java.text.DecimalFormat;
  * @Author: Misoryan
  * @Created_In: 2021/1/30 15:33
  */
-@Include
+
 @BowOnly
 @AutoRegister
 public class TrueDamageArrowEnchant extends AbstractEnchantment implements Listener {

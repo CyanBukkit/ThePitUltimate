@@ -28,6 +28,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -66,17 +67,15 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
 
     @Override
     public void onActive() {
-        Cooldown normalEnd = ThePit.getInstance().getEventFactory().getNormalEnd();
-        HomoGenerator homoGenerator = HomoGenerator.getGeneratorInst();
+        HomoGenerator homoGenerator = HomoGenerator.get();
         try {
             if(TheEquation == null || TheEquationQuests == null) {
-                int homo = 10000 + ThreadLocalRandom.current().nextInt(30000);
+                int homo = 10000 + ThreadLocalRandom.current().nextInt(1000);
                 this.TheEquationQuests = homoGenerator.homo(homo);
                 this.TheEquation = String.valueOf(homo);
             }
 
             } catch (Exception e) {
-            e.printStackTrace();
             ThePit.getInstance()
                     .getEventFactory()
                     .safeInactiveEvent(this);
@@ -84,7 +83,7 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
         setTop(0);
             setStartTime(System.currentTimeMillis());
             alreadyAnswered.clear();
-            CC.boardCast("&5&l速算! &7前五名在聊天栏发出答案的玩家可以获得 &0暗聚块 &6+520硬币 &b+100%经验值 &7!");
+            CC.boardCast("&5&l速算! &7前五名在聊天栏发出答案的玩家可以获得 &6+100硬币 &b+100%经验值 &7!");
             CC.boardCast("&5&l速算! &7在聊天栏里写下你的答案: &e" + TheEquationQuests);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 TitleUtil.sendTitle(player, "&5&l速算!", ("&e" + TheEquationQuests), 20, 20 * 5, 10);
@@ -106,7 +105,6 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
                 if (System.currentTimeMillis() - startTime <= 2.5 * 1000) {
                     new QuickMathsMedal().addProgress(profile, 1);
                 }
-                e.getPlayer().getInventory().addItem(ChunkOfVileItem.toItemStack());
                 CC.boardCast("&5&l速算! &e#" + top + " " + profile.getFormattedName() + " &7在 &e" + TimeUtil.millisToRoundedTime(System.currentTimeMillis() - startTime) + " &7内回答正确!");
                 profile.setCoins(profile.getCoins() + 520);
                 profile.grindCoins(520);
@@ -126,8 +124,8 @@ public class QuickMathEvent implements IEvent, INormalEvent, Listener {
         HandlerList.unregisterAll(this);//fix static
         TheEquationQuests = null;
         alreadyAnswered.clear();
-        TheEquation = null;
         CC.boardCast("&5&l速算! &7活动结束! 正确答案: &e" + TheEquation);
+        TheEquation = null;
     }
 
 

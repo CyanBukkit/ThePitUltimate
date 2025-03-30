@@ -21,7 +21,6 @@ public class SpecialUtil {
     static {
 /*        SPECIALS.add("Love_E");
         SPECIALS.add("114514211");*/
-        BLACKS.add("yizhimeng728");
     }
 
     public static String  addPlayer(Player player){

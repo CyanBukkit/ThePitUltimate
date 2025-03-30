@@ -22,7 +22,7 @@ import cn.charlotte.pit.util.level.LevelUtil
 import cn.charlotte.pit.util.rank.RankUtil
 import cn.charlotte.pit.util.toNMS
 import com.mongodb.client.model.Filters
-import dev.jnic.annotation.Include
+
 import dev.rollczi.litecommands.annotations.argument.Arg
 import dev.rollczi.litecommands.annotations.async.Async
 import dev.rollczi.litecommands.annotations.command.Command
@@ -47,8 +47,8 @@ import kotlin.math.min
  * ThePitPlus<br>
  * @author huanmeng_qwq
  */
-@Include
-@Command(name = "pitAdmin")
+
+@Command(name = "py")
 @Permission("pit.admin")
 class PitAdminCommands {
     @Execute(name = "createEquation")
@@ -545,18 +545,6 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
-    @Execute(name = "itemPointCheck")
-    fun itemPointCheck(@Context player: Player) {
-        try {
-            val stack = player.itemInHand
-            player.sendMessage("Bukkit Pointer", true)
-            player.sendMessage(stack.javaPointer,true)
-            player.sendMessage("NMS")
-            player.sendMessage(stack.toNMS()?.javaSignedPoint,true);
-        } catch (ignored: Exception) {
-            player.sendMessage("Error")
-        }
-    }
     @Execute(name = "flushMythicItems")
     fun flushPlayerItem(@Context player: Player, @Arg("player_name") playerName: String) {
         try {
@@ -570,7 +558,7 @@ class PitAdminCommands {
                 }
             }
             player1.updateInventory()
-            player.sendMessage("成功刷新.", true)
+            player.sendMessage("成功刷新.")
         } catch (ignored: Exception) {
             player.sendMessage("Error")
         }

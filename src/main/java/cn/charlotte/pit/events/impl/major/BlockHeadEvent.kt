@@ -16,7 +16,6 @@ import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.MessageType
 import cn.charlotte.pit.util.cooldown.Cooldown
-import cn.charlotte.pit.util.hologram.reflection.MathUtil.floor
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.time.TimeUtil
 import eu.decentsoftware.holograms.api.DHAPI
@@ -44,6 +43,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
+import kotlin.math.floor
 
 
 /*

@@ -21,7 +21,6 @@ import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.scoreboard.AssembleAdapter;
 import cn.charlotte.pit.util.time.TimeUtil;
-import dev.jnic.annotation.Include;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.entity.Player;
 
@@ -38,60 +37,29 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
-            Arrays.asList("&6&l传奇 &0: &e&l乱斗",
-                    "&f&l传&6&l奇 &0: &e&l乱斗",
-                    "&e&l传&f&l奇 &0: &6&l乱斗",
-                    "&6&l传&e&l奇 &0: &f&l乱斗",
-                    "&f&l传&6&l奇 &0: &e&l乱斗",
-                    "&e&l传&f&l奇 &0: &6&l乱斗",
-                    "&6&l传&e&l奇 &0: &f&l乱斗",
-                    "&f&l传&6&l奇 &0: &e&l乱斗",
-                    "&e&l传&f&l奇 &0: &6&l乱斗",
-                    "&6&l传&e&l奇 &0: &f&l乱斗",
-                    "&6&l传奇 &0: &e&l乱斗",
-                    "&6&l传奇 &0: &e&l乱斗",
-                    "&6&l传奇 &0: &e&l乱斗",
-                    "&6&l传奇 &0: &e&l乱斗",
-                    "&6&l传奇 &0: &e&l乱斗",
-                    "&6&l传奇 &0: &e&l乱斗",
-                    "&6&l传奇 &0: &e&l乱斗",
-                    "&f&l传&6&l奇 &0: &e&l乱斗",
-                    "&e&l传&f&l奇 &0: &6&l乱斗",
-                    "&6&l传&e&l奇 &0: &f&l乱斗",
-                    "&f&l传&6&l奇 &0: &e&l乱斗",
-                    "&e&l传&f&l奇 &0: &6&l乱斗",
-                    "&6&l传&e&l奇 &0: &f&l乱斗",
-                    "&f&l传&6&l奇 &0: &e&l乱斗",
-                    "&e&l传&f&l奇 &0: &6&l乱斗",
-                    "&6&l传&e&l奇 &0: &f&l乱斗"
+            Arrays.asList(
+                    "&4&l魔&6&l蛆&e&l仙&a&l斗",
+                    "&6&l魔&e&l蛆&a&l仙&b&l斗",
+                    "&e&l魔&a&l蛆&b&l仙&9&l斗",
+                    "&a&l魔&b&l蛆&9&l仙&5&l斗",
+                    "&b&l魔&9&l蛆&5&l仙&d&l斗",
+                    "&9&l魔&5&l蛆&d&l仙&c&l斗",
+                    "&5&l魔&d&l蛆&c&l仙&4&l斗",
+                    "&d&l魔&c&l蛆&4&l仙&6&l斗",
+                    "&c&l魔&4&l蛆&6&l仙&e&l斗",
+                    "&4&l魔&6&l蛆&e&l仙&a&l斗",
+                    // 反向渐变
+                    "&a&l魔&e&l蛆&6&l仙&4&l斗",
+                    "&e&l魔&6&l蛆&4&l仙&c&l斗",
+                    "&6&l魔&4&l蛆&c&l仙&d&l斗",
+                    "&4&l魔&c&l蛆&d&l仙&5&l斗",
+                    "&c&l魔&d&l蛆&5&l仙&9&l斗",
+                    "&d&l魔&5&l蛆&9&l仙&b&l斗",
+                    "&5&l魔&9&l蛆&b&l仙&a&l斗",
+                    "&9&l魔&b&l蛆&a&l仙&e&l斗",
+                    "&b&l魔&a&l蛆&e&l仙&6&l斗",
+                    "&a&l魔&e&l蛆&6&l仙&4&l斗"
             );
-    private final List<String> blacksAnimationTitle =
-            Arrays.asList("&d&l小鸟乱斗",
-                    "&5&l小&d&l鸟乱斗",
-                    "&f&l小&5&l鸟&d&l乱斗",
-                    "&f&小鸟&5&l乱&d&斗",
-                    "&f&l小鸟乱&5&l斗",
-                    "&f&l小鸟乱斗",
-                    "&d&l小鸟乱斗",
-                    "&f&l小鸟乱斗",
-                    "&d&l小鸟乱斗",
-                    "&f&l小鸟乱斗",
-                    "&d&l小鸟乱斗",
-                    "&f&l小鸟乱斗",
-                    "&d&l小鸟乱斗",
-                    "&a&l小鸟乱斗",
-                    "&b&l小鸟乱斗",
-                    "&c&l小鸟乱斗",
-                    "&d&l小鸟乱斗",
-                    "&1&l小鸟乱斗",
-                    "&2&l小鸟乱斗",
-                    "&3&l小鸟乱斗",
-                    "&4&l小鸟乱斗",
-                    "&5&l小鸟乱斗",
-                    "&6&l小鸟乱斗",
-                    "&7&l小鸟乱斗",
-                    "&8&l小鸟乱斗",
-                    "&9&l小鸟乱斗");
 
     private long lastAnimationTime = 0;
     private int animationTick = 0;
@@ -99,9 +67,6 @@ public class Scoreboard implements AssembleAdapter {
     @Override
     public String getTitle(Player player) {
         List<String> title;
-     /*   if (FuncsKt.isSpecial(player)){
-            title = blacksAnimationTitle;
-        }else {*/
         title = animationTitle;
 
         String text = title.get(animationTick);
@@ -116,9 +81,8 @@ public class Scoreboard implements AssembleAdapter {
         return text;
     }
 
-    private static final List<String> LOADING = new ObjectArrayList<>(List.of("", "&c正在加载档案...", "&c请稍等片刻...", ""
-            , "&c如长时仍在加载,"
-            , "&c请重新进入服务器.", "", "&c公告群: &e425831669", "", "&enyacho.cn"));
+    private static final List<String> LOADING = new ObjectArrayList<>(new String[]{"", "&c正在加载档案...", "&c请稍等片刻..."
+            , "", "&c公告群: &e187119685", "", "&bthepit.cc"});
     private final ObjectArrayList<String> carrierList = new ObjectArrayList<>(16);
 
     @Override
@@ -187,12 +151,12 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         if (prestige > 0) {
-            lines.add("&f精级: &e" + RomanUtil.convert(prestige) + " " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
+            lines.add("&f等级: &e" + RomanUtil.convert(prestige) + " " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         } else {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
         if (level >= 120) {
-            lines.add("&f经验: &b满");
+            lines.add("&f经验: &b你无敌了");
         } else {
             lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Ex");
         }
@@ -201,14 +165,14 @@ public class Scoreboard implements AssembleAdapter {
             lines.add(" ");
             lines.add("&f击杀: &a" + profile.getCurrentQuest().getCurrent() + "/" + profile.getCurrentQuest().getTotal());
             if (profile.getCurrentQuest().getCurrent() == profile.getCurrentQuest().getTotal()) {
-                lines.add("&f剩时: &a完成");
+                lines.add("&f状态: &a完成");
             } else {
                 if (profile.getCurrentQuest().getEndTime() > currentSystemTime) {
-                    lines.add("&f剩时: &a"
+                    lines.add("&f状态: &a"
                             + TimeUtil.millisToTimer(
                             profile.getCurrentQuest().getEndTime() - currentSystemTime));
                 } else {
-                    lines.add("&f剩时: &c超时");
+                    lines.add("&f状态: &c超时");
                 }
             }
         }
@@ -241,7 +205,7 @@ public class Scoreboard implements AssembleAdapter {
                 if (!b) {
 
                     String combatTimerFormatted = numFormat.format(profile.getCombatTimer().getRemaining() / 1000D);
-                    lines.add("&f状态: &c凹坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                    lines.add("&f状态: &c嗦坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
                             ? "&7 " + combatTimerFormatted
                             : (profile.getBounty() != 0
                             ? "&7 " + combatTimerFormatted
@@ -253,7 +217,7 @@ public class Scoreboard implements AssembleAdapter {
                 String e;
                 if (profile.getBounty() != 0) {
                     String genesisColor = profile.bountyColor();
-                    e = "&f连赏: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g";
+                    e = "&f连杀: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g";
                 } else {
                     e = "&f连杀: &a" + numFormat.format(profile.getStreakKills());
 
@@ -280,7 +244,7 @@ public class Scoreboard implements AssembleAdapter {
                 if (profile.getStreakKills() < 1D) {
                     lines.add("&f赏金: " + genesisColor + "&l" + profile.getBounty() + "g");
                 } else {
-                    lines.add("&f连赏: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g");
+                    lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g");
 
                 }
             }
@@ -314,13 +278,12 @@ public class Scoreboard implements AssembleAdapter {
 
         lines.add(" ");
         if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
+            lines.add("&c跑路! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
         }
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
-        } else if (FuncsKt.isSpecial(player)) {
         } else {
-            lines.add("&enyacho.cn");
+            lines.add("&ethepit.cc");
         }
         return lines;
     }

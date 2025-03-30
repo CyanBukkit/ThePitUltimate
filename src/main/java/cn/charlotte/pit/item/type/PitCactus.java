@@ -1,7 +1,7 @@
 package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.util.item.ItemBuilder;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,7 @@ import java.util.List;
  * @Creator Misoryan
  * @Date 2021/5/29 17:36
  */
-@Include
+
 public class PitCactus {
 
     public static ItemStack toItemStack() {

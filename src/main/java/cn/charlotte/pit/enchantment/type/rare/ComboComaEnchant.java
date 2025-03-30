@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ComboComaEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
     private final DecimalFormat decimalFormat = new DecimalFormat("0.0");
     private final HashMap<UUID, Cooldown> Cooldown = new HashMap();
-
+    
 
     @Override
     public String getEnchantName() {

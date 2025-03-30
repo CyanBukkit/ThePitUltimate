@@ -7,7 +7,7 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import dev.jnic.annotation.Include;
+
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ import org.bukkit.util.Vector;
  * @Creator Misoryan
  * @Date 2021/6/19 12:50
  */
-@Include
+
 @AutoRegister
 public class BounceBowEnchant extends AbstractEnchantment implements Listener {
     @Override

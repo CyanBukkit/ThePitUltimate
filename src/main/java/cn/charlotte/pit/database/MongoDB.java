@@ -13,7 +13,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.internal.connection.PowerOfTwoBufferPool;
-import dev.jnic.annotation.Include;
+
 import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.conversions.Bson;
@@ -67,7 +67,7 @@ public final class MongoDB {
         MongoClientSettings.Builder builder1 = MongoClientSettings.builder().serverApi(ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build()).applyConnectionString(connectionString);
-        if (mongoUser != null && mongoPassword != null) {
+        if (mongoUser != null && mongoPassword != null&& !mongoUser.isEmpty() && !mongoPassword.isEmpty()) {
             final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
             MongoClientSettings thePit = builder1
                     .credential(credential).applicationName("ThePitRequiredPass")

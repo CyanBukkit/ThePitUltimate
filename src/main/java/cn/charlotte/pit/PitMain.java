@@ -11,24 +11,13 @@ public class PitMain {
 
     @NativeObfuscation(obfuscated = true)
     public static void start() {
-        try {
-            //inlined code=w=
-            InetAddress address = InetAddress.getByName("thepit.nyacho.cn");
-            boolean a = address.isReachable(3000);
+        ThePit.getInstance().loadListener();
 
-            if (a) {
-                ThePit.getInstance().loadListener();
+        ThePit.setApi(PitInternalImpl.INSTANCE);
 
-                ThePit.setApi(PitInternalImpl.INSTANCE);
-
-                hook = PitHook.INSTANCE;
-                hook.init();
-                PitInternalImpl.INSTANCE.setLoaded(true);
-            }
-        } catch (IOException ignored) {
-            Thread.currentThread().getThreadGroup().getParent().enumerate(new Thread[0]);
-            ignored.printStackTrace();
-        }
+        hook = PitHook.INSTANCE;
+        hook.init();
+        PitInternalImpl.INSTANCE.setLoaded(true);
     }
 
 }

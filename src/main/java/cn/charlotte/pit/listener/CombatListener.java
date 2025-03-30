@@ -39,7 +39,7 @@ import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import lombok.val;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;

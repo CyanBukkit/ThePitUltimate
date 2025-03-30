@@ -11,7 +11,7 @@ import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/1/17 18:26
  */
-@Include
+
 @WeaponOnly
 @BowOnly
 @ArmorOnly

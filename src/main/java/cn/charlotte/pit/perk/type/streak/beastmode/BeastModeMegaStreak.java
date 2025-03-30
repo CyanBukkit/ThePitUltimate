@@ -14,7 +14,7 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Creator Misoryan
  * @Date 2021/4/27 17:11
  */
-@Include
+
 @AutoRegister
 public class BeastModeMegaStreak extends AbstractPerk implements Listener, ITickTask, IPlayerKilledEntity, IAttackEntity, IPlayerShootEntity, IPlayerBeKilledByEntity, MegaStreak {
 

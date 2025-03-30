@@ -5,9 +5,9 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.util.cooldown.Cooldown
-import dev.jnic.annotation.Include
 
-@Include
+
+
 @ArmorOnly
 class ClubRodEnchant: AbstractEnchantment() {
     companion object {

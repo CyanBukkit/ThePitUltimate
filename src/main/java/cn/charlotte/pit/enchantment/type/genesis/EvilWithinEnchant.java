@@ -3,13 +3,13 @@ package cn.charlotte.pit.enchantment.type.genesis;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import dev.jnic.annotation.Include;
+
 
 /**
  * @Author: Misoryan
  * @Created_In: 2021/3/16 19:47
  */
-@Include
+
 public class EvilWithinEnchant extends AbstractEnchantment {
     @Override
     public String getEnchantName() {

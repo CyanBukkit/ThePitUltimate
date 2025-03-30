@@ -8,7 +8,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/1/19 14:57
  */
-@Include
+
 @WeaponOnly
 public class EchoOfSnowlandWEnchant extends AbstractEnchantment implements IAttackEntity {
     @Override

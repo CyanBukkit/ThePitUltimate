@@ -2,14 +2,14 @@ package cn.charlotte.pit.item.type.mythic;
 
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.IMythicSword;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/17 11:38
  */
-@Include
+
 public class MythicSwordItem extends IMythicItem implements IMythicSword {
     @Override
     public String getInternalName() {

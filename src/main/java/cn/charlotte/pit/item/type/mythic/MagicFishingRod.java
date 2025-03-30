@@ -3,7 +3,7 @@ package cn.charlotte.pit.item.type.mythic;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.util.item.ItemBuilder;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,7 +15,7 @@ import java.util.Map;
  * @Author: EmptyIrony
  * @Date: 2021/2/7 1:10
  */
-@Include
+
 public class MagicFishingRod extends IMythicItem {
     @Override
     public String getInternalName() {

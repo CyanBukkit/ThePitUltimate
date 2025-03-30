@@ -40,7 +40,7 @@ public class Dependency {
     private static final String ALIYUN_MIRROR_REPO = "https://maven.aliyun.com/nexus/content/groups/public/";
     private static final String AIKAR_REPO = "https://repo.aikar.co/content/groups/aikar/";
     private static final String OSSRH_REPO = "https://oss.sonatype.org/content/groups/public/";
-
+    private static final String PANDA_REPO = "https://repo.panda-lang.org/releases";
     private static final String MAVEN_FORMAT = "%s/%s/%s/%s-%s.jar";
 
     private final String name;
@@ -68,7 +68,8 @@ public class Dependency {
                     new URL(LUCK_MIRROR_REPO + path),
                     new URL(MAVEN_CENTRAL_REPO + path),
                     new URL(AIKAR_REPO + path),
-                    new URL(OSSRH_REPO + path)
+                    new URL(OSSRH_REPO + path),
+                    new URL(PANDA_REPO + path)
             );
         } catch (MalformedURLException e) {
             throw new RuntimeException(e); // propagate

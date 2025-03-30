@@ -133,6 +133,7 @@ public class DependencyManager {
      */
     private Path downloadDependency(Path saveDirectory, cn.charlotte.pit.util.dependencies.Dependency dependency) throws Exception {
         String fileName = dependency.getName().toLowerCase() + "-" + dependency.getVersion() + ".jar";
+        System.out.println("Checking " + fileName);
         Path file = saveDirectory.resolve(fileName);
 
         // if the file already exists, don't attempt to re-download it.

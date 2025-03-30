@@ -132,6 +132,7 @@ public class CC {
         for (StackTraceElement element : e.getStackTrace()) {
             sender.sendMessage(CC.translate("&cAt " + element.toString()));
         }
+        e.printStackTrace();
         sender.sendMessage(translate("&c执行操作时发生了一个错误.请完整截图此信息并反馈至管理员!"));
     }
 

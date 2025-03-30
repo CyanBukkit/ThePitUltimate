@@ -11,7 +11,7 @@ import cn.charlotte.pit.util.chat.RomanUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.time.TimeUtil
 import cn.charlotte.pit.util.toMythicItem
-import dev.jnic.annotation.Include
+
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -22,7 +22,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.*
 
-@Include
+
 @AutoRegister
 @WeaponOnly
 class LastShadowLeapForward : AbstractEnchantment(), Listener, IActionDisplayEnchant {

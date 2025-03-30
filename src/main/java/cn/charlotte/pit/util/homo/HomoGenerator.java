@@ -1,625 +1,247 @@
 package cn.charlotte.pit.util.homo;
 
-
-import cn.charlotte.pit.ThePit;
-import com.caoccao.javet.exceptions.JavetException;
-import com.caoccao.javet.interop.V8Host;
-import com.caoccao.javet.interop.V8Runtime;
-import com.caoccao.javet.values.V8Value;
-import com.caoccao.javet.values.primitive.V8ValueUndefined;
-import com.caoccao.javet.values.reference.V8ValueFunction;
-import lombok.Getter;
-
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import java.io.*;
 import java.math.BigDecimal;
-import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HomoGenerator implements AutoCloseable{
-    @Getter
-    static HomoGenerator generatorInst;
-
+public class HomoGenerator {
+    static HomoGenerator INSTANCE;
     static {
+        INSTANCE = new HomoGenerator();
+    }
+    public static HomoGenerator get(){
+        return INSTANCE;
+    }
+    private final List<Integer> numsReversed;
+    private Map<String, String> NUMBERS;
+    private static final Pattern IS_DOT_REGEX = Pattern.compile("\\.(\\d+?)0*$");
+
+    private static final Pattern FINISHER_MULT_DIV_PATTERN = Pattern.compile("([*/])\\(([^()+*/\\-]+)\\)");
+
+    private static final Pattern FINISHER_ADD_SUB_PATTERN = Pattern.compile("([+-])\\(([^()]+)\\)([+\\-)])");
+
+    private static final Pattern FINISHER_ADD_SUB_END_PATTERN = Pattern.compile("([+-])\\(([^()]+)\\)$");
+    private static final Pattern FINISHER_OUTERMOST_BRACKET_PATTERN = Pattern.compile("^\\(([^()]+)\\)$");
+    private static final Pattern NUM_PATTERN = Pattern.compile("\\d+|⑨");
+
+    public HomoGenerator() {
+        this.NUMBERS = new HashMap<>();
+        initializeNums();
+        // Extract integer keys, filter positive, sort ascendingly
+        this.numsReversed = new ArrayList<>();
+        for (String key : NUMBERS.keySet()) {
+            if (isIntegerKey(key) && Integer.parseInt(key) > 0) {
+                numsReversed.add(Integer.parseInt(key));
+            }
+        }
+        Collections.sort(numsReversed);
+    }
+
+    /**
+     * Initializes the Nums map with the provided key-value pairs.
+     */
+    private void initializeNums() {
+        // Initialize with provided key-value pairs
+        NUMBERS = new HashMap<>() {{
+            put("229028", "⌈sin(114514°)+cos(114514°)⌉");  // 通过三角函数取整
+            put("114514", "√(114514²)");                   // 平方根恒等式
+            put("58596", "114×⌊tan(514°)⌋");               // 三角函数取整运算
+            put("49654", "⌈√(114514)⌉×44");                // 平方根取整
+            put("400", "√(160000)");                       // 直接平方根
+            put("100", "√(10000)");                        // 完美平方
+            put("25", "5×√(25)");                          // 自映射平方根
+            put("16", "4^√4");                             // 根号指数
+            put("9", "√81");                               // 完美平方
+            put("4", "√4+√4");                             // 根号叠加
+            put("1", "sin²(√1)+cos²(√1)");                 // 三角恒等式
+            put("0", "sin(√1)-sin(√1)");                   // 三角零值
+            put("2", "√(5-1)");                            // 代数平方根
+            put("3", "√(5+4)");                            // 简单平方根
+            put("5", "⌈√24⌉");                             // 向上取整
+            put("⑨", "⌊√85⌋");                             // 向下取整
+        }};
+    }
+
+    /**
+     * Converts the given number into a string representation based on the Nums mapping.
+     *
+     * @param num The number to convert.
+     * @return The converted string.
+     */
+    public String homo(double num) {
+        return finisher(demolish(num));
+    }
+
+    /**
+     * Finds the smallest divisor from numsReversed that is less than or equal to num.
+     *
+     * @param num The number to find the divisor for.
+     * @return The smallest divisor.
+     */
+    private Integer getMinDiv(double num) {
+        for (int i = numsReversed.size() - 1; i >= 0; i--) {
+            int candidate = numsReversed.get(i);
+            if (num >= candidate) {
+                return candidate;
+            }
+        }
+        return null; // Or throw an exception if no divisor is found
+    }
+
+    /**
+     * Recursively breaks down the number into its components based on the Nums mapping.
+     *
+     * @param num The number to demolish.
+     * @return The expression string.
+     */
+    private String demolish(double num) {
+        if (Double.isInfinite(num) || Double.isNaN(num)) {
+            return String.format("这么恶臭的%s有必要论证吗", num);
+        }
+
+        if (num < 0) {
+            String positivePart = demolish(-num);
+            // Replace "*1" if present
+            return String.format("(⑨)*(%s)", positivePart).replace("*1", "");
+        }
+
+        if (!isInteger(num)) {
+            // Handle decimal fractions
+            BigDecimal bd = BigDecimal.valueOf(num).setScale(16, RoundingMode.DOWN);
+            Matcher matcher = IS_DOT_REGEX.matcher(bd.toPlainString());
+            if (matcher.find()) {
+                int n = matcher.group(1).length();
+                double scaledNum = num * Math.pow(10, n);
+                return String.format("(%s)/(10)^(%d)", demolish(scaledNum), n);
+            }
+            // Fallback if regex doesn't match
+            return "";
+        }
+
+        int intNum = (int) num;
+        String key = String.valueOf(intNum);
+        if (NUMBERS.containsKey(key)) {
+            return key;
+        }
+
+        Integer div = getMinDiv(num);
+        if (div == null || div == 0) {
+            // Cannot find a suitable divisor, return the number as string
+            return key;
+        }
+
+        double quotient = Math.floor(num / div);
+        double remainder = num % div;
+
+        StringBuilder sb = new StringBuilder();
+
+        if (quotient > 0) {
+            sb.append(String.format("%d*(%s)", div, demolish(quotient)));
+        }
+
+        if (remainder > 0) {
+            if (sb.length() > 0) {
+                sb.append("+");
+            }
+            sb.append(String.format("(%s)", demolish(remainder)));
+        }
+
+        // Replace "*1" and "+0" with empty strings
+        String result = sb.toString().replace("*1", "").replace("+0", "");
+        return result;
+    }
+
+    /**
+     * Processes the expression string by performing regex-based replacements.
+     *
+     * @param expr The expression to finish.
+     * @return The finished expression.
+     */
+    private String finisher(String expr) {
+        // Replace numbers and '⑨' with their corresponding strings in Nums
+        StringBuilder replacedExpr = new StringBuilder();
+        Matcher matcher = NUM_PATTERN.matcher(expr);
+        int lastIndex = 0;
+        while (matcher.find()) {
+            replacedExpr.append(expr, lastIndex, matcher.start());
+            String match = matcher.group();
+            if (match.equals("⑨")) {
+                replacedExpr.append(NUMBERS.getOrDefault("⑨", "⑨"));
+            } else {
+                String replacement = NUMBERS.getOrDefault(match, match);
+                replacedExpr.append(replacement);
+            }
+            lastIndex = matcher.end();
+        }
+        replacedExpr.append(expr.substring(lastIndex));
+        expr = replacedExpr.toString().replace("^", "**");
+
+        // Perform [*|/] followed by (expr) -> replace with operator + expr
+        Matcher mulDivMatcher = FINISHER_MULT_DIV_PATTERN.matcher(expr);
+        while (mulDivMatcher.find()) {
+            String operator = mulDivMatcher.group(1);
+            String innerExpr = mulDivMatcher.group(2);
+            expr = expr.replace(mulDivMatcher.group(), operator + innerExpr);
+            mulDivMatcher = FINISHER_MULT_DIV_PATTERN.matcher(expr);
+        }
+
+        // Perform [+|-] followed by (expr) followed by [+|-|)] -> replace with operator + expr + trailing
+        Matcher addSubMatcher = FINISHER_ADD_SUB_PATTERN.matcher(expr);
+        while (addSubMatcher.find()) {
+            String operator = addSubMatcher.group(1);
+            String innerExpr = addSubMatcher.group(2);
+            String trailing = addSubMatcher.group(3);
+            expr = expr.replace(addSubMatcher.group(), operator + innerExpr + trailing);
+            addSubMatcher = FINISHER_ADD_SUB_PATTERN.matcher(expr);
+        }
+
+        // Perform [+|-] followed by (expr) at the end -> replace with operator + expr
+        Matcher addSubEndMatcher = FINISHER_ADD_SUB_END_PATTERN.matcher(expr);
+        while (addSubEndMatcher.find()) {
+            String operator = addSubEndMatcher.group(1);
+            String innerExpr = addSubEndMatcher.group(2);
+            expr = expr.replace(addSubEndMatcher.group(), operator + innerExpr);
+            addSubEndMatcher = FINISHER_ADD_SUB_END_PATTERN.matcher(expr);
+        }
+
+        // Remove outermost brackets if present
+        Matcher outermostMatcher = FINISHER_OUTERMOST_BRACKET_PATTERN.matcher(expr);
+        if (outermostMatcher.matches()) {
+            expr = outermostMatcher.group(1);
+        }
+
+        // Replace "+-" with "-"
+        expr = expr.replace("+-", "-");
+
+        return expr;
+    }
+
+    /**
+     * Checks if a double value is an integer.
+     *
+     * @param num The number to check.
+     * @return True if the number is an integer, false otherwise.
+     */
+    private boolean isInteger(double num) {
+        return num == Math.floor(num) && !Double.isInfinite(num);
+    }
+
+    /**
+     * Checks if a key is an integer.
+     *
+     * @param key The key to check.
+     * @return True if the key represents an integer, false otherwise.
+     */
+    private boolean isIntegerKey(String key) {
         try {
-            generatorInst = new HomoGenerator();
-        } catch (JavetException e) {
-            throw new RuntimeException(e);
+            Integer.parseInt(key);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 
-    V8Runtime v8Runtime = V8Host.getV8Instance().createV8Runtime();
-    public HomoGenerator() throws JavetException {
-        v8Runtime.getGlobalObject().bindFunction("homo","((Nums) => {\n" +
-                "\tconst numsReversed = Object.keys(Nums).map(x => +x).filter(x => x > 0)\n" +
-                "\tconst getMinDiv = (num) => {\n" +
-                "\t\tfor (let i = numsReversed.length; i >= 0; i--)\n" +
-                "\t\t\tif (num >= numsReversed[i])\n" +
-                "\t\t\t\treturn numsReversed[i]\n" +
-                "\t}\n" +
-                "\tconst isDotRegex = /\\.(\\d+?)0{0,}$/\n" +
-                "\tconst demolish = (num) => {\n" +
-                "\t\tif (typeof num !== \"number\")\n" +
-                "\t\t\treturn \"\"\n" +
-                "\n" +
-                "\t\tif (num === Infinity || Number.isNaN(num))\n" +
-                "\t\t\treturn `这么恶臭的${num}有必要论证吗`\n" +
-                "\n" +
-                "\t\tif (num < 0)\n" +
-                "\t\t\treturn `(⑨)*(${demolish(num * -1)})`.replace(/\\*\\(1\\)/g, \"\")\n" +
-                "\n" +
-                "\t\tif (!Number.isInteger(num)) {\n" +
-                "\t\t\t// abs(num) is definitely smaller than 2**51\n" +
-                "\t\t\t// rescale\n" +
-                "\t\t\tconst n = num.toFixed(16).match(isDotRegex)[1].length\n" +
-                "\t\t\treturn `(${demolish(num * Math.pow(10, n))})/(10)^(${n})`\n" +
-                "\t\t}\n" +
-                "\n" +
-                "\t\tif (Nums[num])\n" +
-                "\t\t\treturn String(num)\n" +
-                "\n" +
-                "\t\tconst div = getMinDiv(num)\n" +
-                "\t\treturn (`${div}*(${demolish(Math.floor(num / div))})+` +\n" +
-                "\t\t\t`(${demolish(num % div)})`).replace(/\\*\\(1\\)|\\+\\(0\\)$/g, \"\")\n" +
-                "\t}\n" +
-                "\t//Finisher\n" +
-                "\tconst finisher = (expr) => {\n" +
-                "\t\texpr = expr.replace(/\\d+|⑨/g, (n) => Nums[n]).replace(\"^\", \"**\")\n" +
-                "\t\t//As long as it matches ([\\*|\\/])\\(([^\\+\\-\\(\\)]+)\\), replace it with $1$2\n" +
-                "\t\twhile (expr.match(/[\\*|\\/]\\([^\\+\\-\\(\\)]+\\)/))\n" +
-                "\t\t\texpr = expr.replace(/([\\*|\\/])\\(([^\\+\\-\\(\\)]+)\\)/, (m, $1, $2) => $1 + $2)\n" +
-                "\t\t//As long as it matches ([\\+|\\-])\\(([^\\(\\)]+)\\)([\\+|\\-|\\)]), replace it with $1$2$3\n" +
-                "\t\twhile (expr.match(/[\\+|\\-]\\([^\\(\\)]+\\)[\\+|\\-|\\)]/))\n" +
-                "\t\t\texpr = expr.replace(/([\\+|\\-])\\(([^\\(\\)]+)\\)([\\+|\\-|\\)])/, (m, $1, $2, $3) => $1 + $2 + $3)\n" +
-                "\t\t//As long as it matches ([\\+|\\-])\\(([^\\(\\)]+)\\)$, replace it with $1$2\n" +
-                "\t\twhile (expr.match(/[\\+|\\-]\\(([^\\(\\)]+)\\)$/))\n" +
-                "\t\t\texpr = expr.replace(/([\\+|\\-])\\(([^\\(\\)]+)\\)$/, (m, $1, $2) => $1 + $2)\n" +
-                "\t\t//If there is a bracket in the outermost part, remove it\n" +
-                "\t\tif (expr.match(/^\\([^\\(\\)]+?\\)$/))\n" +
-                "\t\t\texpr = expr.replace(/^\\(([^\\(\\)]+)\\)$/, \"$1\")\n" +
-                "\n" +
-                "\t\texpr = expr.replace(/\\+-/g,'-')\n" +
-                "\t\treturn expr\n" +
-                "\t}\n" +
-                "\treturn (num) => finisher(demolish(num))\n" +
-                "})({\n" +
-                "\t229028: \"(114514+114514)\",\n" +
-                "\t114514: \"114514\",\n" +
-                "\t58596: \"114*514\",\n" +
-                "\t49654: \"11*4514\",\n" +
-                "\t45804: \"11451*4\",\n" +
-                "\t23256: \"114*51*4\",\n" +
-                "\t22616: \"11*4*514\",\n" +
-                "\t19844: \"11*451*4\",\n" +
-                "\t16030: \"1145*14\",\n" +
-                "\t14515: \"1+14514\",\n" +
-                "\t14514: \"1*14514\",\n" +
-                "\t14513: \"-1+14514\",\n" +
-                "\t11455: \"11451+4\",\n" +
-                "\t11447: \"11451-4\",\n" +
-                "\t9028: \"(1+1)*4514\",\n" +
-                "\t8976: \"11*4*51*4\",\n" +
-                "\t7980: \"114*5*14\",\n" +
-                "\t7710: \"(1+14)*514\",\n" +
-                "\t7197: \"1+14*514\",\n" +
-                "\t7196: \"1*14*514\",\n" +
-                "\t7195: \"-1+14*514\",\n" +
-                "\t6930: \"11*45*14\",\n" +
-                "\t6682: \"(1-14)*-514\",\n" +
-                "\t6270: \"114*(51+4)\",\n" +
-                "\t5818: \"114*51+4\",\n" +
-                "\t5810: \"114*51-4\",\n" +
-                "\t5808: \"(1+1451)*4\",\n" +
-                "\t5805: \"1+1451*4\",\n" +
-                "\t5804: \"1*1451*4\",\n" +
-                "\t5803: \"-1+1451*4\",\n" +
-                "\t5800: \"(1-1451)*-4\",\n" +
-                "\t5725: \"1145*(1+4)\",\n" +
-                "\t5698: \"11*(4+514)\",\n" +
-                "\t5610: \"-11*(4-514)\",\n" +
-                "\t5358: \"114*(51-4)\",\n" +
-                "\t5005: \"11*(451+4)\",\n" +
-                "\t4965: \"11*451+4\",\n" +
-                "\t4957: \"11*451-4\",\n" +
-                "\t4917: \"11*(451-4)\",\n" +
-                "\t4584: \"(1145+1)*4\",\n" +
-                "\t4580: \"1145*1*4\",\n" +
-                "\t4576: \"(1145-1)*4\",\n" +
-                "\t4525: \"11+4514\",\n" +
-                "\t4516: \"1+1+4514\",\n" +
-                "\t4515: \"1+1*4514\",\n" +
-                "\t4514: \"1-1+4514\",\n" +
-                "\t4513: \"-1*1+4514\",\n" +
-                "\t4512: \"-1-1+4514\",\n" +
-                "\t4503: \"-11+4514\",\n" +
-                "\t4112: \"(1+1)*4*514\",\n" +
-                "\t3608: \"(1+1)*451*4\",\n" +
-                "\t3598: \"(11-4)*514\",\n" +
-                "\t3435: \"-1145*(1-4)\",\n" +
-                "\t3080: \"11*4*5*14\",\n" +
-                "\t3060: \"(11+4)*51*4\",\n" +
-                "\t2857: \"1+14*51*4\",\n" +
-                "\t2856: \"1*14*51*4\",\n" +
-                "\t2855: \"-1+14*51*4\",\n" +
-                "\t2850: \"114*5*(1+4)\",\n" +
-                "\t2736: \"114*(5+1)*4\",\n" +
-                "\t2652: \"(1-14)*51*-4\",\n" +
-                "\t2570: \"1*(1+4)*514\",\n" +
-                "\t2475: \"11*45*(1+4)\",\n" +
-                "\t2420: \"11*4*(51+4)\",\n" +
-                "\t2280: \"114*5*1*4\",\n" +
-                "\t2248: \"11*4*51+4\",\n" +
-                "\t2240: \"11*4*51-4\",\n" +
-                "\t2166: \"114*(5+14)\",\n" +
-                "\t2068: \"11*4*(51-4)\",\n" +
-                "\t2067: \"11+4*514\",\n" +
-                "\t2058: \"1+1+4*514\",\n" +
-                "\t2057: \"1/1+4*514\",\n" +
-                "\t2056: \"1/1*4*514\",\n" +
-                "\t2055: \"-1/1+4*514\",\n" +
-                "\t2054: \"-1-1+4*514\",\n" +
-                "\t2045: \"-11+4*514\",\n" +
-                "\t2044: \"(1+145)*14\",\n" +
-                "\t2031: \"1+145*14\",\n" +
-                "\t2030: \"1*145*14\",\n" +
-                "\t2029: \"-1+145*14\",\n" +
-                "\t2024: \"11*(45+1)*4\",\n" +
-                "\t2016: \"-(1-145)*14\",\n" +
-                "\t1980: \"11*45*1*4\",\n" +
-                "\t1936: \"11*(45-1)*4\",\n" +
-                "\t1848: \"(11+451)*4\",\n" +
-                "\t1824: \"114*(5-1)*4\",\n" +
-                "\t1815: \"11+451*4\",\n" +
-                "\t1808: \"1*(1+451)*4\",\n" +
-                "\t1806: \"1+1+451*4\",\n" +
-                "\t1805: \"1+1*451*4\",\n" +
-                "\t1804: \"1-1+451*4\",\n" +
-                "\t1803: \"1*-1+451*4\",\n" +
-                "\t1802: \"-1-1+451*4\",\n" +
-                "\t1800: \"1*-(1-451)*4\",\n" +
-                "\t1793: \"-11+451*4\",\n" +
-                "\t1760: \"-(11-451)*4\",\n" +
-                "\t1710: \"114*-5*(1-4)\",\n" +
-                "\t1666: \"(114+5)*14\",\n" +
-                "\t1632: \"(1+1)*4*51*4\",\n" +
-                "\t1542: \"1*-(1-4)*514\",\n" +
-                "\t1526: \"(114-5)*14\",\n" +
-                "\t1485: \"11*-45*(1-4)\",\n" +
-                "\t1456: \"1+1451+4\",\n" +
-                "\t1455: \"1*1451+4\",\n" +
-                "\t1454: \"-1+1451+4\",\n" +
-                "\t1448: \"1+1451-4\",\n" +
-                "\t1447: \"1*1451-4\",\n" +
-                "\t1446: \"-1+1451-4\",\n" +
-                "\t1428: \"(11-4)*51*4\",\n" +
-                "\t1386: \"11*(4+5)*14\",\n" +
-                "\t1260: \"(1+1)*45*14\",\n" +
-                "\t1159: \"1145+14\",\n" +
-                "\t1150: \"1145+1+4\",\n" +
-                "\t1149: \"1145+1*4\",\n" +
-                "\t1148: \"1145-1+4\",\n" +
-                "\t1142: \"1145+1-4\",\n" +
-                "\t1141: \"1145-1*4\",\n" +
-                "\t1140: \"(1145-1)-4\",\n" +
-                "\t1131: \"1145-14\",\n" +
-                "\t1100: \"11*4*5*(1+4)\",\n" +
-                "\t1056: \"11*4*(5+1)*4\",\n" +
-                "\t1050: \"(11+4)*5*14\",\n" +
-                "\t1036: \"(1+1)*(4+514)\",\n" +
-                "\t1026: \"114*-(5-14)\",\n" +
-                "\t1020: \"1*(1+4)*51*4\",\n" +
-                "\t981: \"1+14*5*14\",\n" +
-                "\t980: \"1*14*5*14\",\n" +
-                "\t979: \"-1+14*5*14\",\n" +
-                "\t910: \"-(1-14)*5*14\",\n" +
-                "\t906: \"(1+1)*451+4\",\n" +
-                "\t898: \"(1+1)*451-4\",\n" +
-                "\t894: \"(1+1)*(451-4)\",\n" +
-                "\t880: \"11*4*5*1*4\",\n" +
-                "\t836: \"11*4*(5+14)\",\n" +
-                "\t827: \"11+4*51*4\",\n" +
-                "\t825: \"(11+4)*(51+4)\",\n" +
-                "\t818: \"1+1+4*51*4\",\n" +
-                "\t817: \"1*1+4*51*4\",\n" +
-                "\t816: \"1*1*4*51*4\",\n" +
-                "\t815: \"-1+1*4*51*4\",\n" +
-                "\t814: \"-1-1+4*51*4\",\n" +
-                "\t805: \"-11+4*51*4\",\n" +
-                "\t784: \"(11+45)*14\",\n" +
-                "\t771: \"1+14*(51+4)\",\n" +
-                "\t770: \"1*14*(51+4)\",\n" +
-                "\t769: \"(11+4)*51+4\",\n" +
-                "\t761: \"(1+14)*51-4\",\n" +
-                "\t730: \"(1+145)*(1+4)\",\n" +
-                "\t726: \"1+145*(1+4)\",\n" +
-                "\t725: \"1*145*(1+4)\",\n" +
-                "\t724: \"-1-145*-(1+4)\",\n" +
-                "\t720: \"(1-145)*-(1+4)\",\n" +
-                "\t719: \"1+14*51+4\",\n" +
-                "\t718: \"1*14*51+4\",\n" +
-                "\t717: \"-1-14*-51+4\",\n" +
-                "\t715: \"(1-14)*-(51+4)\",\n" +
-                "\t711: \"1+14*51-4\",\n" +
-                "\t710: \"1*14*51-4\",\n" +
-                "\t709: \"-1+14*51-4\",\n" +
-                "\t705: \"(1+14)*(51-4)\",\n" +
-                "\t704: \"11*4*(5-1)*4\",\n" +
-                "\t688: \"114*(5+1)+4\",\n" +
-                "\t680: \"114*(5+1)-4\",\n" +
-                "\t667: \"-(1-14)*51+4\",\n" +
-                "\t660: \"(114+51)*4\",\n" +
-                "\t659: \"1+14*(51-4)\",\n" +
-                "\t658: \"1*14*(51-4)\",\n" +
-                "\t657: \"-1+14*(51-4)\",\n" +
-                "\t649: \"11*(45+14)\",\n" +
-                "\t644: \"1*(1+45)*14\",\n" +
-                "\t641: \"11+45*14\",\n" +
-                "\t632: \"1+1+45*14\",\n" +
-                "\t631: \"1*1+45*14\",\n" +
-                "\t630: \"1*1*45*14\",\n" +
-                "\t629: \"1*-1+45*14\",\n" +
-                "\t628: \"114+514\",\n" +
-                "\t619: \"-11+45*14\",\n" +
-                "\t616: \"1*-(1-45)*14\",\n" +
-                "\t612: \"-1*(1-4)*51*4\",\n" +
-                "\t611: \"(1-14)*-(51-4)\",\n" +
-                "\t609: \"11*(4+51)+4\",\n" +
-                "\t601: \"11*(4+51)-4\",\n" +
-                "\t595: \"(114+5)*(1+4)\",\n" +
-                "\t584: \"114*5+14\",\n" +
-                "\t581: \"1+145*1*4\",\n" +
-                "\t580: \"1*145/1*4\",\n" +
-                "\t579: \"-1+145*1*4\",\n" +
-                "\t576: \"1*(145-1)*4\",\n" +
-                "\t575: \"114*5+1+4\",\n" +
-                "\t574: \"114*5/1+4\",\n" +
-                "\t573: \"114*5-1+4\",\n" +
-                "\t567: \"114*5+1-4\",\n" +
-                "\t566: \"114*5*1-4\",\n" +
-                "\t565: \"114*5-1-4\",\n" +
-                "\t561: \"11/4*51*4\",\n" +
-                "\t560: \"(1+1)*4*5*14\",\n" +
-                "\t558: \"11*4+514\",\n" +
-                "\t556: \"114*5-14\",\n" +
-                "\t545: \"(114-5)*(1+4)\",\n" +
-                "\t529: \"1+14+514\",\n" +
-                "\t528: \"1*14+514\",\n" +
-                "\t527: \"-1+14+514\",\n" +
-                "\t522: \"(1+1)*4+514\",\n" +
-                "\t521: \"11-4+514\",\n" +
-                "\t520: \"1+1+4+514\",\n" +
-                "\t519: \"1+1*4+514\",\n" +
-                "\t518: \"1-1+4+514\",\n" +
-                "\t517: \"-1+1*4+514\",\n" +
-                "\t516: \"-1-1+4+514\",\n" +
-                "\t514: \"(1-1)/4+514\",\n" +
-                "\t513: \"-11*(4-51)-4\",\n" +
-                "\t512: \"1+1-4+514\",\n" +
-                "\t511: \"1*1-4+514\",\n" +
-                "\t510: \"1-1-4+514\",\n" +
-                "\t509: \"11*45+14\",\n" +
-                "\t508: \"-1-1-4+514\",\n" +
-                "\t507: \"-11+4+514\",\n" +
-                "\t506: \"-(1+1)*4+514\",\n" +
-                "\t502: \"11*(45+1)-4\",\n" +
-                "\t501: \"1-14+514\",\n" +
-                "\t500: \"11*45+1+4\",\n" +
-                "\t499: \"11*45*1+4\",\n" +
-                "\t498: \"11*45-1+4\",\n" +
-                "\t495: \"11*(4+5)*(1+4)\",\n" +
-                "\t492: \"11*45+1-4\",\n" +
-                "\t491: \"11*45-1*4\",\n" +
-                "\t490: \"11*45-1-4\",\n" +
-                "\t488: \"11*(45-1)+4\",\n" +
-                "\t481: \"11*45-14\",\n" +
-                "\t480: \"11*(45-1)-4\",\n" +
-                "\t476: \"(114+5)/1*4\",\n" +
-                "\t470: \"-11*4+514\",\n" +
-                "\t466: \"11+451+4\",\n" +
-                "\t460: \"114*(5-1)+4\",\n" +
-                "\t458: \"11+451-4\",\n" +
-                "\t457: \"1+1+451+4\",\n" +
-                "\t456: \"1*1+451+4\",\n" +
-                "\t455: \"1-1+451+4\",\n" +
-                "\t454: \"-1+1*451+4\",\n" +
-                "\t453: \"-1-1+451+4\",\n" +
-                "\t452: \"114*(5-1)-4\",\n" +
-                "\t450: \"(1+1)*45*(1+4)\",\n" +
-                "\t449: \"1+1+451-4\",\n" +
-                "\t448: \"1+1*451-4\",\n" +
-                "\t447: \"1/1*451-4\",\n" +
-                "\t446: \"1*-1+451-4\",\n" +
-                "\t445: \"-1-1+451-4\",\n" +
-                "\t444: \"-11+451+4\",\n" +
-                "\t440: \"(1+1)*4*(51+4)\",\n" +
-                "\t438: \"(1+145)*-(1-4)\",\n" +
-                "\t436: \"-11+451-4\",\n" +
-                "\t435: \"-1*145*(1-4)\",\n" +
-                "\t434: \"-1-145*(1-4)\",\n" +
-                "\t432: \"(1-145)*(1-4)\",\n" +
-                "\t412: \"(1+1)*4*51+4\",\n" +
-                "\t404: \"(1+1)*4*51-4\",\n" +
-                "\t400: \"-114+514\",\n" +
-                "\t396: \"11*4*-(5-14)\",\n" +
-                "\t385: \"(11-4)*(51+4)\",\n" +
-                "\t376: \"(1+1)*4*(51-4)\",\n" +
-                "\t375: \"(1+14)*5*(1+4)\",\n" +
-                "\t368: \"(1+1)*(45+1)*4\",\n" +
-                "\t363: \"(1+1451)/4\",\n" +
-                "\t361: \"(11-4)*51+4\",\n" +
-                "\t360: \"(1+1)*45*1*4\",\n" +
-                "\t357: \"(114+5)*-(1-4)\",\n" +
-                "\t353: \"(11-4)*51-4\",\n" +
-                "\t352: \"(1+1)*(45-1)*4\",\n" +
-                "\t351: \"1+14*-5*-(1+4)\",\n" +
-                "\t350: \"1*(1+4)*5*14\",\n" +
-                "\t349: \"-1+14*5*(1+4)\",\n" +
-                "\t341: \"11*(45-14)\",\n" +
-                "\t337: \"1-14*-(5+1)*4\",\n" +
-                "\t336: \"1*14*(5+1)*4\",\n" +
-                "\t335: \"-1+14*(5+1)*4\",\n" +
-                "\t329: \"(11-4)*(51-4)\",\n" +
-                "\t327: \"-(114-5)*(1-4)\",\n" +
-                "\t325: \"-(1-14)*5*(1+4)\",\n" +
-                "\t318: \"114+51*4\",\n" +
-                "\t312: \"(1-14)*-(5+1)*4\",\n" +
-                "\t300: \"(11+4)*5/1*4\",\n" +
-                "\t297: \"-11*(4+5)*(1-4)\",\n" +
-                "\t291: \"11+4*5*14\",\n" +
-                "\t286: \"(1145-1)/4\",\n" +
-                "\t285: \"(11+4)*(5+14)\",\n" +
-                "\t282: \"1+1+4*5*14\",\n" +
-                "\t281: \"1+14*5/1*4\",\n" +
-                "\t280: \"1-1+4*5*14\",\n" +
-                "\t279: \"1*-1+4*5*14\",\n" +
-                "\t278: \"-1-1+4*5*14\",\n" +
-                "\t275: \"1*(1+4)*(51+4)\",\n" +
-                "\t270: \"(1+1)*45*-(1-4)\",\n" +
-                "\t269: \"-11+4*5*14\",\n" +
-                "\t268: \"11*4*(5+1)+4\",\n" +
-                "\t267: \"1+14*(5+14)\",\n" +
-                "\t266: \"1*14*(5+14)\",\n" +
-                "\t265: \"-1+14*(5+14)\",\n" +
-                "\t260: \"1*(14+51)*4\",\n" +
-                "\t259: \"1*(1+4)*51+4\",\n" +
-                "\t257: \"(1+1)/4*514\",\n" +
-                "\t252: \"(114-51)*4\",\n" +
-                "\t251: \"1*-(1+4)*-51-4\",\n" +
-                "\t248: \"11*4+51*4\",\n" +
-                "\t247: \"-(1-14)*(5+14)\",\n" +
-                "\t240: \"(11+4)*(5-1)*4\",\n" +
-                "\t236: \"11+45*(1+4)\",\n" +
-                "\t235: \"1*(1+4)*(51-4)\",\n" +
-                "\t234: \"11*4*5+14\",\n" +
-                "\t231: \"11+4*(51+4)\",\n" +
-                "\t230: \"1*(1+45)*(1+4)\",\n" +
-                "\t229: \"1145/(1+4)\",\n" +
-                "\t227: \"1+1+45*(1+4)\",\n" +
-                "\t226: \"1*1+45*(1+4)\",\n" +
-                "\t225: \"11*4*5+1+4\",\n" +
-                "\t224: \"11*4*5/1+4\",\n" +
-                "\t223: \"11*4*5-1+4\",\n" +
-                "\t222: \"1+1+4*(51+4)\",\n" +
-                "\t221: \"1/1+4*(51+4)\",\n" +
-                "\t220: \"1*1*(4+51)*4\",\n" +
-                "\t219: \"1+14+51*4\",\n" +
-                "\t218: \"1*14+51*4\",\n" +
-                "\t217: \"11*4*5+1-4\",\n" +
-                "\t216: \"11*4*5-1*4\",\n" +
-                "\t215: \"11*4*5-1-4\",\n" +
-                "\t214: \"-11+45*(1+4)\",\n" +
-                "\t212: \"(1+1)*4+51*4\",\n" +
-                "\t211: \"11-4+51*4\",\n" +
-                "\t210: \"1+1+4+51*4\",\n" +
-                "\t209: \"1+1*4*51+4\",\n" +
-                "\t208: \"1*1*4+51*4\",\n" +
-                "\t207: \"-1+1*4*51+4\",\n" +
-                "\t206: \"11*4*5-14\",\n" +
-                "\t204: \"(1-1)/4+51*4\",\n" +
-                "\t202: \"1+1-4+51*4\",\n" +
-                "\t201: \"1/1-4+51*4\",\n" +
-                "\t200: \"1/1*4*51-4\",\n" +
-                "\t199: \"1*-1+4*51-4\",\n" +
-                "\t198: \"-1-1+4*51-4\",\n" +
-                "\t197: \"-11+4+51*4\",\n" +
-                "\t196: \"-(1+1)*4+51*4\",\n" +
-                "\t195: \"(1-14)*5*(1-4)\",\n" +
-                "\t192: \"(1+1)*4*(5+1)*4\",\n" +
-                "\t191: \"1-14+51*4\",\n" +
-                "\t190: \"1*-14+51*4\",\n" +
-                "\t189: \"-11-4+51*4\",\n" +
-                "\t188: \"1-1-(4-51)*4\",\n" +
-                "\t187: \"1/-1+4*(51-4)\",\n" +
-                "\t186: \"1+1+(45+1)*4\",\n" +
-                "\t185: \"1-1*-(45+1)*4\",\n" +
-                "\t184: \"114+5*14\",\n" +
-                "\t183: \"-1+1*(45+1)*4\",\n" +
-                "\t182: \"1+1+45/1*4\",\n" +
-                "\t181: \"1+1*45*1*4\",\n" +
-                "\t180: \"1*1*45*1*4\",\n" +
-                "\t179: \"-1/1+45*1*4\",\n" +
-                "\t178: \"-1-1+45*1*4\",\n" +
-                "\t177: \"1+1*(45-1)*4\",\n" +
-                "\t176: \"1*1*(45-1)*4\",\n" +
-                "\t175: \"-1+1*(45-1)*4\",\n" +
-                "\t174: \"-1-1+(45-1)*4\",\n" +
-                "\t172: \"11*4*(5-1)-4\",\n" +
-                "\t171: \"114*(5+1)/4\",\n" +
-                "\t170: \"(11-45)*-(1+4)\",\n" +
-                "\t169: \"114+51+4\",\n" +
-                "\t168: \"(11+45)*-(1-4)\",\n" +
-                "\t165: \"11*-45/(1-4)\",\n" +
-                "\t161: \"114+51-4\",\n" +
-                "\t160: \"1+145+14\",\n" +
-                "\t159: \"1*145+14\",\n" +
-                "\t158: \"-1+145+14\",\n" +
-                "\t157: \"1*(1-4)*-51+4\",\n" +
-                "\t154: \"11*(4-5)*-14\",\n" +
-                "\t152: \"(1+1)*4*(5+14)\",\n" +
-                "\t151: \"1+145+1+4\",\n" +
-                "\t150: \"1+145*1+4\",\n" +
-                "\t149: \"1*145*1+4\",\n" +
-                "\t148: \"1*145-1+4\",\n" +
-                "\t147: \"-1+145-1+4\",\n" +
-                "\t146: \"11+45*-(1-4)\",\n" +
-                "\t143: \"1+145+1-4\",\n" +
-                "\t142: \"1+145*1-4\",\n" +
-                "\t141: \"1+145-1-4\",\n" +
-                "\t140: \"1*145-1-4\",\n" +
-                "\t139: \"-1+145-1-4\",\n" +
-                "\t138: \"-1*(1+45)*(1-4)\",\n" +
-                "\t137: \"1+1-45*(1-4)\",\n" +
-                "\t136: \"1*1-45*(1-4)\",\n" +
-                "\t135: \"-1/1*45*(1-4)\",\n" +
-                "\t134: \"114+5/1*4\",\n" +
-                "\t133: \"114+5+14\",\n" +
-                "\t132: \"1+145-14\",\n" +
-                "\t131: \"1*145-14\",\n" +
-                "\t130: \"-1+145-14\",\n" +
-                "\t129: \"114+5*-(1-4)\",\n" +
-                "\t128: \"1+1+(4+5)*14\",\n" +
-                "\t127: \"1-14*(5-14)\",\n" +
-                "\t126: \"1*(14-5)*14\",\n" +
-                "\t125: \"-1-14*(5-14)\",\n" +
-                "\t124: \"114+5+1+4\",\n" +
-                "\t123: \"114-5+14\",\n" +
-                "\t122: \"114+5-1+4\",\n" +
-                "\t121: \"11*(45-1)/4\",\n" +
-                "\t120: \"-(1+1)*4*5*(1-4)\",\n" +
-                "\t118: \"(1+1)*(45+14)\",\n" +
-                "\t117: \"(1-14)*(5-14)\",\n" +
-                "\t116: \"114+5+1-4\",\n" +
-                "\t115: \"114+5*1-4\",\n" +
-                "\t114: \"11*4+5*14\",\n" +
-                "\t113: \"114-5/1+4\",\n" +
-                "\t112: \"114-5-1+4\",\n" +
-                "\t111: \"11+4*5*(1+4)\",\n" +
-                "\t110: \"-(11-451)/4\",\n" +
-                "\t107: \"11-4*-(5+1)*4\",\n" +
-                "\t106: \"114-5+1-4\",\n" +
-                "\t105: \"114+5-14\",\n" +
-                "\t104: \"114-5-1-4\",\n" +
-                "\t103: \"11*(4+5)+1*4\",\n" +
-                "\t102: \"11*(4+5)-1+4\",\n" +
-                "\t101: \"1+1*4*5*(1+4)\",\n" +
-                "\t100: \"1*(1+4)*5*1*4\",\n" +
-                "\t99: \"11*4+51+4\",\n" +
-                "\t98: \"1+1+4*(5+1)*4\",\n" +
-                "\t97: \"1+1*4*(5+1)*4\",\n" +
-                "\t96: \"11*(4+5)+1-4\",\n" +
-                "\t95: \"114-5-14\",\n" +
-                "\t94: \"114-5/1*4\",\n" +
-                "\t93: \"(1+1)*45-1+4\",\n" +
-                "\t92: \"(1+1)*(45-1)+4\",\n" +
-                "\t91: \"11*4+51-4\",\n" +
-                "\t90: \"-114+51*4\",\n" +
-                "\t89: \"(1+14)*5+14\",\n" +
-                "\t88: \"1*14*(5+1)+4\",\n" +
-                "\t87: \"11+4*(5+14)\",\n" +
-                "\t86: \"(1+1)*45*1-4\",\n" +
-                "\t85: \"1+14+5*14\",\n" +
-                "\t84: \"1*14+5*14\",\n" +
-                "\t83: \"-1+14+5*14\",\n" +
-                "\t82: \"1+1+4*5/1*4\",\n" +
-                "\t81: \"1/1+4*5*1*4\",\n" +
-                "\t80: \"1-1+4*5*1*4\",\n" +
-                "\t79: \"1*-1+4*5/1*4\",\n" +
-                "\t78: \"(1+1)*4+5*14\",\n" +
-                "\t77: \"11-4+5*14\",\n" +
-                "\t76: \"1+1+4+5*14\",\n" +
-                "\t75: \"1+14*5*1+4\",\n" +
-                "\t74: \"1/1*4+5*14\",\n" +
-                "\t73: \"1*14*5-1+4\",\n" +
-                "\t72: \"-1-1+4+5*14\",\n" +
-                "\t71: \"(1+14)*5-1*4\",\n" +
-                "\t70: \"11+45+14\",\n" +
-                "\t69: \"1*14+51+4\",\n" +
-                "\t68: \"1+1-4+5*14\",\n" +
-                "\t67: \"1-1*4+5*14\",\n" +
-                "\t66: \"1*14*5-1*4\",\n" +
-                "\t65: \"1*14*5-1-4\",\n" +
-                "\t64: \"11*4+5*1*4\",\n" +
-                "\t63: \"11*4+5+14\",\n" +
-                "\t62: \"1+14+51-4\",\n" +
-                "\t61: \"1+1+45+14\",\n" +
-                "\t60: \"11+45*1+4\",\n" +
-                "\t59: \"114-51-4\",\n" +
-                "\t58: \"-1+1*45+14\",\n" +
-                "\t57: \"1+14*5-14\",\n" +
-                "\t56: \"1*14*5-14\",\n" +
-                "\t55: \"-1+14*5-14\",\n" +
-                "\t54: \"11-4+51-4\",\n" +
-                "\t53: \"11+45+1-4\",\n" +
-                "\t52: \"11+45/1-4\",\n" +
-                "\t51: \"11+45-1-4\",\n" +
-                "\t50: \"1+1*45/1+4\",\n" +
-                "\t49: \"1*1*45/1+4\",\n" +
-                "\t48: \"-11+45+14\",\n" +
-                "\t47: \"1/-1+45-1+4\",\n" +
-                "\t46: \"11*4+5+1-4\",\n" +
-                "\t45: \"11+4*5+14\",\n" +
-                "\t44: \"114-5*14\",\n" +
-                "\t43: \"1+1*45+1-4\",\n" +
-                "\t42: \"11+45-14\",\n" +
-                "\t41: \"1/1*45*1-4\",\n" +
-                "\t40: \"-11+4*51/4\",\n" +
-                "\t39: \"-11+45+1+4\",\n" +
-                "\t38: \"-11+45*1+4\",\n" +
-                "\t37: \"-11+45-1+4\",\n" +
-                "\t36: \"11+4*5+1+4\",\n" +
-                "\t35: \"11*4+5-14\",\n" +
-                "\t34: \"1-14+51-4\",\n" +
-                "\t33: \"1+1+45-14\",\n" +
-                "\t32: \"1*1+45-14\",\n" +
-                "\t31: \"1/1*45-14\",\n" +
-                "\t30: \"1*-1+45-14\",\n" +
-                "\t29: \"-11+45-1-4\",\n" +
-                "\t28: \"11+4*5+1-4\",\n" +
-                "\t27: \"11+4*5/1-4\",\n" +
-                "\t26: \"11-4+5+14\",\n" +
-                "\t25: \"11*4-5-14\",\n" +
-                "\t24: \"1+14-5+14\",\n" +
-                "\t23: \"1*14-5+14\",\n" +
-                "\t22: \"1*14+5-1+4\",\n" +
-                "\t21: \"-1-1+4+5+14\",\n" +
-                "\t20: \"-11+45-14\",\n" +
-                "\t19: \"1+1+4*5+1-4\",\n" +
-                "\t18: \"1+1+4*5*1-4\",\n" +
-                "\t17: \"11+4*5-14\",\n" +
-                "\t16: \"11-4-5+14\",\n" +
-                "\t15: \"1+14-5+1+4\",\n" +
-                "\t14: \"11+4-5/1+4\",\n" +
-                "\t13: \"1*14-5/1+4\",\n" +
-                "\t12: \"-11+4+5+14\",\n" +
-                "\t11: \"11*-4+51+4\",\n" +
-                "\t10: \"-11/4+51/4\",\n" +
-                "\t9: \"11-4+5+1-4\",\n" +
-                "\t8: \"11-4+5/1-4\",\n" +
-                "\t7: \"11-4+5-1-4\",\n" +
-                "\t6: \"1-14+5+14\",\n" +
-                "\t5: \"11-4*5+14\",\n" +
-                "\t4: \"-11-4+5+14\",\n" +
-                "\t3: \"11*-4+51-4\",\n" +
-                "\t2: \"-11+4-5+14\",\n" +
-                "\t1: \"11/(45-1)*4\",\n" +
-                "\t0: \"(1-1)*4514\",\n" +
-                "\t\"⑨\": \"11-4-5+1-4\",\n" +
-                "})"); // load this;
-    }
-    public String homo(Object homo) throws JavetException {
-        //String s = function.callString(null, homo);
-        //System.out.println("Result is " + s);
-        //return s;
-        return ((V8ValueFunction)v8Runtime.getGlobalObject().get("homo")).callString(null,homo);
-    }
 
-
-    @Override
-    public void close() throws Exception {
-        v8Runtime.close();
-    }
 }

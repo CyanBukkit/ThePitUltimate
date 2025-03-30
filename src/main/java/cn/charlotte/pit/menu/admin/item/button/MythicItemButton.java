@@ -3,10 +3,7 @@ package cn.charlotte.pit.menu.admin.item.button;
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.DyeColor;
 import cn.charlotte.pit.item.IMythicItem;
-import cn.charlotte.pit.item.type.AngelChestplate;
-import cn.charlotte.pit.item.type.ArmageddonBoots;
-import cn.charlotte.pit.item.type.LuckyChestplate;
-import cn.charlotte.pit.item.type.SpireSword;
+import cn.charlotte.pit.item.type.*;
 import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
@@ -73,6 +70,8 @@ public class MythicItemButton extends Button {
             IMythicItem mythicItem = new AngelChestplate();
             mythicItem.loadFromItemStack(itemStack);
             return mythicItem.toItemStack();
+        } else if (i == 11){
+            return MythicBook.toItemStack();
         }
         return new ItemBuilder(Material.AIR).build();
     }

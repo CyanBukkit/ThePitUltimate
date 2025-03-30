@@ -9,7 +9,7 @@ import cn.charlotte.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
 import com.google.common.util.concurrent.AtomicDouble
-import dev.jnic.annotation.Include
+
 import net.minecraft.server.v1_8_R3.BlockPosition
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent
 import org.bukkit.Sound
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @Author: Misoryan
  * @Created_In: 2021/1/29 21:23
  */
-@Include
+
 @WeaponOnly
 class ExecutionerEnchant : AbstractEnchantment(), IAttackEntity {
     override fun getEnchantName(): String {

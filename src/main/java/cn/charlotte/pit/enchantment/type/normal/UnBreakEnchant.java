@@ -6,7 +6,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IItemDamage;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.random.RandomUtil;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 4
  */
 
-@Include
+
 //耐久设定只存在于钓鱼竿中
 @RodOnly
 public class UnBreakEnchant extends AbstractEnchantment implements IItemDamage {

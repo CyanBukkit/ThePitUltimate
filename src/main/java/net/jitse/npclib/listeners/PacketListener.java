@@ -5,6 +5,7 @@
 package net.jitse.npclib.listeners;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.proto.Reflection;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.events.NPCInteractEvent;
@@ -17,7 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import xyz.refinedev.spigot.CarbonSpigot;
 import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
 import java.util.HashSet;
@@ -43,19 +43,20 @@ public class PacketListener {
 
     public void start(NPCLib instance) {
         this.plugin = instance.getPlugin();
-        CarbonSpigot.getPacketAPI().registerPacketHandler(ThePit.getInstance(), new PacketHandler() {
-                    @Override
-                    public void handleReceivedPacket(PlayerConnection playerConnection, Packet<?> packet) {
-                        if (packet instanceof PacketPlayInUseEntity) {
-                            handleInteractPacket(playerConnection.getPlayer(), packet);
-                        }
-                    }
+        PacketHandler packetHandler = new PacketHandler() {
+            @Override
+            public void handleReceivedPacket(PlayerConnection playerConnection, Packet<?> packet) {
+                if (packet instanceof PacketPlayInUseEntity) {
+                    handleInteractPacket(playerConnection.getPlayer(), packet);
+                }
+            }
 
-                    @Override
-                    public void handleSentPacket(PlayerConnection playerConnection, Packet<?> packet) {
+            @Override
+            public void handleSentPacket(PlayerConnection playerConnection, Packet<?> packet) {
 
-                    }
-                });
+            }
+        };
+        Utils.addCommonHandler(packetHandler);
     }
 
     private void handleInteractPacket(Player player, Object packet) {

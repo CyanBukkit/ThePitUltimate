@@ -3,7 +3,7 @@ package cn.charlotte.pit.medal.impl.challenge;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.medal.AbstractMedal;
 import cn.charlotte.pit.parm.AutoRegister;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.event.Listener;
 
 
@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
  * @Creator Misoryan
  * @Date 2021/6/10 19:22
  */
-@Include
+
 @AutoRegister
 public class RareEnchantMedal extends AbstractMedal implements Listener {
     @Override

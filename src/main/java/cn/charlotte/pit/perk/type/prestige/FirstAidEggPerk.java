@@ -3,7 +3,7 @@ package cn.charlotte.pit.perk.type.prestige;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.item.ItemBuilder;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +15,7 @@ import java.util.List;
  * @Author: Misoryan
  * @Created_In: 2021/3/17 16:58
  */
-@Include
+
 public class FirstAidEggPerk extends AbstractPerk {
     @Override
     public String getInternalPerkName() {

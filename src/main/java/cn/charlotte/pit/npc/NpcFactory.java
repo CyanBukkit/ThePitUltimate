@@ -42,7 +42,7 @@ public class NpcFactory implements Listener {
 
             }
             if (AbstractPitNPC.class.isAssignableFrom(clazz)) {
-                AbstractPitNPC abstractPitNPC = (AbstractPitNPC) clazz.newInstance();
+                AbstractPitNPC abstractPitNPC = (AbstractPitNPC) clazz.getConstructor().newInstance();
 
                 NPC npc = npcLib.createNPC();
                 npc.setLocation(abstractPitNPC.getNpcSpawnLocation());

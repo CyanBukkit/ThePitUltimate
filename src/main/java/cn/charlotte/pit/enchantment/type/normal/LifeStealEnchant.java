@@ -6,13 +6,13 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import dev.jnic.annotation.Include;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-@Include
+
 @WeaponOnly
 @AutoRegister
 public class LifeStealEnchant extends AbstractEnchantment implements Listener {
