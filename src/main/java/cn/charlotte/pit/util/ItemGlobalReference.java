@@ -1,22 +1,12 @@
 package cn.charlotte.pit.util;
 
 import cn.charlotte.pit.item.IMythicItem;
-import cn.klee.backports.utils.SWMRHashTable;
 import com.google.common.annotations.Beta;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 
-import java.util.Iterator;
-import java.util.Map;
 import java.util.UUID;
-import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Consumer;
-import java.util.function.LongConsumer;
 import java.util.function.LongSupplier;
 
 public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, IMythicItem> {

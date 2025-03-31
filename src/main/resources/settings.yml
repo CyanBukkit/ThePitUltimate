@@ -1,5 +1,5 @@
 Name: Python
-Version: 3.21
+Version: ${plugin_version}
 EntryClass: cn.charlotte.pit.PitMain
 EntryPoint: start
 InfPort: false

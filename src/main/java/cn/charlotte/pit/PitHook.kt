@@ -86,7 +86,7 @@ import dev.rollczi.litecommands.validator.ValidatorScope
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
-import xyz.refinedev.spigot.CarbonSpigot
+
 
 object PitHook {
     @JvmStatic
