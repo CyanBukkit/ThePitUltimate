@@ -68,9 +68,6 @@ import org.slf4j.Logger;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
-import tech.skidonion.obfuscator.annotations.NativeObfuscation;
-
-import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Objects;
@@ -82,7 +79,7 @@ import java.util.concurrent.*;
  * @author EmptyIrony, Misoryan
  */
 
-@NativeObfuscation(obfuscated = true)
+
 
 public class ThePit extends JavaPlugin implements PluginMessageListener {
 
@@ -126,11 +123,11 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     private BukkitAudiences audiences;
     private ActionBarManager actionBarManager;
-    @NativeObfuscation(obfuscated = false)
+
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
     }
-    @NativeObfuscation(obfuscated = false)
+
     public static ThePit getInstance() {
         return ThePit.instance;
     }
@@ -146,7 +143,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     }
 
 
-    @NativeObfuscation(obfuscated = true)
+    
     @Override
     public void onEnable() {
         audiences = BukkitAudiences.create(this);
@@ -279,7 +276,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     }
 
 
-    @NativeObfuscation(obfuscated = true)
+    
     public static boolean h() {
         return true;
     }

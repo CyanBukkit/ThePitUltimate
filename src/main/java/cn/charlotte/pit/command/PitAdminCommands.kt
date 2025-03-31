@@ -421,7 +421,7 @@ class PitAdminCommands {
     @Execute(name = "nocache")
     fun executeBrokeCache(@Context player: Player){
         ThePit.getInstance().itemFactory.clientSide = !ThePit.getInstance().itemFactory.clientSide
-        player.sendMessage("&a成功设置客户端主导服务端 值为: " + ThePit.getInstance().itemFactory.clientSide,true)
+        player.sendMessage("&a成功设置客户端主导服务端 值为: " + ThePit.getInstance().itemFactory.clientSide)
     }
     @Execute(name = "changeItemInHand color")
     @HandHasItem(mythic = true)
@@ -506,10 +506,10 @@ class PitAdminCommands {
     @Async
     fun listavailablePerks(@Context player: Player) {
         val perkMap = ThePit.getInstance().perkFactory.perkMap
-        player.sendMessage("当前Perk数量为 " + perkMap.size,true)
+        player.sendMessage("当前Perk数量为 " + perkMap.size)
 
         perkMap.values.forEachIndexed { a,it ->
-            player.sendMessage(CC.translate("NUM: " + a + " NBT: " + it.internalPerkName + " DISPLAYNAME: " + it.displayName),true)
+            player.sendMessage(CC.translate("NUM: " + a + " NBT: " + it.internalPerkName + " DISPLAYNAME: " + it.displayName))
         }
     }
 
@@ -517,30 +517,28 @@ class PitAdminCommands {
     @Async
     fun listitems(@Context player: Player) {
         val itemMap = ThePit.getInstance().itemFactor
-        player.sendMessage("当前Perk数量为 " + itemMap.itemMap,true)
+        player.sendMessage("当前Perk数量为 " + itemMap.itemMap)
 
         itemMap.itemMap.keys.forEachIndexed() { a,it ->
-            player.sendMessage(CC.translate("NUM: $a NBT: $it"),true)
+            player.sendMessage(CC.translate("NUM: $a NBT: $it"))
         }
     }
     @Execute(name = "enchantments")
     @Async
     fun enchantments(@Context player: Player){
         val enchs = ThePit.getInstance().getEnchantmentFactor()
-        player.sendMessage("当前Ench数量为 " + enchs.enchantmentMap.size,true)
+        player.sendMessage("当前Ench数量为 " + enchs.enchantmentMap.size)
 
         enchs.enchantmentMap.values.forEachIndexed { index, it ->
             player.sendMessage(
-                CC.translate("NUM: " + index + " NBT: " + it.nbtName + " DISPLAYNAME: " + it.enchantName),
-                true
-            )
+                CC.translate("NUM: " + index + " NBT: " + it.nbtName + " DISPLAYNAME: " + it.enchantName))
         }
     }
     @Execute(name = "itemNbtDump")
     fun nbtDump(@Context player: Player) {
         try {
             val stack = player.itemInHand
-            player.sendMessage(Utils.dumpNBTOnString(stack),true)
+            player.sendMessage(Utils.dumpNBTOnString(stack))
         } catch (ignored: Exception) {
             player.sendMessage("Error")
         }
@@ -685,7 +683,7 @@ class PitAdminCommands {
     fun skipNormalEvent(@Context player: Player){
         ThePit.getInstance().eventFactory.activeNormalEvent?.let {
 
-            player.sendMessage(CC.translate("已经跳过事件 $it" ),true)
+            player.sendMessage(CC.translate("已经跳过事件 $it" ))
             CC.boardCast("&c&l事件跳过! &c管理员已经跳过该普通事件")
             ThePit.getInstance().eventFactory.safeInactiveEvent(it)
         }
@@ -697,7 +695,7 @@ class PitAdminCommands {
     fun skipEpicEvent(@Context player: Player){
         ThePit.getInstance().eventFactory.activeEpicEvent?.let {
 
-            player.sendMessage(CC.translate("已经跳过事件 $it" ),true)
+            player.sendMessage(CC.translate("已经跳过事件 $it" ))
             CC.boardCast("&c&l事件跳过! &c管理员已经跳过该Epic事件")
             ThePit.getInstance().eventFactory.inactiveEvent(it)
 
@@ -721,7 +719,7 @@ class PitAdminCommands {
         try {
             PlayerProfile.saveAllSync(!shouldAnnounce.toBoolean());
         } catch (t: Throwable){
-            player.sendMessage("失败 $shouldAnnounce",true)
+            player.sendMessage("失败 $shouldAnnounce")
         }
     }
 }
