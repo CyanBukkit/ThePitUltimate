@@ -1,0 +1,9 @@
+name: Python
+version: ${plugin_version}
+description: A Bukkit mini-game plugin.
+authors: [ EmptyIrony ]
+
+api-version: 1.8
+main: cn.charlotte.pit.ThePit
+load: POSTWORLD
+softdepend: [ ProtocolLib, WorldEdit, FastAsyncWorldEdit, PlayerPoints, LuckPerms ]
