@@ -549,7 +549,7 @@ class PitAdminCommands {
             val player1 = Bukkit.getPlayer(playerName)
             val inventory = player1.inventory
             inventory.forEachIndexed { index, itemStack ->
-                val mmItem = ThePit.getInstance().itemFactory.getIMythicItem(itemStack)
+                val mmItem = ThePit.getInstance().itemFactory.getItemFromStack(itemStack)
                 if (mmItem != null) {
                     inventory.remove(index)
                     inventory.setItem(index, mmItem.toItemStack())
@@ -593,7 +593,7 @@ class PitAdminCommands {
     @Async
     fun trade(@Context player: Player, @Arg("target") target: String) {
         val profile = ThePit.getInstance().profileOperator
-            .namedOperator(target).profile()
+            .namedIOperator(target).profile()
         if (profile == null) {
             player.sendMessage("§c玩家不存在!")
             return

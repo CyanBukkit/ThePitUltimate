@@ -4,8 +4,7 @@
 
 package net.jitse.npclib.listeners;
 
-import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.PublicUtil;
 import cn.charlotte.pit.util.proto.Reflection;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.events.NPCInteractEvent;
@@ -56,7 +55,7 @@ public class PacketListener {
 
             }
         };
-        Utils.addCommonHandler(packetHandler);
+        PublicUtil.addCommonHandler(packetHandler);
     }
 
     private void handleInteractPacket(Player player, Object packet) {

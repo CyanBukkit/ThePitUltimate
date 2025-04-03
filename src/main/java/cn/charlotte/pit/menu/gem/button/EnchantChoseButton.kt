@@ -4,6 +4,7 @@ package cn.charlotte.pit.menu.gem.button
 import cn.charlotte.pit.data.sub.EnchantmentRecord
 import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
+import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.item.ItemBuilder
@@ -96,7 +97,7 @@ class EnchantChoseButton(
                 System.currentTimeMillis()
             )
 
-            indexedMythicItem.boostedByGem = true
+            (indexedMythicItem as IMythicItem).boostedByGem = true
 
             player.inventory.setItem(index, indexedMythicItem.toItemStack())
         } else {
@@ -121,7 +122,7 @@ class EnchantChoseButton(
         player.playSound(player.location, Sound.ANVIL_USE, 1.5f, 1.5f)
     }
 
-    private fun isSameEnchant(itemA: cn.charlotte.pit.item.IMythicItem, itemB: cn.charlotte.pit.item.IMythicItem): Boolean {
+    private fun isSameEnchant(itemA: cn.charlotte.pit.item.AbstractPitItem, itemB: cn.charlotte.pit.item.AbstractPitItem): Boolean {
         loop@ for (enchantment in itemA.enchantments) {
             for (enchantmentB in itemB.enchantments) {
                 if (enchantment.key.nbtName == enchantmentB.key.nbtName && enchantment.value == enchantmentB.value) {

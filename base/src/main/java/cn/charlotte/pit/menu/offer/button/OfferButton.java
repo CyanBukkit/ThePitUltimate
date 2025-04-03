@@ -3,7 +3,7 @@ package cn.charlotte.pit.menu.offer.button;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
-import cn.charlotte.pit.data.operator.PackedOperator;
+import cn.charlotte.pit.data.operator.IOperator;
 import cn.charlotte.pit.data.sub.OfferData;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.medal.impl.challenge.FirstTradeMedal;
@@ -32,7 +32,7 @@ public class OfferButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        PackedOperator orLoadOperatorOffline = ThePit.getInstance().getProfileOperator().getOrConstructOperator(target);
+        IOperator orLoadOperatorOffline = ThePit.getInstance().getProfileOperator().getOrConstructIOperator(target);
         ItemBuilder builder = new ItemBuilder(Material.STAINED_CLAY)
                 .name("&e交易报价");
 

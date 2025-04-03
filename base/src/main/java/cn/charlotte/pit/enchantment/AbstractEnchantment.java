@@ -7,8 +7,8 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.param.item.RodOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
-import cn.charlotte.pit.item.IMythicItem;
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.item.AbstractPitItem;
+import cn.charlotte.pit.util.PublicUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import lombok.Getter;
@@ -52,21 +52,21 @@ public abstract class AbstractEnchantment {
     }
 
     //Todo: 需要一个判断玩家身上附魔是否生效中(持续时间内)的方法 (虽然也许不应该写在这里)
-    public int getItemEnchantLevel(IMythicItem im){
+    public int getItemEnchantLevel(AbstractPitItem im){
         if(im == null)
             return -1;
         int anInt = im.getEnchantments().getInt(this);
         return anInt;
     }
     public int getItemEnchantLevel(ItemStack item) {
-        IMythicItem iMythicItem = ThePit.getInstance().getItemFactory().getIMythicItem(item); //更快Or 更慢
+        AbstractPitItem iMythicItem = ThePit.getInstance().getItemFactory().getItemFromStack(item); //更快Or 更慢
         if(iMythicItem != null){
             return iMythicItem.getEnchantments().getInt(this);
         } //更快的解析
         if (item == null || item.getType() == Material.AIR) {
             return -1;
         }
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(item);
         NBTTagCompound tag = nmsItem.getTag();
         if (tag == null) {
             return -1;
@@ -83,7 +83,7 @@ public abstract class AbstractEnchantment {
         }
         for (int i = 0; i < list.size(); i++) {
             String string = list.getString(i);
-            String[] split = Utils.splitByCharAt(string,':');
+            String[] split = PublicUtil.splitByCharAt(string,':');
             if (split.length != 2) {
                 return -1;
             }
@@ -95,7 +95,7 @@ public abstract class AbstractEnchantment {
     }
 
     public boolean canApply(ItemStack item) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(item);
         if (nmsItem.getItem() instanceof ItemSword) {
             return this.getClass().isAnnotationPresent(WeaponOnly.class);
         }
@@ -115,7 +115,7 @@ public abstract class AbstractEnchantment {
         return this.getItemEnchantLevel(itemStack) != -1;
     }
 
-    public boolean isItemHasEnchant(IMythicItem itemStack) {
+    public boolean isItemHasEnchant(AbstractPitItem itemStack) {
         return this.getItemEnchantLevel(itemStack) != -1;
     }
 

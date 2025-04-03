@@ -6,7 +6,6 @@ import cn.charlotte.pit.enchantment.runnable.AnimationRunnable;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.MythicColor;
 import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
@@ -20,13 +19,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

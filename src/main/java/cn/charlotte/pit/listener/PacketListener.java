@@ -3,24 +3,15 @@ package cn.charlotte.pit.listener;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PotionAddEvent;
 import cn.charlotte.pit.events.impl.major.RedVSBlueEvent;
-import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.item.ItemBuilder;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
 
-import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
-
-import java.lang.reflect.Field;
 
 /**
  * @Author: EmptyIrony

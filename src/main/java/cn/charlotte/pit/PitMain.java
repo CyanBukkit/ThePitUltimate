@@ -1,6 +1,7 @@
 package cn.charlotte.pit;
 
 import cn.charlotte.pit.impl.PitInternalImpl;
+import cn.charlotte.pit.runnable.AsyncTickHandler;
 
 
 import java.io.IOException;
@@ -11,8 +12,8 @@ public class PitMain {
 
     
     public static void start() {
-        ThePit.getInstance().loadListener();
 
+        ThePit.getInstance().loadListener();
         ThePit.setApi(PitInternalImpl.INSTANCE);
 
         hook = PitHook.INSTANCE;

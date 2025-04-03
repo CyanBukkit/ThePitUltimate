@@ -4,7 +4,7 @@
 
 package net.jitse.npclib.nms.v1_8_R3;
 
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.PublicUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.jitse.npclib.NPCLib;
@@ -19,7 +19,6 @@ import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -129,7 +128,7 @@ public class NPC_v1_8_R3 extends NPCBase {
 
         ItemStack item = getItem(slot);
 
-        PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(entityId, slot.getSlot(), Utils.toNMStackQuick(item));
+        PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(entityId, slot.getSlot(), PublicUtil.toNMStackQuick(item));
         playerConnection.sendPacket(packet);
     }
 

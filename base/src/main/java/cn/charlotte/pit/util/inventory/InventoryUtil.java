@@ -3,7 +3,7 @@ package cn.charlotte.pit.util.inventory;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.PublicUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -182,7 +182,7 @@ public class InventoryUtil {
         if (in == null || in.equals("unset") || in.equals("null") || in.equals("'null'")) return null;
         ItemStack[] contents = new ItemStack[in.split(";").length];
 
-        for (String s : Utils.splitByCharAt(in,';')) {
+        for (String s : PublicUtil.splitByCharAt(in,';')) {
             int slot = Integer.parseInt(s.split("#")[0]);
 
             if (s.split("#").length == 1) {
@@ -327,7 +327,7 @@ public class InventoryUtil {
         
         ByteArrayOutputStream outputStream = null;
         try {
-            net.minecraft.server.v1_8_R3.ItemStack nmsStack = Utils.toNMStackQuick(itemStack);
+            net.minecraft.server.v1_8_R3.ItemStack nmsStack = PublicUtil.toNMStackQuick(itemStack);
             NBTTagCompound nbtTagCompound = new NBTTagCompound();
             nmsStack.save(nbtTagCompound);
             outputStream = new ByteArrayOutputStream();
@@ -390,7 +390,7 @@ public class InventoryUtil {
 
             if (ItemUtil.isDefaultItem(item)) {
                 //player.getInventory().remove(item);
-                net.minecraft.server.v1_8_R3.ItemStack nmStackQuick = Utils.toNMStackQuick(item);
+                net.minecraft.server.v1_8_R3.ItemStack nmStackQuick = PublicUtil.toNMStackQuick(item);
                 if (nmStackQuick.getItem() instanceof ItemArmor) {
                     inventory.remove(item);
                 }

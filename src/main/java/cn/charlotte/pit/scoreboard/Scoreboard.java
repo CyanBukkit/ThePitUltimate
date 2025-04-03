@@ -3,7 +3,6 @@ package cn.charlotte.pit.scoreboard;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.INormalEvent;
@@ -12,13 +11,10 @@ import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.events.impl.major.RagePitEvent;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak;
-import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
-import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.scoreboard.AssembleAdapter;
 import cn.charlotte.pit.util.time.TimeUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -26,10 +22,8 @@ import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Scoreboard implements AssembleAdapter {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(NewConfiguration.INSTANCE.getDateFormat());

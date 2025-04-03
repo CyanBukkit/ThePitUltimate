@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSet;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public abstract class AbstractPitItem {
     protected Object2IntOpenHashMap<AbstractEnchantment> enchantments = new Object2IntOpenHashMap<>();
 
     protected List<EnchantmentRecord> enchantmentRecords = new ObjectArrayList<>();
+    public boolean boostedByGlobalGem;
 
     public AbstractPitItem() {
         enchantments.defaultReturnValue(-1);
@@ -36,6 +38,12 @@ public abstract class AbstractPitItem {
 
     public abstract Material getItemDisplayMaterial();
 
+    public int getEnchantmentLevel(String enchantment){
+        return -1;
+    }
+    public int getEnchantmentLevel(AbstractEnchantment enchantment){
+        return -1;
+    }
     public boolean isEnchanted() {
         return !enchantments.isEmpty();
     }

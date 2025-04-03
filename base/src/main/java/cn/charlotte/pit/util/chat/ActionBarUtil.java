@@ -1,7 +1,7 @@
 package cn.charlotte.pit.util.chat;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.actionbar.ActionBarManager;
+import cn.charlotte.pit.actionbar.IActionBarManager;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -20,7 +20,7 @@ public class ActionBarUtil {
         }
     }
     public static boolean sendActionBar1(Player player, String channel,String message,int repeat) {
-        ActionBarManager actionBarManager = ThePit.getInstance().getActionBarManager();
+        IActionBarManager actionBarManager = ThePit.getInstance().getActionBarManager();
         if(actionBarManager != null){
             actionBarManager.addActionBarOnQueue(player,channel,message,repeat);
             return false;

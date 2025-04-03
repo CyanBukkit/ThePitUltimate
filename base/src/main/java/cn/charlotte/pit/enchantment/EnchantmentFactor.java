@@ -1,7 +1,6 @@
 package cn.charlotte.pit.enchantment;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.*;
 import cn.klee.backports.utils.SWMRHashTable;
@@ -54,7 +53,6 @@ public class EnchantmentFactor {
 
     public void init(Collection<Class<? extends AbstractEnchantment>> classes) {
         log.info("Loading enchantments...");
-        if (new DupeItemButton().isDupe() == DupeItemButton.DumpType.SUCCESSFULLY) {
             for (Class<?> clazz : classes) {
                 if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
                     try {
@@ -103,9 +101,6 @@ public class EnchantmentFactor {
                 }
             }
             log.info("" + enchantmentMap.size() + " enchantments loaded!");
-        }else {
-            log.info("" + 246 + " enchantments loaded!");
-        }
     }
 
     public List<AbstractEnchantment> getEnchantments() {

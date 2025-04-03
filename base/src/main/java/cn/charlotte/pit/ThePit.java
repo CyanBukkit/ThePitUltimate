@@ -1,24 +1,23 @@
 package cn.charlotte.pit;
 
-import cn.charlotte.pit.actionbar.ActionBarManager;
+import cn.charlotte.pit.actionbar.IActionBarManager;
 import cn.charlotte.pit.api.PitInternalHook;
 import cn.charlotte.pit.api.PointsAPI;
 import cn.charlotte.pit.buff.BuffFactory;
 import cn.charlotte.pit.config.PitConfig;
 import cn.charlotte.pit.data.FixedRewardData;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.data.operator.ProfileOperator;
+import cn.charlotte.pit.data.operator.IProfilerOperator;
 import cn.charlotte.pit.database.MongoDB;
 import cn.charlotte.pit.enchantment.EnchantmentFactor;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.EventsHandler;
+import cn.charlotte.pit.item.IItemFactory;
 import cn.charlotte.pit.trade.Game;
 import cn.charlotte.pit.hologram.HologramFactory;
 import cn.charlotte.pit.item.ItemFactor;
-import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.medal.MedalFactory;
-import cn.charlotte.pit.menu.admin.backpack.button.DupeItemButton;
 import cn.charlotte.pit.minigame.MiniGameController;
 import cn.charlotte.pit.movement.PlayerMoveHandler;
 import cn.charlotte.pit.npc.NpcFactory;
@@ -97,6 +96,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private EnchantmentFactor enchantmentFactor;
     private NpcFactory npcFactory;
     private NametagHandler nametagHandler;
+    private IItemFactory factory;
     private Game game;
     private MedalFactory medalFactory;
     private PerkFactory perkFactory;
@@ -112,7 +112,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private MiniGameController miniGameController;
     private SoundFactory soundFactory;
     private PetFactory petFactory;
-    private ProfileOperator profileOperator;
+    private IProfilerOperator profileOperator;
     private PlayerPointsAPI playerPoints;
     private LuckPerms luckPerms;
 
@@ -121,7 +121,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private String serverId;
 
     private BukkitAudiences audiences;
-    private ActionBarManager actionBarManager;
+    private IActionBarManager actionBarManager;
 
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
@@ -134,7 +134,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     public static String getBungeeServerName() {
         return bungeeServerName == null ? "THEPIT" : bungeeServerName.toUpperCase();
     }
-    public ProfileOperator getProfileOperator(){
+    public IProfilerOperator getProfileOperator(){
         return profileOperator;
     }
     private static void setBungeeServerName(String name) {
@@ -168,7 +168,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.loadConfig();
 
                 this.loadDatabase();
-                this.loadOperator(); //operator
+//                this.loadOperator(); //operator
                 this.loadItemFactor();
                 this.loadMenu();
                 this.loadNpc();
@@ -181,7 +181,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.loadEnchantment();
                 this.loadQuest();
                 this.loadEvents();
-                this.loadItemFactory();
                 try {
                     this.loadMoveHandler();
                 } catch (Exception ignored) {
@@ -191,7 +190,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 this.initBossBar();
 
                 this.initPet();
-                this.loadActionBarManager();
                 this.signGui = new SignGui(this);
 
                 this.rebootRunnable = new RebootRunnable();
@@ -231,9 +229,13 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 FixedRewardData.Companion.refreshAll();
                 Bukkit.getServer().setWhitelist(whiteList);
                 new ProfileLoadRunnable(this);
-                new AsyncTickHandler().runTaskTimerAsynchronously(this,1,1);
-
-                PitMain.start();
+                //Bridgeing
+                try{
+                    Class<?> main = Class.forName("cn.charlotte.pit.PitMain");
+                    main.getMethod("start").invoke(null);
+                }catch (Exception e) {
+                    System.out.println("Incorrect class");
+                }
             } else {
                 while (!h()) {
                     sendLogs("§c???");
@@ -241,11 +243,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
             }
             sendLogs("宝马启动");
     }
-    public void loadOperator(){
-        profileOperator = new ProfileOperator(this);
+    public void setProfileOperator(IProfilerOperator operator){
+        this.profileOperator = operator;
     }
-    public ActionBarManager getActionBarManager(){
+    public IActionBarManager getActionBarManager(){
         return actionBarManager;
+    }
+    public void setActionBarManager(IActionBarManager actionBarManager){
+        this.actionBarManager = actionBarManager;
     }
     private void loadItemFactor() {
         this.itemFactor = new ItemFactor();
@@ -254,9 +259,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     public void sendLogs(String s) {
         Bukkit.getConsoleSender().sendMessage(s);
-    }
-    public void loadActionBarManager(){
-        this.actionBarManager = new ActionBarManager();
     }
     @Override
     public void onDisable() {
@@ -973,5 +975,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
 
     public BukkitAudiences getAudiences() {
         return audiences;
+    }
+
+    public IItemFactory getItemFactory() {
+        return factory;
+    }
+    public void setItemFactory(IItemFactory factory){
+        this.factory = factory;
     }
 }

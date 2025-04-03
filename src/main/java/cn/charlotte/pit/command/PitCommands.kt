@@ -6,15 +6,16 @@ import cn.charlotte.pit.command.handler.HandHasItem
 import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.mail.Mail
+import cn.charlotte.pit.data.operator.IOperator
 import cn.charlotte.pit.data.operator.PackedOperator
 import cn.charlotte.pit.data.sub.KillRecap
 import cn.charlotte.pit.data.sub.OfferData
 import cn.charlotte.pit.data.temp.TradeRequest
 import cn.charlotte.pit.event.PitPlayerSpawnEvent
-import cn.charlotte.pit.trade.runnable.TradeMonitorRunnable
+import cn.charlotte.pit.trade.TradeMonitorRunnable
 import cn.charlotte.pit.map.kingsquests.ui.CakeBakeUI
 import cn.charlotte.pit.map.kingsquests.ui.KingQuestsUI
-import cn.charlotte.pit.menu.event.previewer.EventPreviewerMenu
+import cn.charlotte.pit.menu.previewer.EventPreviewerMenu
 import cn.charlotte.pit.menu.offer.OfferMenu
 import cn.charlotte.pit.menu.option.PlayerOptionMenu
 import cn.charlotte.pit.menu.trade.TradeManager
@@ -120,8 +121,8 @@ class PitCommands {
                 return
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
-                val lookupStrict = ThePit.getInstance().profileOperator.namedOperator(name)
-                    ?: ThePit.getInstance().profileOperator.lookupOnline(name)
+                val lookupStrict = ThePit.getInstance().profileOperator.namedIOperator(name)
+                    ?: ThePit.getInstance().profileOperator.lookupIOnline(name)
                 if (lookupStrict == null) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                     return@runTaskAsynchronously
@@ -680,7 +681,7 @@ class PitCommands {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
         val targetProfile = ThePit.getInstance().profileOperator.ifPresentAndLoaded(
             target
-        ) { operator: PackedOperator ->
+        ) { operator: IOperator ->
             val targetProfile = operator.profile()
             if (player.isSpecial || target.isSpecial) {
                 if (!player.hasPermission("pit.admin") || player.isSpecial) {
@@ -781,7 +782,7 @@ class PitCommands {
             return
         }
         val target = Bukkit.getPlayer(targetPlayer)
-        ThePit.getInstance().profileOperator.ifPresentAndLoaded(target) { operator: PackedOperator ->
+        ThePit.getInstance().profileOperator.ifPresentAndLoaded(target) { operator: IOperator ->
             val targetProfile = operator.profile()
             if (player.uniqueId == target.uniqueId || player.isSpecial || target.isSpecial) {
                 if (!player.hasPermission("pit.admin") || player.isSpecial) {

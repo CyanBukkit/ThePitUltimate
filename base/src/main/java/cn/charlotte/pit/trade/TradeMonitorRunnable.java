@@ -1,4 +1,4 @@
-package cn.charlotte.pit.trade.runnable;
+package cn.charlotte.pit.trade;
 
 import cn.charlotte.pit.data.temp.TradeRequest;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

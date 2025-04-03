@@ -2,6 +2,7 @@ package cn.charlotte.pit.runnable
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
+import cn.charlotte.pit.item.AbstractPitItem
 import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.item.ItemFactory
 import cn.charlotte.pit.util.chat.ActionBarUtil
@@ -59,7 +60,7 @@ object ActionBarDisplayRunnable {
             }, 100L, 20L)
     }
 
-    private fun Player.handleActionDisplay(itemStack: IMythicItem?, builder: StringBuilder) {
+    private fun Player.handleActionDisplay(itemStack: AbstractPitItem?, builder: StringBuilder) {
         itemStack?.run {
             for (enchantment in enchantments) {
                 val displayEnchant = enchants[enchantment.key.nbtName] ?: continue

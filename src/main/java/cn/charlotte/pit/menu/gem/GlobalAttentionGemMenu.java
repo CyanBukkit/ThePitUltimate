@@ -1,7 +1,6 @@
 package cn.charlotte.pit.menu.gem;
 
 import cn.charlotte.pit.menu.gem.button.ItemGlobalGemButton;
-import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
 import org.bukkit.entity.Player;

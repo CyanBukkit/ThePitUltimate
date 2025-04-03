@@ -3,7 +3,6 @@ package cn.charlotte.pit.util.chat;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerOption;
-import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.SpecialUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -208,10 +207,8 @@ public class CC {
     public static void boardCast0(String text) {
         String translate = CC.translate(text);
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!FuncsKt.isSpecial(player)) {
-                player.sendMessage(translate);
-            }
-            }
+            player.sendMessage(translate);
+        }
     }
 
     public static boolean canPlayerSeeMessage(Player player, MessageType type) {
@@ -241,9 +238,7 @@ public class CC {
     public static void boardCast(MessageType type, String text) {
         Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!FuncsKt.isSpecial(player)) {
                     send(type, player, text);
-                }
             }
         });
     }

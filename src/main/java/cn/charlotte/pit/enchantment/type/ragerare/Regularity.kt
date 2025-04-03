@@ -1,6 +1,7 @@
 package cn.charlotte.pit.enchantment.type.ragerare
 
 import cn.charlotte.pit.ThePit
+import cn.charlotte.pit.data.operator.ProfileOperator
 import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
@@ -72,7 +73,7 @@ class Regularity : AbstractEnchantment(), Listener {
 
 
         var level = -1
-        val operator = ThePit.getInstance().profileOperator.getOperator(attacker)
+        val operator = (ThePit.getInstance().profileOperator as ProfileOperator).getOperator(attacker)
         if(operator != null){
             if(operator.profile().leggings != null) {
                 if (operator.isLoaded) {

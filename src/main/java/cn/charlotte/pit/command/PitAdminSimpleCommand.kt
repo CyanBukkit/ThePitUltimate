@@ -178,7 +178,7 @@ class PitAdminSimpleCommand {
     @Execute(name = "wipe")
     @Permission("pit.admin")
     fun wipe(@Context player: Player, @Arg("target") target: String, @Arg("reason") reason: String) {
-        val profile = ThePit.getInstance().profileOperator.namedOperator(target)
+        val profile = ThePit.getInstance().profileOperator.namedIOperator(target)
         if (profile == null) {
             player.sendMessage(CC.translate("&cすみません！あのプレイヤーは見つかりませんでした！もう一度確認してください！"))
             return
@@ -195,7 +195,7 @@ class PitAdminSimpleCommand {
     @Permission("pit.admin")
     @Async
     fun unWipe(@Context player: Player, @Arg("target") target: String) {
-        val profile = ThePit.getInstance().profileOperator.namedOperator(target)
+        val profile = ThePit.getInstance().profileOperator.namedIOperator(target)
         if (profile == null) {
             player.sendMessage(CC.translate("&cすみません！あのプレイヤーは見つかりませんでした！もう一度確認してください！"))
             return
@@ -219,8 +219,8 @@ class PitAdminSimpleCommand {
     @Permission("pit.admin")
     @Async
     fun rollback(@Context player: Player, @Arg("name") name: String): String {
-        val profile = ThePit.getInstance().profileOperator.namedOperator(name)
-            ?: ThePit.getInstance().profileOperator.lookupOnline(name)
+        val profile = ThePit.getInstance().profileOperator.namedIOperator(name)
+            ?: ThePit.getInstance().profileOperator.lookupIOnline(name)
         if (profile.profile() == null) {
             return CC.translate("&c该玩家不存在")
         }

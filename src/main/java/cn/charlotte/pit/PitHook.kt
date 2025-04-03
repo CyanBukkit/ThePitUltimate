@@ -1,5 +1,6 @@
 package cn.charlotte.pit
 
+import cn.charlotte.pit.actionbar.ActionBarManager
 import cn.charlotte.pit.command.PitAdminCommands
 import cn.charlotte.pit.command.PitAdminDupeFixCommands
 import cn.charlotte.pit.command.PitAdminSimpleCommand
@@ -9,21 +10,17 @@ import cn.charlotte.pit.command.handler.HandHasItemValidator
 import cn.charlotte.pit.command.handler.metaKey
 import cn.charlotte.pit.config.NewConfiguration
 import cn.charlotte.pit.data.CDKData
+import cn.charlotte.pit.data.operator.ProfileOperator
 import cn.charlotte.pit.enchantment.type.aqua.ClubRodEnchant
 import cn.charlotte.pit.enchantment.type.aqua.GrandmasterEnchant
 import cn.charlotte.pit.enchantment.type.aqua.LuckOfPondEnchant
 import cn.charlotte.pit.enchantment.type.aqua.RogueEnchant
 import cn.charlotte.pit.enchantment.type.dark_normal.*
-import cn.charlotte.pit.enchantment.type.dark_rare.CatastrophicEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboDazzlingGoldEnchant
-import cn.charlotte.pit.enchantment.type.dark_rare.ComboDustEnchant
-import cn.charlotte.pit.enchantment.type.dark_rare.ComboRottenHeartEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboUnpredictablyEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.ComboVenomEnchant
 import cn.charlotte.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
 import cn.charlotte.pit.enchantment.type.genesis.*
-import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench
-import cn.charlotte.pit.enchantment.type.limit.xzq.LimitXZQ1Ench
 import cn.charlotte.pit.enchantment.type.normal.*
 import cn.charlotte.pit.enchantment.type.op.*
 import cn.charlotte.pit.enchantment.type.rage.*
@@ -31,7 +28,6 @@ import cn.charlotte.pit.enchantment.type.ragerare.Regularity
 import cn.charlotte.pit.enchantment.type.ragerare.ThinkOfThePeopleEnchant
 import cn.charlotte.pit.enchantment.type.rare.*
 import cn.charlotte.pit.enchantment.type.sewer_normal.AegisEnchant
-import cn.charlotte.pit.enchantment.type.sewer_rare.TrashPandaEnchant
 import cn.charlotte.pit.enchantment.type.special.SoulRipperEnchant
 import cn.charlotte.pit.events.genesis.listener.GenesisCombatListener
 import cn.charlotte.pit.events.impl.*
@@ -39,6 +35,7 @@ import cn.charlotte.pit.events.impl.major.*
 import cn.charlotte.pit.hologram.HologramListener
 import cn.charlotte.pit.hook.PitPapiHook
 import cn.charlotte.pit.item.AbstractPitItem
+import cn.charlotte.pit.item.ItemFactory
 import cn.charlotte.pit.item.type.*
 import cn.charlotte.pit.listener.*
 import cn.charlotte.pit.map.kingsquests.KingsQuests
@@ -100,7 +97,9 @@ object PitHook {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
+        loadOperator()
+        loadItemFactory()
+        loadActionBar()
         loadEnchants()
         loadPerks()
         loadItems()
@@ -138,7 +137,15 @@ object PitHook {
         SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
     }
-
+    private fun loadActionBar(){
+        ThePit.getInstance().actionBarManager = ActionBarManager();
+    }
+    private fun loadItemFactory(){
+        ThePit.getInstance().itemFactory = ItemFactory();
+    }
+    private fun loadOperator(){
+        ThePit.getInstance().profileOperator = ProfileOperator(ThePit.getInstance());
+    }
     private fun loadCommands() {
         LiteBukkitFactory.builder()
             .commands(
@@ -187,6 +194,8 @@ object PitHook {
 
 
         //AnnouncementRunnable.runTaskTimerAsynchronously(ThePit.getInstance(), 0, 40 * 60)
+
+        AsyncTickHandler().runTaskTimerAsynchronously(ThePit.getInstance(), 1, 1)
         GoldDropRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
         ProtectRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)

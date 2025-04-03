@@ -14,7 +14,6 @@ import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**

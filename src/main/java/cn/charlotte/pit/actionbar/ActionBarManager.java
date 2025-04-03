@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ActionBarManager{
+public class ActionBarManager implements IActionBarManager{
     Map<UUID,Map<String, Map.Entry<String,Integer>>> multiMap = new SWMRHashTable<>();
     public void addActionBarOnQueue(Player player,String arg,String val,int repeat) {
         UUID uniqueId = player.getUniqueId();

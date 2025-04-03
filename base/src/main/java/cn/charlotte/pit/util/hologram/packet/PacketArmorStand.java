@@ -1,6 +1,6 @@
 package cn.charlotte.pit.util.hologram.packet;
 
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.PublicUtil;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.ReflectUtil;
@@ -120,7 +120,7 @@ public class PacketArmorStand {
         handle.playerConnection.sendPacket(spawnEntityLiving);
         {
             for (Pair<EquipmentSlot, ItemStack> pair : getItems(entity)) {
-                PacketPlayOutEntityEquipment entityEquipment = new PacketPlayOutEntityEquipment(entity.getEntityId(),pair.getKey().ordinal(), Utils.toNMStackQuick(pair.getValue()));
+                PacketPlayOutEntityEquipment entityEquipment = new PacketPlayOutEntityEquipment(entity.getEntityId(),pair.getKey().ordinal(), PublicUtil.toNMStackQuick(pair.getValue()));
                 handle.playerConnection.sendPacket(entityEquipment);
             }
         }

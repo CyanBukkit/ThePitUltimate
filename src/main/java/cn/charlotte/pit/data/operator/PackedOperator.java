@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 @ToString
-public class PackedOperator {
+public class PackedOperator implements IOperator {
 
     ThePit pit;
     //ReentrantLock lock = new ReentrantLock();

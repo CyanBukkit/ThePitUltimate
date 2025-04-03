@@ -4,14 +4,13 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.api.PitInternalHook;
 import cn.charlotte.pit.buff.BuffData;
-import cn.charlotte.pit.data.operator.PackedOperator;
+import cn.charlotte.pit.data.operator.IOperator;
 import cn.charlotte.pit.data.sub.*;
-import cn.charlotte.pit.enchantment.type.limit.Limit24520Ench;
 import cn.charlotte.pit.event.PitGainCoinsEvent;
 import cn.charlotte.pit.event.PitGainRenownEvent;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
-import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.medal.impl.challenge.HundredLevelMedal;
 import cn.charlotte.pit.quest.AbstractQuest;
 import cn.charlotte.pit.util.chat.CC;
@@ -124,8 +123,8 @@ public class PlayerProfile {
     }
 
     //两张表
-    public PackedOperator toOperator(){
-        return ThePit.getInstance().getProfileOperator().getOperator(getPlayerUuid());
+    public IOperator toOperator(){
+        return ThePit.getInstance().getProfileOperator().getIOperator(getPlayerUuid());
     }
    // public static Map<UUID, BukkitRunnable> LOADING_MAP = new SWMRHashTable<>(); // do it static
 
@@ -279,8 +278,8 @@ public class PlayerProfile {
     public KingsQuestsData kingsQuestsData = new KingsQuestsData();
 
     private long lastRenameTime = 0;
-    public IMythicItem heldItem; //make it public because it didn't have any synch operation
-    public IMythicItem leggings; //make it public because it didn't have any synch operation
+    public AbstractPitItem heldItem; //make it public because it didn't have any synch operation
+    public AbstractPitItem leggings; //make it public because it didn't have any synch operation
     public PlayerProfile(UUID uuid, String playerName) {
         //调用默认构造函数，初始化赋值
         this();
@@ -409,7 +408,7 @@ public class PlayerProfile {
         return rawCache;
     }
     public static PlayerProfile getRawCache(UUID uuid){
-        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(uuid);
+        IOperator operator = ThePit.getInstance().getProfileOperator().getIOperator(uuid);
         if (operator == null || !operator.isLoaded()) {
 //            Player player = Bukkit.getPlayer(uuid);
 //            if (player != null && player.isOnline()) {
@@ -764,7 +763,7 @@ public class PlayerProfile {
 
            // cacheProfile.put(this.getPlayerUuid(), profile);
             //TODO edit
-            ThePit.getInstance().getProfileOperator().getOperator(uuid).wipe(profile);
+            ThePit.getInstance().getProfileOperator().getIOperator(uuid).wipe(profile);
         }
         return true;
     }

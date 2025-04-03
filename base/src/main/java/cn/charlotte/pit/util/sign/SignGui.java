@@ -1,6 +1,6 @@
 package cn.charlotte.pit.util.sign;
 
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.PublicUtil;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -60,7 +60,7 @@ public class SignGui {
             public void handleSentPacket(PlayerConnection playerConnection, Packet<?> packet) {
             }
         };
-        Utils.addCommonHandler(packetHandler);
+        PublicUtil.addCommonHandler(packetHandler);
     }
 
 

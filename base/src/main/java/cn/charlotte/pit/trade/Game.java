@@ -1,7 +1,6 @@
 package cn.charlotte.pit.trade;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.trade.runnable.TradeMonitorRunnable;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.runnable.ClearRunnable;

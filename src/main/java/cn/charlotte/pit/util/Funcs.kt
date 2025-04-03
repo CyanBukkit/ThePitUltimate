@@ -142,12 +142,12 @@ fun submit(
     return runnable
 }
 //sync method
-fun org.bukkit.inventory.ItemStack?.toMythicItem(): cn.charlotte.pit.item.IMythicItem? {
-    return ThePit.getInstance().itemFactory.getIMythicItemSync(this) //修正
+fun org.bukkit.inventory.ItemStack?.toMythicItem(): cn.charlotte.pit.item.AbstractPitItem? {
+    return ThePit.getInstance().itemFactory.getItemFromStack(this) //修正
 }
-fun org.bukkit.inventory.ItemStack?.toMythicItemAsync(): cn.charlotte.pit.item.IMythicItem? {
-    return ThePit.getInstance().itemFactory.getIMythicItem(this)
-}
+//fun org.bukkit.inventory.ItemStack?.toMythicItemAsync(): cn.charlotte.pit.item.IMythicItem? {
+//    return ThePit.getInstance().itemFactory.getIMythicItem(this)
+//}
 
 
 val Player.isSpecial: Boolean

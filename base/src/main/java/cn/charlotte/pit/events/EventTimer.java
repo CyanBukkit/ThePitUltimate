@@ -1,9 +1,8 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.PublicUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import lombok.Getter;
 import lombok.Setter;
 
 import java.text.SimpleDateFormat;
@@ -28,7 +27,7 @@ public class EventTimer implements Runnable {
         }
 
         final String format = DATE_FORMAT.format(System.currentTimeMillis());
-        final String[] split = Utils.splitByCharAt(format,':');
+        final String[] split = PublicUtil.splitByCharAt(format,':');
         final String minString = split[4];
         final EventFactory factory = ThePit.getInstance().getEventFactory();
 

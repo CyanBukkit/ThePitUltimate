@@ -1,13 +1,12 @@
 package cn.charlotte.pit.runnable;
 
+import cn.charlotte.pit.PitHook;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.actionbar.ActionBarManager;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.data.operator.PackedOperator;
-import cn.charlotte.pit.data.temp.TradeRequest;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import cn.charlotte.pit.item.ItemFactory;
+import cn.charlotte.pit.util.PublicUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -22,13 +21,17 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
     @Override
     public void run() {
         //trade
-        ActionBarManager actionBarManager = instance.getActionBarManager();
+        ActionBarManager actionBarManager = (ActionBarManager) instance.getActionBarManager();
         if(actionBarManager != null && tick % 5 == 0){
             actionBarManager.tick();
         }
         if(tick % 10 == 0) {
             //Async Lru Detector
-            instance.getItemFactory().lru();
+            ItemFactory itemFactory = (ItemFactory) instance.getItemFactory();
+            itemFactory.lru();
+            PublicUtil.itemVersion = PitHook.getItemVersion();
+
+            PublicUtil.signVer = PitHook.getGitVersion();
         }
         if(++tick==Long.MIN_VALUE){
             tick = 0; //从头开始

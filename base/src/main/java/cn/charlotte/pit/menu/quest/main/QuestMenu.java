@@ -8,7 +8,7 @@ import cn.charlotte.pit.menu.quest.main.button.QuestIntroduceButton;
 import cn.charlotte.pit.menu.quest.main.button.QuestSanctuaryButton;
 import cn.charlotte.pit.quest.AbstractQuest;
 import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.PublicUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
@@ -71,7 +71,7 @@ public class QuestMenu extends Menu {
             } else {
                 int i = 0;
                 for (String internal : profile.getCurrentQuestList()) {
-                    String[] split = Utils.splitByCharAt(internal,':');
+                    String[] split = PublicUtil.splitByCharAt(internal,':');
                     String questName = split[0];
                     int level = Integer.parseInt(split[1]);
                     AbstractQuest abstractQuest = ThePit.getInstance()

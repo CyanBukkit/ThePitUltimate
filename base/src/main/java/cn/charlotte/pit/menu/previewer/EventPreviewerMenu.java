@@ -1,6 +1,6 @@
 package cn.charlotte.pit.menu.previewer;
 
-import cn.charlotte.pit.menu.event.previewer.button.EventPreviewButton;
+import cn.charlotte.pit.menu.previewer.button.EventPreviewButton;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
 import org.bukkit.entity.Player;

@@ -2,15 +2,12 @@ package cn.charlotte.pit.listener;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.UtilKt;
-import cn.charlotte.pit.buff.impl.BountySolventBuff;
 import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.operator.PackedOperator;
-import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.data.sub.*;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.EnchantmentFactor;
-import cn.charlotte.pit.enchantment.type.op.RealManEnchant;
 import cn.charlotte.pit.event.*;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
@@ -30,7 +27,6 @@ import cn.charlotte.pit.runnable.ProfileLoadRunnable;
 import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.MythicUtil;
 import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.*;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
@@ -40,14 +36,12 @@ import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 
-import lombok.val;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -64,16 +58,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import xyz.refinedev.spigot.CarbonSpigot;
-import xyz.refinedev.spigot.async.threading.TaskQueueWorker;
-import xyz.refinedev.spigot.async.utils.ResettableLatch;
 
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * @Author: EmptyIrony

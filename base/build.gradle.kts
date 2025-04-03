@@ -3,7 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("io.freefair.lombok") version "8.10"
-
+    id("java-library")
     kotlin("jvm") version "2.1.20"
     alias(libs.plugins.shadow)
 }

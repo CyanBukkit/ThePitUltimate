@@ -1,10 +1,9 @@
 package cn.charlotte.pit.util.item;
 
-import cn.charlotte.pit.PitHook;
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.item.IMythicItem;
-import cn.charlotte.pit.item.ItemFactory;
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.item.AbstractPitItem;
+import cn.charlotte.pit.item.IItemFactory;
+import cn.charlotte.pit.util.PublicUtil;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -52,16 +51,16 @@ public class ItemUtil {
     }
     public static boolean shouldUpdateItem(ItemStack stack){
         String ver = getVer(stack);
-        return ver == null || ver.equals("NULL") || !PitHook.getItemVersion().equals(ver);
+        return ver == null || ver.equals("NULL") || !PublicUtil.itemVersion.equals(ver);
     }
     public static UUID randomUUIDItem(ItemStack stack) {
         UUID uuid;
 
-        ItemFactory itemFactory = ThePit.getInstance().getItemFactory();
+        IItemFactory itemFactory = ThePit.getInstance().getItemFactory();
         if (itemFactory != null) {
             while (true) {
                 uuid = UUID.randomUUID();
-                IMythicItem item = itemFactory.getItem(uuid);
+                AbstractPitItem item = itemFactory.getAbstractPitItem(uuid);
                 if (item == null) {
                     break;
                 }
@@ -74,14 +73,14 @@ public class ItemUtil {
         return uuid;
     }
     public static void signVer(ItemStack stack){
-        setVer(stack,PitHook.getItemVersion());
+        setVer(stack,PublicUtil.itemVersion);
     }
 
     public static boolean shouldUpdateUUIDAndItem(ItemStack stack){
         return shouldUpdateItem(stack) && shouldUpdateUUID();
     }
     public static boolean shouldUpdateUUID(){
-        return PitHook.getItemVersion().endsWith("uuid");
+        return PublicUtil.itemVersion.endsWith("uuid");
     }
     public static boolean isIllegalItem(ItemStack item) {
         NBTTagCompound extra = getExtra(item);
@@ -133,7 +132,7 @@ public class ItemUtil {
             return null;
         }
 
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = Utils.toNMStackQuick(item);
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(item);
         NBTTagCompound tag = nmsItem.getTag();
         if(tag == null){
             return null;

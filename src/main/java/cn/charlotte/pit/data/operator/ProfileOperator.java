@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-public class ProfileOperator {
+public class ProfileOperator implements IProfilerOperator{
     ThePit instance;
     SWMRHashTable<UUID,PackedOperator> operators = new SWMRHashTable<>();
     public ProfileOperator(ThePit thePit){
@@ -187,6 +187,17 @@ public class ProfileOperator {
             return false;
         });
     }
+
+    @Override
+    public IOperator getIOperator(UUID uuid) {
+        return getOperator(uuid);
+    }
+
+    @Override
+    public IOperator getIOperator(String uuid) {
+        return getOperator(uuid);
+    }
+
     public void doSaveProfiles() {
         operators.forEachValue(operator -> {
             Player lastBoundPlayer = operator.lastBoundPlayer;
@@ -203,6 +214,12 @@ public class ProfileOperator {
         randomGC();
 
     }
+
+    @Override
+    public IOperator getOrConstructIOperator(Player target) {
+        return getOrConstructOperator(target);
+    }
+
     public void randomGC(){
         if (Bukkit.getOnlinePlayers().size() <= 2){
             return;

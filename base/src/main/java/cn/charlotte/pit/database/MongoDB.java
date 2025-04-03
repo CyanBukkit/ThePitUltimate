@@ -1,6 +1,7 @@
 package cn.charlotte.pit.database;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.data.*;
 import com.mongodb.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;

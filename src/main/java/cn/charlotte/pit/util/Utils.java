@@ -5,63 +5,38 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
+import cn.charlotte.pit.item.IItemFactory;
 import cn.charlotte.pit.item.IMythicItem;
-import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.item.MythicColor;
 import cn.charlotte.pit.item.type.*;
 import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
+import cn.charlotte.pit.listener.PacketListener;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.bytebuddy.implementation.bytecode.Throw;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import xyz.refinedev.spigot.CarbonSpigot;
-import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
-    public static void addCommonHandler(PacketHandler packetHandler) {
-        try {
-            CarbonSpigot.getPacketAPI().registerPacketHandler(ThePit.getInstance(), packetHandler);
-        } catch (Throwable a) {
-            try {
-                Bukkit.getLogger().warning("Error in adding the packet handler from " + packetHandler + ", using the public way...");
-                Class<?> aClass = Class.forName("xyz.refinedev.spigot.api.handlers.impl.KQC");
-                Method addHandler = aClass.getMethod("addHandler", PacketHandler.class);
-                addHandler.invoke(null, packetHandler);
-            } catch (Throwable e){
-                e.printStackTrace();
-                System.out.println("Error, this plugin is buggy");
-            }
-        }
-    }
+
     /**
      * 需要Paper支持。
      * @return
      */
     public static final net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
-        if (item instanceof CraftItemStack) {
-            return ((CraftItemStack) item).handle;
-        } else {
-            return CraftItemStack.asNMSCopy(item);
-        }
+        return PublicUtil.toNMStackQuick(item);
     }
     /**
      * 随机color
@@ -125,24 +100,7 @@ public class Utils {
      */
     public static String[] splitByCharAt(final String line, final char delimiter)
     {
-        CharSequence[] temp = new CharSequence[(line.length() / 2) + 1];
-        int wordCount = 0;
-        int i = 0;
-        int j = line.indexOf(delimiter); // first substring
-
-        while (j >= 0)
-        {
-            temp[wordCount++] = line.substring(i, j);
-            i = j + 1;
-            j = line.indexOf(delimiter, i); // rest of substrings
-        }
-
-        temp[wordCount++] = line.substring(i); // last substring
-
-        String[] result = new String[wordCount];
-        System.arraycopy(temp, 0, result, 0, wordCount);
-
-        return result;
+        return PublicUtil.splitByCharAt(line, delimiter);
     }
     /**
      * 返回-1为没有
@@ -186,7 +144,7 @@ public class Utils {
     public static IMythicItem getMythicItem(ItemStack item){
         ThePit instance = ThePit.getInstance();
         if(instance != null){
-            ItemFactory itemFactory = instance.getItemFactory();
+            IItemFactory itemFactory = instance.getItemFactory();
             if(itemFactory != null){
                 return itemFactory.getIMythicItem(item);
             }
@@ -297,4 +255,7 @@ public class Utils {
         return item.toItemStack();
     }
 
+    public static void addCommonHandler(@NotNull PacketListener packetListener) {
+        PublicUtil.addCommonHandler(packetListener);
+    }
 }

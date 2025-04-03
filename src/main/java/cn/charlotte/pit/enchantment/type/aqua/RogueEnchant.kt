@@ -4,6 +4,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
+import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.item.MythicColor
 import cn.charlotte.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.parm.listener.IPlayerDamaged
@@ -53,7 +54,8 @@ class RogueEnchant: AbstractEnchantment(), IAttackEntity, IPlayerDamaged{
         cancel: AtomicBoolean?
     ) {
         if (target is Player) {
-            if (target.inventory.leggings?.toMythicItem()?.color == MythicColor.AQUA) {
+            var toMythicItem = target.inventory.leggings?.toMythicItem() as IMythicItem
+            if (toMythicItem?.color == MythicColor.AQUA) {
                 boostDamage.addAndGet(0.25)
             }
         }
@@ -70,7 +72,8 @@ class RogueEnchant: AbstractEnchantment(), IAttackEntity, IPlayerDamaged{
         cancel: AtomicBoolean?
     ) {
         if (attacker is Player) {
-            if (attacker.inventory.leggings?.toMythicItem()?.color == MythicColor.AQUA) {
+            var toMythicItem = attacker.inventory.leggings?.toMythicItem() as IMythicItem
+            if (toMythicItem?.color == MythicColor.AQUA) {
                 boostDamage.set(boostDamage.get() - 0.1)
             }
         }

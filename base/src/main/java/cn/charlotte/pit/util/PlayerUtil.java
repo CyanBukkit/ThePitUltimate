@@ -4,10 +4,10 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
-import cn.charlotte.pit.enchantment.type.dark_normal.SomberEnchant;
+import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
 import cn.charlotte.pit.events.IEvent;
-import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.MegaStreak;
 import cn.charlotte.pit.perk.PerkType;
@@ -75,11 +75,6 @@ public class PlayerUtil {
     public static boolean isEquippingSomber(Player player) {
         return player.getInventory().getLeggings() != null && ThePit.getApi().getItemEnchantLevel(player.getInventory().getLeggings(), "somber_enchant") > 0;
     }
-
-    public static boolean isEquippingSomberFast(PlayerProfile profile) {
-        return profile.leggings != null && Utils.getEnchantLevel0(profile.leggings, SomberEnchant.INSTANCE) > 0;
-    }
-
 
     public static boolean isCritical(Player player) {
         final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
@@ -254,7 +249,7 @@ public class PlayerUtil {
         boolean ramboPresent = PlayerUtil.isPlayerChosePerk(player, "rambo");
         boolean overHeal = isPlayerChosePerk(player, "OverHeal");
         boolean olympusPresent = PlayerUtil.isPlayerChosePerk(player, "Olympus");
-        IMythicItem leggings = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
+        AbstractPitItem leggings = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
         int overHealEnchant = leggings == null ? -1 : leggings.getEnchantmentLevel("over_heal_enchant");
         if (olympusPresent) {
             limit = 1;
