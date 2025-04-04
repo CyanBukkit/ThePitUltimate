@@ -1,6 +1,8 @@
 package cn.charlotte.pit.events.impl.major
 
 import cn.charlotte.pit.ThePit
+import cn.charlotte.pit.Util.Companion.chatColorToColor
+import cn.charlotte.pit.Util.Companion.chatColorToData
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.enchantment.type.rare.PaparazziEnchant
 import cn.charlotte.pit.event.PitKillEvent
@@ -43,8 +45,8 @@ class SquadsEvent : IEpicEvent, IEvent, IPrepareEvent, Listener, IScoreBoardInse
         private val startChars = 'A'
 
         @JvmStatic
-        private val colors = ArrayList(ChatColor.values().toList().filter {
-            BannerData.chatColorToColor[it] != null
+        private val colors = ArrayList(ChatColor.entries.filter {
+            chatColorToColor[it] != null
         })
     }
 
@@ -355,36 +357,6 @@ class SquadsEvent : IEpicEvent, IEvent, IPrepareEvent, Listener, IScoreBoardInse
             @JvmStatic
             private val MAX_CAPTURING_STATE = 5
 
-            @JvmStatic
-            val chatColorToColor = mapOf(
-                ChatColor.BLACK to Color.BLACK,
-                ChatColor.RED to Color.RED,
-                ChatColor.DARK_GREEN to Color.GREEN,
-                ChatColor.DARK_BLUE to Color.BLUE,
-                ChatColor.DARK_PURPLE to Color.MAROON,
-                ChatColor.DARK_AQUA to Color.fromRGB(0, 170, 170),
-                ChatColor.DARK_GRAY to Color.fromRGB(85, 85, 85),
-                ChatColor.LIGHT_PURPLE to Color.fromRGB(255, 85, 255),
-                ChatColor.GREEN to Color.LIME,
-                ChatColor.YELLOW to Color.YELLOW,
-                ChatColor.AQUA to Color.AQUA,
-                ChatColor.GOLD to Color.ORANGE
-            )
-
-            val chatColorToData = mapOf(
-                ChatColor.BLACK to 0,
-                ChatColor.RED to 1,
-                ChatColor.DARK_GREEN to 2,
-                ChatColor.DARK_BLUE to 4,
-                ChatColor.DARK_PURPLE to 5,
-                ChatColor.DARK_AQUA to 6,
-                ChatColor.DARK_GRAY to 8,
-                ChatColor.LIGHT_PURPLE to 9,
-                ChatColor.GREEN to 10,
-                ChatColor.YELLOW to 11,
-                ChatColor.AQUA to 12,
-                ChatColor.GOLD to 14
-            )
         }
 
         var capturedTeam: TeamData? = null

@@ -38,6 +38,7 @@ object NewConfiguration {
     var removeSupportWhenNoPermission = false
 
     val eventOnlineRequired = HashMap<String, Int>()
+    var disabled: List<*> = ArrayList<Any>();
 
     val mythicMobs = HashMap<String, MythicMobsConf>()
 
@@ -154,7 +155,7 @@ object NewConfiguration {
                 this += Rate(permission, chance)
             }
         }
-
+        disabled = config.getList("enchantment.disable", disabled)
         rareRate[MythicColor.RAGE] = ArrayList<Rate>().apply {
             val rageSection = config.getConfigurationSection("rate.rage")
 

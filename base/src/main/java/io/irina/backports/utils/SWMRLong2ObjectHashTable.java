@@ -1,4 +1,4 @@
-package cn.klee.backports.utils;
+package io.irina.backports.utils;
 
 import io.papermc.paper.util.IntegerUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,8 +17,8 @@ public class SWMRLong2ObjectHashTable<V> {
 
     protected final float loadFactor;
 
-    protected static final VarHandle SIZE_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getVarHandle(SWMRLong2ObjectHashTable.class, "size", int.class);
-    protected static final VarHandle TABLE_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getVarHandle(SWMRLong2ObjectHashTable.class, "table", TableEntry[].class);
+    protected static final VarHandle SIZE_HANDLE = ConcurrentUtil.getVarHandle(SWMRLong2ObjectHashTable.class, "size", int.class);
+    protected static final VarHandle TABLE_HANDLE = ConcurrentUtil.getVarHandle(SWMRLong2ObjectHashTable.class, "table", TableEntry[].class);
 
     /* size */
 
@@ -767,7 +767,7 @@ public class SWMRLong2ObjectHashTable<V> {
 
         protected TableEntry<V> next;
 
-        protected static final VarHandle VALUE_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getVarHandle(TableEntry.class, "value", Object.class);
+        protected static final VarHandle VALUE_HANDLE = ConcurrentUtil.getVarHandle(TableEntry.class, "value", Object.class);
         protected static final VarHandle NEXT_HANDLE = ConcurrentUtil.getVarHandle(TableEntry.class, "next", TableEntry.class);
 
         /* value */
@@ -1055,7 +1055,7 @@ public class SWMRLong2ObjectHashTable<V> {
 
         @Override
         public String toString() {
-            return cn.klee.backports.utils.CollectionUtil.toString(this, "SWMRHashTableEntrySet");
+            return CollectionUtil.toString(this, "SWMRHashTableEntrySet");
         }
     }
     protected static final class EntryIterator<V> extends TableEntryIterator<V, TableEntry<V>> {
@@ -1151,7 +1151,7 @@ public class SWMRLong2ObjectHashTable<V> {
 
         @Override
         public String toString() {
-            return cn.klee.backports.utils.CollectionUtil.toString(this, "SWMRHashTableValues");
+            return CollectionUtil.toString(this, "SWMRHashTableValues");
         }
     }
     protected static final class KeySet<V> extends ViewSet<V, Long> {

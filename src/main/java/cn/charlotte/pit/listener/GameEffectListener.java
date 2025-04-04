@@ -25,6 +25,7 @@ import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.quest.AbstractQuest;
 import cn.charlotte.pit.quest.QuestFactory;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -201,8 +202,8 @@ public class GameEffectListener implements Listener {
             } else {
                 shouldIgnoreEnchant = false;
             }
-            IMythicItem heldItem = profile.heldItem;
-            IMythicItem leggings = profile.leggings;
+            IMythicItem heldItem = (IMythicItem) profile.heldItem;
+            IMythicItem leggings = (IMythicItem) profile.leggings;
             //十分甚至九分的重构
 
             if( (heldItem != null || leggings != null)) {
@@ -271,8 +272,8 @@ public class GameEffectListener implements Listener {
 
                     if (!enchantmentFactor.getPlayerDamageds().isEmpty()) {
                         boolean shouldIgnoreEnchant = PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity());
-                        IMythicItem leggings = profile.leggings;
-                        IMythicItem sword = profile.heldItem;
+                        IMythicItem leggings = (IMythicItem) profile.leggings;
+                        IMythicItem sword = (IMythicItem) profile.heldItem;
                         if(!(sword instanceof MythicLeggingsItem)) {
                             processEnchDMGed(event, player, leggings, shouldIgnoreEnchant, finalDamage, boostDamage, cancel);
                         }
@@ -290,8 +291,8 @@ public class GameEffectListener implements Listener {
 
                     if (!enchantmentFactor.getPlayerDamageds().isEmpty()) {
                         boolean shouldIgnoreEnchant = PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity());
-                        IMythicItem leggings = profile.leggings;
-                        IMythicItem sword = profile.heldItem;
+                        IMythicItem leggings =(IMythicItem)  profile.leggings;
+                        IMythicItem sword = (IMythicItem) profile.heldItem;
                         processEnchDMGed(event, player, leggings, shouldIgnoreEnchant, finalDamage, boostDamage, cancel);
                         processEnchDMGed(event, player, sword, shouldIgnoreEnchant, finalDamage, boostDamage, cancel);
                     }

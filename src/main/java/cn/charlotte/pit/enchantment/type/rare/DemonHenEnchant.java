@@ -149,8 +149,8 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
 
     public Location getHenLocation(Location location) {
         Location clone = location.clone();
-        float rad = MathHelper.fastToRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
-        float rad2 = MathHelper.fastToRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
+        float rad = (float) Math.toRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
+        float rad2 = (float) Math.toRadians(ThreadLocalRandom.current().nextInt(360) % 360 - 180);
         float range = 2;
         float x = MathHelper.sin(rad) * range;
         float z = MathHelper.cos(rad2) * range;

@@ -5,9 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
-import cn.charlotte.pit.item.IItemFactory;
-import cn.charlotte.pit.item.IMythicItem;
-import cn.charlotte.pit.item.MythicColor;
+import cn.charlotte.pit.item.*;
 import cn.charlotte.pit.item.type.*;
 import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
@@ -124,18 +122,18 @@ public class Utils {
         }
         return mythicItem.getEnchantments().getInt(enchObj);
     }
-    public static int getEnchantLevel0(IMythicItem item, AbstractEnchantment enchObj) {
+    public static int getEnchantLevel(AbstractPitItem item, AbstractEnchantment enchObj) {
         if (item == null) {
             return -1;
         }
 
         return item.getEnchantmentLevel(enchObj);
     }
-    public static int getEnchantLevel(IMythicItem mythicItem, String enchantName){
-        if(mythicItem == null)
+    public static int getEnchantLevel(AbstractPitItem item,String enchantName){
+        if (item == null) {
             return -1;
-
-        return mythicItem.getEnchantmentLevel(enchantName);
+        }
+        return item.getEnchantmentLevel(enchantName);
     }
     public static String dumpNBTOnString(ItemStack stack){
         NBTTagCompound tag = Utils.toNMStackQuick(stack).getTag();
@@ -144,7 +142,7 @@ public class Utils {
     public static IMythicItem getMythicItem(ItemStack item){
         ThePit instance = ThePit.getInstance();
         if(instance != null){
-            IItemFactory itemFactory = instance.getItemFactory();
+            ItemFactory itemFactory = (ItemFactory) instance.getItemFactory();
             if(itemFactory != null){
                 return itemFactory.getIMythicItem(item);
             }
@@ -194,7 +192,7 @@ public class Utils {
             return false;
         }
 
-        final IMythicItem mythicItem = FuncsKt.toMythicItem(item);
+        final IMythicItem mythicItem = (IMythicItem) FuncsKt.toMythicItem(item);
         if (mythicItem == null || !mythicItem.isEnchanted() || mythicItem.isBoostedByGem() || mythicItem.isBoostedByGlobalGem()) {
             return false;
         }
@@ -216,7 +214,7 @@ public class Utils {
             return false;
         }
 
-        final IMythicItem mythicItem = FuncsKt.toMythicItem(item);
+        final IMythicItem mythicItem = (IMythicItem) FuncsKt.toMythicItem(item);
         if (mythicItem == null || !mythicItem.isEnchanted() || mythicItem.isBoostedByGem() || mythicItem.isBoostedByGlobalGem()) {
             return false;
         }
@@ -237,7 +235,7 @@ public class Utils {
         if (item == null) {
             return null;
         }
-        return subtractLive(ThePit.getInstance().getItemFactory().getIMythicItemSync(item));
+        return subtractLive(((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItemSync(item));
     }
 
     public static ItemStack subtractLive(IMythicItem item) {

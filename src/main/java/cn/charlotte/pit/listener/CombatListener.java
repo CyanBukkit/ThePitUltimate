@@ -13,6 +13,7 @@ import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.IMythicItem;
+import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.item.type.LuckyChestplate;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
@@ -27,6 +28,7 @@ import cn.charlotte.pit.runnable.ProfileLoadRunnable;
 import cn.charlotte.pit.util.FuncsKt;
 import cn.charlotte.pit.util.MythicUtil;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.*;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
@@ -584,7 +586,7 @@ public class CombatListener implements Listener {
                 ItemStack item = inventory.getItem(i);
                 if (item == null || item.getType() == Material.AIR) continue;
 
-                final IMythicItem mythicSwordItem = ThePit.getInstance().getItemFactory().getIMythicItemSync(item);
+                final IMythicItem mythicSwordItem = ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItemSync(item);
                 if (mythicSwordItem == null) {
                     continue;
                 }
@@ -664,7 +666,7 @@ public class CombatListener implements Listener {
         //save status - end
 
         InventoryUtil.supplyItems(player);
-        PackedOperator operator = playerProfile.toOperator();
+        PackedOperator operator = (PackedOperator) playerProfile.toOperator();
         if (operator != null) {
             operator.pending(i -> {
                 playerProfile.setInventory(PlayerInv.fromPlayerInventory(inventory));
@@ -932,11 +934,11 @@ public class CombatListener implements Listener {
         if (enchantPerkLevel > -1) {
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
                 double chance = NewConfiguration.INSTANCE.getMythicDropChance(killer) * (1 + (enchantPerkLevel - 1) * 0.02);
-                int level = Utils.getEnchantLevel(killerProfile.leggings, "pants_radar");
+                int level = Utils.getEnchantLevel((IMythicItem) killerProfile.leggings, "pants_radar");
                 if (level > 0) {
                     chance = (1 + level * 0.3) * chance;
                 }
-                level = Utils.getEnchantLevel(killerProfile.heldItem, "pants_radar");
+                level = Utils.getEnchantLevel((IMythicItem) killerProfile.heldItem, "pants_radar");
                 if (level > 0) {
                     chance = (1 + level * 0.3) * chance;
                 }
@@ -1221,7 +1223,7 @@ public class CombatListener implements Listener {
 
             int level = enchant.getItemEnchantLevel(killerProfile.heldItem);
             GameEffectListener.processKilled(ins, level, killer, player, coinsAtomic, expAtomic);
-            IMythicItem leggingItem = killerProfile.leggings;
+            IMythicItem leggingItem = (IMythicItem) killerProfile.leggings;
             if (leggingItem != null) {
                 level = enchant.getItemEnchantLevel(leggingItem);
                 GameEffectListener.processKilled(ins, level, killer, player, coinsAtomic, expAtomic);

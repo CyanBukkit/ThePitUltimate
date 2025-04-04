@@ -106,7 +106,7 @@ public class LevelUtil {
     /**
      * For max performance
      */
-    static double[][] plevelMapping = null;
+    static double[] plevelMapping = null;
     static boolean booted = false;
     /**
      * @param prestige 玩家当前精通等级
@@ -121,9 +121,10 @@ public class LevelUtil {
             bootCache();
         } else if (booted && plevelMapping != null) {
             if(plevelMapping.length > prestige) {
-                double[] doubles = plevelMapping[prestige];
-                if(doubles.length > level) {
-                    return doubles[level];
+                try {
+                    return plevelMapping[prestige * 130 + level];
+                } catch (Exception e){
+                    return Double.MAX_VALUE - 1000.0D;
                 }
             }
         }
@@ -153,10 +154,11 @@ public class LevelUtil {
         booting = true;
         booted = false;
         int limit = PrestigeStatusButton.limit;
-        double[][] plevelMappingRaw = new double[limit + 40][130];
+        double[] plevelMappingRaw = new double[(limit + 40) *130];
         for (int i = 0; i < limit; i++) {
             for (int ia = 0; ia < 130; ia++) {
-                plevelMappingRaw[i][ia] = getLevelExpRequired(i,ia);
+                int append = i * 130;
+                plevelMappingRaw[append + ia] = getLevelExpRequired(i,ia);
             }
         }
         plevelMapping = plevelMappingRaw;

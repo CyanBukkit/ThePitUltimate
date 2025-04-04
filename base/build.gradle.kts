@@ -35,13 +35,13 @@ tasks.named<ShadowJar>("shadowJar") {
 
 
 dependencies {
-    api(libs.reflectionhelper)
-    api(libs.hutool.core)
-    api(libs.hutool.crypto)
-    api(libs.book)
-    api(libs.slf4j)
-    api(libs.litecommands)
-    api(libs.adventure.bukkit)
+    compileOnly(libs.reflectionhelper)
+    compileOnly(libs.reflectionhelper)
+    compileOnly(libs.hutool.crypto)
+    compileOnly(libs.book)
+    compileOnly(libs.slf4j)
+    compileOnly(libs.litecommands)
+    compileOnly(libs.adventure.bukkit)
     compileOnly("com.caoccao.javet:javet:3.1.4") // Linux and Windows (x86_64)
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
@@ -53,7 +53,6 @@ dependencies {
     compileOnly(libs.protocollib)
     compileOnly(libs.luckperms)
     compileOnly("com.github.ben-manes.caffeine:caffeine:3.1.8")
-    implementation("com.github.f4b6a3:uuid-creator:6.0.0")
     compileOnly(libs.papi)
     compileOnly(libs.narshorn)
     compileOnly(libs.protocollib)
@@ -63,6 +62,7 @@ dependencies {
     compileOnly("org.mongojack:mongojack:5.0.1")
     compileOnly("org.mongodb:mongodb-driver-sync:5.2.0")
 
+    implementation(fileTree("../cloudlib"))
     compileOnly(libs.websocket)
     // fawe /we
     compileOnly(fileTree("../libs"))
@@ -77,7 +77,7 @@ dependencies {
     compileOnly(libs.adventure.bukkit)
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }
 
 tasks.withType<JavaCompile> {

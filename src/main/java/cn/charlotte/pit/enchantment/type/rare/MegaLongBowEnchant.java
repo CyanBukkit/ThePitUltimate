@@ -6,6 +6,7 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
@@ -91,7 +92,7 @@ public class MegaLongBowEnchant extends AbstractEnchantment implements Listener,
                 final EntityPlayer ePlayer = ((CraftPlayer) player).getHandle();
                 final ItemStack itemStack = Utils.toNMStackQuick(itemInHand);
                 final ItemBow bow = (ItemBow) itemStack.getItem();
-                bow.performShoot(itemStack, ePlayer.world, ePlayer, 0,true);
+                bow.a(itemStack, ePlayer.world, ePlayer, 0,true);
             }
         }
     }

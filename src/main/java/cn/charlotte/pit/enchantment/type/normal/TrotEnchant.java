@@ -67,7 +67,7 @@ public class TrotEnchant extends AbstractEnchantment implements MovementHandler 
 
     @Override
     public void handleUpdateLocation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
-        IMythicItem leggings = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
+        IMythicItem leggings = (IMythicItem) PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
         if (leggings != null){
             int level = trotEnchant.getItemEnchantLevel(leggings);
             if (level == 1) {

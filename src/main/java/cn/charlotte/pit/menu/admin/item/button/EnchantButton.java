@@ -10,6 +10,7 @@ import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.IMythicSword;
+import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
@@ -74,7 +75,7 @@ public class EnchantButton extends Button {
         boolean canApply = true;
         if ("mythic_sword".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MythicSwordItem swordItem = (MythicSwordItem) ThePit.getInstance().getItemFactory().getIMythicItem(item);
+                MythicSwordItem swordItem = (MythicSwordItem) ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItem(item);
                 swordItem.setMaxLive(RandomUtil.random.nextInt(8) + 16);
                 swordItem.setLive(swordItem.getMaxLive());
                 int level;
@@ -114,7 +115,7 @@ public class EnchantButton extends Button {
             }
         } else if ("mythic_bow".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MythicBowItem bowItem = (MythicBowItem) ThePit.getInstance().getItemFactory().getIMythicItem(item);
+                MythicBowItem bowItem = (MythicBowItem) ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItem(item);
                 bowItem.setMaxLive(RandomUtil.random.nextInt(8) + 16);
                 bowItem.setLive(bowItem.getMaxLive());
                 int level;
@@ -155,7 +156,7 @@ public class EnchantButton extends Button {
             }
         } else if ("mythic_leggings".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MythicLeggingsItem leggingsItem = (MythicLeggingsItem) ThePit.getInstance().getItemFactory().getIMythicItem(item);
+                MythicLeggingsItem leggingsItem = (MythicLeggingsItem) ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItem(item);
                 leggingsItem.setMaxLive(RandomUtil.random.nextInt(17) + 24);
                 leggingsItem.setLive(leggingsItem.getMaxLive());
                 int level;
@@ -195,7 +196,7 @@ public class EnchantButton extends Button {
             }
         } else if ("magic_fishing_rod".equals(ItemUtil.getInternalName(item))) {
             if (canApply) {
-                MagicFishingRod fishingRod = (MagicFishingRod) ThePit.getInstance().getItemFactory().getIMythicItem(item);
+                MagicFishingRod fishingRod = (MagicFishingRod) ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItem(item);
                 fishingRod.setMaxLive(RandomUtil.random.nextInt(17) + 24);
                 fishingRod.setLive(fishingRod.getMaxLive());
                 int level;

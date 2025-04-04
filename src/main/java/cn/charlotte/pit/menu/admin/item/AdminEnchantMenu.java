@@ -6,11 +6,13 @@ import cn.charlotte.pit.menu.admin.item.button.EnchantButton;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.menu.Button;
 import cn.charlotte.pit.util.menu.Menu;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +35,7 @@ public class AdminEnchantMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttonMap = new HashMap<>();
-        List<AbstractEnchantment> enchantments = ThePit.getInstance().getEnchantmentFactor().getEnchantments();
+        ObjectArrayList<AbstractEnchantment> enchantments = new ObjectArrayList<>(ThePit.getInstance().getEnchantmentFactor().getEnchantments());
 
         int num = 45 * page;
 

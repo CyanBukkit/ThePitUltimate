@@ -1,7 +1,7 @@
 package cn.charlotte.pit.util.scoreboard;
 
 import cn.charlotte.pit.util.scoreboard.events.AssembleBoardCreateEvent;
-import cn.klee.backports.utils.SWMRHashTable;
+import io.irina.backports.utils.SWMRHashTable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;

@@ -4,6 +4,8 @@ import cn.charlotte.pit.PitHook;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.actionbar.ActionBarManager;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.PackedOperator;
+import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.util.PublicUtil;
 import org.bukkit.Bukkit;
@@ -18,6 +20,14 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
 
     ThePit instance = ThePit.getInstance();
     private long tick = 0;
+    public void flushIds(){
+        PublicUtil.itemVersion = PitHook.getItemVersion();
+
+        PublicUtil.signVer = PitHook.getGitVersion();
+    }
+    public AsyncTickHandler(){
+        flushIds();
+    }
     @Override
     public void run() {
         //trade
@@ -29,9 +39,7 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
             //Async Lru Detector
             ItemFactory itemFactory = (ItemFactory) instance.getItemFactory();
             itemFactory.lru();
-            PublicUtil.itemVersion = PitHook.getItemVersion();
-
-            PublicUtil.signVer = PitHook.getGitVersion();
+            flushIds();
         }
         if(++tick==Long.MIN_VALUE){
             tick = 0; //从头开始
@@ -42,7 +50,7 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
             return;
         }
         //Async Io Tracker
-        instance.getProfileOperator().tick();
+        ((ProfileOperator)instance.getProfileOperator()).tick();
     }
     public void doAutoSave(){
         final long last = System.currentTimeMillis();
@@ -54,7 +62,7 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
         Bukkit.getOnlinePlayers().forEach(player -> {
 
             if (player.hasPermission("pit.admin")) return;
-            instance.getProfileOperator().operatorStrict(player).ifPresent(operator -> {
+            ((ProfileOperator)instance.getProfileOperator()).operatorStrict(player).ifPresent(operator -> {
                 PlayerProfile playerProfileByUuid = operator.profile();
                 if(playerProfileByUuid.getCombatTimer().hasExpired()) {
                     if (player.getLastDamageCause() != null) {

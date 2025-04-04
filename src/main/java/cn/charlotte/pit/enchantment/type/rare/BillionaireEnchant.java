@@ -56,7 +56,7 @@ public class BillionaireEnchant extends AbstractEnchantment implements IAttackEn
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(attacker);
+        PackedOperator operator = (PackedOperator) ThePit.getInstance().getProfileOperator().getIOperator(attacker);
         if(operator != null) {
             PlayerProfile profile = operator.profile();
             if (profile.getCoins() >= enchantLevel * 100) {
@@ -69,7 +69,7 @@ public class BillionaireEnchant extends AbstractEnchantment implements IAttackEn
     @Override
     @cn.charlotte.pit.parm.type.BowOnly
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        PackedOperator operator = ThePit.getInstance().getProfileOperator().getOperator(attacker);
+        PackedOperator operator = (PackedOperator) ThePit.getInstance().getProfileOperator().getIOperator(attacker);
         if(operator != null) {
             PlayerProfile profile = operator.profile();
             if (profile.getCoins() >= enchantLevel * 100) {

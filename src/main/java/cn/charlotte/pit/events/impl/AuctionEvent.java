@@ -5,6 +5,7 @@ import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.data.mail.Mail;
+import cn.charlotte.pit.data.operator.IOperator;
 import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.data.sub.PlayerInv;
@@ -159,7 +160,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
         );
     }
     public static void sendMail(UUID uuid, Mail mail) {
-       ProfileOperator profileOperator = ThePit.getInstance().getProfileOperator();
+       ProfileOperator profileOperator = (ProfileOperator)ThePit.getInstance().getProfileOperator();
 
         profileOperator.operator(uuid).ifPresent(operator -> {
             operator.pendingUntilLoaded(prof -> prof.getMailData().sendMail(mail));

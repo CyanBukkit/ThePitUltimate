@@ -13,6 +13,7 @@ import cn.charlotte.pit.perk.MegaStreak;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -28,7 +29,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @Author: EmptyIrony
@@ -481,15 +484,28 @@ public class PlayerUtil {
 
 
     public static Collection<Player> getNearbyPlayers(Location location, double radius) {
-        return location.getWorld()
-                .getNearbyPlayers(location, radius, radius, radius);
+        return getNearbyEntitiesByType(Player.class,location, radius, radius, radius,null);
     }
 
     public static Collection<LivingEntity> getNearbyPlayersAndChicken(Location location, double radius) {
-        return location.getWorld()
-                .getNearbyLivingEntities(location, radius, radius, radius, e -> e instanceof Chicken || e instanceof Player);
+        return getNearbyEntitiesByType(LivingEntity.class,location, radius, radius, radius, e -> e instanceof Chicken || e instanceof Player);
     }
+    public static <T extends org.bukkit.entity.Entity> Collection<T> getNearbyEntitiesByType( Class<? extends org.bukkit.entity.Entity> clazz,  Location loc, double xRadius, double yRadius, double zRadius, Predicate<T> predicate) {
+        if (clazz == null) {
+            clazz = org.bukkit.entity.Entity.class;
+        }
+        Collection<org.bukkit.entity.Entity> nearbyEntities = loc.getWorld().getNearbyEntities(loc, xRadius, yRadius, zRadius);
 
+        List<T> nearby = new ObjectArrayList<>(nearbyEntities.size() + 1);
+        for (org.bukkit.entity.Entity bukkitEntity : nearbyEntities) {
+            //noinspection unchecked
+            if (clazz.isAssignableFrom(bukkitEntity.getClass()) && (predicate == null || predicate.test((T) bukkitEntity))) {
+                //noinspection unchecked
+                nearby.add((T) bukkitEntity);
+            }
+        }
+        return nearby;
+    }
     public static void heal(Player player, double heal) {
         PitRegainHealthEvent event = new PitRegainHealthEvent(player, heal);
         event.callEvent();

@@ -1,6 +1,6 @@
 package cn.charlotte.pit.util.nametag;
 
-import cn.klee.backports.utils.SWMRHashTable;
+import io.irina.backports.utils.SWMRHashTable;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;

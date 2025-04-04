@@ -28,8 +28,8 @@ public class VectorUtil {
     public static Item itemDrop(Player player, ItemStack itemStack, double bulletSpread, double radius) {
         Location location = player.getLocation().add(0.0D, 1.5D, 0.0D);
         Item item = player.getWorld().dropItem(location, itemStack);
-        float yaw = MathHelper.fastToRadians(-player.getLocation().getYaw() - 90.0F);
-        float pitch = MathHelper.fastToRadians(-player.getLocation().getPitch());
+        float yaw = (float) Math.toRadians(-player.getLocation().getYaw() - 90.0F);
+        float pitch = (float) Math.toRadians(-player.getLocation().getPitch());
         double x;
         double y;
         double z;
@@ -66,9 +66,9 @@ public class VectorUtil {
 
     public static Location calculateBackwardVector(World world, double x, double y, double z, float yaw, float pitch) {
         // 计算方向向量的分量
-        float dx = MathHelper.cos(MathHelper.fastToRadians(pitch)) * MathHelper.sin(MathHelper.fastToRadians(MathHelper.normalizeYaw(yaw + 90)));
-        float dy = MathHelper.sin(MathHelper.fastToRadians(30));
-        float dz = MathHelper.cos(MathHelper.fastToRadians(pitch)) * MathHelper.sin(MathHelper.fastToRadians(MathHelper.normalizeYaw(yaw + 90)));
+        float dx = MathHelper.cos((float) Math.toRadians(pitch)) * MathHelper.sin((float) Math.toRadians(MathHelper.g(yaw + 90)));
+        float dy = MathHelper.sin((float) Math.toRadians(30));
+        float dz = MathHelper.cos((float) Math.toRadians(pitch)) * MathHelper.sin((float) Math.toRadians(MathHelper.g(yaw + 90)));
 
         // 归一化方向向量
         float magnitude = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
@@ -81,7 +81,7 @@ public class VectorUtil {
         double backwardY = -dy * 1.24;
         double backwardZ = (-dz) * 6.28;
 
-        return new Location(world,x + backwardX,y - backwardY,z + backwardZ,MathHelper.normalizeYaw(yaw+180F),-30);
+        return new Location(world,x + backwardX,y - backwardY,z + backwardZ,MathHelper.g(yaw+180F),-30);
     }
     public static Vector getPushVector(Location from, Location to, double velocity) {
         Vector test = to.clone().subtract(from).toVector();

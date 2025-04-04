@@ -1,22 +1,20 @@
-package cn.klee.backports.utils;
-
-import cn.klee.backports.utils.ConcurrentUtil;
+package io.irina.backports.utils;
 
 import java.lang.invoke.VarHandle;
 
 public final class ArrayUtil {
 
-    public static final VarHandle BOOLEAN_ARRAY_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getArrayHandle(boolean[].class);
+    public static final VarHandle BOOLEAN_ARRAY_HANDLE = ConcurrentUtil.getArrayHandle(boolean[].class);
 
-    public static final VarHandle BYTE_ARRAY_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getArrayHandle(byte[].class);
+    public static final VarHandle BYTE_ARRAY_HANDLE = ConcurrentUtil.getArrayHandle(byte[].class);
 
-    public static final VarHandle SHORT_ARRAY_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getArrayHandle(short[].class);
+    public static final VarHandle SHORT_ARRAY_HANDLE = ConcurrentUtil.getArrayHandle(short[].class);
 
-    public static final VarHandle INT_ARRAY_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getArrayHandle(int[].class);
+    public static final VarHandle INT_ARRAY_HANDLE = ConcurrentUtil.getArrayHandle(int[].class);
 
-    public static final VarHandle LONG_ARRAY_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getArrayHandle(long[].class);
+    public static final VarHandle LONG_ARRAY_HANDLE = ConcurrentUtil.getArrayHandle(long[].class);
 
-    public static final VarHandle OBJECT_ARRAY_HANDLE = cn.klee.backports.utils.ConcurrentUtil.getArrayHandle(Object[].class);
+    public static final VarHandle OBJECT_ARRAY_HANDLE = ConcurrentUtil.getArrayHandle(Object[].class);
 
     private ArrayUtil() {
         throw new RuntimeException();
@@ -61,7 +59,7 @@ public final class ArrayUtil {
 
         for (byte curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -103,7 +101,7 @@ public final class ArrayUtil {
 
         for (byte curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (byte) (curr + param)))) {
@@ -117,7 +115,7 @@ public final class ArrayUtil {
 
         for (byte curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (byte) (curr & param)))) {
@@ -131,7 +129,7 @@ public final class ArrayUtil {
 
         for (byte curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (byte) (curr | param)))) {
@@ -145,7 +143,7 @@ public final class ArrayUtil {
 
         for (byte curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (byte) (curr ^ param)))) {
@@ -159,7 +157,7 @@ public final class ArrayUtil {
 
         for (byte curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -207,7 +205,7 @@ public final class ArrayUtil {
 
         for (short curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -249,7 +247,7 @@ public final class ArrayUtil {
 
         for (short curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (short) (curr + param)))) {
@@ -263,7 +261,7 @@ public final class ArrayUtil {
 
         for (short curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (short) (curr & param)))) {
@@ -277,7 +275,7 @@ public final class ArrayUtil {
 
         for (short curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (short) (curr | param)))) {
@@ -291,7 +289,7 @@ public final class ArrayUtil {
 
         for (short curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (short) (curr ^ param)))) {
@@ -305,7 +303,7 @@ public final class ArrayUtil {
 
         for (short curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -353,7 +351,7 @@ public final class ArrayUtil {
 
         for (int curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -395,7 +393,7 @@ public final class ArrayUtil {
 
         for (int curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (int) (curr + param)))) {
@@ -409,7 +407,7 @@ public final class ArrayUtil {
 
         for (int curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (int) (curr & param)))) {
@@ -423,7 +421,7 @@ public final class ArrayUtil {
 
         for (int curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (int) (curr | param)))) {
@@ -437,7 +435,7 @@ public final class ArrayUtil {
 
         for (int curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (int) (curr ^ param)))) {
@@ -451,7 +449,7 @@ public final class ArrayUtil {
 
         for (int curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -499,7 +497,7 @@ public final class ArrayUtil {
 
         for (long curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -541,7 +539,7 @@ public final class ArrayUtil {
 
         for (long curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (long) (curr + param)))) {
@@ -555,7 +553,7 @@ public final class ArrayUtil {
 
         for (long curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (long) (curr & param)))) {
@@ -569,7 +567,7 @@ public final class ArrayUtil {
 
         for (long curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (long) (curr | param)))) {
@@ -583,7 +581,7 @@ public final class ArrayUtil {
 
         for (long curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (long) (curr ^ param)))) {
@@ -597,7 +595,7 @@ public final class ArrayUtil {
 
         for (long curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -645,7 +643,7 @@ public final class ArrayUtil {
 
         for (boolean curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -679,7 +677,7 @@ public final class ArrayUtil {
 
         for (boolean curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (boolean) (curr & param)))) {
@@ -693,7 +691,7 @@ public final class ArrayUtil {
 
         for (boolean curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (boolean) (curr | param)))) {
@@ -707,7 +705,7 @@ public final class ArrayUtil {
 
         for (boolean curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, (boolean) (curr ^ param)))) {
@@ -721,7 +719,7 @@ public final class ArrayUtil {
 
         for (boolean curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {
@@ -775,7 +773,7 @@ public final class ArrayUtil {
 
         for (T curr = getVolatile(array, index);;++failures) {
             for (int i = 0; i < failures; ++i) {
-                cn.klee.backports.utils.ConcurrentUtil.backoff();
+                ConcurrentUtil.backoff();
             }
 
             if (curr == (curr = compareAndExchangeVolatileContended(array, index, curr, param))) {

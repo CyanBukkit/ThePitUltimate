@@ -1,13 +1,9 @@
 package cn.charlotte.pit.perk;
 
-import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.*;
+import cn.charlotte.pit.util.PublicUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import lombok.Getter;
 import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 
 import java.util.*;
 
@@ -54,31 +50,7 @@ public class PerkFactory {
 
                 perkMap.put(((AbstractPerk) instance).getInternalPerkName(), (AbstractPerk) instance);
 
-                if (instance instanceof Listener && instance.getClass().isAnnotationPresent(AutoRegister.class)) {
-                    Bukkit.getPluginManager().registerEvents((Listener) instance, ThePit.getInstance());
-                }
-
-                if (IPlayerDamaged.class.isAssignableFrom(clazz)) {
-                    playerDamageds.add((IPlayerDamaged) instance);
-                }
-                if (IAttackEntity.class.isAssignableFrom(clazz)) {
-                    attackEntities.add((IAttackEntity) instance);
-                }
-                if (IItemDamage.class.isAssignableFrom(clazz)) {
-                    iItemDamages.add((IItemDamage) instance);
-                }
-                if (IPlayerBeKilledByEntity.class.isAssignableFrom(clazz)) {
-                    playerBeKilledByEntities.add((IPlayerBeKilledByEntity) instance);
-                }
-                if (IPlayerKilledEntity.class.isAssignableFrom(clazz)) {
-                    playerKilledEntities.add((IPlayerKilledEntity) instance);
-                }
-                if (IPlayerRespawn.class.isAssignableFrom(clazz)) {
-                    playerRespawns.add((IPlayerRespawn) instance);
-                }
-                if (IPlayerShootEntity.class.isAssignableFrom(clazz)) {
-                    playerShootEntities.add((IPlayerShootEntity) instance);
-                }
+                PublicUtil.register(clazz, instance, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
                 if (ITickTask.class.isAssignableFrom(clazz)) {
                     final ITickTask task = (ITickTask) instance;
                     tickTasks.put(perk.getInternalPerkName(), task);

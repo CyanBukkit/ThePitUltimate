@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.FixedRewardData;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.operator.PackedOperator;
+import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.util.PitProfileUpdater;
@@ -57,7 +58,7 @@ public class DataListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        PackedOperator orLoadOperator = ThePit.getInstance().getProfileOperator().getOrLoadOperator(player);
+        PackedOperator orLoadOperator = ((ProfileOperator)ThePit.getInstance().getProfileOperator()).getOrLoadOperator(player);
         orLoadOperator.ifLoaded(() -> {
             byte code = orLoadOperator.profile().code;
 
@@ -77,7 +78,7 @@ public class DataListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         PlayerInv playerInv = PlayerInv.fromPlayerInventory(event.getPlayer().getInventory());
         event.setQuitMessage(null);
-        ThePit.getInstance().getProfileOperator()
+        ((ProfileOperator)ThePit.getInstance().getProfileOperator())
                 .operatorStrict(event.getPlayer()).ifPresent(profileOper -> {
                     PlayerProfile profile = profileOper.profile();
                     profile.disallow();

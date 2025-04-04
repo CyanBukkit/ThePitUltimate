@@ -1,17 +1,21 @@
 package cn.charlotte.pit.util;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.parm.AutoRegister;
+import cn.charlotte.pit.parm.listener.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import xyz.refinedev.spigot.CarbonSpigot;
 import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class PublicUtil {
-    public static String signVer;
-    public static String itemVersion;
+    public static String signVer = "Loader";
+    public static String itemVersion = "Loader";
     public static final net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
         if (item instanceof CraftItemStack) {
             return ((CraftItemStack) item).handle;
@@ -21,7 +25,9 @@ public class PublicUtil {
     }
     public static void addCommonHandler(PacketHandler packetHandler) {
         try {
-            CarbonSpigot.getPacketAPI().registerPacketHandler(ThePit.getInstance(), packetHandler);
+            Class<?> aClass = Class.forName("xyz.refinedev.spigot.CarbonSpigot");
+            Object invoke = aClass.getMethod("getPacketAPI").invoke(null);
+            invoke.getClass().getMethod("registerPacketHandler").invoke(invoke,packetHandler);
         } catch (Throwable a) {
             try {
                 Bukkit.getLogger().warning("Error in adding the packet handler from " + packetHandler + ", using the public way...");
@@ -60,5 +66,60 @@ public class PublicUtil {
         System.arraycopy(temp, 0, result, 0, wordCount);
 
         return result;
+    }
+
+    public static void register(Class<?> clazz, Object instance, List<IPlayerDamaged> playerDamageds, List<IAttackEntity> attackEntities, List<IItemDamage> iItemDamages, List<IPlayerBeKilledByEntity> playerBeKilledByEntities, List<IPlayerKilledEntity> playerKilledEntities, List<IPlayerRespawn> playerRespawns, List<IPlayerShootEntity> playerShootEntities) {
+        if (instance instanceof Listener && instance.getClass().isAnnotationPresent(AutoRegister.class)) {
+            Bukkit.getPluginManager().registerEvents((Listener) instance, ThePit.getInstance());
+        }
+
+        if (IPlayerDamaged.class.isAssignableFrom(clazz)) {
+            playerDamageds.add((IPlayerDamaged) instance);
+        }
+        if (IAttackEntity.class.isAssignableFrom(clazz)) {
+            attackEntities.add((IAttackEntity) instance);
+        }
+        if (IItemDamage.class.isAssignableFrom(clazz)) {
+            iItemDamages.add((IItemDamage) instance);
+        }
+        if (IPlayerBeKilledByEntity.class.isAssignableFrom(clazz)) {
+            playerBeKilledByEntities.add((IPlayerBeKilledByEntity) instance);
+        }
+        if (IPlayerKilledEntity.class.isAssignableFrom(clazz)) {
+            playerKilledEntities.add((IPlayerKilledEntity) instance);
+        }
+        if (IPlayerRespawn.class.isAssignableFrom(clazz)) {
+            playerRespawns.add((IPlayerRespawn) instance);
+        }
+        if (IPlayerShootEntity.class.isAssignableFrom(clazz)) {
+            playerShootEntities.add((IPlayerShootEntity) instance);
+        }
+    }
+    public static void unregister(Class<?> clazz, Object instance, List<IPlayerDamaged> playerDamageds, List<IAttackEntity> attackEntities, List<IItemDamage> iItemDamages, List<IPlayerBeKilledByEntity> playerBeKilledByEntities, List<IPlayerKilledEntity> playerKilledEntities, List<IPlayerRespawn> playerRespawns, List<IPlayerShootEntity> playerShootEntities) {
+        if (instance instanceof Listener && instance.getClass().isAnnotationPresent(AutoRegister.class)) {
+            HandlerList.unregisterAll((Listener) instance);
+        }
+
+        if (IPlayerDamaged.class.isAssignableFrom(clazz)) {
+            playerDamageds.remove((IPlayerDamaged) instance);
+        }
+        if (IAttackEntity.class.isAssignableFrom(clazz)) {
+            attackEntities.remove((IAttackEntity) instance);
+        }
+        if (IItemDamage.class.isAssignableFrom(clazz)) {
+            iItemDamages.remove((IItemDamage) instance);
+        }
+        if (IPlayerBeKilledByEntity.class.isAssignableFrom(clazz)) {
+            playerBeKilledByEntities.remove((IPlayerBeKilledByEntity) instance);
+        }
+        if (IPlayerKilledEntity.class.isAssignableFrom(clazz)) {
+            playerKilledEntities.remove((IPlayerKilledEntity) instance);
+        }
+        if (IPlayerRespawn.class.isAssignableFrom(clazz)) {
+            playerRespawns.remove((IPlayerRespawn) instance);
+        }
+        if (IPlayerShootEntity.class.isAssignableFrom(clazz)) {
+            playerShootEntities.remove((IPlayerShootEntity) instance);
+        }
     }
 }

@@ -11,6 +11,7 @@ import cn.charlotte.pit.command.handler.metaKey
 import cn.charlotte.pit.config.NewConfiguration
 import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.data.operator.ProfileOperator
+import cn.charlotte.pit.enchantment.EnchantmentFactor
 import cn.charlotte.pit.enchantment.type.aqua.ClubRodEnchant
 import cn.charlotte.pit.enchantment.type.aqua.GrandmasterEnchant
 import cn.charlotte.pit.enchantment.type.aqua.LuckOfPondEnchant
@@ -101,6 +102,7 @@ object PitHook {
         loadItemFactory()
         loadActionBar()
         loadEnchants()
+        filter()
         loadPerks()
         loadItems()
         loadNameTag()
@@ -136,6 +138,13 @@ object PitHook {
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
+    }
+    private fun filter(){
+        NewConfiguration.disabled.forEach { i ->
+            val toString = i.toString()
+            ThePit.getInstance().sendLogs("Unregistering $toString");
+            ThePit.getInstance().enchantmentFactor.unregister(null, toString);
+        }
     }
     private fun loadActionBar(){
         ThePit.getInstance().actionBarManager = ActionBarManager();
@@ -598,7 +607,8 @@ object PitHook {
       //  classes += Limit24520Ench::class.java
       //  classes += LimitXZQ1Ench::class.java
 
-        enchantmentFactor.init(LinkedHashSet(classes))
+        enchantmentFactor.init(classes)
+
     }
 
     private fun loadScoreBoard() {
@@ -846,7 +856,7 @@ object PitHook {
             listOf(
                 GenesisAngelNpc::class.java,
                 GenesisDemonNpc::class.java,
-                KeeperNPC::class.java,
+                //KeeperNPC::class.java,
                 MailNpc::class.java,
                 PerkNPC::class.java,
                 PrestigeNPC::class.java,
@@ -886,8 +896,8 @@ object PitHook {
             EveOneBountyEvent::class.java,
             //QuickMathEvent::class.java,
             SquadsEvent::class.java,
-            DoubleRewardsEvent::class.java,
-            RespawnFamilyEvent::class.java
+            //DoubleRewardsEvent::class.java,
+            //RespawnFamilyEvent::class.java
         )
 
         eventFactory.init(classes)

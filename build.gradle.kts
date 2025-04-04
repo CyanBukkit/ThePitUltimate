@@ -29,6 +29,9 @@ repositories {
 tasks.named<ShadowJar>("shadowJar") {
     archiveBaseName.set(plugin_name)
     archiveVersion.set(plugin_version)
+    exclude("META-INF/**")
+
+    exclude("org/**")
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
 }
@@ -71,7 +74,7 @@ dependencies {
     compileOnly(libs.adventure.bukkit)
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }
 
 tasks.withType<JavaCompile> {

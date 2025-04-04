@@ -25,6 +25,7 @@ import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.pet.PetFactory;
 import cn.charlotte.pit.quest.QuestFactory;
 import cn.charlotte.pit.runnable.*;
+import cn.charlotte.pit.util.KQC;
 import cn.charlotte.pit.util.bossbar.BossBarHandler;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.dependencies.Dependency;
@@ -64,6 +65,9 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.slf4j.Logger;
+import pku.yim.license.MagicLicense;
+import pku.yim.license.PluginProxy;
+import pku.yim.license.Resource;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
@@ -80,7 +84,7 @@ import java.util.concurrent.*;
 
 
 
-public class ThePit extends JavaPlugin implements PluginMessageListener {
+public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
 
     public static PitInternalHook api;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
@@ -107,6 +111,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     private QuestFactory questFactory;
     private SignGui signGui;
     private BossBarHandler bossBar;
+
     private ItemFactor itemFactor;
     private RebootRunnable rebootRunnable;
     private MiniGameController miniGameController;
@@ -230,12 +235,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
                 Bukkit.getServer().setWhitelist(whiteList);
                 new ProfileLoadRunnable(this);
                 //Bridgeing
-                try{
-                    Class<?> main = Class.forName("cn.charlotte.pit.PitMain");
-                    main.getMethod("start").invoke(null);
-                }catch (Exception e) {
-                    System.out.println("Incorrect class");
-                }
+                KQC.hook();
+                KQC.ensureIsLoaded();
             } else {
                 while (!h()) {
                     sendLogs("§c???");
@@ -812,6 +813,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     public EnchantmentFactor getEnchantmentFactor() {
         return this.enchantmentFactor;
     }
+    public void setEnchantmentFactor(EnchantmentFactor enchantmentFactor) {
+        this.enchantmentFactor = enchantmentFactor;
+    }
 
     public NpcFactory getNpcFactory() {
         return this.npcFactory;
@@ -983,4 +987,26 @@ public class ThePit extends JavaPlugin implements PluginMessageListener {
     public void setItemFactory(IItemFactory factory){
         this.factory = factory;
     }
+
+    @Override
+    public void info(String s) {
+        log.info(s);
+    }
+
+    @Override
+    public void disablePlugin() {
+        onDisable();
+    }
+
+    @Override
+    public boolean isPrimaryThread() {
+        return Bukkit.isPrimaryThread();
+    }
+
+
+    @Override
+    public Resource getResourceType() {
+        return Resource.CLEAR_LOWERCASE;
+    }
+
 }

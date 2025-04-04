@@ -3,10 +3,11 @@ package cn.charlotte.pit.data.operator;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.util.Utils;
-import cn.klee.backports.utils.SWMRHashTable;
+import io.irina.backports.utils.SWMRHashTable;
 import com.google.common.annotations.Beta;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -198,6 +199,11 @@ public class ProfileOperator implements IProfilerOperator{
         return getOperator(uuid);
     }
 
+    @Override
+    public IOperator getIOperator(Player player) {
+        return getOperator(player);
+    }
+
     public void doSaveProfiles() {
         operators.forEachValue(operator -> {
             Player lastBoundPlayer = operator.lastBoundPlayer;
@@ -218,6 +224,23 @@ public class ProfileOperator implements IProfilerOperator{
     @Override
     public IOperator getOrConstructIOperator(Player target) {
         return getOrConstructOperator(target);
+    }
+
+    @NotNull
+    @Override
+    public IOperator namedIOperator(@NotNull String target) {
+        return namedOperator(target);
+    }
+
+    @NotNull
+    @Override
+    public IOperator lookupIOnline(@NotNull String name) {
+        return null;
+    }
+
+    @NotNull
+    public void ifPresentAndILoaded(@NotNull Player target, @NotNull Consumer<IOperator> function) {
+        ifPresentAndLoaded(target, function::accept);
     }
 
     public void randomGC(){

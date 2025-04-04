@@ -6,10 +6,11 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
-import cn.klee.backports.utils.SWMRHashTable;
+import io.irina.backports.utils.SWMRHashTable;
 
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.EntityHuman;
@@ -131,7 +132,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                                 this.cancel();
                             }
                             tick++;
-                            bow.performShoot(item, entityPlayer.world, entityPlayer, value,true);
+                            bow.a(item, entityPlayer.world, entityPlayer, value);
 
                         }
                     }.runTaskTimer(ThePit.getInstance(), 0, 2);
