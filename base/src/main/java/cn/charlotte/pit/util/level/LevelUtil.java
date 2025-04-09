@@ -1,5 +1,7 @@
 package cn.charlotte.pit.util.level;
 
+import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.config.PitConfig;
 import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton;
 import cn.charlotte.pit.util.chat.RomanUtil;
 
@@ -122,7 +124,7 @@ public class LevelUtil {
         } else if (booted && plevelMapping != null) {
             if(plevelMapping.length > prestige) {
                 try {
-                    return plevelMapping[prestige * 130 + level];
+                    return plevelMapping[prestige * ThePit.getInstance().getPitConfig().maxLevel + level];
                 } catch (Exception e){
                     return Double.MAX_VALUE - 1000.0D;
                 }
@@ -130,34 +132,43 @@ public class LevelUtil {
         }
         double boost = 1.1;
         if (level >= 10) {
-            return switch ((level - level % 10) / 10) {
-                case 1 -> Math.round(Math.pow(boost, prestige) * 30);
-                case 2 -> Math.round(Math.pow(boost, prestige) * 50);
-                case 3 -> Math.round(Math.pow(boost, prestige) * 75);
-                case 4 -> Math.round(Math.pow(boost, prestige) * 125);
-                case 5 -> Math.round(Math.pow(boost, prestige) * 250);
-                case 6 -> Math.round(Math.pow(boost, prestige) * 600);
-                case 7 -> Math.round(Math.pow(boost, prestige) * 800);
-                case 8 -> Math.round(Math.pow(boost, prestige) * 900);
-                case 9 -> Math.round(Math.pow(boost, prestige) * 1000);
-                case 10 -> Math.round(Math.pow(boost, prestige) * 1200);
-                default ->
-                    //>=110
-                        Math.round(Math.pow(boost, prestige) * 1500);
-            };
+            double v = getaDouble(prestige, level, boost);
+            if(v <= 0){
+                return Double.MAX_VALUE;
+            }
+            return v;
         } else {
             // 0~9
             return Math.round(Math.pow(boost, prestige) * 15);
         }
     }
+
+    private static double getaDouble(int prestige, int level, double boost) {
+        return switch ((level - level % 10) / 10) {
+            case 1 -> Math.round(Math.pow(boost, prestige) * 30);
+            case 2 -> Math.round(Math.pow(boost, prestige) * 50);
+            case 3 -> Math.round(Math.pow(boost, prestige) * 75);
+            case 4 -> Math.round(Math.pow(boost, prestige) * 125);
+            case 5 -> Math.round(Math.pow(boost, prestige) * 250);
+            case 6 -> Math.round(Math.pow(boost, prestige) * 600);
+            case 7 -> Math.round(Math.pow(boost, prestige) * 800);
+            case 8 -> Math.round(Math.pow(boost, prestige) * 900);
+            case 9 -> Math.round(Math.pow(boost, prestige) * 1000);
+            case 10 -> Math.round(Math.pow(boost, prestige) * 1200);
+            default ->
+                //>=110
+                    Math.round(Math.pow(boost, prestige) * 1500);
+        };
+    }
+
     public static void bootCache(){
         booting = true;
         booted = false;
         int limit = PrestigeStatusButton.limit;
-        double[] plevelMappingRaw = new double[(limit + 40) *130];
-        for (int i = 0; i < limit; i++) {
-            for (int ia = 0; ia < 130; ia++) {
-                int append = i * 130;
+        double[] plevelMappingRaw = new double[(limit + 40) * (ThePit.getInstance().getPitConfig().maxLevel + 1)];
+        for (int i = 0; i <= limit; i++) {
+            int append = i * ThePit.getInstance().getPitConfig().maxLevel;
+            for (int ia = 0; ia <= ThePit.getInstance().getPitConfig().maxLevel; ia++) {
                 plevelMappingRaw[append + ia] = getLevelExpRequired(i,ia);
             }
         }
@@ -174,7 +185,7 @@ public class LevelUtil {
     public static int getLevelByExp(int prestige, double exp) {
         double experience = exp;
         int level = 0;
-        for (int i = 0; i <= 120; i++) {
+        for (int i = 0; i <= ThePit.getInstance().getPitConfig().maxLevel; i++) {
             level = i;
             double levelExpRequired = getLevelExpRequired(prestige, i);
             if (experience >= levelExpRequired) {
@@ -195,13 +206,16 @@ public class LevelUtil {
         double experience = 0;
         for (int i = 0; i < level; i++) {
             experience = experience + getLevelExpRequired(prestige, i);
+            if(experience < 0){
+                return Double.MAX_VALUE;
+            }
         }
         return experience;
     }
 
     public static float getLevelProgress(int prestige, double experience) {
         int level = LevelUtil.getLevelByExp(prestige, experience);
-        if (level >= 120) {
+        if (level >= ThePit.getInstance().getPitConfig().maxLevel) {
             return 1;
         } else {
             double levelExpRequired = getLevelExpRequired(prestige, level);

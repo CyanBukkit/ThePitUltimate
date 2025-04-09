@@ -62,6 +62,10 @@ class ExecutionerEnchant : AbstractEnchantment(), IAttackEntity {
     ) {
         val targetPlayer = target as Player
         for (nearbyPlayers in PlayerUtil.getNearbyPlayers(targetPlayer.location, 10.0)) {
+            var npc = PlayerUtil.isNPC(nearbyPlayers)
+            if(npc){
+                continue
+            }
             if (nearbyPlayers.inventory.leggings != null && thinkOfThePeople.isItemHasEnchant(nearbyPlayers.inventory.leggings)) {
                 val level = thinkOfThePeople.getItemEnchantLevel(nearbyPlayers.inventory.leggings)
                 if (level > 1) {
@@ -70,6 +74,7 @@ class ExecutionerEnchant : AbstractEnchantment(), IAttackEntity {
                 return
             }
         }
+
         if (targetPlayer.health - damage * boostDamage.get() < enchantLevel + 1) {
             cancel.set(true)
             finalDamage.getAndAdd(2000.0)

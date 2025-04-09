@@ -230,7 +230,9 @@ public class Utils {
 
         return false;
     }
-
+    public static boolean isNPC(org.bukkit.entity.Entity entity){
+        return entity.getName().equals("bot");
+    }
     public static ItemStack subtractLive(ItemStack item) {
         if (item == null) {
             return null;

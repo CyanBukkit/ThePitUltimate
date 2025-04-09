@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: EmptyIrony
@@ -34,7 +36,7 @@ public class EnchantmentFactor {
     private final Map<String, IActionDisplayEnchant> actionDisplayEnchants;
 
     public EnchantmentFactor() {
-        this.enchantmentMap = new SWMRHashTable<>();
+        this.enchantmentMap = new ConcurrentHashMap<>();
         this.enchantments = enchantmentMap.values();
         this.playerDamageds = new ObjectArrayList<>();
         this.iItemDamages = new ObjectArrayList<>();
@@ -42,14 +44,15 @@ public class EnchantmentFactor {
         this.playerBeKilledByEntities = new ObjectArrayList<>();
         this.playerKilledEntities = new ObjectArrayList<>();
         this.playerRespawns = new ObjectArrayList<>();
-        this.tickTasks = new SWMRHashTable<>();
+        this.tickTasks = new ConcurrentHashMap<>();
         this.playerShootEntities = new ObjectArrayList<>();
         this.playerAssists = new ObjectArrayList<>();
-        this.actionDisplayEnchants = new SWMRHashTable<>(); //keep sync!!!
+        this.actionDisplayEnchants = new ConcurrentHashMap<>(); //keep sync!!!
     }
 
     public void init(Collection<Class<? extends AbstractEnchantment>> classes) {
         log.info("Loading enchantments...");
+        log.info("Last enchantments {}", enchantmentMap);
             for (Class<?> clazz : classes) {
                 if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
                     try {
@@ -73,14 +76,20 @@ public class EnchantmentFactor {
         }
         String finalNbtName = nbtName;
         String finalEnchantName = enchantName;
-        ((SWMRHashTable<String, AbstractEnchantment>)this.enchantmentMap)
-                .removeIf((nbt, enchObj) -> {
-                    boolean b = nbt.equalsIgnoreCase(finalNbtName) || enchObj.getEnchantName().equalsIgnoreCase(finalEnchantName);
-                    if(b){
-                        PublicUtil.unregister(enchObj.getClass(), enchObj, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
-                    }
-                    return b;
-                });
+        int size = this.enchantmentMap.size();
+        Iterator<AbstractEnchantment> iterator = this.enchantmentMap
+                .values().iterator();
+        while(iterator.hasNext()) {
+            AbstractEnchantment enchObj = iterator.next();
+            String nbt = enchObj.getNbtName();
+            boolean b = nbt.equalsIgnoreCase(finalNbtName) || enchObj.getEnchantName().equalsIgnoreCase(finalEnchantName);
+            if (b) {
+                log.info("Removing {}", nbt);
+                PublicUtil.unregister(enchObj.getClass(), enchObj, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
+                iterator.remove();
+            }
+        }
+        log.info("Enchantments {} -> {}", size, enchantmentMap.size());
     }
     private void registerTickTask(Class<?> clazz, AbstractEnchantment enchantment) {
         if (ITickTask.class.isAssignableFrom(clazz)) {

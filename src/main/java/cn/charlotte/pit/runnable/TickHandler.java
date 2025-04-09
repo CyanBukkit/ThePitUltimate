@@ -3,6 +3,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
+import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.Utils;
@@ -16,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -38,57 +40,106 @@ public class TickHandler implements Listener {
 
         Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
         for (Player player : onlinePlayers) {
-                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-
-                for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
-                    final ITickTask task = entry.getValue().getITickTask(ticksPerk);
-                    if (task != null) {
-                        if (tick % task.loopTick(entry.getValue().getLevel()) == 0) {
-                            task.handle(entry.getValue().getLevel(), player);
-                        }
-                    }
-                }
-
-                for (Map.Entry<String, PerkData> entry : profile.getUnlockedPerkMap().entrySet()) {
-                    final ITickTask task = ticksPerk.get(entry.getValue().getPerkInternalName());
-                    if (task != null) {
-                        if (tick % Math.max(0, task.loopTick(entry.getValue().getLevel())) == 0) {
-                            task.handle(entry.getValue().getLevel(), player);
-                        }
-                    }
-                }
-
-
-                //裤子
-            PlayerInventory inventory = player.getInventory();
-            final ItemStack leggings = inventory.getLeggings();
-                if (leggings != null) {
-                    profile.leggings = handleIMythicItemTickTasks(leggings,player);
-                } else {
-                    profile.leggings = null;
-                }
-
-                ItemStack itemInHand = inventory.getItemInHand();
-                if (itemInHand != null) {
-                    Material type = itemInHand.getType();
-                    if (type != Material.AIR && type != Material.LEATHER_LEGGINGS && type != Material.PAPER) {
-                        profile.heldItem = handleIMythicItemTickTasks(itemInHand, player);
-
-                    } else {
-                        profile.heldItem = null;
-                    }
-                }
+            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+            if (!profile.isLoaded()) {
+                continue;
+            }
+            tickPerks(player, profile);
+            tickItemInHand(player, tickLeggings(player, profile), profile); //别问我为什么这样写 lol
         }
         //潜在风险 unsigned!
-        if(++tick==Long.MIN_VALUE){
+        if (++tick == Long.MIN_VALUE) {
             tick = 0; //从头开始
         }
     }
+
+    private void tickItemInHand(Player player, PlayerInventory inventory, PlayerProfile profile) {
+        ItemStack itemInHand = inventory.getItemInHand();
+        if (itemInHand != null) {
+            Material type = itemInHand.getType();
+            if (type != Material.AIR && type != Material.LEATHER_LEGGINGS && type != Material.PAPER) {
+                ItemStack heldItemStack = profile.heldItemStack;
+                if (heldItemStack != null) {
+                    if (heldItemStack == itemInHand) { //only compare java object equal
+                        if(profile.heldItem instanceof IMythicItem ii)
+                            tickIMythicItem(player, ii);
+                    } else {
+                        tickItemStackHand(player, profile, itemInHand);
+                    }
+                } else {
+                    tickItemStackHand(player, profile, itemInHand);
+                }
+            } else {
+                profile.heldItem = null;
+                profile.heldItemStack = null;
+            }
+        }
+    }
+
+    @NotNull
+    private PlayerInventory tickLeggings(Player player, PlayerProfile profile) {
+        //裤子
+        PlayerInventory inventory = player.getInventory();
+        final ItemStack leggings = inventory.getLeggings();
+        if (leggings != null) {
+            ItemStack leggingItemStack = profile.leggingItemStack;
+            if(leggingItemStack != null){
+                if (leggingItemStack == leggings) { //only compare java object equal
+                    if( profile.leggings instanceof IMythicItem ii)
+                        tickIMythicItem(player, ii);
+                } else {
+                    tickItemStack(player, profile, leggings);
+                }
+            } else {
+                tickItemStack(player, profile, leggings);
+            }
+
+        } else {
+            profile.leggingItemStack = null;
+            profile.leggings = null;
+        }
+        return inventory;
+    }
+
+    private void tickItemStack(Player player, PlayerProfile profile, ItemStack leggings) {
+        profile.leggingItemStack = leggings;
+        profile.leggings = handleIMythicItemTickTasks(leggings, player);
+    }
+    private void tickItemStackHand(Player player, PlayerProfile profile, ItemStack leggings) {
+        profile.heldItemStack = leggings;
+        profile.heldItem = handleIMythicItemTickTasks(leggings, player);
+    }
+
+    private void tickPerks(Player player, PlayerProfile profile) {
+        for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
+            final ITickTask task = entry.getValue().getITickTask(ticksPerk);
+            if (task != null) {
+                if (tick % task.loopTick(entry.getValue().getLevel()) == 0) {
+                    task.handle(entry.getValue().getLevel(), player);
+                }
+            }
+        }
+
+        for (Map.Entry<String, PerkData> entry : profile.getUnlockedPerkMap().entrySet()) {
+            final ITickTask task = ticksPerk.get(entry.getValue().getPerkInternalName());
+            if (task != null) {
+                if (tick % Math.max(0, task.loopTick(entry.getValue().getLevel())) == 0) {
+                    task.handle(entry.getValue().getLevel(), player);
+                }
+            }
+        }
+    }
+
     public IMythicItem handleIMythicItemTickTasks(ItemStack stack,Player player) {
 
         final IMythicItem imythicItem = Utils.getMythicItem(stack);
 
         //U can set it on your profile
+        tickIMythicItem(player, imythicItem);
+        return imythicItem;
+    }
+
+    private void tickIMythicItem(Player player, IMythicItem imythicItem) {
         if (imythicItem != null) {
             for (Object2IntMap.Entry<AbstractEnchantment> entry : imythicItem.getEnchantments().object2IntEntrySet()) {
                 final ITickTask task = enchantTicks.get(entry.getKey().getNbtName());
@@ -104,7 +155,6 @@ public class TickHandler implements Listener {
                 }
             }
         }
-        return imythicItem;
     }
 
 }

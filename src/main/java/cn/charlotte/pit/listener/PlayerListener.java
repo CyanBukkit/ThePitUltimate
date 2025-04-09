@@ -129,8 +129,7 @@ public class PlayerListener implements Listener {
                     if (i instanceof CraftPlayer) {
                         if (((CraftPlayer) i).getHandle().getClass().isAssignableFrom(aClass)) {
                             try {
-                                String displayName = ((CraftPlayer) i).getDisplayName();
-                                if (displayName.equals("bot")) {
+                                if (Utils.isNPC(i)) {
                                     entitiesNPC.add((CraftPlayer) i);
                                     if (player.canSee((CraftPlayer) i)) {
                                         player.hidePlayer((CraftPlayer) i);

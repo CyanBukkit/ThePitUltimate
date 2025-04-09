@@ -76,6 +76,7 @@ import java.net.InetAddress;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -124,7 +125,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private PointsAPI pointsAPI;
 
     private String serverId;
-
     private BukkitAudiences audiences;
     private IActionBarManager actionBarManager;
 
@@ -237,6 +237,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 //Bridgeing
                 KQC.hook();
                 KQC.ensureIsLoaded();
+
             } else {
                 while (!h()) {
                     sendLogs("§c???");

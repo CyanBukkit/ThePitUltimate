@@ -90,7 +90,7 @@ object PitHook {
     @JvmStatic
     val gitVersion = "53c934dac"
     @JvmStatic
-    val itemVersion = "Python"
+    val itemVersion = "p_uuid"
     fun init() {
         try {
             NewConfiguration.loadFile()
@@ -136,8 +136,8 @@ object PitHook {
         Bukkit.getPluginManager().registerEvents(SewersRunnable, ThePit.getInstance())
         SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
-        SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
-        PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
+        //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
+        //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
     }
     private fun filter(){
         NewConfiguration.disabled.forEach { i ->
@@ -894,7 +894,7 @@ object PitHook {
             CakeEvent::class.java,
             CarePackageEvent::class.java,
             EveOneBountyEvent::class.java,
-            //QuickMathEvent::class.java,
+            QuickMathEvent::class.java,
             SquadsEvent::class.java,
             //DoubleRewardsEvent::class.java,
             //RespawnFamilyEvent::class.java

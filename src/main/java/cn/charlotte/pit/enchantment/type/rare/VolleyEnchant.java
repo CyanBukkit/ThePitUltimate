@@ -26,6 +26,8 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.UUID;
@@ -42,11 +44,17 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
     private static final Map<UUID, Cooldown> cooldown = new SWMRHashTable<>();
 
     private final Field playerUsingFiled;
-
+    private Object unreflected = null;
     @SneakyThrows
     public VolleyEnchant() {
         this.playerUsingFiled = EntityHuman.class.getDeclaredField("h");
         this.playerUsingFiled.setAccessible(true);
+        try{
+            VarHandle varHandle = MethodHandles.lookup().unreflectVarHandle(playerUsingFiled);
+            unreflected = varHandle;
+        } catch (Throwable e){
+            unreflected = null;
+        }
     }
 
     @Override
@@ -89,8 +97,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
     @EventHandler
     @SneakyThrows
     public void onInteract(EntityShootBowEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
-        final Player player = (Player) event.getEntity();
+        if (!(event.getEntity() instanceof Player player)) return;
         if (PlayerUtil.shouldIgnoreEnchant(player)) return;
         final org.bukkit.inventory.ItemStack itemInHand = player.getItemInHand();
         if (itemInHand == null) return;
@@ -106,14 +113,18 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                 if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
 
                     //shoot 5 arrows need 400ms u suck why u set it to 200ms
-                    event.setCancelled(true);
 
                     final ItemStack item = Utils.toNMStackQuick(itemInHand);
                     final ItemBow bow = (ItemBow) item.getItem();
 
                     final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 
-                    final int value = (int) this.playerUsingFiled.get(entityPlayer);
+                    final int value;
+                    if(unreflected != null) {
+                        value = (int) ((VarHandle) unreflected).get(entityPlayer);
+                    }else {
+                        value = (int) this.playerUsingFiled.get(entityPlayer);
+                    }
                     ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
 
                     //let shooting multiple arrows cost 1 arrow at once
@@ -126,14 +137,19 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                         }
                         @Override
                         public void run() {
-                            if (tick >= level + 1) {
-                                cooldown.put(player.getUniqueId(), new Cooldown(15, TimeUnit.MILLISECONDS));
+                            if (tick >= level) {
+                                cooldown.put(player.getUniqueId(), new Cooldown(15L, TimeUnit.MILLISECONDS));
                                 isShooting.remove(player.getUniqueId());
                                 this.cancel();
+                            } else {
+                                try {
+                                    bow.shoot(item, entityPlayer.world, entityPlayer, value, true);
+                                } catch (NoSuchMethodError e) {
+                                    bow.a(item, entityPlayer.world, entityPlayer, value);
+
+                                }
                             }
                             tick++;
-                            bow.a(item, entityPlayer.world, entityPlayer, value);
-
                         }
                     }.runTaskTimer(ThePit.getInstance(), 0, 2);
                 }

@@ -112,7 +112,7 @@ public class ArrowArmoryEnchant extends AbstractEnchantment implements Listener 
         boolean success = InventoryUtil.removeItem(player, arrowBuilder.build(), getExtraArrowRequirement(level));
         if (success) {
             event.getProjectile().setMetadata("arrow_armory", new FixedMetadataValue(ThePit.getInstance(), getBoostDamage(level)));
-            Utils.pointMetadataAndRemove(event.getProjectile(),500,"arrow_armory");
+            Utils.pointMetadataAndRemove(event.getProjectile(),3000,"arrow_armory");
             cooldown.put(player.getUniqueId(), new Cooldown(500, TimeUnit.MILLISECONDS));
         }
     }

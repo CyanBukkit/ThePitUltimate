@@ -43,7 +43,7 @@ public class MagicFishingRod extends IMythicItem {
         } else {
             lore.add("&7死亡后保留");
             lore.add("");
-            lore.add("&7在神话之井中使用 | &bNyacho @ 2022 - Future");
+            lore.add("&7在神话之井中使用 | &8&o@thepit.cc");
         }
 
 

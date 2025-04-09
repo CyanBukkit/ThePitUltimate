@@ -20,7 +20,7 @@ public class PitConfig extends Configuration {
 
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
+    public int maxLevel = 130; //Mirror
     private boolean tradeEnable = true;
     private boolean PVPEnable = true;
     @ConfigData(

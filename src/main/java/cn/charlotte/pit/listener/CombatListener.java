@@ -25,10 +25,7 @@ import cn.charlotte.pit.parm.listener.*;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
-import cn.charlotte.pit.util.FuncsKt;
-import cn.charlotte.pit.util.MythicUtil;
-import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.Utils;
+import cn.charlotte.pit.util.*;
 import cn.charlotte.pit.util.chat.*;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
@@ -60,6 +57,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.spigotmc.AsyncCatcher;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -116,10 +114,16 @@ public class CombatListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        PlayerMoveHandler.checkMove(event.getTo(), event.getFrom(), event.getPlayer());
+        if (!AsyncCatcher.isAsync()) {
+            PlayerMoveHandler.checkMove(event.getTo(), event.getFrom(), event.getPlayer());
+        } else {
+            Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+                PlayerMoveHandler.checkMove(event.getTo(), event.getFrom(), event.getPlayer());
+            });
+        }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void onCombat(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             if (event.getDamager() instanceof Player damager) {
@@ -271,6 +275,7 @@ public class CombatListener implements Listener {
         playerProfile.setHurtDamage((long) (playerProfile.getHurtDamage() + damage));
         if (isShoot) {
             if (event.getDamager() instanceof Arrow) {
+
                 playerProfile.setBowHurtDamage((long) (playerProfile.getBowHurtDamage() + damage));
                 damagerProfile.setBowHit(damagerProfile.getBowHit() + 1);
                 damagerProfile.setArrowTotalDamage((long) (damagerProfile.getArrowTotalDamage() + damage));
@@ -284,15 +289,18 @@ public class CombatListener implements Listener {
         }
         damagerProfile.setTotalDamage((long) (damagerProfile.getTotalDamage() + damage));
 
-        int absorptionHearts = (int) (((CraftPlayer) player).getHandle().getAbsorptionHearts() / 2);
+        int absorptionHearts1 = (int) ((CraftPlayer) player).getHandle().getAbsorptionHearts();
+        int absorptionHearts = (int) (absorptionHearts1 / 2);
         int totalHearts = (int) player.getMaxHealth() / 2;
-        int nowHearts = (int) player.getHealth() / 2;
+        int health = (int) player.getHealth();
+        int nowHearts = health / 2;
         int damageHearts = (int) damage / 2;
-
+        int total = absorptionHearts1 + health;
         if (damagerProfile.getPlayerOption().getBarPriority() != PlayerOption.BarPriority.ENCHANT_ONLY) {
             StringBuilder builder = new StringBuilder();
             builder.append(RankUtil.getPlayerColoredName(player.getUniqueId()));
-            builder.append(" &4");
+            boolean venom = !PlayerUtil.isNPC(player) && PlayerUtil.isVenom(player);
+            builder.append(venom ? " &2" : " &4");
             builder.append("❤".repeat(Math.max(0, nowHearts)));
 
             if (absorptionHearts > 0) {
@@ -300,55 +308,52 @@ public class CombatListener implements Listener {
             }
             builder.append("❤".repeat(Math.max(0, absorptionHearts)));
 
-            builder.append("&c");
+            builder.append(venom ? "&a" : "&c");
             builder.append("❤".repeat(Math.max(0, damageHearts)));
             builder.append("&7");
             int heats = totalHearts - nowHearts - damageHearts;
             builder.append("❤".repeat(Math.max(0, heats)));
+            builder.append(" &7(&a").append(total).append("&f -> &c").append(Math.max(0,total - (int) damage)).append("&7)");
             ActionBarUtil.sendActionBar1(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""), 7);
 
             player.setMetadata("showing_damage_data", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
         }
-        if (player.hasMetadata("backing")) {
-            player.sendMessage(CC.translate("&c回城被取消."));
-            player.removeMetadata("backing", ThePit.getInstance());
+        if(playerProfile.isLoaded()) {
+            if (player.hasMetadata("backing")) {
+                player.sendMessage(CC.translate("&c回城被取消."));
+                player.removeMetadata("backing", ThePit.getInstance());
+            }
         }
 
 
         //handle kill recap - start
         String damagerName = damagerProfile.getFormattedName();
         String playerName = playerProfile.getFormattedName();
+        if(damagerProfile.isLoaded()) {
+            KillRecap.DamageData damagerData = new KillRecap.DamageData();
+            damagerData.setDisplayName(playerName);
+            damagerData.setAttack(true);
+            damagerData.setMelee(!isShoot);
+            damagerData.setAfterHealth(Math.max(player.getHealth() - event.getFinalDamage(), 0));
+            damagerData.setUsedItem(damager.getItemInHand());
+            damagerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
 
-        KillRecap.DamageData damagerData = new KillRecap.DamageData();
-        damagerData.setDisplayName(playerName);
-        damagerData.setAttack(true);
-        damagerData.setMelee(!isShoot);
-        damagerData.setAfterHealth(Math.max(player.getHealth() - event.getFinalDamage(), 0));
-        damagerData.setUsedItem(damager.getItemInHand());
-        damagerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
-
-
-        damagerProfile.getKillRecap()
-                .getDamageLogs()
-                .removeIf(data -> data.getTimer().hasExpired());
-        damagerProfile.getKillRecap()
-                .getDamageLogs()
-                .add(damagerData);
-
-        KillRecap.DamageData playerData = new KillRecap.DamageData();
-        playerData.setDisplayName(damagerName);
-        playerData.setAttack(false);
-        playerData.setMelee(!isShoot);
-        playerData.setAfterHealth(Math.max(player.getHealth() - event.getFinalDamage(), 0));
-        playerData.setUsedItem(damager.getItemInHand());
-        playerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
-        playerData.setDamage(event.getFinalDamage());
-        Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
-            List<KillRecap.DamageData> damageLogs = playerProfile.getKillRecap()
-                    .getDamageLogs();
-            damageLogs.removeIf(data -> data.getTimer().hasExpired());
-            damageLogs.add(playerData);
-        });
+            damagerProfile.getKillRecap()
+                    .getDamageLogs()
+                    .add(damagerData);
+        }
+        if(playerProfile.isLoaded()) {
+            KillRecap.DamageData playerData = new KillRecap.DamageData();
+            playerData.setDisplayName(damagerName);
+            playerData.setAttack(false);
+            playerData.setMelee(!isShoot);
+            playerData.setAfterHealth(Math.max(player.getHealth() - event.getFinalDamage(), 0));
+            playerData.setUsedItem(damager.getItemInHand());
+            playerData.setTimer(new Cooldown(10, TimeUnit.SECONDS));
+            playerData.setDamage(event.getFinalDamage());
+            playerProfile.getKillRecap().getDamageLogs()
+                    .add(playerData);
+        }
         //handle kill recap - end
 
     }
@@ -418,7 +423,7 @@ public class CombatListener implements Listener {
                 totalXp = totalXp * 0.01;
             }
 
-            if (killerProfile.getLevel() < 120) {
+            if (killerProfile.getLevel() < NewConfiguration.INSTANCE.getMaxLevel()) {
                 killerProfile.setExperience(killerProfile.getExperience() + totalXp);
             } else {
                 totalXp = 0;
@@ -521,7 +526,7 @@ public class CombatListener implements Listener {
             }
         }
         //saves performance
-        if (player.getName().equals("666")) { //NPC Name
+        if (Utils.isNPC(player)) { //NPC Name
             return;
         }
         final Player finalKiller = killer;

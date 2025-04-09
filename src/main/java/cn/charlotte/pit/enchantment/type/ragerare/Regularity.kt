@@ -57,7 +57,7 @@ class Regularity : AbstractEnchantment(), Listener {
                 2 -> 60
                 else -> 75
             }
-        }%&7."
+        }%&7. &7(最多三次)"
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -84,9 +84,6 @@ class Regularity : AbstractEnchantment(), Listener {
 
         if (level < 1) return
 
-        if (attacker.player.isBlacks){
-            level = 1;
-        }
         if (PlayerUtil.shouldIgnoreEnchant(attacker, victim)) {
             return
         }
@@ -113,13 +110,15 @@ class Regularity : AbstractEnchantment(), Listener {
 
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
                     victim.noDamageTicks = 0
+                    (victim as CraftPlayer).handle.invulnerableTicks = 0;
                     victim.damage(event.damage * boost, attacker)
-                    victim.noDamageTicks = 10;
+                    victim.noDamageTicks = 25;
+
                     victim.setMetadata(
                         "regularity_cooldown",
-                        FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L + 2)
+                        FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L + 50)
                     )
-                    Utils.pointMetadataAndRemove(victim,1000,"regularity_cooldown");
+                    Utils.pointMetadataAndRemove(victim,500,"regularity_cooldown");
                 }, 5L)
             }
         }

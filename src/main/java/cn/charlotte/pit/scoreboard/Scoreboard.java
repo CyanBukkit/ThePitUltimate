@@ -33,27 +33,33 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
     private final List<String> animationTitle =
             Arrays.asList(
-                    "&4&l魔&6&l蛆&e&l仙&a&l斗",
-                    "&6&l魔&e&l蛆&a&l仙&b&l斗",
-                    "&e&l魔&a&l蛆&b&l仙&9&l斗",
-                    "&a&l魔&b&l蛆&9&l仙&5&l斗",
-                    "&b&l魔&9&l蛆&5&l仙&d&l斗",
-                    "&9&l魔&5&l蛆&d&l仙&c&l斗",
-                    "&5&l魔&d&l蛆&c&l仙&4&l斗",
-                    "&d&l魔&c&l蛆&4&l仙&6&l斗",
-                    "&c&l魔&4&l蛆&6&l仙&e&l斗",
-                    "&4&l魔&6&l蛆&e&l仙&a&l斗",
-                    // 反向渐变
-                    "&a&l魔&e&l蛆&6&l仙&4&l斗",
-                    "&e&l魔&6&l蛆&4&l仙&c&l斗",
-                    "&6&l魔&4&l蛆&c&l仙&d&l斗",
-                    "&4&l魔&c&l蛆&d&l仙&5&l斗",
-                    "&c&l魔&d&l蛆&5&l仙&9&l斗",
-                    "&d&l魔&5&l蛆&9&l仙&b&l斗",
-                    "&5&l魔&9&l蛆&b&l仙&a&l斗",
-                    "&9&l魔&b&l蛆&a&l仙&e&l斗",
-                    "&b&l魔&a&l蛆&e&l仙&6&l斗",
-                    "&a&l魔&e&l蛆&6&l仙&4&l斗"
+                    // 正向光波 (带残影效果)
+                    "&f&l神&5&l话&5&l天&5&l坑",
+                    "&d&l神&f&l话&5&l天&5&l坑",
+                    "&5&l神&d&l话&f&l天&5&l坑",
+                    "&5&l神&5&l话&d&l天&f&l坑",
+                    "&5&l神&5&l话&5&l天&d&l坑",
+
+                    // 逆向渐隐过渡
+                    "&5&l神&5&l话&f&l天&5&l坑",
+                    "&5&l神&f&l话&d&l天&5&l坑",
+                    "&f&l神&d&l话&5&l天&5&l坑",
+                    "&d&l神&5&l话&5&l天&5&l坑",
+                    "&5&l神&5&l话&5&l天&5&l坑",
+
+                    // 反向光波 (镜像运动)
+                    "&5&l神&5&l话&5&l天&f&l坑",
+                    "&5&l神&5&l话&f&l天&d&l坑",
+                    "&5&l神&f&l话&d&l天&5&l坑",
+                    "&f&l神&d&l话&5&l天&5&l坑",
+                    "&d&l神&5&l话&5&l天&5&l坑",
+
+                    // 光波反弹效果
+                    "&5&l神&f&l话&5&l天&5&l坑",
+                    "&d&l神&5&l话&f&l天&5&l坑",
+                    "&5&l神&d&l话&5&l天&f&l坑",
+                    "&5&l神&5&l话&d&l天&5&l坑",
+                    "&5&l神&5&l话&5&l天&d&l坑"
             );
 
     private long lastAnimationTime = 0;
@@ -117,10 +123,14 @@ public class Scoreboard implements AssembleAdapter {
 
                 lines.add("&f总击杀: " + (killed >= 600 ? "&a" : "&c") + killed + "&7/600");
             } else if (event instanceof IScoreBoardInsert insert) {
-
-                List<String> insert1 = insert.insert(player);
-                if (insert1 != null) {
-                    lines.addAll(insert1);
+                try {
+                    List<String> insert1 = insert.insert(player);
+                    if (insert1 != null) {
+                        lines.addAll(insert1);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                    //ignore
                 }
 
             }
@@ -136,13 +146,22 @@ public class Scoreboard implements AssembleAdapter {
         }
         lines.add("");
 
+        int bounty = profile.getBounty();
+
+        String genesisPrefix = "";
         String genesisTeam = "";
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
-            if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                genesisTeam = " &b♆";
-            }
-            if (profile.getGenesisData().getTeam() == GenesisTeam.DEMON) {
-                genesisTeam = " &c♨";
+        if(bounty == 0) {
+            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
+                switch (profile.getGenesisData().getTeam()) {
+                    case ANGEL -> {
+                        genesisPrefix = "&b";
+                        genesisTeam = genesisPrefix + " ♆";
+                    }
+                    case DEMON -> {
+                        genesisPrefix = "&c";
+                        genesisTeam = genesisPrefix + " ♨";
+                    }
+                }
             }
         }
         if (prestige > 0) {
@@ -150,10 +169,10 @@ public class Scoreboard implements AssembleAdapter {
         } else {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
-        if (level >= 120) {
-            lines.add("&f经验: &b你无敌了");
+        if (level >= NewConfiguration.INSTANCE.getMaxLevel()) {
+            lines.add("&f经验: &b无敌");
         } else {
-            lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Ex");
+            lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Xp");
         }
 
         if (profile.getCurrentQuest() != null) {
@@ -200,19 +219,19 @@ public class Scoreboard implements AssembleAdapter {
                 if (!b) {
 
                     String combatTimerFormatted = numFormat.format(profile.getCombatTimer().getRemaining() / 1000D);
-                    lines.add("&f状态: &c嗦坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
-                            ? "&7 " + combatTimerFormatted
-                            : (profile.getBounty() != 0
-                            ? "&7 " + combatTimerFormatted
+                    lines.add("&f状态: &c占坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                            ? "&7 (" + combatTimerFormatted + "s)"
+                            : (bounty != 0
+                            ? "&7 (" + combatTimerFormatted + "s)"
                             : ""))); // status: 占坑中 (%duration%秒) / 不在占坑中
                 }
             }
             if (!b) {
 
                 String e;
-                if (profile.getBounty() != 0) {
+                if (bounty != 0) {
                     String genesisColor = profile.bountyColor();
-                    e = "&f连杀: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g";
+                    e = "&f连杀: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + bounty + "g";
                 } else {
                     e = "&f连杀: &a" + numFormat.format(profile.getStreakKills());
 
@@ -234,12 +253,12 @@ public class Scoreboard implements AssembleAdapter {
         }
         //if Player have a bounty:
         if (!sultKill) {
-            if (profile.getBounty() != 0) {
+            if (bounty != 0) {
                 String genesisColor = profile.bountyColor();
                 if (profile.getStreakKills() < 1D) {
-                    lines.add("&f赏金: " + genesisColor + "&l" + profile.getBounty() + "g");
+                    lines.add("&f赏金: "  + "&l" + genesisColor + bounty + "g");
                 } else {
-                    lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + profile.getBounty() + "g");
+                    lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " &l" +genesisColor + bounty + "g");
 
                 }
             }

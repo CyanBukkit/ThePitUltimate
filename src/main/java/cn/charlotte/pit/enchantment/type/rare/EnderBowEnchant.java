@@ -120,10 +120,9 @@ public class EnderBowEnchant extends AbstractEnchantment implements IPlayerShoot
     @EventHandler
     public void onBowHit(ProjectileHitEvent event) {
         if (event.getEntity().hasMetadata("ender_bow") && event.getEntity().getShooter() != null) {
-            if (event.getEntity().getShooter() instanceof Player) {
-                Player player = (Player) event.getEntity().getShooter();
+            if (event.getEntity().getShooter() instanceof Player player) {
                 if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) return;
-                player.teleport(event.getEntity().getLocation());
+                player.teleport(event.getEntity());
             }
         }
     }

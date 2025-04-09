@@ -1,6 +1,7 @@
 package cn.charlotte.pit.data.sub;
 
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.util.RangedStreamLineList;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * @Author: EmptyIrony
@@ -43,9 +45,10 @@ public class KillRecap {
 
     //assist
     private List<AssistData> assistData = new ObjectArrayList<>();
-
+    static Predicate<DamageData> damageDataPredicate = i -> i.getTimer().hasExpired();
     //damage log
-    private List<DamageData> damageLogs = ObjectLists.synchronize(new ObjectArrayList<>());
+    private RangedStreamLineList<DamageData> damageLogs = new RangedStreamLineList<DamageData>(100, damageDataPredicate);;
+
 
     public KillRecap() {
     }
@@ -178,12 +181,12 @@ public class KillRecap {
         this.assistData = assistData;
     }
 
-    public List<DamageData> getDamageLogs() {
+    public RangedStreamLineList<DamageData> getDamageLogs() {
         return this.damageLogs;
     }
 
     public void setDamageLogs(List<DamageData> damageLogs) {
-        this.damageLogs = damageLogs;
+        this.damageLogs = new RangedStreamLineList<>(128,damageDataPredicate,damageLogs);
     }
 
     public boolean equals(final Object o) {

@@ -25,6 +25,7 @@ import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.quest.AbstractQuest;
 import cn.charlotte.pit.quest.QuestFactory;
 import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.RangedStreamLineList;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemUtil;
@@ -149,7 +150,7 @@ public class GameEffectListener implements Listener {
     public void onTimeChange(OriginalTimeChangeEvent event) {
         CC.boardCast("Time change to: " + event.getTime());
     }
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player attacker) {
             //修正伤害
@@ -191,8 +192,7 @@ public class GameEffectListener implements Listener {
             //TODO perk handlers
             //perk handler
             //faster
-            Player finalDamager1 = damager;
-            processPerkATK(event, profile, perkFactory, disabledPerks, finalDamager1, finalDamage, boostDamage, cancel);
+            processPerkATK(event, profile, perkFactory, disabledPerks, damager, finalDamage, boostDamage, cancel);
             //TODO heldItem -- leggings handlers
             boolean shouldIgnoreEnchant;
             List<IAttackEntity> attackEntities = enchantmentFactor.getAttackEntities();
@@ -207,7 +207,7 @@ public class GameEffectListener implements Listener {
             //十分甚至九分的重构
 
             if( (heldItem != null || leggings != null)) {
-                processAttackWithLeggingAndHeldItems(shouldIgnoreEnchant,event, finalDamager1, finalDamage, boostDamage, cancel, heldItem, leggings);
+                processAttackWithLeggingAndHeldItems(shouldIgnoreEnchant,event, damager, finalDamage, boostDamage, cancel, heldItem, leggings);
             }
             //TODO quest handler
 
@@ -256,13 +256,16 @@ public class GameEffectListener implements Listener {
         }
 
         if (event.getEntity() instanceof Player player) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
-            if (NewConfiguration.INSTANCE.getNoobProtect() && profile.getPrestige() <= 0
-                    && profile.getLevel() < NewConfiguration.INSTANCE.getNoobProtectLevel()) {
-                boostDamage.getAndAdd(NewConfiguration.INSTANCE.getNoobDamageReduce() - 1);
-            }
+
             boolean npc = PlayerUtil.isNPC(player);
-            if(!npc) {
+
+            if(!npc) {//针对npc不生效。
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
+
+                if (NewConfiguration.INSTANCE.getNoobProtect() && profile.getPrestige() <= 0
+                        && profile.getLevel() < NewConfiguration.INSTANCE.getNoobProtectLevel()) {
+                    boostDamage.getAndAdd(NewConfiguration.INSTANCE.getNoobDamageReduce() - 1);
+                }
                 if (PlayerUtil.isEquippingAngelChestplate(player)) {
                     boostDamage.getAndAdd(-0.1);
                 }
@@ -274,7 +277,7 @@ public class GameEffectListener implements Listener {
                         boolean shouldIgnoreEnchant = PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity());
                         IMythicItem leggings = (IMythicItem) profile.leggings;
                         IMythicItem sword = (IMythicItem) profile.heldItem;
-                        if(!(sword instanceof MythicLeggingsItem)) {
+                        if (!(sword instanceof MythicLeggingsItem)) {
                             processEnchDMGed(event, player, leggings, shouldIgnoreEnchant, finalDamage, boostDamage, cancel);
                         }
                         processEnchDMGed(event, player, sword, shouldIgnoreEnchant, finalDamage, boostDamage, cancel);
@@ -291,7 +294,7 @@ public class GameEffectListener implements Listener {
 
                     if (!enchantmentFactor.getPlayerDamageds().isEmpty()) {
                         boolean shouldIgnoreEnchant = PlayerUtil.shouldIgnoreEnchant(damager, event.getEntity());
-                        IMythicItem leggings =(IMythicItem)  profile.leggings;
+                        IMythicItem leggings = (IMythicItem) profile.leggings;
                         IMythicItem sword = (IMythicItem) profile.heldItem;
                         processEnchDMGed(event, player, leggings, shouldIgnoreEnchant, finalDamage, boostDamage, cancel);
                         processEnchDMGed(event, player, sword, shouldIgnoreEnchant, finalDamage, boostDamage, cancel);
@@ -301,19 +304,16 @@ public class GameEffectListener implements Listener {
                     QuestData currentQuest1 = profile.getCurrentQuest();
                     processQuestDmged(event, player, currentQuest1, finalDamage, boostDamage, cancel);
                 }
-            }
-            if (damager != null) {
-                new PitDamagePlayerEvent(damager, event.getFinalDamage(), event.getDamage(), player).callEvent();
-                new PitDamageEvent(damager, event.getFinalDamage(), event.getDamage()).callEvent();
-                PlayerProfile profile1 = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
-                List<KillRecap.DamageData> damageLogs = profile1.getKillRecap().getDamageLogs();
-                if (!damageLogs.isEmpty()) {
-                    damageLogs.get(damageLogs.size() - 1).setBoostDamage(boostDamage.get());
+                if (damager != null) {
+                    new PitDamagePlayerEvent(damager, event.getFinalDamage(), event.getDamage(), player).callEvent();
+                    new PitDamageEvent(damager, event.getFinalDamage(), event.getDamage()).callEvent();
+                    PlayerProfile profile1 = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
+                    RangedStreamLineList<KillRecap.DamageData> damageLogs = profile1.getKillRecap().getDamageLogs();
+                    if (!damageLogs.isEmpty()) {
+                        damageLogs.peekFirst().setBoostDamage(boostDamage.get());
+                    }
                 }
-            }
 
-
-            if(!npc) {
                 //mirror enchant code start
                 if (profile.leggings != null) {
                     int enchantLevel = profile.leggings.getEnchantmentLevel("Mirror");

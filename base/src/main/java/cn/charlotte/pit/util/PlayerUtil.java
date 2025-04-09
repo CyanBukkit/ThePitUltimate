@@ -140,7 +140,7 @@ public class PlayerUtil {
     }
     //进行合并方法
     public static boolean isNPC(org.bukkit.entity.Entity entity){
-        return entity.getName().equals("666");
+        return entity.getName().equals("bot");
     }
     public static boolean isSinkingMoonlight(Player player) {
         MetadataValue sinkingMoonlight = ((CraftPlayer)player).getMetadata(ThePit.getInstance(),"sinking_moonlight");

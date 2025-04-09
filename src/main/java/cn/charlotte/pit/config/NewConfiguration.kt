@@ -14,6 +14,7 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.max
 
 object NewConfiguration {
 
@@ -36,7 +37,7 @@ object NewConfiguration {
     var pitSupportPermission = "pit.vip"
 
     var removeSupportWhenNoPermission = false
-
+    var maxLevel = 120
     val eventOnlineRequired = HashMap<String, Int>()
     var disabled: List<*> = ArrayList<Any>();
 
@@ -166,6 +167,8 @@ object NewConfiguration {
                 this += Rate(permission, chance)
             }
         }
+        maxLevel = config.getInt("maxLevel",120)
+        ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 
     }
     fun patchCaches(): Unit {
