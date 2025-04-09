@@ -1,5 +1,5 @@
-Name: Ptyhon
-Version: Loader
+Name: ThePitUltimate
+Version: 4.01
 EntryClass: cn.charlotte.pit.PitMain
 EntryPoint: start
 InfPort: false

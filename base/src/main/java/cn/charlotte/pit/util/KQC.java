@@ -5,10 +5,10 @@ import lombok.SneakyThrows;
 import pku.yim.license.MagicLicense;
 
 public class KQC {
-    private static Object lock = new Object();
+    private static final Object lock = new Object();
     private static Exception e;
     private static volatile boolean loaded;
-    public final static void hook(){
+    public static void hook(){
         new Thread(() -> {
             try {
                 MagicLicense magicLicense = new MagicLicense(ThePit.getInstance());
@@ -25,7 +25,7 @@ public class KQC {
             }).start();
     }
     @SneakyThrows
-    public synchronized strictfp final static void ensureIsLoaded(){
+    public synchronized strictfp static void ensureIsLoaded(){
         if(!loaded){
             synchronized (lock){
                 lock.wait();
