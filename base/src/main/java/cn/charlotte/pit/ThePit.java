@@ -13,9 +13,8 @@ import cn.charlotte.pit.enchantment.EnchantmentFactor;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.EventsHandler;
-import cn.charlotte.pit.item.IItemFactory;
-import cn.charlotte.pit.trade.Game;
 import cn.charlotte.pit.hologram.HologramFactory;
+import cn.charlotte.pit.item.IItemFactory;
 import cn.charlotte.pit.item.ItemFactor;
 import cn.charlotte.pit.medal.MedalFactory;
 import cn.charlotte.pit.minigame.MiniGameController;
@@ -24,7 +23,11 @@ import cn.charlotte.pit.npc.NpcFactory;
 import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.pet.PetFactory;
 import cn.charlotte.pit.quest.QuestFactory;
-import cn.charlotte.pit.runnable.*;
+import cn.charlotte.pit.runnable.DayNightCycleRunnable;
+import cn.charlotte.pit.runnable.LeaderBoardRunnable;
+import cn.charlotte.pit.runnable.ProfileLoadRunnable;
+import cn.charlotte.pit.runnable.RebootRunnable;
+import cn.charlotte.pit.trade.Game;
 import cn.charlotte.pit.util.KQC;
 import cn.charlotte.pit.util.bossbar.BossBarHandler;
 import cn.charlotte.pit.util.chat.CC;
@@ -42,7 +45,8 @@ import cn.charlotte.pit.util.sound.SoundFactory;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.luckperms.api.LuckPerms;
@@ -65,18 +69,19 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.slf4j.Logger;
-import pku.yim.license.MagicLicense;
 import pku.yim.license.PluginProxy;
 import pku.yim.license.Resource;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.RejectedExecutionException;
 
 
 /**
@@ -84,9 +89,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 
-
 public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
 
+    @Getter
     public static PitInternalHook api;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
     private static boolean DEBUG_SERVER = false;
@@ -94,38 +99,66 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private static ThePit instance;
 
 
-
+    @Getter
     private MongoDB mongoDB;
+    @Getter
     private JedisPool jedis;
+    @Getter
     private PitConfig pitConfig;
+    @Setter
+    @Getter
     private EnchantmentFactor enchantmentFactor;
+    @Getter
     private NpcFactory npcFactory;
+    @Getter
     private NametagHandler nametagHandler;
     private IItemFactory factory;
+    @Getter
     private Game game;
+    @Getter
     private MedalFactory medalFactory;
+    @Getter
     private PerkFactory perkFactory;
+    @Getter
     private BuffFactory buffFactory;
+    @Getter
     private HologramFactory hologramFactory;
+    @Getter
     private EventFactory eventFactory;
+    @Getter
     private PlayerMoveHandler movementHandler;
+    @Getter
     private QuestFactory questFactory;
+    @Getter
     private SignGui signGui;
+    @Getter
     private BossBarHandler bossBar;
 
+    @Getter
     private ItemFactor itemFactor;
+    @Getter
     private RebootRunnable rebootRunnable;
+    @Getter
     private MiniGameController miniGameController;
+    @Getter
     private SoundFactory soundFactory;
+    @Getter
     private PetFactory petFactory;
+    @Setter
     private IProfilerOperator profileOperator;
     private PlayerPointsAPI playerPoints;
     private LuckPerms luckPerms;
 
+    @Setter
+    @Getter
     private PointsAPI pointsAPI;
 
+    @Getter
     private String serverId;
+    @Getter
     private BukkitAudiences audiences;
+    @Setter
+    @Getter
     private IActionBarManager actionBarManager;
 
     public static boolean isDEBUG_SERVER() {
@@ -139,121 +172,108 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     public static String getBungeeServerName() {
         return bungeeServerName == null ? "THEPIT" : bungeeServerName.toUpperCase();
     }
-    public IProfilerOperator getProfileOperator(){
+
+    public IProfilerOperator getProfileOperator() {
         return profileOperator;
     }
+
     private static void setBungeeServerName(String name) {
         bungeeServerName = name;
     }
 
 
-    
     @Override
     public void onEnable() {
         audiences = BukkitAudiences.create(this);
-            if (h()) {
-                instance = this;
-                //Draw Banner
-                sendLogs("Starting ThePitPremium Modified Edition (Python) 仅用作学习用途");
-                sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal KleeLoveLife.");
-                sendLogs("§cSupport to §bYou know the rules and so do i NetWork.");
-                serverId = RandomUtil.forRandomScoreboardString();
+        instance = this;
+        //Draw Banner
+        sendLogs("Starting ThePitPremium Modified Edition (Python) 仅用作学习用途");
+        sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal KleeLoveLife.");
+        sendLogs("§cSupport to §bYou know the rules and so do i NetWork.");
+        serverId = RandomUtil.forRandomScoreboardString();
 
-                saveDefaultConfig();
+        saveDefaultConfig();
 
-                hookPlayerPoints();
-                hookLuckPerms();
+        hookPlayerPoints();
+        hookLuckPerms();
 
-                boolean whiteList = Bukkit.getServer().hasWhitelist();
-                Bukkit.getServer().setWhitelist(true);
+        boolean whiteList = Bukkit.getServer().hasWhitelist();
+        Bukkit.getServer().setWhitelist(true);
 
-                iSpigot spigot = new iSpigot();
-                Bukkit.getServer().getPluginManager().registerEvents(spigot, this);
+        iSpigot spigot = new iSpigot();
+        Bukkit.getServer().getPluginManager().registerEvents(spigot, this);
 
-                this.loadConfig();
+        this.loadConfig();
 
-                this.loadDatabase();
+        this.loadDatabase();
 //                this.loadOperator(); //operator
-                this.loadItemFactor();
-                this.loadMenu();
-                this.loadNpc();
-                this.loadGame();
-                this.loadMedals();
-                this.loadBuffs();
-                this.loadHologram();
-                this.loadSound();
-                this.loadPerks();
-                this.loadEnchantment();
-                this.loadQuest();
-                this.loadEvents();
-                try {
-                    this.loadMoveHandler();
-                } catch (Exception ignored) {
-                }
+        this.loadItemFactor();
+        this.loadMenu();
+        this.loadNpc();
+        this.loadGame();
+        this.loadMedals();
+        this.loadBuffs();
+        this.loadHologram();
+        this.loadSound();
+        this.loadPerks();
+        this.loadEnchantment();
+        this.loadQuest();
+        this.loadEvents();
+        try {
+            this.loadMoveHandler();
+        } catch (Exception ignored) {
+        }
 
-                this.loadQuest();
-                this.initBossBar();
+        this.loadQuest();
+        this.initBossBar();
 
-                this.initPet();
-                this.signGui = new SignGui(this);
+        this.initPet();
+        this.signGui = new SignGui(this);
 
-                this.rebootRunnable = new RebootRunnable();
-                this.rebootRunnable.runTaskTimerAsynchronously(this, 20, 20);
+        this.rebootRunnable = new RebootRunnable();
+        this.rebootRunnable.runTaskTimerAsynchronously(this, 20, 20);
 
-                this.miniGameController = new MiniGameController();
-                this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
-                new DayNightCycleRunnable().runTaskTimerAsynchronously(this,20,20);
+        this.miniGameController = new MiniGameController();
+        this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
+        new DayNightCycleRunnable().runTaskTimerAsynchronously(this, 20, 20);
 
-                Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
-                    if (e instanceof ArmorStand) {
-                        e.remove();
-                    }
-                    if(e instanceof Item it){
-                        if (it.getItemStack().getType() == Material.GOLD_INGOT) {
-                            it.remove(); //garbage remove pieces 修复内存碎片整合慢问题
-                        }
-                    }
-                }));
-//            this.printBanner();
-
-               new LeaderBoardRunnable().runTaskTimerAsynchronously(this,0,12000);
-
-                try {
-                    EventsHandler.INSTANCE.loadFromDatabase();
-                } catch (Exception ignored) {
-
-                }
-
-                for (World world : Bukkit.getWorlds()) {
-                    world.setGameRuleValue("keepInventory", "true");
-                    world.setGameRuleValue("mobGriefing", "false");
-                    world.setGameRuleValue("doDaylightCycle", "false");
-                }
-                this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-                this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
-                FixedRewardData.Companion.refreshAll();
-                Bukkit.getServer().setWhitelist(whiteList);
-                new ProfileLoadRunnable(this);
-                //Bridgeing
-                KQC.hook();
-                KQC.ensureIsLoaded();
-
-            } else {
-                while (!h()) {
-                    sendLogs("§c???");
+        Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
+            if (e instanceof ArmorStand) {
+                e.remove();
+            }
+            if (e instanceof Item it) {
+                if (it.getItemStack().getType() == Material.GOLD_INGOT) {
+                    it.remove(); //garbage remove pieces 修复内存碎片整合慢问题
                 }
             }
-            sendLogs("宝马启动");
+        }));
+//            this.printBanner();
+
+        new LeaderBoardRunnable().runTaskTimerAsynchronously(this, 0, 12000);
+
+        try {
+            EventsHandler.INSTANCE.loadFromDatabase();
+        } catch (Exception ignored) {
+
+        }
+
+        for (World world : Bukkit.getWorlds()) {
+            world.setGameRuleValue("keepInventory", "true");
+            world.setGameRuleValue("mobGriefing", "false");
+            world.setGameRuleValue("doDaylightCycle", "false");
+        }
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
+        FixedRewardData.Companion.refreshAll();
+        Bukkit.getServer().setWhitelist(whiteList);
+        new ProfileLoadRunnable(this);
+        //Bridgeing
+        KQC.hook();
+        KQC.ensureIsLoaded();
+
+        sendLogs("宝马启动");
     }
-    public void setProfileOperator(IProfilerOperator operator){
-        this.profileOperator = operator;
-    }
-    public IActionBarManager getActionBarManager(){
-        return actionBarManager;
-    }
-    public void setActionBarManager(IActionBarManager actionBarManager){
-        this.actionBarManager = actionBarManager;
-    }
+
     private void loadItemFactor() {
         this.itemFactor = new ItemFactor();
     }
@@ -262,6 +282,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     public void sendLogs(String s) {
         Bukkit.getConsoleSender().sendMessage(s);
     }
+
     @Override
     public void onDisable() {
         PacketHologramRunnable.deSpawnAll();
@@ -272,11 +293,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         }
     }
 
-
-    
-    public static boolean h() {
-        return true;
-    }
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
@@ -443,45 +459,45 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     }
 
     public final void onLoad() {
-        try{
-        InetAddress inet4Address = Inet4Address.getByName("kqc.netty.asia");
+        try {
+            InetAddress inet4Address = Inet4Address.getByName("kqc.netty.asia");
             boolean reachable = inet4Address.isReachable(2000);
-            if(!reachable){
+            if (!reachable) {
                 throw new Exception("fuck you");
             }
         } catch (Exception e) {
             try {
                 System.exit(114514);
                 //Exit blocker
-            } catch (Throwable e2){
+            } catch (Throwable e2) {
                 Thread.currentThread().getThreadGroup().enumerate(new Thread[0]);
             }
         }
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
-                new Dependency("expressible-kt","org.panda-lang","expessible-kt","1.3.6",LoaderType.REFLECTION),
-                new Dependency("expressible","org.panda-lang","expessible","1.3.6",LoaderType.REFLECTION),
+                new Dependency("expressible-kt", "org.panda-lang", "expessible-kt", "1.3.6", LoaderType.REFLECTION),
+                new Dependency("expressible", "org.panda-lang", "expessible", "1.3.6", LoaderType.REFLECTION),
                 //adventure-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform" }
-                new Dependency("kotlin","org.jetbrains.kotlin","kotlin-stdlib","2.1.20",LoaderType.REFLECTION),
-                new Dependency("adventure-platform-bukkit","net.kyori","adventure-platform-bukkit","4.3.2",LoaderType.REFLECTION),
-                new Dependency("adventure-platform-facet","net.kyori","adventure-platform-facet","4.3.2",LoaderType.REFLECTION),
-                new Dependency("adventure-text-serializer-legacy","net.kyori","adventure-text-serializer-legacy","4.13.1",LoaderType.REFLECTION),
-                new Dependency("adventure-text-serializer-gson","net.kyori","adventure-text-serializer-gson","4.13.1",LoaderType.REFLECTION),
-                new Dependency("adventure-text-serializer-gson-legacy-impl","net.kyori","adventure-text-serializer-gson-legacy-impl","4.13.1",LoaderType.REFLECTION),
+                new Dependency("kotlin", "org.jetbrains.kotlin", "kotlin-stdlib", "2.1.20", LoaderType.REFLECTION),
+                new Dependency("adventure-platform-bukkit", "net.kyori", "adventure-platform-bukkit", "4.3.2", LoaderType.REFLECTION),
+                new Dependency("adventure-platform-facet", "net.kyori", "adventure-platform-facet", "4.3.2", LoaderType.REFLECTION),
+                new Dependency("adventure-text-serializer-legacy", "net.kyori", "adventure-text-serializer-legacy", "4.13.1", LoaderType.REFLECTION),
+                new Dependency("adventure-text-serializer-gson", "net.kyori", "adventure-text-serializer-gson", "4.13.1", LoaderType.REFLECTION),
+                new Dependency("adventure-text-serializer-gson-legacy-impl", "net.kyori", "adventure-text-serializer-gson-legacy-impl", "4.13.1", LoaderType.REFLECTION),
 
-                new Dependency("adventure-nbt","net.kyori","adventure-nbt","4.13.1",LoaderType.REFLECTION),
-                new Dependency("adventure-platform-api","net.kyori","adventure-platform-api","4.3.2",LoaderType.REFLECTION),
-                new Dependency("adventure-key","net.kyori","adventure-key","4.13.1",LoaderType.REFLECTION),
-                new Dependency("adventure-api","net.kyori","adventure-api","4.13.1",LoaderType.REFLECTION),
+                new Dependency("adventure-nbt", "net.kyori", "adventure-nbt", "4.13.1", LoaderType.REFLECTION),
+                new Dependency("adventure-platform-api", "net.kyori", "adventure-platform-api", "4.3.2", LoaderType.REFLECTION),
+                new Dependency("adventure-key", "net.kyori", "adventure-key", "4.13.1", LoaderType.REFLECTION),
+                new Dependency("adventure-api", "net.kyori", "adventure-api", "4.13.1", LoaderType.REFLECTION),
 
-                new Dependency("litecommands-core","dev.rollczi","litecommands-core","3.4.1",LoaderType.REFLECTION),
-                new Dependency("litecommands-bukkit","dev.rollczi","litecommands-bukkit","3.4.1",LoaderType.REFLECTION),
-                new Dependency("expiringmap","net.jodah","expiringmap","0.5.11"
-                ,LoaderType.REFLECTION),
-                new Dependency("litecommands-framework","dev.rollczi","litecommands-framework","3.4.1",LoaderType.REFLECTION),
+                new Dependency("litecommands-core", "dev.rollczi", "litecommands-core", "3.4.1", LoaderType.REFLECTION),
+                new Dependency("litecommands-bukkit", "dev.rollczi", "litecommands-bukkit", "3.4.1", LoaderType.REFLECTION),
+                new Dependency("expiringmap", "net.jodah", "expiringmap", "0.5.11"
+                        , LoaderType.REFLECTION),
+                new Dependency("litecommands-framework", "dev.rollczi", "litecommands-framework", "3.4.1", LoaderType.REFLECTION),
 
-                new Dependency("litecommands-programmatic","dev.rollczi","litecommands-programmatic","3.4.1",LoaderType.REFLECTION),
-                new Dependency("litecommands-annotations","dev.rollczi","litecommands-annotations","3.4.1",LoaderType.REFLECTION),
+                new Dependency("litecommands-programmatic", "dev.rollczi", "litecommands-programmatic", "3.4.1", LoaderType.REFLECTION),
+                new Dependency("litecommands-annotations", "dev.rollczi", "litecommands-annotations", "3.4.1", LoaderType.REFLECTION),
 
                 new Dependency(
                         "websocket",
@@ -490,8 +506,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                         "1.5.4",
                         LoaderType.REFLECTION
                 ),
-                new Dependency("hutool","cn.hutool","hutool-core","5.8.36",LoaderType.REFLECTION),
-                new Dependency("hutool-cry","cn.hutool","hutool-crypto","5.8.36",LoaderType.REFLECTION),
+                new Dependency("hutool", "cn.hutool", "hutool-core", "5.8.36", LoaderType.REFLECTION),
+                new Dependency("hutool-cry", "cn.hutool", "hutool-crypto", "5.8.36", LoaderType.REFLECTION),
                 new Dependency(
                         "annotations",
                         "org.jetbrains",
@@ -803,89 +819,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         );
     }
 
-    public MongoDB getMongoDB() {
-        return this.mongoDB;
-    }
-
-    public PitConfig getPitConfig() {
-        return this.pitConfig;
-    }
-
-    public EnchantmentFactor getEnchantmentFactor() {
-        return this.enchantmentFactor;
-    }
-    public void setEnchantmentFactor(EnchantmentFactor enchantmentFactor) {
-        this.enchantmentFactor = enchantmentFactor;
-    }
-
-    public NpcFactory getNpcFactory() {
-        return this.npcFactory;
-    }
-
-    public NametagHandler getNametagHandler() {
-        return this.nametagHandler;
-    }
-
-    public Game getGame() {
-        return this.game;
-    }
-
-    public MedalFactory getMedalFactory() {
-        return this.medalFactory;
-    }
-
-    public PerkFactory getPerkFactory() {
-        return this.perkFactory;
-    }
-
-    public BuffFactory getBuffFactory() {
-        return this.buffFactory;
-    }
-
-    public HologramFactory getHologramFactory() {
-        return this.hologramFactory;
-    }
-
-    public EventFactory getEventFactory() {
-        return this.eventFactory;
-    }
-
-    public PlayerMoveHandler getMovementHandler() {
-        return this.movementHandler;
-    }
-
-    public QuestFactory getQuestFactory() {
-        return this.questFactory;
-    }
-
-    public SignGui getSignGui() {
-        return this.signGui;
-    }
-
-    public BossBarHandler getBossBar() {
-        return this.bossBar;
-    }
-
-    public ItemFactor getItemFactor() {
-        return this.itemFactor;
-    }
-
-    public RebootRunnable getRebootRunnable() {
-        return this.rebootRunnable;
-    }
-
-    public MiniGameController getMiniGameController() {
-        return this.miniGameController;
-    }
-
-    public SoundFactory getSoundFactory() {
-        return this.soundFactory;
-    }
-
-    public PetFactory getPetFactory() {
-        return this.petFactory;
-    }
-
     /**
      * Validate that we have access to PlayerPoints
      *
@@ -925,10 +858,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         return null;
     }
 
-    public String getServerId() {
-        return serverId;
-    }
-
     public User getLuckPermsUser(UUID uuid) {
         try {
             UserManager userManager = luckPerms.getUserManager();
@@ -941,18 +870,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 return null;
             }
         }
-    }
-
-    public JedisPool getJedis() {
-        return jedis;
-    }
-
-    public PointsAPI getPointsAPI() {
-        return pointsAPI;
-    }
-
-    public void setPointsAPI(PointsAPI pointsAPI) {
-        this.pointsAPI = pointsAPI;
     }
 
     public Object getLuckPermsUserPrefix(UUID uuid) {
@@ -973,19 +890,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         ThePit.api = api;
     }
 
-    public static PitInternalHook getApi() {
-        return api;
-    }
-
-
-    public BukkitAudiences getAudiences() {
-        return audiences;
-    }
 
     public IItemFactory getItemFactory() {
         return factory;
     }
-    public void setItemFactory(IItemFactory factory){
+
+    public void setItemFactory(IItemFactory factory) {
         this.factory = factory;
     }
 

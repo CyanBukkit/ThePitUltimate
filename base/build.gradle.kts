@@ -9,10 +9,7 @@ plugins {
 }
 
 group = "me.huanmeng"
-version = "1.0-SNAPSHOT"
-
-val plugin_name = "Python"
-val plugin_version = "1.0.1"
+version = "4.01"
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
@@ -27,14 +24,17 @@ repositories {
     maven("https://repo.panda-lang.org/releases")
 }
 tasks.named<ShadowJar>("shadowJar") {
-    archiveBaseName.set(plugin_name)
-    archiveVersion.set(plugin_version)
+    archiveFileName.set("ThePitUltimate-$version.jar")
+    relocate("pku.yim.license", "cn.charlotte.pit.license")
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
+    mergeServiceFiles()
 }
 
 
 dependencies {
+    compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
+    implementation(fileTree(mapOf("dir" to "../libs", "include" to listOf("magic-license-1.0.7.jar"))))
     compileOnly(libs.reflectionhelper)
     compileOnly(libs.reflectionhelper)
     compileOnly(libs.hutool.crypto)
@@ -62,10 +62,8 @@ dependencies {
     compileOnly("org.mongojack:mongojack:5.0.1")
     compileOnly("org.mongodb:mongodb-driver-sync:5.2.0")
 
-    implementation(fileTree("../cloudlib"))
     compileOnly(libs.websocket)
     // fawe /we
-    compileOnly(fileTree("../libs"))
     // to get the proper api
     compileOnly("it.unimi.dsi:fastutil:8.5.13")
 
@@ -86,21 +84,6 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
-}
-tasks.register<Copy>("processPluginYml") {
-    from("src/main/resources/plugin.yml")
-    into("build/tmp/processed-resources")
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    expand(
-        "plugin_version" to plugin_version
-    )
-}
-
-
-tasks.processResources {
-    dependsOn("processPluginYml")
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    from("build/tmp/processed-resources")
 }
 
 tasks.build {

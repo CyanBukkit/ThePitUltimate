@@ -1,5 +1,5 @@
-name: Python
-version: ${plugin_version}
+name: ThePitUltimate
+version: 4.01
 description: A Bukkit mini-game plugin.
 authors: [ EmptyIrony ]
 
