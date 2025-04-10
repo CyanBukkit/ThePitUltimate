@@ -282,15 +282,6 @@ public class PitConfig extends Configuration {
             path = "debug.ienchantNpcLoc"
     )
     private Location enchantNpcLocation;
-    @ConfigData(
-            path = "booster"
-    )
-    private double booster = 1.0;
-
-    @ConfigData(
-            path = "vip-price"
-    )
-    private int vipPrice = 500;
 
     @ConfigData(
             path = "curfew.enable"
@@ -597,13 +588,7 @@ public class PitConfig extends Configuration {
         return enchantNpcLocation;
     }
 
-    public double getBooster() {
-        return booster;
-    }
 
-    public int getVipPrice() {
-        return vipPrice;
-    }
 
 
     public boolean isCurfewEnable() {
@@ -856,14 +841,6 @@ public class PitConfig extends Configuration {
 
     public void setEnchantNpcLocation(Location enchantNpcLocation) {
         this.enchantNpcLocation = enchantNpcLocation;
-    }
-
-    public void setBooster(double booster) {
-        this.booster = booster;
-    }
-
-    public void setVipPrice(int vipPrice) {
-        this.vipPrice = vipPrice;
     }
 
     public void setCurfewEnable(boolean curfewEnable) {

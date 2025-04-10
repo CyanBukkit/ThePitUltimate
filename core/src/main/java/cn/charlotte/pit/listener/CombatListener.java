@@ -78,12 +78,7 @@ public class CombatListener implements Listener {
     String boostString = " &6(限时加成x" + eventBoost + "倍奖励)";
 
     public CombatListener() {
-        this.initMoveHandler();
         INSTANCE = this;
-    }
-
-    private void initMoveHandler() {
-        eventBoost = ThePit.getInstance().getPitConfig().getBooster();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

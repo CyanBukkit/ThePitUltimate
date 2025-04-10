@@ -74,7 +74,7 @@ object NewConfiguration {
         noobDamageBoost = config.getDouble("noob-protect.damage_boost")
         noobDamageReduce = config.getDouble("noob-protect.damage_reduce")
 
-        CombatListener.eventBoost = config.getDouble("coins-boost")
+        CombatListener.eventBoost = config.getDouble("boost")
 
         customChatFormatEnable = config.getBoolean("custom-chat-format.enable", false)
         customChatFormat = config.getString("custom-chat-format.format", "%pit_level_tag_roman% %s&f: %s")
@@ -237,7 +237,7 @@ object NewConfiguration {
         "price-name" to "点券",
         "lobby-command" to "hub",
 
-        "coins-boost" to 2.0,
+        "boost" to 2.0,
 
         "dateFormat" to "MM/dd HH:mm",
 

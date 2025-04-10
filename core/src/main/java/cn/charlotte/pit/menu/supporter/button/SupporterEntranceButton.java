@@ -27,7 +27,7 @@ import java.util.List;
 public class SupporterEntranceButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
-        final int price = ThePit.getInstance().getPitConfig().getVipPrice();
+        final int price = NewConfiguration.INSTANCE.getVipPrice();
 
         List<String> lines = new ArrayList<>();
         lines.add("");
@@ -76,7 +76,7 @@ public class SupporterEntranceButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        final int price = ThePit.getInstance().getPitConfig().getVipPrice();
+        final int price = NewConfiguration.INSTANCE.getVipPrice();
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.isSupporter()) {
