@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
  * @Date: 2021/3/26 13:32
  */
 public class SuccessfullySound extends AbstractPitSound {
+
     @Override
     public String getMusicInternalName() {
         return "successfully";

@@ -19,8 +19,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Getter
 public class ClearRunnable extends BukkitRunnable {
+
     private static ClearRunnable clearRunnable;
-    public final SWMRHashTable<Location,PlacedBlockData> placedBlock;
+    public final SWMRHashTable<Location, PlacedBlockData> placedBlock;
     private final List<DroppedEntityData> entityData;
 
     public ClearRunnable() {
@@ -31,8 +32,8 @@ public class ClearRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-       this.placedBlock.removeIf((i,a) -> {
-            if(a.getCooldown().hasExpired()){
+        this.placedBlock.removeIf((i, a) -> {
+            if (a.getCooldown().hasExpired()) {
                 Location location = a.getLocation();
                 location.getBlock().setType(Material.AIR);
                 return true;
@@ -54,7 +55,7 @@ public class ClearRunnable extends BukkitRunnable {
     }
 
     public void placeBlock(Location location, Cooldown cooldown) {
-        this.placedBlock.put(location,new PlacedBlockData(location, cooldown));
+        this.placedBlock.put(location, new PlacedBlockData(location, cooldown));
     }
 
     public static ClearRunnable getClearRunnable() {

@@ -1,6 +1,6 @@
 package io.irina.backports.utils;
 
-import io.papermc.paper.util.IntegerUtil;
+import cn.charlotte.pit.util.arithmetic.IntegerUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.lang.invoke.VarHandle;
@@ -172,7 +172,7 @@ public class SWMRHashTable<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>
         if (capacity >= MAXIMUM_CAPACITY) {
             return MAXIMUM_CAPACITY;
         }
-        return IntegerUtil.roundCeilLog2(capacity);
+        return IntegerUtils.roundCeilLog2(capacity);
     }
 
     /** Callers must still use acquire when reading the value of the entry. */
@@ -496,7 +496,7 @@ public class SWMRHashTable<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>
         }
 
         final TableEntry<K, V>[] table = this.getTablePlain();
-        int newCapacity = minCapacity >= MAXIMUM_CAPACITY ? MAXIMUM_CAPACITY : IntegerUtil.roundCeilLog2(minCapacity);
+        int newCapacity = minCapacity >= MAXIMUM_CAPACITY ? MAXIMUM_CAPACITY : IntegerUtils.roundCeilLog2(minCapacity);
         if (newCapacity < 0) {
             newCapacity = MAXIMUM_CAPACITY;
         }

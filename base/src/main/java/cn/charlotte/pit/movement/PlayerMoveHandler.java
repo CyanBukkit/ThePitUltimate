@@ -32,6 +32,7 @@ import java.util.Set;
  * @Date: 2021/1/16 23:49
  */
 public class PlayerMoveHandler implements MovementHandler, Listener {
+
     private static final Set<Player> cantMoveList = new ConcurrentHashSet<>();
 
     public PlayerMoveHandler() {
@@ -48,11 +49,11 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
         //when X/Z Loc change
         if (to.getBlockX() != from.getBlockX() || to.getBlockZ() != from.getBlockZ()) {
             if (!profile.isLoaded() && ProfileLoadRunnable.getInstance() != null && ProfileLoadRunnable.getInstance().getCooldownMap() != null && ProfileLoadRunnable.getInstance().getCooldownMap().containsKey(player.getUniqueId())) {
-                ActionBarUtil.sendActionBar1(player,"system", "&c正在加载您的游戏数据,如长时间等待请尝试重新进入...",2);
+                ActionBarUtil.sendActionBar1(player, "system", "&c正在加载您的游戏数据,如长时间等待请尝试重新进入...", 2);
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 9999999, 1, false),true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, -100, false),true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999999, -100, false),true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 9999999, 1, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, -100, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999999, -100, false), true);
                 return;
             }
         }
@@ -179,7 +180,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
                 player.setAllowFlight(true);
             }
         }
-        if(player.isOnGround()) {
+        if (player.isOnGround()) {
             boolean backing = player.hasMetadata("backing");
             if (backing) {
                 if (to.getBlockX() != from.getBlockX() ||
@@ -228,8 +229,8 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             final Location from = event.getFrom();
 
             if (to.getBlockX() != from.getBlockX() ||
-                to.getBlockY() != from.getBlockY() ||
-                to.getBlockZ() != from.getBlockZ()) {
+                    to.getBlockY() != from.getBlockY() ||
+                    to.getBlockZ() != from.getBlockZ()) {
                 event.setCancelled(true);
             }
         }

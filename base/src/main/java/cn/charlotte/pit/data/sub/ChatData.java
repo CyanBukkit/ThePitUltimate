@@ -5,6 +5,7 @@ package cn.charlotte.pit.data.sub;
  * @Date: 2021/1/18 22:49
  */
 public class ChatData {
+
     private long timestamp;
     private String message;
 

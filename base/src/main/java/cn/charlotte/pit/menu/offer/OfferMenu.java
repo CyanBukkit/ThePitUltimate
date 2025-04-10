@@ -18,6 +18,7 @@ import java.util.Map;
  * @Date 2021/5/29 11:36
  */
 public class OfferMenu extends Menu {
+
     private final Player target;
     private final String PATTEN_DEFAULT_YMD = "yyyy-MM-dd";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(PATTEN_DEFAULT_YMD);

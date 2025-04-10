@@ -5,11 +5,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
+
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/5 0:30
  */
 public class TradeMonitorRunnable extends BukkitRunnable {
+
     private final static List<TradeRequest> tradeRequests = new ObjectArrayList<>();
 
     @Override

@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 @Getter
 public class RebootRunnable extends BukkitRunnable {
+
     private final long serverStartTime;
     private RebootTask currentTask;
 
@@ -64,6 +65,7 @@ public class RebootRunnable extends BukkitRunnable {
 
 
     public static class RebootTask {
+
         private final String reason;
         private final long endTime;
 

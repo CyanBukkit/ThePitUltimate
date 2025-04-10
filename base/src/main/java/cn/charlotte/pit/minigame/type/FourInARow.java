@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/3/24 22:02
  */
 public class FourInARow extends AbstractMiniGame {
+
     private final Map<PosInfo, PosInfo> board = new HashMap<>();
     private Player whitePlayer;
     private Player blackPlayer;
@@ -249,6 +250,7 @@ public class FourInARow extends AbstractMiniGame {
     }
 
     public static class PosInfo {
+
         private int x;
         private int y;
         private Marked markedInfo;

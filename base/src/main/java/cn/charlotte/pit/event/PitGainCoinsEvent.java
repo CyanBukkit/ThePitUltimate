@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 @RequiredArgsConstructor
 @Data
 public class PitGainCoinsEvent extends PitEvent {
+
     private final Player player;
     private final double coins;
 

@@ -16,6 +16,7 @@ import java.io.IOException;
  * @Date: 2021/1/8 18:32
  */
 public class EnderChestSerializer extends JsonSerializer<PlayerEnderChest> {
+
     @Override
     public void serialize(PlayerEnderChest value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         try {

@@ -10,6 +10,7 @@ import java.util.Map;
  * @Date: 2020/12/31 12:57
  */
 public class ItemFactor {
+
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ItemFactor.class);
     private final Map<String, Class<? extends AbstractPitItem>> itemMap;
 

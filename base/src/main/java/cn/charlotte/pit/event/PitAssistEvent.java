@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
  */
 
 public class PitAssistEvent extends PitEvent {
+
     private final Player assist;
     private final Player target;
 

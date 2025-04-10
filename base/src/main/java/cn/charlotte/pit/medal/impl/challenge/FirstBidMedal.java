@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class FirstBidMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "FIRST_AUCTION_BID";

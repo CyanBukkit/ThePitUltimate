@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Configuration {
+
     private final YamlConfiguration config;
     private final JavaPlugin plugin;
     private final File file;

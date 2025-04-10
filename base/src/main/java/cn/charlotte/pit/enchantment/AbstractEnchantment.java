@@ -52,15 +52,16 @@ public abstract class AbstractEnchantment {
     }
 
     //Todo: 需要一个判断玩家身上附魔是否生效中(持续时间内)的方法 (虽然也许不应该写在这里)
-    public int getItemEnchantLevel(AbstractPitItem im){
-        if(im == null)
+    public int getItemEnchantLevel(AbstractPitItem im) {
+        if (im == null)
             return -1;
         int anInt = im.getEnchantments().getInt(this);
         return anInt;
     }
+
     public int getItemEnchantLevel(ItemStack item) {
         AbstractPitItem iMythicItem = ThePit.getInstance().getItemFactory().getItemFromStack(item); //更快Or 更慢
-        if(iMythicItem != null){
+        if (iMythicItem != null) {
             return iMythicItem.getEnchantments().getInt(this);
         } //更快的解析
         if (item == null || item.getType() == Material.AIR) {
@@ -83,7 +84,7 @@ public abstract class AbstractEnchantment {
         }
         for (int i = 0; i < list.size(); i++) {
             String string = list.getString(i);
-            String[] split = PublicUtil.splitByCharAt(string,':');
+            String[] split = PublicUtil.splitByCharAt(string, ':');
             if (split.length != 2) {
                 return -1;
             }
@@ -120,7 +121,6 @@ public abstract class AbstractEnchantment {
     }
 
 
-
     public abstract String getUsefulnessLore(int enchantLevel);
 
     @Override
@@ -130,11 +130,13 @@ public abstract class AbstractEnchantment {
         AbstractEnchantment that = (AbstractEnchantment) o;
         return that.getNbtName().equals(this.getNbtName());
     }
+
     //return the hashcode ewe
-    int hashCode = 0,cached = -1;
+    int hashCode = 0, cached = -1;
+
     @Override
     public int hashCode() {
-        if(cached == -1){
+        if (cached == -1) {
             hashCode = this.getNbtName().hashCode();
             cached = 0;
         }

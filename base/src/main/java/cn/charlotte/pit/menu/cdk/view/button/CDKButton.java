@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
  * @Date: 2021/3/27 19:37
  */
 public class CDKButton extends Button {
+
     private static final Gson gson = new Gson();
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
     private final CDKData data;

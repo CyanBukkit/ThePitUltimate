@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 @RequiredArgsConstructor
 @Data
 public class PitGainRenownEvent extends PitEvent {
+
     private final Player player;
     private final int renown;
 

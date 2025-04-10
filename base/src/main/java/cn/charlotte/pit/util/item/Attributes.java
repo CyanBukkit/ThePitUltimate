@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
 public class Attributes {
+
     private final NBTTagCompound parent;
     // This may be modified
     public net.minecraft.server.v1_8_R3.ItemStack nmsStack;
@@ -167,6 +168,7 @@ public class Attributes {
     }
 
     public static class AttributeType {
+
         private static final ConcurrentMap<String, AttributeType> LOOKUP = Maps.newConcurrentMap();
         public static final AttributeType GENERIC_MAX_HEALTH = new AttributeType("generic.maxHealth").register();
         public static final AttributeType GENERIC_FOLLOW_RANGE = new AttributeType("generic.followRange").register();
@@ -228,6 +230,7 @@ public class Attributes {
     }
 
     public static class Attribute {
+
         private final NBTTagCompound data;
 
         private Attribute(Builder builder) {
@@ -298,6 +301,7 @@ public class Attributes {
 
         // Makes it easier to construct an attribute
         public static class Builder {
+
             private double amount;
             private Operation operation = Operation.ADD_NUMBER;
             private AttributeType type;

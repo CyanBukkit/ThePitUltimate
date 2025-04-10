@@ -13,6 +13,7 @@ import org.bukkit.event.HandlerList;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PitEvent extends Event {
+
     private static final HandlerList HANDLERS = new HandlerList();
 
     public static HandlerList getHandlerList() {

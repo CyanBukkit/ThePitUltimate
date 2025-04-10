@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/1/19 20:57
  */
 public class TradeManager {
+
     public static final Map<UUID, TradeManager> trades = new HashMap<>();
 
     private final Player playerA;

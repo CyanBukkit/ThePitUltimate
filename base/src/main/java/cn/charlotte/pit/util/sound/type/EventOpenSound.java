@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
  * @Date: 2021/4/8 22:06
  */
 public class EventOpenSound extends AbstractPitSound {
+
     @Override
     public String getMusicInternalName() {
         return "event_open";

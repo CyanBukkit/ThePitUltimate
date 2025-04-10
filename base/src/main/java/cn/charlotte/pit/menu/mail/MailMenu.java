@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/3/16 23:35
  */
 public class MailMenu extends Menu {
+
     private static final int[] slot = new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
     private int currentPage = 0;
     private int totalPage = 0;

@@ -18,6 +18,7 @@ import java.util.Map;
  * @Created_In: 2021/1/13 14:57
  */
 public class EnderChestViewerMenu extends Menu {
+
     private final PlayerProfile profile;
 
     public EnderChestViewerMenu(PlayerProfile profile) {

@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class BossBar {
+
     private net.kyori.adventure.bossbar.BossBar bar;
     private Set<UUID> viewers = new HashSet<>();
     private String title;

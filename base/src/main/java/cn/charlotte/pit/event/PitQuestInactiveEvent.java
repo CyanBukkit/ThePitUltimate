@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 @RequiredArgsConstructor
 @Data
 public class PitQuestInactiveEvent extends PitEvent {
+
     private final Player player;
     private final QuestData questData;
 

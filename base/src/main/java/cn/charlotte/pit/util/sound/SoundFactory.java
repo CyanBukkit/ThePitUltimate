@@ -15,6 +15,7 @@ import java.util.Map;
  * @Date: 2021/3/26 13:31
  */
 public class SoundFactory extends BukkitRunnable {
+
     private Map<String, AbstractPitSound> pitSounds;
 
 

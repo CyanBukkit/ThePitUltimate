@@ -9,6 +9,7 @@ import org.bukkit.Location;
  * @Date: 2021/1/1 22:15
  */
 public class PlacedBlockData {
+
     private final Location location;
     private final Cooldown cooldown;
 

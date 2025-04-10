@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
  */
 @UnknowEntityType
 public interface IPlayerBeKilledByEntity {
+
     /**
      * @param enchantLevel 附魔等级
      * @param myself       玩家对象（被攻击者，附魔物品持有者）

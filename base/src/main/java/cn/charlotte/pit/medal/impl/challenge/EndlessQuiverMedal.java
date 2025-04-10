@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class EndlessQuiverMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "ENDLESS_QUIVER";

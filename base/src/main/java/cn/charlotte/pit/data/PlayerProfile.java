@@ -21,13 +21,13 @@ import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.level.LevelUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
-import io.irina.backports.utils.SWMRHashTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.annotations.Beta;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.ReplaceOptions;
+import io.irina.backports.utils.SWMRHashTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
@@ -40,7 +40,7 @@ import org.mongojack.JacksonMongoCollection;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: EmptyIrony
@@ -87,9 +87,10 @@ public class PlayerProfile {
 
     public final static PlayerProfile NONE_PROFILE;
     public static final UUID CONSTANT_UUID_BOT_UNLOADED_PLAYER = UUID.randomUUID();
+
     static {
         NONE_PROFILE = new PlayerProfile(CONSTANT_UUID_BOT_UNLOADED_PLAYER, "NotLoadPlayer") {
-            public boolean isLoaded(){
+            public boolean isLoaded() {
                 return false;
             }
 
@@ -313,15 +314,16 @@ public class PlayerProfile {
             }
 
             @Override
-            public void setOfferData(OfferData offerData) {}
+            public void setOfferData(OfferData offerData) {
+            }
 
             @Override
             public void setGrindedCoins(double grindedCoins) {
-           }
+            }
 
             @Override
             public void setPlayerOption(PlayerOption playerOption) {
-           }
+            }
 
             @Override
             public void setPlayerBanData(PlayerBanData playerBanData) {
@@ -346,19 +348,19 @@ public class PlayerProfile {
 
             @Override
             public void setRemedyDate(String remedyDate) {
-           }
+            }
 
             @Override
             public void setTotalFishTimes(int totalFishTimes) {
-       }
+            }
 
             @Override
             public void setTotalFishTreasureTimes(int totalFishTreasureTimes) {
-         }
+            }
 
             @Override
             public void setTotalFishTrashTimes(int totalFishTrashTimes) {
-           }
+            }
 
             @Override
             public void setCurrentQuest(QuestData currentQuest) {
@@ -419,11 +421,11 @@ public class PlayerProfile {
 
             @Override
             public void setClaimedMail(List<String> claimedMail) {
-          }
+            }
 
             @Override
             public void setInArena(boolean inArena) {
-      }
+            }
 
             @Override
             public void setStreakKills(double kills) {
@@ -431,7 +433,7 @@ public class PlayerProfile {
 
             @Override
             public void setCombatTimer(Cooldown combatTimer) {
-           }
+            }
 
             @Override
             public void setEditingMode(boolean editingMode) {
@@ -439,39 +441,39 @@ public class PlayerProfile {
 
             @Override
             public void setDamageReduced(double damageReduced) {
-           }
+            }
 
             @Override
             public void setDamageMap(Map<UUID, DamageData> damageMap) {
-          }
+            }
 
             @Override
             public void setStrengthNum(int strengthNum) {
-           }
+            }
 
             @Override
             public void setStrengthTimer(Cooldown strengthTimer) {
-          }
+            }
 
             @Override
             public void setLastKilledPlayer(UUID lastKilledPlayer) {
-         }
+            }
 
             @Override
             public void setBountyCooldown(Cooldown bountyCooldown) {
-       }
+            }
 
             @Override
             public void setBountyStreak(int bountyStreak) {
-           }
+            }
 
             @Override
             public void setKillRecap(KillRecap killRecap) {
-        }
+            }
 
             @Override
             public void setScreenShare(boolean screenShare) {
-           }
+            }
 
             @Override
             public void setScreenShareQQ(String screenShareQQ) {
@@ -483,19 +485,19 @@ public class PlayerProfile {
 
             @Override
             public void setNicked(boolean nicked) {
-           }
+            }
 
             @Override
             public void setNickPrestige(int nickPrestige) {
-           }
+            }
 
             @Override
             public void setNickLevel(int nickLevel) {
-          }
+            }
 
             @Override
             public void setTempInvUsing(boolean tempInvUsing) {
-      }
+            }
 
             @Override
             public void setNoDamageAnimations(boolean noDamageAnimations) {
@@ -546,11 +548,11 @@ public class PlayerProfile {
 
             @Override
             public void setStreakCooldown(Cooldown streakCooldown) {
-     }
+            }
 
             @Override
             public void setStreakCount(int streakCount) {
-         }
+            }
 
             @Override
             public void setBot(boolean bot) {
@@ -558,7 +560,7 @@ public class PlayerProfile {
 
             @Override
             public void setLastDamageAt(long lastDamageAt) {
-         }
+            }
 
             @Override
             public void setExtraMaxHealth(HashMap<String, Double> extraMaxHealth) {
@@ -566,7 +568,7 @@ public class PlayerProfile {
 
             @Override
             public void setEnchantingBook(String enchantingBook) {
-           }
+            }
 
             @Override
             public void setUnlockedPerkMap(Map<String, PerkData> unlockedPerkMap) {
@@ -578,7 +580,7 @@ public class PlayerProfile {
 
             @Override
             public void setLastRenameTime(long lastRenameTime) {
-        }
+            }
 
             @Override
             public void setBoughtPerkMap(Map<String, PerkData> boughtPerkMap) {
@@ -593,12 +595,12 @@ public class PlayerProfile {
     }
 
     //两张表
-    public IOperator toOperator(){
+    public IOperator toOperator() {
         return ThePit.getInstance().getProfileOperator().getIOperator(getPlayerUuid());
     }
-   // public static Map<UUID, BukkitRunnable> LOADING_MAP = new SWMRHashTable<>(); // do it static
+    // public static Map<UUID, BukkitRunnable> LOADING_MAP = new SWMRHashTable<>(); // do it static
 
-   // public static final Map<UUID, BukkitRunnable> SAVING_MAP = new SWMRHashTable<>(); // do it static
+    // public static final Map<UUID, BukkitRunnable> SAVING_MAP = new SWMRHashTable<>(); // do it static
 
     //private final static Map<UUID, PlayerProfile> cacheProfile = new SWMRHashTable<>();
 
@@ -726,7 +728,7 @@ public class PlayerProfile {
     private double xpStackAddon = 0.0;
     private double xpStackMax = 1.0;
 
-   // private List<PlayerInvBackup> invBackups;
+    // private List<PlayerInvBackup> invBackups;
 
     private int todayCompletedUber;
     private long todayCompletedUberLastRefreshed;
@@ -754,6 +756,7 @@ public class PlayerProfile {
     public ItemStack leggingItemStack;
     public AbstractPitItem heldItem; //make it public because it didn't have any synch operation
     public AbstractPitItem leggings; //make it public because it didn't have any synch operation
+
     public PlayerProfile(UUID uuid, String playerName) {
         //调用默认构造函数，初始化赋值
         this();
@@ -762,25 +765,28 @@ public class PlayerProfile {
         this.lowerName = playerName.toLowerCase();
         this.mailData = new PlayerMailData(uuid, playerName);
     }
-    public synchronized PlayerProfile disallow(){
-        if(this.code == -1) {
+
+    public synchronized PlayerProfile disallow() {
+        if (this.code == -1) {
             this.code = -2;
             return this;
         }
         return NONE_PROFILE;
     }
-    public synchronized PlayerProfile disallowUnsafe(){
+
+    public synchronized PlayerProfile disallowUnsafe() {
         disallow();
         return this;
     }
 
-    public synchronized PlayerProfile allow(){
-        if(this.code == -2) {
+    public synchronized PlayerProfile allow() {
+        if (this.code == -2) {
             this.code = -1;
             return this;
         }
         return NONE_PROFILE;
     }
+
     public PlayerProfile() {
         this.inventory = new PlayerInv();
         this.enderChest = new PlayerEnderChest();
@@ -822,7 +828,7 @@ public class PlayerProfile {
         this.bountyCooldown = new Cooldown(0);
         this.currentQuestList = new ObjectArrayList<>();
         this.genesisData = new GenesisData();
-       // this.invBackups = new ObjectArrayList<>();
+        // this.invBackups = new ObjectArrayList<>();
         this.claimedMail = new ObjectArrayList<>();
 
         this.nightQuestEnable = false;
@@ -849,7 +855,8 @@ public class PlayerProfile {
 
         this.loaded = false;
     }
-    public boolean isChoosePerk(String intName){
+
+    public boolean isChoosePerk(String intName) {
         for (PerkData value : chosePerk.values()) {
             if (value.getPerkInternalName().equals(intName)) {
                 return true;
@@ -861,6 +868,7 @@ public class PlayerProfile {
     /**
      * 本方法仅作为兼容桥, 向下兼容存在代码, 已最大保证线程安全性以及最大解决bug等问题
      * 重定向于 PackedOperator
+     *
      * @param uuid
      * @return the raw profile, if it exists and loaded
      */
@@ -870,23 +878,14 @@ public class PlayerProfile {
 
         PlayerProfile rawCache = getRawCache(uuid);
         if (rawCache == null) {
-//            Player player = Bukkit.getPlayer(uuid);
-//            if (player != null && player.isOnline()) {
-//                player.kickPlayer("你的档案因未知异常没有被加载,请尝试稍等一会儿重新进入游戏!");
-//            }
-//            throw new RuntimeException(uuid.toString() + "'s Player profile is not loaded");
             return NONE_PROFILE;
         }
         return rawCache;
     }
-    public static PlayerProfile getRawCache(UUID uuid){
+
+    public static PlayerProfile getRawCache(UUID uuid) {
         IOperator operator = ThePit.getInstance().getProfileOperator().getIOperator(uuid);
         if (operator == null || !operator.isLoaded()) {
-//            Player player = Bukkit.getPlayer(uuid);
-//            if (player != null && player.isOnline()) {
-//                player.kickPlayer("你的档案因未知异常没有被加载,请尝试稍等一会儿重新进入游戏!");
-//            }
-//            throw new RuntimeException(uuid.toString() + "'s Player profile is not loaded");
             return null;
         }
 
@@ -908,6 +907,7 @@ public class PlayerProfile {
 //        }
 //        return loadPlayerProfileByUuid(uuid);
 //    }
+
     /**
      * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
      * 注意！请异步调用本方法，如果在主线程上调用会抛异常
@@ -940,13 +940,15 @@ public class PlayerProfile {
 
         return playerProfile;
     }
+
     /**
      * 进行垃圾回收。。。, 可能会误回收, 我存在哥牛逼
+     *
      * @param invBackups
      * @param playerProfile
      * @param add
      */
-    public static void gcBackups(Iterable<PlayerInvBackup> invBackups,PlayerProfile playerProfile, boolean add) {
+    public static void gcBackups(Iterable<PlayerInvBackup> invBackups, PlayerProfile playerProfile, boolean add) {
         long lastTime = 0;
         JacksonMongoCollection<PlayerInvBackup> invCollection = ThePit.getInstance().getMongoDB().getInvCollection();
         for (PlayerInvBackup backup : invBackups) {
@@ -960,6 +962,7 @@ public class PlayerProfile {
             lastTime = backup.getTimeStamp();
         }
     }
+
     /**
      * 该方法用于查找玩家，如果玩家可能离线时请使用本方法
      * 注意！请异步调用本方法，如果在主线程上调用会抛异常
@@ -975,24 +978,11 @@ public class PlayerProfile {
                 .getProfileCollection()
                 .findOne(Filters.eq("lowerName", name.toLowerCase())); //PlayerProfile lookup
     }
-//
-//    @JsonIgnore
-//    public static PlayerProfile getPlayerProfileByName(String name) {
-//        for (Map.Entry<UUID, PlayerProfile> entry : cacheProfile.entrySet()) {
-//            if (entry.getValue().getPlayerName().equalsIgnoreCase(name)) {
-//                return entry.getValue();
-//            }
-//        }
-//        Player player = Bukkit.getPlayer(name);
-//        if (player != null && player.isOnline()) {
-//            player.sendMessage(CC.translate("&c在加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试."));
-//            player.kickPlayer("加载您的天坑乱斗数据时出现了一个问题,您可以尝试再次进入游戏以重试.");
-//        }
-//        throw new RuntimeException(name + "'s Player profile not load");
-//    }
+
     public static void saveAll() {
         ThePit.getInstance().getProfileOperator().doSaveProfiles();
     }
+
     public static void loadMail(PlayerProfile playerProfile, UUID uuid) {
         PlayerMailData mailData = ThePit.getInstance()
                 .getMongoDB()
@@ -1025,9 +1015,10 @@ public class PlayerProfile {
         saveData(player);
         return this;
     }
+
     public void saveData(Player player) {
         final long now = System.currentTimeMillis();
-        if(player != null){
+        if (player != null) {
             this.setInventory(InventoryUtil.playerInventoryFromPlayer(player));
         }
         //if (invBackups.isEmpty() || invBackups.stream().noneMatch(backup -> now - backup.getTimeStamp() < 10 * 60 * 1000)) {
@@ -1049,7 +1040,8 @@ public class PlayerProfile {
                 .getProfileCollection()
                 .replaceOne(Filters.eq("uuid", this.uuid), this, new ReplaceOptions().upsert(true));
     }
-    public static void bootstrapProfile(PlayerProfile profile){
+
+    public static void bootstrapProfile(PlayerProfile profile) {
         //refresh quests - start
         profile.refreshQuest();
         profile.refreshGenesisData();
@@ -1078,6 +1070,7 @@ public class PlayerProfile {
         });
         profile.loaded = true;
     }
+
     public PlayerProfile load() {
 
         PlayerProfile profile = PlayerProfile.loadPlayerProfileByUuid(this.getPlayerUuid());
@@ -1170,11 +1163,13 @@ public class PlayerProfile {
     public String geLevelColor() {
         return LevelUtil.getLevelColor(this.getLevel());
     }
+
     @JsonIgnore
     UUID cachedUUID;
+
     @JsonIgnore
     public UUID getPlayerUuid() {
-        if(cachedUUID == null) {
+        if (cachedUUID == null) {
             UUID uuid1 = UUID.fromString(this.uuid);
             cachedUUID = uuid1;
         }
@@ -1234,7 +1229,7 @@ public class PlayerProfile {
             profile.setWipedData(wipedData);
             profile.setLoaded(true);
 
-           // cacheProfile.put(this.getPlayerUuid(), profile);
+            // cacheProfile.put(this.getPlayerUuid(), profile);
             //TODO edit
             ThePit.getInstance().getProfileOperator().getIOperator(uuid).wipe(profile);
         }
@@ -1276,6 +1271,7 @@ public class PlayerProfile {
         }
         return LevelUtil.getLevelTag(this.getPrestige(), this.getLevel());
     }
+
     public String getFormattedLevelTagTabSpec() {
         if (nicked) {
             return LevelUtil.getLevelTagTabListSpec(this.nickPrestige, this.nickLevel);
@@ -1673,6 +1669,7 @@ public class PlayerProfile {
         }
         this.inventory = inv;
     }
+
     @Beta
     public PlayerProfile setInventoryUnsafe(PlayerInv inv) {
         this.inventory = inv;
@@ -2023,7 +2020,8 @@ public class PlayerProfile {
 
         this.streakKills = kills;
     }
-    public static synchronized final void saveAllSync(boolean silent){
+
+    public static synchronized final void saveAllSync(boolean silent) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             try {
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -2199,23 +2197,25 @@ public class PlayerProfile {
     public void setLastActionTimestamp(long lastActionTimestamp) {
         this.lastActionTimestamp = lastActionTimestamp;
     }
+
     @Beta
     @Warning
     public Iterable<PlayerInvBackup> getInvBackups() {
-        if(Bukkit.isPrimaryThread()){
+        if (Bukkit.isPrimaryThread()) {
             Bukkit.getLogger().warning("Executing fetch inventory backups on main thread for " + this.playerName);
         }
         return ThePit.getInstance().getMongoDB().
-                getInvCollection().find(Filters.eq("uuid",uuid));
+                getInvCollection().find(Filters.eq("uuid", uuid));
     }
+
     @Beta
     @Warning
     public Iterable<PlayerInvBackup> gcBackupIterators() {
-        if(Bukkit.isPrimaryThread()){
+        if (Bukkit.isPrimaryThread()) {
             Bukkit.getLogger().warning("Executing fetch inventory backups on main thread for " + this.playerName);
         }
         return ThePit.getInstance().getMongoDB().
-                getInvCollection().find(Filters.eq("uuid",uuid)).projection(Projections.include("timeStamp","backupUuid","uuid"));
+                getInvCollection().find(Filters.eq("uuid", uuid)).projection(Projections.include("timeStamp", "backupUuid", "uuid"));
     }
 
     public double getGoldStackAddon() {
@@ -2310,7 +2310,7 @@ public class PlayerProfile {
         Collection<Double> values = extraMaxHealth.values();
         double valued = 0D;
         for (Double value : values) {
-            valued+=value;
+            valued += value;
         }
         return valued;
     }

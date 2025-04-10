@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlayerMailData {
+
     private String uuid;
     private String name;
     private String nameLower;

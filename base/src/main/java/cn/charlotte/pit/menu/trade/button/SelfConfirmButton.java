@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/1/19 21:10
  */
 public class SelfConfirmButton extends Button {
+
     private final TradeManager tradeManager;
 
     public SelfConfirmButton(TradeManager tradeManager) {

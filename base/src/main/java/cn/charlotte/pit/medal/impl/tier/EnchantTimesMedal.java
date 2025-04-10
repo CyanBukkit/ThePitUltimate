@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 
 @AutoRegister
 public class EnchantTimesMedal extends AbstractMedal implements Listener {
+
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
 
     @Override

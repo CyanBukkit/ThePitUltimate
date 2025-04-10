@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 
 @AutoRegister
 public class FastContractMedal extends AbstractMedal implements Listener {
+
     @Override
     public String getInternalName() {
         return "FAST_COMPLETE_CONTRACT";

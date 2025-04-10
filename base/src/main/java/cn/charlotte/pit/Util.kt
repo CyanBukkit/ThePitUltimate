@@ -2,17 +2,11 @@ package cn.charlotte.pit
 
 import cn.charlotte.pit.data.PlayerProfile
 import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.nbt.BinaryTagIO
-import net.kyori.adventure.nbt.CompoundBinaryTag
 import net.kyori.adventure.text.Component
-import net.minecraft.server.v1_8_R3.NBTCompressedStreamTools
 import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
-import java.io.*
 
 fun Player.getPitProfile(): PlayerProfile {
     return PlayerProfile.getPlayerProfileByUuid(this.uniqueId)
@@ -32,7 +26,8 @@ fun Player.sendMessage(message: Component) {
 }
 
 val Player.audience: Audience
-    get()= ThePit.getInstance().audiences.player(this)
+    get() = ThePit.getInstance().audiences.player(this)
+
 class Util {
     companion object {
         @JvmStatic

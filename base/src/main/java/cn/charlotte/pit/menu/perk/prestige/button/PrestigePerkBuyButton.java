@@ -24,6 +24,7 @@ import java.util.List;
  * @Created_In: 2021/1/4 18:45
  */
 public class PrestigePerkBuyButton extends Button {
+
     private final AbstractPerk perk;
 
     public PrestigePerkBuyButton(AbstractPerk perk) {

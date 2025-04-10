@@ -16,6 +16,7 @@ import java.util.List;
 
 @AutoRegister
 public class SiltedUpBuuff extends AbstractPitBuff implements Listener {
+
     @Override
     public String getInternalBuffName() {
         return "pin_down_de_buff";
@@ -40,6 +41,7 @@ public class SiltedUpBuuff extends AbstractPitBuff implements Listener {
     }
 
     class rundebuff extends BukkitRunnable {
+
         Player player;
 
         rundebuff(PitStackBuffEvent event) {

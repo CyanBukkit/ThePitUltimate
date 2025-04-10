@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
  * @Date: 2021/1/30 1:07
  */
 public class PitKillEvent extends PitEvent {
+
     private final Player killer;
     private final LivingEntity target;
     private double coins;

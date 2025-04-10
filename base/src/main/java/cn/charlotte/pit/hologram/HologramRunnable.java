@@ -20,6 +20,7 @@ import java.util.Map;
  * @Date: 2021/1/4 13:25
  */
 public class HologramRunnable extends BukkitRunnable {
+
     private long tick = 0;
 
     public HologramRunnable() {
@@ -29,7 +30,7 @@ public class HologramRunnable extends BukkitRunnable {
     @Override
     @SneakyThrows
     public void run() {
-        if(!MinecraftServer.getServer().isRunning()){
+        if (!MinecraftServer.getServer().isRunning()) {
             this.cancel();
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -45,7 +46,7 @@ public class HologramRunnable extends BukkitRunnable {
                     continue;
                 }
 
-                int i1 = Math.max(1,abstractHologram.loopTicks());
+                int i1 = Math.max(1, abstractHologram.loopTicks());
 
                 if (tick % i1 != 0) {
                     continue;

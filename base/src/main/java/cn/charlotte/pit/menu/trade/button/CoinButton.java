@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/1/19 21:10
  */
 public class CoinButton extends Button {
+
     private final TradeManager tradeManager;
 
     public CoinButton(TradeManager tradeManager) {

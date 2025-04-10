@@ -12,6 +12,7 @@ import java.util.Set;
  * @Date: 2021/1/19 16:18
  */
 public class QuestData {
+
     @JsonIgnore
     AbstractQuest handle;
     private String internalName;
@@ -21,17 +22,19 @@ public class QuestData {
     private int current;
     private int total;
     private Set<String> killed;
+
     @JsonIgnore
-    public AbstractQuest getHandle(){
-        if(handle == null){
+    public AbstractQuest getHandle() {
+        if (handle == null) {
             for (AbstractQuest quest : ThePit.getInstance().getQuestFactory().getQuests()) {
-                if(quest.getQuestInternalName().equals(internalName)){
-                    this.handle =quest;
+                if (quest.getQuestInternalName().equals(internalName)) {
+                    this.handle = quest;
                 }
             }
         }
         return handle;
     }
+
     public QuestData() {
         this.killed = new HashSet<>();
     }

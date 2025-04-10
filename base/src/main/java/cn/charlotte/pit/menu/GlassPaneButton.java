@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/1/1 17:16
  */
 public class GlassPaneButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.STAINED_GLASS_PANE)

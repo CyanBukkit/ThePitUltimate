@@ -13,6 +13,7 @@ import java.io.IOException;
  * @Date: 2021/1/8 18:35
  */
 public class EnderChestDeserializer extends JsonDeserializer<PlayerEnderChest> {
+
     @Override
     public PlayerEnderChest deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         try {

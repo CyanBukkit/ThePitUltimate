@@ -15,6 +15,7 @@ import java.util.Map;
  * @Created_In: 2021/1/4 19:48
  */
 public class PrestigeMainMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "精通";

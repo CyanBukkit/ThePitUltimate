@@ -14,6 +14,7 @@ import java.util.HashMap;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class BuffData {
+
     private HashMap<String, Buff> buffs = new HashMap<>();
 
     public Buff getBuff(String internal) {
@@ -23,6 +24,7 @@ public class BuffData {
 
     @Data
     public class Buff {
+
         private LongArrayList buff;
 
         public Buff() {

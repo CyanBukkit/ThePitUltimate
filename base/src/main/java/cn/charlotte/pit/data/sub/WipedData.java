@@ -7,6 +7,7 @@ import cn.charlotte.pit.data.PlayerProfile;
  * @Date: 2021/1/22 22:34
  */
 public class WipedData {
+
     private long wipedTimestamp;
     private PlayerProfile wipedProfile;
     private String reason;

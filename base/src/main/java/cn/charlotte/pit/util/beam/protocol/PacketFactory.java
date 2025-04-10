@@ -30,6 +30,7 @@ import static com.comphenix.protocol.PacketType.Play.Server.*;
  * @author Jaxon A Brown
  */
 public class PacketFactory {
+
     /**
      * Creates a packet to spawn a squid at the location.
      *

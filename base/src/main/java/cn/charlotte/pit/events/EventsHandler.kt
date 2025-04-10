@@ -46,7 +46,11 @@ object EventsHandler {
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
-            ThePit.getInstance().mongoDB.eventQueueCollection.replaceOne(Filters.eq("id", "1"), eventQueue, ReplaceOptions().upsert(true))
+            ThePit.getInstance().mongoDB.eventQueueCollection.replaceOne(
+                Filters.eq("id", "1"),
+                eventQueue,
+                ReplaceOptions().upsert(true)
+            )
         }
     }
 
@@ -67,16 +71,16 @@ object EventsHandler {
             if (this.epicQueue.size < 45 || this.normalQueue.size < 90) {
                 this.refreshEvents()
             }
-        }catch (e: Exception) {
+        } catch (e: Exception) {
 
         }
     }
 
     fun nextEvent(major: Boolean): String {
-        if(epicQueue.isEmpty() || normalQueue.isEmpty()){
+        if (epicQueue.isEmpty() || normalQueue.isEmpty()) {
             this.refreshEvents()
         }
-        if (epicQueue.isEmpty() && normalQueue.isEmpty()){
+        if (epicQueue.isEmpty() && normalQueue.isEmpty()) {
             return "NULL"
         }
         if (major) return epicQueue.poll() else return normalQueue.poll()

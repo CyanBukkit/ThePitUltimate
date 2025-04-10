@@ -19,6 +19,7 @@ import java.util.Random;
  * @Date: 2021/1/17 20:52
  */
 public abstract class AbstractQuest {
+
     private static final Random random = new Random();
 
     public abstract String getQuestInternalName();

@@ -33,6 +33,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Path;
 
 public class ReflectionClassLoader implements PluginClassLoader {
+
     private static final Method ADD_URL_METHOD;
 
     static {

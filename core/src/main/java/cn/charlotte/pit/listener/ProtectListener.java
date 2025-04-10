@@ -36,7 +36,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -87,10 +89,23 @@ public class ProtectListener implements Listener {
                 return;
             }
 
+            Set<Material> BLOCKED_MATERIALS = EnumSet.of(
+                    Material.WATER,
+                    Material.STATIONARY_WATER,
+                    Material.WATER_LILY
+            );
+
+            Location temp = location.clone();
+
             for (int i = -3; i < 3; i++) {
                 for (int j = -3; j < 3; j++) {
                     for (int k = -3; k < 3; k++) {
-                        if (location.clone().add(i, j, k).getBlock().getType() == Material.WATER_LILY || location.clone().add(i, j, k).getBlock().getType() == Material.WATER || location.clone().add(i, j, k).getBlock().getType() == Material.STATIONARY_WATER) {
+                        temp.setX(location.getX() + i);
+                        temp.setY(location.getY() + j);
+                        temp.setZ(location.getZ() + k);
+
+                        Material type = temp.getBlock().getType();
+                        if (BLOCKED_MATERIALS.contains(type)) {
                             event.setCancelled(true);
                             event.getPlayer().sendMessage(CC.translate("&c你无法修改此处方块!"));
                             return;
@@ -174,12 +189,24 @@ public class ProtectListener implements Listener {
                 return;
             }
 
+            Set<Material> BLOCKED_MATERIALS = EnumSet.of(
+                    Material.WATER,
+                    Material.STATIONARY_WATER,
+                    Material.WATER_LILY
+            );
+
             Location location = event.getBlockClicked().getLocation();
+            Location temp = location.clone();
 
             for (int i = -3; i < 3; i++) {
                 for (int j = -3; j < 3; j++) {
                     for (int k = -3; k < 3; k++) {
-                        if (location.clone().add(i, j, k).getBlock().getType() == Material.WATER_LILY || location.clone().add(i, j, k).getBlock().getType() == Material.WATER || location.clone().add(i, j, k).getBlock().getType() == Material.STATIONARY_WATER) {
+                        temp.setX(location.getX() + i);
+                        temp.setY(location.getY() + j);
+                        temp.setZ(location.getZ() + k);
+
+                        Material type = temp.getBlock().getType();
+                        if (BLOCKED_MATERIALS.contains(type)) {
                             event.setCancelled(true);
                             event.getPlayer().sendMessage(CC.translate("&c你无法修改此处方块!"));
                             return;

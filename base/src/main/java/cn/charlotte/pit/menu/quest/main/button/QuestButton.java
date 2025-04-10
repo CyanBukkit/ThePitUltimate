@@ -24,6 +24,7 @@ import java.util.List;
  * @Date: 2021/1/19 16:55
  */
 public class QuestButton extends Button {
+
     private final AbstractQuest quest;
     private final int level;
 

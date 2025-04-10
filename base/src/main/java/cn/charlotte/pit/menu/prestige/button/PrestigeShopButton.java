@@ -17,6 +17,7 @@ import java.util.List;
  * @Created_In: 2021/1/4 20:51
  */
 public class PrestigeShopButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

@@ -14,6 +14,8 @@ import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.listener.PacketListener;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_8_R3.NBTBase;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import net.minecraft.server.v1_8_R3.NBTTagString;
@@ -24,6 +26,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -33,13 +36,13 @@ public class Utils {
      * 需要Paper支持。
      * @return
      */
-    public static final net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
+    public static net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
         return PublicUtil.toNMStackQuick(item);
     }
     /**
      * 随机color
      */
-    private static ChatColor[] CHAT_COLORS = ChatColor.values();
+    private static final ChatColor[] CHAT_COLORS = ChatColor.values();
     public static ChatColor randomColor(){
         return CHAT_COLORS[ThreadLocalRandom.current().nextInt(Math.max(0,CHAT_COLORS.length - 1))];
     }
@@ -58,8 +61,12 @@ public class Utils {
      * 超级快，nano respond o(":".length())
      * 0 - len
      */
+    @SneakyThrows
     public static void readEnchantments(Object2IntMap<AbstractEnchantment> ment,NBTTagList nbtTagList) {
-        nbtTagList.list.forEach(nbtBase -> {
+        Field listField = NBTTagList.class.getField("list");
+        listField.setAccessible(true);
+        List<NBTBase> list = (List<NBTBase>) listField.get(nbtTagList);
+        list.forEach(nbtBase -> {
             if (nbtBase instanceof NBTTagString nbtTagString) {
                 String s = nbtTagString.a_(); //read NBT
                 final int offset = 2;
@@ -241,8 +248,6 @@ public class Utils {
     }
 
     public static ItemStack subtractLive(IMythicItem item) {
-
-
         if (item == null) return null;
         if (item.isEnchanted()) {
             if (item.getLive() <= 1) {
@@ -253,9 +258,5 @@ public class Utils {
             }
         }
         return item.toItemStack();
-    }
-
-    public static void addCommonHandler(@NotNull PacketListener packetListener) {
-        PublicUtil.addCommonHandler(packetListener);
     }
 }

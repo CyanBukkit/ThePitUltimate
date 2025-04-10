@@ -10,6 +10,7 @@ import java.util.UUID;
  * @Date: 2021/1/3 12:57
  */
 public class LeaderBoardEntry {
+
     private static List<LeaderBoardEntry> leaderBoardEntries = new ObjectArrayList<>();
 
     private final String name;

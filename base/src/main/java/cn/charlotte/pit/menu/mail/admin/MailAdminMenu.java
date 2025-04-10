@@ -11,6 +11,7 @@ import java.util.Map;
  * @Date: 2021/3/16 23:36
  */
 public class MailAdminMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "邮件管理中心";

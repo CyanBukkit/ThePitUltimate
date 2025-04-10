@@ -24,7 +24,7 @@ public interface PitInternalHook {
 
     void openTradeTrackMenu(Player player, PlayerProfile profile, List<TradeData> data);
 
-    void openBackupShowMenu(Player player, PlayerProfile profile,List<PlayerInvBackup> backups , PlayerInvBackup backup, boolean enderChest);
+    void openBackupShowMenu(Player player, PlayerProfile profile, List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean enderChest);
 
     void openMenu(Player player, String menuName);
 
@@ -43,8 +43,10 @@ public interface PitInternalHook {
     ItemStack generateItem(String item);
 
     int getItemEnchantLevel(ItemStack item, String enchantName);
-    boolean openEvent(IEvent event,Player player);
-    default boolean isLoaded(){
+
+    boolean openEvent(IEvent event, Player player);
+
+    default boolean isLoaded() {
         return false;
     }
 }

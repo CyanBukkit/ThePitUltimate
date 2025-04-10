@@ -17,6 +17,7 @@ import java.util.UUID;
  * @Date: 2021/1/3 12:57
  */
 public class LeaderBoardRunnable extends BukkitRunnable {
+
     @SneakyThrows
     @Override
     public void run() {
@@ -42,7 +43,7 @@ public class LeaderBoardRunnable extends BukkitRunnable {
                 Double experience;
                 try {
                     experience = (Double) expObj;
-                }catch (Exception e) {
+                } catch (Exception e) {
                     experience = Double.valueOf(((Integer) expObj));
                 }
                 int prestige = document.getInteger("prestige");

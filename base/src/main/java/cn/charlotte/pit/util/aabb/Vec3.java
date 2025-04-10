@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.aabb;
 
 public class Vec3 {
+
     /**
      * X coordinate of Vec3D
      */

@@ -4,20 +4,19 @@
 
 package net.jitse.npclib.listeners;
 
-import cn.charlotte.pit.util.PublicUtil;
-import cn.charlotte.pit.util.proto.Reflection;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.events.NPCInteractEvent;
 import net.jitse.npclib.internal.NPCBase;
 import net.jitse.npclib.internal.NPCManager;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.jitse.npclib.utilities.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,20 +41,14 @@ public class PacketListener {
 
     public void start(NPCLib instance) {
         this.plugin = instance.getPlugin();
-        PacketHandler packetHandler = new PacketHandler() {
-            @Override
-            public void handleReceivedPacket(PlayerConnection playerConnection, Packet<?> packet) {
-                if (packet instanceof PacketPlayInUseEntity) {
-                    handleInteractPacket(playerConnection.getPlayer(), packet);
-                }
-            }
 
-            @Override
-            public void handleSentPacket(PlayerConnection playerConnection, Packet<?> packet) {
-
-            }
-        };
-        PublicUtil.addCommonHandler(packetHandler);
+        ProtocolLibrary.getProtocolManager()
+                .addPacketListener(new PacketAdapter(instance.getPlugin(), PacketType.Play.Client.USE_ENTITY) {
+                    @Override
+                    public void onPacketReceiving(PacketEvent event) {
+                        handleInteractPacket(event.getPlayer(), event.getPacket().getHandle());
+                    }
+                });
     }
 
     private void handleInteractPacket(Player player, Object packet) {

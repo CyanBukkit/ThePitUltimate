@@ -20,6 +20,7 @@ import java.util.Map;
  * @Created_In: 2021/1/7 15:47
  */
 public class BoostButton extends Button {
+
     private final AbstractPerk perk;
     private final int page;
 

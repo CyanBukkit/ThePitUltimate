@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ItemBuilder {
+
     private static int dontStack = 0;
     private ItemStack is;
 
@@ -159,6 +160,7 @@ public class ItemBuilder {
         this.changeNbt("boostedByGem", boosted);
         return this;
     }
+
     public ItemBuilder makeBoostedByGlobalGem(boolean boosted) {
         this.changeNbt("boostedByGlobalGem", boosted);
         return this;
@@ -390,6 +392,7 @@ public class ItemBuilder {
         this.changeNbt("deathDrop", drop);
         return this;
     }
+
     public ItemBuilder version(String version) {
         this.changeNbt("version", version);
         return this;

@@ -18,6 +18,7 @@ import java.util.List;
  * @Date 2021/6/10 9:19
  */
 public class MedalEntranceButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         MedalFactory medalFactory = ThePit.getInstance().getMedalFactory();

@@ -9,7 +9,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import org.spigotmc.AsyncCatcher
 
 /**
  * 2024/5/16<br>
@@ -37,7 +36,7 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun spawn(receivers: MutableCollection<out Player>?): Boolean {
-        if(AsyncCatcher.isAsync()){
+        if (!Bukkit.isPrimaryThread()) {
             Bukkit.getScheduler().runTask(ThePit.getInstance()) {
                 spawn(receivers)
             }
@@ -52,7 +51,7 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun spawn(): Boolean {
-        if(AsyncCatcher.isAsync()){
+        if (!Bukkit.isPrimaryThread()) {
             Bukkit.getScheduler().runTask(ThePit.getInstance()) {
                 spawn()
             }
@@ -64,7 +63,7 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun deSpawn(): Boolean {
-        if(!AsyncCatcher.isAsync()) {
+        if (Bukkit.isPrimaryThread()) {
             hologram.removeAll()
             spawned = false
             HologramAPI.removeHologram(this)
@@ -73,7 +72,7 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
                 deSpawn()
             }
         }
-            return true
+        return true
     }
 
     override fun getText(): String {
@@ -108,7 +107,7 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
     }
 
     override fun setLocation(loc: Location) {
-        if (AsyncCatcher.isAsync()) {
+        if (!Bukkit.isPrimaryThread()) {
             move(loc)
         } else {
             Bukkit.getScheduler().runTask(ThePit.getInstance()) {

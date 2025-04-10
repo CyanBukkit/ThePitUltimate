@@ -18,41 +18,47 @@ public class ItemUtil {
 
 
     public static String getUUID(ItemStack item) {
-        return getItemStringData(item,"uuid");
+        return getItemStringData(item, "uuid");
     }
 
-    public static UUID getUUIDObj(ItemStack stack){
+    public static UUID getUUIDObj(ItemStack stack) {
         String uuid = getUUID(stack);
-        if(uuid == null) return null;
+        if (uuid == null) return null;
         return UUID.fromString(uuid);
     }
+
     public static void setUUIDObj(ItemStack stack, UUID uuid) {
-        setUUID(stack,uuid.toString());
+        setUUID(stack, uuid.toString());
     }
+
     public static void setUUID(ItemStack stack, String uuid) {
         NBTTagCompound extra = getExtra(stack);
         if (extra != null) {
             extra.setString("uuid", uuid);
         }
     }
+
     public static void setVer(ItemStack stack, String ver) {
         NBTTagCompound extra = getExtra(stack);
         if (extra != null) {
             extra.setString("version", ver);
         }
     }
+
     public static String getVer(ItemStack stack) {
         NBTTagCompound extra = getExtra(stack);
-        if(extra != null){
+        if (extra != null) {
             NBTBase nbtBase = extra.get("version");
             return nbtBase instanceof NBTTagString ? ((NBTTagString) nbtBase).a_() : null;
         }
         return null;
     }
-    public static boolean shouldUpdateItem(ItemStack stack){
+
+    public static boolean shouldUpdateItem(ItemStack stack) {
         String ver = getVer(stack);
         return ver == null || ver.equals("NULL") || !PublicUtil.itemVersion.equals(ver);
     }
+
     public static UUID randomUUIDItem(ItemStack stack) {
         UUID uuid;
 
@@ -72,16 +78,19 @@ public class ItemUtil {
         setUUIDObj(stack, uuid); //async? I think never will have bugs on here
         return uuid;
     }
-    public static void signVer(ItemStack stack){
-        setVer(stack,PublicUtil.itemVersion);
+
+    public static void signVer(ItemStack stack) {
+        setVer(stack, PublicUtil.itemVersion);
     }
 
-    public static boolean shouldUpdateUUIDAndItem(ItemStack stack){
+    public static boolean shouldUpdateUUIDAndItem(ItemStack stack) {
         return shouldUpdateItem(stack) && shouldUpdateUUID();
     }
-    public static boolean shouldUpdateUUID(){
+
+    public static boolean shouldUpdateUUID() {
         return PublicUtil.itemVersion.endsWith("uuid");
     }
+
     public static boolean isIllegalItem(ItemStack item) {
         NBTTagCompound extra = getExtra(item);
         if (extra == null) {
@@ -92,11 +101,11 @@ public class ItemUtil {
     }
 
     public static boolean canDrop(ItemStack item) {
-        return getItemBoolData(item,"tradeAllow");
+        return getItemBoolData(item, "tradeAllow");
     }
 
     public static boolean isHealingItem(ItemStack item) {
-        return getItemBoolData(item,"isHealingItem");
+        return getItemBoolData(item, "isHealingItem");
     }
 
     public static boolean canTrade(ItemStack item) {
@@ -107,7 +116,7 @@ public class ItemUtil {
         }
 
         if (forceCanTrade(item)) {
-           return true;
+            return true;
         }
         String internalName = getInternalName(item);
         boolean b = extra.hasKey("canTrade") && extra.getBoolean("canTrade");
@@ -116,48 +125,51 @@ public class ItemUtil {
     }
 
     public static boolean forceCanTrade(ItemStack item) {
-        return getItemBoolData(item,"forceCanTrade");
+        return getItemBoolData(item, "forceCanTrade");
     }
 
     public static boolean canSaveEnderChest(ItemStack item) {
-        return getItemBoolData(item,"enderChest");
+        return getItemBoolData(item, "enderChest");
     }
 
     public static boolean isDefaultItem(ItemStack item) {
-        return getItemBoolData(item,"defaultItem");
+        return getItemBoolData(item, "defaultItem");
     }
+
     @Nullable
-    public static NBTTagCompound getExtra(ItemStack item){
+    public static NBTTagCompound getExtra(ItemStack item) {
         if (item == null || item.getTypeId() == 0) { //Faster
             return null;
         }
 
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(item);
         NBTTagCompound tag = nmsItem.getTag();
-        if(tag == null){
+        if (tag == null) {
             return null;
         }
-        if(tag.get("extra") instanceof NBTTagCompound extra){
+        if (tag.get("extra") instanceof NBTTagCompound extra) {
             return extra;
         }
         return null;
     }
+
     public static boolean isDeathDrop(ItemStack item) {
-        return getItemBoolData(item,"deathDrop");
+        return getItemBoolData(item, "deathDrop");
     }
 
     public static boolean isRemovedOnJoin(ItemStack item) {
-        return getItemBoolData(item,"removeOnJoin");
+        return getItemBoolData(item, "removeOnJoin");
     }
 
     public static String getInternalName(ItemStack item) {
-        return getItemStringData(item,"internal");
+        return getItemStringData(item, "internal");
     }
-    public static Object[] getInternalNameAndUUID(ItemStack stack){
+
+    public static Object[] getInternalNameAndUUID(ItemStack stack) {
         NBTTagCompound extra = getExtra(stack);
         Object[] objects = new Object[2];
         String internal = getItemStringData0(extra, "internal");
-        String uuid = getItemStringData0(extra,"uuid");
+        String uuid = getItemStringData0(extra, "uuid");
         objects[0] = internal;
         objects[1] = uuid;
         return objects;
@@ -165,36 +177,39 @@ public class ItemUtil {
 
     public static Integer getItemIntData(ItemStack item, String key) {
         NBTTagCompound extra = getExtra(item);
-        if(extra != null){
+        if (extra != null) {
             NBTBase nbtBase = extra.get(key);
-            if(nbtBase instanceof NBTTagInt intData){
+            if (nbtBase instanceof NBTTagInt intData) {
                 return intData.d();
             }
         }
         return null;
     }
-    public static boolean getItemBoolData(ItemStack item, String key){
+
+    public static boolean getItemBoolData(ItemStack item, String key) {
         NBTTagCompound extra = getExtra(item);
-        if(extra != null){
+        if (extra != null) {
             NBTBase nbtBase = extra.get(key);
-            if(nbtBase instanceof NBTTagByte byted){
+            if (nbtBase instanceof NBTTagByte byted) {
                 return byted.f() != 0;
             }
         }
 
         return false;
     }
-    public static String getItemStringData0(NBTTagCompound extra, String key){
-        if(extra != null){
+
+    public static String getItemStringData0(NBTTagCompound extra, String key) {
+        if (extra != null) {
             NBTBase nbtBase = extra.get(key);
-            if(nbtBase instanceof NBTTagString string){
+            if (nbtBase instanceof NBTTagString string) {
                 return string.a_();
             }
         }
         return null;
     }
+
     public static String getItemStringData(ItemStack item, String key) {
-        return getItemStringData0(getExtra(item),key);
+        return getItemStringData0(getExtra(item), key);
 
     }
 

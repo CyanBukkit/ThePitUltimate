@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface IProfilerOperator {
+
     IOperator getIOperator(UUID uuid);
 
     IOperator getIOperator(String uuid);

@@ -58,7 +58,7 @@ public class RankUtil {
     private static Boolean mmEnable = null;
 
     public static String getPlayerName(UUID uuid) {
-        if(uuid == PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER){
+        if (uuid == PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER) {
             return CONSTANT_BOT_NAME;
         }
         Player player = Bukkit.getPlayer(uuid);
@@ -116,11 +116,11 @@ public class RankUtil {
     final static String CONSTANT_BOT_NAME = "§cPolpot";
 
     public static String getNameFormatWithPrefix(UUID uuid) {
-        if(uuid == PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER){
+        if (uuid == PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER) {
             return CONSTANT_BOT_NAME;
         }
         String playerName = getPlayerName(uuid);
-        if (playerName == null || "null".equals(playerName)){
+        if (playerName == null || "null".equals(playerName)) {
             return CONSTANT_BOT_NAME;
         }
         return LuckPermsUtil.getPrefix(uuid) + playerName;

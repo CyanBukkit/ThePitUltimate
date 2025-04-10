@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 
 @AutoRegister
 public class ScamArtistMedal extends AbstractMedal implements Listener {
+
     @Override
     public String getInternalName() {
         return "SCAM_ARTIST_UNLOCK";

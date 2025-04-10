@@ -13,55 +13,56 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class ClassUtil {
-        public static Collection<Class<?>> getClassesInPackage(JavaPlugin plugin, String packageName) {
-            Collection<Class<?>> classes = new ArrayList();
-            CodeSource codeSource = plugin.getClass().getProtectionDomain().getCodeSource();
-            URL resource = codeSource.getLocation();
-            String relPath = packageName.replace('.', '/');
-            String resPath = resource.getPath().replace("%20", " ");
-            String jarPath = resPath.replaceFirst("[.]jar[!].*", ".jar").replaceFirst("file:", "");
 
-            JarFile jarFile;
-            try {
-                jarFile = new JarFile(jarPath);
-            } catch (IOException var16) {
-                IOException e = var16;
-                throw new IllegalStateException("Unexpected IOException reading JAR File '" + jarPath + "'", e);
-            }
+    public static Collection<Class<?>> getClassesInPackage(JavaPlugin plugin, String packageName) {
+        Collection<Class<?>> classes = new ArrayList();
+        CodeSource codeSource = plugin.getClass().getProtectionDomain().getCodeSource();
+        URL resource = codeSource.getLocation();
+        String relPath = packageName.replace('.', '/');
+        String resPath = resource.getPath().replace("%20", " ");
+        String jarPath = resPath.replaceFirst("[.]jar[!].*", ".jar").replaceFirst("file:", "");
 
-            Enumeration<JarEntry> entries = jarFile.entries();
+        JarFile jarFile;
+        try {
+            jarFile = new JarFile(jarPath);
+        } catch (IOException var16) {
+            IOException e = var16;
+            throw new IllegalStateException("Unexpected IOException reading JAR File '" + jarPath + "'", e);
+        }
 
-            while(true) {
-                String className;
-                do {
-                    if (!entries.hasMoreElements()) {
-                        try {
-                            jarFile.close();
-                        } catch (IOException var15) {
-                            IOException e = var15;
-                            e.printStackTrace();
-                        }
+        Enumeration<JarEntry> entries = jarFile.entries();
 
-                        return ImmutableSet.copyOf(classes);
+        while (true) {
+            String className;
+            do {
+                if (!entries.hasMoreElements()) {
+                    try {
+                        jarFile.close();
+                    } catch (IOException var15) {
+                        IOException e = var15;
+                        e.printStackTrace();
                     }
 
-                    JarEntry entry = (JarEntry)entries.nextElement();
-                    String entryName = entry.getName();
-                    className = null;
-                    if (entryName.endsWith(".class") && entryName.startsWith(relPath) && entryName.length() > relPath.length() + "/".length()) {
-                        className = entryName.replace('/', '.').replace('\\', '.').replace(".class", "");
-                    }
-                } while(className == null);
-
-                Class clazz;
-                try {
-                    clazz = plugin.getClass().getClassLoader().loadClass(className);
-                } catch (NoClassDefFoundError | ClassNotFoundException var17) {
-                    continue;
+                    return ImmutableSet.copyOf(classes);
                 }
 
-                classes.add(clazz);
+                JarEntry entry = (JarEntry) entries.nextElement();
+                String entryName = entry.getName();
+                className = null;
+                if (entryName.endsWith(".class") && entryName.startsWith(relPath) && entryName.length() > relPath.length() + "/".length()) {
+                    className = entryName.replace('/', '.').replace('\\', '.').replace(".class", "");
+                }
+            } while (className == null);
+
+            Class clazz;
+            try {
+                clazz = plugin.getClass().getClassLoader().loadClass(className);
+            } catch (NoClassDefFoundError | ClassNotFoundException var17) {
+                continue;
             }
+
+            classes.add(clazz);
         }
+    }
 
 }

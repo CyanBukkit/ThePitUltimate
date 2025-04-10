@@ -8,6 +8,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  * @Date 2021/6/11 8:35
  */
 public class SupporterMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "SUPPORTER_BUYER";

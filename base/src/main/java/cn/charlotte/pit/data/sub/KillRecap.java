@@ -4,7 +4,6 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.util.RangedStreamLineList;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectLists;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +15,7 @@ import java.util.function.Predicate;
  * @Date: 2021/2/2 22:45
  */
 public class KillRecap {
+
     public static Map<UUID, KillRecap> recapMap = new HashMap<>();
 
 
@@ -47,7 +47,8 @@ public class KillRecap {
     private List<AssistData> assistData = new ObjectArrayList<>();
     static Predicate<DamageData> damageDataPredicate = i -> i.getTimer().hasExpired();
     //damage log
-    private RangedStreamLineList<DamageData> damageLogs = new RangedStreamLineList<DamageData>(100, damageDataPredicate);;
+    private RangedStreamLineList<DamageData> damageLogs = new RangedStreamLineList<DamageData>(100, damageDataPredicate);
+    ;
 
 
     public KillRecap() {
@@ -186,7 +187,7 @@ public class KillRecap {
     }
 
     public void setDamageLogs(List<DamageData> damageLogs) {
-        this.damageLogs = new RangedStreamLineList<>(128,damageDataPredicate,damageLogs);
+        this.damageLogs = new RangedStreamLineList<>(128, damageDataPredicate, damageLogs);
     }
 
     public boolean equals(final Object o) {
@@ -281,6 +282,7 @@ public class KillRecap {
     }
 
     public static class DamageData {
+
         private boolean attack;
         private boolean melee;
         private double damage;
@@ -411,6 +413,7 @@ public class KillRecap {
     }
 
     public static class AssistData {
+
         private String displayName;
         private double percentage;
 

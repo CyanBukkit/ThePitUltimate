@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class GenesisTierMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "GENESIS_TIER_VII";

@@ -15,6 +15,7 @@ import java.util.Map;
  * @Created_In: 2021/1/31 19:25
  */
 public class QuestSanctuaryMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "兑换所";

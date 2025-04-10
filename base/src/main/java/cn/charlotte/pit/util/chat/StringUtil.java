@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
  * @Date: 2021/1/3 22:44
  */
 public class StringUtil {
+
     private static final long million = 100000000;
     private static final long tenkilo = 10000;
     public static DecimalFormat decimalFormat = new java.text.DecimalFormat("0.00");

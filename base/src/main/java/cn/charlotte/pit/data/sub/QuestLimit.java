@@ -5,6 +5,7 @@ package cn.charlotte.pit.data.sub;
  * @Created_In: 2021/4/7 19:04
  */
 public class QuestLimit {
+
     private long lastRefresh;
     private int times;
 

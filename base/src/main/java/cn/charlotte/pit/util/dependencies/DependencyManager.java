@@ -255,6 +255,7 @@ public class DependencyManager {
     }
 
     private static final class Source {
+
         private final Dependency dependency;
         private final Path file;
 

@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/3/26 17:33
  */
 public class CDKEditStringButton extends Button {
+
     private final ItemStack material;
     private final Menu menu;
     private final Callback<String> doubleCallback;

@@ -1,6 +1,6 @@
 package io.irina.backports.utils;
 
-import io.papermc.paper.util.IntegerUtil;
+import cn.charlotte.pit.util.arithmetic.IntegerUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.commons.lang3.Validate;
 
@@ -238,7 +238,7 @@ public class SWMRLong2ObjectHashTable<V> {
         if (capacity >= MAXIMUM_CAPACITY) {
             return MAXIMUM_CAPACITY;
         }
-        return IntegerUtil.roundCeilLog2(capacity);
+        return IntegerUtils.roundCeilLog2(capacity);
     }
 
     /** Callers must still use acquire when reading the value of the entry. */
@@ -497,7 +497,7 @@ public class SWMRLong2ObjectHashTable<V> {
         }
 
         final TableEntry<V>[] table = this.getTablePlain();
-        int newCapacity = minCapacity >= MAXIMUM_CAPACITY ? MAXIMUM_CAPACITY : IntegerUtil.roundCeilLog2(minCapacity);
+        int newCapacity = minCapacity >= MAXIMUM_CAPACITY ? MAXIMUM_CAPACITY : IntegerUtils.roundCeilLog2(minCapacity);
         if (newCapacity < 0) {
             newCapacity = MAXIMUM_CAPACITY;
         }

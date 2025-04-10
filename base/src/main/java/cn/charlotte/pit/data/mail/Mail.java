@@ -11,6 +11,7 @@ import java.util.UUID;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Mail {
+
     private String uuid;
     private String title;
     private String content;

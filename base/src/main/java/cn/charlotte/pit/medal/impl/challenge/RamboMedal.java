@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 
 @AutoRegister
 public class RamboMedal extends AbstractMedal implements Listener {
+
     @Override
     public String getInternalName() {
         return "RAMBO_STREAK";

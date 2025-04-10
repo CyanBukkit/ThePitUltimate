@@ -15,6 +15,7 @@ import org.bukkit.event.Cancellable;
 @RequiredArgsConstructor
 @Data
 public class PitStackBuffEvent extends PitEvent implements Cancellable {
+
     private final Player player;
     private final AbstractPitBuff buff;
     private final long buffExpire;

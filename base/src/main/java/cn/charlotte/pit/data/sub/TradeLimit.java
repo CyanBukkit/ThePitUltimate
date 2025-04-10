@@ -7,10 +7,12 @@ import java.util.Objects;
  * @Created_In: 2021/1/27 16:56
  */
 public class TradeLimit {
+
     private long lastRefresh;
     private int times;
     private double amount;
-    public TradeLimit(){
+
+    public TradeLimit() {
     }
 
     public TradeLimit(long lastRefresh, int times, double amount) {

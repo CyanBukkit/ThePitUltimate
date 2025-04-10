@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class ObsidianBreakMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "BREAK_HUNDRED_OBSIDIAN";

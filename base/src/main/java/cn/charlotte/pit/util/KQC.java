@@ -6,6 +6,7 @@ import pku.yim.license.MagicLicense;
 import pku.yim.license.Response;
 
 public class KQC {
+
     private static final Object lock = new Object();
     private static Exception exception;
     private static volatile boolean isLoaded;

@@ -27,6 +27,7 @@ import java.util.Map;
  * @Date: 2021/1/1 23:10
  */
 public class PerkBuyButton extends Button {
+
     private final AbstractPerk perk;
     private final int page;
     private final PerkType perkType;

@@ -2,7 +2,6 @@ package cn.charlotte.pit.enchantment;
 
 import cn.charlotte.pit.parm.listener.*;
 import cn.charlotte.pit.util.PublicUtil;
-import io.irina.backports.utils.SWMRHashTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -53,25 +52,26 @@ public class EnchantmentFactor {
     public void init(Collection<Class<? extends AbstractEnchantment>> classes) {
         log.info("Loading enchantments...");
         log.info("Last enchantments {}", enchantmentMap);
-            for (Class<?> clazz : classes) {
-                if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
-                    try {
-                        AbstractEnchantment enchantment = (AbstractEnchantment) clazz.getConstructor().newInstance();
-                        this.enchantmentMap.put(enchantment.getNbtName(), enchantment);
-                        PublicUtil.register(clazz, enchantment, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
-                        registerTickTask(clazz, enchantment);
-                    } catch (Exception e) {
-                        log.error("{} exception on install enchantments.", String.valueOf(e));
-                    }
+        for (Class<?> clazz : classes) {
+            if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
+                try {
+                    AbstractEnchantment enchantment = (AbstractEnchantment) clazz.getConstructor().newInstance();
+                    this.enchantmentMap.put(enchantment.getNbtName(), enchantment);
+                    PublicUtil.register(clazz, enchantment, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
+                    registerTickTask(clazz, enchantment);
+                } catch (Exception e) {
+                    log.error("{} exception on install enchantments.", String.valueOf(e));
                 }
             }
+        }
         log.info("{} enchantments loaded!", enchantmentMap.size());
     }
-    public void unregister(String nbtName,String enchantName){
-        if(nbtName == null){
+
+    public void unregister(String nbtName, String enchantName) {
+        if (nbtName == null) {
             nbtName = "NULL";
         }
-        if(enchantName == null){
+        if (enchantName == null) {
             enchantName = "NULL";
         }
         String finalNbtName = nbtName;
@@ -79,7 +79,7 @@ public class EnchantmentFactor {
         int size = this.enchantmentMap.size();
         Iterator<AbstractEnchantment> iterator = this.enchantmentMap
                 .values().iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             AbstractEnchantment enchObj = iterator.next();
             String nbt = enchObj.getNbtName();
             boolean b = nbt.equalsIgnoreCase(finalNbtName) || enchObj.getEnchantName().equalsIgnoreCase(finalEnchantName);
@@ -91,6 +91,7 @@ public class EnchantmentFactor {
         }
         log.info("Enchantments {} -> {}", size, enchantmentMap.size());
     }
+
     private void registerTickTask(Class<?> clazz, AbstractEnchantment enchantment) {
         if (ITickTask.class.isAssignableFrom(clazz)) {
             tickTasks.put(enchantment.getNbtName(), (ITickTask) enchantment);

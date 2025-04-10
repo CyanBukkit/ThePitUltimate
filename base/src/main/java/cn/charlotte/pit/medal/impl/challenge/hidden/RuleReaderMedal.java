@@ -8,6 +8,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  * @Date 2021/6/11 8:04
  */
 public class RuleReaderMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "RULE_BOOK_READER";

@@ -20,6 +20,7 @@ import java.util.List;
  * @Created_In: 2021/1/3 18:15
  */
 public class PerformanceStatusButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -29,7 +30,7 @@ public class PerformanceStatusButton extends Button {
             experience = experience + LevelUtil.getLevelTotalExperience(i, 120);
         }
         List<String> lores = new ArrayList<>();
-        lores.add("&7总经验值: &b" + StringUtil.getFormatLong((long)(experience)));
+        lores.add("&7总经验值: &b" + StringUtil.getFormatLong((long) (experience)));
         lores.add("&7注册时间: &d" + TimeUtil.millisToRoundedTime(System.currentTimeMillis() - profile.getRegisterTime()) + "前");
         if (TimeUtil.millisToRoundedTime(System.currentTimeMillis() - profile.getRegisterTime()).equalsIgnoreCase("55 年")) {
             lores.add("&7debug: &d" + profile.getRegisterTime());

@@ -27,6 +27,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class OfferButton extends Button {
+
     private final Player target;
 
     @Override
@@ -84,7 +85,7 @@ public class OfferButton extends Button {
         PlayerInv bInv = new PlayerInv();
         bInv.setContents(itemStacks.toArray(new ItemStack[36]));
         tradeData.setBPaidItem(bInv);
-        tradeData.setAPaidCoin((long)(targetProfile.getOfferData().getPrice()));
+        tradeData.setAPaidCoin((long) (targetProfile.getOfferData().getPrice()));
         PlayerInv aInv = new PlayerInv();
         aInv.setContents(new ItemStack[36]);
         tradeData.setAPaidItem(aInv);

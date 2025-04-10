@@ -13,6 +13,7 @@ import org.bukkit.event.Cancellable;
 @RequiredArgsConstructor
 @Data
 public class OriginalTimeChangeEvent extends PitEvent implements Cancellable {
+
     private final long time;
     private boolean cancelled;
 }

@@ -5,6 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.potion.PotionEffect;
 
 public class PotionAddEvent extends PitEvent implements Cancellable {
+
     private final Player player;
     private final PotionEffect effect;
     private boolean cancel;

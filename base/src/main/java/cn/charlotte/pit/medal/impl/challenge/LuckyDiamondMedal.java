@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class LuckyDiamondMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "LUCKY_DIAMOND";

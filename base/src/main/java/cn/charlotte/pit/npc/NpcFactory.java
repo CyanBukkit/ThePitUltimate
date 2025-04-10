@@ -23,6 +23,7 @@ import java.util.List;
  */
 //@AutoRegister
 public class NpcFactory implements Listener {
+
     private static final List<AbstractPitNPC> pitNpc = new ArrayList<>();
 
     public static List<AbstractPitNPC> getPitNpc() {

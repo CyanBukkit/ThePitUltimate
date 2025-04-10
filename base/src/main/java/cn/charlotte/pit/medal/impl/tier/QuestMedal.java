@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 
 @AutoRegister
 public class QuestMedal extends AbstractMedal implements Listener {
+
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
 
     @Override

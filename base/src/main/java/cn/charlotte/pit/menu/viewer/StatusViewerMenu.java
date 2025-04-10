@@ -30,6 +30,7 @@ import java.util.Map;
  * @Created_In: 2021/1/12 15:53
  */
 public class StatusViewerMenu extends Menu {
+
     private final PlayerProfile profile;
 
     private boolean adminVersion = false;

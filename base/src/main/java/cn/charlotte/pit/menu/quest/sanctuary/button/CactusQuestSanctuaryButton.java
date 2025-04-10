@@ -18,6 +18,7 @@ import java.util.List;
  * @Created_In: 2021/2/21 17:33
  */
 public class CactusQuestSanctuaryButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

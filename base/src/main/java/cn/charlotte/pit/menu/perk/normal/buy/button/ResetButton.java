@@ -19,6 +19,7 @@ import java.util.Map;
  * @Date: 2021/1/1 23:56
  */
 public class ResetButton extends Button {
+
     private final int page;
 
     public ResetButton(int page) {
