@@ -91,7 +91,7 @@ import java.util.concurrent.RejectedExecutionException;
 
 public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
 
-    @Getter
+
     public static PitInternalHook api;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
     private static boolean DEBUG_SERVER = false;
@@ -207,6 +207,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
         this.loadDatabase();
 //                this.loadOperator(); //operator
+        //Bridgeing
+        KQC.hook();
+        KQC.ensureIsLoaded();
         this.loadItemFactor();
         this.loadMenu();
         this.loadNpc();
@@ -267,9 +270,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
-        //Bridgeing
-        KQC.hook();
-        KQC.ensureIsLoaded();
+
 
         sendLogs("宝马启动");
     }
@@ -914,6 +915,10 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         return Bukkit.isPrimaryThread();
     }
 
+
+    public static PitInternalHook getApi() {
+        return api;
+    }
 
     @Override
     public Resource getResourceType() {

@@ -1,12 +1,7 @@
 package cn.charlotte.pit;
 
 import cn.charlotte.pit.impl.PitInternalImpl;
-import cn.charlotte.pit.runnable.AsyncTickHandler;
-import cn.charlotte.pit.util.KQC;
 
-
-import java.io.IOException;
-import java.net.InetAddress;
 
 public class PitMain {
     private static PitHook hook;

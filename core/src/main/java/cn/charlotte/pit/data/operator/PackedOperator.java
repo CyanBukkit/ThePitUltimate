@@ -120,6 +120,7 @@ public class PackedOperator implements IOperator {
             profile.accept(PackedOperator.this.profile);
         });
     }
+
     public Promise promise(Consumer<PlayerProfile> profile){
         Promise promise = new Promise();
         offerOperation(() -> {
