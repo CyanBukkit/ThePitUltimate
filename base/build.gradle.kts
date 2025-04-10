@@ -30,7 +30,6 @@ tasks.named<ShadowJar>("shadowJar") {
     relocate("dev.rollczi","cn.charlotte.pit.libs")
     relocate("cn.hutool","cn.charlotte.pit.libs")
     relocate("io.irina","cn.charlotte.pit.libs")
-    relocate("net","cn.charlotte.pit.libs")
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
     mergeServiceFiles()

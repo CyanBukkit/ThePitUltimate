@@ -79,7 +79,9 @@ import java.util.concurrent.*;
         "lastDamageAt",
         "heldItem",
         "leggings",
-        "code"
+        "code",
+        "leggingItemStack",
+        "heldItemStack"
 })
 public class PlayerProfile {
 
@@ -746,6 +748,7 @@ public class PlayerProfile {
     public KingsQuestsData kingsQuestsData = new KingsQuestsData();
 
     private long lastRenameTime = 0;
+
     public ItemStack heldItemStack;
 
     public ItemStack leggingItemStack;

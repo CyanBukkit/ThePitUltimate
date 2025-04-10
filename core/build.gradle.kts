@@ -26,7 +26,11 @@ repositories {
 tasks.named<ShadowJar>("shadowJar") {
     archiveFileName.set("ThePitUltimate-$version.jar")
     exclude("META-INF/**")
-
+    relocate("pku.yim.license", "cn.charlotte.pit.license")
+    relocate("panda","cn.charlotte.pit.libs")
+    relocate("dev.rollczi","cn.charlotte.pit.libs")
+    relocate("cn.hutool","cn.charlotte.pit.libs")
+    relocate("io.irina","cn.charlotte.pit.libs")
     exclude("org/**")
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
