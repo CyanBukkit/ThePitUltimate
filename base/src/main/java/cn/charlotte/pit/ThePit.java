@@ -207,9 +207,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
         this.loadDatabase();
 //                this.loadOperator(); //operator
-        //Bridgeing
-        KQC.hook();
-        KQC.ensureIsLoaded();
+
         this.loadItemFactor();
         this.loadMenu();
         this.loadNpc();
@@ -271,7 +269,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
 
-
+        //Bridgeing
+        KQC.hook();
+        KQC.ensureIsLoaded();
         sendLogs("宝马启动");
     }
 
@@ -476,9 +476,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         }
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
-                new Dependency("expressible-kt", "org.panda-lang", "expessible-kt", "1.3.6", LoaderType.REFLECTION),
+            /*    new Dependency("expressible-kt", "org.panda-lang", "expessible-kt", "1.3.6", LoaderType.REFLECTION),
                 new Dependency("expressible", "org.panda-lang", "expessible", "1.3.6", LoaderType.REFLECTION),
-                //adventure-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform" }
+                //adventure-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform" }*/
                 new Dependency("kotlin", "org.jetbrains.kotlin", "kotlin-stdlib", "2.1.20", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-bukkit", "net.kyori", "adventure-platform-bukkit", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-facet", "net.kyori", "adventure-platform-facet", "4.3.2", LoaderType.REFLECTION),
@@ -491,7 +491,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 new Dependency("adventure-key", "net.kyori", "adventure-key", "4.13.1", LoaderType.REFLECTION),
                 new Dependency("adventure-api", "net.kyori", "adventure-api", "4.13.1", LoaderType.REFLECTION),
 
-                new Dependency("litecommands-core", "dev.rollczi", "litecommands-core", "3.4.1", LoaderType.REFLECTION),
+     /*           new Dependency("litecommands-core", "dev.rollczi", "litecommands-core", "3.4.1", LoaderType.REFLECTION),
                 new Dependency("litecommands-bukkit", "dev.rollczi", "litecommands-bukkit", "3.4.1", LoaderType.REFLECTION),
                 new Dependency("expiringmap", "net.jodah", "expiringmap", "0.5.11"
                         , LoaderType.REFLECTION),
@@ -499,7 +499,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
                 new Dependency("litecommands-programmatic", "dev.rollczi", "litecommands-programmatic", "3.4.1", LoaderType.REFLECTION),
                 new Dependency("litecommands-annotations", "dev.rollczi", "litecommands-annotations", "3.4.1", LoaderType.REFLECTION),
-
+*/
                 new Dependency(
                         "websocket",
                         "org.java-websocket",

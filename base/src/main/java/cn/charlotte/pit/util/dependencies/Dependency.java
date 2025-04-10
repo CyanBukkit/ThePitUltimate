@@ -41,6 +41,12 @@ public class Dependency {
     private static final String AIKAR_REPO = "https://repo.aikar.co/content/groups/aikar/";
     private static final String OSSRH_REPO = "https://oss.sonatype.org/content/groups/public/";
     private static final String PANDA_REPO = "https://repo.panda-lang.org/releases";
+    private static final String CRAZY = "https://repo.crazycrew.us/releases";
+    private static final String CODEMC = "https://repo.codemc.io/repository/maven-public/";
+    private static final String INV = "https://repo.inventivetalent.org/content/groups/public/";
+    private static final String JITPACK = "https://jitpack.io";
+    private static final String PLA = "https://repo.extendedclip.com/content/repositories/placeholderapi/";
+    private static final String ROSE = "https://repo.rosewooddev.io/repository/public/";
     private static final String MAVEN_FORMAT = "%s/%s/%s/%s-%s.jar";
 
     private final String name;
@@ -69,6 +75,12 @@ public class Dependency {
                     new URL(MAVEN_CENTRAL_REPO + path),
                     new URL(AIKAR_REPO + path),
                     new URL(OSSRH_REPO + path),
+                    new URL(CRAZY + path),
+                    new URL(CODEMC + path),
+                    new URL(INV + path),
+                    new URL(PLA + path),
+                    new URL(ROSE + path),
+                    new URL(JITPACK + path),
                     new URL(PANDA_REPO + path)
             );
         } catch (MalformedURLException e) {

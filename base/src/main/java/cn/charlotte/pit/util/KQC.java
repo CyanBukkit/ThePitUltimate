@@ -2,7 +2,6 @@ package cn.charlotte.pit.util;
 
 import cn.charlotte.pit.ThePit;
 import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
 import pku.yim.license.MagicLicense;
 import pku.yim.license.Response;
 
@@ -21,11 +20,7 @@ public class KQC {
                         "AQEBAQEBAX8=",
                         false
                 );
-
-                if (response != Response.ACCEPT) {
-                    ThePit.getInstance().info(response.toString());
-                    Bukkit.shutdown();
-                }
+                ThePit.getInstance().info(response.toString());
                 synchronized (lock) {
                     isLoaded = true;
                     lock.notifyAll();
