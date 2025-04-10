@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/1/1 22:43
  */
 public class PerkBuyMenu extends Menu {
+
     private final int page;
     private final int[] perkSlot = new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
     private final PerkType perkType;

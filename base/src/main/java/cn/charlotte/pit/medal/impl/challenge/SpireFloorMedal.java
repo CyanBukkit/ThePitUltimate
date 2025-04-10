@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class SpireFloorMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "SPIRE_HIGHEST_FLOOR";

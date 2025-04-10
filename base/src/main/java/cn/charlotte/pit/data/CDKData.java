@@ -17,6 +17,7 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CDKData {
+
     private static volatile Map<String, CDKData> cachedCDK = new HashMap<>();
     private static boolean loading;
 

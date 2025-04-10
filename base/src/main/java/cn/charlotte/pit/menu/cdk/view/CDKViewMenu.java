@@ -20,6 +20,7 @@ import java.util.Map;
  * @Date: 2021/3/27 19:32
  */
 public class CDKViewMenu extends Menu {
+
     private int total;
     private int current;
 

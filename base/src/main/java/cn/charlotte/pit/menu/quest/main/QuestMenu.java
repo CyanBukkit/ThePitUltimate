@@ -26,6 +26,7 @@ import java.util.Map;
  * @Date: 2021/1/19 16:52
  */
 public class QuestMenu extends Menu {
+
     private static final int[] slots = {29, 31, 33};
     private final String PATTEN_DEFAULT_YMD = "yyyy-MM-dd";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(PATTEN_DEFAULT_YMD);
@@ -71,7 +72,7 @@ public class QuestMenu extends Menu {
             } else {
                 int i = 0;
                 for (String internal : profile.getCurrentQuestList()) {
-                    String[] split = PublicUtil.splitByCharAt(internal,':');
+                    String[] split = PublicUtil.splitByCharAt(internal, ':');
                     String questName = split[0];
                     int level = Integer.parseInt(split[1]);
                     AbstractQuest abstractQuest = ThePit.getInstance()

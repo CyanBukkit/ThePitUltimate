@@ -21,7 +21,7 @@ object CleanupDupeEnch0525Runnable : BukkitRunnable() {
                 if (checkDupe(itemStack)) {
                     val mythicItem = MythicUtil.getMythicItem(itemStack)
                     if (mythicItem != null) {
-                        player.sendMessage("§c检测到您的背包中存在于8/13 20时的神经附魔，以为您清除。")
+                        player.sendMessage("§c检测到您的背包中存在于8/13 20时的神经附魔，已经为您清除。")
                         player.inventory.setItem(i, rollback(mythicItem))
                     }
                 }

@@ -13,6 +13,7 @@ import java.io.IOException;
  * @Date: 2021/1/8 18:24
  */
 public class PlayerInvSerializer extends JsonSerializer<PlayerInv> {
+
     @Override
     public void serialize(PlayerInv value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         try {

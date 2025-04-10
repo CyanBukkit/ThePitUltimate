@@ -11,6 +11,7 @@ public class CustomPitEffect {
     private CustomPitEffectType type;
     private int level;
     private Cooldown duration;
+
     public CustomPitEffect(CustomPitEffectType type, int level, Cooldown duration) {
         this.type = type;
         this.level = level;

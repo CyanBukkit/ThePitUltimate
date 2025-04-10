@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class ChatComponentBuilder extends ComponentBuilder {
+
     private static Field partsField;
     private static Field currField;
 
@@ -97,7 +98,9 @@ public class ChatComponentBuilder extends ComponentBuilder {
         this.getCurrent().setClickEvent(clickEvent);
         return this;
     }
+
     static Pattern pattern = Pattern.compile("[&ยง]{1}([a-fA-Fl-oL-O0-9-r]){1}");
+
     public ChatComponentBuilder parse(String text) {
 
         text = pattern.matcher(text).replaceAll("ยง$1");

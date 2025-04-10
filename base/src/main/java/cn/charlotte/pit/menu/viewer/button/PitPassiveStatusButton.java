@@ -18,6 +18,7 @@ import java.util.List;
  * @Created_In: 2021/1/12 16:34
  */
 public class PitPassiveStatusButton extends Button {
+
     private final PlayerProfile profile;
 
     public PitPassiveStatusButton(PlayerProfile profile) {

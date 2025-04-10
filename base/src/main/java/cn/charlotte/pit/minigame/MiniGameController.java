@@ -18,6 +18,7 @@ import java.util.List;
  */
 
 public class MiniGameController extends BukkitRunnable implements Listener {
+
     private final List<AbstractMiniGame> miniGameInstances;
     private long tick;
 

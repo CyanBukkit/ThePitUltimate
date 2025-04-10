@@ -18,6 +18,7 @@ import java.util.List;
  * @Date: 2021/1/4 13:04
  */
 public class LeaderBoardHologram extends AbstractHologram {
+
     @Override
     public String getInternalName() {
         return "leader_board_hologram";

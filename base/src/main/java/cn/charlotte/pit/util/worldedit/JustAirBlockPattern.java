@@ -7,6 +7,7 @@ import com.sk89q.worldedit.extent.Extent;
 import com.sk89q.worldedit.patterns.Pattern;
 
 public class JustAirBlockPattern implements Pattern {
+
     private BaseBlock block;
 
     public JustAirBlockPattern(BaseBlock block) {

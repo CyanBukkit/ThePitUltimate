@@ -61,7 +61,7 @@ public class AssembleThread implements Runnable {
 
                 AssembleUpdateEvent assembleUpdateEvent = new AssembleUpdateEvent(player);
                 assembleUpdateEvent.callEvent();
-                if(assembleUpdateEvent.isCancelled()){
+                if (assembleUpdateEvent.isCancelled()) {
                     return;
                 }
                 // Just make a variable so we don't have to
@@ -76,10 +76,10 @@ public class AssembleThread implements Runnable {
 
                 AssemblePostUpdateEvent assemblePostUpdateEvent = new AssemblePostUpdateEvent(player, newLines);
                 assemblePostUpdateEvent.callEvent();
-                if(assemblePostUpdateEvent.isCancelled()){
+                if (assemblePostUpdateEvent.isCancelled()) {
                     return;
                 }
-            // Allow adapter to return null/empty list to display nothing.
+                // Allow adapter to return null/empty list to display nothing.
                 if (newLines == null || newLines.isEmpty()) {
                     board.getEntries().removeIf(i -> {
                         i.remove();

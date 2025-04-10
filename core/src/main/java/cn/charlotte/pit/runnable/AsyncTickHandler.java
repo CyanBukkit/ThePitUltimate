@@ -19,15 +19,18 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
 
 
     ThePit instance = ThePit.getInstance();
+
     private long tick = 0;
+
     public void flushIds(){
         PublicUtil.itemVersion = PitHook.getItemVersion();
-
         PublicUtil.signVer = PitHook.getGitVersion();
     }
+
     public AsyncTickHandler(){
         flushIds();
     }
+
     @Override
     public void run() {
         //trade
@@ -73,7 +76,8 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
                         .getLastActionTimestamp();
                 //AntiAFK
                 if (now - lastActionTimestamp >= 10 * 60 * 1000) {
-                    player.sendMessage("...", true);
+                    // 意义不明
+                    // player.sendMessage("...", true);
                     operator.pending(i -> {
                         playerProfileByUuid.setLastActionTimestamp(now);
                     });

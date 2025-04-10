@@ -7,6 +7,7 @@ import cn.charlotte.pit.data.PlayerProfile;
  * @Date: 2021/1/1 0:54
  */
 public class PitProfileLoadedEvent extends PitEvent {
+
     private final PlayerProfile playerProfile;
 
     public PitProfileLoadedEvent(PlayerProfile playerProfile) {

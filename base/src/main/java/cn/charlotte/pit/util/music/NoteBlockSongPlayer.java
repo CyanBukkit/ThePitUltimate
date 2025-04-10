@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
  * Time: 12:56
  */
 public class NoteBlockSongPlayer extends SongPlayer {
+
     private Block noteBlock;
 
     public NoteBlockSongPlayer(Song song) {

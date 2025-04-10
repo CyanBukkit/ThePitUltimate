@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class MaxBountyHunterMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "MAX_BOUNTY_HUNTER";

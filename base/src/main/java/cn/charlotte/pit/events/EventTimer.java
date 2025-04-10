@@ -13,12 +13,15 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/1/9 13:14
  */
 public class EventTimer implements Runnable {
+
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd:HH:mm");
     @Setter
     private static Cooldown cooldown = new Cooldown(0);
-    public static Cooldown getCooldown(){
+
+    public static Cooldown getCooldown() {
         return cooldown;
     }
+
     @Override
     public void run() {
 
@@ -27,7 +30,7 @@ public class EventTimer implements Runnable {
         }
 
         final String format = DATE_FORMAT.format(System.currentTimeMillis());
-        final String[] split = PublicUtil.splitByCharAt(format,':');
+        final String[] split = PublicUtil.splitByCharAt(format, ':');
         final String minString = split[4];
         final EventFactory factory = ThePit.getInstance().getEventFactory();
 
@@ -46,7 +49,7 @@ public class EventTimer implements Runnable {
         }
 
         boolean b = min != 55 && min != 50;
-        if(factory.getNormalEnd().hasExpired() && cooldown.hasExpired()) { // patch
+        if (factory.getNormalEnd().hasExpired() && cooldown.hasExpired()) { // patch
             INormalEvent activeNormalEvent = factory.getActiveNormalEvent();
             if (activeNormalEvent != null) {
                 factory.inactiveEvent(activeNormalEvent);
@@ -56,7 +59,7 @@ public class EventTimer implements Runnable {
             if (factory.getActiveEpicEvent() == null && factory.getNextEpicEvent() == null) {
                 if (factory.getActiveNormalEvent() == null) {
                     String mini = EventsHandler.INSTANCE.nextEvent(false);
-                    if(mini.equals("NULL")) {
+                    if (mini.equals("NULL")) {
                         return;
                     }
                     cooldown = new Cooldown(1, TimeUnit.MINUTES);

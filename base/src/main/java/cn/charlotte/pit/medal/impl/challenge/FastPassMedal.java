@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
  */
 @AutoRegister
 public class FastPassMedal extends AbstractMedal implements Listener {
+
     @Override
     public String getInternalName() {
         return "FAST_PASS_UNLOCK";

@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 //@AutoRegister
 public class TradeListener implements Listener {
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onLogout(PlayerQuitEvent event) {
         if (TradeManager.trades.containsKey(event.getPlayer().getUniqueId())) {

@@ -17,6 +17,7 @@ import java.util.List;
  * @Created_In: 2021/1/13 22:38
  */
 public class BountyNotifyButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

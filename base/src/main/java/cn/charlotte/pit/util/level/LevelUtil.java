@@ -1,7 +1,6 @@
 package cn.charlotte.pit.util.level;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.config.PitConfig;
 import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton;
 import cn.charlotte.pit.util.chat.RomanUtil;
 
@@ -11,7 +10,8 @@ import cn.charlotte.pit.util.chat.RomanUtil;
  */
 
 public class LevelUtil {
-    public static void dropCache(){
+
+    public static void dropCache() {
         plevelMapping = null;
     }
 
@@ -61,20 +61,19 @@ public class LevelUtil {
             return "&b&l";
         } else if (prestige >= 241 && prestige <= 300) {
             return "&4&l";
-        }else if (prestige >= 301 && prestige <= 400) {
+        } else if (prestige >= 301 && prestige <= 400) {
             return "&f&l";
-        }else if (prestige >= 401 && prestige <= 512) {
+        } else if (prestige >= 401 && prestige <= 512) {
             return "&c&l";
-        }else if (prestige >= 513 && prestige <= 700) {
-                return "&e&l";
-        }else if (prestige >= 701 && prestige <= 800) {
+        } else if (prestige >= 513 && prestige <= 700) {
+            return "&e&l";
+        } else if (prestige >= 701 && prestige <= 800) {
             return "&2&l";
-        }else if (prestige >= 801 && prestige <= 999) {
+        } else if (prestige >= 801 && prestige <= 999) {
             return "&3&l";
-        }else if (prestige >= 1000) {
+        } else if (prestige >= 1000) {
             return "&3&l";
         }
-
 
 
         return "&7";
@@ -105,6 +104,7 @@ public class LevelUtil {
         }
         return "&7";
     }
+
     /**
      * For max performance
      */
@@ -118,14 +118,15 @@ public class LevelUtil {
     public static long fromCache = 0;
     public static long fromRaw = 0;
     static boolean booting = false;
+
     public static double getLevelExpRequired(int prestige, int level) {
         if (plevelMapping == null && !booting) {
             bootCache();
         } else if (booted && plevelMapping != null) {
-            if(plevelMapping.length > prestige) {
+            if (plevelMapping.length > prestige) {
                 try {
                     return plevelMapping[prestige * ThePit.getInstance().getPitConfig().maxLevel + level];
-                } catch (Exception e){
+                } catch (Exception e) {
                     return Double.MAX_VALUE - 1000.0D;
                 }
             }
@@ -133,7 +134,7 @@ public class LevelUtil {
         double boost = 1.1;
         if (level >= 10) {
             double v = getaDouble(prestige, level, boost);
-            if(v <= 0){
+            if (v <= 0) {
                 return Double.MAX_VALUE;
             }
             return v;
@@ -161,7 +162,7 @@ public class LevelUtil {
         };
     }
 
-    public static void bootCache(){
+    public static void bootCache() {
         booting = true;
         booted = false;
         int limit = PrestigeStatusButton.limit;
@@ -169,7 +170,7 @@ public class LevelUtil {
         for (int i = 0; i <= limit; i++) {
             int append = i * ThePit.getInstance().getPitConfig().maxLevel;
             for (int ia = 0; ia <= ThePit.getInstance().getPitConfig().maxLevel; ia++) {
-                plevelMappingRaw[append + ia] = getLevelExpRequired(i,ia);
+                plevelMappingRaw[append + ia] = getLevelExpRequired(i, ia);
             }
         }
         plevelMapping = plevelMappingRaw;
@@ -206,7 +207,7 @@ public class LevelUtil {
         double experience = 0;
         for (int i = 0; i < level; i++) {
             experience = experience + getLevelExpRequired(prestige, i);
-            if(experience < 0){
+            if (experience < 0) {
                 return Double.MAX_VALUE;
             }
         }
@@ -243,9 +244,11 @@ public class LevelUtil {
         String prestigeColor = getPrestigeColor(prestige);
         return prestigeColor + "[" + getLevelColor(level) + level + prestigeColor + "]";
     }
+
     public static String getLevelTagWithOutAnyPS(int level) {
         return getLevelColor(level) + level;
     }
+
     public static String getLevelTagTabListSpec(int prestige, int level) {
         int pre = 120 * prestige / 30;
         if (prestige > 0 && pre < 10) {

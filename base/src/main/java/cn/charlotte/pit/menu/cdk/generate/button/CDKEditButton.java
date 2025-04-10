@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
  * @Created_In: 2021/3/25 20:18
  */
 public class CDKEditButton extends Button {
+
     private final ItemStack material;
     private final Menu menu;
     private final Callback<Integer> doubleCallback;

@@ -13,6 +13,7 @@ import java.util.Set;
  * @author huanmeng_qwq
  */
 public class SpecialUtil {
+
     public static Set<String> PRIVATE = new HashSet<>();
 
     private static Set<String> SPECIALS = new HashSet<String>();
@@ -23,15 +24,16 @@ public class SpecialUtil {
         SPECIALS.add("114514211");*/
     }
 
-    public static String  addPlayer(Player player){
-        if (!PRIVATE.contains(player.getName())){
+    public static String addPlayer(Player player) {
+        if (!PRIVATE.contains(player.getName())) {
             PRIVATE.add(player.getName());
             return "§a进入单人模式状态！";
         }
         return "§c已处于单人模式！";
     }
-    public static String removePlayer(Player player){
-        if (PRIVATE.contains(player.getName())){
+
+    public static String removePlayer(Player player) {
+        if (PRIVATE.contains(player.getName())) {
             PRIVATE.remove(player.getName());
             return "§a进入多人模式状态，请重进游戏！";
         }
@@ -49,6 +51,7 @@ public class SpecialUtil {
     public static boolean isSpecial(PlayerProfile profile) {
         return isSpecial(profile.getPlayerName());
     }
+
     public static boolean isPrivate(String str) {
         return PRIVATE.contains(str);
     }

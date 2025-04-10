@@ -28,6 +28,7 @@ package cn.charlotte.pit.util.beam.protocol;
  * @author Jaxon A Brown
  */
 class EIDGen {
+
     private static int lastIssuedEID = 2000000000;//2 billion
 
     static int generateEID() {

@@ -15,9 +15,11 @@ import java.util.List;
  * @Date: 2021/2/4 20:46
  */
 public class ShowInvBackupButton extends DisplayButton {
+
     private final PlayerInvBackup backup;
     private final PlayerProfile profile;
     private final List<PlayerInvBackup> backups;
+
     public ShowInvBackupButton(List<PlayerInvBackup> inv, ItemStack itemStack, PlayerInvBackup backup, PlayerProfile profile) {
         super(itemStack, true);
         this.backup = backup;
@@ -27,6 +29,6 @@ public class ShowInvBackupButton extends DisplayButton {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        ThePit.api.openBackupShowMenu(player, profile,backups, backup, clickType.isRightClick());
+        ThePit.api.openBackupShowMenu(player, profile, backups, backup, clickType.isRightClick());
     }
 }

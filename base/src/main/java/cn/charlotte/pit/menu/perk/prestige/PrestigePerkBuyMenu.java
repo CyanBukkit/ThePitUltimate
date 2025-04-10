@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  * @Created_In: 2021/1/4 18:37
  */
 public class PrestigePerkBuyMenu extends Menu {
+
     private int page = 0;
 
     public PrestigePerkBuyMenu() {

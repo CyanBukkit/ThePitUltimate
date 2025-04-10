@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
  * @Date: 2021/2/2 13:17
  */
 public class DroppedEntityData {
+
     private Entity entity;
     private Cooldown timer;
 

@@ -13,6 +13,7 @@ import java.util.List;
  * @Date: 2021/1/4 13:39
  */
 public class JumpAndFightHologram extends AbstractHologram {
+
     private int animationTick = 0;
     private long lastTickTime = 0;
 

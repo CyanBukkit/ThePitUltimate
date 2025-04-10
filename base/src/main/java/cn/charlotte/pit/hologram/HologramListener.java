@@ -20,6 +20,7 @@ import java.util.*;
  */
 //@AutoRegister
 public class HologramListener implements Listener {
+
     protected final static Map<UUID, PlayerHologram> hologramMap = new HashMap<>();
 
     @EventHandler
@@ -59,19 +60,20 @@ public class HologramListener implements Listener {
                 .runTaskAsynchronously(
                         ThePit.getInstance()
                         , () -> {
-                    PlayerHologram playerHologram = hologramMap.remove(event.getPlayer().getUniqueId());
-                    if (playerHologram == null) {
-                        return;
-                    }
-                    for (HologramData datum : playerHologram.hologramData.values()) {
-                        for (Hologram hologram : datum.holograms) {
-                            hologram.deSpawn();
-                        }
-                    }
-                });
+                            PlayerHologram playerHologram = hologramMap.remove(event.getPlayer().getUniqueId());
+                            if (playerHologram == null) {
+                                return;
+                            }
+                            for (HologramData datum : playerHologram.hologramData.values()) {
+                                for (Hologram hologram : datum.holograms) {
+                                    hologram.deSpawn();
+                                }
+                            }
+                        });
     }
 
     public static class PlayerHologram {
+
         private final Map<String, HologramData> hologramData;
 
         public PlayerHologram(List<HologramData> hologramData) {
@@ -115,6 +117,7 @@ public class HologramListener implements Listener {
     }
 
     public static class HologramData {
+
         private List<Hologram> holograms;
         private String internalName;
 

@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class CakeEventMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "CAKE_COINS";

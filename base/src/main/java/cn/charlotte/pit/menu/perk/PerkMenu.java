@@ -5,4 +5,5 @@ package cn.charlotte.pit.menu.perk;
  * @Date: 2021/1/1 22:34
  */
 public class PerkMenu {
+
 }

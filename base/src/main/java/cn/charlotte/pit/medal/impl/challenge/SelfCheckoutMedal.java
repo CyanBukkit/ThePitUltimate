@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class SelfCheckoutMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "SELF_CHECKOUT";

@@ -15,6 +15,7 @@ import java.util.Map;
  * @Created_In: 2021/1/3 17:11
  */
 public class StatusMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "统计信息";

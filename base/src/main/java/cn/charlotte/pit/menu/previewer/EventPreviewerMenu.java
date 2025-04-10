@@ -13,6 +13,7 @@ import java.util.Map;
  * @Date 2021/5/5 12:13
  */
 public class EventPreviewerMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "天坑乱斗会员: /events";

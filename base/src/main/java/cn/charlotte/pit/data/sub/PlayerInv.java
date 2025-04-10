@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 @JsonSerialize(using = PlayerInvSerializer.class)
 @JsonDeserialize(using = PlayerInvDeserializer.class)
 public class PlayerInv {
+
     private ItemStack[] contents;
     private ItemStack[] armorContents;
 

@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 @RequiredArgsConstructor
 @Data
 public class PitPlayerUpgradePerkEvent extends PitEvent {
+
     private final Player player;
     private final AbstractPerk perk;
     private final int newLevel;

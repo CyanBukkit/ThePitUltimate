@@ -15,6 +15,7 @@ import java.util.List;
  * @Date: 2020/12/30 22:35
  */
 public abstract class AbstractPitNPC {
+
     private NPC npc;
 
     //NPC 内部名称

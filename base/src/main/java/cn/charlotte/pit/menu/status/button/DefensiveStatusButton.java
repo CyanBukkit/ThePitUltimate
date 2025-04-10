@@ -16,6 +16,7 @@ import java.util.List;
  * @Created_In: 2021/1/3 17:59
  */
 public class DefensiveStatusButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

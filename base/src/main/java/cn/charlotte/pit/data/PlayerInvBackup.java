@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlayerInvBackup {
+
     private String uuid;
     private long timeStamp;
     private String backupUuid;

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
  */
 
 public final class MongoDB {
+
     private static final Logger log = ThePit.getInstance().getLogger();
 
     private MongoClient mongoClient;
@@ -62,7 +63,7 @@ public final class MongoDB {
         MongoClientSettings.Builder builder1 = MongoClientSettings.builder().serverApi(ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build()).applyConnectionString(connectionString);
-        if (mongoUser != null && mongoPassword != null&& !mongoUser.isEmpty() && !mongoPassword.isEmpty()) {
+        if (mongoUser != null && mongoPassword != null && !mongoUser.isEmpty() && !mongoPassword.isEmpty()) {
             final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
             MongoClientSettings thePit = builder1
                     .credential(credential).applicationName("ThePitRequiredPass")
@@ -140,7 +141,7 @@ public final class MongoDB {
 
         createIndex(mailCollection, "uuidIndex", "uuid");
         log.info("Connected! (连接成功>>>>)");
-        log.info("Costs " + ChronoUnit.MILLIS.between(connects,Instant.now()));
+        log.info("Costs " + ChronoUnit.MILLIS.between(connects, Instant.now()));
 
 //        log.info("loading cdk...");
 //        CDKData.loadAllCDKFromData();

@@ -8,6 +8,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  * @Date 2021/6/10 23:51
  */
 public class PizzaEventMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "PIZZA_ORDER";

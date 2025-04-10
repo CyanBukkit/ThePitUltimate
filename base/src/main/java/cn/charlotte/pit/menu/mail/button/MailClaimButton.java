@@ -26,6 +26,7 @@ import java.util.List;
  * @Date: 2021/3/25 21:23
  */
 public class MailClaimButton extends Button {
+
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
     private final Menu mainMenu;
     private final Mail mail;

@@ -30,6 +30,7 @@ import java.util.*;
  * @Date: 2021/3/17 21:44
  */
 public class CDKMenu extends Menu {
+
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 
     private final CDKData data = new CDKData();

@@ -37,6 +37,7 @@ import java.util.UUID;
  * @author Jaxon A Brown
  */
 public class Beam {
+
     private final UUID worldUID;
     private final double viewingRadiusSquared;
     private final long updateDelay;
@@ -209,6 +210,7 @@ public class Beam {
     }
 
     private class BeamUpdater extends BukkitRunnable {
+
         @Override
         public void run() {
             Beam.this.update();

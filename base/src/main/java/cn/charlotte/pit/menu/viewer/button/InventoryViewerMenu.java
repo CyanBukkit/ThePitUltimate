@@ -18,6 +18,7 @@ import java.util.Map;
  * @Created_In: 2021/1/13 14:53
  */
 public class InventoryViewerMenu extends Menu {
+
     private final PlayerProfile profile;
 
     public InventoryViewerMenu(PlayerProfile profile) {

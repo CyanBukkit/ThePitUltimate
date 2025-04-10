@@ -1,7 +1,6 @@
 package cn.charlotte.pit.data.sub
 
 import cn.charlotte.pit.ThePit
-import java.util.*
 
 class KingsQuestsData {
 

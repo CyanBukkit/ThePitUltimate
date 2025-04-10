@@ -10,6 +10,7 @@ import java.util.Map;
  * @Date: 2021/3/26 13:32
  */
 public abstract class AbstractPitSound {
+
     private final Map<Player, Integer> playersTick;
 
     public AbstractPitSound() {

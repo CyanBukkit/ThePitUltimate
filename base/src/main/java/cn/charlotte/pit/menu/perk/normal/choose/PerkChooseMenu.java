@@ -19,6 +19,7 @@ import java.util.Map;
  * @Date: 2021/1/1 22:46
  */
 public class PerkChooseMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "天赋商店";

@@ -19,6 +19,7 @@ import java.util.List;
  * @Created_In: 2021/1/11 22:15
  */
 public class KillStreakMainButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lore = new ArrayList<>();

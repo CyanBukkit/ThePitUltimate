@@ -21,6 +21,7 @@ import java.util.List;
  * @Created_In: 2021/3/4 18:59
  */
 public class TradeDataViewerButton extends Button {
+
     private final PlayerProfile profile;
 
     public TradeDataViewerButton(PlayerProfile profile) {

@@ -14,11 +14,13 @@ import java.util.Date;
  * 4
  */
 public class RandomUtil {
+
     public static final SecureRandom random;
 
     static {
         random = new SecureRandom();
     }
+
     public static String randomStr() {
         String s = "ABCDEFGHIJKLMNPQRSTUVXYZ1234567890";
         char[] c = s.toCharArray();
@@ -29,7 +31,8 @@ public class RandomUtil {
         }
         return numbers.toString();
     }
-    public static String forRandomScoreboardString(){
+
+    public static String forRandomScoreboardString() {
         Date from = Date.from(Instant.now());
         int year = from.getYear();
         int mon = from.getMonth();
@@ -59,7 +62,8 @@ public class RandomUtil {
         switchSeed();
         return entry[random.nextInt(entry.length)];
     }
-    public static void switchSeed(){
+
+    public static void switchSeed() {
         random.setSeed(System.nanoTime());
     }
 

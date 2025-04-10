@@ -5,14 +5,17 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 
 public class RangedStreamLineList<T> extends ConcurrentLinkedDeque<T> {
+
     private final Predicate<T> predicate;
     private final int maxElement;
-    public RangedStreamLineList(int maxElement,Predicate<T> t){
+
+    public RangedStreamLineList(int maxElement, Predicate<T> t) {
         super();
         this.maxElement = maxElement;
         this.predicate = t;
     }
-    public RangedStreamLineList(int maxElement, Predicate<T> t, Collection<T> t2){
+
+    public RangedStreamLineList(int maxElement, Predicate<T> t, Collection<T> t2) {
         super(t2);
         this.maxElement = maxElement;
         this.predicate = t;
@@ -45,7 +48,7 @@ public class RangedStreamLineList<T> extends ConcurrentLinkedDeque<T> {
         return true;
     }
 
-    public void recycle(){
+    public void recycle() {
         //stage 1
         while (peekLast() != null && (size() > maxElement || predicate.test(peekLast()))) {
             pollLast();

@@ -76,8 +76,8 @@ public abstract class HologramAPI {
         if (hologram.isSpawned()) {
             hologram.deSpawn();
         }
-        if(hologram instanceof PacketHologram && isMAGA) {
-            if (AsyncCatcher.isAsync()) {
+        if (hologram instanceof PacketHologram && isMAGA) {
+            if (!Bukkit.isPrimaryThread()) {
                 Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
                     ((PacketHologram) hologram).getHologram().recycleEntity();
                 });

@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
  * @Created_In: 2020/12/30 19:07
  */
 public class Cooldown {
+
     private long start = System.currentTimeMillis();
     private long expire;
     private boolean notified;
@@ -50,9 +51,11 @@ public class Cooldown {
             this.notified = true;
         }
     }
-    public void fastExpired(){
+
+    public void fastExpired() {
         this.expire = System.currentTimeMillis();
     }
+
     public long getStart() {
         return this.start;
     }

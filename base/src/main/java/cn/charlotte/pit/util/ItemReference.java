@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class ItemReference extends SWMRHashTable<UUID, Set<UUID>> {
+
     public Set<UUID> getRef(Player player) {
         UUID uniqueId = player.getUniqueId();
         Set<UUID> uuids = get(uniqueId);
@@ -18,13 +19,16 @@ public class ItemReference extends SWMRHashTable<UUID, Set<UUID>> {
         }
         return uuids;
     }
-    public void removeRef(Player player){
+
+    public void removeRef(Player player) {
         remove(player.getUniqueId());
     }
-    public void addRefCount(Player player,UUID uuid){
+
+    public void addRefCount(Player player, UUID uuid) {
         getRef(player).add(uuid);
     }
-    public void removeRef(Player player,UUID uuid){
+
+    public void removeRef(Player player, UUID uuid) {
         this.getRef(player).remove(uuid);
     }
 }

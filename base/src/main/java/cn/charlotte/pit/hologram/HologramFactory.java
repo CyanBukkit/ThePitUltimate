@@ -13,6 +13,7 @@ import java.util.List;
  */
 
 public class HologramFactory {
+
     protected final List<AbstractHologram> loopHologram;
     protected final List<AbstractHologram> normalHologram;
 

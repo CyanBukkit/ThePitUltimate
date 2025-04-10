@@ -5,10 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class AssembleUpdateEvent extends PitEvent implements Cancellable {
+
     boolean cancel = false;
     @Getter
     Player player;
-    public AssembleUpdateEvent(Player player){
+
+    public AssembleUpdateEvent(Player player) {
         this.player = player;
     }
 

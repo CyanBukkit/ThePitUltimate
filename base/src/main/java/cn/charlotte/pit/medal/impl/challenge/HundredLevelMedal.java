@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class HundredLevelMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "HUNDRED_LEVEL";

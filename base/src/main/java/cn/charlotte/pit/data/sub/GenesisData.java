@@ -11,6 +11,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class GenesisData {
+
     private int tier = 0;
     private int points = 0;
     private int boostTier = 0;

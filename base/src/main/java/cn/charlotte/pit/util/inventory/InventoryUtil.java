@@ -27,6 +27,7 @@ import java.util.Random;
  * @Date: 2020/12/30 23:40
  */
 public class InventoryUtil {
+
     private static final Random random = new Random();
 
     public static int getInventoryEmptySlots(ItemStack[] itemStacks) {
@@ -182,7 +183,7 @@ public class InventoryUtil {
         if (in == null || in.equals("unset") || in.equals("null") || in.equals("'null'")) return null;
         ItemStack[] contents = new ItemStack[in.split(";").length];
 
-        for (String s : PublicUtil.splitByCharAt(in,';')) {
+        for (String s : PublicUtil.splitByCharAt(in, ';')) {
             int slot = Integer.parseInt(s.split("#")[0]);
 
             if (s.split("#").length == 1) {
@@ -324,7 +325,7 @@ public class InventoryUtil {
 
     public static String serializeItemStack(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().equals(Material.AIR)) return "null";
-        
+
         ByteArrayOutputStream outputStream = null;
         try {
             net.minecraft.server.v1_8_R3.ItemStack nmsStack = PublicUtil.toNMStackQuick(itemStack);
@@ -368,8 +369,10 @@ public class InventoryUtil {
         }
         return true;
     }
-    private static final ItemStack DEFAULT_SWORD =  new ItemBuilder(Material.IRON_SWORD).internalName("default_sword").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable();
+
+    private static final ItemStack DEFAULT_SWORD = new ItemBuilder(Material.IRON_SWORD).internalName("default_sword").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable();
     private static final ItemStack DEFAULT_BOW = new ItemBuilder(Material.BOW).internalName("default_bow").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable();
+
     //THERE IS NO SUPPLY ITEMS TO DETECT UNFAIR ITEMS
     public static void supplyItems(Player player) {
         int arrowAmount = 0;
@@ -445,7 +448,7 @@ public class InventoryUtil {
         }
 
         if (!swordFound) {
-          inventory
+            inventory
                     .addItem(DEFAULT_SWORD);
         }
         if (!bowFound) {
@@ -463,9 +466,9 @@ public class InventoryUtil {
         int maxArrow = 32 + Math.max(0, PlayerUtil.getPlayerUnlockedPerkLevel(player, "arrow_armory_perk") * 8);
         if (arrowAmount > 0 && arrowAmount <= maxArrow) {
             if (arrowAmount != maxArrow) {
-                    ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
+                ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
 
-                    inventory.addItem(
+                inventory.addItem(
                         arrowBuilder.amount(maxArrow - arrowAmount).build()
                 );
             }

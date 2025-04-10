@@ -9,6 +9,7 @@ import org.bukkit.event.Cancellable;
 @RequiredArgsConstructor
 @Data
 public class ItemLiveDropEvent extends PitEvent implements Cancellable {
+
     private final double chance;
     boolean cancelled;
 

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorkshopEntranceButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

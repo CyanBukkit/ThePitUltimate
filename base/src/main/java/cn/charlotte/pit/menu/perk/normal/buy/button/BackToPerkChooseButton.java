@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
  * @Created_In: 2021/1/7 17:47
  */
 public class BackToPerkChooseButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.ARROW)

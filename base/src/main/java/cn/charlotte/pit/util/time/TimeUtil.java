@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
  * @Created_In: 2020/12/30 19:10
  */
 public final class TimeUtil {
+
     private static final JsonParser parse = new JsonParser();
     private static final String HOUR_FORMAT = "%02d:%02d:%02d";
     private static final String MINUTE_FORMAT = "%02d:%02d";

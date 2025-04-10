@@ -8,6 +8,7 @@ import java.util.List;
  * @Date: 2021/1/20 22:27
  */
 public class QuestCenter {
+
     private List<String> todayQuest = new ArrayList<>();
     private long lastRefreshTime = 0L;
 

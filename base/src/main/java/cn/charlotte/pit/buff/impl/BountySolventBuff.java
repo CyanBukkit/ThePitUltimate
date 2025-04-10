@@ -11,6 +11,7 @@ import java.util.List;
  */
 
 public class BountySolventBuff extends AbstractPitBuff {
+
     @Override
     public String getInternalBuffName() {
         return "bounty_solvent";

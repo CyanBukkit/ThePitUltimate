@@ -11,12 +11,14 @@ import java.util.Map;
  * @Date: 2021/1/1 21:44
  */
 public class PerkData {
+
     private String perkInternalName;
     private int level;
     @JsonIgnore
     private AbstractPerk handle;
     @JsonIgnore
     private ITickTask iTickTask;
+
     public PerkData(String perkInternalName, int level) {
         this.perkInternalName = perkInternalName;
         this.level = level;
@@ -28,16 +30,18 @@ public class PerkData {
     public String getPerkInternalName() {
         return this.perkInternalName;
     }
-    public ITickTask getITickTask(Map<String, ITickTask> tickTasks){
-        if(iTickTask != null){
+
+    public ITickTask getITickTask(Map<String, ITickTask> tickTasks) {
+        if (iTickTask != null) {
             return iTickTask;
         }
         iTickTask = tickTasks.get(getPerkInternalName());
         return iTickTask;
     }
+
     @JsonIgnore
-    public AbstractPerk getHandle(Map<String, AbstractPerk> tickTasks){
-        if(handle != null){
+    public AbstractPerk getHandle(Map<String, AbstractPerk> tickTasks) {
+        if (handle != null) {
             return handle;
         }
         handle = tickTasks.get(getPerkInternalName());

@@ -17,6 +17,7 @@ import java.util.List;
  * @Created_In: 2021/1/14 15:19
  */
 public class InventoryVisibilityButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

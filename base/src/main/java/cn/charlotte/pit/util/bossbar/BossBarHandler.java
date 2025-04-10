@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 @AutoRegister
 public class BossBarHandler implements Listener {
+
     private final BossBar bossBar;
 
     public BossBarHandler() {

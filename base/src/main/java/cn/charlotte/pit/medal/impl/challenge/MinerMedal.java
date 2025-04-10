@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class MinerMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "COBBLESTONE_COLLECTOR";

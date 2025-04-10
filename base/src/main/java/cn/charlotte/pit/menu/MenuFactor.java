@@ -5,4 +5,5 @@ package cn.charlotte.pit.menu;
  * @Date: 2021/1/1 16:57
  */
 public class MenuFactor {
+
 }

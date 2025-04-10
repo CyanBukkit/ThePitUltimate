@@ -12,6 +12,7 @@ import java.util.List;
  * @Date: 2020/12/30 22:06
  */
 public class LocationsSerializer extends AbstractSerializer<List<Location>> {
+
     @Override
     public String toString(List<Location> var1) {
         StringBuilder builder = new StringBuilder();

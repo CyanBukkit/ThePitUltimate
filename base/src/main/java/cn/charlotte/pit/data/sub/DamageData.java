@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/1/1 12:12
  */
 public class DamageData {
+
     private UUID uuid;
     private double damage;
     private Cooldown timer;

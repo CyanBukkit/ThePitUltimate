@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
  * @author Jaxon A Brown
  */
 public class WrappedBeamPacket {
+
     private final PacketContainer handle;
 
     /**

@@ -14,6 +14,7 @@ import java.util.Map;
  * @Created_In: 2021/2/20 20:40
  */
 public class StreakChooseMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "连杀天赋";

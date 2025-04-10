@@ -13,6 +13,7 @@ import java.util.*;
 @Getter
 @Slf4j
 public class QuestFactory {
+
     private final List<AbstractQuest> quests;
     private final Map<String, AbstractQuest> questMap;
     private final List<IPlayerDamaged> playerDamageds;

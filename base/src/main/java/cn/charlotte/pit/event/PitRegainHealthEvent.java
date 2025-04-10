@@ -12,6 +12,7 @@ import org.bukkit.event.Cancellable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PitRegainHealthEvent extends PitEvent implements Cancellable {
+
     private final Player player;
     private double amount;
     private boolean cancelled;

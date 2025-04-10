@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
  */
 
 public class KillMedal extends AbstractMedal {
+
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
 
     @Override

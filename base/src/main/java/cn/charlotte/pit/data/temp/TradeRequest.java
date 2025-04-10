@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/1/28 13:24
  */
 public class TradeRequest {
+
     private Player player;
     private Player target;
     private Cooldown cooldown;

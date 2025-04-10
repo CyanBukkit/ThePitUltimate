@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
  */
 @AutoRegister
 public class QuestFailMedal extends AbstractMedal implements Listener {
+
     @Override
     public String getInternalName() {
         return "QUEST_FAILED";

@@ -1,6 +1,11 @@
 package cn.charlotte.pit.util.sign;
 
 import cn.charlotte.pit.util.PublicUtil;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,7 +14,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
-import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,50 +23,42 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2021/1/19 21:33
  */
 public class SignGui {
+
     protected Map<String, Vector> signLocations = new ConcurrentHashMap<>();
     protected Map<String, SignGUIListener> listeners = new ConcurrentHashMap<>();
+
     public SignGui(JavaPlugin plugin) {
-        PacketHandler packetHandler = new PacketHandler() {
-            @Override
-            public void handleReceivedPacket(PlayerConnection playerConnection, Packet<?> packet) {
-                if (packet instanceof PacketPlayInUpdateSign sign) {
-                    final Player player = playerConnection.player.getBukkitEntity();
-                    Vector v = signLocations.remove(player.getName());
-                    BlockPosition bp = sign.a();
-                    final IChatBaseComponent[] chatarray = sign.b();
-                    final String[] lines = new String[4];
-                    for (int i = 0; i < chatarray.length; i++) {
-                        lines[i] = EnumChatFormat.a(chatarray[i].c());
-                    }
-                    final SignGUIListener response = listeners.remove(playerConnection.player.getBukkitEntity().getName());
+        ProtocolLibrary.getProtocolManager()
+                .addPacketListener(new PacketAdapter(plugin, PacketType.Play.Client.UPDATE_SIGN) {
+                    @Override
+                    public void onPacketReceiving(PacketEvent event) {
+                        final Player player = event.getPlayer();
+                        Vector v = signLocations.remove(player.getName());
+                        com.comphenix.protocol.wrappers.BlockPosition bp = event.getPacket().getBlockPositionModifier().getValues().get(0);
+                        final WrappedChatComponent[] chatarray = event.getPacket().getChatComponentArrays().getValues().get(0);
+                        final String[] lines = {chatarray[0].getJson().replace("\"", ""), chatarray[1].getJson().replace("\"", ""), chatarray[2].getJson().replace("\"", ""), chatarray[3].getJson().replace("\"", "")};
+                        final SignGUIListener response = listeners.remove(event.getPlayer().getName());
 
-                    if (v == null) {
-                        return;
-                    }
-                    if (bp.getX() != v.getBlockX()) {
-                        return;
-                    }
-                    if (bp.getY() != v.getBlockY()) {
-                        return;
-                    }
-                    if (bp.getZ() != v.getBlockZ()) {
-                        return;
-                    }
+                        if (v == null) {
+                            return;
+                        }
+                        if (bp.getX() != v.getBlockX()) {
+                            return;
+                        }
+                        if (bp.getY() != v.getBlockY()) {
+                            return;
+                        }
+                        if (bp.getZ() != v.getBlockZ()) {
+                            return;
+                        }
 
-                    if (response != null) {
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> response.onSignDone(player, lines));
-                        throw CancelledPacketHandleException.INSTANCE;
+                        if (response != null) {
+                            event.setCancelled(true);
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> response.onSignDone(player, lines));
+                        }
                     }
-                }
-            }
-
-            @Override
-            public void handleSentPacket(PlayerConnection playerConnection, Packet<?> packet) {
-            }
-        };
-        PublicUtil.addCommonHandler(packetHandler);
+                });
     }
-
 
 
     public void open(Player player, String[] messages, SignGUIListener response) {
@@ -91,6 +87,7 @@ public class SignGui {
     }
 
     public interface SignGUIListener {
+
         void onSignDone(Player player, String[] lines);
     }
 

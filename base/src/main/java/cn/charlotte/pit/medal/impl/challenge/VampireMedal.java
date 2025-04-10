@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class VampireMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "VAMPIRE_HEAL";

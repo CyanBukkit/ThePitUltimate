@@ -15,6 +15,7 @@ import java.util.List;
  * @Date: 2021/1/6 23:30
  */
 public class EmailData {
+
     private String title;
     private String content;
     private double exp;

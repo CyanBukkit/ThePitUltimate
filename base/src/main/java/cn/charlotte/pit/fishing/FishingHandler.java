@@ -63,7 +63,9 @@ public class FishingHandler implements Listener {
 
         return entityItem;
     }
+
     ItemBuilder build = new ItemBuilder(Material.GOLD_INGOT);
+
     private ItemStack generateItem(Player player, Location location) {
 
         return build

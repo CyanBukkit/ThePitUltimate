@@ -92,26 +92,29 @@ public class AssembleBoardEntry {
             if (suffix.length() > 16) {
                 suffix = suffix.substring(0, 16);
             }
-            setPrefixCheckEqual(team,prefix);
-            setSuffixCheckEqual(team,suffix);
+            setPrefixCheckEqual(team, prefix);
+            setSuffixCheckEqual(team, suffix);
         } else {
-            setPrefixCheckEqual(team,text);
-            setSuffixCheckEqual(team,"");
+            setPrefixCheckEqual(team, text);
+            setSuffixCheckEqual(team, "");
         }
 
         Score score = this.board.getObjective().getScore(this.identifier);
         score.setScore(position);
     }
-    public void setPrefixCheckEqual(Team team, String prefix){
-        if(!team.getPrefix().equals(prefix)) {
+
+    public void setPrefixCheckEqual(Team team, String prefix) {
+        if (!team.getPrefix().equals(prefix)) {
             team.setPrefix(prefix);
         }
     }
-    public void setSuffixCheckEqual(Team team, String suffix){
-        if(!team.getSuffix().equals(suffix)) {
+
+    public void setSuffixCheckEqual(Team team, String suffix) {
+        if (!team.getSuffix().equals(suffix)) {
             team.setSuffix(suffix);
         }
     }
+
     /**
      * Remove Board Entry from Board.
      */

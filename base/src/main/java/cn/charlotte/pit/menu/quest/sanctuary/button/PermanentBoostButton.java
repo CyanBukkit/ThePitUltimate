@@ -19,6 +19,7 @@ import java.util.List;
  * @Created_In: 2021/1/4 18:45
  */
 public class PermanentBoostButton extends Button {
+
     private final AbstractPerk perk;
     private final int price;
 

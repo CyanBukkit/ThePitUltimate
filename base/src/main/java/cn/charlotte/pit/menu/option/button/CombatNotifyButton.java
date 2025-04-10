@@ -16,6 +16,7 @@ import java.util.List;
  * @Created_In: 2021/1/13 22:57
  */
 public class CombatNotifyButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

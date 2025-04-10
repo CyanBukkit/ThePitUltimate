@@ -24,6 +24,7 @@ import java.util.Optional;
  * @Date: 2021/1/1 22:47
  */
 public class PerkButton extends Button {
+
     private final int page;
 
     public PerkButton(int page) {

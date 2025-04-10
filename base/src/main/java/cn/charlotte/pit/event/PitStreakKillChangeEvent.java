@@ -10,6 +10,7 @@ import org.bukkit.event.Cancellable;
  */
 @EqualsAndHashCode(callSuper = true)
 public class PitStreakKillChangeEvent extends PitEvent implements Cancellable {
+
     private final PlayerProfile playerProfile;
     private final double from;
     private final double to;

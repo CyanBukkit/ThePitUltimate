@@ -17,6 +17,7 @@ import java.util.List;
  * @Created_In: 2021/3/10 19:29
  */
 public class BountyHiddenWhenNearOptionButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

@@ -18,6 +18,7 @@ import java.util.List;
 //practicing and copying
 @Getter
 public class BuffFactory {
+
     private final List<AbstractPitBuff> buffs;
 
     public BuffFactory() {
@@ -39,8 +40,8 @@ public class BuffFactory {
         for (Class<?> clazz : classes) {
             if (AbstractPitBuff.class.isAssignableFrom(clazz)) {
                 Object instance = clazz.newInstance();
-                if(Listener.class.isAssignableFrom(clazz)){
-                    Bukkit.getPluginManager().registerEvents((Listener) instance,ThePit.getInstance());
+                if (Listener.class.isAssignableFrom(clazz)) {
+                    Bukkit.getPluginManager().registerEvents((Listener) instance, ThePit.getInstance());
                 }
                 buffs.add((AbstractPitBuff) instance);
 

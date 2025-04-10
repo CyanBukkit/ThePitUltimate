@@ -3,6 +3,7 @@ package cn.charlotte.pit.util.music;
 import org.bukkit.Sound;
 
 public class Instrument {
+
     public static Sound getInstrument(final byte b) {
         switch (b) {
             case 1: {

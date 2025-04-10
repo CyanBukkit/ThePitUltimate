@@ -10,7 +10,6 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +20,7 @@ import static org.bukkit.Sound.BURP;
  * @Date: 2021/1/9 12:59
  */
 public class EventFactory {
+
     private final List<INormalEvent> normalEvents;
     private final List<IEpicEvent> epicEvents;
     private INormalEvent activeNormalEvent;
@@ -157,14 +157,17 @@ public class EventFactory {
         IEvent iEvent = (IEvent) event;
         iEvent.onInactive();
     }
-    public void safeInactiveEvent(INormalEvent event){
+
+    public void safeInactiveEvent(INormalEvent event) {
         if (activeNormalEvent != event) return;
         this.normalEnd.fastExpired();
         EventTimer.getCooldown().fastExpired();
     }
-    public void cooldown(){
-        EventTimer.setCooldown(new Cooldown(1,TimeUnit.MINUTES));
+
+    public void cooldown() {
+        EventTimer.setCooldown(new Cooldown(1, TimeUnit.MINUTES));
     }
+
     public void readyEpicEvent(IEpicEvent event) {
         this.nextEpicEvent = event;
         this.nextEpicEventTimer = new Cooldown(5, TimeUnit.MINUTES);

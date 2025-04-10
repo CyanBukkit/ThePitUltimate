@@ -62,7 +62,7 @@ public class MedalData {
             MedalStatus val = stringMedalStatusEntry.getValue();
             if (medal.startsWith(medalInternal + "#") && val.isUnlocked()) {
                 int i = Integer.parseInt(medal.replace(medalInternal + "#", ""));
-                if(i > result){
+                if (i > result) {
                     result = i;
                 }
             }
@@ -73,6 +73,7 @@ public class MedalData {
 
     @Data
     public static class MedalStatus {
+
         private boolean unlocked;
         private int progress;
         private long finishedTime;

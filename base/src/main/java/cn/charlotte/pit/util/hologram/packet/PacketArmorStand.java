@@ -27,6 +27,7 @@ import java.util.Set;
  * @author huanmeng_qwq
  */
 public class PacketArmorStand {
+
     public static final double DISTANCE = 64;
     protected String text;
     public Location location;
@@ -80,9 +81,10 @@ public class PacketArmorStand {
         hiding.remove(user);
         viewing.remove(user);
     }
+
     //MUST DO THIS AFTER THE USE IT CAN BE A FUCKING CRASHER for YOUR SERVER SILENT!!!!
     //The dumb huanmeng_qwq
-    public void recycleEntity(){
+    public void recycleEntity() {
         this.entity.remove(); //remove the memory entity from the list.
 
     }
@@ -115,12 +117,12 @@ public class PacketArmorStand {
     }
 
     public void sendEquipments(Player user) {
-        PacketPlayOutSpawnEntityLiving spawnEntityLiving = new PacketPlayOutSpawnEntityLiving(((CraftArmorStand)entity).getHandle());
+        PacketPlayOutSpawnEntityLiving spawnEntityLiving = new PacketPlayOutSpawnEntityLiving(((CraftArmorStand) entity).getHandle());
         EntityPlayer handle = ((CraftPlayer) user).getHandle();
         handle.playerConnection.sendPacket(spawnEntityLiving);
         {
             for (Pair<EquipmentSlot, ItemStack> pair : getItems(entity)) {
-                PacketPlayOutEntityEquipment entityEquipment = new PacketPlayOutEntityEquipment(entity.getEntityId(),pair.getKey().ordinal(), PublicUtil.toNMStackQuick(pair.getValue()));
+                PacketPlayOutEntityEquipment entityEquipment = new PacketPlayOutEntityEquipment(entity.getEntityId(), pair.getKey().ordinal(), PublicUtil.toNMStackQuick(pair.getValue()));
                 handle.playerConnection.sendPacket(entityEquipment);
             }
         }
@@ -167,7 +169,7 @@ public class PacketArmorStand {
         }
         if (hiding.add(user) || force) {
             PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy(entity.getEntityId());
-            ((CraftPlayer)user).getHandle().playerConnection.sendPacket(destroy);
+            ((CraftPlayer) user).getHandle().playerConnection.sendPacket(destroy);
             viewing.remove(user);
         }
     }
@@ -185,9 +187,9 @@ public class PacketArmorStand {
         ArmorStand entity1 = this.entity;
         CraftArmorStand entity11 = (CraftArmorStand) entity1;
         PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(
-                entity1.getEntityId(),entity11.getHandle().getDataWatcher(),true);
+                entity1.getEntityId(), entity11.getHandle().getDataWatcher(), true);
         for (Player user : viewing) {
-            ((CraftPlayer)user).getHandle().playerConnection.sendPacket(packetPlayOutEntityMetadata);
+            ((CraftPlayer) user).getHandle().playerConnection.sendPacket(packetPlayOutEntityMetadata);
         }
     }
 
@@ -263,17 +265,19 @@ public class PacketArmorStand {
     public Set<Player> viewing() {
         return viewing;
     }
-    public void sendTo(Location to,boolean ground){
+
+    public void sendTo(Location to, boolean ground) {
         double v = to.getX() - this.location.getX();
         double p = to.getX() - this.location.getX();
         double a = to.getZ() - location.getZ();
         PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook entityMoveLook = new PacketPlayOutEntity
-                .PacketPlayOutRelEntityMoveLook(entity.getEntityId(), (byte)v,
-                (byte) p,(byte) a, (byte) MathHelper.floor(to.getYaw() * 256.0F / 360F), (byte) MathHelper.floor(to.getPitch() * 256.0F / 360.0F),ground);
+                .PacketPlayOutRelEntityMoveLook(entity.getEntityId(), (byte) v,
+                (byte) p, (byte) a, (byte) MathHelper.floor(to.getYaw() * 256.0F / 360F), (byte) MathHelper.floor(to.getPitch() * 256.0F / 360.0F), ground);
         for (Player user : viewing) {
-            ((CraftPlayer)user).getHandle().playerConnection.sendPacket(entityMoveLook);
+            ((CraftPlayer) user).getHandle().playerConnection.sendPacket(entityMoveLook);
         }
     }
+
     public void move(Location to, boolean ground) {
         double teleportThreshold = 4;
         double v = to.getX() - this.location.getX();
@@ -289,8 +293,9 @@ public class PacketArmorStand {
         } else {
             PacketPlayOutEntity.PacketPlayOutRelEntityMove entityMove =
                     new PacketPlayOutEntity.PacketPlayOutRelEntityMove(entity.getEntityId(), (byte) MathHelper.floor(v * 32D),
-                            (byte)  MathHelper.floor(p * 32D), (byte)  MathHelper.floor(a*32D), ground);
-            for (Player user : viewing) {;
+                            (byte) MathHelper.floor(p * 32D), (byte) MathHelper.floor(a * 32D), ground);
+            for (Player user : viewing) {
+                ;
                 ((CraftPlayer) user).getHandle().playerConnection.sendPacket(entityMove);
             }
             senHeadYaw(to.getYaw());
@@ -301,10 +306,10 @@ public class PacketArmorStand {
 
     public void sendTeleportPacket(Location location, boolean ground) {
         PacketPlayOutEntityTeleport entityTeleport = new PacketPlayOutEntityTeleport(entity.getEntityId(),
-                MathHelper.floor(location.getX()*32), MathHelper.floor(location.getY()*32),MathHelper.floor(location.getZ()*32)
-                ,getFixRotation(location.getYaw()),getFixRotation(location.getPitch()),ground);
+                MathHelper.floor(location.getX() * 32), MathHelper.floor(location.getY() * 32), MathHelper.floor(location.getZ() * 32)
+                , getFixRotation(location.getYaw()), getFixRotation(location.getPitch()), ground);
         for (Player user : viewing) {
-            ((CraftPlayer)user).getHandle().playerConnection.sendPacket(entityTeleport);
+            ((CraftPlayer) user).getHandle().playerConnection.sendPacket(entityTeleport);
         }
     }
 
@@ -314,10 +319,10 @@ public class PacketArmorStand {
     }
 
     public void senHeadYaw(float yaw) {
-        PacketPlayOutEntityHeadRotation entityHeadRotation = new PacketPlayOutEntityHeadRotation(((CraftArmorStand)entity).getHandle()
-                ,getFixRotation(yaw));
+        PacketPlayOutEntityHeadRotation entityHeadRotation = new PacketPlayOutEntityHeadRotation(((CraftArmorStand) entity).getHandle()
+                , getFixRotation(yaw));
         for (Player user : viewing) {
-            ((CraftPlayer)user).getHandle().playerConnection.sendPacket(entityHeadRotation);
+            ((CraftPlayer) user).getHandle().playerConnection.sendPacket(entityHeadRotation);
         }
     }
 }

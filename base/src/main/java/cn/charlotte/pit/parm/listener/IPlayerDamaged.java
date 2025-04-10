@@ -23,7 +23,7 @@ public interface IPlayerDamaged {
      * @param finalDamage  最终伤害，即target受到的最终伤害
      * @param boostDamage  伤害倍率，将在所有附魔结算后统一计算，基础值为1
      * @param cancel       取消事件
-     *                     Todo: @param projectile 攻击事件的投掷物(没有则为null)
+     *                                         Todo: @param projectile 攻击事件的投掷物(没有则为null)
      */
     void handlePlayerDamaged(int enchantLevel, Player myself, Entity attacker, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel);
 

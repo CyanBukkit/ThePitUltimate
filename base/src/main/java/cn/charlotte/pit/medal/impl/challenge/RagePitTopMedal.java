@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class RagePitTopMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "RAGE_PIT_TOP";

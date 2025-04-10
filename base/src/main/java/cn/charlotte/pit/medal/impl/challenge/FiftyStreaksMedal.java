@@ -11,11 +11,11 @@ import org.bukkit.event.Listener;
 /**
  * @Creator Misoryan
  * @Date 2021/6/9 23:00
- *
  */
 
 @AutoRegister
 public class FiftyStreaksMedal extends AbstractMedal implements Listener {
+
     @Override
     public String getInternalName() {
         return "FIFTY_STREAKS";

@@ -4,7 +4,6 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
-import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.item.AbstractPitItem;
@@ -27,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.Collection;
 import java.util.List;
@@ -42,6 +42,7 @@ public class PlayerUtil {
     public static String getActiveMegaStreak(Player player) {
         return CC.translate(getActiveMegaStreakObj(player).getDisplayName());
     }
+
     public static AbstractPerk getActiveMegaStreakObj(Player player) {
         final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (!profile.isLoaded()) {
@@ -52,12 +53,12 @@ public class PlayerUtil {
             return null;
         }
         for (AbstractPerk abstractPerk : ThePit.getInstance().getPerkFactory().getPerks()) { //无意义stream
-            if(abstractPerk.getPerkType() == PerkType.MEGA_STREAK
-                    && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName())){
+            if (abstractPerk.getPerkType() == PerkType.MEGA_STREAK
+                    && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName())) {
                 if (abstractPerk instanceof MegaStreak mega) {
                     if (profile.getStreakKills() >= mega.getStreakNeed()) {
-                    return abstractPerk;
-                  }
+                        return abstractPerk;
+                    }
                 }
             }
         }
@@ -65,13 +66,7 @@ public class PlayerUtil {
     }
 
     public static boolean isVenom(Player player) {
-        MetadataValue comboVenom = ((CraftPlayer)player).getMetadata(ThePit.getInstance(),"combo_venom");
-        if (comboVenom == null) return false;
-        boolean b = comboVenom.asLong() > System.currentTimeMillis();
-        if(!b){
-            player.removeMetadata("combo_venom",ThePit.getInstance()); //garbages
-        }
-        return b;
+        return player.hasMetadata("combo_venom") && player.getMetadata("combo_venom").get(0).asLong() > System.currentTimeMillis();
     }
 
 
@@ -90,13 +85,14 @@ public class PlayerUtil {
         if (sinkingMoonlight) return true;
         return isEquippingSomber(self) || isVenom(self); //|| sinkingMoonlight; always false plz
     }
-    public static boolean shouldIgnoreEnchant(Player self, org.bukkit.entity.Entity target){ //大合集
+
+    public static boolean shouldIgnoreEnchant(Player self, org.bukkit.entity.Entity target) { //大合集
         boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self); //缓存结果
         if (sinkingMoonlight) return true;
-        if(target instanceof Player player){ //对其他人使用
+        if (target instanceof Player player) { //对其他人使用
             boolean equipSomberTarget;
             boolean isVenom;
-            if(isNPC(player)){
+            if (isNPC(player)) {
                 equipSomberTarget = false;
                 isVenom = false;
             } else {
@@ -108,28 +104,29 @@ public class PlayerUtil {
             return isEquippingSomber(self) || isVenom(self);
         }
     }
-  /*  public static boolean shouldIgnoreEnchant(PlayerProfile selfPro,PlayerProfile targetProf,Player self, org.bukkit.entity.Entity target){ //大合集
-        boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self); //缓存结果
-        if (sinkingMoonlight) return true;
-        if(target instanceof Player player){ //对其他人使用
-            boolean equipSomberTarget;
-            boolean isVenom;
-            if(isNPC(player)){
-                equipSomberTarget = false;
-                isVenom = false;
-            } else {
-                if(targetProf != null) {
-                    equipSomberTarget = isEquippingSomberFast(targetProf);
-                } else {
-                    equipSomberTarget = isEquippingSomber(player);
-                }
-                isVenom = isVenom(player);
-            }
-            return isEquippingSomberFast(selfPro) || isVenom(self) || (equipSomberTarget && !isEquippingArmageddon(self)) || isVenom;
-        } else { //如果他不是人或者null
-            return isEquippingSomberFast(selfPro) || isVenom(self);
-        }
-    }*/ //无影响
+
+    /*  public static boolean shouldIgnoreEnchant(PlayerProfile selfPro,PlayerProfile targetProf,Player self, org.bukkit.entity.Entity target){ //大合集
+          boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self); //缓存结果
+          if (sinkingMoonlight) return true;
+          if(target instanceof Player player){ //对其他人使用
+              boolean equipSomberTarget;
+              boolean isVenom;
+              if(isNPC(player)){
+                  equipSomberTarget = false;
+                  isVenom = false;
+              } else {
+                  if(targetProf != null) {
+                      equipSomberTarget = isEquippingSomberFast(targetProf);
+                  } else {
+                      equipSomberTarget = isEquippingSomber(player);
+                  }
+                  isVenom = isVenom(player);
+              }
+              return isEquippingSomberFast(selfPro) || isVenom(self) || (equipSomberTarget && !isEquippingArmageddon(self)) || isVenom;
+          } else { //如果他不是人或者null
+              return isEquippingSomberFast(selfPro) || isVenom(self);
+          }
+      }*/ //无影响
     //自身对其他人使用附魔时附魔是否应该失效 (适用于有目标附魔)
     public static boolean shouldIgnoreEnchant(Player self, Player target) {
         boolean sinkingMoonlight = PlayerUtil.isSinkingMoonlight(self);
@@ -138,13 +135,14 @@ public class PlayerUtil {
         //自身穿黑裤时必定失效 && 自身被沉默时必定生效 && 其他人穿黑裤且自身没有鞋子时失效 && 对方被沉默时失效
         return isEquippingSomber(self) || isVenom(self) || (isEquippingSomber(target) && !isEquippingArmageddon(self)) || isVenom(target);
     }
+
     //进行合并方法
-    public static boolean isNPC(org.bukkit.entity.Entity entity){
+    public static boolean isNPC(org.bukkit.entity.Entity entity) {
         return entity.getName().equals("bot");
     }
+
     public static boolean isSinkingMoonlight(Player player) {
-        MetadataValue sinkingMoonlight = ((CraftPlayer)player).getMetadata(ThePit.getInstance(),"sinking_moonlight");
-        return sinkingMoonlight != null && sinkingMoonlight.asLong() > System.currentTimeMillis();
+        return player.hasMetadata("sinking_moonlight") && player.getMetadata("sinking_moonlight").get(0).asLong() > System.currentTimeMillis();
     }
 
     public static boolean isEquippingArmageddon(Player player) {
@@ -310,17 +308,14 @@ public class PlayerUtil {
     public static float getDistance(Player p1, Player p2) {
         Location lc1 = p1.getLocation();
         Location lc2 = p2.getLocation();
-        if (lc1.getWorld() != lc2.getWorld()) {
-            return Float.MAX_VALUE;
-        }
-        return MathHelper.sqrt(MathHelper.pow(lc1.getX() - lc2.getX(), 2) + MathHelper.pow(lc1.getY() - lc2.getY(), 2) +MathHelper.pow(lc1.getZ() - lc2.getZ(), 2));
+        return getDistance(lc1, lc2);
     }
 
     public static float getDistance(Location lc1, Location lc2) {
         if (lc1.getWorld() != lc2.getWorld()) {
             return Float.MAX_VALUE;
         }
-        return MathHelper.sqrt(MathHelper.pow(lc1.getX() - lc2.getX(), 2) + MathHelper.pow(lc1.getY() - lc2.getY(), 2) +MathHelper.pow(lc1.getZ() - lc2.getZ(), 2));
+        return MathHelper.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2) + Math.pow(lc1.getY() - lc2.getY(), 2) + Math.pow(lc1.getZ() - lc2.getZ(), 2));
     }
 
     public static int getPlayerUnlockedPerkLevel(Player player, String internal) {
@@ -445,7 +440,9 @@ public class PlayerUtil {
             player.closeInventory();
         }
         player.setGameMode(GameMode.SURVIVAL);
-        player.removePotionEffects();
+        for (PotionEffect activePotionEffect : player.getActivePotionEffects()) {
+            player.removePotionEffect(activePotionEffect.getType());
+        }
         EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
         entityPlayer.getDataWatcher().watch(9, (byte) 0);
         entityPlayer.setAbsorptionHearts(0.0F);
@@ -484,13 +481,14 @@ public class PlayerUtil {
 
 
     public static Collection<Player> getNearbyPlayers(Location location, double radius) {
-        return getNearbyEntitiesByType(Player.class,location, radius, radius, radius,null);
+        return getNearbyEntitiesByType(Player.class, location, radius, radius, radius, null);
     }
 
     public static Collection<LivingEntity> getNearbyPlayersAndChicken(Location location, double radius) {
-        return getNearbyEntitiesByType(LivingEntity.class,location, radius, radius, radius, e -> e instanceof Chicken || e instanceof Player);
+        return getNearbyEntitiesByType(LivingEntity.class, location, radius, radius, radius, e -> e instanceof Chicken || e instanceof Player);
     }
-    public static <T extends org.bukkit.entity.Entity> Collection<T> getNearbyEntitiesByType( Class<? extends org.bukkit.entity.Entity> clazz,  Location loc, double xRadius, double yRadius, double zRadius, Predicate<T> predicate) {
+
+    public static <T extends org.bukkit.entity.Entity> Collection<T> getNearbyEntitiesByType(Class<? extends org.bukkit.entity.Entity> clazz, Location loc, double xRadius, double yRadius, double zRadius, Predicate<T> predicate) {
         if (clazz == null) {
             clazz = org.bukkit.entity.Entity.class;
         }
@@ -506,6 +504,7 @@ public class PlayerUtil {
         }
         return nearby;
     }
+
     public static void heal(Player player, double heal) {
         PitRegainHealthEvent event = new PitRegainHealthEvent(player, heal);
         event.callEvent();

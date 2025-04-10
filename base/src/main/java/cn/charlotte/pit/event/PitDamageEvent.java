@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
  * @Date: 2021/1/30 1:09
  */
 public class PitDamageEvent extends PitEvent {
+
     private final Player attacker;
     private final double finalDamage;
     private final double damage;

@@ -7,13 +7,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HomoGenerator {
+
     static HomoGenerator INSTANCE;
+
     static {
         INSTANCE = new HomoGenerator();
     }
-    public static HomoGenerator get(){
+
+    public static HomoGenerator get() {
         return INSTANCE;
     }
+
     private final List<Integer> numsReversed;
     private Map<String, String> NUMBERS;
     private static final Pattern IS_DOT_REGEX = Pattern.compile("\\.(\\d+?)0*$");
@@ -142,15 +146,14 @@ public class HomoGenerator {
         }
 
         if (remainder > 0) {
-            if (sb.length() > 0) {
+            if (!sb.isEmpty()) {
                 sb.append("+");
             }
             sb.append(String.format("(%s)", demolish(remainder)));
         }
 
         // Replace "*1" and "+0" with empty strings
-        String result = sb.toString().replace("*1", "").replace("+0", "");
-        return result;
+        return sb.toString().replace("*1", "").replace("+0", "");
     }
 
     /**

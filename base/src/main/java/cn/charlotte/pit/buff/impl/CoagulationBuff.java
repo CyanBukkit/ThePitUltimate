@@ -14,6 +14,7 @@ import java.util.List;
 
 @AutoRegister
 public class CoagulationBuff extends AbstractPitBuff implements Listener {
+
     @EventHandler
     public void onRegain(PitRegainHealthEvent event) {
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(event.getPlayer().getUniqueId());
@@ -28,6 +29,7 @@ public class CoagulationBuff extends AbstractPitBuff implements Listener {
             event.setAmount(event.getAmount() * Math.max(0.0D, 1.0D - 1.0D * playerProfile.getBuffData().getBuff(getInternalBuffName()).getTier()));
         }
     }
+
     @Override
     public String getInternalBuffName() {
         return "rotten_de_buff";

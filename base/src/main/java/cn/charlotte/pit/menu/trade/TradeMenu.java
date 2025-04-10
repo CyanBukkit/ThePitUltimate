@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/1/19 20:52
  */
 public class TradeMenu extends Menu {
+
     private static final int[] myselfSlots = {0, 1, 2, 3, 9, 10, 11, 12};
     private static final int[] targetSlots = {5, 6, 7, 8, 14, 15, 16, 17};
     private static final int[] glassSlots = {4, 13, 22};
@@ -70,9 +71,9 @@ public class TradeMenu extends Menu {
             int amount;
             if (myselfCoins >= 1000) {
                 material = Material.GOLD_INGOT;
-                amount = (int)((myselfCoins - (myselfCoins % 1000)) / 1000);
+                amount = (int) ((myselfCoins - (myselfCoins % 1000)) / 1000);
             } else {
-                amount = Math.max(1, (int)((myselfCoins - (myselfCoins % 100)) / 100));
+                amount = Math.max(1, (int) ((myselfCoins - (myselfCoins % 100)) / 100));
             }
             buttonMap.put(0, new CoinDisplayButton(new ItemBuilder(material).name("&6" + StringUtil.getFormatLong((long) myselfCoins) + "硬币").amount(amount).shiny().build(), true, tradeManager, true));
         }
@@ -84,9 +85,9 @@ public class TradeMenu extends Menu {
             int amount;
             if (targetCoins >= 1000) {
                 material = Material.GOLD_INGOT;
-                amount = (int)((targetCoins - (targetCoins % 1000)) / 1000);
+                amount = (int) ((targetCoins - (targetCoins % 1000)) / 1000);
             } else {
-                amount = Math.max(1, (int)((targetCoins - (targetCoins % 100)) / 100));
+                amount = Math.max(1, (int) ((targetCoins - (targetCoins % 100)) / 100));
             }
             buttonMap.put(5, new CoinDisplayButton(new ItemBuilder(material).name("&6" + StringUtil.getFormatLong((long) targetCoins) + "硬币").amount(amount).shiny().build(), true, tradeManager, false));
         }

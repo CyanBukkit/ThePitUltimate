@@ -7,18 +7,21 @@ import org.bukkit.event.Cancellable;
 import java.util.List;
 
 public class AssemblePostUpdateEvent extends PitEvent implements Cancellable {
+
     boolean cancel = false;
     List<String> strList;
     @Getter
     Player player;
-    public AssemblePostUpdateEvent(Player player,List<String> strList){
+
+    public AssemblePostUpdateEvent(Player player, List<String> strList) {
         this.strList = strList;
         this.player = player;
     }
 
-    public List<String> getTexts(){
+    public List<String> getTexts() {
         return strList;
     }
+
     @Override
     public boolean isCancelled() {
         return cancel;

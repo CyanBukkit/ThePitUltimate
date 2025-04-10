@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 
 @AutoRegister
 public class NightQuestMedal extends AbstractMedal implements Listener {
+
     private static boolean isNightQuest(PlayerProfile profile, QuestData quest) {
         return profile.isNightQuestEnable() && TimeUtil.getMinecraftTick(quest.getStartTime()) > 12000;
     }

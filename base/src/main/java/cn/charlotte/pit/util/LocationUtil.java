@@ -7,6 +7,7 @@ import org.bukkit.Location;
  * @Date: 2021/3/7 16:45
  */
 public class LocationUtil {
+
     public static Location[] getFaces(Location start) {
         Location[] faces = new Location[4];
         faces[0] = new Location(start.getWorld(), start.getX() + 1, start.getY(), start.getZ());

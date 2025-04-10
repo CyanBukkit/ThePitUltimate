@@ -10,6 +10,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  */
 
 public class HighestBidMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "AUCTION_HIGHEST_BID";

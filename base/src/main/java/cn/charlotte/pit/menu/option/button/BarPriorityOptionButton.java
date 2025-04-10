@@ -18,6 +18,7 @@ import java.util.List;
  * @Created_In: 2021/3/10 19:36
  */
 public class BarPriorityOptionButton extends Button {
+
     public static PlayerOption.BarPriority switchBarPriority(PlayerOption.BarPriority barPriority) {
         switch (barPriority) {
             case DAMAGE_ONLY:

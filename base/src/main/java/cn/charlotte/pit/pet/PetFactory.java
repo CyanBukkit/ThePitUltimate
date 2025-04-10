@@ -35,6 +35,7 @@ import java.util.UUID;
  * @Date: 2021/4/22 10:07
  */
 public class PetFactory implements Listener {
+
     private final Map<String, Class<? extends IPet>> petClazz = new HashMap<>();
     private final Map<UUID, PetData> petMap = new HashMap<>();
     private final Map<UUID, PetData> entityToPetData = new HashMap<>();
@@ -52,8 +53,9 @@ public class PetFactory implements Listener {
             }
         }
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         final LivingEntity entity = e.getPlayer();
         final PetData data = entityToPetData.get(entity.getUniqueId());
         if (data == null) {
@@ -63,6 +65,7 @@ public class PetFactory implements Listener {
         data.removeThis();
         entityToPetData.remove(entity.getUniqueId()); // 垃圾回收我能行。。。
     }
+
     @SneakyThrows
     public void spawnPet(String internal, Player owner) {
         try {
@@ -233,6 +236,7 @@ public class PetFactory implements Listener {
 
     @Getter
     public static class PetData {
+
         private UUID ownerUuid;
         private UUID entityUuid;
         private Hologram hologram;

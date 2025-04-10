@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.update.eagletdl;
 
 public class CompleteEvent {
+
     private final EagletTask task;
     private final boolean success;
 

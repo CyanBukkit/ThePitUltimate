@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/1/19 21:22
  */
 public class TargetConfirmButton extends Button {
+
     private final TradeManager tradeManager;
 
     public TargetConfirmButton(TradeManager tradeManager) {

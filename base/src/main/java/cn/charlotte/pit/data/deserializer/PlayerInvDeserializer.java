@@ -17,6 +17,7 @@ import java.io.IOException;
  * @Date: 2021/1/8 18:28
  */
 public class PlayerInvDeserializer extends JsonDeserializer<PlayerInv> {
+
     @Override
     public PlayerInv deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         try {

@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/1/21 13:14
  */
 public class QuestCancelButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         return new ItemBuilder(Material.BARRIER)

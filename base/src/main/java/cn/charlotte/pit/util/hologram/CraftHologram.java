@@ -115,7 +115,7 @@ abstract class CraftHologram implements Hologram {
         //设置盔甲架无法交互
         byte b0 = watcher.getByte(10);
         if (!isTouchable()) {
-            b0 = (byte)(b0 | 16);
+            b0 = (byte) (b0 | 16);
         } else {
             b0 &= -17;
         }

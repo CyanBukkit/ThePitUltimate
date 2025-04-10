@@ -78,6 +78,7 @@ import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable
 import cn.charlotte.pit.util.menu.ButtonListener
 import cn.charlotte.pit.util.nametag.NametagHandler
 import cn.charlotte.pit.util.scoreboard.Assemble
+import com.comphenix.protocol.ProtocolLibrary
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages
 import dev.rollczi.litecommands.meta.Meta
@@ -87,7 +88,6 @@ import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
 import real.nanoneko.EnchantedConstructor
 import real.nanoneko.PerkConstructor
-
 
 object PitHook {
     @JvmStatic
@@ -681,7 +681,8 @@ object PitHook {
                 e.printStackTrace()
             }
         }
-        Utils.addCommonHandler(PacketListener());
+
+        ProtocolLibrary.getProtocolManager().addPacketListener(PacketListener())
 
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
             Bukkit.getPluginManager().registerEvents(MythicMobListener, ThePit.getInstance());

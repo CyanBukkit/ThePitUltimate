@@ -204,6 +204,7 @@ public class CC {
             boardCast0(text);
         }
     }
+
     public static void boardCast0(String text) {
         String translate = CC.translate(text);
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -238,14 +239,14 @@ public class CC {
     public static void boardCast(MessageType type, String text) {
         Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                    send(type, player, text);
+                send(type, player, text);
             }
         });
     }
 
     public static void send(MessageType type, Player player, String text) {
-        if(MinecraftServer.getServer().isRunning()) {
-            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(),() -> {
+        if (MinecraftServer.getServer().isRunning()) {
+            Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
                 if (canPlayerSeeMessage(player, type)) {
                     player.sendMessage(CC.translate(text));
                 }

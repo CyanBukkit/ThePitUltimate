@@ -17,6 +17,7 @@ import java.util.List;
  * @Created_In: 2021/1/31 20:04
  */
 public class QuestSanctuaryButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lore = new ArrayList<>();

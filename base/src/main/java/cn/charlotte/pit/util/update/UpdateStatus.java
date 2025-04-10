@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.update;
 
 public class UpdateStatus {
+
     private int completed, total;
 
     public UpdateStatus() {

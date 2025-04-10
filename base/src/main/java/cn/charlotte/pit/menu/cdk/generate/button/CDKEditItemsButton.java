@@ -22,6 +22,7 @@ import java.util.Map;
  * @Date: 2021/3/26 17:16
  */
 public class CDKEditItemsButton extends Button {
+
     private final ItemStack displayItem;
     private final Menu menu;
     private final List<ItemStack> items;
@@ -65,16 +66,17 @@ public class CDKEditItemsButton extends Button {
                 public void onClickEvent(InventoryClickEvent event) {
                     event.setCancelled(false);
                 }
+
                 @Override
                 public void onClose(Player player) {
                     for (int i = 0; i < 18; i++) {
                         if (player.getOpenInventory().getItem(i) != null && player.getOpenInventory().getItem(i).getType() != Material.AIR) {
                             ItemStack item = player.getOpenInventory().getItem(i);
                             String internalName = ItemUtil.getInternalName(item);
-                            if(internalName != null){
+                            if (internalName != null) {
                                 String uuid = ItemUtil.getUUID(item);
-                                if(uuid != null){
-                                    ItemUtil.setUUID(item,"00000000-0000-0000-0000-000000000001");
+                                if (uuid != null) {
+                                    ItemUtil.setUUID(item, "00000000-0000-0000-0000-000000000001");
                                 }
                             }
                             items.set(i, item);

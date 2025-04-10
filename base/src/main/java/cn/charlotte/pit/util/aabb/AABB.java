@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.aabb;
 
 public class AABB {
+
     public final double minX;
     public final double minY;
     public final double minZ;

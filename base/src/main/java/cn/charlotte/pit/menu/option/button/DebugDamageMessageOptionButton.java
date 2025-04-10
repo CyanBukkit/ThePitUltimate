@@ -17,6 +17,7 @@ import java.util.List;
  * @Created_In: 2021/3/6 22:09
  */
 public class DebugDamageMessageOptionButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

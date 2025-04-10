@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.configuration;
 
 public abstract class AbstractSerializer<T> {
+
     public AbstractSerializer() {
     }
 

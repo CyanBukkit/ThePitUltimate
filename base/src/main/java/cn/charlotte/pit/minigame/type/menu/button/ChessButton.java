@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/3/25 13:09
  */
 public class ChessButton extends Button {
+
     private final FourInARow gameInstance;
     private final FourInARow.PosInfo posInfo;
     private final boolean canPlay;

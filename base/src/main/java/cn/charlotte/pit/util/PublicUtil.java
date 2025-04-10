@@ -8,53 +8,41 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import xyz.refinedev.spigot.api.handlers.impl.PacketHandler;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 public class PublicUtil {
+
     public static String signVer = "Loader";
     public static String itemVersion = "Loader";
-    public static final net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
+
+    public static net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
         if (item instanceof CraftItemStack) {
-            return ((CraftItemStack) item).handle;
+            try {
+                java.lang.reflect.Field handleField = CraftItemStack.class.getDeclaredField("handle");
+                handleField.setAccessible(true);
+                return (net.minecraft.server.v1_8_R3.ItemStack) handleField.get(item);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RuntimeException("Failed to access the handle field", e);
+            }
         } else {
             return CraftItemStack.asNMSCopy(item);
         }
     }
-    public static void addCommonHandler(PacketHandler packetHandler) {
-        try {
-            Class<?> aClass = Class.forName("xyz.refinedev.spigot.CarbonSpigot");
-            Object invoke = aClass.getMethod("getPacketAPI").invoke(null);
-            invoke.getClass().getMethod("registerPacketHandler").invoke(invoke,packetHandler);
-        } catch (Throwable a) {
-            try {
-                Bukkit.getLogger().warning("Error in adding the packet handler from " + packetHandler + ", using the public way...");
-                Class<?> aClass = Class.forName("xyz.refinedev.spigot.api.handlers.impl.KQC");
-                Method addHandler = aClass.getMethod("addHandler", PacketHandler.class);
-                addHandler.invoke(null, packetHandler);
-            } catch (Throwable e){
-                e.printStackTrace();
-                System.out.println("Error, this plugin is buggy");
-            }
-        }
-    }
+
     /**
      * 超级高效的split方法。
      *
      * @param line string
      * @return a array of strings
      */
-    public static String[] splitByCharAt(final String line, final char delimiter)
-    {
+    public static String[] splitByCharAt(final String line, final char delimiter) {
         CharSequence[] temp = new CharSequence[(line.length() / 2) + 1];
         int wordCount = 0;
         int i = 0;
         int j = line.indexOf(delimiter); // first substring
 
-        while (j >= 0)
-        {
+        while (j >= 0) {
             temp[wordCount++] = line.substring(i, j);
             i = j + 1;
             j = line.indexOf(delimiter, i); // rest of substrings
@@ -95,6 +83,7 @@ public class PublicUtil {
             playerShootEntities.add((IPlayerShootEntity) instance);
         }
     }
+
     public static void unregister(Class<?> clazz, Object instance, List<IPlayerDamaged> playerDamageds, List<IAttackEntity> attackEntities, List<IItemDamage> iItemDamages, List<IPlayerBeKilledByEntity> playerBeKilledByEntities, List<IPlayerKilledEntity> playerKilledEntities, List<IPlayerRespawn> playerRespawns, List<IPlayerShootEntity> playerShootEntities) {
         if (instance instanceof Listener && instance.getClass().isAnnotationPresent(AutoRegister.class)) {
             HandlerList.unregisterAll((Listener) instance);

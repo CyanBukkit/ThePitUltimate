@@ -8,6 +8,7 @@ import cn.charlotte.pit.medal.AbstractMedal;
  * @Date 2021/6/11 9:52
  */
 public class KaboomMedal extends AbstractMedal {
+
     @Override
     public String getInternalName() {
         return "KABOOM_FROM_STAFF";

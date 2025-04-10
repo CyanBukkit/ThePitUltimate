@@ -18,6 +18,7 @@ import java.util.List;
  * @Created_In: 2021/3/25 15:43
  */
 public class FunkyFeatherSanctuaryButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

@@ -17,8 +17,9 @@ object ArmorStandHelper {
 
     @JvmStatic
     fun applyLocation(location: Location, armorStand: PacketArmorStand) {
-        armorStand.move(location,true)
+        armorStand.move(location, true)
     }
+
     //傻逼幻梦。
     @JvmStatic
     fun memoryEntity(location: Location): ArmorStand {
