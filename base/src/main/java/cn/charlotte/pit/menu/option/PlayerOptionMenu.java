@@ -69,6 +69,7 @@ public class PlayerOptionMenu extends Menu {
 
             button.put(28, new BarPriorityOptionButton());
             button.put(29, new BountyHiddenWhenNearOptionButton());
+            button.put(34, new OutfitOption());
         } else {
             button.put(11, new DebugDamageMessageOptionButton());
         }

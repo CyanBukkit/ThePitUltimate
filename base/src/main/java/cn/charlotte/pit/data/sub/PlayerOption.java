@@ -16,7 +16,7 @@ public class PlayerOption {
             eventNotify = true,
             combatNotify = true,
             chatMsg = true,
-            otherMsg = true,
+            otherMsg = true,outfit = true,
 
     bountyHiddenWhenNear = false,
 
@@ -152,6 +152,14 @@ public class PlayerOption {
 
     public void setSupporterStarDisplay(boolean supporterStarDisplay) {
         this.supporterStarDisplay = supporterStarDisplay;
+    }
+
+    public boolean isOutfit() {
+        return outfit;
+    }
+
+    public void setOutfit(boolean outfit) {
+        this.outfit = outfit;
     }
 
     public enum BarPriority {

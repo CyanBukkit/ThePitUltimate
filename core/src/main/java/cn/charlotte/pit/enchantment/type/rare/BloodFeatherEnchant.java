@@ -24,7 +24,7 @@ public class BloodFeatherEnchant extends AbstractEnchantment implements IPlayerK
 
     @Override
     public String getEnchantName() {
-        return "&c血&3羽&6";
+        return "血羽";
     }
 
     @Override

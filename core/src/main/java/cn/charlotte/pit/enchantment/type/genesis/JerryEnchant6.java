@@ -117,7 +117,7 @@ public class JerryEnchant6 extends AbstractEnchantment implements ITickTask, Mov
         if (songPlayer == null) {
             initializeSongPlayer(target);
         } else {
-            PlayerUtil.sendParticle(target.getLocation().add(0, 2.0, 0), EnumParticle.NOTE, 2);
+            PlayerUtil.sendParticle(target.getLocation().add(0, 3, 0), EnumParticle.NOTE, 2);
         }
     }
 

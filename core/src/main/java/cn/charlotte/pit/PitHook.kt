@@ -272,6 +272,10 @@ object PitHook {
 private fun loadEnchants() {
     val enchantmentFactor = ThePit.getInstance().enchantmentFactor
     val classes = mutableListOf(
+        //new
+        ThunderArrowEnchant::class.java,
+        UndeadArrowEnchant::class.java,
+        //end
         ComboUnpredictablyEnchant::class.java,
         ComboDazzlingGoldEnchant::class.java,
         NightFallEnchant::class.java,

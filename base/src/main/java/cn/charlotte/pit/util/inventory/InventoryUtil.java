@@ -380,7 +380,7 @@ public class InventoryUtil {
         boolean bowFound = false;
         boolean miner = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getChosePerk().entrySet().stream().anyMatch(entry -> entry.getValue().getPerkInternalName().equals("Miner"));
         int cobblestone = 0;
-
+        PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
         int slot = 0;
         PlayerInventory inventory = player.getInventory();
@@ -433,7 +433,7 @@ public class InventoryUtil {
                 inventory.addItem(new ItemBuilder(Material.COBBLESTONE).deathDrop(true).amount(32 - cobblestone).canDrop(false).canSaveToEnderChest(false).internalName("perk_miner").build());
             }
         }
-
+        if (playerProfile.getPlayerOption().isOutfit()) {
         if (ItemUtil.isDefaultItem(inventory.getHelmet())) {
             inventory.setHelmet(new ItemStack(Material.AIR));
         }
@@ -454,6 +454,7 @@ public class InventoryUtil {
         if (!bowFound) {
             inventory
                     .addItem(DEFAULT_BOW);
+        }
         }
         /*
         player.getInventory()
@@ -481,28 +482,29 @@ public class InventoryUtil {
                     (arrowBuilder.amount(maxArrow).build()));
         }
 
+        if (playerProfile.getPlayerOption().isOutfit()) {
+            int ironArmorSlot = random.nextInt(3);
 
-        int ironArmorSlot = random.nextInt(3);
-
-        if (inventory.getChestplate() == null || ItemUtil.isDefaultItem(inventory.getChestplate())) {
-            if (ironArmorSlot == 0) {
-                inventory.setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
-            } else {
-                inventory.setChestplate(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+            if (inventory.getChestplate() == null || ItemUtil.isDefaultItem(inventory.getChestplate())) {
+                if (ironArmorSlot == 0) {
+                    inventory.setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                } else {
+                    inventory.setChestplate(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                }
             }
-        }
-        if (inventory.getLeggings() == null || ItemUtil.isDefaultItem(inventory.getLeggings())) {
-            if (ironArmorSlot == 1) {
-                inventory.setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
-            } else {
-                inventory.setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+            if (inventory.getLeggings() == null || ItemUtil.isDefaultItem(inventory.getLeggings())) {
+                if (ironArmorSlot == 1) {
+                    inventory.setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                } else {
+                    inventory.setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                }
             }
-        }
-        if (inventory.getBoots() == null || ItemUtil.isDefaultItem(inventory.getBoots())) {
-            if (ironArmorSlot == 2) {
-                inventory.setBoots(new ItemBuilder(Material.IRON_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
-            } else {
-                inventory.setBoots(new ItemBuilder(Material.CHAINMAIL_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+            if (inventory.getBoots() == null || ItemUtil.isDefaultItem(inventory.getBoots())) {
+                if (ironArmorSlot == 2) {
+                    inventory.setBoots(new ItemBuilder(Material.IRON_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                } else {
+                    inventory.setBoots(new ItemBuilder(Material.CHAINMAIL_BOOTS).defaultItem().internalName("default_armor").canDrop(false).canSaveToEnderChest(true).buildWithUnbreakable());
+                }
             }
         }
     }
