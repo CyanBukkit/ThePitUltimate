@@ -100,21 +100,25 @@ public class ItemFactory implements IItemFactory {
     }
 
     public IMythicItem getIMythicItem0(ItemStack stack, String internalName) {
-        if (ItemUtil.shouldUpdateItem(stack)) {
-            if (ItemUtil.shouldUpdateUUID()) {
-                ItemUtil.randomUUIDItem(stack);
+        if(!this.clientSide) {
+            if (ItemUtil.shouldUpdateItem(stack)) {
+                if (ItemUtil.shouldUpdateUUID()) {
+                    ItemUtil.randomUUIDItem(stack);
+                }
+                ItemUtil.signVer(stack);
             }
-            ItemUtil.signVer(stack);
         }
 
         IMythicItem mythicItem = Utils.getMythicItem0(stack, internalName);
 
         if (mythicItem != null) {
             if (mythicItem.uuid != null) {
-                if (mythicItem.uuid.equals(IMythicItem.getDefUUID())) {
-                    mythicItem.uuid = ItemUtil.randomUUIDItem(stack);
+                if(!this.clientSide) {
+                    if (mythicItem.uuid.equals(IMythicItem.getDefUUID())) {
+                        mythicItem.uuid = ItemUtil.randomUUIDItem(stack);
+                    }
+                    theReference.putValue(mythicItem.uuid, mythicItem);
                 }
-                theReference.putValue(mythicItem.uuid, mythicItem);
             }
         }
         return mythicItem;
