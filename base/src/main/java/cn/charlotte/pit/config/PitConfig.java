@@ -23,6 +23,9 @@ public class PitConfig extends Configuration {
     public int maxLevel = 130; //Mirror
     private boolean tradeEnable = true;
     private boolean PVPEnable = true;
+    public List<String> animationForEpicEvent;
+
+    public int periodForEpicEvent;
     @ConfigData(
             path = "validate.state"
     )

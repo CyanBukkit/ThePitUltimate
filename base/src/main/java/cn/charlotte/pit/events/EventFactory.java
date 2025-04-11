@@ -1,6 +1,7 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.config.PitConfig;
 import cn.charlotte.pit.util.bossbar.BossBar;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
@@ -10,6 +11,7 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -180,10 +182,11 @@ public class EventFactory {
         if (event instanceof IPrepareEvent) {
             ((IPrepareEvent) event).onPreActive();
         }
-
+        PitConfig pitConfig = ThePit.getInstance().getPitConfig();
+        List<String> animationForEpicEvent = pitConfig.animationForEpicEvent;
+        int periodForEpicEvent = pitConfig.periodForEpicEvent;
         new BukkitRunnable() {
-            int tick = 0;
-
+            Iterator<String> iterator = animationForEpicEvent.iterator();
             @Override
             public void run() {
                 if (nextEpicEventTimer.hasExpired()) {
@@ -195,17 +198,13 @@ public class EventFactory {
                     cancel();
                     return;
                 }
-
-                if (tick >= 15) {
-                    tick = 0;
+                if(!iterator.hasNext()){
+                    iterator = animationForEpicEvent.iterator();
                 }
-                String start;
-                if (tick % 2 == 0) {
-                    start = "&5&l大型事件! ";
-                } else {
-                    start = "&d&l大型事件! ";
+                String start = "Epic Event Trigger";
+                if(iterator.hasNext()) {
+                     start = iterator.next(); //check
                 }
-
                 final String title = CC.translate(
                         start + "&6&l" + iEvent.getEventName() + " &7将在 &e" + TimeUtil.millisToTimer(nextEpicEventTimer.getRemaining()) + " &7后开始!");
 
@@ -217,10 +216,8 @@ public class EventFactory {
                         .getBossBar()
                         .getBossBar()
                         .setProgress(nextEpicEventTimer.getRemaining() / (5 * 1000 * 60f));
-
-                tick++;
             }
-        }.runTaskTimerAsynchronously(ThePit.getInstance(), 10, 10);
+        }.runTaskTimerAsynchronously(ThePit.getInstance(), 10, periodForEpicEvent);
     }
 
     public void activeEvent(IEpicEvent event) {

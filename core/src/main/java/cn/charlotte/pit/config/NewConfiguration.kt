@@ -14,7 +14,8 @@ import java.io.File
 import java.util.*
 
 object NewConfiguration {
-
+    var epicTitleUpdateInterval = 10
+    var epicEventTitleAnimation = listOf<String>()
     var watermarks = "&cThePitUltimate"
     var forbidEnchant = listOf("false");
     var vipPrice = 500
@@ -176,7 +177,13 @@ object NewConfiguration {
         loadingBoardTips = config.getList("scoreboard.loading", loadingBoardTips) as List<String>
         bountyTickInterval = config.getInt("bounty.updateInterval", bountyTickInterval);
         watermarks = config.getString("water-marks", watermarks)
-        ThePit.getInstance().pitConfig.maxLevel = maxLevel;
+        epicEventTitleAnimation = config.getList("title.event.epic.animation", epicEventTitleAnimation) as List<String>
+
+        epicTitleUpdateInterval = config.getInt("title.event.epic.interval", epicTitleUpdateInterval)
+        var pitConfig = ThePit.getInstance().pitConfig
+        pitConfig.maxLevel = maxLevel;
+        pitConfig.animationForEpicEvent = epicEventTitleAnimation
+        pitConfig.periodForEpicEvent = epicTitleUpdateInterval
 
     }
 
@@ -295,7 +302,11 @@ object NewConfiguration {
         "event-online-required.squads" to 999,
 
         "highest-prestige" to 35,
-
+        "title.event.epic.animation" to listOf(
+            "&5&l大型事件! ",
+            "&d&l大型事件! ",
+        ),
+        "title.event.epic.interval" to 10,
         "scoreboard.animation" to listOf(
             // 正向光波 (带残影效果)
             "&f&l神&5&l话&5&l天&5&l坑",
