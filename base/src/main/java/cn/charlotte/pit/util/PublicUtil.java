@@ -18,10 +18,11 @@ public class PublicUtil {
     public static String signVer = "Loader";
     public static String itemVersion = "Loader";
     protected static VarHandle METHOD_;
+
     public static net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
         if (item instanceof CraftItemStack) {
             try {
-                if(false) {
+                if (false) {
                     if (METHOD_ != null) {
                         return (net.minecraft.server.v1_8_R3.ItemStack) METHOD_.get(item);
                     }
@@ -29,7 +30,7 @@ public class PublicUtil {
                 java.lang.reflect.Field handleField = CraftItemStack.class.getDeclaredField("handle");
                 handleField.setAccessible(true);
                 net.minecraft.server.v1_8_R3.ItemStack itemStack = (net.minecraft.server.v1_8_R3.ItemStack) handleField.get(item);
-                if(itemStack != null && false) {
+                if (itemStack != null && false) {
                     MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(CraftItemStack.class, MethodHandles.lookup());
                     VarHandle varHandle = lookup.unreflectVarHandle(handleField);
                     METHOD_ = varHandle;

@@ -33,7 +33,9 @@ object NewConfiguration {
     var scoreboardShowtime = true
 
     var pitSupportPermission = "pit.vip"
+    var scoreBoardAnimation = listOf<String>()
 
+    var loadingBoardTips = listOf<String>()
     var removeSupportWhenNoPermission = false
     var maxLevel = 120
     val eventOnlineRequired = HashMap<String, Int>()
@@ -167,6 +169,9 @@ object NewConfiguration {
             }
         }
         maxLevel = config.getInt("maxLevel", 120)
+        scoreBoardAnimation = config.getList("scoreboard.animation", scoreBoardAnimation) as List<String>
+        loadingBoardTips = config.getList("scoreboard.loading", loadingBoardTips) as List<String>
+
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 
     }

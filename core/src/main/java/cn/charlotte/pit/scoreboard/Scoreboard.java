@@ -32,36 +32,6 @@ public class Scoreboard implements AssembleAdapter {
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
-    private final List<String> animationTitle =
-            Arrays.asList(
-                    // 正向光波 (带残影效果)
-                    "&f&l神&5&l话&5&l天&5&l坑",
-                    "&d&l神&f&l话&5&l天&5&l坑",
-                    "&5&l神&d&l话&f&l天&5&l坑",
-                    "&5&l神&5&l话&d&l天&f&l坑",
-                    "&5&l神&5&l话&5&l天&d&l坑",
-
-                    // 逆向渐隐过渡
-                    "&5&l神&5&l话&f&l天&5&l坑",
-                    "&5&l神&f&l话&d&l天&5&l坑",
-                    "&f&l神&d&l话&5&l天&5&l坑",
-                    "&d&l神&5&l话&5&l天&5&l坑",
-                    "&5&l神&5&l话&5&l天&5&l坑",
-
-                    // 反向光波 (镜像运动)
-                    "&5&l神&5&l话&5&l天&f&l坑",
-                    "&5&l神&5&l话&f&l天&d&l坑",
-                    "&5&l神&f&l话&d&l天&5&l坑",
-                    "&f&l神&d&l话&5&l天&5&l坑",
-                    "&d&l神&5&l话&5&l天&5&l坑",
-
-                    // 光波反弹效果
-                    "&5&l神&f&l话&5&l天&5&l坑",
-                    "&d&l神&5&l话&f&l天&5&l坑",
-                    "&5&l神&d&l话&5&l天&f&l坑",
-                    "&5&l神&5&l话&d&l天&5&l坑",
-                    "&5&l神&5&l话&5&l天&d&l坑"
-            );
 
     private long lastAnimationTime = 0;
     private int animationTick = 0;
@@ -69,7 +39,7 @@ public class Scoreboard implements AssembleAdapter {
     @Override
     public String getTitle(Player player) {
         List<String> title;
-        title = animationTitle;
+        title = NewConfiguration.INSTANCE.getScoreBoardAnimation();
 
         String text = title.get(animationTick);
         if (System.currentTimeMillis() - lastAnimationTime >= 250) {
@@ -83,16 +53,13 @@ public class Scoreboard implements AssembleAdapter {
         return text;
     }
 
-    private static final List<String> LOADING = new ObjectArrayList<>(new String[]{"", "&c正在加载档案...", "&c请稍等片刻..."
-            , "", "&c公告群: &e187119685", "", "&bthepit.cc"});
     private final ObjectArrayList<String> carrierList = new ObjectArrayList<>(16);
-
     @Override
     public List<String> getLines(Player player) {
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (!profile.isLoaded()) {
-            return LOADING;
+            return NewConfiguration.INSTANCE.getLoadingBoardTips();
         }
         List<String> lines = carrierList;
         lines.clear();
@@ -171,7 +138,7 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
         if (level >= NewConfiguration.INSTANCE.getMaxLevel()) {
-            lines.add("&f经验: &b无敌");
+            lines.add("&f经验: &e&lMax");
         } else {
             lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Xp");
         }
