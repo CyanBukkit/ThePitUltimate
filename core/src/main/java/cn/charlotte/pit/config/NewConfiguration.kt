@@ -15,6 +15,7 @@ import java.util.*
 
 object NewConfiguration {
 
+    var watermarks = "&cThePitUltimate"
     var forbidEnchant = listOf("false");
     var vipPrice = 500
     var priceName = "点券"
@@ -171,7 +172,7 @@ object NewConfiguration {
         maxLevel = config.getInt("maxLevel", 120)
         scoreBoardAnimation = config.getList("scoreboard.animation", scoreBoardAnimation) as List<String>
         loadingBoardTips = config.getList("scoreboard.loading", loadingBoardTips) as List<String>
-
+        watermarks = config.getString("watermarks", watermarks)
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 
     }
@@ -238,7 +239,7 @@ object NewConfiguration {
     )
 
     private val defaults = mapOf(
-        "forbidEnchant" to listOf("false"),
+        "watermarks" to watermarks,
         "vip-price" to 500,
         "price-name" to "点券",
         "lobby-command" to "hub",
@@ -292,8 +293,43 @@ object NewConfiguration {
 
         "highest-prestige" to 35,
 
-        "scoreboard-showtime" to true,
+        "scoreboard.animation" to listOf(
+            // 正向光波 (带残影效果)
+            "&f&l神&5&l话&5&l天&5&l坑",
+            "&d&l神&f&l话&5&l天&5&l坑",
+            "&5&l神&d&l话&f&l天&5&l坑",
+            "&5&l神&5&l话&d&l天&f&l坑",
+            "&5&l神&5&l话&5&l天&d&l坑", // 逆向渐隐过渡,
 
+
+            // 逆向渐隐过渡
+            "&5&l神&5&l话&f&l天&5&l坑",
+            "&5&l神&f&l话&d&l天&5&l坑",
+            "&f&l神&d&l话&5&l天&5&l坑",
+            "&d&l神&5&l话&5&l天&5&l坑",
+            "&5&l神&5&l话&5&l天&5&l坑", // 反向光波 (镜像运动),
+
+
+            // 反向光波 (镜像运动)
+            "&5&l神&5&l话&5&l天&f&l坑",
+            "&5&l神&5&l话&f&l天&d&l坑",
+            "&5&l神&f&l话&d&l天&5&l坑",
+            "&f&l神&d&l话&5&l天&5&l坑",
+            "&d&l神&5&l话&5&l天&5&l坑", // 光波反弹效果,
+
+
+            // 光波反弹效果
+            "&5&l神&f&l话&5&l天&5&l坑",
+            "&d&l神&5&l话&f&l天&5&l坑",
+            "&5&l神&d&l话&5&l天&f&l坑",
+            "&5&l神&5&l话&d&l天&5&l坑",
+            "&5&l神&5&l话&5&l天&d&l坑"
+        ),
+        "scoreboard.loading" to listOf(
+            "", "&c正在加载档案...", "&c请稍等片刻...", "", "&c公告群: &exxxxxxx", "", "&cThePitUltimate"
+        ),
+        "scoreboard-showtime" to true,
+        "forbidEnchant" to forbidEnchant,
         "rate.dark.vip1.test" to "pit.vip1",
         "rate.dark.vip1.value" to 0.08,
         "rate.dark.vip2.test" to "pit.vip2",

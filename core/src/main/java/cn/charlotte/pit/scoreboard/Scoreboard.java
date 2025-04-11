@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 
 public class Scoreboard implements AssembleAdapter {
@@ -54,6 +53,7 @@ public class Scoreboard implements AssembleAdapter {
     }
 
     private final ObjectArrayList<String> carrierList = new ObjectArrayList<>(16);
+
     @Override
     public List<String> getLines(Player player) {
 
@@ -69,8 +69,7 @@ public class Scoreboard implements AssembleAdapter {
 
         long currentSystemTime = System.currentTimeMillis();
         if (NewConfiguration.INSTANCE.getScoreboardShowtime()) {
-            lines.add("&7" +
-                    dateFormat.format(currentSystemTime) + " &8" + ThePit.getInstance().getServerId());
+            lines.add("&7" + dateFormat.format(currentSystemTime) + " &8" + ThePit.getInstance().getServerId());
         }
 
         IEpicEvent activeEpicEvent = ThePit.getInstance().getEventFactory().getActiveEpicEvent();
@@ -265,7 +264,7 @@ public class Scoreboard implements AssembleAdapter {
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
-            lines.add("&ethepit.cc");
+            lines.add(ThePit.getInstance().getPitConfig().getServerName());
         }
         return lines;
     }

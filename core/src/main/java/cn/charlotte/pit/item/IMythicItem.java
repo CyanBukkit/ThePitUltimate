@@ -1,6 +1,7 @@
 package cn.charlotte.pit.item;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
@@ -163,12 +164,12 @@ public abstract class IMythicItem extends AbstractPitItem {
 
             if (this instanceof MythicLeggingsItem) {
                 if (color != MythicColor.DARK) {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果 &8&o@thepit.cc");
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果 &8| " + NewConfiguration.INSTANCE.getWatermarks());
                 } else {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &8&o@thepit.cc");
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &8| " + NewConfiguration.INSTANCE.getWatermarks());
                 }
             } else {
-                lore.add("&8thepit.cc");
+                lore.add(NewConfiguration.INSTANCE.getWatermarks());
             }
 
             if (genesisFound) {
@@ -180,9 +181,9 @@ public abstract class IMythicItem extends AbstractPitItem {
             lore.add("");
             if (this instanceof MythicLeggingsItem) {
                 lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "在神话之井盖中附魔");
-                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种象征 &8&o@thepit.cc");
+                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种象征 &8| " + NewConfiguration.INSTANCE.getWatermarks());
             } else {
-                lore.add("&7在神话之井盖中附魔 &8&o@thepit.cc");
+                lore.add("&7在神话之井盖中附魔 &8| " + ThePit.getApi().getWatermarks());
             }
             this.tier = 0;
         }

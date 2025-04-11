@@ -46,6 +46,8 @@ public interface PitInternalHook {
 
     boolean openEvent(IEvent event, Player player);
 
+    String getWatermarks();
+
     default boolean isLoaded() {
         return false;
     }

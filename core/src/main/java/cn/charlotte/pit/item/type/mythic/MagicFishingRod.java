@@ -1,5 +1,6 @@
 package cn.charlotte.pit.item.type.mythic;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.util.item.ItemBuilder;
@@ -43,7 +44,7 @@ public class MagicFishingRod extends IMythicItem {
         } else {
             lore.add("&7死亡后保留");
             lore.add("");
-            lore.add("&7在神话之井中使用 | &8&o@thepit.cc");
+            lore.add("&7在神话之井中使用 &8| " + ThePit.getApi().getWatermarks());
         }
 
 
