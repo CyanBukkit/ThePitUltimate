@@ -19,6 +19,7 @@ not-netease-skins:
   GenesisDemon-npc-signature: bbbbbbbb
 bot:
   name: "bot"
+watermark: "TPU3"
 scoreboard:
   ip: "&eserver.properties"
   animation:

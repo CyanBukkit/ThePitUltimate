@@ -85,8 +85,8 @@ import java.util.concurrent.TimeUnit;
 })
 public class PlayerProfile {
 
-    public final static PlayerProfile NONE_PROFILE = new NullProfile();
     public static final UUID CONSTANT_UUID_BOT_UNLOADED_PLAYER = UUID.randomUUID();
+    public final static PlayerProfile NONE_PROFILE = new NullProfile();
 
     //两张表
     public IOperator toOperator() {

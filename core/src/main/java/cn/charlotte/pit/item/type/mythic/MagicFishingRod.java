@@ -44,7 +44,7 @@ public class MagicFishingRod extends IMythicItem {
         } else {
             lore.add("&7死亡后保留");
             lore.add("");
-            lore.add("&7在神话之井中使用 &8| " + ThePit.getApi().getWatermarks());
+            lore.add("&7在神话之井中使用 &8| " + ThePit.getApi().getWatermark());
         }
 
 

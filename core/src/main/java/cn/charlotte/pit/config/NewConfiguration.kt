@@ -1,5 +1,6 @@
 package cn.charlotte.pit.config
 
+import cn.charlotte.pit.PitHook
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.enchantment.type.rare.ThePunchEnchant
 import cn.charlotte.pit.item.MythicColor
@@ -16,6 +17,7 @@ import java.util.*
 
 object NewConfiguration {
 
+    var watermark = "tpu_" + PitHook.gitVersion
     var dummyBotName = "bot"
     var ip = "localhost"
     var forbidEnchant = listOf("false");
@@ -178,7 +180,7 @@ object NewConfiguration {
         ip = config.getString("scoreboard.ip",ip)
         dummyBotName = config.getString("bot.name",dummyBotName)
         PlayerUtil.BOT_NAME = dummyBotName
-
+        watermark = config.getString("watermark",watermark)
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 
     }

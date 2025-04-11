@@ -250,8 +250,8 @@ object PitInternalImpl : PitInternalHook {
         return Utils.getEnchantLevel(item, enchantName)
     }
 
-    override fun getWatermarks(): String {
-        return NewConfiguration.watermarks
+    override fun getWatermark(): String {
+        return NewConfiguration.watermark
     }
 
     override fun isLoaded(): Boolean {

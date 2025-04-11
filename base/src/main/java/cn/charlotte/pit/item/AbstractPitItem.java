@@ -66,10 +66,10 @@ public abstract class AbstractPitItem {
                     lore.add("&7" + s);
                 }
             } else {
-                lore.add("&7此附魔已被移除. &8| " + ThePit.getApi().getWatermarks());
+                lore.add("&7此附魔已被移除. &8| " + ThePit.getApi().getWatermark());
             }
             if (entry.getKey().getRarity() == EnchantmentRarity.DISABLED) {
-                lore.add("&7此附魔暂时被管理员停用. &8| " + ThePit.getApi().getWatermarks());
+                lore.add("&7此附魔暂时被管理员停用. &8| " + ThePit.getApi().getWatermark());
             }
             lore.add(" ");
         }
