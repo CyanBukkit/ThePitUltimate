@@ -70,8 +70,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.slf4j.Logger;
-import pku.yim.license.PluginProxy;
-import pku.yim.license.Resource;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
@@ -86,11 +84,10 @@ import java.util.concurrent.RejectedExecutionException;
 
 
 /**
- * @author EmptyIrony, Misoryan
+ * @author EmptyIrony, Misoryan, KleeLoveLife, Araykal, Rabbit0w0
  */
 
-
-public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
+public class ThePit extends JavaPlugin implements PluginMessageListener {
 
 
     public static PitInternalHook api;
@@ -897,29 +894,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.factory = factory;
     }
 
-    @Override
-    public void info(String s) {
-        log.info(s);
-    }
-
-    @Override
-    public void disablePlugin() {
-        onDisable();
-    }
-
-    @Override
-    public boolean isPrimaryThread() {
-        return Bukkit.isPrimaryThread();
-    }
-
 
     public static PitInternalHook getApi() {
         return api;
-    }
-
-    @Override
-    public Resource getResourceType() {
-        return Resource.CLEAR_LOWERCASE;
     }
 
 }

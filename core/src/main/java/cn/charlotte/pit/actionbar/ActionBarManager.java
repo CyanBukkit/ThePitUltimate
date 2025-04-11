@@ -10,7 +10,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
+/**
+ * 不要使用SimpleEntry, 会污染HashMap
+ */
 public class ActionBarManager implements IActionBarManager {
 
     Map<UUID, Map<String, MutablePair<String, Integer>>> multiMap = new SWMRHashTable<>();
@@ -31,8 +33,8 @@ public class ActionBarManager implements IActionBarManager {
         ((SWMRHashTable<UUID, Map<String, MutablePair<String, Integer>>>) multiMap).removeIf((uuid, mappedString) -> { //forEach as multimap
             Player player = Bukkit.getPlayer(uuid); //get Players
             if (mappedString.isEmpty() || player == null || !player.isOnline()) {
-                //point to gc
-                return true; //save performances
+                //remove immediately
+                return true; //save performance
             }
             AtomicBoolean ab = new AtomicBoolean(false);
             AtomicInteger index = new AtomicInteger();
@@ -40,7 +42,6 @@ public class ActionBarManager implements IActionBarManager {
             ((SWMRHashTable<String, MutablePair<String, Integer>>) mappedString).removeIf((key, value) -> {
                 String rawString = value.getKey();
                 Integer repeat = value.getValue();
-                //  System.out.println("Append " + rawString + " for " + player);
                 builder.append(rawString);
                 if (index.incrementAndGet() < size) {
                     builder.append("&7| ");
@@ -51,7 +52,7 @@ public class ActionBarManager implements IActionBarManager {
                 } else if (!rawString.isEmpty()) {
                     ab.set(true);
                 }
-                value.setValue(i1); //设置指针
+                value.setValue(i1); //setting the value instead create new one, do not use SimpleEntry, because of its rehashing operation
                 return false;
             });
             if (ab.get()) {

@@ -17,10 +17,8 @@ import java.util.function.Consumer;
 
 @ToString
 public class PackedOperator implements IOperator {
-
+    ExecutionPolicy policy;
     ThePit pit;
-    //ReentrantLock lock = new ReentrantLock();
-    //Didn't have any lock required
     long lastHeartBeat = 0;
 
     Player lastBoundPlayer = null;
@@ -28,7 +26,9 @@ public class PackedOperator implements IOperator {
     PlayerProfile profile = PlayerProfile.NONE_PROFILE;
 
     public PackedOperator(ThePit inst) {
+        this.policy = ExecutionPolicy.EXECUTION_POLICY_DEFAULT;
         this.pit = inst;
+
     }
 
     public PlayerProfile profile() {
@@ -182,12 +182,16 @@ public class PackedOperator implements IOperator {
             pendingExecuting.add(operation);
             final Runnable operationFinaled = operation;
             Bukkit.getScheduler().runTaskAsynchronously(pit, () -> {
-                operationFinaled.run();
-                operations.remove(operationFinaled);
-                pendingExecuting.remove(operationFinaled);
+                try {
+                    operationFinaled.run();
+                    operations.remove(operationFinaled);
+                    pendingExecuting.remove(operationFinaled);
+                    policy.success(this.lastBoundPlayer);
+                } catch (Exception e) {
+                    policy.fail(this.lastBoundPlayer, e);
+                }
             });
         }
-
     }
 
     private static final Runnable EMPTY_RUNNABLE = () -> {

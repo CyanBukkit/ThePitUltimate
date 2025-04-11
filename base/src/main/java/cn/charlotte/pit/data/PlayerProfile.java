@@ -85,514 +85,8 @@ import java.util.concurrent.TimeUnit;
 })
 public class PlayerProfile {
 
-    public final static PlayerProfile NONE_PROFILE;
+    public final static PlayerProfile NONE_PROFILE = new NullProfile();
     public static final UUID CONSTANT_UUID_BOT_UNLOADED_PLAYER = UUID.randomUUID();
-
-    static {
-        NONE_PROFILE = new PlayerProfile(CONSTANT_UUID_BOT_UNLOADED_PLAYER, "NotLoadPlayer") {
-            public boolean isLoaded() {
-                return false;
-            }
-
-            @Override
-            public PlayerProfile save(Player player) {
-                return this;
-            }
-
-            @Override
-            public PlayerProfile disallow() {
-                return this;
-            }
-
-            @Override
-            public PlayerProfile allow() {
-                return this;
-            }
-
-            @Override
-            public boolean isBot() {
-                return true;
-            }
-
-            @Override
-            public void saveData(Player player) {
-                throw new UnsupportedOperationException("Never save the not loaded player");
-            }
-
-            @Override
-            public IOperator toOperator() {
-                return super.toOperator();
-            }
-
-            @Override
-            public void setLastLoginTime(long lastLoginTime) {
-            }
-
-            @Override
-            public void setRegisterTime(long registerTime) {
-            }
-
-            @Override
-            public void setTotalPlayedTime(long totalPlayedTime) {
-            }
-
-            @Override
-            public void setLastLogoutTime(long lastLogoutTime) {
-            }
-
-            @Override
-            public void setYearPlayedTime(long yearPlayedTime) {
-            }
-
-            @Override
-            public void setMonthPlayedTime(long monthPlayedTime) {
-            }
-
-            @Override
-            public void setWeekPlayedTime(long weekPlayedTime) {
-            }
-
-            @Override
-            public void setTodayPlayedTime(long todayPlayedTime) {
-            }
-
-            @Override
-            public void setKills(int kills) {
-            }
-
-            @Override
-            public void setAssists(int assists) {
-            }
-
-            @Override
-            public void setDeaths(int deaths) {
-            }
-
-            @Override
-            public void setHighestStreaks(int highestStreaks) {
-            }
-
-            @Override
-            public void setTotalDamage(long totalDamage) {
-            }
-
-            @Override
-            public void setMeleeTotalDamage(long meleeTotalDamage) {
-            }
-
-            @Override
-            public void setArrowTotalDamage(long arrowTotalDamage) {
-            }
-
-            @Override
-            public void setHurtDamage(long hurtDamage) {
-            }
-
-            @Override
-            public void setMeleeHurtDamage(long meleeHurtDamage) {
-            }
-
-            @Override
-            public void setBowHurtDamage(long bowHurtDamage) {
-            }
-
-            @Override
-            public void setMeleeAttack(int meleeAttack) {
-            }
-
-            @Override
-            public void setShootAttack(int shootAttack) {
-            }
-
-            @Override
-            public void setMeleeHit(int meleeHit) {
-            }
-
-            @Override
-            public void setBowHit(int bowHit) {
-            }
-
-            @Override
-            public void setRodUsed(int rodUsed) {
-            }
-
-            @Override
-            public void setRodHit(int rodHit) {
-            }
-
-            @Override
-            public void setGoldPicked(int goldPicked) {
-            }
-
-            @Override
-            public void setFishingNumber(int fishingNumber) {
-            }
-
-            @Override
-            public void setGoldenHeadEaten(int goldenHeadEaten) {
-            }
-
-            @Override
-            public void setExperience(double experience) {
-            }
-
-            @Override
-            public void setPrestige(int prestige) {
-            }
-
-            @Override
-            public void setCoins(double coins) {
-            }
-
-            @Override
-            public void setRenown(int renown) {
-            }
-
-            @Override
-            public void setBounty(int bounty) {
-            }
-
-            @Override
-            public void setActionBounty(int actionBounty) {
-            }
-
-            @Override
-            public void setRespawnTime(double respawnTime) {
-            }
-
-            @Override
-            public void setInventory(PlayerInv inv) {
-            }
-
-            @Override
-            public void setEnderChest(PlayerEnderChest enderChest) {
-            }
-
-            @Override
-            public PlayerProfile setInventoryUnsafe(PlayerInv inv) {
-                return this;
-            }
-
-            @Override
-            public void setEnderChestRow(int enderChestRow) {
-            }
-
-            @Override
-            public void setUnlockedPerk(List<PerkData> unlockedPerk) {
-            }
-
-            @Override
-            public void setBoughtPerk(List<PerkData> boughtPerk) {
-            }
-
-            @Override
-            public void setUsedCdk(Set<String> usedCdk) {
-            }
-
-            @Override
-            public void setChosePerk(Map<Integer, PerkData> chosePerk) {
-            }
-
-            @Override
-            public void setTotalExp(double totalExp) {
-            }
-
-            @Override
-            public void setAutoBuyButtons(List<String> autoBuyButtons) {
-            }
-
-            @Override
-            public void setTradeLimit(TradeLimit tradeLimit) {
-            }
-
-            @Override
-            public void setMedalData(MedalData medalData) {
-            }
-
-            @Override
-            public void setQuestLimit(QuestLimit questLimit) {
-            }
-
-            @Override
-            public void setOfferData(OfferData offerData) {
-            }
-
-            @Override
-            public void setGrindedCoins(double grindedCoins) {
-            }
-
-            @Override
-            public void setPlayerOption(PlayerOption playerOption) {
-            }
-
-            @Override
-            public void setPlayerBanData(PlayerBanData playerBanData) {
-            }
-
-            @Override
-            public void setSupporter(boolean supporter) {
-
-            }
-
-            @Override
-            public void setSupporterGivenByAdmin(boolean supporterGivenByAdmin) {
-            }
-
-            @Override
-            public void setRemedyLevel(int remedyLevel) {
-            }
-
-            @Override
-            public void setRemedyExp(double remedyExp) {
-            }
-
-            @Override
-            public void setRemedyDate(String remedyDate) {
-            }
-
-            @Override
-            public void setTotalFishTimes(int totalFishTimes) {
-            }
-
-            @Override
-            public void setTotalFishTreasureTimes(int totalFishTreasureTimes) {
-            }
-
-            @Override
-            public void setTotalFishTrashTimes(int totalFishTrashTimes) {
-            }
-
-            @Override
-            public void setCurrentQuest(QuestData currentQuest) {
-
-            }
-
-            @Override
-            public void setLastQuest(QuestData lastQuest) {
-            }
-
-            @Override
-            public void setNightQuestEnable(boolean nightQuestEnable) {
-            }
-
-            @Override
-            public void setQuestCenter(QuestCenter questCenter) {
-            }
-
-            @Override
-            public void setGenesisData(GenesisData genesisData) {
-            }
-
-            @Override
-            public void setCurrentQuestList(List<String> currentQuestList) {
-            }
-
-            @Override
-            public void setMaxHealth(double maxHealth) {
-            }
-
-            @Override
-            public void setFoodLevel(int foodLevel) {
-            }
-
-            @Override
-            public void setMoveSpeed(float moveSpeed) {
-            }
-
-            @Override
-            public void setEnchantingItem(String enchantingItem) {
-            }
-
-            @Override
-            public void setEnchantingScience(String enchantingScience) {
-            }
-
-            @Override
-            public void setLogin(boolean login) {
-            }
-
-            @Override
-            public void setWipedData(WipedData wipedData) {
-            }
-
-            @Override
-            public void setBuffData(BuffData buffData) {
-            }
-
-            @Override
-            public void setClaimedMail(List<String> claimedMail) {
-            }
-
-            @Override
-            public void setInArena(boolean inArena) {
-            }
-
-            @Override
-            public void setStreakKills(double kills) {
-            }
-
-            @Override
-            public void setCombatTimer(Cooldown combatTimer) {
-            }
-
-            @Override
-            public void setEditingMode(boolean editingMode) {
-            }
-
-            @Override
-            public void setDamageReduced(double damageReduced) {
-            }
-
-            @Override
-            public void setDamageMap(Map<UUID, DamageData> damageMap) {
-            }
-
-            @Override
-            public void setStrengthNum(int strengthNum) {
-            }
-
-            @Override
-            public void setStrengthTimer(Cooldown strengthTimer) {
-            }
-
-            @Override
-            public void setLastKilledPlayer(UUID lastKilledPlayer) {
-            }
-
-            @Override
-            public void setBountyCooldown(Cooldown bountyCooldown) {
-            }
-
-            @Override
-            public void setBountyStreak(int bountyStreak) {
-            }
-
-            @Override
-            public void setKillRecap(KillRecap killRecap) {
-            }
-
-            @Override
-            public void setScreenShare(boolean screenShare) {
-            }
-
-            @Override
-            public void setScreenShareQQ(String screenShareQQ) {
-            }
-
-            @Override
-            public void setMailData(PlayerMailData mailData) {
-            }
-
-            @Override
-            public void setNicked(boolean nicked) {
-            }
-
-            @Override
-            public void setNickPrestige(int nickPrestige) {
-            }
-
-            @Override
-            public void setNickLevel(int nickLevel) {
-            }
-
-            @Override
-            public void setTempInvUsing(boolean tempInvUsing) {
-            }
-
-            @Override
-            public void setNoDamageAnimations(boolean noDamageAnimations) {
-
-            }
-
-            @Override
-            public void setLiteStreakKill(double liteStreakKill) {
-            }
-
-            @Override
-            public void setLastActionTimestamp(long lastActionTimestamp) {
-            }
-
-            @Override
-            public void setGoldStackAddon(double goldStackAddon) {
-            }
-
-            @Override
-            public void setGoldStackMax(double goldStackMax) {
-            }
-
-            @Override
-            public void setXpStackAddon(double xpStackAddon) {
-            }
-
-            @Override
-            public void setXpStackMax(double xpStackMax) {
-            }
-
-            @Override
-            public Iterable<PlayerInvBackup> gcBackupIterators() {
-                return new ObjectArrayList<>();
-            }
-
-            @Override
-            public Iterable<PlayerInvBackup> getInvBackups() {
-                return new ObjectArrayList<>();
-            }
-
-            @Override
-            public void setTodayCompletedUber(int todayCompletedUber) {
-            }
-
-            @Override
-            public void setTodayCompletedUberLastRefreshed(long todayCompletedUberLastRefreshed) {
-            }
-
-            @Override
-            public void setStreakCooldown(Cooldown streakCooldown) {
-            }
-
-            @Override
-            public void setStreakCount(int streakCount) {
-            }
-
-            @Override
-            public void setBot(boolean bot) {
-            }
-
-            @Override
-            public void setLastDamageAt(long lastDamageAt) {
-            }
-
-            @Override
-            public void setExtraMaxHealth(HashMap<String, Double> extraMaxHealth) {
-            }
-
-            @Override
-            public void setEnchantingBook(String enchantingBook) {
-            }
-
-            @Override
-            public void setUnlockedPerkMap(Map<String, PerkData> unlockedPerkMap) {
-            }
-
-            @Override
-            public void setProfileFormatVersion(int profileFormatVersion) {
-            }
-
-            @Override
-            public void setLastRenameTime(long lastRenameTime) {
-            }
-
-            @Override
-            public void setBoughtPerkMap(Map<String, PerkData> boughtPerkMap) {
-
-            }
-
-            @Override
-            public int getBounty() {
-                return 0;
-            }
-        };
-    }
 
     //两张表
     public IOperator toOperator() {
@@ -2353,5 +1847,513 @@ public class PlayerProfile {
 
     public void setLastRenameTime(long lastRenameTime) {
         this.lastRenameTime = lastRenameTime;
+    }
+
+    private static class NullProfile extends PlayerProfile {
+        public NullProfile() {
+            super(PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER, "NotLoadPlayer");
+        }
+
+        public boolean isLoaded() {
+            return false;
+        }
+
+        @Override
+        public PlayerProfile save(Player player) {
+            return this;
+        }
+
+        @Override
+        public PlayerProfile disallow() {
+            return this;
+        }
+
+        @Override
+        public PlayerProfile allow() {
+            return this;
+        }
+
+        @Override
+        public boolean isBot() {
+            return true;
+        }
+
+        @Override
+        public void saveData(Player player) {
+            throw new UnsupportedOperationException("Never save the not loaded player");
+        }
+
+        @Override
+        public IOperator toOperator() {
+            return super.toOperator();
+        }
+
+        @Override
+        public void setLastLoginTime(long lastLoginTime) {
+        }
+
+        @Override
+        public void setRegisterTime(long registerTime) {
+        }
+
+        @Override
+        public void setTotalPlayedTime(long totalPlayedTime) {
+        }
+
+        @Override
+        public void setLastLogoutTime(long lastLogoutTime) {
+        }
+
+        @Override
+        public void setYearPlayedTime(long yearPlayedTime) {
+        }
+
+        @Override
+        public void setMonthPlayedTime(long monthPlayedTime) {
+        }
+
+        @Override
+        public void setWeekPlayedTime(long weekPlayedTime) {
+        }
+
+        @Override
+        public void setTodayPlayedTime(long todayPlayedTime) {
+        }
+
+        @Override
+        public void setKills(int kills) {
+        }
+
+        @Override
+        public void setAssists(int assists) {
+        }
+
+        @Override
+        public void setDeaths(int deaths) {
+        }
+
+        @Override
+        public void setHighestStreaks(int highestStreaks) {
+        }
+
+        @Override
+        public void setTotalDamage(long totalDamage) {
+        }
+
+        @Override
+        public void setMeleeTotalDamage(long meleeTotalDamage) {
+        }
+
+        @Override
+        public void setArrowTotalDamage(long arrowTotalDamage) {
+        }
+
+        @Override
+        public void setHurtDamage(long hurtDamage) {
+        }
+
+        @Override
+        public void setMeleeHurtDamage(long meleeHurtDamage) {
+        }
+
+        @Override
+        public void setBowHurtDamage(long bowHurtDamage) {
+        }
+
+        @Override
+        public void setMeleeAttack(int meleeAttack) {
+        }
+
+        @Override
+        public void setShootAttack(int shootAttack) {
+        }
+
+        @Override
+        public void setMeleeHit(int meleeHit) {
+        }
+
+        @Override
+        public void setBowHit(int bowHit) {
+        }
+
+        @Override
+        public void setRodUsed(int rodUsed) {
+        }
+
+        @Override
+        public void setRodHit(int rodHit) {
+        }
+
+        @Override
+        public void setGoldPicked(int goldPicked) {
+        }
+
+        @Override
+        public void setFishingNumber(int fishingNumber) {
+        }
+
+        @Override
+        public void setGoldenHeadEaten(int goldenHeadEaten) {
+        }
+
+        @Override
+        public void setExperience(double experience) {
+        }
+
+        @Override
+        public void setPrestige(int prestige) {
+        }
+
+        @Override
+        public void setCoins(double coins) {
+        }
+
+        @Override
+        public void setRenown(int renown) {
+        }
+
+        @Override
+        public void setBounty(int bounty) {
+        }
+
+        @Override
+        public void setActionBounty(int actionBounty) {
+        }
+
+        @Override
+        public void setRespawnTime(double respawnTime) {
+        }
+
+        @Override
+        public void setInventory(PlayerInv inv) {
+        }
+
+        @Override
+        public void setEnderChest(PlayerEnderChest enderChest) {
+        }
+
+        @Override
+        public PlayerProfile setInventoryUnsafe(PlayerInv inv) {
+            return this;
+        }
+
+        @Override
+        public void setEnderChestRow(int enderChestRow) {
+        }
+
+        @Override
+        public void setUnlockedPerk(List<PerkData> unlockedPerk) {
+        }
+
+        @Override
+        public void setBoughtPerk(List<PerkData> boughtPerk) {
+        }
+
+        @Override
+        public void setUsedCdk(Set<String> usedCdk) {
+        }
+
+        @Override
+        public void setChosePerk(Map<Integer, PerkData> chosePerk) {
+        }
+
+        @Override
+        public void setTotalExp(double totalExp) {
+        }
+
+        @Override
+        public void setAutoBuyButtons(List<String> autoBuyButtons) {
+        }
+
+        @Override
+        public void setTradeLimit(TradeLimit tradeLimit) {
+        }
+
+        @Override
+        public void setMedalData(MedalData medalData) {
+        }
+
+        @Override
+        public void setQuestLimit(QuestLimit questLimit) {
+        }
+
+        @Override
+        public void setOfferData(OfferData offerData) {
+        }
+
+        @Override
+        public void setGrindedCoins(double grindedCoins) {
+        }
+
+        @Override
+        public void setPlayerOption(PlayerOption playerOption) {
+        }
+
+        @Override
+        public void setPlayerBanData(PlayerBanData playerBanData) {
+        }
+
+        @Override
+        public void setSupporter(boolean supporter) {
+
+        }
+
+        @Override
+        public void setSupporterGivenByAdmin(boolean supporterGivenByAdmin) {
+        }
+
+        @Override
+        public void setRemedyLevel(int remedyLevel) {
+        }
+
+        @Override
+        public void setRemedyExp(double remedyExp) {
+        }
+
+        @Override
+        public void setRemedyDate(String remedyDate) {
+        }
+
+        @Override
+        public void setTotalFishTimes(int totalFishTimes) {
+        }
+
+        @Override
+        public void setTotalFishTreasureTimes(int totalFishTreasureTimes) {
+        }
+
+        @Override
+        public void setTotalFishTrashTimes(int totalFishTrashTimes) {
+        }
+
+        @Override
+        public void setCurrentQuest(QuestData currentQuest) {
+
+        }
+
+        @Override
+        public void setLastQuest(QuestData lastQuest) {
+        }
+
+        @Override
+        public void setNightQuestEnable(boolean nightQuestEnable) {
+        }
+
+        @Override
+        public void setQuestCenter(QuestCenter questCenter) {
+        }
+
+        @Override
+        public void setGenesisData(GenesisData genesisData) {
+        }
+
+        @Override
+        public void setCurrentQuestList(List<String> currentQuestList) {
+        }
+
+        @Override
+        public void setMaxHealth(double maxHealth) {
+        }
+
+        @Override
+        public void setFoodLevel(int foodLevel) {
+        }
+
+        @Override
+        public void setMoveSpeed(float moveSpeed) {
+        }
+
+        @Override
+        public void setEnchantingItem(String enchantingItem) {
+        }
+
+        @Override
+        public void setEnchantingScience(String enchantingScience) {
+        }
+
+        @Override
+        public void setLogin(boolean login) {
+        }
+
+        @Override
+        public void setWipedData(WipedData wipedData) {
+        }
+
+        @Override
+        public void setBuffData(BuffData buffData) {
+        }
+
+        @Override
+        public void setClaimedMail(List<String> claimedMail) {
+        }
+
+        @Override
+        public void setInArena(boolean inArena) {
+        }
+
+        @Override
+        public void setStreakKills(double kills) {
+        }
+
+        @Override
+        public void setCombatTimer(Cooldown combatTimer) {
+        }
+
+        @Override
+        public void setEditingMode(boolean editingMode) {
+        }
+
+        @Override
+        public void setDamageReduced(double damageReduced) {
+        }
+
+        @Override
+        public void setDamageMap(Map<UUID, DamageData> damageMap) {
+        }
+
+        @Override
+        public void setStrengthNum(int strengthNum) {
+        }
+
+        @Override
+        public void setStrengthTimer(Cooldown strengthTimer) {
+        }
+
+        @Override
+        public void setLastKilledPlayer(UUID lastKilledPlayer) {
+        }
+
+        @Override
+        public void setBountyCooldown(Cooldown bountyCooldown) {
+        }
+
+        @Override
+        public void setBountyStreak(int bountyStreak) {
+        }
+
+        @Override
+        public void setKillRecap(KillRecap killRecap) {
+        }
+
+        @Override
+        public void setScreenShare(boolean screenShare) {
+        }
+
+        @Override
+        public void setScreenShareQQ(String screenShareQQ) {
+        }
+
+        @Override
+        public void setMailData(PlayerMailData mailData) {
+        }
+
+        @Override
+        public void setNicked(boolean nicked) {
+        }
+
+        @Override
+        public void setNickPrestige(int nickPrestige) {
+        }
+
+        @Override
+        public void setNickLevel(int nickLevel) {
+        }
+
+        @Override
+        public void setTempInvUsing(boolean tempInvUsing) {
+        }
+
+        @Override
+        public void setNoDamageAnimations(boolean noDamageAnimations) {
+
+        }
+
+        @Override
+        public void setLiteStreakKill(double liteStreakKill) {
+        }
+
+        @Override
+        public void setLastActionTimestamp(long lastActionTimestamp) {
+        }
+
+        @Override
+        public void setGoldStackAddon(double goldStackAddon) {
+        }
+
+        @Override
+        public void setGoldStackMax(double goldStackMax) {
+        }
+
+        @Override
+        public void setXpStackAddon(double xpStackAddon) {
+        }
+
+        @Override
+        public void setXpStackMax(double xpStackMax) {
+        }
+
+        @Override
+        public Iterable<PlayerInvBackup> gcBackupIterators() {
+            return new ObjectArrayList<>();
+        }
+
+        @Override
+        public Iterable<PlayerInvBackup> getInvBackups() {
+            return new ObjectArrayList<>();
+        }
+
+        @Override
+        public void setTodayCompletedUber(int todayCompletedUber) {
+        }
+
+        @Override
+        public void setTodayCompletedUberLastRefreshed(long todayCompletedUberLastRefreshed) {
+        }
+
+        @Override
+        public void setStreakCooldown(Cooldown streakCooldown) {
+        }
+
+        @Override
+        public void setStreakCount(int streakCount) {
+        }
+
+        @Override
+        public void setBot(boolean bot) {
+        }
+
+        @Override
+        public void setLastDamageAt(long lastDamageAt) {
+        }
+
+        @Override
+        public void setExtraMaxHealth(HashMap<String, Double> extraMaxHealth) {
+        }
+
+        @Override
+        public void setEnchantingBook(String enchantingBook) {
+        }
+
+        @Override
+        public void setUnlockedPerkMap(Map<String, PerkData> unlockedPerkMap) {
+        }
+
+        @Override
+        public void setProfileFormatVersion(int profileFormatVersion) {
+        }
+
+        @Override
+        public void setLastRenameTime(long lastRenameTime) {
+        }
+
+        @Override
+        public void setBoughtPerkMap(Map<String, PerkData> boughtPerkMap) {
+
+        }
+
+        @Override
+        public int getBounty() {
+            return 0;
+        }
     }
 }

@@ -69,19 +69,19 @@ public class Utils {
     /**
      * 超级快，nano respond o(":".length())
      * 0 - len
+     * 原理: Enchantment NBT always prepend number at the last char
      */
     @SneakyThrows
     public static void readEnchantments(Object2IntMap<AbstractEnchantment> ment, NBTTagList nbtTagList) {
         for (int i = 0, size = nbtTagList.size(); i < size; i++) {
             String s = nbtTagList.getString(i);
-            int splitIndex = s.lastIndexOf(':');
+            int length = s.length();
+            int splitIndex = s.lastIndexOf(':',length - 1);
 
             if (splitIndex != -1) {
                 String enchantmentName = s.substring(0, splitIndex);
-                String levelString = s.substring(splitIndex + 1);
-
                 try {
-                    int level = IntegerUtils.fastParse(levelString);
+                    int level = IntegerUtils.fastParse0(s,splitIndex + 1,length);
                     AbstractEnchantment enchantment = ThePit.getInstance()
                             .getEnchantmentFactor()
                             .getEnchantmentMap()
@@ -91,8 +91,8 @@ public class Utils {
                         ment.put(enchantment, level);
                     }
                 } catch (NumberFormatException e) {
-
-                    System.err.println("Invalid enchantment level: " + levelString);
+                    String levelString = s.substring(splitIndex + 1);
+                    ThePit.getInstance().getLogger().warning("Can't serialize level: " + levelString);
                 }
             }
         }

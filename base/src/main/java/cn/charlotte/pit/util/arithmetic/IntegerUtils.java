@@ -174,8 +174,11 @@ public final class IntegerUtils {
     }
 
     public static int fastParse(String string) {
+        return fastParse0(string,0,string.length());
+    }
+    public static int fastParse0(String string,int start,int end) {
         int result = 0;
-        for (int i = 0; i < string.length(); i++) {
+        for (int i = start; i < end; i++) {
             char c = string.charAt(i);
             result = result * 10 + (c - '0');
         }
