@@ -152,7 +152,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
                 }
             };
 
-            runnable.runTaskTimer(ThePit.getInstance(), 20, 20);
+            runnable.runTaskTimer(ThePit.getInstance(), 0, 20);
         } catch (Exception ignored) {
         }
     }

@@ -273,7 +273,8 @@ public class RedVSBlueEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
         }
         CC.boardCast(CC.CHAT_BAR);
 
-
+        this.redKills = 0;
+        this.blueKills = 0;
         this.blueTeam.clear();
         this.redTeam.clear();
     }
