@@ -29,17 +29,18 @@ public class EventTimer implements Runnable {
             return;
         }
 
+
         final String format = DATE_FORMAT.format(System.currentTimeMillis());
         final String[] split = PublicUtil.splitByCharAt(format, ':');
         final String minString = split[4];
         final EventFactory factory = ThePit.getInstance().getEventFactory();
-
+        if(factory.getActiveEpicEvent() != null) {
+            cooldown.reset();
+        }
         final int min = Integer.parseInt(minString);
-
         if (min == 55) {
             String major = EventsHandler.INSTANCE.nextEvent(true);
-            cooldown = new Cooldown(1, TimeUnit.MINUTES);
-
+            cooldown = new Cooldown(3, TimeUnit.MINUTES);
             factory.getEpicEvents()
                     .stream()
                     .map(event -> (IEvent) event)
@@ -49,11 +50,13 @@ public class EventTimer implements Runnable {
         }
 
         boolean b = min != 55 && min != 50;
-        if (factory.getNormalEnd().hasExpired() && cooldown.hasExpired()) { // patch
+        if (factory.getNormalEnd().hasExpired()) { // patch
             INormalEvent activeNormalEvent = factory.getActiveNormalEvent();
             if (activeNormalEvent != null) {
                 factory.inactiveEvent(activeNormalEvent);
             }
+
+            cooldown = new Cooldown(3, TimeUnit.MINUTES);
         }
         if (b) {
             if (factory.getActiveEpicEvent() == null && factory.getNextEpicEvent() == null) {
