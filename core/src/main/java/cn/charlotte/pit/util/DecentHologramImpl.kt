@@ -35,7 +35,7 @@ class DecentHologramImpl(var loc: Location, var inputText: String) : Hologram {
     override fun spawn(receivers: MutableCollection<out Player>?): Boolean {
         hologram.isDefaultVisibleState = false
 
-        Bukkit.getOnlinePlayers().forEach{
+        Bukkit.getOnlinePlayers().forEach {
             hologram.removeShowPlayer(it)
         }
         receivers?.forEach {

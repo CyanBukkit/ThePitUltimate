@@ -8,7 +8,6 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 @WeaponOnly
 @ArmorOnly
 public class SierraEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
+
     @Override
     public String getEnchantName() {
         return "钻石回收者";

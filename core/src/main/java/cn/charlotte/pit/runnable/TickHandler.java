@@ -1,31 +1,30 @@
 package cn.charlotte.pit.runnable;
+
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
-import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.Utils;
-import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/5 0:30
  */
-public class TickHandler implements Listener {
+public class TickHandler extends BukkitRunnable {
     //@Getter
     //private final static ObjectArrayList<TradeRequest> tradeRequests = new ObjectArrayList<>();
 
@@ -34,10 +33,10 @@ public class TickHandler implements Listener {
     final Map<String, ITickTask> ticksPerk = ThePit.getInstance().getPerkFactory().getTickTasks();
 
     private long tick = 0;
-    @SneakyThrows
-    @EventHandler
-    public void onTick(ServerTickEndEvent event) { //PostTick
 
+    @SneakyThrows
+    @Override
+    public void run() {
         Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
         for (Player player : onlinePlayers) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -46,10 +45,6 @@ public class TickHandler implements Listener {
             }
             tickPerks(player, profile);
             tickItemInHand(player, tickLeggings(player, profile), profile); //别问我为什么这样写 lol
-        }
-        //潜在风险 unsigned!
-        if (++tick == Long.MIN_VALUE) {
-            tick = 0; //从头开始
         }
     }
 
@@ -61,7 +56,7 @@ public class TickHandler implements Listener {
                 ItemStack heldItemStack = profile.heldItemStack;
                 if (heldItemStack != null) {
                     if (heldItemStack == itemInHand) { //only compare java object equal
-                        if(profile.heldItem instanceof IMythicItem ii)
+                        if (profile.heldItem instanceof IMythicItem ii)
                             tickIMythicItem(player, ii);
                     } else {
                         tickItemStackHand(player, profile, itemInHand);
@@ -83,9 +78,9 @@ public class TickHandler implements Listener {
         final ItemStack leggings = inventory.getLeggings();
         if (leggings != null) {
             ItemStack leggingItemStack = profile.leggingItemStack;
-            if(leggingItemStack != null){
+            if (leggingItemStack != null) {
                 if (leggingItemStack == leggings) { //only compare java object equal
-                    if( profile.leggings instanceof IMythicItem ii)
+                    if (profile.leggings instanceof IMythicItem ii)
                         tickIMythicItem(player, ii);
                 } else {
                     tickItemStack(player, profile, leggings);
@@ -105,6 +100,7 @@ public class TickHandler implements Listener {
         profile.leggingItemStack = leggings;
         profile.leggings = handleIMythicItemTickTasks(leggings, player);
     }
+
     private void tickItemStackHand(Player player, PlayerProfile profile, ItemStack leggings) {
         profile.heldItemStack = leggings;
         profile.heldItem = handleIMythicItemTickTasks(leggings, player);
@@ -130,7 +126,7 @@ public class TickHandler implements Listener {
         }
     }
 
-    public IMythicItem handleIMythicItemTickTasks(ItemStack stack,Player player) {
+    public IMythicItem handleIMythicItemTickTasks(ItemStack stack, Player player) {
 
         final IMythicItem imythicItem = Utils.getMythicItem(stack);
 

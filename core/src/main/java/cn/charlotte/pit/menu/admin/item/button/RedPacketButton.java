@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/1/30 22:38
  */
 public class RedPacketButton extends Button {
+
     private int money;
 
     @Override

@@ -5,15 +5,11 @@ import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
 import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
-import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -23,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @WeaponOnly
 public class GambleEnchant extends AbstractEnchantment implements IAttackEntity {
+
     @Override
     public String getEnchantName() {
         return "赌徒";

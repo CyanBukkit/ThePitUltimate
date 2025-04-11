@@ -1,6 +1,5 @@
 package cn.charlotte.pit.menu.admin.item.button;
 
-import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.DyeColor;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.type.*;
@@ -21,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/1/17 22:42
  */
 public class MythicItemButton extends Button {
+
     private final int i;
 
     public MythicItemButton(int i) {
@@ -70,7 +70,7 @@ public class MythicItemButton extends Button {
             IMythicItem mythicItem = new AngelChestplate();
             mythicItem.loadFromItemStack(itemStack);
             return mythicItem.toItemStack();
-        } else if (i == 11){
+        } else if (i == 11) {
             return MythicBook.toItemStack();
         }
         return new ItemBuilder(Material.AIR).build();
@@ -78,7 +78,7 @@ public class MythicItemButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        if(clickType.isRightClick()){
+        if (clickType.isRightClick()) {
             player.sendMessage("这个物品的NBTName是: " + ItemUtil.getInternalName(currentItem));
             return;
         }

@@ -3,7 +3,7 @@ package cn.charlotte.pit.handler
 import cn.charlotte.pit.ThePit
 import org.bukkit.Location
 
-object SewersHandler: Runnable {
+object SewersHandler : Runnable {
     var lastClosedSewers = -1L
     var nowChest: Location? = null
 

@@ -4,7 +4,6 @@ import cn.charlotte.pit.PitHook;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.actionbar.ActionBarManager;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.data.operator.PackedOperator;
 import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.item.ItemFactory;
 import cn.charlotte.pit.util.PublicUtil;
@@ -15,19 +14,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Async tick handler
  */
-public class AsyncTickHandler extends BukkitRunnable implements Listener {
+public class AsyncTickHandler extends BukkitRunnable {
 
 
     ThePit instance = ThePit.getInstance();
 
     private long tick = 0;
 
-    public void flushIds(){
+    public void flushIds() {
         PublicUtil.itemVersion = PitHook.getItemVersion();
         PublicUtil.signVer = PitHook.getGitVersion();
     }
 
-    public AsyncTickHandler(){
+    public AsyncTickHandler() {
         flushIds();
     }
 
@@ -35,27 +34,28 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
     public void run() {
         //trade
         ActionBarManager actionBarManager = (ActionBarManager) instance.getActionBarManager();
-        if(actionBarManager != null && tick % 5 == 0){
+        if (actionBarManager != null && tick % 5 == 0) {
             actionBarManager.tick();
         }
-        if(tick % 10 == 0) {
+        if (tick % 10 == 0) {
             //Async Lru Detector
             ItemFactory itemFactory = (ItemFactory) instance.getItemFactory();
             itemFactory.lru();
             flushIds();
         }
-        if(++tick==Long.MIN_VALUE){
+        if (++tick == Long.MIN_VALUE) {
             tick = 0; //从头开始
         }
-        if(tick > 1200 && tick % 6000 ==0) {
+        if (tick > 1200 && tick % 6000 == 0) {
             //AutoSave
             doAutoSave();
             return;
         }
         //Async Io Tracker
-        ((ProfileOperator)instance.getProfileOperator()).tick();
+        ((ProfileOperator) instance.getProfileOperator()).tick();
     }
-    public void doAutoSave(){
+
+    public void doAutoSave() {
         final long last = System.currentTimeMillis();
         instance.getProfileOperator().doSaveProfiles();
 
@@ -65,9 +65,9 @@ public class AsyncTickHandler extends BukkitRunnable implements Listener {
         Bukkit.getOnlinePlayers().forEach(player -> {
 
             if (player.hasPermission("pit.admin")) return;
-            ((ProfileOperator)instance.getProfileOperator()).operatorStrict(player).ifPresent(operator -> {
+            ((ProfileOperator) instance.getProfileOperator()).operatorStrict(player).ifPresent(operator -> {
                 PlayerProfile playerProfileByUuid = operator.profile();
-                if(playerProfileByUuid.getCombatTimer().hasExpired()) {
+                if (playerProfileByUuid.getCombatTimer().hasExpired()) {
                     if (player.getLastDamageCause() != null) {
                         player.setLastDamageCause(null); //fix memory leak
                     }

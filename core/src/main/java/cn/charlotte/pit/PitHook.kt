@@ -72,7 +72,6 @@ import cn.charlotte.pit.quest.type.*
 import cn.charlotte.pit.runnable.*
 import cn.charlotte.pit.scoreboard.Scoreboard
 import cn.charlotte.pit.sound.impl.*
-import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.getInstance
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable
 import cn.charlotte.pit.util.menu.ButtonListener
@@ -212,7 +211,7 @@ object PitHook {
 
 
         //AnnouncementRunnable.runTaskTimerAsynchronously(ThePit.getInstance(), 0, 40 * 60)
-
+        TickHandler().runTaskTimer(ThePit.getInstance(), 1, 1)
         AsyncTickHandler().runTaskTimerAsynchronously(ThePit.getInstance(), 1, 1)
         GoldDropRunnable().runTaskTimer(ThePit.getInstance(), 20, 20)
 
@@ -670,8 +669,6 @@ object PitHook {
             FixListeners::class.java,
             TradeListener::class.java,
             HologramListener::class.java,
-            TickHandler::class.java,
-            AsyncTickHandler::class.java
         )
         for (aClass in classes) {
             try {

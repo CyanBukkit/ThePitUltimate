@@ -18,19 +18,24 @@ import org.bukkit.inventory.ItemStack;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: EmptyIrony
  * @Date: 2021/2/4 20:47
  */
 public class BackupShowMenu extends Menu {
+
     private final DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private final PlayerProfile playerProfile;
     private final PlayerInvBackup backup;
     private final List<PlayerInvBackup> backups;
     private final boolean right;
-    public BackupShowMenu(PlayerProfile playerProfile,List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean right) {
+
+    public BackupShowMenu(PlayerProfile playerProfile, List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean right) {
         this.playerProfile = playerProfile;
         this.backup = backup;
         this.backups = backups;
@@ -41,6 +46,7 @@ public class BackupShowMenu extends Menu {
     public String getTitle(Player player) {
         return playerProfile.getPlayerName() + " 的背包备份";
     }
+
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttonMap = new HashMap<>();

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DarkPantsCraftButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

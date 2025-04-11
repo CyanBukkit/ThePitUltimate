@@ -12,9 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +20,7 @@ import java.util.Map;
  * @Date: 2021/1/17 22:48
  */
 public class AdminEnchantMenu extends Menu {
+
     private int page = 0;
 
     public AdminEnchantMenu() {

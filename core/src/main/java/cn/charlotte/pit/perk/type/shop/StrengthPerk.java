@@ -8,7 +8,6 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class StrengthPerk extends AbstractPerk implements IPlayerKilledEntity, ITickTask, IAttackEntity {
+
     @Override
     public String getInternalPerkName() {
         return "Strength";
@@ -111,9 +111,9 @@ public class StrengthPerk extends AbstractPerk implements IPlayerKilledEntity, I
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-     PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId());
+        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId());
         if (profile.getStrengthNum() > 0 && !profile.getStrengthTimer().hasExpired() && profile.getStrengthNum() <= 10) {
             boostDamage.set(boostDamage.get() + (profile.getStrengthNum() * 4D / 100D));
         }
-     }
+    }
 }

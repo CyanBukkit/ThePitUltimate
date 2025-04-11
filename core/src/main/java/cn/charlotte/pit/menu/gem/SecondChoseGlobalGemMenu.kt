@@ -1,6 +1,5 @@
 package cn.charlotte.pit.menu.gem
 
-import cn.charlotte.pit.menu.gem.button.EnchantChoseButton
 import cn.charlotte.pit.menu.gem.button.EnchantChoseButtonGlobalGem
 import cn.charlotte.pit.util.menu.Button
 import cn.charlotte.pit.util.menu.Menu

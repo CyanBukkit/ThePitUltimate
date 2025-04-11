@@ -12,8 +12,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @ArmorOnly
 public class PhantomShieldEnchant extends AbstractEnchantment implements IPlayerDamaged {
+
     @Override
     public String getEnchantName() {
         return "幻影盾";

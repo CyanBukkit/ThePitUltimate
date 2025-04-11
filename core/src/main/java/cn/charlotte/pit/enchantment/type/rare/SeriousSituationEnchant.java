@@ -6,7 +6,6 @@ import cn.charlotte.pit.enchantment.param.item.BowOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
-import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
@@ -18,14 +17,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @AutoRegister
 @BowOnly
-public class SeriousSituationEnchant extends AbstractEnchantment implements Listener, IActionDisplayEnchant,IPlayerShootEntity {
+public class SeriousSituationEnchant extends AbstractEnchantment implements Listener, IActionDisplayEnchant, IPlayerShootEntity {
+
     Object2LongOpenHashMap<UUID> shoot = new Object2LongOpenHashMap<>();
 
     @Override
@@ -89,16 +89,18 @@ public class SeriousSituationEnchant extends AbstractEnchantment implements List
             }
         }
     }
-    public int getPunch(int ench){
-        return switch (ench){
+
+    public int getPunch(int ench) {
+        return switch (ench) {
             case 1 -> 2;
             case 2 -> 3;
             case 3 -> 4;
             default -> 0;
         };
     }
-    public double getAddonDamage(int ench){
-        return switch(ench){
+
+    public double getAddonDamage(int ench) {
+        return switch (ench) {
             case 2 -> 1D;
             case 3 -> 2D;
             default -> 0D;
@@ -108,7 +110,7 @@ public class SeriousSituationEnchant extends AbstractEnchantment implements List
     @Override
     public String getText(int level, Player player) {
         long remain = (3L - shoot.getLong(player.getUniqueId()));
-        if(remain == 1) {
+        if (remain == 1) {
             return "&a&l✔";
         }
         return "&e&l" + remain + "/3";

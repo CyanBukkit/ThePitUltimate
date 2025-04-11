@@ -8,7 +8,6 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -32,6 +31,7 @@ import java.text.DecimalFormat;
 @BowOnly
 @AutoRegister
 public class TrueDamageArrowEnchant extends AbstractEnchantment implements Listener {
+
     final DecimalFormat format = new DecimalFormat("0");
 
     public static double getTrueDamageRate(int enchantLevel) {
@@ -102,15 +102,15 @@ public class TrueDamageArrowEnchant extends AbstractEnchantment implements Liste
                 Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
                     final int noDamageTicks = player.getNoDamageTicks(); //emptyirony u suck
                     //victim.setNoDamageTicks(0); //buggy code
-                        EntityPlayer handle = ((CraftPlayer) victim).getHandle();
-                        float absorptionHearts = handle.getAbsorptionHearts();
-                        double v = getTrueDamageRate(level) * event.getFinalDamage();
-                        double b = absorptionHearts - v;
-                        handle.setAbsorptionHearts((float) Math.max(0, b));
-                        if (handle.getAbsorptionHearts() <= 0) {
-                            PlayerUtil.damage(player, (Player) event.getEntity(), PlayerUtil.DamageType.TRUE, v + b, true);
+                    EntityPlayer handle = ((CraftPlayer) victim).getHandle();
+                    float absorptionHearts = handle.getAbsorptionHearts();
+                    double v = getTrueDamageRate(level) * event.getFinalDamage();
+                    double b = absorptionHearts - v;
+                    handle.setAbsorptionHearts((float) Math.max(0, b));
+                    if (handle.getAbsorptionHearts() <= 0) {
+                        PlayerUtil.damage(player, (Player) event.getEntity(), PlayerUtil.DamageType.TRUE, v + b, true);
 
-                        }
+                    }
                     //victim.setNoDamageTicks(noDamageTicks);
                 });
             }
@@ -129,8 +129,8 @@ public class TrueDamageArrowEnchant extends AbstractEnchantment implements Liste
         }
         if (itemInHand.getType() == Material.BOW) {
             event.getProjectile().setMetadata("true_shot", new FixedMetadataValue(ThePit.getInstance(), true));
-            event.getProjectile().setMetadata("true_shot_level", new FixedMetadataValue(ThePit.getInstance(),level));
-            Utils.pointMetadataAndRemove(event.getProjectile(),500,"true_shot","true_shot_level");
+            event.getProjectile().setMetadata("true_shot_level", new FixedMetadataValue(ThePit.getInstance(), level));
+            Utils.pointMetadataAndRemove(event.getProjectile(), 500, "true_shot", "true_shot_level");
         }
     }
 

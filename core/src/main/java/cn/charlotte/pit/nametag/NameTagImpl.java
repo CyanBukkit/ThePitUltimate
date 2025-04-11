@@ -11,12 +11,10 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.nametag.BufferedNametag;
 import cn.charlotte.pit.util.nametag.NametagAdapter;
 import cn.charlotte.pit.util.rank.RankUtil;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +23,7 @@ import java.util.List;
  */
 
 public class NameTagImpl implements NametagAdapter {
+
     @Override
     public List<BufferedNametag> getPlate(Player player) {
         List<BufferedNametag> tags = new ObjectArrayList<>();

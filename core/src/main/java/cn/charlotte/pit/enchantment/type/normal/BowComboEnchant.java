@@ -12,7 +12,6 @@ import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -100,7 +99,7 @@ public class BowComboEnchant extends AbstractEnchantment implements IPlayerShoot
             return;
         }
         event.getProjectile().setMetadata("bow_combo_enchant_uuid", new FixedMetadataValue(ThePit.getInstance(), UUID.randomUUID().toString()));
-        Utils.pointMetadataAndRemove(event.getProjectile(),500,"bow_combo_enchant_uuid");
+        Utils.pointMetadataAndRemove(event.getProjectile(), 500, "bow_combo_enchant_uuid");
     }
 
     @EventHandler
@@ -130,7 +129,7 @@ public class BowComboEnchant extends AbstractEnchantment implements IPlayerShoot
             List<MetadataValue> bowComboEnchantUuid = event.getDamager().getMetadata("bow_combo_enchant_uuid");
             if (!bowComboEnchantUuid.isEmpty()) {
                 UUID uuid = UUID.fromString(bowComboEnchantUuid.get(0).asString());
-                event.getEntity().removeMetadata("bow_combo_enchant_uuid",ThePit.getInstance());
+                event.getEntity().removeMetadata("bow_combo_enchant_uuid", ThePit.getInstance());
                 hitCheck.put(uuid, System.currentTimeMillis());
             }
         }

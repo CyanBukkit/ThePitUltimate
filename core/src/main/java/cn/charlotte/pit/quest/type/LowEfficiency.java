@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Date: 2021/1/19 16:32
  */
 public class LowEfficiency extends AbstractQuest implements IAttackEntity, IPlayerShootEntity, IPlayerDamaged {
+
     @Override
     public String getQuestInternalName() {
         return "Low_Efficiency";

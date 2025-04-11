@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.scheduler.BukkitRunnable
 import kotlin.random.Random
 
-object SewersRunnable: BukkitRunnable(), Listener {
+object SewersRunnable : BukkitRunnable(), Listener {
 
     private var existSewersChest: Location? = null
 
@@ -90,15 +90,17 @@ object SewersRunnable: BukkitRunnable(), Listener {
         val id = randomList.random() ?: return
         player.playSound(player.location, Sound.LEVEL_UP, 1f, 1f)
         player.sendMessage(CC.translate("&9下水道! &7你领取了下水道奖励."))
-        when(id) {
+        when (id) {
             "xp" -> {
                 profile.experience += 100
                 profile.applyExperienceToPlayer(player)
             }
+
             "gold" -> {
                 profile.coins += 200
                 profile.grindCoins(200.0)
             }
+
             "diamond_chestplate" -> {
                 player.inventory.addItem(
                     ItemBuilder(Material.DIAMOND_CHESTPLATE)
@@ -109,6 +111,7 @@ object SewersRunnable: BukkitRunnable(), Listener {
                         .buildWithUnbreakable()
                 )
             }
+
             "diamond_leggings" -> {
                 ItemBuilder(Material.DIAMOND_LEGGINGS)
                     .deathDrop(true)
@@ -117,6 +120,7 @@ object SewersRunnable: BukkitRunnable(), Listener {
                     .internalName("shopItem")
                     .buildWithUnbreakable()
             }
+
             "diamond_boots" -> {
                 ItemBuilder(Material.DIAMOND_BOOTS)
                     .deathDrop(true)
@@ -125,6 +129,7 @@ object SewersRunnable: BukkitRunnable(), Listener {
                     .internalName("shopItem")
                     .buildWithUnbreakable()
             }
+
             "rubbish" -> {
                 player.inventory.addItem(
                     ItemBuilder(Material.INK_SACK)
@@ -142,6 +147,7 @@ object SewersRunnable: BukkitRunnable(), Listener {
                         .build()
                 )
             }
+
             "milk_buckets" -> {
                 player.inventory.addItem(
                     ItemBuilder(Material.MILK_BUCKET)

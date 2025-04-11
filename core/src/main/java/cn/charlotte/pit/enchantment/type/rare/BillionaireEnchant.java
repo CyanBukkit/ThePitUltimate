@@ -10,7 +10,6 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -57,7 +56,7 @@ public class BillionaireEnchant extends AbstractEnchantment implements IAttackEn
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         PackedOperator operator = (PackedOperator) ThePit.getInstance().getProfileOperator().getIOperator(attacker);
-        if(operator != null) {
+        if (operator != null) {
             PlayerProfile profile = operator.profile();
             if (profile.getCoins() >= enchantLevel * 100) {
                 boostDamage.getAndAdd(enchantLevel * 0.35);
@@ -70,7 +69,7 @@ public class BillionaireEnchant extends AbstractEnchantment implements IAttackEn
     @cn.charlotte.pit.parm.type.BowOnly
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         PackedOperator operator = (PackedOperator) ThePit.getInstance().getProfileOperator().getIOperator(attacker);
-        if(operator != null) {
+        if (operator != null) {
             PlayerProfile profile = operator.profile();
             if (profile.getCoins() >= enchantLevel * 100) {
                 boostDamage.getAndAdd(enchantLevel * 0.35);

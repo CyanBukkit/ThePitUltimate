@@ -13,9 +13,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import kotlin.math.min
 
 
-
 @AutoRegister
-class SingularityEnchant: AbstractEnchantment(), Listener {
+class SingularityEnchant : AbstractEnchantment(), Listener {
     override fun getEnchantName(): String {
         return "奇异"
     }
@@ -38,7 +37,7 @@ class SingularityEnchant: AbstractEnchantment(), Listener {
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
         return "&7单次最多受到&c ${
-            when(enchantLevel) {
+            when (enchantLevel) {
                 1 -> 2.5
                 2 -> 2
                 else -> 1.5

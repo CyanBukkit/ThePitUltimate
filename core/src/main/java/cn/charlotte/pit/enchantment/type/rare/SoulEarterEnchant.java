@@ -13,9 +13,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @WeaponOnly
 @BowOnly
 public class SoulEarterEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "灵魂吞噬者";
@@ -49,12 +51,12 @@ public class SoulEarterEnchant extends AbstractEnchantment implements IAttackEnt
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        boostDamage.getAndAdd(((Player)target).getHealth() / 2.0D * 0.05D);
+        boostDamage.getAndAdd(((Player) target).getHealth() / 2.0D * 0.05D);
     }
 
     @cn.charlotte.pit.parm.type.BowOnly
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        boostDamage.getAndAdd(((Player)target).getHealth() / 2.0D * 0.05D);
+        boostDamage.getAndAdd(((Player) target).getHealth() / 2.0D * 0.05D);
     }
 }

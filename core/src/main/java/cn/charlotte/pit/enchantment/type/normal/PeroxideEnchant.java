@@ -9,7 +9,6 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,6 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class PeroxideEnchant extends AbstractEnchantment implements IPlayerDamaged, IActionDisplayEnchant {
+
     private final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
 
     @Override

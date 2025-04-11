@@ -23,7 +23,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 @ArmorOnly
 public class AssassinsEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+
     private static final HashMap<UUID, Cooldown> Cooldown = new HashMap<>();
+
     @Override
     public String getEnchantName() {
         return "暗影刺客";
@@ -62,9 +64,9 @@ public class AssassinsEnchant extends AbstractEnchantment implements IAttackEnti
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if (((Player)target).getHealth() <= (2 * enchantLevel) && (Cooldown.getOrDefault(attacker.getUniqueId(), new Cooldown(0L))).hasExpired()) {
+        if (((Player) target).getHealth() <= (2 * enchantLevel) && (Cooldown.getOrDefault(attacker.getUniqueId(), new Cooldown(0L))).hasExpired()) {
             attacker.teleport(target.getLocation());
-            ((Player)target).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 4), true);
+            ((Player) target).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 4), true);
             Cooldown.put(attacker.getUniqueId(), getCooldown());
         }
     }

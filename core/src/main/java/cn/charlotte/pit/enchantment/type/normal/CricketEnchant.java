@@ -21,13 +21,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 @AutoRegister
 public class CricketEnchant extends AbstractEnchantment implements ITickTask, IPlayerDamaged, IActionDisplayEnchant {
+
     Set<UUID> crickets = new ObjectOpenHashSet<>();
+
     @Override
     public String getEnchantName() {
         return "蟋蟀";
@@ -66,13 +67,15 @@ public class CricketEnchant extends AbstractEnchantment implements ITickTask, IP
             default -> "ERROR";
         };
     }
-    PotionEffect L1 = PotionEffectType.REGENERATION.createEffect(100,0);
+
+    PotionEffect L1 = PotionEffectType.REGENERATION.createEffect(100, 0);
+
     @Override
     public void handle(int enchantLevel, Player player) {
         UUID uniqueId = player.getUniqueId();
 
-        if(player.getLocation().clone().add(0,-1,0).getBlock().getType() == Material.GRASS) {
-            player.addPotionEffect(L1,true);
+        if (player.getLocation().clone().add(0, -1, 0).getBlock().getType() == Material.GRASS) {
+            player.addPotionEffect(L1, true);
             crickets.add(uniqueId);
         } else {
             crickets.remove(uniqueId);
@@ -83,13 +86,15 @@ public class CricketEnchant extends AbstractEnchantment implements ITickTask, IP
     public int loopTick(int enchantLevel) {
         return 20;
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         this.crickets.remove(e.getPlayer().getUniqueId());
     }
+
     @Override
     public void handlePlayerDamaged(int enchantLevel, Player myself, Entity attacker, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if(crickets.contains(myself.getUniqueId())){
+        if (crickets.contains(myself.getUniqueId())) {
             boostDamage.set(boostDamage.get() - switch (enchantLevel) {
                 case 1 -> 0.05;
                 case 2 -> 0.1;

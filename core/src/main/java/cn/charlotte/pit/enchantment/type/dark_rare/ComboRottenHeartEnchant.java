@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class ComboRottenHeartEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+
     private final HashMap<UUID, Cooldown> Cooldown = new HashMap<>();
     private final static CoagulationBuff coagulationBuff = new CoagulationBuff();
 
@@ -67,9 +68,10 @@ public class ComboRottenHeartEnchant extends AbstractEnchantment implements IAtt
             return (level % b == 0) ? "&4&l✔" : (new StringBuilder()).insert(0, "&c&l").append(b - level % b).toString();
         return getCooldownActionText(Cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0L)));
     }
+
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player player1 = (Player)target;
+        Player player1 = (Player) target;
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 4 == 0) {
             if (player1.getMaxHealth() > 3.0D) {
                 player1.setMaxHealth(Math.max(0.1D, player1.getMaxHealth() - 3.0D));
@@ -83,7 +85,7 @@ public class ComboRottenHeartEnchant extends AbstractEnchantment implements IAtt
 
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player player1 = (Player)target;
+        Player player1 = (Player) target;
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 4 == 0) {
             if (player1.getMaxHealth() > 3.0D) {
                 player1.setMaxHealth(Math.max(0.1D, player1.getMaxHealth() - 3.0D));

@@ -11,7 +11,6 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.rank.RankUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 

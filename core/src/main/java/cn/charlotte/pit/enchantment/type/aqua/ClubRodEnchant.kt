@@ -7,9 +7,8 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.util.cooldown.Cooldown
 
 
-
 @ArmorOnly
-class ClubRodEnchant: AbstractEnchantment() {
+class ClubRodEnchant : AbstractEnchantment() {
     companion object {
         init {
 //            Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), {

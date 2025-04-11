@@ -13,6 +13,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 
 @WeaponOnly
 public class BruiserEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "斗士";

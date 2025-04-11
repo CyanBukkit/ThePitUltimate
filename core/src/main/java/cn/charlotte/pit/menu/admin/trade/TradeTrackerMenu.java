@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/1/31 23:07
  */
 public class TradeTrackerMenu extends Menu {
+
     private final PlayerProfile profile;
     private final List<TradeData> data;
 

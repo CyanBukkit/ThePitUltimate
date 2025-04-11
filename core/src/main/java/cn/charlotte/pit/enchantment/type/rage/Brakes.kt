@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType
 import java.util.concurrent.atomic.AtomicBoolean
 
 
-class Brakes: AbstractEnchantment(), IAttackEntity, IPlayerDamaged {
+class Brakes : AbstractEnchantment(), IAttackEntity, IPlayerDamaged {
     override fun getEnchantName(): String {
         return "停下!"
     }

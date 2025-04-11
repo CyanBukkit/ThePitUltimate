@@ -14,6 +14,7 @@ import cn.charlotte.pit.util.time.TimeUtil;
 
 @ArmorOnly
 public class PurpleGoldEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "紫金";

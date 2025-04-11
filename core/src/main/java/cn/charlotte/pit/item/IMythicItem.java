@@ -12,7 +12,8 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +24,9 @@ import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author: EmptyIrony
@@ -33,6 +36,7 @@ import java.util.*;
 @Getter
 @Setter
 public abstract class IMythicItem extends AbstractPitItem {
+
     public int maxLive;
     public int live;
     public int tier;
@@ -52,13 +56,17 @@ public abstract class IMythicItem extends AbstractPitItem {
     public UUID uuid;
     // 0=false 1=true -1=unset
     public int forceCanTrade = -1;
+
     public IMythicItem() {
     }
-    public static void clearCache(ItemStack e){
+
+    public static void clearCache(ItemStack e) {
     }
-    public void resetUUID(){
+
+    public void resetUUID() {
         this.uuid = defUUID;
     }
+
     @Override
     public ItemStack toItemStack() {
         List<String> lore = new ObjectArrayList<>();
@@ -135,7 +143,7 @@ public abstract class IMythicItem extends AbstractPitItem {
 
         if (maxLive != 0) {
             lore.add(("&7寄期: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive)
-             + (isBoostedByGem() ? "&a ♦" : "") + (isBoostedByGlobalGem() ? "&b ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
+                    + (isBoostedByGem() ? "&a ♦" : "") + (isBoostedByGlobalGem() ? "&b ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
             lore.add("");
         }
 
@@ -217,7 +225,7 @@ public abstract class IMythicItem extends AbstractPitItem {
                     .internalName(getInternalName())
                     .deathDrop(false)
                     .version(version == null ? "NULL" : version)
-                    .uuid(uuid == null ? defUUID: uuid)
+                    .uuid(uuid == null ? defUUID : uuid)
                     .canDrop(false)
                     .canTrade(true)
                     .canSaveToEnderChest(true)
@@ -318,7 +326,7 @@ public abstract class IMythicItem extends AbstractPitItem {
             this.color = (MythicColor) RandomUtil.helpMeToChooseOne(
                     MythicColor.RED, MythicColor.ORANGE, MythicColor.BLUE, MythicColor.GREEN, MythicColor.YELLOW);
         } else {
-            if(mythicColor instanceof NBTTagString) {
+            if (mythicColor instanceof NBTTagString) {
                 String internalColor = ((NBTTagString) mythicColor).a_();
                 this.color = MythicColor.valueOfInternalName(internalColor);
                 if (color == null) {
@@ -342,24 +350,24 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (recordsStringRaw instanceof NBTTagString) {
             String recordsString = ((NBTTagString) recordsStringRaw).a_();
 
-                for (String recordString : Utils.splitByCharAt(recordsString, ';')) {
-                    final String[] split = recordString.split("\\|");
-                    if (split.length >= 3) {
-                        enchantmentRecords.add(
-                                new EnchantmentRecord(
-                                        split[0],
-                                        split[1],
-                                        Long.parseLong(split[2])
-                                )
-                        );
+            for (String recordString : Utils.splitByCharAt(recordsString, ';')) {
+                final String[] split = recordString.split("\\|");
+                if (split.length >= 3) {
+                    enchantmentRecords.add(
+                            new EnchantmentRecord(
+                                    split[0],
+                                    split[1],
+                                    Long.parseLong(split[2])
+                            )
+                    );
                 }
-                }
+            }
         }
         //nano
         NBTTagList ench = extra.getList("ench", 8);
-            this.enchantments = new Object2IntOpenHashMap<>();
-            this.enchantments.defaultReturnValue(-1);
-            Utils.readEnchantments(enchantments,ench);
+        this.enchantments = new Object2IntOpenHashMap<>();
+        this.enchantments.defaultReturnValue(-1);
+        Utils.readEnchantments(enchantments, ench);
         if (!extra.hasKey("tier") && isEnchanted()) {
             if (color == MythicColor.DARK) {
                 this.tier = 2;
@@ -381,16 +389,18 @@ public abstract class IMythicItem extends AbstractPitItem {
         builder.changeNbt("mythic_color", color.getInternalName());
     }
 
-    public int getEnchantmentLevel(String name){
+    public int getEnchantmentLevel(String name) {
         AbstractEnchantment abstractEnchantment = ThePit.getInstance().getEnchantmentFactor().getEnchantmentMap().get(name);
-        if(abstractEnchantment != null){
+        if (abstractEnchantment != null) {
             return this.enchantments.getInt(abstractEnchantment);
         }
         return -1;
     }
-    public int getEnchantmentLevel(AbstractEnchantment abstractEnchantment){
-            return this.enchantments.getInt(abstractEnchantment);
+
+    public int getEnchantmentLevel(AbstractEnchantment abstractEnchantment) {
+        return this.enchantments.getInt(abstractEnchantment);
     }
+
     public String toString() {
         return "IMythicItem(maxLive=" +
                 this.getMaxLive() + ", live=" +

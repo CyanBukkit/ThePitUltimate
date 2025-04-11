@@ -13,6 +13,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 
 @ArmorOnly
 public class DivineMiracleEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "奇迹力场";

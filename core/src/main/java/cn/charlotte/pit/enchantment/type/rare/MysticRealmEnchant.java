@@ -12,7 +12,6 @@ import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class MysticRealmEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, ITickTask {
+
     @Override
     public String getEnchantName() {
         return "&e神秘领域";
@@ -54,13 +54,13 @@ public class MysticRealmEnchant extends AbstractEnchantment implements IAttackEn
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if (((Player)target).hasPotionEffect(PotionEffectType.SLOW))
+        if (((Player) target).hasPotionEffect(PotionEffectType.SLOW))
             boostDamage.getAndAdd(enchantLevel * 0.04D);
     }
 
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if (((Player)target).hasPotionEffect(PotionEffectType.SLOW))
+        if (((Player) target).hasPotionEffect(PotionEffectType.SLOW))
             boostDamage.getAndAdd(enchantLevel * 0.04D);
     }
 
@@ -69,8 +69,8 @@ public class MysticRealmEnchant extends AbstractEnchantment implements IAttackEn
             for (Entity r : player.getWorld().getNearbyEntities(player.getLocation(), enchantLevel * 3, enchantLevel * 3, enchantLevel * 3)) {
                 if (!(r instanceof Player)) continue;
                 Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
-                    ((Player)r).removePotionEffect(PotionEffectType.SLOW);
-                    ((Player)r).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 0));
+                    ((Player) r).removePotionEffect(PotionEffectType.SLOW);
+                    ((Player) r).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 0));
                 });
             }
         }

@@ -11,7 +11,6 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 

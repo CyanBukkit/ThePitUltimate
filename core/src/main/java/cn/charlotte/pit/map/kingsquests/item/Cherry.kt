@@ -7,7 +7,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
 
-object Cherry: AbstractPitItem() {
+object Cherry : AbstractPitItem() {
     override fun getInternalName(): String {
         return "cherry"
     }

@@ -10,10 +10,10 @@ import org.spigotmc.AsyncCatcher;
 
 import java.util.UUID;
 
-public class ItemFactory implements IItemFactory{
+public class ItemFactory implements IItemFactory {
 
     public boolean clientSide = false;
-   //这里是存玩家的
+    //这里是存玩家的
     ItemGlobalReference theReference = new ItemGlobalReference(() -> Bukkit.getOnlinePlayers().size() * 60L);
 
     //简易LRU
@@ -47,13 +47,16 @@ public class ItemFactory implements IItemFactory{
 
     Runnable EMPTY_RUNNABLE = () -> {
     };
-    public void lru(){
+
+    public void lru() {
         theReference.executeLRU();
     }
+
     @Beta
     public IMythicItem getIMythicItem(ItemStack stack) {
         return getIMythicItem(stack, EMPTY_RUNNABLE);
     }
+
     @Beta
     public IMythicItem getIMythicItem(ItemStack stack, Runnable runnable) {
 
@@ -64,7 +67,7 @@ public class ItemFactory implements IItemFactory{
         IMythicItem iMythicItem = getIMythicItemFromUUIDString(uuidString);
 
         if (iMythicItem == null || clientSide) { //会导致不掉命bug, 有点厉害
-               runnable.run();
+            runnable.run();
 
             return getIMythicItem0(stack, internalName);
         } else {
@@ -84,7 +87,7 @@ public class ItemFactory implements IItemFactory{
 
     public IMythicItem getIMythicItemFromUUIDString(String uuidString) {
         IMythicItem iMythicItem;
-        if (AsyncCatcher.isAsync()) { //async get sucks
+        if (!Bukkit.isPrimaryThread()) { //async get sucks
             iMythicItem = theReference.get(uuidString);
         } else {
             iMythicItem = theReference.getValue(uuidString);

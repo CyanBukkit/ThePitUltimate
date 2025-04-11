@@ -10,7 +10,6 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
-
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemBow;
 import net.minecraft.server.v1_8_R3.ItemStack;
@@ -96,10 +95,12 @@ public class MegaLongBowEnchant extends AbstractEnchantment implements Listener,
             }
         }
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         cooldown.remove(e.getPlayer().getUniqueId());
     }
+
     @Override
     public String getText(int level, Player player) {
         return cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ? "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(cooldown.get(player.getUniqueId()).getRemaining()).replace(" ", "");

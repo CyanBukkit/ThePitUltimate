@@ -5,8 +5,7 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.util.cooldown.Cooldown
 
 
-
-class HeadOnBlow: AbstractEnchantment() {
+class HeadOnBlow : AbstractEnchantment() {
     override fun getEnchantName(): String {
         return "当头一棒"
     }

@@ -7,7 +7,6 @@ import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,6 +21,7 @@ import java.util.Map;
  */
 
 public class ElGatoBoostPerk extends AbstractPerk implements IPlayerKilledEntity {
+
     @Override
     public String getInternalPerkName() {
         return "ElGatoBoost";

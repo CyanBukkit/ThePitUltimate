@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Scoreboard implements AssembleAdapter {
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(NewConfiguration.INSTANCE.getDateFormat());
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
@@ -128,7 +129,7 @@ public class Scoreboard implements AssembleAdapter {
                     if (insert1 != null) {
                         lines.addAll(insert1);
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     //ignore
                 }
@@ -150,7 +151,7 @@ public class Scoreboard implements AssembleAdapter {
 
         String genesisPrefix = "";
         String genesisTeam = "";
-        if(bounty == 0) {
+        if (bounty == 0) {
             if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
                 switch (profile.getGenesisData().getTeam()) {
                     case ANGEL -> {
@@ -256,9 +257,9 @@ public class Scoreboard implements AssembleAdapter {
             if (bounty != 0) {
                 String genesisColor = profile.bountyColor();
                 if (profile.getStreakKills() < 1D) {
-                    lines.add("&f赏金: "  + "&l" + genesisColor + bounty + "g");
+                    lines.add("&f赏金: " + "&l" + genesisColor + bounty + "g");
                 } else {
-                    lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " &l" +genesisColor + bounty + "g");
+                    lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " &l" + genesisColor + bounty + "g");
 
                 }
             }

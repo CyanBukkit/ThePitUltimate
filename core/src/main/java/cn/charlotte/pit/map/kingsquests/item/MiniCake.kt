@@ -10,7 +10,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.ItemStack
 
-object MiniCake: AbstractPitItem(), Listener {
+object MiniCake : AbstractPitItem(), Listener {
 
     @EventHandler
     fun onPlace(event: BlockPlaceEvent) {

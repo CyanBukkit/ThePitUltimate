@@ -13,6 +13,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 
 @RodOnly
 public class LureEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "饵钓";

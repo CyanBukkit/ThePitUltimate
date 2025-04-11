@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.material.Crops
 import kotlin.random.Random
 
-object Wheat: AbstractPitItem(), Listener {
+object Wheat : AbstractPitItem(), Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     fun onBreak(event: BlockBreakEvent) {
@@ -109,8 +109,6 @@ object Wheat: AbstractPitItem(), Listener {
     override fun loadFromItemStack(item: ItemStack?) {
 
     }
-
-
 
 
 }

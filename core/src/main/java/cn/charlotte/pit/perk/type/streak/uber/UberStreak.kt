@@ -219,14 +219,15 @@ class UberStreak : AbstractPerk(), Listener, MegaStreak {
             lastRefreshedCalendar.timeInMillis = refreshedTime
 
             if (todayCalendar.get(Calendar.YEAR) != lastRefreshedCalendar.get(Calendar.YEAR) ||
-                todayCalendar.get(Calendar.DAY_OF_YEAR) != lastRefreshedCalendar.get(Calendar.DAY_OF_YEAR)) {
+                todayCalendar.get(Calendar.DAY_OF_YEAR) != lastRefreshedCalendar.get(Calendar.DAY_OF_YEAR)
+            ) {
                 profile.todayCompletedUberLastRefreshed = System.currentTimeMillis()
                 profile.todayCompletedUber = 0
             }
 
             profile.todayCompletedUber++
 
-            when(profile.todayCompletedUber) {
+            when (profile.todayCompletedUber) {
                 2 -> {
                     if (profile.renown < 5) {
                         victim.sendMessage(CC.translate("&c登峰造极! &c你的声望不足以支付你今日的第二次&d登峰造极&c奖励门槛"))
@@ -234,6 +235,7 @@ class UberStreak : AbstractPerk(), Listener, MegaStreak {
                     }
                     profile.renown -= 5
                 }
+
                 3 -> {
                     if (profile.renown < 10) {
                         victim.sendMessage(CC.translate("&c登峰造极! &c你的声望不足以支付你今日的第三次&d登峰造极&c奖励门槛"))
@@ -241,6 +243,7 @@ class UberStreak : AbstractPerk(), Listener, MegaStreak {
                     }
                     profile.renown -= 10
                 }
+
                 4 -> {
                     if (profile.renown < 15) {
                         victim.sendMessage(CC.translate("&c登峰造极! &c你的声望不足以支付你今日的第四次&d登峰造极&c奖励门槛"))
@@ -248,9 +251,11 @@ class UberStreak : AbstractPerk(), Listener, MegaStreak {
                     }
                     profile.renown -= 15
                 }
+
                 1 -> {
 
                 }
+
                 else -> {
                     victim.sendMessage(CC.translate("&c登峰造极! &c你今日完成次数已达上限!"))
                     return

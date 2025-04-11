@@ -13,6 +13,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 
 @ArmorOnly
 public class PebbleEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "鹅卵石";

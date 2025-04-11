@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @Created_In: 2021/2/27 15:16
  */
 public class ProtectRunnable extends BukkitRunnable {
+
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {

@@ -8,7 +8,6 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.SneakyThrows;
@@ -23,7 +22,6 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import spg.lgdev.handler.MovementHandler;
 import spg.lgdev.iSpigot;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +43,7 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
         } catch (NoClassDefFoundError ignore) {
         }
     }
+
     @Override
     public String getEnchantName() {
         return "二段跳";
@@ -82,10 +81,12 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
     public String getUsefulnessLore(int enchantLevel) {
         return "&7在半空中按下跳跃键,你将向上方冲刺一段距离 (" + getCooldownInt(enchantLevel) + "秒冷却)";
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         cooldown.remove(e.getPlayer().getUniqueId());
     }
+
     @EventHandler
     public void onToggle(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
@@ -120,11 +121,12 @@ public class DoubleJumpEnchant extends AbstractEnchantment implements Listener, 
                 }
             }
         } else {
-            if(!player.getAllowFlight()) {
+            if (!player.getAllowFlight()) {
                 player.setAllowFlight(true);
             }
         }
     }
+
     @Override
     public void handleUpdateRotation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
     }

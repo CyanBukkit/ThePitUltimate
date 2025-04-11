@@ -15,14 +15,14 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 
 
-object CakeBakeUI: Menu() {
+object CakeBakeUI : Menu() {
     override fun getTitle(player: Player?): String {
         return "烘焙大师"
     }
 
     override fun getButtons(player: Player): MutableMap<Int, Button> {
         return mutableMapOf(
-            13 to object :Button() {
+            13 to object : Button() {
                 override fun getButtonItem(player: Player): ItemStack {
                     return ItemBuilder(Material.CAKE)
                         .name("&a制作&d迷你蛋糕")

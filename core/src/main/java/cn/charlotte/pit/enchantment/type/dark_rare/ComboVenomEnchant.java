@@ -14,7 +14,6 @@ import cn.charlotte.pit.parm.type.BowOnly;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -36,6 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ArmorOnly
 @AutoRegister
 public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant, Listener {
+
     @Override
     public String getEnchantName() {
         return "强力击: 毒液";
@@ -75,15 +75,15 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 3 == 0) {
             Player targetPlayer = (Player) target;
             attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 20 * 1000L));
-            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 20, 0),true);
+            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 20, 0), true);
 
-            if(PlayerUtil.isNPC(target)){
+            if (PlayerUtil.isNPC(target)) {
                 return;
             }
             targetPlayer.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 12 * 1000L));
-            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0),true);
+            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0), true);
 
-   }
+        }
     }
 
     @Override
@@ -93,15 +93,15 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getBowHit() % 3 == 0) {
             Player targetPlayer = (Player) target;
             attacker.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 20 * 1000L));
-            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0),true);
+            attacker.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0), true);
 
-            if(PlayerUtil.isNPC(target)){
-                 return;
+            if (PlayerUtil.isNPC(target)) {
+                return;
             }
             targetPlayer.setMetadata("combo_venom", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 12 * 1000L));
-            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0),true);
+            targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 12 * 20, 0), true);
 
-     }
+        }
     }
 
     @Override
@@ -110,7 +110,7 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
         return (hit % 3 == 0 ? "&a&l✔" : "&e&l" + (3 - hit % 3));
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPoisonDamage(EntityDamageEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
             event.setCancelled(true);

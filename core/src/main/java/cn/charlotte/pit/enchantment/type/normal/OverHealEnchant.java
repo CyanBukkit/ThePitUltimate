@@ -13,6 +13,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 
 @ArmorOnly
 public class OverHealEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "过度医疗";

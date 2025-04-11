@@ -1,7 +1,6 @@
 package cn.charlotte.pit.menu.gem.button
 
 
-import cn.charlotte.pit.menu.gem.SecondChoseGemMenu
 import cn.charlotte.pit.menu.gem.SecondChoseGlobalGemMenu
 import cn.charlotte.pit.util.menu.Button
 import org.bukkit.entity.Player

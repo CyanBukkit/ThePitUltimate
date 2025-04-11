@@ -65,7 +65,7 @@ object PitInternalImpl : PitInternalHook {
         backup: PlayerInvBackup?,
         enderChest: Boolean
     ) {
-        BackupShowMenu(profile, backups,backup, enderChest).openMenu(player)
+        BackupShowMenu(profile, backups, backup, enderChest).openMenu(player)
     }
 
     override fun openMenu(player: Player, menuName: String) {
@@ -94,6 +94,7 @@ object PitInternalImpl : PitInternalHook {
             "rspf" -> {
                 RespawnFamilyEvent()
             }
+
             "rage" -> {
                 RagePitEvent()
             }
@@ -152,13 +153,14 @@ object PitInternalImpl : PitInternalHook {
             else -> return false
         }
 
-        return openEvent(event,player)
+        return openEvent(event, player)
     }
-    override fun openEvent(event: IEvent,player: Player?): Boolean {
+
+    override fun openEvent(event: IEvent, player: Player?): Boolean {
 
         val factory = ThePit.getInstance().eventFactory
         if (event is IEpicEvent) {
-            if(player != null) {
+            if (player != null) {
                 val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
                 if (profile.playerOption.isDebugDamageMessage) {
                     factory.activeEvent(event)
@@ -181,6 +183,7 @@ object PitInternalImpl : PitInternalHook {
         }
         return true;
     }
+
     override fun createHologram(location: Location, text: String): Hologram {
         return PacketHologram(text, location)
 //        val plugin = Bukkit.getPluginManager().getPlugin("DecentHolograms")

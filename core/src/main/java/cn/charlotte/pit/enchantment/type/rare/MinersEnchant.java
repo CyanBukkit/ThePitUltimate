@@ -8,18 +8,18 @@ import cn.charlotte.pit.enchantment.param.item.WeaponOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.item.type.ChunkOfVileItem;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
-import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+
 @WeaponOnly
 @ArmorOnly
 public class MinersEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
+
     @Override
     public String getEnchantName() {
         return "矿工";

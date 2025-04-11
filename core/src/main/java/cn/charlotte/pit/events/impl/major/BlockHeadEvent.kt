@@ -2,7 +2,6 @@ package cn.charlotte.pit.events.impl.major
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
-import cn.charlotte.pit.data.sub.PlacedBlockData
 import cn.charlotte.pit.enchantment.type.rare.PaparazziEnchant
 import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.event.PitProfileLoadedEvent
@@ -28,7 +27,6 @@ import org.bukkit.*
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.HandlerList
@@ -40,9 +38,6 @@ import org.bukkit.scheduler.BukkitRunnable
 import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 import kotlin.math.floor
 
 
@@ -163,7 +158,11 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
                 if (data.type == BuffType.QUICK_TRAIL) {
                     this.quickTrail[player.uniqueId] = Cooldown(30, TimeUnit.SECONDS)
                     player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20 * 30, 1, true, true))
-                    CC.send(MessageType.EVENT, player, "&9&l捡起! &7你获得了30秒的 &f速度 II&7, 以及你经过的地方将被你染色!")
+                    CC.send(
+                        MessageType.EVENT,
+                        player,
+                        "&9&l捡起! &7你获得了30秒的 &f速度 II&7, 以及你经过的地方将被你染色!"
+                    )
                 }
                 if (data.type == BuffType.SUPER_HEAL) {
                     player.health = player.maxHealth
@@ -487,8 +486,9 @@ class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
                     PacketPlayOutEntityEquipment(
                         target.entityId,
                         4,
-                        PublicUtil.toNMStackQuick(target.inventory.helmet))
+                        PublicUtil.toNMStackQuick(target.inventory.helmet)
                     )
+                )
             }
 
 

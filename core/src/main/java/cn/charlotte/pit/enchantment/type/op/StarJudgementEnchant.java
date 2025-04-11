@@ -10,7 +10,6 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -25,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeaponOnly
 public class StarJudgementEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+
     @Override
     public String getEnchantName() {
         return "星辰裁决";

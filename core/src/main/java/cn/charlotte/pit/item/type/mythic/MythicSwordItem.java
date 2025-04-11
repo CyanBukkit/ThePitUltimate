@@ -2,7 +2,6 @@ package cn.charlotte.pit.item.type.mythic;
 
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.IMythicSword;
-
 import org.bukkit.Material;
 
 /**
@@ -11,6 +10,7 @@ import org.bukkit.Material;
  */
 
 public class MythicSwordItem extends IMythicItem implements IMythicSword {
+
     @Override
     public String getInternalName() {
         return "mythic_sword";

@@ -16,6 +16,7 @@ import java.util.List;
  * @Created_In: 2021/4/5 18:37
  */
 public class NightQuestSwitchButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

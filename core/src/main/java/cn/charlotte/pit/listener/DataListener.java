@@ -58,7 +58,7 @@ public class DataListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        PackedOperator orLoadOperator = ((ProfileOperator)ThePit.getInstance().getProfileOperator()).getOrLoadOperator(player);
+        PackedOperator orLoadOperator = ((ProfileOperator) ThePit.getInstance().getProfileOperator()).getOrLoadOperator(player);
         orLoadOperator.ifLoaded(() -> {
             byte code = orLoadOperator.profile().code;
 
@@ -78,7 +78,7 @@ public class DataListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         PlayerInv playerInv = PlayerInv.fromPlayerInventory(event.getPlayer().getInventory());
         event.setQuitMessage(null);
-        ((ProfileOperator)ThePit.getInstance().getProfileOperator())
+        ((ProfileOperator) ThePit.getInstance().getProfileOperator())
                 .operatorStrict(event.getPlayer()).ifPresent(profileOper -> {
                     PlayerProfile profile = profileOper.profile();
                     profile.disallow();
@@ -98,15 +98,15 @@ public class DataListener implements Listener {
                         profile.setLogin(false); //我草泥马
 
                         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> { //keep synchronize
-                                    profile.disallowUnsafe()
-                                            .setInventoryUnsafe(playerInv).allow();
-                                    profileOper.pending(i -> {
-                                        //unsafe exit
+                            profile.disallowUnsafe()
+                                    .setInventoryUnsafe(playerInv).allow();
+                            profileOper.pending(i -> {
+                                //unsafe exit
 
-                                        profile.disallowUnsafe()
-                                                .setInventoryUnsafe(playerInv).allow();
-                                    });
-                                });
+                                profile.disallowUnsafe()
+                                        .setInventoryUnsafe(playerInv).allow();
+                            });
+                        });
                         CombatListener instance = CombatListener.INSTANCE;
                         if (instance != null && !profile.getCombatTimer().hasExpired()) {
                             Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {

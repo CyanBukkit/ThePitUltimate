@@ -30,11 +30,10 @@ import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Material;
 import org.bukkit.*;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -74,6 +73,7 @@ import java.util.stream.Stream;
  */
 @AutoRegister
 public class PlayerListener implements Listener {
+
     boolean flagLoad = false;
     int lastSize = 0;
     Class<?> aClass;
@@ -107,7 +107,7 @@ public class PlayerListener implements Listener {
         }
 
         ProfileLoadRunnable.getInstance().handleJoin(player);
-        if (FuncsKt.isSpecial(player)){
+        if (FuncsKt.isSpecial(player)) {
             hideBot(player);
         }
     }

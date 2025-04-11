@@ -16,6 +16,7 @@ import java.util.List;
  * @Created_In: 2021/1/21 14:50
  */
 public class KeepSilence extends AbstractQuest {
+
     @Override
     public String getQuestInternalName() {
         return "KeepSilence";

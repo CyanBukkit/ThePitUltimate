@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @Date: 2024/1/1
  */
 public class FreeExpRunnable extends BukkitRunnable {
+
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {

@@ -9,8 +9,6 @@ import cn.charlotte.pit.parm.AutoRegister
 import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.cooldown.Cooldown
-import cn.charlotte.pit.util.isBlacks
-
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
@@ -70,11 +68,10 @@ class Regularity : AbstractEnchantment(), Listener {
         if (victim !is Player) return
 
 
-
         var level = -1
         val operator = (ThePit.getInstance().profileOperator as ProfileOperator).getOperator(attacker)
-        if(operator != null){
-            if(operator.profile().leggings != null) {
+        if (operator != null) {
+            if (operator.profile().leggings != null) {
                 if (operator.isLoaded) {
                     level = operator.profile().leggings.getEnchantmentLevel(this.nbtName)
                 }
@@ -98,7 +95,7 @@ class Regularity : AbstractEnchantment(), Listener {
                 if (System.currentTimeMillis() < it) {
                     return
                 } else {
-                    victim.removeMetadata("regularity_cooldown",ThePit.getInstance())
+                    victim.removeMetadata("regularity_cooldown", ThePit.getInstance())
                 }
             }
             if (!victim.isDead) {
@@ -118,7 +115,7 @@ class Regularity : AbstractEnchantment(), Listener {
                         "regularity_cooldown",
                         FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L + 50)
                     )
-                    Utils.pointMetadataAndRemove(victim,500,"regularity_cooldown");
+                    Utils.pointMetadataAndRemove(victim, 500, "regularity_cooldown");
                 }, 5L)
             }
         }

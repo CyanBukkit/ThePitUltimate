@@ -32,9 +32,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.*;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -51,6 +52,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/2/11 16:51
  */
 public class EnchantButton extends Button {
+
     SecureRandom random = RandomUtil.random;
     private final ItemStack item;
     private final MythicWellMenu menu;
@@ -625,10 +627,11 @@ public class EnchantButton extends Button {
             BaseComponent[] hoverEventComponents = new BaseComponent[]{
                     new TextComponent(tag.toString())
             };
-            new BukkitRunnable(){
+            new BukkitRunnable() {
                 final Cooldown cooldown = new Cooldown(10, TimeUnit.SECONDS);
-                public void run(){
-                    if(menu.getAnimationData().isFinished()) {
+
+                public void run() {
+                    if (menu.getAnimationData().isFinished()) {
                         this.cancel();
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (!FuncsKt.isSpecial(p)) {
@@ -640,11 +643,11 @@ public class EnchantButton extends Button {
                             }
 
                         }
-                    } else if(cooldown.hasExpired()){
+                    } else if (cooldown.hasExpired()) {
                         this.cancel();
                     }
                 }
-            }.runTaskTimerAsynchronously(ThePit.getInstance(),50,5);
+            }.runTaskTimerAsynchronously(ThePit.getInstance(), 50, 5);
         }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         profile.setEnchantingItem(InventoryUtil.serializeItemStack(mythicItem.toItemStack()));
@@ -654,8 +657,8 @@ public class EnchantButton extends Button {
         return abstractEnchantment instanceof ILimit;
     }
 
-    public static boolean isPlayerBlackList(Player player){
-        List<String> BLACKLIST = List.of("TongXin","yizhimeng728");
+    public static boolean isPlayerBlackList(Player player) {
+        List<String> BLACKLIST = List.of("TongXin", "yizhimeng728");
         return BLACKLIST.contains(player.getName());
     }
 
@@ -680,7 +683,7 @@ public class EnchantButton extends Button {
     }
 
     public ItemStack getDefaultDisplayItem() {
-        return ((MythicEnchantingTable)FuncsKt.getInstance(ThePit.getInstance().getItemFactor().getItemMap().get("enchant_table_mobile"))).toItemStack();
+        return ((MythicEnchantingTable) FuncsKt.getInstance(ThePit.getInstance().getItemFactor().getItemMap().get("enchant_table_mobile"))).toItemStack();
     }
 
     /**

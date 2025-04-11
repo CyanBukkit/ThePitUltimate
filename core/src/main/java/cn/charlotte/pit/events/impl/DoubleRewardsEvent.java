@@ -6,10 +6,8 @@ import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.chat.CC;
 import com.google.common.util.concurrent.AtomicDouble;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @Author: Starry_Killer

@@ -13,7 +13,6 @@ import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 @ArmorOnly
-public class HealShieldEnchant extends AbstractEnchantment implements Listener,IPlayerDamaged, ITickTask, IActionDisplayEnchant {
+public class HealShieldEnchant extends AbstractEnchantment implements Listener, IPlayerDamaged, ITickTask, IActionDisplayEnchant {
 
     private final HashMap<UUID, Integer> shield = new HashMap<>();
     private final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
@@ -98,10 +97,12 @@ public class HealShieldEnchant extends AbstractEnchantment implements Listener,I
             cooldown.put(player.getUniqueId(), new Cooldown(0));
         }
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         cooldown.remove(e.getPlayer().getUniqueId());
     }
+
     @Override
     public int loopTick(int enchantLevel) {
         return 20;

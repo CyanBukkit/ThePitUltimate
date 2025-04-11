@@ -9,8 +9,6 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -22,7 +20,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @AutoRegister
 @WeaponOnly
-public class ComboStunEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IActionDisplayEnchant {
+public class ComboStunEnchant extends AbstractEnchantment implements Listener, IAttackEntity, IActionDisplayEnchant {
 
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
     private final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();
@@ -70,10 +67,12 @@ public class ComboStunEnchant extends AbstractEnchantment implements Listener,IA
         return "&7每 &e5 &7次攻击对敌人施加 &4失衡 &7效果 (持续" + numFormat.format(0.4 * enchantLevel) + "秒) (8秒冷却)"
                 + "/s&7效果 &4失衡 &7: 失明,移动速度与攻击力极大幅度降低";
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         this.cooldown.remove(e.getPlayer().getUniqueId());
     }
+
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         Player victim = (Player) target;

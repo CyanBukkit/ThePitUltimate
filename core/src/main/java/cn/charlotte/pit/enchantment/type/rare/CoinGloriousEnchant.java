@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @ArmorOnly
 public class CoinGloriousEnchant extends AbstractEnchantment implements IAttackEntity {
+
     @Override
     public String getEnchantName() {
         return "金碧辉煌";

@@ -14,7 +14,6 @@ import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -32,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class VampirePerk extends AbstractPerk implements IAttackEntity, IPlayerShootEntity, IPlayerKilledEntity {
+
     @Override
     public String getInternalPerkName() {
         return "Vampire";

@@ -13,7 +13,7 @@ public class MythicUtil {
      * (此物品需要能被附魔)
      */
     public static IMythicItem getMythicItem(ItemStack itemStack) {//sync
-        return ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItemSync(itemStack);
+        return ((ItemFactory) ThePit.getInstance().getItemFactory()).getIMythicItemSync(itemStack);
     }
 
 

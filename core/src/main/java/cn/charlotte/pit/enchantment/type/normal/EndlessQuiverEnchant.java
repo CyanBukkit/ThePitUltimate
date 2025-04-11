@@ -7,7 +7,6 @@ import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @BowOnly
 public class EndlessQuiverEnchant extends AbstractEnchantment implements IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "箭矢回收";

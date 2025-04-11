@@ -5,7 +5,6 @@ import cn.charlotte.pit.enchantment.param.item.ArmorOnly;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-import cn.charlotte.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -13,11 +12,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class HyperOxygenEnchant extends AbstractEnchantment implements IPlayerDamaged {
+
     private static PotionEffect potionEffectLevel1 = new PotionEffect(PotionEffectType.REGENERATION, 80, 0);
 
     private static PotionEffect potionEffectLevel2 = new PotionEffect(PotionEffectType.REGENERATION, 20 * 8, 0);
@@ -78,8 +77,6 @@ public class HyperOxygenEnchant extends AbstractEnchantment implements IPlayerDa
                 case 3:
                     player.addPotionEffect(potionEffectLevel3);
                     break;
-                default:
-                    player.sendMessage("INVALID POTION LEVEL",true);
             }
         }
     }

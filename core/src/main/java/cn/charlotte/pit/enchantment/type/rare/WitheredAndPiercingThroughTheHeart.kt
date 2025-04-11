@@ -23,7 +23,7 @@ import kotlin.math.min
 
 
 @BowOnly
-class WitheredAndPiercingThroughTheHeart: AbstractEnchantment(), IPlayerShootEntity, IActionDisplayEnchant {
+class WitheredAndPiercingThroughTheHeart : AbstractEnchantment(), IPlayerShootEntity, IActionDisplayEnchant {
     override fun getEnchantName(): String {
         return "枯萎穿心"
     }
@@ -62,8 +62,8 @@ class WitheredAndPiercingThroughTheHeart: AbstractEnchantment(), IPlayerShootEnt
         if (PlayerProfile.getPlayerProfileByUuid(attacker.uniqueId).bowHit % 4 == 0) {
             val metadata = victim.getMetadata("lastThroughTheHeart")
             val lastTimeStamp = metadata.firstOrNull()?.asLong() ?: -1L
-            if(lastTimeStamp != -1L){
-                victim.removeMetadata("lastThroughTheHeart",ThePit.getInstance());
+            if (lastTimeStamp != -1L) {
+                victim.removeMetadata("lastThroughTheHeart", ThePit.getInstance());
             }
             if (System.currentTimeMillis() - lastTimeStamp >= 10 * 1000L) {
                 victim.addPotionEffect(
@@ -83,7 +83,10 @@ class WitheredAndPiercingThroughTheHeart: AbstractEnchantment(), IPlayerShootEnt
                     ),
                     true
                 )
-                victim.setMetadata("lastThroughTheHeart", FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()))
+                victim.setMetadata(
+                    "lastThroughTheHeart",
+                    FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis())
+                )
             }
 
             attacker.playSound(attacker.location, Sound.ANVIL_LAND, 1f, 1f)

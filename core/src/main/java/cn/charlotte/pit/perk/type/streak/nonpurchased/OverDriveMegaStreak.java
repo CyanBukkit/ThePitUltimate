@@ -15,7 +15,6 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -38,6 +37,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @AutoRegister
 public class OverDriveMegaStreak extends AbstractPerk implements Listener, IPlayerKilledEntity, ITickTask, IPlayerDamaged, IPlayerBeKilledByEntity, MegaStreak {
+
     @Override
     public String getInternalPerkName() {
         return "over_drive";

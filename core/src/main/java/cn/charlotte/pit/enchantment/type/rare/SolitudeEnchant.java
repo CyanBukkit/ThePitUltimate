@@ -9,7 +9,6 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -22,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class SolitudeEnchant extends AbstractEnchantment implements IPlayerDamaged {
+
     @Override
     public String getEnchantName() {
         return "独处";

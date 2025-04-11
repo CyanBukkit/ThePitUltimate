@@ -4,7 +4,7 @@ import cn.charlotte.pit.util.sound.AbstractPitSound
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 
-object DoubleStreakSound: AbstractPitSound() {
+object DoubleStreakSound : AbstractPitSound() {
     override fun getMusicInternalName(): String {
         return "double_streak"
     }

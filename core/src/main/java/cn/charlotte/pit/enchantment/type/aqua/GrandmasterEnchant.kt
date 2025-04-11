@@ -19,14 +19,15 @@ import kotlin.math.max
 
 @ArmorOnly
 @AutoRegister
-class GrandmasterEnchant: AbstractEnchantment(), Listener{
+class GrandmasterEnchant : AbstractEnchantment(), Listener {
     @EventHandler
     private fun onDamage(event: EntityDamageByEntityEvent) {
         val damager = event.damager
         if (damager is FishHook && event.entity is Player &&
             damager.shooter is Player && (damager.shooter as Player).inventory.leggings?.toMythicItem()?.enchantments?.any {
                 it.key.nbtName == "rod_back"
-            } == true) {
+            } == true
+        ) {
             Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
                 val player = event.entity as Player
                 player.damage(0.0, (event.damager as FishHook).shooter as Player)

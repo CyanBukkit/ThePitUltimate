@@ -9,6 +9,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
  * @Created_In: 2024/1/6
  */
 public class TrashPandaEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "垃圾拾荒者";

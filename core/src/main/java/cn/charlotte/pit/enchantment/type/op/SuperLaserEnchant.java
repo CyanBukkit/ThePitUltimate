@@ -6,11 +6,13 @@ import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.beam.beam.Beam;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author: EmptyIrony
@@ -18,6 +20,7 @@ import java.util.*;
  */
 
 public class SuperLaserEnchant extends AbstractEnchantment implements ITickTask {
+
     private final Map<UUID, TargetInfo> targetInfoMap = new HashMap<>();
 
     @Override
@@ -90,6 +93,7 @@ public class SuperLaserEnchant extends AbstractEnchantment implements ITickTask 
 
     @RequiredArgsConstructor
     public static class TargetInfo {
+
         private final UUID target;
         private final Beam beam;
     }

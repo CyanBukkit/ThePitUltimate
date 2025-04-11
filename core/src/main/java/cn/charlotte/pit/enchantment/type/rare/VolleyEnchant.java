@@ -11,7 +11,6 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import io.irina.backports.utils.SWMRHashTable;
-
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -41,18 +40,20 @@ import java.util.concurrent.TimeUnit;
 @AutoRegister
 @BowOnly
 public class VolleyEnchant extends AbstractEnchantment implements Listener {
+
     private static final Map<UUID, Cooldown> cooldown = new SWMRHashTable<>();
 
     private final Field playerUsingFiled;
     private Object unreflected = null;
+
     @SneakyThrows
     public VolleyEnchant() {
         this.playerUsingFiled = EntityHuman.class.getDeclaredField("h");
         this.playerUsingFiled.setAccessible(true);
-        try{
+        try {
             VarHandle varHandle = MethodHandles.lookup().unreflectVarHandle(playerUsingFiled);
             unreflected = varHandle;
-        } catch (Throwable e){
+        } catch (Throwable e) {
             unreflected = null;
         }
     }
@@ -90,7 +91,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
     private Map<UUID, Boolean> isShooting = new SWMRHashTable<>();
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         cooldown.remove(e.getPlayer().getUniqueId());
     }
 
@@ -120,9 +121,9 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                     final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 
                     final int value;
-                    if(unreflected != null) {
+                    if (unreflected != null) {
                         value = (int) ((VarHandle) unreflected).get(entityPlayer);
-                    }else {
+                    } else {
                         value = (int) this.playerUsingFiled.get(entityPlayer);
                     }
                     ItemBuilder arrowBuilder = new ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false);
@@ -132,9 +133,11 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
 
                     new BukkitRunnable() {
                         int tick = 0;
+
                         {
                             isShooting.put(player.getUniqueId(), true);
                         }
+
                         @Override
                         public void run() {
                             if (tick >= level) {
@@ -142,12 +145,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                                 isShooting.remove(player.getUniqueId());
                                 this.cancel();
                             } else {
-                                try {
-                                    bow.shoot(item, entityPlayer.world, entityPlayer, value, true);
-                                } catch (NoSuchMethodError e) {
-                                    bow.a(item, entityPlayer.world, entityPlayer, value);
-
-                                }
+                                bow.a(item, entityPlayer.world, entityPlayer, value);
                             }
                             tick++;
                         }

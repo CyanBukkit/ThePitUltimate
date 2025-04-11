@@ -5,7 +5,6 @@ import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.data.mail.Mail;
-import cn.charlotte.pit.data.operator.IOperator;
 import cn.charlotte.pit.data.operator.ProfileOperator;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.data.sub.PlayerInv;
@@ -30,7 +29,6 @@ import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
-import io.papermc.paper.util.maplist.ObjectMapList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AllArgsConstructor;
@@ -45,7 +43,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -154,19 +155,21 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
         return new LotsData(
                 new ItemStack[]{
-                       FunkyFeather.toItemStack()},
+                        FunkyFeather.toItemStack()},
                 2000,
                 0
         );
     }
+
     public static void sendMail(UUID uuid, Mail mail) {
-       ProfileOperator profileOperator = (ProfileOperator)ThePit.getInstance().getProfileOperator();
+        ProfileOperator profileOperator = (ProfileOperator) ThePit.getInstance().getProfileOperator();
 
         profileOperator.operator(uuid).ifPresent(operator -> {
             operator.pendingUntilLoaded(prof -> prof.getMailData().sendMail(mail));
         });
 
     }
+
     private static int getRandomLevel() {
         if (RandomUtil.hasSuccessfullyByChance(0.6)) {
             return 1;
@@ -174,7 +177,8 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
             return ThreadLocalRandom.current().nextInt(2) + 2;
         }
     }
-    public static LotsData randomEnchantment(){
+
+    public static LotsData randomEnchantment() {
 
         IMythicItem mythicItem = null;
 
@@ -185,7 +189,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
         //        } else if ("mythic_leggings".equals(internalName)) {
         //            mythicItem = new MythicLeggingsItem();
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        switch(random.nextInt(3)){
+        switch (random.nextInt(3)) {
             case 0 -> mythicItem = new MythicBowItem();
             case 1 -> mythicItem = new MythicSwordItem();
             case 2 -> mythicItem = new MythicLeggingsItem();
@@ -264,48 +268,48 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
                 if (amount == 1) { // If this item has only 1 enchantment
 
-                        int singleLevel = 0;
-                        AbstractEnchantment enchantment = null;
-                        for (Integer i : mythicItem.getEnchantments().values()) {
-                            singleLevel = i;
-                        }
-                        for (AbstractEnchantment ae : mythicItem.getEnchantments().keySet()) {
-                            enchantment = ae;
-                        }
-                        if (singleLevel == 1) { //Condition: 1 (Only 1 Lv1 Enchantment)
-                            int choice = random.nextInt(3);
-                            switch (choice) {
-                                case 0: { // 1->3
-                                    mythicItem.getEnchantments().put(enchantment, 3);
+                    int singleLevel = 0;
+                    AbstractEnchantment enchantment = null;
+                    for (Integer i : mythicItem.getEnchantments().values()) {
+                        singleLevel = i;
+                    }
+                    for (AbstractEnchantment ae : mythicItem.getEnchantments().keySet()) {
+                        enchantment = ae;
+                    }
+                    if (singleLevel == 1) { //Condition: 1 (Only 1 Lv1 Enchantment)
+                        int choice = random.nextInt(3);
+                        switch (choice) {
+                            case 0: { // 1->3
+                                mythicItem.getEnchantments().put(enchantment, 3);
 
-                                    break;
-                                }
-                                case 1: { // 1->21
-                                    mythicItem.getEnchantments().put(enchantment, 2);
-                                  break;
-                                }
-                                case 2: { // 1->211
-                                    mythicItem.getEnchantments().put(enchantment, 2);
-                                }
-                                default:
-                                    break;
+                                break;
                             }
-                        } else if (singleLevel == 2) {
-                            int choice = random.nextInt(2);
-                            switch (choice) {
-                                case 0: { // 2->3
-                                    mythicItem.getEnchantments().put(enchantment, 3);
+                            case 1: { // 1->21
+                                mythicItem.getEnchantments().put(enchantment, 2);
+                                break;
+                            }
+                            case 2: { // 1->211
+                                mythicItem.getEnchantments().put(enchantment, 2);
+                            }
+                            default:
+                                break;
+                        }
+                    } else if (singleLevel == 2) {
+                        int choice = random.nextInt(2);
+                        switch (choice) {
+                            case 0: { // 2->3
+                                mythicItem.getEnchantments().put(enchantment, 3);
 
-                                    break;
-                                }
-                                case 1: { // 2->21
-                                 break;
-                                }
-                                default:
-                                    break;
+                                break;
                             }
-                        } else {
-                     }
+                            case 1: { // 2->21
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                    } else {
+                    }
                 } else if (amount == 2) { //11
                     int choice = random.nextInt(2);
 
@@ -330,45 +334,45 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                 int amount = mythicItem.getEnchantments().size();
                 if (amount == 1) { // If this item have only 1 enchantment
                     AbstractEnchantment enchantment = null;
-                        for (int i = 0; i < 2; i++) {
-                            results.removeAll(enchantments);
-                                enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
-                            enchantments.add(enchantment);
-                            mythicItem.getEnchantments().put(enchantment, 1);
-                        }
-                        for (AbstractEnchantment abstractEnchantment : enchantments) {
-                            mythicItem.getEnchantments().put(abstractEnchantment, Math.max(mythicItem.getEnchantments().get(abstractEnchantment), getRandomLevel()));
-                        }
-                        //set level of a new enchant to 1/2 (3 excluded cuz the limit)
-                        Integer totalLevel = 0;
-                        for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
-                            totalLevel += mythicItem.getEnchantments().get(abstractEnchantment);
-                        }
-                        if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
-                            if (enchantment != null) {
-                                mythicItem.getEnchantments().put(enchantment, RandomUtil.hasSuccessfullyByChance(0.1) ? 2 : 1);
-                            }
-                    }
-                } else if (amount == 2) { //21 -> 311
+                    for (int i = 0; i < 2; i++) {
                         results.removeAll(enchantments);
-                        AbstractEnchantment enchantment;
                         enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
                         enchantments.add(enchantment);
                         mythicItem.getEnchantments().put(enchantment, 1);
-                        for (AbstractEnchantment abstractEnchantment : enchantments) {
-                            final int currentLevel = Math.max(mythicItem.getEnchantments().get(abstractEnchantment), getRandomLevel());
-                            mythicItem.getEnchantments().put(abstractEnchantment, currentLevel);
+                    }
+                    for (AbstractEnchantment abstractEnchantment : enchantments) {
+                        mythicItem.getEnchantments().put(abstractEnchantment, Math.max(mythicItem.getEnchantments().get(abstractEnchantment), getRandomLevel()));
+                    }
+                    //set level of a new enchant to 1/2 (3 excluded cuz the limit)
+                    Integer totalLevel = 0;
+                    for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
+                        totalLevel += mythicItem.getEnchantments().get(abstractEnchantment);
+                    }
+                    if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
+                        if (enchantment != null) {
+                            mythicItem.getEnchantments().put(enchantment, RandomUtil.hasSuccessfullyByChance(0.1) ? 2 : 1);
                         }
-                        Integer totalLevel = 0;
-                        for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
-                            totalLevel += mythicItem.getEnchantments().get(abstractEnchantment);
+                    }
+                } else if (amount == 2) { //21 -> 311
+                    results.removeAll(enchantments);
+                    AbstractEnchantment enchantment;
+                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                    enchantments.add(enchantment);
+                    mythicItem.getEnchantments().put(enchantment, 1);
+                    for (AbstractEnchantment abstractEnchantment : enchantments) {
+                        final int currentLevel = Math.max(mythicItem.getEnchantments().get(abstractEnchantment), getRandomLevel());
+                        mythicItem.getEnchantments().put(abstractEnchantment, currentLevel);
+                    }
+                    Integer totalLevel = 0;
+                    for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
+                        totalLevel += mythicItem.getEnchantments().get(abstractEnchantment);
+                    }
+                    if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
+                        //set level of new enchant to 1/2 (3 excluded cuz the limit)
+                        if (enchantment != null) {
+                            mythicItem.getEnchantments().put(enchantment, RandomUtil.hasSuccessfullyByChance(0.1) ? 2 : 1);
                         }
-                        if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
-                            //set level of new enchant to 1/2 (3 excluded cuz the limit)
-                            if (enchantment != null) {
-                                mythicItem.getEnchantments().put(enchantment, RandomUtil.hasSuccessfullyByChance(0.1) ? 2 : 1);
-                            }
-                        }
+                    }
 
 
                 } else if (amount == 3) { // 111 -> 211/311
@@ -398,16 +402,17 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
                 }
             }
 
-        mythicItem.getEnchantmentRecords()
-                .add(new EnchantmentRecord(
-            "CONSOLE_EVENT",
-                        "AUCTION",
-                                System.currentTimeMillis()
-                                ));
+            mythicItem.getEnchantmentRecords()
+                    .add(new EnchantmentRecord(
+                            "CONSOLE_EVENT",
+                            "AUCTION",
+                            System.currentTimeMillis()
+                    ));
         }
         ItemStack itemStack = mythicItem.toItemStack();
-        return new LotsData(new ItemStack[]{itemStack},8000,0,itemStack);
+        return new LotsData(new ItemStack[]{itemStack}, 8000, 0, itemStack);
     }
+
     public double getRate() {
         return AuctionEvent.rate;
     }
@@ -683,7 +688,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
         if (finalBidHistories.isEmpty()) {
             return null;
         }
-        List<Double> bidCoins = new ObjectMapList<>();
+        List<Double> bidCoins = new ObjectArrayList<>();
         for (BidHistory bidHistory : finalBidHistories) {
             bidCoins.add(bidHistory.getCoins());
         }
@@ -701,7 +706,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
     }
 
     public List<UUID> getParticipants() {
-        List<UUID> participants = new ObjectMapList<>();
+        List<UUID> participants = new ObjectArrayList<>();
         for (BidHistory bidHistory : bidHistories) {
             if (!participants.contains(bidHistory.getUuid())) {
                 participants.add(bidHistory.getUuid());
@@ -778,6 +783,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
     @Data
     @AllArgsConstructor
     public static class BidHistory {
+
         private UUID uuid;
         private long time;
         private double coins;
@@ -785,6 +791,7 @@ public class AuctionEvent implements IEvent, INormalEvent, Listener {
 
     @Data
     public static class LotsData {
+
         private ItemStack[] contents;
         private double startPrice;
         private int renown;

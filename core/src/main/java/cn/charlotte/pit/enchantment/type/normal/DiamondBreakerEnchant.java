@@ -11,7 +11,6 @@ import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -29,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @BowOnly
 @ArmorOnly
 public class DiamondBreakerEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "钻石破坏者";

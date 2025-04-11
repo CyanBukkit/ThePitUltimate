@@ -20,6 +20,7 @@ import java.util.Map;
  * @Created_In: 2021/2/21 17:16
  */
 public class CactusMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "哲学仙人掌 (选择其一)";

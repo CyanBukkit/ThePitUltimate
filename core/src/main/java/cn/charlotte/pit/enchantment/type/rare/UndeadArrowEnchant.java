@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @BowOnly
 public class UndeadArrowEnchant extends AbstractEnchantment implements IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "亡灵之箭";
@@ -51,7 +52,7 @@ public class UndeadArrowEnchant extends AbstractEnchantment implements IPlayerSh
 
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if (((Player)target).getHealth() - damage * boostDamage.get() < 1.5D + enchantLevel * 0.5D) {
+        if (((Player) target).getHealth() - damage * boostDamage.get() < 1.5D + enchantLevel * 0.5D) {
             cancel.set(true);
             finalDamage.getAndAdd(9999.0D);
             attacker.playSound(attacker.getLocation(), Sound.VILLAGER_DEATH, 1.0F, 1.0F);

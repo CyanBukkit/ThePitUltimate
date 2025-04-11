@@ -7,7 +7,7 @@ import cn.charlotte.pit.util.chat.CC
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 
-object PitPapiHook: PlaceholderExpansion() {
+object PitPapiHook : PlaceholderExpansion() {
 
     override fun getIdentifier(): String {
         return "pit"
@@ -31,13 +31,15 @@ object PitPapiHook: PlaceholderExpansion() {
             }
         }
 
-        when(params) {
+        when (params) {
             "level_tag_roman" -> {
                 return CC.translate(profile?.formattedLevelTagWithRoman ?: "&7[0]")
             }
+
             "level_tag" -> {
                 return CC.translate(profile?.formattedLevelTag ?: "&7[0]")
             }
+
             "genesis_tag" -> {
                 if (ThePit.getInstance().pitConfig.isGenesisEnable) {
                     if (profile?.genesisData?.team == GenesisTeam.ANGEL) {
@@ -49,12 +51,15 @@ object PitPapiHook: PlaceholderExpansion() {
                 }
                 return ""
             }
+
             "coins" -> {
                 return profile?.coins?.toString() ?: "0.0"
             }
+
             "exp" -> {
                 return profile?.experience?.toString() ?: "0.0"
             }
+
             "bounty" -> {
                 return profile?.bounty?.toString() ?: "0"
             }

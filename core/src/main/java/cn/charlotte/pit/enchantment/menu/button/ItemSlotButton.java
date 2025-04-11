@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 @Setter
 @AllArgsConstructor
 public class ItemSlotButton extends Button {
+
     private MythicWellMenu enchantMenu;
     private ItemStack item;
 

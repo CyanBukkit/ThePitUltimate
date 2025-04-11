@@ -2,8 +2,7 @@ package cn.charlotte.pit.runnable;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.random.RandomUtil;
-import io.papermc.paper.util.maplist.ObjectMapList;
-import org.bukkit.Bukkit;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -11,19 +10,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Queue;
-
 /**
  * @Author: EmptyIrony
  * @Date: 2021/2/2 13:21
  */
 public class GoldDropRunnable extends BukkitRunnable {
-    ObjectMapList<Item> itemGarbageList = new ObjectMapList<>();
+
+    ObjectArrayList<Item> itemGarbageList = new ObjectArrayList<>();
     long tick;
+
     @Override
     public void run() {
         tick++;
-        if(tick < 0){
+        if (tick < 0) {
             tick = 0;
         }
         for (int i = 0; i < 2; i++) {
@@ -32,7 +31,7 @@ public class GoldDropRunnable extends BukkitRunnable {
             item.setMetadata("gold", new FixedMetadataValue(ThePit.getInstance(), RandomUtil.random.nextInt(3) + 3));
             itemGarbageList.add(item);
         }
-        if(tick % 20 == 0){
+        if (tick % 20 == 0) {
             itemGarbageList.forEach(item -> {
                 item.removeMetadata("gold", ThePit.getInstance());
                 item.remove();

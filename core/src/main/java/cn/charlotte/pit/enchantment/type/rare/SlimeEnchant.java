@@ -11,7 +11,6 @@ import cn.charlotte.pit.pet.PetFactory;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
@@ -27,6 +26,7 @@ import org.bukkit.event.Listener;
 @ArmorOnly
 @AutoRegister
 public class SlimeEnchant extends AbstractEnchantment implements Listener {
+
     @Override
     public String getEnchantName() {
         return "召唤: 史莱姆宠物";

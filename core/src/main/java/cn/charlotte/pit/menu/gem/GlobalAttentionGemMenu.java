@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlobalAttentionGemMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "宝石点缀";
@@ -20,12 +21,12 @@ public class GlobalAttentionGemMenu extends Menu {
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
-        Map<Integer,Button> buttonMap =new HashMap<>();
+        Map<Integer, Button> buttonMap = new HashMap<>();
         var index = 0;
         PlayerInventory inventory = player.getInventory();
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);
-            if(item != null){
+            if (item != null) {
                 if (Utils.canUseGlobalAttGem(item)) {
                     buttonMap.put(index, new ItemGlobalGemButton(item, i));
                     index++;
@@ -35,6 +36,7 @@ public class GlobalAttentionGemMenu extends Menu {
 
         return buttonMap;
     }
+
     public void onClickEvent(InventoryClickEvent event) {
         event.setCancelled(true);
     }

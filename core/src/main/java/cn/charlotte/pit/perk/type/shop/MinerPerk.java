@@ -8,7 +8,6 @@ import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -23,6 +22,7 @@ import java.util.List;
  */
 
 public class MinerPerk extends AbstractPerk implements IPlayerKilledEntity {
+
     @Override
     public String getInternalPerkName() {
         return "Miner";

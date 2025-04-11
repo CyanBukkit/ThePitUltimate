@@ -6,7 +6,6 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class DmgReduceBoostPerk extends AbstractPerk implements IPlayerDamaged {
+
     @Override
     public String getInternalPerkName() {
         return "DmgReduceBoost";

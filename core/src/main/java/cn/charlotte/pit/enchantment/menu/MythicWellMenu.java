@@ -34,6 +34,7 @@ import java.util.Map;
 @Getter
 @Setter
 public class MythicWellMenu extends Menu {
+
     private final int[] ANIMATIONS_SLOT = new int[]{19, 10, 11, 12, 21, 30, 29, 28};
     private final int INPUT_SLOT = 20;
     private final int CLICK_SLOT = 25;
@@ -88,7 +89,7 @@ public class MythicWellMenu extends Menu {
             Integer tier = ItemUtil.getItemIntData(itemStack, "tier");
             if (tier != null && tier == (foundColor == MythicColor.DARK ? 1 : 2)) {
                 button.put(14, new EnchantSinceButton(this, foundColor));
-                    button.put(32, new EnchantBookButton(this, foundColor));
+                button.put(32, new EnchantBookButton(this, foundColor));
             } else if (tier != null && tier != (foundColor == MythicColor.DARK ? 2 : 3)) {
                 button.put(23, new EnchantBookButton(this, foundColor));
             }
@@ -167,9 +168,9 @@ public class MythicWellMenu extends Menu {
                             Integer tier = ItemUtil.getItemIntData(enchantingItem, "tier");
                             if (tier != null && tier == (color == MythicColor.DARK ? 1 : 2)) {
                                 button.put(14, new EnchantSinceButton(this, color));
-                                    button.put(32, new EnchantBookButton(this, color));
+                                button.put(32, new EnchantBookButton(this, color));
                             } else if (tier != null && tier != (color == MythicColor.DARK ? 2 : 3)) {
-                                    button.put(23, new EnchantBookButton(this, color));
+                                button.put(23, new EnchantBookButton(this, color));
                             }
                             break;
                         }

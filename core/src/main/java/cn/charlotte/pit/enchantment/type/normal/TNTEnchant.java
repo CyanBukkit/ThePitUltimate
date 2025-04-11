@@ -10,7 +10,6 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,6 +23,7 @@ import java.util.Arrays;
 
 @ArmorOnly
 public class TNTEnchant extends AbstractEnchantment implements IPlayerKilledEntity, IPlayerRespawn {
+
     private ItemBuilder getTNTBuilder() {
         return new ItemBuilder(Material.TNT)
                 .internalName("tnt_enchant_item")
@@ -68,7 +68,9 @@ public class TNTEnchant extends AbstractEnchantment implements IPlayerKilledEnti
                 + "/s&7TNT放置后立刻被点燃并在1.5秒后爆炸,对周围3格内的所有敌人造成 &c" + (0.5 + enchantLevel * 0.5) + "❤ &7普通伤害."
                 + "/s&7(TNT爆炸时如自身未装备此附魔,则TNT不会造成伤害)";
     }
+
     ItemBuilder itemBuilder = getTNTBuilder();
+
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {

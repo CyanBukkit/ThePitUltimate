@@ -22,6 +22,7 @@ import java.util.List;
  */
 
 public class GenesisSpawnButton extends Button {
+
     private final GenesisTeam displayTeam;
     private final PlayerProfile profile;
 

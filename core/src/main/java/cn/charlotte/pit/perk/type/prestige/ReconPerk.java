@@ -7,7 +7,6 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class ReconPerk extends AbstractPerk implements IPlayerShootEntity {
+
     private final Map<UUID, Cooldown> cooldown = new HashMap<>();
 
     @Override

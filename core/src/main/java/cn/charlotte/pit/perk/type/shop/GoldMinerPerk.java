@@ -9,7 +9,6 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.Utils;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -25,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class GoldMinerPerk extends AbstractPerk implements IPlayerKilledEntity, IPlayerShootEntity, IPlayerAssist {
+
     @Override
     public String getInternalPerkName() {
         return "GoldMiner";
@@ -72,6 +72,7 @@ public class GoldMinerPerk extends AbstractPerk implements IPlayerKilledEntity, 
         lines.add("&7箭矢命中其他玩家后,该玩家死亡时");
         lines.add("&7你参与击杀/助攻获得的硬币 &6+50% &7.");
     }
+
     @Override
     public List<String> getDescription(Player player) {
         return lines;
@@ -116,6 +117,6 @@ public class GoldMinerPerk extends AbstractPerk implements IPlayerKilledEntity, 
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         String s = "mixed_combat_" + attacker.getUniqueId();
         target.setMetadata(s, new FixedMetadataValue(ThePit.getInstance(), true));
-        Utils.pointMetadataAndRemove(target,500,s);
+        Utils.pointMetadataAndRemove(target, 500, s);
     }
 }

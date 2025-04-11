@@ -6,10 +6,8 @@ import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.menu.shop.button.AbstractShopButton;
 import cn.charlotte.pit.util.item.ItemBuilder;
-import cn.charlotte.pit.util.item.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
@@ -67,13 +65,15 @@ public class DiamondSwordShopButton extends AbstractShopButton {
     public boolean shouldUpdate(Player player, int slot, ClickType clickType) {
         return true;
     }
+
     ItemStack stack = new ItemBuilder(Material.DIAMOND_SWORD)
-                .deathDrop(true)
-                .canSaveToEnderChest(true)
-                .canDrop(true)
-                .canTrade(true)
-                .internalName("shopItem")
-                .buildWithUnbreakable();
+            .deathDrop(true)
+            .canSaveToEnderChest(true)
+            .canDrop(true)
+            .canTrade(true)
+            .internalName("shopItem")
+            .buildWithUnbreakable();
+
     @Override
     public ItemStack[] getResultItem(Player player) {
         if (getButtonItem(player).getType().equals(Material.DIAMOND_AXE)) {

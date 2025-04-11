@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ArmorOnly
 @BowOnly
 public class TheSwiftWindEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "&b迅捷之风";

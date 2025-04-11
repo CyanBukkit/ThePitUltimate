@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @BowOnly
 public class NightFallEnchant extends AbstractEnchantment implements IPlayerShootEntity, IActionDisplayEnchant {
+
     private final Map<UUID, Cooldown> Cooldown = new HashMap();
 
     @Override
@@ -39,7 +40,7 @@ public class NightFallEnchant extends AbstractEnchantment implements IPlayerShoo
         Cooldown.putIfAbsent(attacker.getUniqueId(), new Cooldown(0L));
         if ((Cooldown.get(attacker.getUniqueId())).hasExpired()) {
             Cooldown.put(attacker.getUniqueId(), getCooldown());
-            Player targetplayer = (Player)target;
+            Player targetplayer = (Player) target;
             targetplayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * enchantLevel, 9));
         }
 

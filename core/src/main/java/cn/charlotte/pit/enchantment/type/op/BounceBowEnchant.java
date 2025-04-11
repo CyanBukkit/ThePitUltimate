@@ -7,7 +7,6 @@ import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,6 +31,7 @@ import org.bukkit.util.Vector;
 
 @AutoRegister
 public class BounceBowEnchant extends AbstractEnchantment implements Listener {
+
     @Override
     public String getEnchantName() {
         return "弹跳箭矢";
@@ -77,7 +77,7 @@ public class BounceBowEnchant extends AbstractEnchantment implements Listener {
         if (!player.isSneaking()) return;
         if (itemInHand.getType() == Material.BOW) {
             event.getProjectile().setMetadata("bounce_bow", new FixedMetadataValue(ThePit.getInstance(), true));
-            Utils.pointMetadataAndRemove(event.getProjectile(),500,"bounce_bow");
+            Utils.pointMetadataAndRemove(event.getProjectile(), 500, "bounce_bow");
             //event.setProjectile(projectile);
         }
     }
@@ -105,7 +105,7 @@ public class BounceBowEnchant extends AbstractEnchantment implements Listener {
         double min = 0.5;
         double dec = 0.6;
         Vector vector = entity.getVelocity();
-        double b1 = MathHelper.sqrt(MathHelper.pow(vector.getX(), 2)) + MathHelper.pow(vector.getY(), 2) + MathHelper.pow(vector.getZ(), 2);
+        double b1 = Math.sqrt(Math.pow(vector.getX(), 2)) + Math.pow(vector.getY(), 2) + Math.pow(vector.getZ(), 2);
         if (b1 < min) return null;
         Location location = entity.getLocation();
         BlockIterator blockIterator = new BlockIterator(location.getWorld(), location.toVector(), vector, 0.0, 3);

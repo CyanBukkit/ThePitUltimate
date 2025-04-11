@@ -3,17 +3,20 @@ package cn.charlotte.pit.data.operator;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
 public class Promise extends ObjectArraySet<Runnable> {
+
     boolean done = false;
-    void ret(){
+
+    void ret() {
         synchronized (this) {
             done = true;
             this.notifyAll();
         }
         this.forEach(Runnable::run);
     }
-    public Promise promise(Runnable run){
-        synchronized (this){
-            if(done){
+
+    public Promise promise(Runnable run) {
+        synchronized (this) {
+            if (done) {
                 run.run();
                 return this;
             }
@@ -21,15 +24,16 @@ public class Promise extends ObjectArraySet<Runnable> {
         this.add(run);
         return this;
     }
-    public Promise join(){
+
+    public Promise join() {
         try {
             synchronized (this) {
-                if(done){
+                if (done) {
                     return this;
                 }
                 this.wait();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return this;

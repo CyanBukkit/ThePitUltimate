@@ -14,7 +14,6 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -39,6 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ArmorOnly
 @AutoRegister
 public class TestEnchant extends AbstractEnchantment implements ITickTask, IAttackEntity, IPlayerBeKilledByEntity, IPlayerShootEntity, IPlayerKilledEntity, IPlayerAssist, IPlayerDamaged, IPlayerRespawn, Listener {
+
     private static final HealPoisonDeBuff healPoisonDeBuff = new HealPoisonDeBuff();
 
     @Override

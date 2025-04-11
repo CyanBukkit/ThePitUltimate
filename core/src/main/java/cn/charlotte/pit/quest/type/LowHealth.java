@@ -12,6 +12,7 @@ import java.util.List;
  * @Created_In: 2021/2/2 17:12
  */
 public class LowHealth extends AbstractQuest {
+
     @Override
     public String getQuestInternalName() {
         return "low_health";

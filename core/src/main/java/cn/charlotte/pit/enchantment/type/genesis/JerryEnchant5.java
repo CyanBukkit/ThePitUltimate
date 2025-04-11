@@ -22,7 +22,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import spg.lgdev.handler.MovementHandler;
 import spg.lgdev.iSpigot;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @ArmorOnly
 public class JerryEnchant5 extends AbstractEnchantment implements ITickTask, MovementHandler {
@@ -112,7 +115,7 @@ public class JerryEnchant5 extends AbstractEnchantment implements ITickTask, Mov
             player.setAutoDestroy(false);
             player.setLoop(true);
             player.setPlaying(true);
-            player.setVolume((byte)0.5);
+            player.setVolume((byte) 0.5);
 
             this.playerMap.put(target.getUniqueId(), player);
         } else {

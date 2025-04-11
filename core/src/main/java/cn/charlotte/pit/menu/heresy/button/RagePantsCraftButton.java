@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RagePantsCraftButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         List<String> lines = new ArrayList<>();

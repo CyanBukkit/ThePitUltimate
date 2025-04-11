@@ -8,7 +8,6 @@ import cn.charlotte.pit.parm.listener.IPlayerRespawn;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Passive
 public class AutoBuyPerk extends AbstractPerk implements IPlayerRespawn {
+
     @Override
     public String getInternalPerkName() {
         return "auto_buy_perk";

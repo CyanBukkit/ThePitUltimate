@@ -25,6 +25,7 @@ import java.util.List;
  */
 
 public class SupporterEntranceButton extends Button {
+
     @Override
     public ItemStack getButtonItem(Player player) {
         final int price = NewConfiguration.INSTANCE.getVipPrice();

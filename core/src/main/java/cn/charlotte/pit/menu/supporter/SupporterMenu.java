@@ -14,6 +14,7 @@ import java.util.Map;
  * @Date 2021/5/4 10:16
  */
 public class SupporterMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "天坑乱斗会员";

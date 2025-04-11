@@ -11,6 +11,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
  */
 @ArmorOnly
 public class GoldenHandcuffsEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "金手铐";

@@ -21,6 +21,7 @@ import java.util.Map;
  * @Date: 2021/1/31 23:32
  */
 public class TradeInfoMenu extends Menu {
+
     private static final int[] myselfSlots = {0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     private static final int[] targetSlots = {5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 33, 34, 35};
     private static final int[] glassSlots = {4, 13, 22, 31, 40};
