@@ -46,7 +46,7 @@ import kotlin.math.min
  * @author huanmeng_qwq
  */
 
-@Command(name = "pu")
+@Command(name = "pit")
 @Permission("pit.admin")
 class PitAdminCommands {
     @Execute(name = "createEquation")
