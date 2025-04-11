@@ -22,7 +22,6 @@ import java.util.Map;
 public class HologramRunnable extends BukkitRunnable {
 
     private long tick = 0;
-
     public HologramRunnable() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), this, 0, 2L);
     }
@@ -53,9 +52,10 @@ public class HologramRunnable extends BukkitRunnable {
                 }
 
                 List<String> text = abstractHologram.getText(player);
-                if (text.size() != hologramData.getHolograms().size()) {
-                    hologramData.getHolograms().forEach(Hologram::deSpawn);
-                    hologramData.getHolograms().clear();
+                List<Hologram> holograms1 = hologramData.getHolograms();
+                if (text.size() != holograms1.size()) {
+                    holograms1.forEach(Hologram::deSpawn);
+                    holograms1.clear();
                     List<Hologram> holograms = new ArrayList<>();
                     for (int i = 0; i < text.size(); i++) {
                         String line = text.get(i);
@@ -63,10 +63,10 @@ public class HologramRunnable extends BukkitRunnable {
                         holo.spawn(Collections.singletonList(player));
                         holograms.add(holo);
                     }
-                    hologramData.getHolograms().addAll(holograms);
+                    holograms1.addAll(holograms);
                 }
                 for (int i = 0; i < text.size(); i++) {
-                    hologramData.getHolograms().get(i).setText(CC.translate(text.get(i)));
+                    holograms1.get(i).setText(CC.translate(text.get(i)));
                 }
             }
         }

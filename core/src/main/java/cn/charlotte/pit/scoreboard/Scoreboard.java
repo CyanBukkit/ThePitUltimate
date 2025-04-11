@@ -133,7 +133,7 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         if (prestige > 0) {
-            lines.add("&f等级: &e" + RomanUtil.convert(prestige) + " " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
+            lines.add("&f等级: &e" + LevelUtil.getPrestigeTagFully(prestige) + " " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         } else {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
@@ -224,9 +224,9 @@ public class Scoreboard implements AssembleAdapter {
             if (bounty != 0) {
                 String genesisColor = profile.bountyColor();
                 if (profile.getStreakKills() < 1D) {
-                    lines.add("&f赏金: " + "&l" + genesisColor + bounty + "g");
+                    lines.add("&f赏金: "  + genesisColor +"&l" + bounty + "g");
                 } else {
-                    lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " &l" + genesisColor + bounty + "g");
+                    lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + bounty + "g");
 
                 }
             }
@@ -253,7 +253,7 @@ public class Scoreboard implements AssembleAdapter {
                 boost = 10;
             }
             if (boost >= 3) {
-                lines.add("&f脚坑士: &9-" + boost * 3 + "%");
+                lines.add("&f角斗士: &9-" + boost * 3 + "%");
             }
 
         }

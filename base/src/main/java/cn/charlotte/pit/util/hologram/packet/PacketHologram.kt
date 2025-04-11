@@ -7,8 +7,12 @@ import cn.charlotte.pit.util.hologram.view.ViewHandler
 import eu.decentsoftware.holograms.api.nms.NMS
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand
+import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.event.entity.CreatureSpawnEvent
 
 /**
  * 2024/5/16<br>
@@ -46,6 +50,8 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
         receivers?.forEach {
             hologram.addUser(it)
         }
+        (hologram.entity.world as CraftWorld).addEntity<ArmorStand>((hologram.entity as CraftArmorStand).handle,
+            CreatureSpawnEvent.SpawnReason.DEFAULT)
 
         return spawn()
     }

@@ -21,7 +21,7 @@ object NewConfiguration {
     var lobbyCommand = "spb connect lobby"
 
     var dateFormat = "MM/dd HH:mm"
-
+    var bountyTickInterval = 1;
     var noobProtect = true
     var noobProtectLevel = 120
     var noobDamageBoost = 1.1
@@ -171,6 +171,7 @@ object NewConfiguration {
         maxLevel = config.getInt("maxLevel", 120)
         scoreBoardAnimation = config.getList("scoreboard.animation", scoreBoardAnimation) as List<String>
         loadingBoardTips = config.getList("scoreboard.loading", loadingBoardTips) as List<String>
+        bountyTickInterval = config.getInt("bounty.updateInterval", bountyTickInterval);
 
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 

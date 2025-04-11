@@ -274,7 +274,14 @@ public class LevelUtil {
             return getLevelTag(prestige, experience);
         }
     }
-
+    public static String getPrestigeTagFully(int prestige) {
+        if (prestige > 0) {
+            String prestigeColor = getPrestigeColor(prestige);
+            return prestigeColor + "[&e" + RomanUtil.convert(prestige) + prestigeColor + "]";
+        } else {
+            return RomanUtil.convert(prestige);
+        }
+    }
     public static String getLevelTagWithRoman(int prestige, int level) {
         if (prestige > 0) {
             int pre = 120 * prestige / 30;

@@ -1101,27 +1101,23 @@ public class PlayerProfile {
     }
 
     public String bountyColor() {
-        Player player = Bukkit.getPlayer(getPlayerUuid());
-        if (player != null) {
+      //  Player player = Bukkit.getPlayer(getPlayerUuid());
+       // if (player != null) {
 //            boolean itemHasEnchant = Limit24520Ench.instance.isItemHasEnchant(player.getInventory().getLeggings());
 //            if (itemHasEnchant) {
 //                return "&d";
 //            }
-        }
+        //}
 
+
+        GenesisData genesisData1 = getGenesisData();
+        GenesisTeam team = genesisData1.getTeam();
         if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
-            if (getGenesisData().getTeam() == GenesisTeam.ANGEL) {
-                //♆♨
-                return "&b";
-            }
-            if (getGenesisData().getTeam() == GenesisTeam.DEMON) {
-                //♨
-                return "&c";
-            }
-        }
-
-        if (getGenesisData().getTeam() == GenesisTeam.NONE) {
-            return "&6";
+            return switch (team) {
+                case ANGEL -> "&b";
+                case DEMON -> "&c";
+                default -> "&6";
+            };
         }
         return "&6";
     }
