@@ -7,6 +7,7 @@ import cn.charlotte.pit.util.inventory.InventoryUtil;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.menu.Button;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -45,6 +46,7 @@ public class DyeButton extends Button {
         if (profile.getCoins() < 200) {
             return;
         }
+        player.playSound(player.getLocation(), Sound.LAVA_POP, 1.0F, 1.0F);
         profile.setCoins(profile.getCoins() - 200);
         ItemStack itemStack = new ItemBuilder(InventoryUtil.deserializeItemStack(profile.getEnchantingItem())).changeNbt("dyeColor", dyeColor.name()).build();
 

@@ -53,11 +53,10 @@ public class VerminEnchant extends AbstractEnchantment implements ITickTask, IAc
     @Override
     public String getUsefulnessLore(int enchantLevel) {
         return String.format(
-                "&7右键化身蝙蝠 /s&7向视角方向移动&e%d秒&7 无法受到攻击 并恢复&c%d❤&7生命值/s同时对5格范围内的目标每0.5秒造成&d%d❤&7伤害/s（15秒冷却）",
+                "&7右键化身蝙蝠, 向视角方向进行突进/s&7与此同时, 在 &e3 &7秒内无法受到攻击, 且恢复 &c3❤ &7生命值/s&7并且, 对 &e5 &7格范围内的目标每 &e0.5 &7秒造成 &c4❤ &7伤害/s&7(15秒冷却)",
                 enchantLevel, enchantLevel, 4
         );
     }
-
     @Override
     public void handle(int enchantLevel, Player player) {
         if (player.isBlocking() && COOLDOWN.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() && !PlayerUtil.isVenom(player) && !PlayerUtil.isEquippingSomber(player)) {

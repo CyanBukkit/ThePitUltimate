@@ -53,7 +53,7 @@ class DragonEggsEvent : IEvent, INormalEvent, Listener {
 
     private fun prepareNewLocation() {
         despawnHolograms()
-        eggLocation?.block?.type = Material.AIR
+        eggLocation!!.block!!.type = Material.AIR
     }
 
     private fun calculateOffset(origin: Location, random: Random): Int {
@@ -152,19 +152,17 @@ class DragonEggsEvent : IEvent, INormalEvent, Listener {
     }
 
     override fun onInactive() {
-        Bukkit.getScheduler().runTask(ThePit.getInstance(), Runnable {
+        Bukkit.getScheduler().runTask(ThePit.getInstance()) {
             isActive = false
             unregisterEvents()
             cleanup()
             playSoundToOnlinePlayers(Sound.ENDERDRAGON_DEATH, 1.5f, 1.5f)
             CC.boardCast(CC.translate("&5&l龙蛋！ &7活动已结束！"))
-        })
+        }
     }
 
     private fun cleanup() {
-        Bukkit.getScheduler().runTask(ThePit.getInstance()) {
-            eggLocation?.block?.type = Material.AIR
-        }
+        eggLocation!!.block!!.type = Material.AIR
         despawnHolograms()
         isActive = false
         eggLocation = null

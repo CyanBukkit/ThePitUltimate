@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.huanmeng"
-version = "4.01"
+version = "4.0."
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
