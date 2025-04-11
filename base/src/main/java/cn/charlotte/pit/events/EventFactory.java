@@ -26,16 +26,20 @@ public class EventFactory {
     private INormalEvent activeNormalEvent;
     private IEpicEvent activeEpicEvent;
     private Cooldown normalEnd;
-
     private long lastNormalEvent;
 
     private IEpicEvent nextEpicEvent;
     private Cooldown nextEpicEventTimer;
 
+    EventTimer eventTimer;
+
     public EventFactory() {
         this.normalEvents = new ObjectArrayList<>();
         this.epicEvents = new ObjectArrayList<>();
         this.normalEnd = new Cooldown(0);
+    }
+    public EventTimer getEventTimer(){
+        return eventTimer;
     }
 
     public void pushEvent(IEpicEvent event) {
@@ -78,7 +82,7 @@ public class EventFactory {
         }
 
         Bukkit.getScheduler()
-                .runTaskTimerAsynchronously(ThePit.getInstance(), new EventTimer(), 20, 20);
+                .runTaskTimerAsynchronously(ThePit.getInstance(), eventTimer = new EventTimer(), 20, 20);
 
     }
 
@@ -161,11 +165,11 @@ public class EventFactory {
     public void safeInactiveEvent(INormalEvent event) {
         if (activeNormalEvent != event) return;
         this.normalEnd.fastExpired();
-        EventTimer.getCooldown().fastExpired();
+        eventTimer.getCooldown().fastExpired();
     }
 
     public void cooldown() {
-        EventTimer.setCooldown(new Cooldown(1, TimeUnit.MINUTES));
+        eventTimer.setCooldown(new Cooldown(1, TimeUnit.MINUTES));
     }
 
     public void readyEpicEvent(IEpicEvent event) {

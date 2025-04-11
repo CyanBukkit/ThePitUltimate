@@ -702,26 +702,28 @@ class PitAdminCommands {
 
     @Execute(name = "skipNormalEvent")
     fun skipNormalEvent(@Context player: Player) {
-        ThePit.getInstance().eventFactory.activeNormalEvent?.let {
+        var eventFactory = ThePit.getInstance().eventFactory
+        eventFactory.activeNormalEvent?.let {
 
             player.sendMessage(CC.translate("已经跳过事件 $it"))
             CC.boardCast("&c&l事件跳过! &c管理员已经跳过该普通事件")
-            ThePit.getInstance().eventFactory.safeInactiveEvent(it)
+            eventFactory.safeInactiveEvent(it)
         }
-        EventTimer.getCooldown().fastExpired()
+        eventFactory.eventTimer.cooldown.fastExpired()
     }
 
 
     @Execute(name = "skipEpicEvent")
     fun skipEpicEvent(@Context player: Player) {
-        ThePit.getInstance().eventFactory.activeEpicEvent?.let {
+        var eventFactory = ThePit.getInstance().eventFactory
+        eventFactory.activeEpicEvent?.let {
 
             player.sendMessage(CC.translate("已经跳过事件 $it"))
             CC.boardCast("&c&l事件跳过! &c管理员已经跳过该Epic事件")
-            ThePit.getInstance().eventFactory.inactiveEvent(it)
+            eventFactory.inactiveEvent(it)
 
         }
-        EventTimer.getCooldown().fastExpired()
+        eventFactory.eventTimer.cooldown.fastExpired()
     }
 
     @Execute(name = "rareplus")

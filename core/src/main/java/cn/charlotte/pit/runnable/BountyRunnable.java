@@ -105,7 +105,8 @@ public class BountyRunnable extends BukkitRunnable {
                 Location location = player.getLocation().clone();
                 location.setX(location.getX() + hologram.boostX);
                 Hologram hologram1 = hologram.getHologram();
-                location.setY(hologram1.getLocation().getY() + 0.01 * NewConfiguration.INSTANCE.getBountyTickInterval());
+                Location location1 = hologram1.getLocation();
+                location.setY(location1.getY() + (0.01 * NewConfiguration.INSTANCE.getBountyTickInterval()));
                 location.setZ(location.getZ() + hologram.boostZ);
                 hologram1.setLocation(location);
                 return false;

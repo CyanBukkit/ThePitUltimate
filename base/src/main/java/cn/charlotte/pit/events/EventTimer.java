@@ -16,9 +16,9 @@ public class EventTimer implements Runnable {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd:HH:mm");
     @Setter
-    private static Cooldown cooldown = new Cooldown(0);
+    private Cooldown cooldown = new Cooldown(0);
 
-    public static Cooldown getCooldown() {
+    public Cooldown getCooldown() {
         return cooldown;
     }
 
