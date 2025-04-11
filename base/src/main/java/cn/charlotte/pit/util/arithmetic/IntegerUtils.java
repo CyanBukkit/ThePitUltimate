@@ -172,5 +172,14 @@ public final class IntegerUtils {
         x ^= x >>> 53;
         return x;
     }
+
+    public static int fastParse(String string) {
+        int result = 0;
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            result = result * 10 + (c - '0');
+        }
+        return result;
+    }
 }
 

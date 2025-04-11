@@ -14,6 +14,7 @@ import cn.charlotte.pit.item.type.mythic.MagicFishingRod;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
 import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
+import cn.charlotte.pit.util.arithmetic.IntegerUtils;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.SneakyThrows;
@@ -80,7 +81,7 @@ public class Utils {
                 String levelString = s.substring(splitIndex + 1);
 
                 try {
-                    int level = Integer.parseInt(levelString);
+                    int level = IntegerUtils.fastParse(levelString);
                     AbstractEnchantment enchantment = ThePit.getInstance()
                             .getEnchantmentFactor()
                             .getEnchantmentMap()
