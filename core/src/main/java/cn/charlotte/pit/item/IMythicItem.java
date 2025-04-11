@@ -199,6 +199,10 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (customName != null) {
             builder.customName(customName);
         }
+        if (uuid != null){
+            boolean equals = uuid == null || defUUID.equals(uuid);
+            lore.add("&8" + (equals ? "DEFAULT_TPU_UUID" : uuid.toString()));
+        }
 
         if (this instanceof IMythicSword mythicSword) {
             builder
