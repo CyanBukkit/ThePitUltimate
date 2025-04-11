@@ -17,6 +17,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 @WeaponOnly
 @BowOnly
 public class PantsRadarEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "神话雷达";

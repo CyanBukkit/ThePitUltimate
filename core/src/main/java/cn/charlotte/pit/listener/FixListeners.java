@@ -13,8 +13,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.HashSet;
-
 public class FixListeners implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -25,8 +23,8 @@ public class FixListeners implements Listener {
         }
     }
 
-    public boolean check(Material material){
-        return material== Material.HOPPER || material== Material.ENDER_CHEST;
+    public boolean check(Material material) {
+        return material == Material.HOPPER || material == Material.ENDER_CHEST;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

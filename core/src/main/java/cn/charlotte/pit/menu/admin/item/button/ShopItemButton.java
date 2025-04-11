@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/1/17 22:44
  */
 public class ShopItemButton extends Button {
+
     private final Material material;
     private final String internalName;
     private int amount = 1;

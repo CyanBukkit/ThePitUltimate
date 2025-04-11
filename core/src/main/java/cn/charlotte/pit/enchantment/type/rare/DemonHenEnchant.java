@@ -1,6 +1,5 @@
 package cn.charlotte.pit.enchantment.type.rare;
 
-import cn.charlotte.pit.PitMain;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.IActionDisplayEnchant;
@@ -16,11 +15,9 @@ import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -47,6 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @BowOnly
 @AutoRegister
 public class DemonHenEnchant extends AbstractEnchantment implements IActionDisplayEnchant, IPlayerShootEntity, Listener, IPlayerKilledEntity {
+
     private static final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();
     Set<Entity> masters = new CopyOnWriteArraySet<>();
     Set<Map.Entry<Entity, LivingEntity>> entitySet = new CopyOnWriteArraySet<>();

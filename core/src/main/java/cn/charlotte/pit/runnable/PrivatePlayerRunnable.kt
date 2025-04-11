@@ -1,9 +1,7 @@
 package cn.charlotte.pit.runnable
 
 import cn.charlotte.pit.util.isPrivate
-import cn.charlotte.pit.util.isSpecial
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
 object PrivatePlayerRunnable : BukkitRunnable() {

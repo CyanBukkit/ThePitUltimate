@@ -12,7 +12,6 @@ import cn.charlotte.pit.util.music.NBSDecoder;
 import cn.charlotte.pit.util.music.PositionSongPlayer;
 import cn.charlotte.pit.util.music.Song;
 import io.irina.backports.utils.SWMRHashTable;
-
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import org.bukkit.Bukkit;
@@ -23,7 +22,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import spg.lgdev.handler.MovementHandler;
 import spg.lgdev.iSpigot;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @ArmorOnly
 public class JerryEnchant4 extends AbstractEnchantment implements ITickTask, MovementHandler {

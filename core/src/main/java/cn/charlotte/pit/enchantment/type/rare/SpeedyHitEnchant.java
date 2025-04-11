@@ -7,7 +7,6 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -23,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeaponOnly
 public class SpeedyHitEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "迅捷打击";

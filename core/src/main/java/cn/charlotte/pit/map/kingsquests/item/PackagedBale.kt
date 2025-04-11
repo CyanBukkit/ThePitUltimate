@@ -6,7 +6,7 @@ import cn.charlotte.pit.util.item.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
-object PackagedBale: AbstractPitItem() {
+object PackagedBale : AbstractPitItem() {
     override fun getInternalName(): String {
         return "packaged_bale"
     }

@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class KingKillersEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "国王杀手";
@@ -47,17 +48,19 @@ public class KingKillersEnchant extends AbstractEnchantment implements IAttackEn
     public String getUsefulnessLore(int enchantLevel) {
         return (new StringBuilder()).insert(0, "&7对穿戴 &6国王的王冠 &7的玩家额外造成 &c").append(enchantLevel * 0.5D).append("❤ &7的伤害.").toString();
     }
+
     @PlayerOnly
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player player = (Player)target;
+        Player player = (Player) target;
         if (player.getInventory().getHelmet() != null && "kings_helmet".equals(ItemUtil.getInternalName(player.getInventory().getHelmet())))
             boostDamage.getAndAdd(enchantLevel * 0.1D);
     }
+
     @PlayerOnly
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player player = (Player)target;
+        Player player = (Player) target;
         if (player.getInventory().getHelmet() != null && "kings_helmet".equals(ItemUtil.getInternalName(player.getInventory().getHelmet())))
             boostDamage.getAndAdd(enchantLevel * 0.1D);
     }

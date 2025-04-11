@@ -15,9 +15,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @AutoRegister
 @ArmorOnly
 public class CatastrophicEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "灾难";
@@ -48,11 +50,12 @@ public class CatastrophicEnchant extends AbstractEnchantment implements IAttackE
     public String getUsefulnessLore(int enchantLevel) {
         return "&7每次攻击额外对目标造成 &f1❤ &7的&c必中&7伤害, 但每次使用扣除自身 &c0.5❤ &7生命值./s&c(必中伤害无法被免疫与抵抗)";
     }
+
     @PlayerOnly
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player targetPlayer = (Player)target;
+        Player targetPlayer = (Player) target;
         targetPlayer.setHealth(Math.max(0.1, targetPlayer.getHealth() - 2.0));
         attacker.setHealth(Math.max(0.1, attacker.getHealth() - 1.0));
     }
@@ -61,7 +64,7 @@ public class CatastrophicEnchant extends AbstractEnchantment implements IAttackE
     @BowOnly
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player targetPlayer = (Player)target;
+        Player targetPlayer = (Player) target;
         targetPlayer.setHealth(Math.max(0.1, targetPlayer.getHealth() - 2.0));
         attacker.setHealth(Math.max(0.1, attacker.getHealth() - 1.0));
     }

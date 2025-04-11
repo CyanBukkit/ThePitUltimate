@@ -7,7 +7,7 @@ import cn.charlotte.pit.util.menu.Menu
 import org.bukkit.entity.Player
 
 
-object KingQuestsUI: Menu() {
+object KingQuestsUI : Menu() {
     override fun getTitle(player: Player?): String {
         return "国王任务"
     }

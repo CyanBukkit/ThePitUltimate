@@ -10,7 +10,6 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -30,6 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 @BowOnly
 public class ThePunchEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+
     public static double PUNCH_X = 0;
     public static double PUNCH_Y = 0;
     public static double PUNCH_Z = 0;

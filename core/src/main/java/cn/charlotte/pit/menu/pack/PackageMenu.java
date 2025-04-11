@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2021/1/30 17:19
  */
 public class PackageMenu extends Menu {
+
     private static final Map<Integer, ItemStack> items = new ConcurrentHashMap<>();
 
     public static Map<Integer, ItemStack> getItems() {

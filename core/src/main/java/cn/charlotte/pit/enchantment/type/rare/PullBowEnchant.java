@@ -11,7 +11,6 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @AutoRegister
 @cn.charlotte.pit.enchantment.param.item.BowOnly
-public class PullBowEnchant extends AbstractEnchantment implements Listener,IPlayerShootEntity, IActionDisplayEnchant {
+public class PullBowEnchant extends AbstractEnchantment implements Listener, IPlayerShootEntity, IActionDisplayEnchant {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
 
@@ -90,10 +89,12 @@ public class PullBowEnchant extends AbstractEnchantment implements Listener,IPla
             }, 1L);
         }
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         cooldown.remove(e.getPlayer().getUniqueId());
     }
+
     @Override
     public String getText(int level, Player player) {
         return cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ? "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(cooldown.get(player.getUniqueId()).getRemaining()).replace(" ", "");

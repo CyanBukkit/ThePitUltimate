@@ -6,7 +6,6 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @BowOnly
 public class ArchangelEnchant extends AbstractEnchantment implements IPlayerDamaged {
+
     @Override
     public String getEnchantName() {
         return "大天使";

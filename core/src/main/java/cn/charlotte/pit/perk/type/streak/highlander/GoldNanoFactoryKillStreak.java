@@ -7,7 +7,6 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -31,6 +30,7 @@ import java.util.List;
 
 @AutoRegister
 public class GoldNanoFactoryKillStreak extends AbstractPerk implements Listener {
+
     @Override
     public String getInternalPerkName() {
         return "gold_nano_factory_kill_streak";

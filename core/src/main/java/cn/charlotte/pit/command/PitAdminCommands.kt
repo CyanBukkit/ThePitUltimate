@@ -20,9 +20,7 @@ import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.level.LevelUtil
 import cn.charlotte.pit.util.rank.RankUtil
-import cn.charlotte.pit.util.toNMS
 import com.mongodb.client.model.Filters
-
 import dev.rollczi.litecommands.annotations.argument.Arg
 import dev.rollczi.litecommands.annotations.async.Async
 import dev.rollczi.litecommands.annotations.command.Command
@@ -53,9 +51,10 @@ import kotlin.math.min
 class PitAdminCommands {
     @Execute(name = "createEquation")
     @Shortcut("eq")
-    fun eqEvent(@Context player: Player, @Arg("eqQuest") eq : String, @Arg("eqAns") ans : String){
-        ThePit.getApi().openEvent(QuickMathEvent(eq,ans),null)
+    fun eqEvent(@Context player: Player, @Arg("eqQuest") eq: String, @Arg("eqAns") ans: String) {
+        ThePit.getApi().openEvent(QuickMathEvent(eq, ans), null)
     }
+
     @Execute(name = "giveItemInHand")
     @Shortcut("give")
     fun giveItemInHand(@Context player: Player, @Arg("target") target: Player) {
@@ -405,6 +404,7 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "changeItemInHand nolive")
     @HandHasItem(mythic = true)
     fun nolive(@Context player: Player) {
@@ -418,11 +418,13 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "nocache")
-    fun executeBrokeCache(@Context player: Player){
+    fun executeBrokeCache(@Context player: Player) {
         ThePit.getInstance().itemFactory.clientSide = !ThePit.getInstance().itemFactory.clientSide
         player.sendMessage("&a成功设置客户端主导服务端 值为: " + ThePit.getInstance().itemFactory.clientSide)
     }
+
     @Execute(name = "changeItemInHand color")
     @HandHasItem(mythic = true)
     fun changeColor(@Context player: Player, @Arg("color") color: String) {
@@ -433,8 +435,9 @@ class PitAdminCommands {
             }.toItemStack()
         } catch (ignored: Exception) {
             player.sendMessage("Error")
-        }   
+        }
     }
+
     @Execute(name = "changeItemInHand randomUUID")
     @HandHasItem(mythic = true)
     fun randomUUID(@Context player: Player) {
@@ -447,9 +450,10 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "changeItemInHand uuid")
     @HandHasItem(mythic = true)
-    fun uuid(@Context player: Player,@Arg("uuid") uuid: String) {
+    fun uuid(@Context player: Player, @Arg("uuid") uuid: String) {
         try {
             val stack = player.itemInHand
             player.itemInHand = MythicUtil.getMythicItem(stack).also {
@@ -459,6 +463,7 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "changeItemInHand resetEnch")
     @HandHasItem(mythic = true)
     fun rstEnch(@Context player: Player) {
@@ -480,7 +485,7 @@ class PitAdminCommands {
             player.itemInHand = MythicUtil.getMythicItem(stack).also {
                 val enchObj = ThePit.getInstance().enchantmentFactor.enchantmentMap.get(ench)
                 val levelInt = Integer.valueOf(level)
-                if(levelInt == 0){
+                if (levelInt == 0) {
                     it.enchantments.remove(enchObj)
                 } else {
                     it.enchantments[enchObj] = enchObj?.let { it1 -> min(it1.maxEnchantLevel, levelInt) }
@@ -490,25 +495,27 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "changeItemInHand maxLive")
     @HandHasItem(mythic = true)
     fun changeMaxLive(@Context player: Player, @Arg("maxLive") maxLive: Int) {
         try {
             val stack = player.itemInHand
             player.itemInHand = MythicUtil.getMythicItem(stack).also {
-               it.maxLive = maxLive
+                it.maxLive = maxLive
             }.toItemStack()
         } catch (ignored: Exception) {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "listavailablePerks")
     @Async
     fun listavailablePerks(@Context player: Player) {
         val perkMap = ThePit.getInstance().perkFactory.perkMap
         player.sendMessage("当前Perk数量为 " + perkMap.size)
 
-        perkMap.values.forEachIndexed { a,it ->
+        perkMap.values.forEachIndexed { a, it ->
             player.sendMessage(CC.translate("NUM: " + a + " NBT: " + it.internalPerkName + " DISPLAYNAME: " + it.displayName))
         }
     }
@@ -519,21 +526,24 @@ class PitAdminCommands {
         val itemMap = ThePit.getInstance().itemFactor
         player.sendMessage("当前Perk数量为 " + itemMap.itemMap)
 
-        itemMap.itemMap.keys.forEachIndexed() { a,it ->
+        itemMap.itemMap.keys.forEachIndexed() { a, it ->
             player.sendMessage(CC.translate("NUM: $a NBT: $it"))
         }
     }
+
     @Execute(name = "enchantments")
     @Async
-    fun enchantments(@Context player: Player){
+    fun enchantments(@Context player: Player) {
         val enchs = ThePit.getInstance().getEnchantmentFactor()
         player.sendMessage("当前Ench数量为 " + enchs.enchantmentMap.size)
 
         enchs.enchantmentMap.values.forEachIndexed { index, it ->
             player.sendMessage(
-                CC.translate("NUM: " + index + " NBT: " + it.nbtName + " DISPLAYNAME: " + it.enchantName))
+                CC.translate("NUM: " + index + " NBT: " + it.nbtName + " DISPLAYNAME: " + it.enchantName)
+            )
         }
     }
+
     @Execute(name = "itemNbtDump")
     fun nbtDump(@Context player: Player) {
         try {
@@ -543,6 +553,7 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "flushMythicItems")
     fun flushPlayerItem(@Context player: Player, @Arg("player_name") playerName: String) {
         try {
@@ -561,6 +572,7 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "give")
 
     fun give(@Context player: Player, @Arg("nbtName") nbtName: String, @Arg("amount") amount: String) {
@@ -576,6 +588,7 @@ class PitAdminCommands {
             player.sendMessage("Error, 神话系物品并没有注册进factor")
         }
     }
+
     @Execute(name = "changeItemInHand tier")
     @HandHasItem(mythic = true)
     fun changeTier(@Context player: Player, @Arg("tier") tier: Int) {
@@ -679,11 +692,12 @@ class PitAdminCommands {
             player.sendMessage("Error")
         }
     }
+
     @Execute(name = "skipNormalEvent")
-    fun skipNormalEvent(@Context player: Player){
+    fun skipNormalEvent(@Context player: Player) {
         ThePit.getInstance().eventFactory.activeNormalEvent?.let {
 
-            player.sendMessage(CC.translate("已经跳过事件 $it" ))
+            player.sendMessage(CC.translate("已经跳过事件 $it"))
             CC.boardCast("&c&l事件跳过! &c管理员已经跳过该普通事件")
             ThePit.getInstance().eventFactory.safeInactiveEvent(it)
         }
@@ -692,10 +706,10 @@ class PitAdminCommands {
 
 
     @Execute(name = "skipEpicEvent")
-    fun skipEpicEvent(@Context player: Player){
+    fun skipEpicEvent(@Context player: Player) {
         ThePit.getInstance().eventFactory.activeEpicEvent?.let {
 
-            player.sendMessage(CC.translate("已经跳过事件 $it" ))
+            player.sendMessage(CC.translate("已经跳过事件 $it"))
             CC.boardCast("&c&l事件跳过! &c管理员已经跳过该Epic事件")
             ThePit.getInstance().eventFactory.inactiveEvent(it)
 
@@ -704,11 +718,11 @@ class PitAdminCommands {
     }
 
     @Execute(name = "rareplus")
-    fun rareplus(@Context player: Player){
-        if (PlusPlayer.on){
+    fun rareplus(@Context player: Player) {
+        if (PlusPlayer.on) {
             PlusPlayer.on = false
             player.sendMessage("§a平衡模式开启！")
-        }else{
+        } else {
             PlusPlayer.on = true
             player.sendMessage("§c平衡模式关闭！")
         }
@@ -718,7 +732,7 @@ class PitAdminCommands {
     fun saveAll(@Context player: Player, @Arg("announce") shouldAnnounce: String) {
         try {
             PlayerProfile.saveAllSync(!shouldAnnounce.toBoolean());
-        } catch (t: Throwable){
+        } catch (t: Throwable) {
             player.sendMessage("失败 $shouldAnnounce")
         }
     }

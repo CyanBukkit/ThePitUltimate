@@ -2,7 +2,6 @@ package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.util.item.ItemBuilder;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,6 +13,7 @@ import java.util.List;
  */
 
 public class SpireArmor extends AbstractPitItem {
+
     private final Material material;
 
     public SpireArmor(Material material) {

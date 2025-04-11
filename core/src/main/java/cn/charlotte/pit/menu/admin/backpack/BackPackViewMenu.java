@@ -13,6 +13,7 @@ import java.util.Map;
  * @Date: 2021/2/4 20:43
  */
 public class BackPackViewMenu extends Menu {
+
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private final PlayerProfile profile;
     private final int page = 0;

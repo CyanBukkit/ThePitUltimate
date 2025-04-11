@@ -5,7 +5,7 @@ import org.black_ixx.playerpoints.PlayerPoints
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-object PlayerPointsAPIImpl: PointsAPI {
+object PlayerPointsAPIImpl : PointsAPI {
     private val pointsAPI by lazy {
         (Bukkit.getPluginManager().getPlugin("PlayerPoints") as PlayerPoints).api
     }

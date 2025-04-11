@@ -24,9 +24,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 
 public class ComboComaEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+
     private final DecimalFormat decimalFormat = new DecimalFormat("0.0");
     private final HashMap<UUID, Cooldown> Cooldown = new HashMap();
-    
+
 
     @Override
     public String getEnchantName() {
@@ -58,7 +59,7 @@ public class ComboComaEnchant extends AbstractEnchantment implements IAttackEnti
     public String getUsefulnessLore(int enchantLevel) {
         return new StringBuilder()
                 .insert(0, "&7每 &e5 &7次攻击对敌人施加以下效果 (持续")
-                .append(decimalFormat.format(1.6 * (double)enchantLevel))
+                .append(decimalFormat.format(1.6 * (double) enchantLevel))
                 .append("秒) &7(8秒冷却)/s  &f▶ &8失明/s  &f▶ &8缓慢/s  &f▶ &c虚弱/s  &f▶ &6挖掘疲劳")
                 .toString();
     }
@@ -74,7 +75,7 @@ public class ComboComaEnchant extends AbstractEnchantment implements IAttackEnti
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player player1 = (Player)target;
+        Player player1 = (Player) target;
         if ((Cooldown.getOrDefault(player1.getUniqueId(), new Cooldown(0L))).hasExpired() && PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 5 == 0) {
             Cooldown.put(attacker.getUniqueId(), new Cooldown(8L, TimeUnit.SECONDS));
             player1.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 32 * enchantLevel, 9));

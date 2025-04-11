@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 @ArmorOnly
-class RogueEnchant: AbstractEnchantment(), IAttackEntity, IPlayerDamaged{
+class RogueEnchant : AbstractEnchantment(), IAttackEntity, IPlayerDamaged {
     override fun getEnchantName(): String {
         return "无赖"
     }

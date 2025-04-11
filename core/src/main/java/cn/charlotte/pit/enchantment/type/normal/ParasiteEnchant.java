@@ -7,7 +7,6 @@ import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -20,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @BowOnly
 public class ParasiteEnchant extends AbstractEnchantment implements IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "吸血鬼: 箭矢";

@@ -21,11 +21,17 @@ import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.map.kingsquests.item.Cherry;
 import cn.charlotte.pit.movement.PlayerMoveHandler;
 import cn.charlotte.pit.parm.AutoRegister;
-import cn.charlotte.pit.parm.listener.*;
+import cn.charlotte.pit.parm.listener.IPlayerAssist;
+import cn.charlotte.pit.parm.listener.IPlayerBeKilledByEntity;
+import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
+import cn.charlotte.pit.parm.listener.IPlayerRespawn;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
-import cn.charlotte.pit.util.*;
+import cn.charlotte.pit.util.FuncsKt;
+import cn.charlotte.pit.util.MythicUtil;
+import cn.charlotte.pit.util.PlayerUtil;
+import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.*;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
@@ -34,7 +40,6 @@ import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.minecraft.server.v1_8_R3.ItemArmor;
@@ -70,6 +75,7 @@ import java.util.concurrent.TimeUnit;
  */
 @AutoRegister
 public class CombatListener implements Listener {
+
     ;
     public static CombatListener INSTANCE;
     private final DecimalFormat numFormat = new DecimalFormat("0.00");
@@ -84,7 +90,7 @@ public class CombatListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onStrike(PitStreakKillChangeEvent event) {
         final PlayerProfile profile = event.getPlayerProfile();
-        if (FuncsKt.isPrivate(profile)){
+        if (FuncsKt.isPrivate(profile)) {
             return;
         }
         if (profile.getChosePerk().get(5) == null) {
@@ -109,10 +115,10 @@ public class CombatListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (!AsyncCatcher.isAsync()) {
+        if (Bukkit.isPrimaryThread()) {
             PlayerMoveHandler.checkMove(event.getTo(), event.getFrom(), event.getPlayer());
         } else {
-            Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
                 PlayerMoveHandler.checkMove(event.getTo(), event.getFrom(), event.getPlayer());
             });
         }
@@ -245,7 +251,7 @@ public class CombatListener implements Listener {
         player.removeMetadata("leech_hit", ThePit.getInstance());
         player.removeMetadata("true_damage_immune", ThePit.getInstance());
         player.removeMetadata("regularity_cooldown", ThePit.getInstance());
-        player.removeMetadata("mixed_combat_" + player.getUniqueId(),ThePit.getInstance());
+        player.removeMetadata("mixed_combat_" + player.getUniqueId(), ThePit.getInstance());
 
     }
 
@@ -308,12 +314,12 @@ public class CombatListener implements Listener {
             builder.append("&7");
             int heats = totalHearts - nowHearts - damageHearts;
             builder.append("❤".repeat(Math.max(0, heats)));
-            builder.append(" &7(&a").append(total).append("&f -> &c").append(Math.max(0,total - (int) damage)).append("&7)");
+            builder.append(" &7(&a").append(total).append("&f -> &c").append(Math.max(0, total - (int) damage)).append("&7)");
             ActionBarUtil.sendActionBar1(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""), 7);
 
             player.setMetadata("showing_damage_data", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
         }
-        if(playerProfile.isLoaded()) {
+        if (playerProfile.isLoaded()) {
             if (player.hasMetadata("backing")) {
                 player.sendMessage(CC.translate("&c回城被取消."));
                 player.removeMetadata("backing", ThePit.getInstance());
@@ -324,7 +330,7 @@ public class CombatListener implements Listener {
         //handle kill recap - start
         String damagerName = damagerProfile.getFormattedName();
         String playerName = playerProfile.getFormattedName();
-        if(damagerProfile.isLoaded()) {
+        if (damagerProfile.isLoaded()) {
             KillRecap.DamageData damagerData = new KillRecap.DamageData();
             damagerData.setDisplayName(playerName);
             damagerData.setAttack(true);
@@ -337,7 +343,7 @@ public class CombatListener implements Listener {
                     .getDamageLogs()
                     .add(damagerData);
         }
-        if(playerProfile.isLoaded()) {
+        if (playerProfile.isLoaded()) {
             KillRecap.DamageData playerData = new KillRecap.DamageData();
             playerData.setDisplayName(damagerName);
             playerData.setAttack(false);
@@ -586,7 +592,7 @@ public class CombatListener implements Listener {
                 ItemStack item = inventory.getItem(i);
                 if (item == null || item.getType() == Material.AIR) continue;
 
-                final IMythicItem mythicSwordItem = ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItemSync(item);
+                final IMythicItem mythicSwordItem = ((ItemFactory) ThePit.getInstance().getItemFactory()).getIMythicItemSync(item);
                 if (mythicSwordItem == null) {
                     continue;
                 }
@@ -1199,7 +1205,7 @@ public class CombatListener implements Listener {
 //        }
         killerProfile.getUnlockedPerkMap().values().forEach(i -> {
             AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
-            if(!abstractPerk.isPassive()){
+            if (!abstractPerk.isPassive()) {
                 return;
             }
             if (abstractPerk instanceof IPlayerKilledEntity ins) {
@@ -1208,7 +1214,7 @@ public class CombatListener implements Listener {
         });
         killerProfile.getChosePerk().values().forEach(i -> {
             AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
-            if(abstractPerk.isPassive()){
+            if (abstractPerk.isPassive()) {
                 return;
             }
             if (abstractPerk instanceof IPlayerKilledEntity ins) {

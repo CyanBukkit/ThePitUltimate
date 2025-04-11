@@ -7,7 +7,6 @@ import cn.charlotte.pit.parm.listener.IPlayerShootEntity;
 import cn.charlotte.pit.util.chat.RomanUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -22,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @BowOnly
 public class PowerAngelEnchant extends AbstractEnchantment implements IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "权天使";

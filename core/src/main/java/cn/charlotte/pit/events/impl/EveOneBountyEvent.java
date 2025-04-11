@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
  * @Created_In: 2021/2/8 21:25
  */
 public class EveOneBountyEvent implements IEvent, INormalEvent {
+
     @Override
     public String getEventInternalName() {
         return "everyone_bounty_event";

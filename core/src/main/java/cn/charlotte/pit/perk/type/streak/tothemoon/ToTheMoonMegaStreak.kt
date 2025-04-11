@@ -34,10 +34,12 @@ import kotlin.random.Random
 
 
 @AutoRegister
-class ToTheMoonMegaStreak: AbstractPerk() , IPlayerKilledEntity, IPlayerDamaged, IPlayerBeKilledByEntity, MegaStreak, Listener {
+class ToTheMoonMegaStreak : AbstractPerk(), IPlayerKilledEntity, IPlayerDamaged, IPlayerBeKilledByEntity, MegaStreak,
+    Listener {
     init {
         instance = this;
     }
+
     companion object {
         @JvmStatic
         val cache = HashMap<UUID, Double>()
@@ -221,7 +223,15 @@ class ToTheMoonMegaStreak: AbstractPerk() , IPlayerKilledEntity, IPlayerDamaged,
                 val multiple = (give - stored) / stored
                 profile.experience += give
                 profile.applyExperienceToPlayer(myself)
-                myself.sendMessage(CC.translate("&b&l月球之旅! &7你挣取了 &b+${format.format(give)}经验&7 在这次连杀中. (&b${decimalFormat.format(multiple)}x &7倍率)"))
+                myself.sendMessage(
+                    CC.translate(
+                        "&b&l月球之旅! &7你挣取了 &b+${format.format(give)}经验&7 在这次连杀中. (&b${
+                            decimalFormat.format(
+                                multiple
+                            )
+                        }x &7倍率)"
+                    )
+                )
             }
         }
     }

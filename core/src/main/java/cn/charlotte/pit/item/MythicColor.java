@@ -20,15 +20,17 @@ public enum MythicColor {
     DARK("黑", "dark", ChatColor.DARK_PURPLE, Color.BLACK, (byte) 15),
     RAGE("红", "rage", ChatColor.DARK_RED, Color.fromBGR(0, 0, 107), (byte) 14),
     AQUA("天蓝", "aqua", ChatColor.AQUA, Color.AQUA, (byte) 3),
-    DARK_GREEN("深绿", "dark_green", ChatColor.DARK_GREEN, Color.fromBGR(125,195,131), (byte) 13),
+    DARK_GREEN("深绿", "dark_green", ChatColor.DARK_GREEN, Color.fromBGR(125, 195, 131), (byte) 13),
     NONE("无", "none", ChatColor.AQUA, Color.AQUA, (byte) 0),
     DEMON_DARK("", "demon_dark", ChatColor.RED, Color.RED, (byte) 15);
-    static final Map<String,MythicColor> mappedColor = new SWMRHashTable<>();
+    static final Map<String, MythicColor> mappedColor = new SWMRHashTable<>();
+
     static {
         for (MythicColor value : values()) {
-            mappedColor.put(value.internalName,value);
+            mappedColor.put(value.internalName, value);
         }
     }
+
     private final String displayName;
     private final String internalName;
     private final ChatColor chatColor;
@@ -43,6 +45,7 @@ public enum MythicColor {
         this.leatherColor = leatherColor;
         this.colorByte = colorByte;
     }
+
     public static MythicColor valueOfInternalName(String internalName) {
         return mappedColor.get(internalName);
     }

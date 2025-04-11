@@ -11,7 +11,6 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.chat.MessageType;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.rank.RankUtil;
-
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -68,7 +67,7 @@ public class ChatListener implements Listener {
                 }
             }
         }
-        if (FuncsKt.isSpecial(player)){
+        if (FuncsKt.isSpecial(player)) {
             event.setCancelled(true);
         }
 

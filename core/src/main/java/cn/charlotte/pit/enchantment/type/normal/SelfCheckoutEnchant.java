@@ -8,7 +8,6 @@ import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 @ArmorOnly
 public class SelfCheckoutEnchant extends AbstractEnchantment implements ITickTask {
+
     @Override
     public String getEnchantName() {
         return "自助结账";

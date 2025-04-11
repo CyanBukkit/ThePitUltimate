@@ -10,11 +10,12 @@ import org.bukkit.entity.Player
 import org.bukkit.metadata.FixedMetadataValue
 
 
-class RealManEnchant: AbstractEnchantment() , ITickTask {
+class RealManEnchant : AbstractEnchantment(), ITickTask {
     companion object {
         @JvmStatic
         fun hasRealMan(player: Player): Boolean {
-            return (player.getMetadata("real_man").firstOrNull()?.asLong() ?: Long.MAX_VALUE) >= System.currentTimeMillis()
+            return (player.getMetadata("real_man").firstOrNull()?.asLong()
+                ?: Long.MAX_VALUE) >= System.currentTimeMillis()
         }
     }
 
@@ -47,7 +48,10 @@ class RealManEnchant: AbstractEnchantment() , ITickTask {
         player.world.getNearbyEntities(player.location, 7.0, 7.0, 7.0)
             .filterIsInstance<Player>()
             .forEach {
-                it.setMetadata("real_man", FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 3 * 1000L))
+                it.setMetadata(
+                    "real_man",
+                    FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 3 * 1000L)
+                )
             }
     }
 

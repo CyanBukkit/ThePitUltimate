@@ -7,7 +7,6 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -20,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeaponOnly
 public class BerserkerEnchant extends AbstractEnchantment implements IAttackEntity {
+
     @Override
     public String getEnchantName() {
         return "狂战士";

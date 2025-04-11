@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 @BowOnly
 public class SanctionEnchant extends AbstractEnchantment implements IAttackEntity {
+
     @Override
     public String getEnchantName() {
         return "制裁";
@@ -50,7 +51,7 @@ public class SanctionEnchant extends AbstractEnchantment implements IAttackEntit
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        Player player1 = (Player)target;
+        Player player1 = (Player) target;
         attacker.setHealth(Math.max(0.1D, player1.getHealth() - 0.02D * (enchantLevel + 2) * 5.0D));
         if (attacker.getHealth() >= player1.getMaxHealth() / 2.0D)
             boostDamage.getAndAdd((60 - enchantLevel * 10) * -0.01D);

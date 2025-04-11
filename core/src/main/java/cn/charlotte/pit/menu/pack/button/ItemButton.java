@@ -27,7 +27,7 @@ public class ItemButton extends DisplayButton {
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
         INormalEvent activeNormalEvent = ThePit.getInstance().getEventFactory().getActiveNormalEvent();
-        if(activeNormalEvent instanceof CarePackageEvent event) {
+        if (activeNormalEvent instanceof CarePackageEvent event) {
             CarePackageEvent.ChestData chestData = event.getChestData();
             if (chestData == null) {
                 return;

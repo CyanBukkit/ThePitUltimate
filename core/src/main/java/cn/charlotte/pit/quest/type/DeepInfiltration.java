@@ -18,6 +18,7 @@ import java.util.List;
  */
 @AutoRegister
 public class DeepInfiltration extends AbstractQuest implements Listener {
+
     @Override
     public String getQuestInternalName() {
         return "DeepInfiltration";
@@ -79,7 +80,7 @@ public class DeepInfiltration extends AbstractQuest implements Listener {
             if (profile.getCurrentQuest() != null && profile.getCurrentQuest().getInternalName().equalsIgnoreCase(this.getQuestInternalName())) {
                 event.setCancelled(false);
                 float level = 20F * (1F - (Math.min(0.35F * profile.getCurrentQuest().getLevel(), 1F)));
-                event.setFoodLevel((int)level);
+                event.setFoodLevel((int) level);
             }
         }
     }

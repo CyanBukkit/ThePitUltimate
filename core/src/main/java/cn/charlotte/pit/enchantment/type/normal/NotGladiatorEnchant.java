@@ -8,7 +8,6 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -21,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class NotGladiatorEnchant extends AbstractEnchantment implements IPlayerDamaged {
+
     @Override
     public String getEnchantName() {
         return "'不是' 角斗士";

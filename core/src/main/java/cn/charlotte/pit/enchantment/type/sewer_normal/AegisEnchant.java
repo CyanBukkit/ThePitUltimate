@@ -4,7 +4,6 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.cooldown.Cooldown;
-
 import org.bukkit.entity.Player;
 
 /**
@@ -13,6 +12,7 @@ import org.bukkit.entity.Player;
  */
 
 public class AegisEnchant extends AbstractEnchantment implements ITickTask {
+
     @Override
     public String getEnchantName() {
         return "宙斯之盾";

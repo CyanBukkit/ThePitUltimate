@@ -4,11 +4,13 @@ import cn.charlotte.pit.impl.PitInternalImpl;
 
 
 public class PitMain {
+
     private static PitHook hook;
 
-    public static void start(){
-            postStart();
+    public static void start() {
+        postStart();
     }
+
     public static void postStart() {
 
         ThePit.getInstance().loadListener();

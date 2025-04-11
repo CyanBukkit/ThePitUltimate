@@ -6,7 +6,7 @@ import cn.charlotte.pit.util.item.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
-object HighGradeEggs: AbstractPitItem() {
+object HighGradeEggs : AbstractPitItem() {
     override fun getInternalName(): String {
         return "high-grade_eggs"
     }

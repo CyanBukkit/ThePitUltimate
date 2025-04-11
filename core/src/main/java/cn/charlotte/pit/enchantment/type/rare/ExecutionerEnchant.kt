@@ -63,7 +63,7 @@ class ExecutionerEnchant : AbstractEnchantment(), IAttackEntity {
         val targetPlayer = target as Player
         for (nearbyPlayers in PlayerUtil.getNearbyPlayers(targetPlayer.location, 10.0)) {
             var npc = PlayerUtil.isNPC(nearbyPlayers)
-            if(npc){
+            if (npc) {
                 continue
             }
             if (nearbyPlayers.inventory.leggings != null && thinkOfThePeople.isItemHasEnchant(nearbyPlayers.inventory.leggings)) {

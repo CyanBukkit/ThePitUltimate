@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
-object CleanupDupeEnchTheKMGodRunnable: BukkitRunnable() {
+object CleanupDupeEnchTheKMGodRunnable : BukkitRunnable() {
     override fun run() {
         Bukkit.getOnlinePlayers().forEach { player ->
             val size = player.inventory.size

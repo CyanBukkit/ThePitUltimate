@@ -20,10 +20,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @ArmorOnly
 @AutoRegister
 
 public class ComboUnpredictablyEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+
     @Override
     public String getEnchantName() {
         return "强力击: 紊乱";
@@ -50,6 +52,7 @@ public class ComboUnpredictablyEnchant extends AbstractEnchantment implements IA
     public Cooldown getCooldown() {
         return null;
     }
+
     @Override
     public String getUsefulnessLore(int enchantLevel) {
         return "&7每 &e5 &7次攻击对目标玩家施加 &c缓慢 II &f(00:07) &7与 &c虚弱 IV &f(00:07) &7效果.";
@@ -69,7 +72,7 @@ public class ComboUnpredictablyEnchant extends AbstractEnchantment implements IA
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 5 == 0) {
-            Player targetPlayer = (Player)target;
+            Player targetPlayer = (Player) target;
             targetPlayer.removePotionEffect(PotionEffectType.SLOW);
             targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 1, true));
             targetPlayer.removePotionEffect(PotionEffectType.WEAKNESS);
@@ -77,13 +80,14 @@ public class ComboUnpredictablyEnchant extends AbstractEnchantment implements IA
         }
 
     }
+
     @PlayerOnly
     @BowOnly
 
     @Override
     public void handleShootEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 5 == 0) {
-            Player targetPlayer = (Player)target;
+            Player targetPlayer = (Player) target;
             targetPlayer.removePotionEffect(PotionEffectType.SLOW);
             targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 1, true));
             targetPlayer.removePotionEffect(PotionEffectType.WEAKNESS);

@@ -27,6 +27,7 @@ playerpoints = "3.2.4"
 decentholograms = "2.8.6"
 hutool = "5.8.27"
 litecommands = "3.4.1"
+fastutil = "8.5.15"
 
 [libraries]
 
@@ -67,7 +68,7 @@ luckperms = { group = "net.luckperms", name = "api", version.ref = "luckperms" }
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 
 
-### thepit premiunm
+### ThePitUltimate
 papi = { group = "me.clip", name = "placeholderapi", version.ref = "papi" }
 narshorn = { group = "org.openjdk.nashorn", name = "nashorn-core", version.ref = "narshorn" }
 httpclient = { group = "org.apache.httpcomponents", name = "httpclient", version.ref = "httpclient" }
@@ -83,6 +84,7 @@ decentholograms = { group = "com.github.decentsoftware-eu", name = "decenthologr
 hutool-core= {group="cn.hutool", name="hutool-core", version.ref="hutool"}
 hutool-crypto= {group="cn.hutool", name="hutool-crypto", version.ref="hutool"}
 litecommands = { group = "dev.rollczi", name = "litecommands-bukkit", version.ref = "litecommands" }
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
 
 [plugins]
 

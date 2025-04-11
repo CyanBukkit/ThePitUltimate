@@ -9,7 +9,6 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.music.NBSDecoder;
 import cn.charlotte.pit.util.music.PositionSongPlayer;
 import cn.charlotte.pit.util.music.Song;
-
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import org.bukkit.Bukkit;
@@ -29,6 +28,7 @@ import java.util.*;
 
 @ArmorOnly
 public class DJBundlePVZ extends AbstractEnchantment implements ITickTask, MovementHandler {
+
     private final Map<UUID, PositionSongPlayer> playerMap = new HashMap<>();
     private final Song song;
     private final Song song2;

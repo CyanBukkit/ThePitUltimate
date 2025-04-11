@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @BowOnly
 public class SacredArrowEnchant extends AbstractEnchantment implements IPlayerShootEntity {
+
     @Override
     public String getEnchantName() {
         return "圣净之矢";

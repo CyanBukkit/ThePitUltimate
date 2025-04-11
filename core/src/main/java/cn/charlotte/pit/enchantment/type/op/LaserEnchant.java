@@ -8,7 +8,6 @@ import cn.charlotte.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.util.beam.beam.Beam;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -24,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 public class LaserEnchant extends AbstractEnchantment implements IAttackEntity, ITickTask {
+
     private final Map<UUID, TargetInfo> tracker = new HashMap<>();
 
     @Override
@@ -103,6 +103,7 @@ public class LaserEnchant extends AbstractEnchantment implements IAttackEntity, 
     }
 
     public static class TargetInfo {
+
         private Player player;
         private int number;
         private Beam beam;

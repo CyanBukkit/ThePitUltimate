@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
  */
 @RequiredArgsConstructor
 public class AnimationButton extends Button {
+
     private final int color;
 
     @Override

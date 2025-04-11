@@ -10,7 +10,6 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.SpecialUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Chicken;
@@ -19,11 +18,15 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
 
 
 @ArmorOnly
 public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
+
     @Override
     public String getEnchantName() {
         return "死神";
@@ -60,7 +63,7 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
-        if (SpecialUtil.isPrivate(myself)){
+        if (SpecialUtil.isPrivate(myself)) {
             return;
         }
         coins.getAndAdd(-0.8 * coins.get());
@@ -86,16 +89,16 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
                                 break;
                             }
                             LivingEntity player = iterator.next();
-                            if(player instanceof Player){
-                            if (!myself.canSee((Player) player)) {
-                                iterator.remove();
-                                continue;
-                            }
+                            if (player instanceof Player) {
+                                if (!myself.canSee((Player) player)) {
+                                    iterator.remove();
+                                    continue;
+                                }
                             } else {
                                 iterator.remove();
                             }
                             if (!player.isDead() && player != myself && player != targetPlayer) {
-                                player.damage(player instanceof Chicken? 0.75 : 4, myself);
+                                player.damage(player instanceof Chicken ? 0.75 : 4, myself);
                             }
                         }
                         if (flag) {

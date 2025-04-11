@@ -16,7 +16,7 @@ import kotlin.math.min
 
 
 @ArmorOnly
-class Unrestrained: AbstractEnchantment(), IPlayerBeKilledByEntity, IAttackEntity {
+class Unrestrained : AbstractEnchantment(), IPlayerBeKilledByEntity, IAttackEntity {
     override fun getEnchantName(): String {
         return "无拘无束"
     }

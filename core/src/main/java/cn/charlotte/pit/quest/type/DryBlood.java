@@ -20,6 +20,7 @@ import java.util.List;
  */
 @AutoRegister
 public class DryBlood extends AbstractQuest implements Listener {
+
     @Override
     public String getQuestInternalName() {
         return "dried_blood";

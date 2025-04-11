@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 @BowOnly
 public class CriticalHitEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+
     private static final HashMap<UUID, Cooldown> Cooldown = new HashMap<>();
 
     @Override

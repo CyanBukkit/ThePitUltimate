@@ -22,7 +22,7 @@ import kotlin.random.Random
 
 
 @AutoRegister
-class UberDrop: AbstractPitItem(), Listener{
+class UberDrop : AbstractPitItem(), Listener {
     var index = -1
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -49,11 +49,11 @@ class UberDrop: AbstractPitItem(), Listener{
                     it.amount = Random.nextInt(5, 20)
                 },
                 JewelSword().toItemStack(),
-                if(hasSuccessfullyByChance) TotallyLegitGem().toItemStack() else GlobalAttentionGem().toItemStack()
+                if (hasSuccessfullyByChance) TotallyLegitGem().toItemStack() else GlobalAttentionGem().toItemStack()
             ) as ItemStack
 
             var ticks = 0.3f
-            object :BukkitRunnable() {
+            object : BukkitRunnable() {
                 override fun run() {
                     player.playSound(player.location, Sound.CHICKEN_EGG_POP, 1f, ticks)
                     ticks += 0.1f

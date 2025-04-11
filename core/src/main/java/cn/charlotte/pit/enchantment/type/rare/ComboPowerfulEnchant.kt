@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 @ArmorOnly
-class ComboPowerfulEnchant: AbstractEnchantment(), IAttackEntity {
+class ComboPowerfulEnchant : AbstractEnchantment(), IAttackEntity {
     override fun getEnchantName(): String {
         return "强力击: 蓄力"
     }
@@ -38,7 +38,7 @@ class ComboPowerfulEnchant: AbstractEnchantment(), IAttackEntity {
     override fun getUsefulnessLore(enchantLevel: Int): String {
         return "&7在&a 不在战斗&7 状态中持续15秒未受到伤害/s" +
                 "&7则你下次攻击伤害额外增加&c +${
-                    when(enchantLevel) {
+                    when (enchantLevel) {
                         2 -> "95"
                         3 -> "110"
                         else -> "75"

@@ -1,12 +1,10 @@
 package cn.charlotte.pit.item.type;
 
 import cn.charlotte.pit.util.item.ItemBuilder;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

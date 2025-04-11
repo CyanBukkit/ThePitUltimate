@@ -16,6 +16,7 @@ import java.util.Map;
  * @Date: 2021/1/1 16:57
  */
 public class ShopMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "商店";

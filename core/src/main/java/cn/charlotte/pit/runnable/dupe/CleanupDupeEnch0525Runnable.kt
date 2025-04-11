@@ -3,7 +3,6 @@ package cn.charlotte.pit.runnable.dupe
 import cn.charlotte.pit.item.IMythicItem
 import cn.charlotte.pit.util.MythicUtil
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -39,6 +38,7 @@ object CleanupDupeEnch0525Runnable : BukkitRunnable() {
         }
         return false
     }
+
     fun checkDupe2(itemStack: ItemStack?): Boolean {
         if (itemStack == null) return false
         val mythicItem = MythicUtil.getMythicItem(itemStack) ?: return false

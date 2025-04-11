@@ -3,12 +3,10 @@ package cn.charlotte.pit.item.type;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.util.item.ItemBuilder;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +15,7 @@ import java.util.List;
  */
 
 public class SpireSword extends AbstractPitItem {
+
     private Material material;
 
     public SpireSword(Material material) {

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-object MythicMobListener: Listener {
+object MythicMobListener : Listener {
 
     @EventHandler
     fun onMMDead(event: MythicMobDeathEvent) {

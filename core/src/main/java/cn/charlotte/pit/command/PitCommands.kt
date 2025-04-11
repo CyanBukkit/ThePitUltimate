@@ -11,22 +11,25 @@ import cn.charlotte.pit.data.sub.KillRecap
 import cn.charlotte.pit.data.sub.OfferData
 import cn.charlotte.pit.data.temp.TradeRequest
 import cn.charlotte.pit.event.PitPlayerSpawnEvent
-import cn.charlotte.pit.trade.TradeMonitorRunnable
 import cn.charlotte.pit.map.kingsquests.ui.CakeBakeUI
 import cn.charlotte.pit.map.kingsquests.ui.KingQuestsUI
-import cn.charlotte.pit.menu.previewer.EventPreviewerMenu
 import cn.charlotte.pit.menu.offer.OfferMenu
 import cn.charlotte.pit.menu.option.PlayerOptionMenu
+import cn.charlotte.pit.menu.previewer.EventPreviewerMenu
 import cn.charlotte.pit.menu.trade.TradeManager
 import cn.charlotte.pit.menu.trade.TradeMenu
 import cn.charlotte.pit.menu.viewer.StatusViewerMenu
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.sendMessage
-import cn.charlotte.pit.util.*
+import cn.charlotte.pit.trade.TradeMonitorRunnable
+import cn.charlotte.pit.util.MythicUtil
+import cn.charlotte.pit.util.PlayerUtil
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.inventory.InventoryUtil
+import cn.charlotte.pit.util.isSpecial
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.level.LevelUtil
@@ -306,12 +309,12 @@ class PitCommands {
 
 
         TradeMonitorRunnable.getTradeRequests().add(TradeRequest(player, target))
-  /*      if (PlusPlayer.on) {
-            if (player.isBlacks || target.isBlacks) {
-                TradeMonitorRunnable.getTradeRequests().remove(TradeRequest(player, target))
-                return
-            }
-        }*/
+        /*      if (PlusPlayer.on) {
+                  if (player.isBlacks || target.isBlacks) {
+                      TradeMonitorRunnable.getTradeRequests().remove(TradeRequest(player, target))
+                      return
+                  }
+              }*/
         if (!targetProfile.playerOption.isTradeNotify && !player.hasPermission(PlayerUtil.getStaffPermission())) {
             player.sendMessage(CC.translate("&c对方在游戏选项之后中设置了不接受交易请求,因此无法查看你的请求提示."))
             player.sendMessage(CC.translate("&c但对方仍可以通过使用 &e/trade " + player.name + " &c以同意你的请求."))
@@ -996,7 +999,6 @@ class PitCommands {
     }
 
 
-    
     @Execute(name = "python")
 
     fun thepit(): String {

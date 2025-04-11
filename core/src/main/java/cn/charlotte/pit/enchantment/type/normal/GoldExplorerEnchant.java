@@ -9,7 +9,6 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -22,6 +21,7 @@ import org.bukkit.entity.Player;
 @BowOnly
 @ArmorOnly
 public class GoldExplorerEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
+
     @Override
     public String getEnchantName() {
         return "探金之人";

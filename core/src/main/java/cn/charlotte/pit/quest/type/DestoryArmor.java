@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Created_In: 2021/1/22 14:22
  */
 public class DestoryArmor extends AbstractQuest implements IPlayerDamaged {
+
     @Override
     public String getQuestInternalName() {
         return "destroy_armor";

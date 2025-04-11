@@ -13,6 +13,7 @@ import java.util.List;
  * @Date 2021/5/4 12:23
  */
 public class SinkingMoonlight extends AbstractQuest {
+
     @Override
     public String getQuestInternalName() {
         return "sinking_moonlight";

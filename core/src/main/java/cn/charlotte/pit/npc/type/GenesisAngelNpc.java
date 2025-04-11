@@ -1,14 +1,12 @@
 package cn.charlotte.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

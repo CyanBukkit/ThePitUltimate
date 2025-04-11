@@ -21,9 +21,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @ArmorOnly
 @AutoRegister
 public class ComboDazzlingGoldEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+
     @Override
     public String getEnchantName() {
         return "强力击: 耀金";

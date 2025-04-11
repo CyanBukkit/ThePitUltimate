@@ -23,21 +23,24 @@ import java.util.*;
  * @Date: 2021/1/1 17:33
  */
 public class BountyRunnable extends BukkitRunnable {
+
     private final Random random = new Random();
     private static final SWMRHashTable<UUID, AnimationData> animationDataMap = new SWMRHashTable<>();
 
     public static Map<UUID, AnimationData> getAnimationDataMap() {
         return animationDataMap;
     }
-    public void gc(Set<HologramDisplay> sets){
+
+    public void gc(Set<HologramDisplay> sets) {
         sets.removeIf(holo -> {
-            if(!holo.hologram.isSpawned()){
+            if (!holo.hologram.isSpawned()) {
                 return false;
             }
             holo.hologram.deSpawn();
             return true;
         });
     }
+
     @Override
     public void run() {
         Set<UUID> shouldRemove = new ObjectOpenHashSet<>();
@@ -118,6 +121,7 @@ public class BountyRunnable extends BukkitRunnable {
     }
 
     public static class AnimationData {
+
         private final Set<HologramDisplay> holograms;
         private Cooldown spawnCooldown;
 
@@ -137,6 +141,7 @@ public class BountyRunnable extends BukkitRunnable {
 
     @Getter
     public static class HologramDisplay {
+
         private final Hologram hologram;
         private final double boostX;
         private final double boostZ;

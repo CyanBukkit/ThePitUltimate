@@ -13,7 +13,6 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.item.ItemUtil;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -129,7 +128,7 @@ public class ProtectListener implements Listener {
                     tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
                     int enchantLevel = Utils.getEnchantLevel(event.getPlayer().getInventory().getLeggings(), "TNT");
                     tntPrimed.setMetadata("damage", new FixedMetadataValue(ThePit.getInstance(), Math.max(0, enchantLevel)));
-                    Utils.pointMetadataAndRemove(tntPrimed,500,"shooter","damage","internal");
+                    Utils.pointMetadataAndRemove(tntPrimed, 500, "shooter", "damage", "internal");
                     return;
                 }
                 if ("insta_boom_enchant_item".equals(ItemUtil.getInternalName(event.getItemInHand()))) {
@@ -145,7 +144,7 @@ public class ProtectListener implements Listener {
                     tntPrimed.setMetadata("shooter", new FixedMetadataValue(ThePit.getInstance(), event.getPlayer().getUniqueId().toString()));
                     int enchantLevel = Utils.getEnchantLevel(event.getPlayer().getInventory().getLeggings(), "insta_boom_tnt_enchant");
                     tntPrimed.setMetadata("damage", new FixedMetadataValue(ThePit.getInstance(), Math.max(0, enchantLevel)));
-                    Utils.pointMetadataAndRemove(tntPrimed,500,"shooter","damage","internal");
+                    Utils.pointMetadataAndRemove(tntPrimed, 500, "shooter", "damage", "internal");
                     return;
                 }
             }

@@ -18,11 +18,13 @@ import cn.charlotte.pit.util.hologram.HologramAPI;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.time.TimeUtil;
-import io.papermc.paper.util.maplist.ObjectMapList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.Getter;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -32,7 +34,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author: EmptyIrony
@@ -40,6 +45,7 @@ import java.util.*;
  */
 
 public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreBoardInsert {
+
     @Getter
     private Location chest;
     @Getter
@@ -121,8 +127,8 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
         data.setLeft(!data.isLeft());
         Hologram hologram = data.getFirstHologram();
-            hologram.setText(CC.translate(Utils.randomColor().toString() +"&l" + data.getNum()));
-            secondHologram.setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
+        hologram.setText(CC.translate(Utils.randomColor().toString() + "&l" + data.getNum()));
+        secondHologram.setText(CC.translate("&a&l" + (data.isLeft() ? "左键" : "右键") + "点击"));
     }
 
     @Override
@@ -140,9 +146,9 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
                 .registerEvents(this, ThePit.getInstance());
         location.getWorld().strikeLightningEffect(location);
         CC.boardCast0("&6&l空投! &7一个新的空投已在地图降落!打开可以获得神话物品,声望等稀有物资!");
-        Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
-                    location.getBlock().setType(Material.CHEST);
-                });
+        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+            location.getBlock().setType(Material.CHEST);
+        });
         chest = location;
 
         Map<Integer, ItemStack> items = PackageMenu.getItems();
@@ -171,7 +177,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         for (int i = 0; i < RandomUtil.random.nextInt(3) + 3; i++) {
             if (items.get(i) == null) {
                 items.put(i, (ItemStack) RandomUtil.helpMeToChooseOne(new ItemBuilder(Material.EXP_BOTTLE)
-                        .name("&b+1000经验值").internalName("xp_reward").shiny().build(),
+                                .name("&b+1000经验值").internalName("xp_reward").shiny().build(),
                         new ItemBuilder(Material.GOLD_INGOT).name("&6+1000硬币").internalName("coin_reward").shiny().build()));
             }
         }
@@ -194,8 +200,8 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         chestData.getFirstHologram().deSpawn();
         PackageMenu.getItems().clear();
         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-                    chest.getBlock().setType(Material.AIR);
-                });
+            chest.getBlock().setType(Material.AIR);
+        });
         //we didnt have to set chestData = null;
     }
 
@@ -231,10 +237,11 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
 
     @Data
     public static class ChestData {
+
         private boolean left = true;
         private int num = 200;
         private Hologram firstHologram;
         private Hologram secondHologram;
-        private List<UUID> rewarded = new ObjectMapList<>();
+        private List<UUID> rewarded = new ObjectArrayList<>();
     }
 }

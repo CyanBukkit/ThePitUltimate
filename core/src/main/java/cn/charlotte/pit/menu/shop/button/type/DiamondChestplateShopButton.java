@@ -63,7 +63,7 @@ public class DiamondChestplateShopButton extends AbstractShopButton {
     public int getPrice(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
-            return (int)(0.35 * 500);
+            return (int) (0.35 * 500);
         }
         return 500;
     }

@@ -45,6 +45,7 @@ import java.util.UUID;
  * @Date: 2021/2/5 23:37
  */
 public class CakeEvent implements IEvent, INormalEvent, Listener {
+
     private static CuboidRegion[] regions;
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");
     private final DecimalFormat df = new DecimalFormat(",###,###,###,###");
@@ -108,7 +109,6 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
                 .registerEvents(this, ThePit.getInstance());
 
 
-
     }
 
     @Override
@@ -166,7 +166,7 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
                 int baseCoins = 1;
 
                 if (block.getData() == 6) {
-                     baseCoins += 5;
+                    baseCoins += 5;
                     block.setType(Material.AIR);
                 } else {
                     block.setData((byte) (block.getData() + 1));
@@ -230,6 +230,7 @@ public class CakeEvent implements IEvent, INormalEvent, Listener {
     }
 
     public static class CakePlayerData {
+
         private UUID uuid;
         private String name;
         private int coins;

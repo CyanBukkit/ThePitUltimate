@@ -58,6 +58,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date: 2021/3/21 11:02
  */
 public class SpireEvent implements IEvent, IEpicEvent, Listener, IPrepareEvent, ISortedEvent, IScoreBoardInsert {
+
     private final Map<UUID, PlayerSpireData> dataMap;
     private final Map<UUID, Integer> rankMap = new HashMap<>();
     private final List<UUID> cooldownList = new ArrayList<>();
@@ -344,7 +345,7 @@ public class SpireEvent implements IEvent, IEpicEvent, Listener, IPrepareEvent, 
                 if (targetData == null) {
                     return;
                 }
-            } else  {
+            } else {
                 return;
             }
 
@@ -732,6 +733,7 @@ public class SpireEvent implements IEvent, IEpicEvent, Listener, IPrepareEvent, 
     }
 
     public static class PlayerSpireData {
+
         private UUID uuid;
         private String name;
         private int kills;

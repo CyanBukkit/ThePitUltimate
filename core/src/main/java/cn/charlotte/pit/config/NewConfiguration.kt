@@ -12,9 +12,6 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.math.max
 
 object NewConfiguration {
 
@@ -118,11 +115,11 @@ object NewConfiguration {
             for (mmid in it.getKeys(false)) {
                 val xpRange = it.getString("$mmid.xp-provide")?.let { rangeString ->
                     val split = rangeString.split("-")
-                    split.first().toInt() .. split.last().toInt()
+                    split.first().toInt()..split.last().toInt()
                 } ?: continue
                 val coinsRange = it.getString("$mmid.coins-provide")?.let { rangeString ->
                     val split = rangeString.split("-")
-                    split.first().toInt() .. split.last().toInt()
+                    split.first().toInt()..split.last().toInt()
                 } ?: continue
 
                 mythicMobs[mmid] = MythicMobsConf(xpRange, coinsRange)
@@ -167,10 +164,11 @@ object NewConfiguration {
                 this += Rate(permission, chance)
             }
         }
-        maxLevel = config.getInt("maxLevel",120)
+        maxLevel = config.getInt("maxLevel", 120)
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 
     }
+
     fun patchCaches(): Unit {
         LevelUtil.dropCache();
     }

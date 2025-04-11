@@ -122,7 +122,10 @@ class EnchantChoseButtonGlobalGem(
         player.playSound(player.location, Sound.ANVIL_USE, 1.5f, 1.5f)
     }
 
-    private fun isSameEnchant(itemA: cn.charlotte.pit.item.AbstractPitItem, itemB: cn.charlotte.pit.item.AbstractPitItem): Boolean {
+    private fun isSameEnchant(
+        itemA: cn.charlotte.pit.item.AbstractPitItem,
+        itemB: cn.charlotte.pit.item.AbstractPitItem
+    ): Boolean {
         loop@ for (enchantment in itemA.enchantments) {
             for (enchantmentB in itemB.enchantments) {
                 if (enchantment.key.nbtName == enchantmentB.key.nbtName && enchantment.value == enchantmentB.value) {

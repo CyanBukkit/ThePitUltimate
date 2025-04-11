@@ -12,7 +12,6 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -25,6 +24,7 @@ import org.bukkit.entity.Player;
 @WeaponOnly
 @BowOnly
 public class PitMBAEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
+
     @Override
     public String getEnchantName() {
         return "天坑MBA";

@@ -13,7 +13,6 @@ import cn.charlotte.pit.util.MythicUtil;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.inventory.InventoryUtil;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,6 +31,7 @@ import java.util.List;
 
 @AutoRegister
 public class GrandFinaleMegaStreak extends AbstractPerk implements Listener, MegaStreak {
+
     @Override
     public String getInternalPerkName() {
         return "grand_finale";

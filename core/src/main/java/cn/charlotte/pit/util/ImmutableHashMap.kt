@@ -1,6 +1,6 @@
 package cn.charlotte.pit.util
 
-class ImmutableHashMap<K, V>: HashMap<K, V>() {
+class ImmutableHashMap<K, V> : HashMap<K, V>() {
 
     override fun put(key: K, value: V): V? {
         throw UnsupportedOperationException("ImmutableHashMap")

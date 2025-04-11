@@ -17,10 +17,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @WeaponOnly
 @AutoRegister
 public class ComboStealEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+
     private final DecimalFormat iiiIiI = new DecimalFormat("0.0");
+
     @Override
     public String getEnchantName() {
         return "强力击: 窃取";
@@ -63,7 +66,7 @@ public class ComboStealEnchant extends AbstractEnchantment implements IAttackEnt
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (PlayerProfile.getPlayerProfileByUuid(attacker.getUniqueId()).getMeleeHit() % 5 == 0) {
-            ((Player)target).setHealth(Math.max(0.1D, ((Player)target).getHealth() - (2 * (enchantLevel + 1))));
+            ((Player) target).setHealth(Math.max(0.1D, ((Player) target).getHealth() - (2 * (enchantLevel + 1))));
             PlayerUtil.heal(attacker, (enchantLevel + 1));
         }
     }

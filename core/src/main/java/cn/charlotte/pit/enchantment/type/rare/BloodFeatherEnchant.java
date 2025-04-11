@@ -15,13 +15,13 @@ import cn.charlotte.pit.util.random.RandomUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 @BowOnly
 @WeaponOnly
 @ArmorOnly
 public class BloodFeatherEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
+
     @Override
     public String getEnchantName() {
         return "&c血&3羽&6";
@@ -59,11 +59,11 @@ public class BloodFeatherEnchant extends AbstractEnchantment implements IPlayerK
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(myself.getUniqueId());
         if (RandomUtil.hasSuccessfullyByChance(0.01D * IIiIIi(enchantLevel)) && playerProfile.isLoaded()) {
             InventoryUtil.removeItem((Player) target, "funky_feather", 1);
-            if (enchantLevel > 3){
+            if (enchantLevel > 3) {
                 myself.getInventory().addItem(FunkyFeather.toItemStack());
                 myself.sendMessage(CC.translate("&c&l血&3&l羽&f! &7你的附魔掠夺对方一根 &f1x &3时髦的羽毛"));
                 target.sendMessage(CC.translate("&c&l血&3&l羽&f! &7对方的附魔掠夺了你一根 &f1x &3时髦的羽毛"));
-            }else {
+            } else {
                 myself.sendMessage(CC.translate("&c&l血&3&l羽&f! &7你的附魔使对方强制掉落了一根 &f1x &3时髦的羽毛"));
                 target.sendMessage(CC.translate("&c&l血&3&l羽&f! &7对方的附魔使你强制掉落了一根 &f1x &3时髦的羽毛"));
             }

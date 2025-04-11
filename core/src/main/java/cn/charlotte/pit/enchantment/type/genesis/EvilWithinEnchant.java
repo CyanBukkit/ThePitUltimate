@@ -11,6 +11,7 @@ import cn.charlotte.pit.util.cooldown.Cooldown;
  */
 
 public class EvilWithinEnchant extends AbstractEnchantment {
+
     @Override
     public String getEnchantName() {
         return "恶灵附身";

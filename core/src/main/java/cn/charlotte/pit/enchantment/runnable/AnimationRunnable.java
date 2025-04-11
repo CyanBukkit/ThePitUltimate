@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Getter
 public class AnimationRunnable extends BukkitRunnable {
+
     private final Map<UUID, AnimationData> animations = new ConcurrentHashMap<>();
     private final List<Location> animationLocations;
 
@@ -175,7 +176,7 @@ public class AnimationRunnable extends BukkitRunnable {
     public void sendReset(Player player) {
         for (Location location : animationLocations) {
             Block block = location.getBlock();
-            player.sendBlockChange(location, block.getType(),block.getData());
+            player.sendBlockChange(location, block.getType(), block.getData());
         }
     }
 
@@ -188,16 +189,19 @@ public class AnimationRunnable extends BukkitRunnable {
     @Getter
     @Setter
     public static class AnimationData {
+
         private final Player player;
         private int animationTick = 0;
         private byte color = (byte) 6;
         private boolean startEnchanting = false;
         private boolean finished = false;
-        public void reset(){
+
+        public void reset() {
             animationTick = 0;
             startEnchanting = false;
             finished = false;
         }
+
         public AnimationData(Player player) {
             this.player = player;
         }

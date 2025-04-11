@@ -9,7 +9,6 @@ import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -24,7 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @AutoRegister
 @ArmorOnly
-public class MindAssaultEnchant extends AbstractEnchantment implements IAttackEntity,Listener {
+public class MindAssaultEnchant extends AbstractEnchantment implements IAttackEntity, Listener {
+
     @Override
     public String getEnchantName() {
         return "精神攻击";
@@ -60,12 +60,12 @@ public class MindAssaultEnchant extends AbstractEnchantment implements IAttackEn
         Collection<Player> nearbyPlayers = PlayerUtil.getNearbyPlayers(attacker.getLocation(), 11.0);
         nearbyPlayers.forEach(i -> {
             PlayerProfile playerProfileByUuid = PlayerProfile.getPlayerProfileByUuid(i.getUniqueId());
-            if(playerProfileByUuid != null && playerProfileByUuid.isLoaded()){
-                if(playerProfileByUuid.leggings != null){
+            if (playerProfileByUuid != null && playerProfileByUuid.isLoaded()) {
+                if (playerProfileByUuid.leggings != null) {
                     boostDamage.getAndAdd(0.05);
                 }
             }
         });
-        boostDamage.set(Math.max(0,boostDamage.get() - 0.6));
+        boostDamage.set(Math.max(0, boostDamage.get() - 0.6));
     }
 }

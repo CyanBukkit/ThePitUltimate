@@ -3,18 +3,11 @@ package cn.charlotte.pit.runnable
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.item.AbstractPitItem
-import cn.charlotte.pit.item.IMythicItem
-import cn.charlotte.pit.item.ItemFactory
 import cn.charlotte.pit.util.chat.ActionBarUtil
 import cn.charlotte.pit.util.chat.CC
-import cn.charlotte.pit.util.toMythicItem
 import net.minecraft.server.v1_8_R3.MinecraftServer
 import org.bukkit.Bukkit
-import org.bukkit.entity.Minecart
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 object ActionBarDisplayRunnable {
 
@@ -23,41 +16,47 @@ object ActionBarDisplayRunnable {
             .enchantmentFactor
             .actionDisplayEnchants
     }
+
     @JvmStatic
     val shutdownStr: String = CC.translate("&c&l服务器关闭中 ")
     fun start() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(),{
-                if(!MinecraftServer.getServer().isRunning){
-                    for (player in Bukkit.getOnlinePlayers()) {
-                        ActionBarUtil.sendActionBar1(player,"system", shutdownStr,20);
-                    }
-                    return@runTaskTimerAsynchronously
-                }
-                val now = System.currentTimeMillis()
-
+        Bukkit.getScheduler().runTaskTimerAsynchronously(ThePit.getInstance(), {
+            if (!MinecraftServer.getServer().isRunning) {
                 for (player in Bukkit.getOnlinePlayers()) {
-                    val metadata = player.getMetadata("showing_damage_data")
-                    if (metadata.isNotEmpty()) {
-                        val value = metadata.firstOrNull()
-                        if (value != null) {
-                            if (now - value.asLong() <= 1000L) {
-                                continue
-                            }
+                    ActionBarUtil.sendActionBar1(player, "system", shutdownStr, 20);
+                }
+                return@runTaskTimerAsynchronously
+            }
+            val now = System.currentTimeMillis()
+
+            for (player in Bukkit.getOnlinePlayers()) {
+                val metadata = player.getMetadata("showing_damage_data")
+                if (metadata.isNotEmpty()) {
+                    val value = metadata.firstOrNull()
+                    if (value != null) {
+                        if (now - value.asLong() <= 1000L) {
+                            continue
                         }
                     }
-
-                    val builder = StringBuilder()
-
-                    PlayerProfile.getPlayerProfileByUuid(player.uniqueId)?.apply {
-                        player.handleActionDisplay(this.heldItem, builder)
-                        player.handleActionDisplay(this.leggings, builder)
-
-                    }
-
-
-                  if(builder.isNotBlank()) ActionBarUtil.sendActionBar1(player,"skill", CC.translate(builder.toString()),4)
                 }
-            }, 100L, 20L)
+
+                val builder = StringBuilder()
+
+                PlayerProfile.getPlayerProfileByUuid(player.uniqueId)?.apply {
+                    player.handleActionDisplay(this.heldItem, builder)
+                    player.handleActionDisplay(this.leggings, builder)
+
+                }
+
+
+                if (builder.isNotBlank()) ActionBarUtil.sendActionBar1(
+                    player,
+                    "skill",
+                    CC.translate(builder.toString()),
+                    4
+                )
+            }
+        }, 100L, 20L)
     }
 
     private fun Player.handleActionDisplay(itemStack: AbstractPitItem?, builder: StringBuilder) {

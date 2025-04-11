@@ -20,9 +20,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @ArmorOnly
 public class EscapeEnchant extends AbstractEnchantment implements IPlayerDamaged, IActionDisplayEnchant {
+
     private final Map<UUID, Cooldown> Cooldown = new HashMap<>();
+
     @Override
     public String getEnchantName() {
         return "紧急逃生";
@@ -56,7 +59,7 @@ public class EscapeEnchant extends AbstractEnchantment implements IPlayerDamaged
 
     @Override
     public String getText(int enchantLevel, org.bukkit.entity.Player player) {
-        if (Cooldown.getOrDefault(player.getUniqueId(),new Cooldown(0L)).hasExpired()) {
+        if (Cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0L)).hasExpired()) {
             return "&a&l✔";
         }
         return new StringBuilder().insert(0, "&c&l").append(TimeUtil.millisToRoundedTime((Cooldown.get(player.getUniqueId())).getRemaining()).replace(" ", "")).toString();

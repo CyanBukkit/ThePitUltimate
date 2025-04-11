@@ -20,9 +20,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 @AutoRegister
 @ArmorOnly
 public class ComboDustEnchant extends AbstractEnchantment implements IAttackEntity, Listener {
+
     @Override
     public String getEnchantName() {
         return "强力击: 混沌";
@@ -53,23 +55,26 @@ public class ComboDustEnchant extends AbstractEnchantment implements IAttackEnti
     public String getUsefulnessLore(int enchantLevel) {
         return "&7每 &e3 &7次击中玩家时/s你的下一次攻击将会附带 &8失明 II &f(00:04) &c虚弱 II &f(00:04) &7效果";
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         this.attacks.removeLong(e.getPlayer().getUniqueId());
     }
-    PotionEffect L1 = PotionEffectType.BLINDNESS.createEffect(80,1);
 
-    PotionEffect L2 = PotionEffectType.WEAKNESS.createEffect(80,1);
+    PotionEffect L1 = PotionEffectType.BLINDNESS.createEffect(80, 1);
+
+    PotionEffect L2 = PotionEffectType.WEAKNESS.createEffect(80, 1);
     Object2LongOpenHashMap<UUID> attacks = new Object2LongOpenHashMap<>();
+
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         UUID uniqueId = attacker.getUniqueId();
         long aLong = attacks.getLong(uniqueId);
-        attacks.put(uniqueId,++aLong);
-        if(aLong == 4){
-            if(target instanceof LivingEntity e){
-                e.addPotionEffect(L1,true);
-                e.addPotionEffect(L2,true);
+        attacks.put(uniqueId, ++aLong);
+        if (aLong == 4) {
+            if (target instanceof LivingEntity e) {
+                e.addPotionEffect(L1, true);
+                e.addPotionEffect(L2, true);
             }
             attacks.removeLong(uniqueId);
         }

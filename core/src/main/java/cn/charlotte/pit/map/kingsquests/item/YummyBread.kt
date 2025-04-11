@@ -21,7 +21,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
-object YummyBread: AbstractPitItem(), Listener {
+object YummyBread : AbstractPitItem(), Listener {
 
     @EventHandler
     fun onInteractBlock(event: PlayerInteractEvent) {
@@ -97,13 +97,15 @@ object YummyBread: AbstractPitItem(), Listener {
             }
 
             hologram.text = CC.translate(
-                when(countdown) {
-                    in 0 .. 3 -> {
+                when (countdown) {
+                    in 0..3 -> {
                         "&c${countdown}"
                     }
-                    in 4 .. 7 -> {
+
+                    in 4..7 -> {
                         "&e${countdown}"
                     }
+
                     else -> "&a${countdown}"
                 }
             )

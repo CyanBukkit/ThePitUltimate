@@ -2,7 +2,6 @@ package cn.charlotte.pit.util
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
-import cn.charlotte.pit.util.item.ItemUtil
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -29,7 +28,8 @@ fun Inventory.countItem(matcher: (itemStack: ItemStack) -> Boolean): Int {
     }
     return amount
 }
-inline fun ItemStack.toNMS(): net.minecraft.server.v1_8_R3.ItemStack{
+
+inline fun ItemStack.toNMS(): net.minecraft.server.v1_8_R3.ItemStack {
     return Utils.toNMStackQuick(this);
 }
 
@@ -141,6 +141,7 @@ fun submit(
 
     return runnable
 }
+
 //sync method
 fun org.bukkit.inventory.ItemStack?.toMythicItem(): cn.charlotte.pit.item.AbstractPitItem? {
     return ThePit.getInstance().itemFactory.getItemFromStack(this) //修正
@@ -155,15 +156,15 @@ val Player.isSpecial: Boolean
 val PlayerProfile.isSpecial: Boolean
     get() = SpecialUtil.isSpecial(this)
 
-val Player.isPrivate : Boolean
+val Player.isPrivate: Boolean
     get() = SpecialUtil.isPrivate(this)
 val PlayerProfile.isPrivate: Boolean
     get() = SpecialUtil.isPrivate(this)
-val Player.isBlacks : Boolean
+val Player.isBlacks: Boolean
     get() = SpecialUtil.isBlacks(this)
 
 val PlayerProfile.isBlacks: Boolean
     get() = SpecialUtil.isBlacks(this)
 
-val Player.isPlusPlayer : Boolean
+val Player.isPlusPlayer: Boolean
     get() = PlusPlayer.isPlusPlayer(this)

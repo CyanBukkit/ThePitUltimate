@@ -6,7 +6,6 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -20,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeaponOnly
 public class PrisonBossEnchant extends AbstractEnchantment implements IAttackEntity {
+
     @Override
     public String getEnchantName() {
         return "牢大";
@@ -47,7 +47,7 @@ public class PrisonBossEnchant extends AbstractEnchantment implements IAttackEnt
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        String enchJump = switch(enchantLevel) {
+        String enchJump = switch (enchantLevel) {
             case 1:
                 yield "0.5";
             case 2:
@@ -64,7 +64,7 @@ public class PrisonBossEnchant extends AbstractEnchantment implements IAttackEnt
 
     @Override
     public void handleAttackEntity(int enchantLevel, Player attacker, Entity target, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
-        if(attacker.getNoDamageTicks() <= 1) {
+        if (attacker.getNoDamageTicks() <= 1) {
             if (attacker.isOnGround()) {
                 boostDamage.addAndGet(0.5);
                 if (attacker.getVelocity().getY() <= 0.1) {

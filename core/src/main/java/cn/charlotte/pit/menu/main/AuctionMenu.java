@@ -23,6 +23,7 @@ import java.util.Map;
  * @Date 2021/5/25 16:46
  */
 public class AuctionMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "拍卖";

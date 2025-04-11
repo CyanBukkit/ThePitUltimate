@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HeresyMenu extends Menu {
+
     @Override
     public String getTitle(Player player) {
         return "邪术";

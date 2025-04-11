@@ -177,6 +177,7 @@ class PitAdminDupeFixCommands {
             sender.sendMessage("scanned: ${scanned.get()}")
         }
     }
+
     @Execute(name = "0526")
     @Async
     fun fix0526(@Context sender: CommandSender) {
@@ -223,6 +224,7 @@ class PitAdminDupeFixCommands {
     fun kamiExecute(@Context sender: CommandSender) {
         CleanupDupeEnchTheKMGodRunnable.run();
     }
+
     @Execute(name = "kami")
     @Async
     fun kami(@Context sender: CommandSender) {

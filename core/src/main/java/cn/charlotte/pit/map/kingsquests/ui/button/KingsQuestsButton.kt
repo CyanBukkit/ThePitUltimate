@@ -18,7 +18,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 
-object KingsQuestsButton: Button() {
+object KingsQuestsButton : Button() {
     override fun getButtonItem(player: Player): ItemStack {
         val profile = player.getPitProfile()
 
@@ -107,7 +107,7 @@ object KingsQuestsButton: Button() {
 
     private fun PlayerProfile.getRewardExp(): Double {
         var needExp = 0.0
-        for (level in 1 .. 120) {
+        for (level in 1..120) {
             needExp += LevelUtil.getLevelExpRequired(prestige, level)
         }
 
@@ -131,7 +131,10 @@ object KingsQuestsButton: Button() {
         )
     }
 
-    private fun PlayerProfile.getActiveQuestDescription(player: Player, kingsQuestsData: KingsQuestsData): List<String> {
+    private fun PlayerProfile.getActiveQuestDescription(
+        player: Player,
+        kingsQuestsData: KingsQuestsData
+    ): List<String> {
         val hasCake = player.inventory.countItem {
             ItemUtil.getInternalName(it) == "mini_cake"
         } > 0

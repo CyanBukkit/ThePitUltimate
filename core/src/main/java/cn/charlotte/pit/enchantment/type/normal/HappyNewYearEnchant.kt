@@ -43,7 +43,11 @@ class HappyNewYearEnchant : AbstractEnchantment(), IPlayerDamaged, IActionDispla
     }
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
-        return "&7受到攻击时获得 &f生命恢复 ${RomanUtil.convert(getHeal(enchantLevel).first + 1)} &c" + "${getHeal(enchantLevel).second}秒&7 (1.5秒冷却)"
+        return "&7受到攻击时获得 &f生命恢复 ${RomanUtil.convert(getHeal(enchantLevel).first + 1)} &c" + "${
+            getHeal(
+                enchantLevel
+            ).second
+        }秒&7 (1.5秒冷却)"
     }
 
     private fun getHeal(enchantLevel: Int): Pair<Int, Int> {

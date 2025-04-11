@@ -13,7 +13,6 @@ import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.item.ItemBuilder;
 import cn.charlotte.pit.util.item.ItemUtil;
 import cn.charlotte.pit.util.random.RandomUtil;
-
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Location;
@@ -46,6 +45,7 @@ import java.util.List;
 
 @AutoRegister
 public class FishClubPerk extends AbstractPerk implements Listener {
+
     @Override
     public String getInternalPerkName() {
         return "fishing_club_perk";

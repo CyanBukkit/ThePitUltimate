@@ -2,7 +2,7 @@ package cn.charlotte.pit.data.operator;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import io.papermc.paper.util.maplist.SafeObjectMapList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import org.bukkit.Bukkit;
@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+
 @ToString
 public class PackedOperator implements IOperator {
 
@@ -25,66 +26,82 @@ public class PackedOperator implements IOperator {
     Player lastBoundPlayer = null;
     @NotNull
     PlayerProfile profile = PlayerProfile.NONE_PROFILE;
-    public PackedOperator(ThePit inst){
+
+    public PackedOperator(ThePit inst) {
         this.pit = inst;
     }
-    public PlayerProfile profile(){
+
+    public PlayerProfile profile() {
         return profile;
     }
-    public boolean isLoaded(){
+
+    public boolean isLoaded() {
         return profile != PlayerProfile.NONE_PROFILE && profile.isLoaded();
     }
-    public void ifLoaded(Runnable runnable){
-        if(isLoaded()){
+
+    public void ifLoaded(Runnable runnable) {
+        if (isLoaded()) {
             runnable.run();
         }
     }
-    public void heartBeat(){
+
+    public void heartBeat() {
         Player player = Bukkit.getPlayer(profile.getPlayerUuid());
-        if(player != null && player.isOnline()) {
+        if (player != null && player.isOnline()) {
             this.quitFlag = false;
             this.fireExit = false;
         }
         this.lastHeartBeat = System.currentTimeMillis();
     }
-    public void loadAs(UUID uuid,String name) {
+
+    public void loadAs(UUID uuid, String name) {
         lastBoundPlayer = Bukkit.getPlayer(uuid);
-        operations.add(() -> {
-            loadAs0(uuid, name);
-        });
-        this.heartBeat();;
+        synchronized (operations) {
+            operations.add(() -> {
+                loadAs0(uuid, name);
+            });
+        }
+        this.heartBeat();
+        ;
     }
+
     public void loadAs(PlayerProfile profile) {
 
-        if(profile == PlayerProfile.NONE_PROFILE){
+        if (profile == PlayerProfile.NONE_PROFILE) {
             return;
         }
         lastBoundPlayer = Bukkit.getPlayer(profile.getPlayerUuid());
         this.profile = profile;
         this.heartBeat();
     }
-    public void loadAs0(UUID uuid,String name){
-        if(profile != PlayerProfile.NONE_PROFILE){
+
+    public void loadAs0(UUID uuid, String name) {
+        if (profile != PlayerProfile.NONE_PROFILE) {
             return;
         }
         PlayerProfile rawProfile = PlayerProfile.loadPlayerProfileByUuid(uuid);
         if (rawProfile == null) {
             rawProfile = new PlayerProfile(uuid, name);
         } else {
-            PlayerProfile.loadMail(rawProfile,uuid);
+            PlayerProfile.loadMail(rawProfile, uuid);
         }
         PlayerProfile.bootstrapProfile(rawProfile);
         profile = rawProfile;
     }
 
-    SafeObjectMapList<Runnable> operations = new SafeObjectMapList<>(); //safer
+    final ObjectArrayList<Runnable> operations = new ObjectArrayList<>(); //safer
     Set<Runnable> pendingExecuting = new CopyOnWriteArraySet<>(); //正常情况下就一个
+
     public boolean hasAnyOperation() {
-        return !operations.isEmpty() && !this.pendingExecuting.isEmpty();
+        synchronized (operations) {
+            return !operations.isEmpty() && !this.pendingExecuting.isEmpty();
+        }
     }
+
     boolean fireExit = false;
     boolean quitFlag = false;
-    public synchronized boolean save(boolean fireExit,boolean quitFlag) {
+
+    public synchronized boolean save(boolean fireExit, boolean quitFlag) {
         if (System.currentTimeMillis() - lastHeartBeat > 1000) {
             this.fireExit = fireExit;
             if (this.fireExit) {
@@ -110,18 +127,20 @@ public class PackedOperator implements IOperator {
         }
         return true;
     }
-    public void pendingIfLoaded(Consumer<PlayerProfile> profile){
-        if(isLoaded()){
+
+    public void pendingIfLoaded(Consumer<PlayerProfile> profile) {
+        if (isLoaded()) {
             pending(profile);
         }
     }
-    public void pending(Consumer<PlayerProfile> profile){
+
+    public void pending(Consumer<PlayerProfile> profile) {
         offerOperation(() -> {
             profile.accept(PackedOperator.this.profile);
         });
     }
 
-    public Promise promise(Consumer<PlayerProfile> profile){
+    public Promise promise(Consumer<PlayerProfile> profile) {
         Promise promise = new Promise();
         offerOperation(() -> {
             profile.accept(PackedOperator.this.profile);
@@ -129,42 +148,56 @@ public class PackedOperator implements IOperator {
         });
         return promise;
     }
+
     public void offerOperation(Runnable runnable) {
-        operations.add(runnable);
+        synchronized (operations) {
+            operations.add(runnable);
+        }
     }
+
     public void tick() {
-        if(lastBoundPlayer != null){
-            if(isLoaded()){
+        if (lastBoundPlayer != null) {
+            if (isLoaded()) {
                 Player player = Bukkit.getPlayer(this.profile.getPlayerUuid());
-                if(player != null && player.isOnline()){
+                if (player != null && player.isOnline()) {
                     this.lastBoundPlayer = player;
                 }
             }
         }
-        if (operations.isEmpty()) {
-            return;
+        synchronized (operations) {
+            if (operations.isEmpty()) {
+                return;
+            }
+
+            if (!pendingExecuting.isEmpty()) {
+                return; //保持有序性。。。
+            }
+
+            Runnable operation = EMPTY_RUNNABLE;
+            for (Runnable next : operations) {
+                operation = next;
+                break;
+            }
+
+            pendingExecuting.add(operation);
+            final Runnable operationFinaled = operation;
+            Bukkit.getScheduler().runTaskAsynchronously(pit, () -> {
+                operationFinaled.run();
+                operations.remove(operationFinaled);
+                pendingExecuting.remove(operationFinaled);
+            });
         }
-        if(!pendingExecuting.isEmpty()){
-            return; //保持有序性。。。
-        }
-        Runnable operation = EMPTY_RUNNABLE;
-        for (Runnable next : operations) {
-            operation = next;
-            break;
-        }
-        pendingExecuting.add(operation);
-        final Runnable operationFinaled = operation;
-        Bukkit.getScheduler().runTaskAsynchronously(pit, () -> {
-            operationFinaled.run();
-            operations.remove(operationFinaled);
-            pendingExecuting.remove(operationFinaled);
-      });
+
     }
-    private static final Runnable EMPTY_RUNNABLE = () -> {};
-    public UUID getUniqueId(){
+
+    private static final Runnable EMPTY_RUNNABLE = () -> {
+    };
+
+    public UUID getUniqueId() {
         return this.profile.getPlayerUuid();
     }
-    public void wipe(PlayerProfile wProfile){
+
+    public void wipe(PlayerProfile wProfile) {
         pending(i -> {
             Bukkit.getScheduler().runTask(pit, () -> {
                 Bukkit.getPlayer(i.getPlayerUuid()).kickPlayer("working");
@@ -172,12 +205,14 @@ public class PackedOperator implements IOperator {
             this.profile = wProfile;
         });
     }
+
     @SneakyThrows
-    public void waitForLoad(){
+    public void waitForLoad() {
         while (!this.isLoaded()) {
             Thread.onSpinWait();
         }
     }
+
     public Promise pendingUntilLoadedPromise(Consumer<PlayerProfile> profileConsumer) {
         Promise promise = new Promise();
         pendingUntilLoaded(prof -> {
@@ -186,8 +221,9 @@ public class PackedOperator implements IOperator {
         });
         return promise;
     }
+
     public void pendingUntilLoaded(Consumer<PlayerProfile> profileConsumer) {
-        if(isLoaded()){
+        if (isLoaded()) {
             this.pending(profileConsumer);
             return;
         }
@@ -198,6 +234,6 @@ public class PackedOperator implements IOperator {
                     pendingIfLoaded(profileConsumer);
                 }
             }
-        }.runTaskTimerAsynchronously(pit,0,5);
+        }.runTaskTimerAsynchronously(pit, 0, 5);
     }
 }

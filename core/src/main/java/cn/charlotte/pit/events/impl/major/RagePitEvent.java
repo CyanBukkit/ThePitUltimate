@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
  */
 
 public class RagePitEvent implements IEvent, IEpicEvent, Listener {
+
     @Getter
     private final Map<UUID, DamageData> damageMap = new HashMap<>();
     private EditSession session;
@@ -110,7 +111,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
             });
 
 
-            ClearRunnable.getClearRunnable().getPlacedBlock().removeIf((loc,blockData) -> {
+            ClearRunnable.getClearRunnable().getPlacedBlock().removeIf((loc, blockData) -> {
                 loc.getBlock().setType(Material.AIR);
                 return true;
             });
@@ -308,6 +309,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
     @Data
     @AllArgsConstructor
     public static class DamageData {
+
         private UUID uuid;
         private double damage;
     }

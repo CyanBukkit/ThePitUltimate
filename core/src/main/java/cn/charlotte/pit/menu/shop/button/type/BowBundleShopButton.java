@@ -4,8 +4,6 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.type.mythic.MythicBowItem;
-import cn.charlotte.pit.item.type.mythic.MythicLeggingsItem;
-import cn.charlotte.pit.item.type.mythic.MythicSwordItem;
 import cn.charlotte.pit.menu.shop.button.AbstractShopButton;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.util.chat.CC;

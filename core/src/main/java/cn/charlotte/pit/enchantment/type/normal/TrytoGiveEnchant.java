@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 @BowOnly
 @ArmorOnly
 public class TrytoGiveEnchant extends AbstractEnchantment implements IPlayerKilledEntity {
+
     @Override
     public String getEnchantName() {
         return "竭力之获";
@@ -47,7 +48,7 @@ public class TrytoGiveEnchant extends AbstractEnchantment implements IPlayerKill
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7击杀获得 &b+" + 4 * enchantLevel +" 经验值";
+        return "&7击杀获得 &b+" + 4 * enchantLevel + " 经验值";
     }
 
     @Override

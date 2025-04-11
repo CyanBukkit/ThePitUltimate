@@ -4,13 +4,11 @@ import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.buff.impl.BountySolventBuff;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly;
-import cn.charlotte.pit.enchantment.type.op.RealManEnchant;
 import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

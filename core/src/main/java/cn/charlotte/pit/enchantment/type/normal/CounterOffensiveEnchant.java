@@ -10,7 +10,6 @@ import cn.charlotte.pit.parm.listener.IPlayerDamaged;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +18,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -30,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ArmorOnly
 @AutoRegister
 public class CounterOffensiveEnchant extends AbstractEnchantment implements IPlayerDamaged {
+
     @Override
     public String getEnchantName() {
         return "反恐";
@@ -74,15 +73,16 @@ public class CounterOffensiveEnchant extends AbstractEnchantment implements IPla
                 myself.removePotionEffect(PotionEffectType.SPEED);
                 myself.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * (2 * enchantLevel + 1), 1, true));
             }
-            if(count == -1){
-                myself.removeMetadata("counter_enchant_" + uniqueId,ThePit.getInstance());
+            if (count == -1) {
+                myself.removeMetadata("counter_enchant_" + uniqueId, ThePit.getInstance());
                 return;
             }
             myself.setMetadata("counter_enchant_" + uniqueId, new FixedMetadataValue(ThePit.getInstance(), count + 1));
         }
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
-        e.getPlayer().removeMetadata("counter_enchant_" + e.getPlayer().getUniqueId(),ThePit.getInstance());
+    public void onQuit(PlayerQuitEvent e) {
+        e.getPlayer().removeMetadata("counter_enchant_" + e.getPlayer().getUniqueId(), ThePit.getInstance());
     }
 }

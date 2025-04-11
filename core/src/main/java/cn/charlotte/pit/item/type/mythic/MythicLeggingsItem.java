@@ -1,7 +1,6 @@
 package cn.charlotte.pit.item.type.mythic;
 
 import cn.charlotte.pit.item.IMythicItem;
-
 import org.bukkit.Material;
 
 /**

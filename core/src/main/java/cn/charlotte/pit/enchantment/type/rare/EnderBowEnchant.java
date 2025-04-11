@@ -12,7 +12,6 @@ import cn.charlotte.pit.util.Utils;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -88,10 +87,12 @@ public class EnderBowEnchant extends AbstractEnchantment implements IPlayerShoot
             cooldown.put(attacker.getUniqueId(), new Cooldown(Math.max(0, cooldown.get(attacker.getUniqueId()).getRemaining() - 3000)));
         }
     }
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
         cooldown.remove(e.getPlayer().getUniqueId());
     }
+
     @EventHandler
     public void onBowShot(EntityShootBowEvent event) {
         if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() != null) return;
@@ -111,7 +112,7 @@ public class EnderBowEnchant extends AbstractEnchantment implements IPlayerShoot
                 cooldown.put(player.getUniqueId(), new Cooldown(getCooldownInt(level), TimeUnit.SECONDS));
                 Entity projectile = event.getProjectile();
                 event.getProjectile().setMetadata("ender_bow", new FixedMetadataValue(ThePit.getInstance(), true));
-                Utils.pointMetadataAndRemove(projectile,500,"ender_bow");
+                Utils.pointMetadataAndRemove(projectile, 500, "ender_bow");
                 //event.setProjectile(projectile);
             }
         }

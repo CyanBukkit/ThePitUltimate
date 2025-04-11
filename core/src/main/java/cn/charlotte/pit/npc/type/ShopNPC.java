@@ -5,14 +5,12 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.menu.shop.ShopMenu;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.level.LevelUtil;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +19,7 @@ import java.util.List;
  */
 
 public class ShopNPC extends SkinNPC {
+
     @Override
     public String getNpcInternalName() {
         return "shop";

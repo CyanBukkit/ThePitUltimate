@@ -6,10 +6,8 @@ import cn.charlotte.pit.util.MythicUtil
 import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.random.RandomUtil
-
 import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -19,7 +17,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 
 
-class LuckyChestplate: IMythicItem(), Listener {
+class LuckyChestplate : IMythicItem(), Listener {
 
     init {
         this.maxLive = 10
@@ -96,7 +94,9 @@ class LuckyChestplate: IMythicItem(), Listener {
             return
         }
 
-        if ((player.getMetadata("lucky_chestplate").firstOrNull()?.asLong() ?: Long.MAX_VALUE) <= System.currentTimeMillis()) {
+        if ((player.getMetadata("lucky_chestplate").firstOrNull()?.asLong()
+                ?: Long.MAX_VALUE) <= System.currentTimeMillis()
+        ) {
             e.damage += 20.0
         }
 
@@ -105,7 +105,10 @@ class LuckyChestplate: IMythicItem(), Listener {
         val success = RandomUtil.hasSuccessfullyByChance(0.2)
         if (success) {
             e.isCancelled = true
-            player.setMetadata("lucky_chestplate", FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000 * 30))
+            player.setMetadata(
+                "lucky_chestplate",
+                FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000 * 30)
+            )
             player.playSound(player.location, Sound.ANVIL_USE, 1f, 1f)
             player.sendMessage("您抵御了一次必中伤害")
         }

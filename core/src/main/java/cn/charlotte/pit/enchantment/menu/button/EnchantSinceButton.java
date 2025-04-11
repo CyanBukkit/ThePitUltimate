@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
  */
 @RequiredArgsConstructor
 public class EnchantSinceButton extends Button {
+
     private final Menu menu;
     private final MythicColor color;
 

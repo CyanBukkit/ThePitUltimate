@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Created_In: 2021/1/20 21:31
  */
 public class HighValueTarget extends AbstractQuest implements IAttackEntity, IPlayerShootEntity {
+
     @Override
     public String getQuestInternalName() {
         return "High_Value_Target";

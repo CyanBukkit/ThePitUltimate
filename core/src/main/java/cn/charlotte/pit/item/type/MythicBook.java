@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 public class MythicBook {
+
     public static ItemStack toItemStack() {
         return new ItemBuilder(Material.PAPER)
                 .name("&d附魔卷轴")

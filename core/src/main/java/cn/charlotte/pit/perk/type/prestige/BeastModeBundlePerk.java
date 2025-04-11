@@ -2,7 +2,6 @@ package cn.charlotte.pit.perk.type.prestige;
 
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BeastModeBundlePerk extends AbstractPerk {
+
     @Override
     public String getInternalPerkName() {
         return "beast_mode_bundle";

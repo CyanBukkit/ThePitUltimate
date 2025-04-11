@@ -28,6 +28,7 @@ import java.util.Map;
  * @Date: 2021/1/17 22:41
  */
 public class AdminItemMenu extends Menu {
+
     private final boolean admin;
 
     public AdminItemMenu() {
@@ -73,7 +74,7 @@ public class AdminItemMenu extends Menu {
                 buttonMap.put(9, new ShopItemButton(Material.TNT, "tnt", 64));
 
                 buttonMap.put(10, new PitItemButton(new GlobalAttentionGem().toItemStack()));
-                buttonMap.put(11,new PitItemButton(((MythicEnchantingTable) FuncsKt.getInstance(ThePit.getInstance().getItemFactor().getItemMap().get("enchant_table_mobile"))).toItemStack()));
+                buttonMap.put(11, new PitItemButton(((MythicEnchantingTable) FuncsKt.getInstance(ThePit.getInstance().getItemFactor().getItemMap().get("enchant_table_mobile"))).toItemStack()));
                 buttonMap.put(16, new PitItemButton(JumpBoostPotion.toItemStack()));
                 buttonMap.put(17, new PitItemButton(BountySolventPotion.toItemStack()));
                 buttonMap.put(18, new PitItemButton(FourInARowGadget.toItemStack()));

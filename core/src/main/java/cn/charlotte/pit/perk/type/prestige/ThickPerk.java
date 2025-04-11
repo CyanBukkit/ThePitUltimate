@@ -3,7 +3,6 @@ package cn.charlotte.pit.perk.type.prestige;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -16,6 +15,7 @@ import java.util.List;
  */
 
 public class ThickPerk extends AbstractPerk {
+
     @Override
     public String getInternalPerkName() {
         return "thick_perk";

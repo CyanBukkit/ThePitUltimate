@@ -15,7 +15,7 @@ import kotlin.math.min
 
 @ArmorOnly
 @AutoRegister
-class LuckOfPondEnchant: AbstractEnchantment(), Listener{
+class LuckOfPondEnchant : AbstractEnchantment(), Listener {
 
     @EventHandler
     private fun onFish(event: PlayerFishEvent) {

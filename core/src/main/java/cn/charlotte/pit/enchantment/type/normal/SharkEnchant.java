@@ -7,7 +7,6 @@ import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.parm.listener.IAttackEntity;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import com.google.common.util.concurrent.AtomicDouble;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -23,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 @BowOnly
 public class SharkEnchant extends AbstractEnchantment implements IAttackEntity {
+
     public static float getDistance(final Location lc1, final Location lc2) {
         return (float) Math.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2.0) + Math.pow(lc1.getY() - lc2.getY(), 2.0) + Math.pow(lc1.getZ() - lc2.getZ(), 2.0));
     }

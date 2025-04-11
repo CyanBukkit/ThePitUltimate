@@ -65,6 +65,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Getter
 public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoardInsert {
+
     private final static List<String> names;
     private final static String skinValue;
 
@@ -760,14 +761,14 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
                 player.sendMessage(CC.translate("&c为了保证您的安全，我们已将您传送回出生点"));
             }
 
-            ClearRunnable.getClearRunnable().getPlacedBlock().removeIf((i,blockData) -> {
+            ClearRunnable.getClearRunnable().getPlacedBlock().removeIf((i, blockData) -> {
                 if (blockData.getLocation().distance(location) <= 5) {
                     blockData.getLocation().getBlock().setType(Material.AIR);
                     return true;
                 }
                 return false;
             });
-            });
+        });
 
         FaweAPI.getTaskManager().async(() -> {
             try {
@@ -778,7 +779,7 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
                 session = FaweAPI.getEditSessionBuilder(world).build();
 
                 final MCEditSchematicFormat mcedit = (MCEditSchematicFormat) SchematicFormat.MCEDIT;
-                
+
                 final CuboidClipboard clipboard = mcedit.load(inputStream);
 
 
@@ -1124,6 +1125,7 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
     @Data
     @RequiredArgsConstructor
     public static class PizzaData {
+
         private final UUID uuid;
         private final String name;
 
@@ -1135,6 +1137,7 @@ public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoard
 
     @Data
     private static class VillagerData {
+
         private final UUID uuid;
         private final Villager villager;
         private final Hologram hologram;

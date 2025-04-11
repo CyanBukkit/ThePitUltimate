@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
  * @Date: 2021/2/4 20:54
  */
 public class RollbackButton extends DisplayButton {
+
     private final PlayerProfile profile;
     private final PlayerInvBackup backup;
 
@@ -35,6 +36,6 @@ public class RollbackButton extends DisplayButton {
             profile.saveData(null);
         }
         player.closeInventory();
-        player.sendMessage(CC.translate("&a回滚完成"),true);
+        player.sendMessage(CC.translate("&a回滚完成"));
     }
 }

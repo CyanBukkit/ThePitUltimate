@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class RedVSBlueEvent implements IEvent, IEpicEvent, Listener, IScoreBoardInsert {
+
     private final List<UUID> redTeam = new ArrayList<>();
     private final List<UUID> blueTeam = new ArrayList<>();
     private final Map<UUID, Integer> kaMap = new HashMap<>();
