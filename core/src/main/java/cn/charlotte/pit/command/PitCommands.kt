@@ -22,12 +22,16 @@ import cn.charlotte.pit.menu.viewer.StatusViewerMenu
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.sendMessage
 import cn.charlotte.pit.trade.TradeMonitorRunnable
-import cn.charlotte.pit.util.*
 import cn.charlotte.pit.util.DateCodeUtils.codeToDate
+import cn.charlotte.pit.util.MythicUtil
+import cn.charlotte.pit.util.PlayerUtil
+import cn.charlotte.pit.util.Utils
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
+import cn.charlotte.pit.util.chat.StringUtil
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.inventory.InventoryUtil
+import cn.charlotte.pit.util.isSpecial
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.level.LevelUtil
@@ -81,12 +85,17 @@ class PitCommands {
     private val numFormat = DecimalFormat("0.00")
     private val COOLDOWN_SHOW: MutableMap<UUID, Cooldown> = HashMap()
 
+    @Execute(name = "thepit", aliases = ["天坑", "天坑乱斗", "version", "ver"])
+    fun info(@Context player: Player) {
+        player.sendMessage(CC.translate("§7Running Currently - §cThePitUltimate&f(&8${StringUtil.hideMiddle(ThePit.getInstance().pitConfig.token)}&f)"))
+    }
 
     @Execute(name = "startDate")
     fun startDate(@Context player: Player) {
         val convertedDate: LocalDate = codeToDate(ThePit.getInstance().serverId)
-        player.sendMessage(CC.translate("&e最后运行日期: &a${ convertedDate.format(DateTimeFormatter.ISO_LOCAL_DATE)}" ));
+        player.sendMessage(CC.translate("&e最后运行日期: &a${convertedDate.format(DateTimeFormatter.ISO_LOCAL_DATE)}"));
     }
+
     @Execute(name = "option", aliases = ["options", "opt", "setting", "settings"])
     fun option(@Context player: Player) {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
