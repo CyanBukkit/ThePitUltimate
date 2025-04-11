@@ -266,7 +266,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
 
-        //Bridgeing
+        //Bridging
         MagicLoader.hook();
         MagicLoader.ensureIsLoaded();
     }

@@ -1,5 +1,6 @@
 package cn.charlotte.pit.runnable;
 
+import cn.charlotte.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.chat.CC;
@@ -104,7 +105,7 @@ public class BountyRunnable extends BukkitRunnable {
                 Location location = player.getLocation().clone();
                 location.setX(location.getX() + hologram.boostX);
                 Hologram hologram1 = hologram.getHologram();
-                location.setY(hologram1.getLocation().getY() + 0.1);
+                location.setY(hologram1.getLocation().getY() + 0.01 * NewConfiguration.INSTANCE.getBountyTickInterval());
                 location.setZ(location.getZ() + hologram.boostZ);
                 hologram1.setLocation(location);
                 return false;

@@ -222,7 +222,7 @@ object PitHook {
 
         PacketHologramRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20)
 
-        BountyRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 5, 5)
+        BountyRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 5, NewConfiguration.bountyTickInterval.toLong())
     }
 
     private fun loadItems() {
