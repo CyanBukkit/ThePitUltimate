@@ -1,5 +1,7 @@
 package cn.charlotte.pit.util.music;
 
+import cn.charlotte.pit.ThePit;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -40,7 +42,9 @@ public class Song {
         this.description = description;
         this.path = path;
     }
-
+    public static Song loadSong(String resourceName) {
+        return NBSDecoder.parse(ThePit.getInstance().getClass().getClassLoader().getResourceAsStream(resourceName));
+    }
     public HashMap<Integer, Layer> getLayerHashMap() {
         return layerHashMap;
     }

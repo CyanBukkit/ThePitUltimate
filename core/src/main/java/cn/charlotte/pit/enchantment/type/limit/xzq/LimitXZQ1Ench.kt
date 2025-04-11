@@ -5,6 +5,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
+import cn.charlotte.pit.enchantment.type.limit.ILimit
 import cn.charlotte.pit.parm.listener.IPlayerDamaged
 import cn.charlotte.pit.parm.listener.ITickTask
 import cn.charlotte.pit.util.chat.RomanUtil
