@@ -1,4 +1,4 @@
-package cn.charlotte.pit.enchantment.type.limit.xzq
+package cn.charlotte.pit.enchantment.type.limit
 
 /**
  * 2024/5/24<br>

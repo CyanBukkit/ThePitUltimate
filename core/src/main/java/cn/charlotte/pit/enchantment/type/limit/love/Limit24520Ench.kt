@@ -1,4 +1,4 @@
-package cn.charlotte.pit.enchantment.type.limit
+package cn.charlotte.pit.enchantment.type.limit.love
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
@@ -6,7 +6,7 @@ import cn.charlotte.pit.enchantment.AbstractEnchantment
 import cn.charlotte.pit.enchantment.param.event.PlayerOnly
 import cn.charlotte.pit.enchantment.param.item.ArmorOnly
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity
-import cn.charlotte.pit.enchantment.type.limit.xzq.ILimit
+import cn.charlotte.pit.enchantment.type.limit.ILimit
 import cn.charlotte.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.parm.listener.IPlayerKilledEntity
 import cn.charlotte.pit.parm.listener.ITickTask

@@ -306,6 +306,8 @@ private fun loadEnchants() {
         JerryEnchant3::class.java,
         JerryEnchant4::class.java,
         JerryEnchant5::class.java,
+        JerryEnchant6::class.java,
+        JerryEnchant7::class.java,
         AntiAbsorptionEnchant::class.java,
         AntiBowSpammerEnchantP::class.java,
         AntiBowSpammerEnchantW::class.java,
@@ -423,8 +425,7 @@ private fun loadEnchants() {
     /*        classes += HappyNewYearEnchant::class.java
             classes += WitheredAndPiercingThroughTheHeart::class.java
             classes += LastShadowLeapForward::class.java
-
-            classes += RealManEnchant::class.java*/
+*/
 //        classes += TrotEnchant::class.java
 //        classes += TrytoGiveEnchant::class.java
 //

@@ -7,7 +7,7 @@ import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.enchantment.AbstractEnchantment;
 import cn.charlotte.pit.enchantment.menu.MythicWellMenu;
 import cn.charlotte.pit.enchantment.rarity.EnchantmentRarity;
-import cn.charlotte.pit.enchantment.type.limit.xzq.ILimit;
+import cn.charlotte.pit.enchantment.type.limit.ILimit;
 import cn.charlotte.pit.event.PitPlayerEnchantEvent;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import cn.charlotte.pit.item.AbstractPitItem;
