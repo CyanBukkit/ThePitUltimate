@@ -3,8 +3,12 @@ package cn.charlotte.pit.util;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.parm.AutoRegister;
 import cn.charlotte.pit.parm.listener.*;
+import net.minecraft.server.v1_8_R3.Chunk;
+import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +48,18 @@ public class PublicUtil {
             return CraftItemStack.asNMSCopy(item);
         }
     }
-
+    public static void removeFromWorld(Entity entity){
+        if(entity instanceof CraftEntity){
+            net.minecraft.server.v1_8_R3.Entity entityRaw = ((CraftEntity) entity).getHandle();
+            int i = entityRaw.ae;
+            int j = entityRaw.ag;
+            World world = entityRaw.world;
+            Chunk chunkIfLoaded = world.getChunkIfLoaded(i, j);
+            if (chunkIfLoaded != null) {
+                chunkIfLoaded.b(entityRaw);
+            }
+        }
+    }
     /**
      * 超级高效的split方法。
      *

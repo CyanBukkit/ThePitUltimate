@@ -18,13 +18,11 @@ import cn.charlotte.pit.util.arithmetic.IntegerUtils;
 import cn.charlotte.pit.util.item.ItemUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.SneakyThrows;
-import net.minecraft.server.v1_8_R3.NBTBase;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagList;
-import net.minecraft.server.v1_8_R3.NBTTagString;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 

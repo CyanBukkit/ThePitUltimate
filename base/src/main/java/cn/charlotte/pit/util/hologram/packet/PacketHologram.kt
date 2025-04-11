@@ -68,8 +68,6 @@ class PacketHologram(var displayText: String, var loc: Location) : Parent {
 
     override fun deSpawn(): Boolean {
         if (Bukkit.isPrimaryThread()) {
-            (hologram.entity.world as CraftWorld).addEntity<ArmorStand>((hologram.entity as CraftArmorStand).handle,
-                CreatureSpawnEvent.SpawnReason.DEFAULT)
             hologram.removeAll()
             spawned = false
             HologramAPI.removeHologram(this)

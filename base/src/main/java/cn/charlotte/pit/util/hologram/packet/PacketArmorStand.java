@@ -86,7 +86,7 @@ public class PacketArmorStand {
     //The dumb huanmeng_qwq
     public void recycleEntity() {
         this.entity.remove(); //remove the memory entity from the list.
-
+        PublicUtil.removeFromWorld(entity);
     }
 
     public void removeAll() {
