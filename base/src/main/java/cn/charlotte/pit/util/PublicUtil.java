@@ -9,19 +9,33 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.List;
 
 public class PublicUtil {
 
     public static String signVer = "Loader";
     public static String itemVersion = "Loader";
-
+    protected static VarHandle METHOD_;
     public static net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
         if (item instanceof CraftItemStack) {
             try {
+                if(false) {
+                    if (METHOD_ != null) {
+                        return (net.minecraft.server.v1_8_R3.ItemStack) METHOD_.get(item);
+                    }
+                }
                 java.lang.reflect.Field handleField = CraftItemStack.class.getDeclaredField("handle");
                 handleField.setAccessible(true);
-                return (net.minecraft.server.v1_8_R3.ItemStack) handleField.get(item);
+                net.minecraft.server.v1_8_R3.ItemStack itemStack = (net.minecraft.server.v1_8_R3.ItemStack) handleField.get(item);
+                if(itemStack != null && false) {
+                    MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(CraftItemStack.class, MethodHandles.lookup());
+                    VarHandle varHandle = lookup.unreflectVarHandle(handleField);
+                    METHOD_ = varHandle;
+
+                }
+                return itemStack;
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new RuntimeException("Failed to access the handle field", e);
             }
