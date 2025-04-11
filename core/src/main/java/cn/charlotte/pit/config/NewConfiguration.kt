@@ -23,6 +23,8 @@ object NewConfiguration {
 
     var dateFormat = "MM/dd HH:mm"
 
+    var bountyTickInterval = 1;
+
     var noobProtect = true
     var noobProtectLevel = 120
     var noobDamageBoost = 1.1
@@ -172,7 +174,8 @@ object NewConfiguration {
         maxLevel = config.getInt("maxLevel", 120)
         scoreBoardAnimation = config.getList("scoreboard.animation", scoreBoardAnimation) as List<String>
         loadingBoardTips = config.getList("scoreboard.loading", loadingBoardTips) as List<String>
-        watermarks = config.getString("watermarks", watermarks)
+        bountyTickInterval = config.getInt("bounty.updateInterval", bountyTickInterval);
+        watermarks = config.getString("water-marks", watermarks)
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 
     }
@@ -239,7 +242,7 @@ object NewConfiguration {
     )
 
     private val defaults = mapOf(
-        "watermarks" to watermarks,
+        "water-marks" to watermarks,
         "vip-price" to 500,
         "price-name" to "点券",
         "lobby-command" to "hub",
@@ -330,6 +333,8 @@ object NewConfiguration {
         ),
         "scoreboard-showtime" to true,
         "forbidEnchant" to forbidEnchant,
+
+        "bounty.updateInterval" to bountyTickInterval,
         "rate.dark.vip1.test" to "pit.vip1",
         "rate.dark.vip1.value" to 0.08,
         "rate.dark.vip2.test" to "pit.vip2",
