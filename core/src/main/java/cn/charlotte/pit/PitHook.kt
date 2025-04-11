@@ -46,6 +46,7 @@ import cn.charlotte.pit.menu.shop.button.type.PantsBundleShopButton
 import cn.charlotte.pit.menu.shop.button.type.SwordBundleShopButton
 import cn.charlotte.pit.menu.trade.TradeListener
 import cn.charlotte.pit.nametag.NameTagImpl
+import cn.charlotte.pit.npc.NpcFactory
 import cn.charlotte.pit.npc.type.*
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.type.boost.*
@@ -602,15 +603,16 @@ object PitHook {
             listOf(
                 GenesisAngelNpc::class.java,
                 GenesisDemonNpc::class.java,
-                //KeeperNPC::class.java,
+                KeeperNPC::class.java,
                 MailNpc::class.java,
                 PerkNPC::class.java,
                 PrestigeNPC::class.java,
                 QuestNpc::class.java,
                 ShopNPC::class.java,
-                StatusNPC::class.java
+                StatusNPC::class.java,
             )
         )
+        println("load Npc...")
     }
 
     private fun loadQuests() {

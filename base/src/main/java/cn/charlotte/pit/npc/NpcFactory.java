@@ -3,6 +3,7 @@ package cn.charlotte.pit.npc;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.npc.runnable.NpcRunnable;
+import cn.charlotte.pit.parm.AutoRegister;
 import lombok.SneakyThrows;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.NPC;
@@ -21,7 +22,7 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2020/12/30 22:35
  */
-//@AutoRegister
+@AutoRegister
 public class NpcFactory implements Listener {
 
     private static final List<AbstractPitNPC> pitNpc = new ArrayList<>();
@@ -57,7 +58,6 @@ public class NpcFactory implements Listener {
                 pitNpc.add(abstractPitNPC);
             }
         }
-
         new NpcRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20);
     }
 

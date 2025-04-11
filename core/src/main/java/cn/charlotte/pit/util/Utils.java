@@ -71,40 +71,32 @@ public class Utils {
      */
     @SneakyThrows
     public static void readEnchantments(Object2IntMap<AbstractEnchantment> ment, NBTTagList nbtTagList) {
-        Field listField = NBTTagList.class.getField("list");
-        listField.setAccessible(true);
-        List<NBTBase> list = (List<NBTBase>) listField.get(nbtTagList);
-        list.forEach(nbtBase -> {
-            if (nbtBase instanceof NBTTagString nbtTagString) {
-                String s = nbtTagString.a_(); //read NBT
-                final int offset = 2;
-                final int strLen = s.length();
-                for (int length = strLen - offset; length > 0; length--) {
-                    char splitArg = s.charAt(length);
-                    boolean fastEqual = splitArg == ':'; //check equal
-                    if (fastEqual) { //nano respond 10x faster
-                        int lengthUnsigned = length + 1;
-                        int level;
-                        if (lengthUnsigned + 1 == strLen) {
-                            level = Character.getNumericValue(s.charAt(length + 1)); //read level as char
-                        } else {
-                            String substring = s.substring(length + 1, strLen);
-                            level = Integer.parseInt(substring); //read Level as string
-                        }
-                        String substring = s.substring(0, length);
-                        AbstractEnchantment enchantment = ThePit.getInstance()
-                                .getEnchantmentFactor()
-                                .getEnchantmentMap()
-                                .get(substring);
-                        if (enchantment == null) {
-                            return;
-                        }
+        for (int i = 0, size = nbtTagList.size(); i < size; i++) {
+            String s = nbtTagList.getString(i);
+            int splitIndex = s.lastIndexOf(':');
+
+            if (splitIndex != -1) {
+                String enchantmentName = s.substring(0, splitIndex);
+                String levelString = s.substring(splitIndex + 1);
+
+                try {
+                    int level = Integer.parseInt(levelString);
+                    AbstractEnchantment enchantment = ThePit.getInstance()
+                            .getEnchantmentFactor()
+                            .getEnchantmentMap()
+                            .get(enchantmentName);
+
+                    if (enchantment != null) {
                         ment.put(enchantment, level);
                     }
+                } catch (NumberFormatException e) {
+
+                    System.err.println("Invalid enchantment level: " + levelString);
                 }
             }
-        });
+        }
     }
+
 
     /**
      * 超级高效的split方法。

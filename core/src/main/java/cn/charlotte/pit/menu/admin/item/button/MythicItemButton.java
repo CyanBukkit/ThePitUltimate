@@ -1,5 +1,6 @@
 package cn.charlotte.pit.menu.admin.item.button;
 
+import cn.charlotte.pit.item.AbstractPitItem;
 import cn.charlotte.pit.item.DyeColor;
 import cn.charlotte.pit.item.IMythicItem;
 import cn.charlotte.pit.item.type.*;
@@ -40,7 +41,7 @@ public class MythicItemButton extends Button {
         } else if (i == 4) {
             ItemStack itemStack = new MythicLeggingsItem().toItemStack();
             itemStack = new ItemBuilder(itemStack).changeNbt("mythic_color", "dark").build();
-            IMythicItem mythicItem = new MythicLeggingsItem();
+            AbstractPitItem mythicItem = new MythicLeggingsItem();
             mythicItem.loadFromItemStack(itemStack);
             return mythicItem.toItemStack();
         } else if (i == 5) {
@@ -60,7 +61,7 @@ public class MythicItemButton extends Button {
         } else if (i == 8) {
             ItemStack itemStack = new MythicLeggingsItem().toItemStack();
             itemStack = new ItemBuilder(itemStack).changeNbt("dyeColor", DyeColor.WHITE.name()).build();
-            IMythicItem mythicItem = new MythicLeggingsItem();
+            AbstractPitItem mythicItem = new MythicLeggingsItem();
             mythicItem.loadFromItemStack(itemStack);
             return mythicItem.toItemStack();
         } else if (i == 9) {
