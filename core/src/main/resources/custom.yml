@@ -17,7 +17,10 @@ status-npc-skin: ewogICJ0aW1lc3RhbXAiIDogMTY0ODY3MjI4MTczMiwKICAicHJvZmlsZUlkIiA
 not-netease-skins:
   GenesisAngel-npc-signature: aaaaaaaa
   GenesisDemon-npc-signature: bbbbbbbb
+bot:
+  name: "bot"
 scoreboard:
+  ip: "&eserver.properties"
   animation:
     - "&f&l神&5&l话&5&l天&5&l坑"
     - "&d&l神&f&l话&5&l天&5&l坑"

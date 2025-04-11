@@ -250,7 +250,7 @@ public class Utils {
     }
 
     public static boolean isNPC(org.bukkit.entity.Entity entity) {
-        return entity.getName().equals("bot");
+        return PlayerUtil.isNPC(entity);
     }
 
     public static ItemStack subtractLive(ItemStack item) {

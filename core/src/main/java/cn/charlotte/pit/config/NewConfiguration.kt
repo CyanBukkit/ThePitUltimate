@@ -5,6 +5,7 @@ import cn.charlotte.pit.enchantment.type.rare.ThePunchEnchant
 import cn.charlotte.pit.item.MythicColor
 import cn.charlotte.pit.listener.CombatListener
 import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton
+import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.PlusPlayer
 import cn.charlotte.pit.util.isPlusPlayer
 import cn.charlotte.pit.util.level.LevelUtil
@@ -15,6 +16,8 @@ import java.util.*
 
 object NewConfiguration {
 
+    var dummyBotName = "bot"
+    var ip = "localhost"
     var forbidEnchant = listOf("false");
     var vipPrice = 500
     var priceName = "点券"
@@ -172,6 +175,9 @@ object NewConfiguration {
         scoreBoardAnimation = config.getList("scoreboard.animation", scoreBoardAnimation) as List<String>
         loadingBoardTips = config.getList("scoreboard.loading", loadingBoardTips) as List<String>
         bountyTickInterval = config.getInt("bounty.updateInterval", bountyTickInterval);
+        ip = config.getString("scoreboard.ip",ip)
+        dummyBotName = config.getString("bot.name",dummyBotName)
+        PlayerUtil.BOT_NAME = dummyBotName
 
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 

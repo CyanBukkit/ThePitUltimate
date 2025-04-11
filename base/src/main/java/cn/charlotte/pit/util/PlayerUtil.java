@@ -39,7 +39,7 @@ import java.util.function.Predicate;
  * @Date: 2020/12/30 22:30
  */
 public class PlayerUtil {
-
+    public static String BOT_NAME = "bot";
     public static String getActiveMegaStreak(Player player) {
         return CC.translate(getActiveMegaStreakObj(player).getDisplayName());
     }
@@ -139,7 +139,7 @@ public class PlayerUtil {
 
     //进行合并方法
     public static boolean isNPC(org.bukkit.entity.Entity entity) {
-        return entity.getName().equals("bot");
+        return entity.getName().equals(BOT_NAME);
     }
 
     public static boolean isSinkingMoonlight(Player player) {
