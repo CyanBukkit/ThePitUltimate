@@ -133,7 +133,7 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         if (prestige > 0) {
-            lines.add("&f等级: &e" + LevelUtil.getPrestigeTagFully(prestige) + " " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
+            lines.add("&f等级: &e" + LevelUtil.getLevelTagWithRoman(prestige,level) + genesisTeam);
         } else {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
