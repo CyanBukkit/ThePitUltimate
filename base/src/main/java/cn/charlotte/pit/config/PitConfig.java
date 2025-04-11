@@ -24,6 +24,14 @@ public class PitConfig extends Configuration {
     private boolean tradeEnable = true;
     private boolean PVPEnable = true;
     @ConfigData(
+            path = "validate.state"
+    )
+    private String state;
+    @ConfigData(
+            path = "validate.token"
+    )
+    private String token;
+    @ConfigData(
             path = "service.mongodb.ip"
     )
     private String mongoDBAddress;
@@ -366,6 +374,14 @@ public class PitConfig extends Configuration {
         return season;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public String getState() {
+        return state;
+    }
+
     public int getCurfewStart() {
         return curfewStart;
     }
@@ -601,8 +617,6 @@ public class PitConfig extends Configuration {
     public Location getEnchantNpcLocation() {
         return enchantNpcLocation;
     }
-
-
 
 
     public boolean isCurfewEnable() {

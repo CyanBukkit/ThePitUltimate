@@ -1,3 +1,7 @@
+validate:
+  state: CN
+  token: "xxx"
+
 service:
   mongodb:
     ip: 127.0.0.1

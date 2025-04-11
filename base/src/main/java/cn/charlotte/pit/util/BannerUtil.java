@@ -19,7 +19,7 @@ public class BannerUtil {
                 while ((line = reader.readLine()) != null) {
                     ThePit.getInstance().sendLogs("§c" + line);
                 }
-                ThePit.getInstance().sendLogs("Starting ThePitUltimate (Python) 仅用作学习用途");
+                ThePit.getInstance().sendLogs("Starting ThePitUltimate (Python) 唯供学参");
                 ThePit.getInstance().sendLogs("§aVersion: §e" + ThePit.getInstance().getDescription().getVersion());
                 ThePit.getInstance().sendLogs("§cSupport to §bYou know the rules and so do i NetWork.");
 

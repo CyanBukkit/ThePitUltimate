@@ -73,7 +73,8 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(), () -> {
                 Collection<LivingEntity> nearbyPlayers = PlayerUtil.getNearbyPlayersAndChicken(myself.getLocation(), 10);
                 int shouldDamageForCount = 4;
-                Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), new BukkitRunnable() {
+
+                BukkitRunnable task = new BukkitRunnable() {
                     final Iterator<LivingEntity> iterator = nearbyPlayers.iterator();
 
                     {
@@ -89,13 +90,9 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
                                 break;
                             }
                             LivingEntity player = iterator.next();
-                            if (player instanceof Player) {
-                                if (!myself.canSee((Player) player)) {
-                                    iterator.remove();
-                                    continue;
-                                }
-                            } else {
+                            if (player instanceof Player && !myself.canSee((Player) player)) {
                                 iterator.remove();
+                                continue;
                             }
                             if (!player.isDead() && player != myself && player != targetPlayer) {
                                 player.damage(player instanceof Chicken ? 0.75 : 4, myself);
@@ -106,8 +103,11 @@ public class GrimReaperEnchant extends AbstractEnchantment implements IPlayerKil
                             taskMap.remove(myself.getUniqueId());
                         }
                     }
-                }, 1, 1);
+                };
+
+                task.runTaskTimer(ThePit.getInstance(), 1L, 1L);
             });
         }
+
     }
 }
