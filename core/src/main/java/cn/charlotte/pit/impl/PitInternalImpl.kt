@@ -251,7 +251,7 @@ object PitInternalImpl : PitInternalHook {
     }
 
     override fun getWatermark(): String {
-        return NewConfiguration.watermark
+        return NewConfiguration.watermarks
     }
 
     override fun isLoaded(): Boolean {
