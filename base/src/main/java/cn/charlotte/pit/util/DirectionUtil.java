@@ -11,6 +11,54 @@ import org.bukkit.entity.Player;
 
 public class DirectionUtil {
 
+    public static String getDetailedDirection(Player p1, Location location) {
+        Location loc1 = p1.getLocation();
+
+        int x1 = loc1.getBlockX();
+        int z1 = loc1.getBlockZ();
+        int x2 = location.getBlockX();
+        int z2 = location.getBlockZ();
+
+        int dx = x2 - x1;
+        int dz = z2 - z1;
+
+        if (dx == 0 && dz == 0) {
+            return "X";
+        }
+
+        double angleToTarget = Math.atan2(dz, dx) * (180 / Math.PI);
+        if (angleToTarget < 0) {
+            angleToTarget += 360;
+        }
+
+        float yaw = p1.getLocation().getYaw();
+        if (yaw < 0) {
+            yaw += 360;
+        }
+
+
+        double relativeAngle = (angleToTarget - yaw + 360) % 360;
+
+
+        if (relativeAngle >= 22.5 && relativeAngle < 67.5) {
+            return "⬉";
+        } else if (relativeAngle >= 67.5 && relativeAngle < 112.5) {
+            return "⬆";
+        } else if (relativeAngle >= 112.5 && relativeAngle < 157.5) {
+            return "⬈";
+        } else if (relativeAngle >= 157.5 && relativeAngle < 202.5) {
+            return "➡";
+        } else if (relativeAngle >= 202.5 && relativeAngle < 247.5) {
+            return "⬊";
+        } else if (relativeAngle >= 247.5 && relativeAngle < 292.5) {
+            return "⬇";
+        } else if (relativeAngle >= 292.5 && relativeAngle < 337.5) {
+            return "⬋";
+        } else {
+            return "⬅";
+        }
+    }
+
     public static String getTargetDirection(Player p, Location targetLoc) {
         String f = getDirection(p);
         Location l = p.getLocation();

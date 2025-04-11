@@ -28,7 +28,8 @@ import cn.charlotte.pit.runnable.LeaderBoardRunnable;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
 import cn.charlotte.pit.runnable.RebootRunnable;
 import cn.charlotte.pit.trade.Game;
-import cn.charlotte.pit.util.KQC;
+import cn.charlotte.pit.license.MagicLoader;
+import cn.charlotte.pit.util.BannerUtil;
 import cn.charlotte.pit.util.bossbar.BossBarHandler;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.dependencies.Dependency;
@@ -186,10 +187,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     public void onEnable() {
         audiences = BukkitAudiences.create(this);
         instance = this;
-        //Draw Banner
-        sendLogs("Starting ThePitPremium Modified Edition (Python) 仅用作学习用途");
-        sendLogs("§cPowered By §eEmptyIrony huanmeng_qwq Araykal KleeLoveLife.");
-        sendLogs("§cSupport to §bYou know the rules and so do i NetWork.");
+        BannerUtil.printFileContent("banner.txt");
         serverId = RandomUtil.forRandomScoreboardString();
 
         saveDefaultConfig();
@@ -270,9 +268,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         new ProfileLoadRunnable(this);
 
         //Bridgeing
-        KQC.hook();
-        KQC.ensureIsLoaded();
-        sendLogs("宝马启动");
+        MagicLoader.hook();
+        MagicLoader.ensureIsLoaded();
     }
 
     private void loadItemFactor() {

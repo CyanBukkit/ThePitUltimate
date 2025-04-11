@@ -21,7 +21,7 @@ public class Assemble {
 
     private Map<UUID, AssembleBoard> boards;
 
-    private long ticks = 5;
+    private long ticks = 1;
     private boolean hook = false, debugMode = true;
 
     /**

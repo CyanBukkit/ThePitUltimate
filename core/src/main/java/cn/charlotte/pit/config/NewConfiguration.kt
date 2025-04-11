@@ -15,6 +15,7 @@ import java.util.*
 
 object NewConfiguration {
 
+    var forbidEnchant = listOf("false");
     var vipPrice = 500
     var priceName = "点券"
     var lobbyCommand = "spb connect lobby"
@@ -36,7 +37,7 @@ object NewConfiguration {
     var removeSupportWhenNoPermission = false
     var maxLevel = 120
     val eventOnlineRequired = HashMap<String, Int>()
-    var disabled: List<*> = ArrayList<Any>();
+
 
     val mythicMobs = HashMap<String, MythicMobsConf>()
 
@@ -59,6 +60,8 @@ object NewConfiguration {
 
     fun load() {
         refreshAndSave()
+
+        forbidEnchant = config.getStringList("forbidEnchant")
 
         vipPrice = config.getInt("vip-price", 500)
         priceName = config.getString("price-name", "点券")
@@ -153,7 +156,6 @@ object NewConfiguration {
                 this += Rate(permission, chance)
             }
         }
-        disabled = config.getList("enchantment.disable", disabled)
         rareRate[MythicColor.RAGE] = ArrayList<Rate>().apply {
             val rageSection = config.getConfigurationSection("rate.rage")
 
@@ -231,6 +233,7 @@ object NewConfiguration {
     )
 
     private val defaults = mapOf(
+        "forbidEnchant" to listOf("false"),
         "vip-price" to 500,
         "price-name" to "点券",
         "lobby-command" to "hub",
@@ -268,6 +271,8 @@ object NewConfiguration {
         "custom-chat-format.format" to "%pit_genesis_tag%%pit_level_tag_roman% %s&f: %s",
 
         //自定义活动人数需求
+        "event-online-required.hunt" to 5,
+        "event-online-required.dragon_egg" to 5,
         "event-online-required.auction" to 10,
         "event-online-required.cake" to 10,
         "event-online-required.care_package" to 20,

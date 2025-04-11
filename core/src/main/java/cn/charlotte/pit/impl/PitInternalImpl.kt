@@ -106,6 +106,9 @@ object PitInternalImpl : PitInternalHook {
             "qm" -> {
                 QuickMathEvent()
             }
+            "hunt" -> {
+                HuntEvent()
+            }
 
             "package" -> {
                 CarePackageEvent()
@@ -117,6 +120,10 @@ object PitInternalImpl : PitInternalHook {
 
             "cake" -> {
                 CakeEvent()
+            }
+
+            "dragon_egg" -> {
+                DragonEggsEvent()
             }
 
             "hamburger" -> {

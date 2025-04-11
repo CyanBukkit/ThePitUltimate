@@ -202,16 +202,22 @@ public class PitConfig extends Configuration {
     )
     @ConfigSerializer(serializer = LocationSerializer.class)
     private Location portalPosA;
+
     @ConfigData(
             path = "loc.portal.posB" //Middle portal posA
     )
     @ConfigSerializer(serializer = LocationSerializer.class)
     private Location portalPosB;
+    @ConfigData(path = "loc.events.dragon-egg.loc")
+    @ConfigSerializer(serializer = LocationSerializer.class)
+    private Location dragonEggLoc;
     @ConfigData(
             path = "loc.events.cake.a.posA" //cake posA
     )
     @ConfigSerializer(serializer = LocationSerializer.class)
     private Location cakeZoneAPosA;
+
+
     @ConfigData(
             path = "loc.events.cake.a.posB" //cake posB
     )
@@ -538,6 +544,14 @@ public class PitConfig extends Configuration {
 
     public Location getCakeZoneBPosA() {
         return cakeZoneBPosA;
+    }
+
+    public Location getDragonEggLoc() {
+        return dragonEggLoc;
+    }
+
+    public void setDragonEggLoc(Location dragonEggLoc) {
+        this.dragonEggLoc = dragonEggLoc;
     }
 
     public Location getCakeZoneBPosB() {

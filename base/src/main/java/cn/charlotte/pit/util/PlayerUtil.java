@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.UtilKt;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
+import cn.charlotte.pit.event.PitPotionEffectEvent;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.item.AbstractPitItem;
@@ -541,6 +542,21 @@ public class PlayerUtil {
         }
     }
 
+    public static void addPotionEffect(Player player, PotionEffect effect) {
+        PlayerUtil.addPotionEffect(player, effect, false);
+    }
+
+    public static void addPotionEffect(Player player, PotionEffect effect, boolean force) {
+        PitPotionEffectEvent event = new PitPotionEffectEvent(player, effect);
+        event.callEvent();
+        if (event.isCancelled()) {
+            return;
+        }
+        event.getPlayer().addPotionEffect(event.getPotionEffect(), force);
+    }
+    public static void sendParticle(Location location, EnumParticle particle, int count) {
+        new ParticleBuilder(location, particle).setCount(count).play();
+    }
     public enum DamageType {
         NORMAL,
         TRUE

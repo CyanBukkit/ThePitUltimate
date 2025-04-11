@@ -210,7 +210,7 @@ public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreB
         if (chest == null) return null;
 
         List<String> lines = new ObjectArrayList<>();
-        String targetDirection = DirectionUtil.getTargetDirection(player, chest);
+        String targetDirection = DirectionUtil.getDetailedDirection(player, chest);
         int distance = (int) player.getLocation().distance(chest);
 
         if (endTimer.getRemaining() > 2 * 60 * 1000L) {

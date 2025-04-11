@@ -46,7 +46,7 @@ import kotlin.math.min
  * @author huanmeng_qwq
  */
 
-@Command(name = "py")
+@Command(name = "pu")
 @Permission("pit.admin")
 class PitAdminCommands {
     @Execute(name = "createEquation")
@@ -274,6 +274,13 @@ class PitAdminCommands {
         return CC.translate("&a成功设置指令帮助全息位置!")
     }
 
+
+    @Execute(name = "dragonLoc")
+    fun setDragonLoc(@Context player: Player): String {
+        ThePit.getInstance().pitConfig.dragonEggLoc = player.location
+        ThePit.getInstance().pitConfig.save()
+        return CC.translate("成功设置龙蛋事件位置！")
+    }
     @Execute(name = "pitLoc")
     fun setPitLoc(@Context player: Player, @Arg("type") type: String): String {
         if (type.equals("a", ignoreCase = true)) {
