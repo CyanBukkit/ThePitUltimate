@@ -22,14 +22,12 @@ import cn.charlotte.pit.menu.viewer.StatusViewerMenu
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.sendMessage
 import cn.charlotte.pit.trade.TradeMonitorRunnable
-import cn.charlotte.pit.util.MythicUtil
-import cn.charlotte.pit.util.PlayerUtil
-import cn.charlotte.pit.util.Utils
+import cn.charlotte.pit.util.*
+import cn.charlotte.pit.util.DateCodeUtils.codeToDate
 import cn.charlotte.pit.util.chat.CC
 import cn.charlotte.pit.util.chat.ChatComponentBuilder
 import cn.charlotte.pit.util.cooldown.Cooldown
 import cn.charlotte.pit.util.inventory.InventoryUtil
-import cn.charlotte.pit.util.isSpecial
 import cn.charlotte.pit.util.item.ItemBuilder
 import cn.charlotte.pit.util.item.ItemUtil
 import cn.charlotte.pit.util.level.LevelUtil
@@ -60,6 +58,8 @@ import org.bukkit.metadata.FixedMetadataValue
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.Duration
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
@@ -82,6 +82,11 @@ class PitCommands {
     private val COOLDOWN_SHOW: MutableMap<UUID, Cooldown> = HashMap()
 
 
+    @Execute(name = "startDate")
+    fun startDate(@Context player: Player) {
+        val convertedDate: LocalDate = codeToDate(ThePit.getInstance().serverId)
+        player.sendMessage(CC.translate("&e最后运行日期: &a${ convertedDate.format(DateTimeFormatter.ISO_LOCAL_DATE)}" ));
+    }
     @Execute(name = "option", aliases = ["options", "opt", "setting", "settings"])
     fun option(@Context player: Player) {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)

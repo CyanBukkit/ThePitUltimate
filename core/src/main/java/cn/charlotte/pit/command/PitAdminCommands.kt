@@ -429,7 +429,7 @@ class PitAdminCommands {
     @Execute(name = "nocache")
     fun executeBrokeCache(@Context player: Player) {
         ThePit.getInstance().itemFactory.clientSide = !ThePit.getInstance().itemFactory.clientSide
-        player.sendMessage("&a成功设置客户端主导服务端 值为: " + ThePit.getInstance().itemFactory.clientSide)
+        player.sendMessage("§a成功设置客户端主导服务端 值为: " + ThePit.getInstance().itemFactory.clientSide)
     }
 
     @Execute(name = "changeItemInHand color")

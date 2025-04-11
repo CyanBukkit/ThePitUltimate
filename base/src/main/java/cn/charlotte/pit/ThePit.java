@@ -16,6 +16,7 @@ import cn.charlotte.pit.events.EventsHandler;
 import cn.charlotte.pit.hologram.HologramFactory;
 import cn.charlotte.pit.item.IItemFactory;
 import cn.charlotte.pit.item.ItemFactor;
+import cn.charlotte.pit.license.MagicLoader;
 import cn.charlotte.pit.medal.MedalFactory;
 import cn.charlotte.pit.minigame.MiniGameController;
 import cn.charlotte.pit.movement.PlayerMoveHandler;
@@ -28,8 +29,8 @@ import cn.charlotte.pit.runnable.LeaderBoardRunnable;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
 import cn.charlotte.pit.runnable.RebootRunnable;
 import cn.charlotte.pit.trade.Game;
-import cn.charlotte.pit.license.MagicLoader;
 import cn.charlotte.pit.util.BannerUtil;
+import cn.charlotte.pit.util.DateCodeUtils;
 import cn.charlotte.pit.util.bossbar.BossBarHandler;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.dependencies.Dependency;
@@ -39,7 +40,6 @@ import cn.charlotte.pit.util.dependencies.loaders.ReflectionClassLoader;
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
 import cn.charlotte.pit.util.menu.MenuUpdateTask;
 import cn.charlotte.pit.util.nametag.NametagHandler;
-import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.sign.SignGui;
 import cn.charlotte.pit.util.sound.SoundFactory;
@@ -78,6 +78,7 @@ import spg.lgdev.iSpigot;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -186,7 +187,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         audiences = BukkitAudiences.create(this);
         instance = this;
         BannerUtil.printFileContent("banner.txt");
-        serverId = RandomUtil.forRandomScoreboardString();
+        serverId = DateCodeUtils.dateToCode(LocalDate.now());
 
         saveDefaultConfig();
 
