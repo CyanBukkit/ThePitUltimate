@@ -1,7 +1,7 @@
 name: ThePitUltimate
 version: 4.01
 description: A Bukkit mini-game plugin.
-authors: [ EmptyIrony ]
+authors: [ KleeLoveLife, Rabbit0w0, Araykal ]
 
 api-version: 1.8
 main: cn.charlotte.pit.ThePit
