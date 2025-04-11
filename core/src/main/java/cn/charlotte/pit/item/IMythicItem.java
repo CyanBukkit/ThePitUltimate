@@ -164,12 +164,12 @@ public abstract class IMythicItem extends AbstractPitItem {
 
             if (this instanceof MythicLeggingsItem) {
                 if (color != MythicColor.DARK) {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果 &8| " + NewConfiguration.INSTANCE.getWatermark());
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与铁护腿相同的伤害减免效果 &8| " + NewConfiguration.INSTANCE.getWatermarks());
                 } else {
-                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &8| " + NewConfiguration.INSTANCE.getWatermark());
+                    lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "穿着时提供与皮革护腿相同的伤害减免效果 &8| " + NewConfiguration.INSTANCE.getWatermarks());
                 }
             } else {
-                lore.add(NewConfiguration.INSTANCE.getWatermark());
+                lore.add(NewConfiguration.INSTANCE.getWatermarks());
             }
 
             if (genesisFound) {
@@ -181,7 +181,7 @@ public abstract class IMythicItem extends AbstractPitItem {
             lore.add("");
             if (this instanceof MythicLeggingsItem) {
                 lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "在神话之井盖中附魔");
-                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种象征 &8| " + NewConfiguration.INSTANCE.getWatermark());
+                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种象征 &8| " + NewConfiguration.INSTANCE.getWatermarks());
             } else {
                 lore.add("&7在神话之井盖中附魔 &8| " + ThePit.getApi().getWatermark());
             }

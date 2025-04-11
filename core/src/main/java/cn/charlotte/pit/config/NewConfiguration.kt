@@ -1,12 +1,10 @@
 package cn.charlotte.pit.config
 
-import cn.charlotte.pit.PitHook
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.enchantment.type.rare.ThePunchEnchant
 import cn.charlotte.pit.item.MythicColor
 import cn.charlotte.pit.listener.CombatListener
 import cn.charlotte.pit.menu.prestige.button.PrestigeStatusButton
-import cn.charlotte.pit.util.PlayerUtil
 import cn.charlotte.pit.util.PlusPlayer
 import cn.charlotte.pit.util.isPlusPlayer
 import cn.charlotte.pit.util.level.LevelUtil
@@ -17,16 +15,16 @@ import java.util.*
 
 object NewConfiguration {
 
-    var watermark = "tpu_" + PitHook.gitVersion
-    var dummyBotName = "bot"
-    var ip = "localhost"
+    var watermarks = "&cThePitUltimate"
     var forbidEnchant = listOf("false");
     var vipPrice = 500
     var priceName = "点券"
     var lobbyCommand = "spb connect lobby"
 
     var dateFormat = "MM/dd HH:mm"
+
     var bountyTickInterval = 1;
+
     var noobProtect = true
     var noobProtectLevel = 120
     var noobDamageBoost = 1.1
@@ -177,10 +175,7 @@ object NewConfiguration {
         scoreBoardAnimation = config.getList("scoreboard.animation", scoreBoardAnimation) as List<String>
         loadingBoardTips = config.getList("scoreboard.loading", loadingBoardTips) as List<String>
         bountyTickInterval = config.getInt("bounty.updateInterval", bountyTickInterval);
-        ip = config.getString("scoreboard.ip",ip)
-        dummyBotName = config.getString("bot.name",dummyBotName)
-        PlayerUtil.BOT_NAME = dummyBotName
-        watermark = config.getString("watermark",watermark)
+        watermarks = config.getString("water-marks", watermarks)
         ThePit.getInstance().pitConfig.maxLevel = maxLevel;
 
     }
@@ -247,7 +242,7 @@ object NewConfiguration {
     )
 
     private val defaults = mapOf(
-        "forbidEnchant" to listOf("false"),
+        "water-marks" to watermarks,
         "vip-price" to 500,
         "price-name" to "点券",
         "lobby-command" to "hub",
@@ -301,8 +296,45 @@ object NewConfiguration {
 
         "highest-prestige" to 35,
 
-        "scoreboard-showtime" to true,
+        "scoreboard.animation" to listOf(
+            // 正向光波 (带残影效果)
+            "&f&l神&5&l话&5&l天&5&l坑",
+            "&d&l神&f&l话&5&l天&5&l坑",
+            "&5&l神&d&l话&f&l天&5&l坑",
+            "&5&l神&5&l话&d&l天&f&l坑",
+            "&5&l神&5&l话&5&l天&d&l坑", // 逆向渐隐过渡,
 
+
+            // 逆向渐隐过渡
+            "&5&l神&5&l话&f&l天&5&l坑",
+            "&5&l神&f&l话&d&l天&5&l坑",
+            "&f&l神&d&l话&5&l天&5&l坑",
+            "&d&l神&5&l话&5&l天&5&l坑",
+            "&5&l神&5&l话&5&l天&5&l坑", // 反向光波 (镜像运动),
+
+
+            // 反向光波 (镜像运动)
+            "&5&l神&5&l话&5&l天&f&l坑",
+            "&5&l神&5&l话&f&l天&d&l坑",
+            "&5&l神&f&l话&d&l天&5&l坑",
+            "&f&l神&d&l话&5&l天&5&l坑",
+            "&d&l神&5&l话&5&l天&5&l坑", // 光波反弹效果,
+
+
+            // 光波反弹效果
+            "&5&l神&f&l话&5&l天&5&l坑",
+            "&d&l神&5&l话&f&l天&5&l坑",
+            "&5&l神&d&l话&5&l天&f&l坑",
+            "&5&l神&5&l话&d&l天&5&l坑",
+            "&5&l神&5&l话&5&l天&d&l坑"
+        ),
+        "scoreboard.loading" to listOf(
+            "", "&c正在加载档案...", "&c请稍等片刻...", "", "&c公告群: &exxxxxxx", "", "&cThePitUltimate"
+        ),
+        "scoreboard-showtime" to true,
+        "forbidEnchant" to forbidEnchant,
+
+        "bounty.updateInterval" to bountyTickInterval,
         "rate.dark.vip1.test" to "pit.vip1",
         "rate.dark.vip1.value" to 0.08,
         "rate.dark.vip2.test" to "pit.vip2",

@@ -45,7 +45,7 @@ public class BatUtil {
     private static void damageNearbyEntities(Entity source, Player me, double radius, double damage) {
         source.getNearbyEntities(radius, radius, radius).stream()
                 .filter(entity -> entity instanceof LivingEntity)
-                .filter(entity -> !entity.equals(source) && !entity.equals(me) && !entity.hasMetadata("CUSTOM_BAT"))
+                .filter(entity -> !entity.equals(source) && !entity.equals(me) && !source.hasMetadata("CUSTOM_BAT"))
                 .forEach(target -> ((LivingEntity) target).damage(damage, me));
     }
 

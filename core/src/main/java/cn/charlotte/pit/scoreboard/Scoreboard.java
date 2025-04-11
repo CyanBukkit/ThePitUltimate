@@ -265,7 +265,7 @@ public class Scoreboard implements AssembleAdapter {
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
-            lines.add(NewConfiguration.INSTANCE.getIp());
+            lines.add(ThePit.getInstance().getPitConfig().getServerName());
         }
         return lines;
     }
