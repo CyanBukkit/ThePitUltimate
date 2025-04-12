@@ -1,11 +1,11 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.config.PitConfig;
-import cn.charlotte.pit.util.bossbar.BossBar;
-import cn.charlotte.pit.util.chat.CC;
-import cn.charlotte.pit.util.cooldown.Cooldown;
-import cn.charlotte.pit.util.time.TimeUtil;
+import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.util.bossbar.BossBar;
+import net.mizukilab.pit.util.chat.CC;
+import net.mizukilab.pit.util.cooldown.Cooldown;
+import net.mizukilab.pit.util.time.TimeUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;

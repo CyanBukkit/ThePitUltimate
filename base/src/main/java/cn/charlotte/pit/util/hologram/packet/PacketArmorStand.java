@@ -1,6 +1,6 @@
 package cn.charlotte.pit.util.hologram.packet;
 
-import cn.charlotte.pit.util.PublicUtil;
+import net.mizukilab.pit.util.PublicUtil;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.ReflectUtil;

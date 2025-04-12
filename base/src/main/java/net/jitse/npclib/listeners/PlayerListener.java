@@ -4,8 +4,7 @@
 
 package net.jitse.npclib.listeners;
 
-import cn.charlotte.pit.util.PlayerUtil;
-import cn.charlotte.pit.util.PublicUtil;
+import net.mizukilab.pit.util.PlayerUtil;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.internal.NPCBase;
 import net.jitse.npclib.internal.NPCManager;

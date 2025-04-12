@@ -1,10 +1,9 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.util.cooldown.Cooldown;
+import net.mizukilab.pit.util.cooldown.Cooldown;
 import lombok.Setter;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 

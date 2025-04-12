@@ -2,7 +2,7 @@ package cn.charlotte.pit.data.sub;
 
 import cn.charlotte.pit.data.deserializer.PlayerInvDeserializer;
 import cn.charlotte.pit.data.serializer.PlayerInvSerializer;
-import cn.charlotte.pit.util.inventory.InventoryUtil;
+import net.mizukilab.pit.util.inventory.InventoryUtil;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.bukkit.entity.Player;

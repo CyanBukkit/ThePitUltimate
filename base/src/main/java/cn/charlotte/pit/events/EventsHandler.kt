@@ -2,7 +2,7 @@ package cn.charlotte.pit.events
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.EventQueue
-import cn.charlotte.pit.util.random.RandomUtil
+import net.mizukilab.pit.util.random.RandomUtil
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.ReplaceOptions
 import org.bukkit.Bukkit

@@ -4,7 +4,7 @@
 
 package net.jitse.npclib.nms.v1_8_R3;
 
-import cn.charlotte.pit.util.PublicUtil;
+import net.mizukilab.pit.util.PublicUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.jitse.npclib.NPCLib;

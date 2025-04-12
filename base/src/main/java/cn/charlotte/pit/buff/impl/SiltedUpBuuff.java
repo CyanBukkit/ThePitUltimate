@@ -3,7 +3,7 @@ package cn.charlotte.pit.buff.impl;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.buff.AbstractPitBuff;
 import cn.charlotte.pit.event.PitStackBuffEvent;
-import cn.charlotte.pit.parm.AutoRegister;
+import net.mizukilab.pit.parm.AutoRegister;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

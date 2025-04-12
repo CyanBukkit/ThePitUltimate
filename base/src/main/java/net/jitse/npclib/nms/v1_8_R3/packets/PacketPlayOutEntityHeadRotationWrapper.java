@@ -4,7 +4,7 @@
 
 package net.jitse.npclib.nms.v1_8_R3.packets;
 
-import cn.charlotte.pit.util.proto.Reflection;
+import net.mizukilab.pit.util.proto.Reflection;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityHeadRotation;
 import org.bukkit.Location;
 

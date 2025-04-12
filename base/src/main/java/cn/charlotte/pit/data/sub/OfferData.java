@@ -1,6 +1,6 @@
 package cn.charlotte.pit.data.sub;
 
-import cn.charlotte.pit.util.inventory.InventoryUtil;
+import net.mizukilab.pit.util.inventory.InventoryUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bukkit.inventory.ItemStack;
 

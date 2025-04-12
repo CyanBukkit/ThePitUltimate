@@ -1,5 +1,5 @@
 Name: ThePitUltimate
 Version: 4.0.0
-EntryClass: cn.charlotte.pit.EmptyLoader
+EntryClass: net.mizukilab.pit.Loader
 EntryPoint: start
 InfPort: false

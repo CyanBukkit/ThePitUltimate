@@ -2,7 +2,7 @@ package cn.charlotte.pit.data.sub;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.perk.AbstractPerk;
-import cn.charlotte.pit.util.inventory.InventoryUtil;
+import net.mizukilab.pit.util.inventory.InventoryUtil;
 import org.bson.Document;
 import org.bukkit.inventory.ItemStack;
 

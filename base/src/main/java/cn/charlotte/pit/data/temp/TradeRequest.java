@@ -1,6 +1,6 @@
 package cn.charlotte.pit.data.temp;
 
-import cn.charlotte.pit.util.cooldown.Cooldown;
+import net.mizukilab.pit.util.cooldown.Cooldown;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.TimeUnit;

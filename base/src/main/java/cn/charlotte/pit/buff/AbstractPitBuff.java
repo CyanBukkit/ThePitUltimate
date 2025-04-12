@@ -2,7 +2,7 @@ package cn.charlotte.pit.buff;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitStackBuffEvent;
-import cn.charlotte.pit.util.chat.CC;
+import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.entity.Player;
 
 import java.util.List;

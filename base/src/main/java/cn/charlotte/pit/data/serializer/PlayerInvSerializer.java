@@ -1,7 +1,7 @@
 package cn.charlotte.pit.data.serializer;
 
 import cn.charlotte.pit.data.sub.PlayerInv;
-import cn.charlotte.pit.util.inventory.InventoryUtil;
+import net.mizukilab.pit.util.inventory.InventoryUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;

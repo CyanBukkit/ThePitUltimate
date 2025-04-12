@@ -1,6 +1,6 @@
 package cn.charlotte.pit.data.sub;
 
-import cn.charlotte.pit.util.cooldown.Cooldown;
+import net.mizukilab.pit.util.cooldown.Cooldown;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

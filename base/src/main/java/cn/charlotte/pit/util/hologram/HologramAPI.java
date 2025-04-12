@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 import org.inventivetalent.reflection.util.AccessUtil;
-import org.spigotmc.AsyncCatcher;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;

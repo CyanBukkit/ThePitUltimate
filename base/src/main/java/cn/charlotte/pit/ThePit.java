@@ -1,48 +1,48 @@
 package cn.charlotte.pit;
 
-import cn.charlotte.pit.actionbar.IActionBarManager;
+import net.mizukilab.pit.actionbar.IActionBarManager;
 import cn.charlotte.pit.api.PitInternalHook;
 import cn.charlotte.pit.api.PointsAPI;
 import cn.charlotte.pit.buff.BuffFactory;
-import cn.charlotte.pit.config.PitConfig;
+import net.mizukilab.pit.config.PitConfig;
 import cn.charlotte.pit.data.FixedRewardData;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.operator.IProfilerOperator;
-import cn.charlotte.pit.database.MongoDB;
-import cn.charlotte.pit.enchantment.EnchantmentFactor;
+import net.mizukilab.pit.database.MongoDB;
+import net.mizukilab.pit.enchantment.EnchantmentFactor;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.EventsHandler;
-import cn.charlotte.pit.hologram.HologramFactory;
-import cn.charlotte.pit.item.IItemFactory;
-import cn.charlotte.pit.item.ItemFactor;
-import cn.charlotte.pit.license.MagicLoader;
-import cn.charlotte.pit.medal.MedalFactory;
-import cn.charlotte.pit.minigame.MiniGameController;
-import cn.charlotte.pit.movement.PlayerMoveHandler;
-import cn.charlotte.pit.npc.NpcFactory;
+import net.mizukilab.pit.hologram.HologramFactory;
+import net.mizukilab.pit.item.IItemFactory;
+import net.mizukilab.pit.item.ItemFactor;
+import net.mizukilab.pit.license.MagicLoader;
+import net.mizukilab.pit.medal.MedalFactory;
+import net.mizukilab.pit.minigame.MiniGameController;
+import net.mizukilab.pit.movement.PlayerMoveHandler;
+import net.mizukilab.pit.npc.NpcFactory;
 import cn.charlotte.pit.perk.PerkFactory;
-import cn.charlotte.pit.pet.PetFactory;
-import cn.charlotte.pit.quest.QuestFactory;
-import cn.charlotte.pit.runnable.DayNightCycleRunnable;
-import cn.charlotte.pit.runnable.LeaderBoardRunnable;
-import cn.charlotte.pit.runnable.ProfileLoadRunnable;
-import cn.charlotte.pit.runnable.RebootRunnable;
-import cn.charlotte.pit.trade.Game;
-import cn.charlotte.pit.util.BannerUtil;
-import cn.charlotte.pit.util.DateCodeUtils;
-import cn.charlotte.pit.util.bossbar.BossBarHandler;
-import cn.charlotte.pit.util.chat.CC;
-import cn.charlotte.pit.util.dependencies.Dependency;
-import cn.charlotte.pit.util.dependencies.DependencyManager;
-import cn.charlotte.pit.util.dependencies.loaders.LoaderType;
-import cn.charlotte.pit.util.dependencies.loaders.ReflectionClassLoader;
+import net.mizukilab.pit.pet.PetFactory;
+import net.mizukilab.pit.quest.QuestFactory;
+import net.mizukilab.pit.runnable.DayNightCycleRunnable;
+import net.mizukilab.pit.runnable.LeaderBoardRunnable;
+import net.mizukilab.pit.runnable.ProfileLoadRunnable;
+import net.mizukilab.pit.runnable.RebootRunnable;
+import net.mizukilab.pit.trade.Game;
+import net.mizukilab.pit.util.BannerUtil;
+import net.mizukilab.pit.util.DateCodeUtils;
+import net.mizukilab.pit.util.bossbar.BossBarHandler;
+import net.mizukilab.pit.util.chat.CC;
+import net.mizukilab.pit.util.dependencies.Dependency;
+import net.mizukilab.pit.util.dependencies.DependencyManager;
+import net.mizukilab.pit.util.dependencies.loaders.LoaderType;
+import net.mizukilab.pit.util.dependencies.loaders.ReflectionClassLoader;
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
-import cn.charlotte.pit.util.menu.MenuUpdateTask;
-import cn.charlotte.pit.util.nametag.NametagHandler;
-import cn.charlotte.pit.util.rank.RankUtil;
-import cn.charlotte.pit.util.sign.SignGui;
-import cn.charlotte.pit.util.sound.SoundFactory;
+import net.mizukilab.pit.util.menu.MenuUpdateTask;
+import net.mizukilab.pit.util.nametag.NametagHandler;
+import net.mizukilab.pit.util.rank.RankUtil;
+import net.mizukilab.pit.util.sign.SignGui;
+import net.mizukilab.pit.util.sound.SoundFactory;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -384,22 +384,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
     public void loadQuest() {
         this.questFactory = new QuestFactory();
-    }
-
-    public void loadListener() {
-        /*Collection<Class<?>> classes = ClassUtil.getClassesInPackage(this, "cn.charlotte.pit");
-        for (Class<?> clazz : classes) {
-            if (clazz.isAnnotationPresent(AutoRegister.class)) {
-                if (Listener.class.isAssignableFrom(clazz)) {
-                    try {
-                        Bukkit.getPluginManager()
-                                .registerEvents((Listener) clazz.newInstance(), ThePit.getInstance());
-                    } catch (Exception ignored) {
-
-                    }
-                }
-            }
-        }*/
     }
 
     private void loadConfig() {

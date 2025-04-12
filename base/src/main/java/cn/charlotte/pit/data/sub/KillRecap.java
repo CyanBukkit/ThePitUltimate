@@ -1,8 +1,8 @@
 package cn.charlotte.pit.data.sub;
 
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.util.RangedStreamLineList;
-import cn.charlotte.pit.util.cooldown.Cooldown;
+import net.mizukilab.pit.util.RangedStreamLineList;
+import net.mizukilab.pit.util.cooldown.Cooldown;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

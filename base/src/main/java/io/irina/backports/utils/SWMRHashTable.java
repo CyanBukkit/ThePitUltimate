@@ -1,6 +1,6 @@
 package io.irina.backports.utils;
 
-import cn.charlotte.pit.util.arithmetic.IntegerUtils;
+import net.mizukilab.pit.util.arithmetic.IntegerUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.lang.invoke.VarHandle;

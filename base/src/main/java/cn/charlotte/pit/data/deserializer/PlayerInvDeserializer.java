@@ -2,7 +2,7 @@ package cn.charlotte.pit.data.deserializer;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.sub.PlayerInv;
-import cn.charlotte.pit.util.inventory.InventoryUtil;
+import net.mizukilab.pit.util.inventory.InventoryUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;

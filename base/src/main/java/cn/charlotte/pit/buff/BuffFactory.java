@@ -1,7 +1,7 @@
 package cn.charlotte.pit.buff;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.util.ClassUtil;
+import net.mizukilab.pit.util.ClassUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.SneakyThrows;
