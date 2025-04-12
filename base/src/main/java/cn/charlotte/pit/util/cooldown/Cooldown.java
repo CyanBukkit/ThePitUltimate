@@ -90,14 +90,12 @@ public class Cooldown {
 
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof Cooldown)) return false;
-        final Cooldown other = (Cooldown) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!(o instanceof Cooldown other)) return false;
+        if (!other.canEqual(this)) return false;
         if (this.getStart() != other.getStart()) return false;
         if (this.getExpire() != other.getExpire()) return false;
         if (this.isNotified() != other.isNotified()) return false;
-        if (this.getDuration() != other.getDuration()) return false;
-        return true;
+        return this.getDuration() == other.getDuration();
     }
 
     protected boolean canEqual(final Object other) {
@@ -108,12 +106,12 @@ public class Cooldown {
         final int PRIME = 59;
         int result = 1;
         final long $start = this.getStart();
-        result = result * PRIME + (int) ($start >>> 32 ^ $start);
+        result = result * PRIME + Long.hashCode($start);
         final long $expire = this.getExpire();
-        result = result * PRIME + (int) ($expire >>> 32 ^ $expire);
+        result = result * PRIME + Long.hashCode($expire);
         result = result * PRIME + (this.isNotified() ? 79 : 97);
         final long $duration = this.getDuration();
-        result = result * PRIME + (int) ($duration >>> 32 ^ $duration);
+        result = result * PRIME + Long.hashCode($duration);
         return result;
     }
 

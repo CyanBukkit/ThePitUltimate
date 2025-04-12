@@ -29,8 +29,6 @@ import cn.charlotte.pit.runnable.LeaderBoardRunnable;
 import cn.charlotte.pit.runnable.ProfileLoadRunnable;
 import cn.charlotte.pit.runnable.RebootRunnable;
 import cn.charlotte.pit.trade.Game;
-import cn.charlotte.pit.util.BannerUtil;
-import cn.charlotte.pit.util.DateCodeUtils;
 import cn.charlotte.pit.util.bossbar.BossBarHandler;
 import cn.charlotte.pit.util.chat.CC;
 import cn.charlotte.pit.util.dependencies.Dependency;
@@ -40,6 +38,7 @@ import cn.charlotte.pit.util.dependencies.loaders.ReflectionClassLoader;
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
 import cn.charlotte.pit.util.menu.MenuUpdateTask;
 import cn.charlotte.pit.util.nametag.NametagHandler;
+import cn.charlotte.pit.util.random.RandomUtil;
 import cn.charlotte.pit.util.rank.RankUtil;
 import cn.charlotte.pit.util.sign.SignGui;
 import cn.charlotte.pit.util.sound.SoundFactory;
@@ -78,7 +77,6 @@ import spg.lgdev.iSpigot;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -87,10 +85,11 @@ import java.util.concurrent.RejectedExecutionException;
 
 
 /**
- * @author EmptyIrony, Misoryan, KleeLoveLife, Rabbit0w0, Araykal
+ * @author EmptyIrony, Misoryan
  */
-public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
 
+
+public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
 
     public static PitInternalHook api;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
@@ -144,6 +143,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private SoundFactory soundFactory;
     @Getter
     private PetFactory petFactory;
+    @Getter
     @Setter
     private IProfilerOperator profileOperator;
     private PlayerPointsAPI playerPoints;
@@ -173,10 +173,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         return bungeeServerName == null ? "THEPIT" : bungeeServerName.toUpperCase();
     }
 
-    public IProfilerOperator getProfileOperator() {
-        return profileOperator;
-    }
-
     private static void setBungeeServerName(String name) {
         bungeeServerName = name;
     }
@@ -186,8 +182,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     public void onEnable() {
         audiences = BukkitAudiences.create(this);
         instance = this;
-        BannerUtil.printFileContent("banner.txt");
-        serverId = DateCodeUtils.dateToCode(LocalDate.now());
+        serverId = RandomUtil.forRandomScoreboardString();
 
         saveDefaultConfig();
 
@@ -245,7 +240,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 }
             }
         }));
-//            this.printBanner();
 
         new LeaderBoardRunnable().runTaskTimerAsynchronously(this, 0, 12000);
 
@@ -266,15 +260,15 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
 
-        //Bridging
         MagicLoader.hook();
         MagicLoader.ensureIsLoaded();
+
+        sendLogs("ThePitUltimate is now enabled.");
     }
 
     private void loadItemFactor() {
         this.itemFactor = new ItemFactor();
     }
-
 
     public void sendLogs(String s) {
         Bukkit.getConsoleSender().sendMessage(s);
@@ -287,12 +281,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             CC.boardCast0("&6&l公告! &7正在执行关闭服务器...");
             PlayerProfile.saveAllSync(false);
             CC.boardCast0("&6&l公告! &7正在关闭服务器...");
-        }
-        System.out.println("Switching io executions to current thread");
-        try {
-            profileOperator.close();
-        } catch (Exception e){
-            System.err.println("Failed to execute!");
         }
     }
 
@@ -390,22 +378,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.questFactory = new QuestFactory();
     }
 
-    public void loadListener() {
-        /*Collection<Class<?>> classes = ClassUtil.getClassesInPackage(this, "cn.charlotte.pit");
-        for (Class<?> clazz : classes) {
-            if (clazz.isAnnotationPresent(AutoRegister.class)) {
-                if (Listener.class.isAssignableFrom(clazz)) {
-                    try {
-                        Bukkit.getPluginManager()
-                                .registerEvents((Listener) clazz.newInstance(), ThePit.getInstance());
-                    } catch (Exception ignored) {
-
-                    }
-                }
-            }
-        }*/
-    }
-
     private void loadConfig() {
         log.info("Loading configuration...");
         this.pitConfig = new PitConfig(this);
@@ -470,17 +442,13 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             }
         } catch (Exception e) {
             try {
-                System.exit(114514);
-                //Exit blocker
+                System.exit(0);
             } catch (Throwable e2) {
                 Thread.currentThread().getThreadGroup().enumerate(new Thread[0]);
             }
         }
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
-            /*    new Dependency("expressible-kt", "org.panda-lang", "expessible-kt", "1.3.6", LoaderType.REFLECTION),
-                new Dependency("expressible", "org.panda-lang", "expessible", "1.3.6", LoaderType.REFLECTION),
-                //adventure-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform" }*/
                 new Dependency("kotlin", "org.jetbrains.kotlin", "kotlin-stdlib", "2.1.20", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-bukkit", "net.kyori", "adventure-platform-bukkit", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-facet", "net.kyori", "adventure-platform-facet", "4.3.2", LoaderType.REFLECTION),
@@ -492,16 +460,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 new Dependency("adventure-platform-api", "net.kyori", "adventure-platform-api", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-key", "net.kyori", "adventure-key", "4.13.1", LoaderType.REFLECTION),
                 new Dependency("adventure-api", "net.kyori", "adventure-api", "4.13.1", LoaderType.REFLECTION),
-
-     /*           new Dependency("litecommands-core", "dev.rollczi", "litecommands-core", "3.4.1", LoaderType.REFLECTION),
-                new Dependency("litecommands-bukkit", "dev.rollczi", "litecommands-bukkit", "3.4.1", LoaderType.REFLECTION),
-                new Dependency("expiringmap", "net.jodah", "expiringmap", "0.5.11"
-                        , LoaderType.REFLECTION),
-                new Dependency("litecommands-framework", "dev.rollczi", "litecommands-framework", "3.4.1", LoaderType.REFLECTION),
-
-                new Dependency("litecommands-programmatic", "dev.rollczi", "litecommands-programmatic", "3.4.1", LoaderType.REFLECTION),
-                new Dependency("litecommands-annotations", "dev.rollczi", "litecommands-annotations", "3.4.1", LoaderType.REFLECTION),
-*/
                 new Dependency(
                         "websocket",
                         "org.java-websocket",
@@ -818,6 +776,13 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                         "nashorn-core",
                         "15.3",
                         LoaderType.REFLECTION
+                ),
+                new Dependency(
+                        "fastutil",
+                        "it.unimi.dsi",
+                        "fastutil",
+                        "8.5.15",
+                        LoaderType.REFLECTION
                 )
         );
     }
@@ -893,6 +858,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         ThePit.api = api;
     }
 
+    public static PitInternalHook getApi() {
+        return api;
+    }
 
     public IItemFactory getItemFactory() {
         return factory;
@@ -915,11 +883,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Override
     public boolean isPrimaryThread() {
         return Bukkit.isPrimaryThread();
-    }
-
-
-    public static PitInternalHook getApi() {
-        return api;
     }
 
     @Override
