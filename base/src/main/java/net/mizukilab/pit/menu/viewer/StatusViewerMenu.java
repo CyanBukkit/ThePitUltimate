@@ -57,6 +57,7 @@ public class StatusViewerMenu extends Menu {
             inventory = profile.getInventory();
             player.sendMessage(CC.translate("&c该玩家离线,将查询离线档案!"));
         } else {
+            profile.save(Bukkit.getPlayer(profile.getPlayerUuid()));
             inventory = PlayerInv.fromPlayerInventory(Bukkit.getPlayer(profile.getPlayerUuid()).getInventory());
         }
         Map<Integer, Button> button = new HashMap<>();
