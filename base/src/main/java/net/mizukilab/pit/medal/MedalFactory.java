@@ -32,7 +32,7 @@ public class MedalFactory implements Listener {
 
     @SneakyThrows
     public void init() {
-        Collection<Class<?>> classes = ClassUtil.getClassesInPackage(ThePit.getInstance(), "cn.charlotte.pit.medal.impl");
+        Collection<Class<?>> classes = ClassUtil.getClassesInPackage(ThePit.getInstance(), "net.mizukilab.pit.medal.impl");
         for (Class<?> clazz : classes) {
             if (AbstractMedal.class.isAssignableFrom(clazz)) {
                 Object instance = clazz.newInstance();

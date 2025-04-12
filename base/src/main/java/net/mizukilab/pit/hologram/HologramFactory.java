@@ -24,7 +24,7 @@ public class HologramFactory {
 
     @SneakyThrows
     public void init() {
-        for (Class<?> clazz : ClassUtil.getClassesInPackage(ThePit.getInstance(), "cn.charlotte.pit.hologram.type")) {
+        for (Class<?> clazz : ClassUtil.getClassesInPackage(ThePit.getInstance(), "net.mizukilab.pit.hologram.type")) {
             if (AbstractHologram.class.isAssignableFrom(clazz)) {
                 AbstractHologram hologram = (AbstractHologram) clazz.newInstance();
                 if (hologram.shouldLoop()) {

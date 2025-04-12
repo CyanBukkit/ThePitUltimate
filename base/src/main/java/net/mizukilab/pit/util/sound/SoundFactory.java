@@ -23,7 +23,7 @@ public class SoundFactory extends BukkitRunnable {
     public void init() {
         this.pitSounds = new HashMap<>();
 
-        final Collection<Class<?>> classes = ClassUtil.getClassesInPackage(ThePit.getInstance(), "cn.charlotte.pit.util.sound.type");
+        final Collection<Class<?>> classes = ClassUtil.getClassesInPackage(ThePit.getInstance(), "net.mizukilab.pit.util.sound.type");
         for (Class<?> clazz : classes) {
             if (AbstractPitSound.class.isAssignableFrom(clazz)) {
                 final AbstractPitSound sound = (AbstractPitSound) clazz.newInstance();

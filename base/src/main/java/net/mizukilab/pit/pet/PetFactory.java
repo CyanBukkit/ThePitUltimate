@@ -41,7 +41,7 @@ public class PetFactory implements Listener {
     private final Map<UUID, PetData> entityToPetData = new HashMap<>();
 
     public void init() {
-        for (Class<?> clazz : ClassUtil.getClassesInPackage(ThePit.getInstance(), "cn.charlotte.pit.pet.impl")) {
+        for (Class<?> clazz : ClassUtil.getClassesInPackage(ThePit.getInstance(), "net.mizukilab.pit.pet.impl")) {
             if (IPet.class.isAssignableFrom(clazz)) {
                 try {
                     final Class<? extends IPet> petClazz = clazz.asSubclass(IPet.class);
