@@ -19,6 +19,7 @@ package net.mizukilab.pit.util.beam.beam;
 
 import cn.charlotte.pit.ThePit;
 import com.google.common.base.Preconditions;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -43,6 +44,13 @@ public class Beam {
     private final long updateDelay;
     private final LocationTargetBeam beam;
     private final Set<UUID> viewers;
+    /**
+     * -- GETTER --
+     *  Checks if the beam is active (will show when applicable).
+     *
+     * @return True if active.
+     */
+    @Getter
     private boolean isActive;
     private Location startingPosition, endingPosition;
     private BukkitRunnable runnable;
@@ -183,15 +191,6 @@ public class Beam {
                 }
             }
         }
-    }
-
-    /**
-     * Checks if the beam is active (will show when applicable).
-     *
-     * @return True if active.
-     */
-    public boolean isActive() {
-        return this.isActive;
     }
 
     /**

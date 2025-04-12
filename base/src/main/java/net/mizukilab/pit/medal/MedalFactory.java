@@ -21,7 +21,6 @@ import java.util.List;
  * @Date 2021/6/8 20:13
  */
 @Data
-//@AutoRegister
 public class MedalFactory implements Listener {
 
     private final List<AbstractMedal> medals;

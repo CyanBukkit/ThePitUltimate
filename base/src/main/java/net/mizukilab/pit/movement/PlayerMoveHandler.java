@@ -218,8 +218,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
 
         final boolean intersects = aabb.intersectsWith(playerAABB);
 
-        boolean isInArena = !intersects;
-        return isInArena;
+        return !intersects;
     }
 
     @EventHandler
