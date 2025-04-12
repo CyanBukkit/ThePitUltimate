@@ -22,6 +22,10 @@ public class RomanUtil {
      */
     public static String convert(int number) {
 
+        if (number > 3999 || number < 1) {
+            return String.valueOf(number);
+        }
+
         return roman[3][number / 1000 % 10] +
                 roman[2][number / 100 % 10] +
                 roman[1][number / 10 % 10] +

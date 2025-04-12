@@ -9,19 +9,19 @@ import cn.charlotte.pit.data.operator.IProfilerOperator;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.EventsHandler;
+import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.model.user.UserManager;
 import net.mizukilab.pit.actionbar.IActionBarManager;
 import net.mizukilab.pit.config.PitConfig;
 import net.mizukilab.pit.database.MongoDB;
@@ -36,10 +36,11 @@ import net.mizukilab.pit.movement.PlayerMoveHandler;
 import net.mizukilab.pit.npc.NpcFactory;
 import net.mizukilab.pit.pet.PetFactory;
 import net.mizukilab.pit.quest.QuestFactory;
+import net.mizukilab.pit.runnable.ClearRunnable;
 import net.mizukilab.pit.runnable.DayNightCycleRunnable;
 import net.mizukilab.pit.runnable.ProfileLoadRunnable;
 import net.mizukilab.pit.runnable.RebootRunnable;
-import net.mizukilab.pit.trade.Game;
+import net.mizukilab.pit.trade.TradeMonitorRunnable;
 import net.mizukilab.pit.util.BannerUtil;
 import net.mizukilab.pit.util.DateCodeUtils;
 import net.mizukilab.pit.util.bossbar.BossBarHandler;
@@ -50,6 +51,7 @@ import net.mizukilab.pit.util.dependencies.loaders.LoaderType;
 import net.mizukilab.pit.util.dependencies.loaders.ReflectionClassLoader;
 import net.mizukilab.pit.util.menu.MenuUpdateTask;
 import net.mizukilab.pit.util.nametag.NametagHandler;
+import net.mizukilab.pit.util.rank.LuckPermsUtil;
 import net.mizukilab.pit.util.rank.RankUtil;
 import net.mizukilab.pit.util.sign.SignGui;
 import net.mizukilab.pit.util.sound.SoundFactory;
@@ -78,11 +80,7 @@ import spg.lgdev.iSpigot;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.time.LocalDate;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.RejectedExecutionException;
+import java.util.Set;
 
 
 /**
@@ -110,8 +108,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Getter
     private NametagHandler nametagHandler;
     private IItemFactory factory;
-    @Getter
-    private Game game;
     @Getter
     private MedalFactory medalFactory;
     @Getter
@@ -158,6 +154,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Getter
     private IActionBarManager actionBarManager;
 
+    @Getter
+    private final Set<AbstractPerk> disabledPerks = new ObjectOpenHashSet<>();
+
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
     }
@@ -188,8 +187,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
         saveDefaultConfig();
 
-        hookPlayerPoints();
-        hookLuckPerms();
+        if (!hookPlayerPoints()) this.getLogger().warning("Dependency not found: PlayerPoints");
+        if (!hookLuckPerms()) this.getLogger().warning("Dependency not found: LuckPerms");
 
         boolean whiteList = Bukkit.getServer().hasWhitelist();
         Bukkit.getServer().setWhitelist(true);
@@ -260,17 +259,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
-        try{
-            //Dev build
-            System.out.println("Loading from local storage");
-            Class.forName("net.mizukilab.pit.Loader").getMethod("start").invoke(null);
-        } catch (Exception e){
 
-            System.out.println("Fetching");
-            //Non devBuild
+        try {
+            this.getLogger().warning("Loading from local storage");
+            Class.forName("net.mizukilab.pit.Loader").getMethod("start").invoke(null);
+        } catch (Exception e) {
+            this.getLogger().warning("Fetching");
             MagicLoader.load();
             MagicLoader.ensureIsLoaded();
-
         }
     }
 
@@ -294,7 +290,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         System.out.println("Switching io executions to current thread");
         try {
             profileOperator.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Failed to execute!");
         }
     }
@@ -379,8 +375,11 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     }
 
     private void loadGame() {
-        this.game = new Game();
-        this.game.initRunnable();
+        new ClearRunnable()
+                .runTaskTimer(ThePit.getInstance(), 20, 20);
+
+        new TradeMonitorRunnable()
+                .runTaskTimer(ThePit.getInstance(), 20, 20);
     }
 
     @SneakyThrows
@@ -800,18 +799,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         return playerPoints != null;
     }
 
-    /**
-     * Accessor for other parts of your plugin to retrieve PlayerPoints.
-     *
-     * @return PlayerPoints plugin instance
-     */
-    public PlayerPointsAPI getPlayerPoints() {
-        if (hookPlayerPoints()) {
-            return playerPoints;
-        }
-        return null;
-    }
-
     private boolean hookLuckPerms() {
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
@@ -819,48 +806,13 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         } else {
             luckPerms = LuckPermsProvider.get();
         }
+        LuckPermsUtil.setLuckPerms(luckPerms);
         return luckPerms != null;
-    }
-
-    public LuckPerms getLuckPerms() {
-        if (hookLuckPerms()) {
-            return luckPerms;
-        }
-        return null;
-    }
-
-    public User getLuckPermsUser(UUID uuid) {
-        try {
-            UserManager userManager = luckPerms.getUserManager();
-            CompletableFuture<User> userFuture = userManager.loadUser(uuid);
-            return userFuture.join();
-        } catch (RejectedExecutionException | CompletionException e) {
-            if (Bukkit.getPlayer(uuid).isOnline()) {
-                return luckPerms.getUserManager().getUser(uuid);
-            } else {
-                return null;
-            }
-        }
-    }
-
-    public Object getLuckPermsUserPrefix(UUID uuid) {
-        try {
-            UserManager userManager = luckPerms.getUserManager();
-            CompletableFuture<User> userFuture = userManager.loadUser(uuid);
-            return userFuture.thenApplyAsync(user -> user.getCachedData().getMetaData().getPrefix());
-        } catch (RejectedExecutionException | CompletionException e) {
-            if (Bukkit.getPlayer(uuid).isOnline()) {
-                return Objects.requireNonNull(luckPerms.getUserManager().getUser(uuid)).getCachedData().getMetaData().getPrefix();
-            } else {
-                return null;
-            }
-        }
     }
 
     public static void setApi(PitInternalHook api) {
         ThePit.api = api;
     }
-
 
     public IItemFactory getItemFactory() {
         return factory;

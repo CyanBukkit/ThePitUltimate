@@ -23,7 +23,6 @@ import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
 import net.mizukilab.pit.quest.AbstractQuest;
 import net.mizukilab.pit.quest.QuestFactory;
-import net.mizukilab.pit.trade.Game;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.RangedStreamLineList;
 import net.mizukilab.pit.util.Utils;
@@ -182,9 +181,7 @@ public class GameEffectListener implements Listener {
         AtomicBoolean cancel = new AtomicBoolean(false);
         Player damager = null;
 
-        final Game game = instance.getGame();
-
-        Set<AbstractPerk> disabledPerks = game.getDisabledPerks();
+        Set<AbstractPerk> disabledPerks = instance.getDisabledPerks();
         if (event.getDamager() instanceof Player) {
             damager = (Player) event.getDamager();
 

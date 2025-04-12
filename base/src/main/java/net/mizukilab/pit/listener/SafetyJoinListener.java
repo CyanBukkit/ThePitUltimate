@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
-//@AutoRegister
 public class SafetyJoinListener implements Listener {
 
     @EventHandler
