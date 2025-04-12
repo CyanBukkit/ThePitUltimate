@@ -238,7 +238,7 @@ object PitHook {
             JumpBoostPotion::class.java,
             MythicRepairKit::class.java,
             PitCactus::class.java,
-            SpireArmor::class.java,
+            // 神人 SpireArmor::class.java,
             SuperPackage::class.java,
             TotallyLegitGem::class.java,
             GlobalAttentionGem::class.java,
