@@ -21,10 +21,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.*;
@@ -46,6 +43,15 @@ import java.util.concurrent.TimeUnit;
  */
 @AutoRegister
 public class ProtectListener implements Listener {
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Block clickedBlock = event.getClickedBlock();
+        if ((event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL)) && clickedBlock != null && Utils.check(clickedBlock.getType())
+        ) {
+            event.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {

@@ -270,4 +270,8 @@ public class Utils {
         }
         return item.toItemStack();
     }
+
+    public static boolean check(Material material) {
+        return material == Material.HOPPER || material == Material.ENDER_CHEST;
+    }
 }

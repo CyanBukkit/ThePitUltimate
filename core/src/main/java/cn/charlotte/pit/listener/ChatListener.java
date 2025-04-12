@@ -36,14 +36,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
-        if (!cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() && !PlayerUtil.isStaff(player)) {
-            event.setCancelled(true);
-            player.sendMessage(CC.CHAT_BAR);
-            player.sendMessage(CC.translate("&c慢速模式已开启,再次发送聊天信息前请等待3秒!"));
-            player.sendMessage(CC.translate("&c请注意,短时间内重复发送相同聊天信息会被禁止发言!"));
-            player.sendMessage(CC.CHAT_BAR);
-            return;
-        }
+        if (processChatCooldown(event, player)) return;
 
         String tag = profile.getFormattedLevelTagWithRoman();
         if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
@@ -97,6 +90,18 @@ public class ChatListener implements Listener {
                         + (player.hasPermission("thepit.admin") ? CC.translate("%s") : "%s")));
             }
         }
+    }
+
+    private static boolean processChatCooldown(AsyncPlayerChatEvent event, Player player) {
+        if (!cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() && !PlayerUtil.isStaff(player)) {
+            event.setCancelled(true);
+            player.sendMessage(CC.CHAT_BAR);
+            player.sendMessage(CC.translate("&c慢速模式已开启,再次发送聊天信息前请等待3秒!"));
+            player.sendMessage(CC.translate("&c请注意,短时间内重复发送相同聊天信息会被禁止发言!"));
+            player.sendMessage(CC.CHAT_BAR);
+            return true;
+        }
+        return false;
     }
 
 }

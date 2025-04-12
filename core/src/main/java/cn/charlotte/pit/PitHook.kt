@@ -674,7 +674,6 @@ private fun registerListeners() {
         SafetyJoinListener::class.java,
         ButtonListener::class.java,
         GenesisCombatListener::class.java,
-        FixListeners::class.java,
         TradeListener::class.java,
         HologramListener::class.java,
     )

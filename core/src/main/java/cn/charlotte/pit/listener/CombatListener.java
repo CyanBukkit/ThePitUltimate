@@ -496,9 +496,13 @@ public class CombatListener implements Listener {
     @EventHandler
     public void onShoot(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Arrow arrow) {
-            if (arrow.getShooter() instanceof Player) {
-                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(((Player) arrow.getShooter()).getUniqueId());
+            if (arrow.getShooter() instanceof Player player) {
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 profile.setShootAttack(profile.getShootAttack() + 1);
+                if (!profile.isInArena()) {
+                    event.setCancelled(true);
+                    player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1.0f, 1.0f);
+                }
             }
         } else if (event.getEntity() instanceof FishHook hook) {
             if (hook.getShooter() instanceof Player) {
