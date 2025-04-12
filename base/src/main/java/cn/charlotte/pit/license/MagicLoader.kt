@@ -8,7 +8,6 @@ import pku.yim.license.Response
 import java.lang.Thread.sleep
 import java.util.*
 import kotlin.concurrent.Volatile
-import kotlin.system.exitProcess
 
 object MagicLoader {
     private val lock = Any()
@@ -66,7 +65,7 @@ object MagicLoader {
             }
             if (exception != null) {
                 exception!!.printStackTrace()
-                exitProcess(0)
+                System.exit(-114514)
             }
         }
     }

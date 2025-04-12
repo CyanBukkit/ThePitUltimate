@@ -19,7 +19,7 @@ import java.io.IOException;
 public class PlayerInvDeserializer extends JsonDeserializer<PlayerInv> {
 
     @Override
-    public PlayerInv deserialize(JsonParser p, DeserializationContext ctxt) {
+    public PlayerInv deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         try {
             JsonNode node = p.getCodec().readTree(p);
             String inv = node.get("inv").asText();

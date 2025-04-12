@@ -10,6 +10,7 @@ object EmptyLoader {
     @JvmStatic
     fun start() {
         ThePit.getInstance().apply {
+            loadListener()
             setApi(PitInternalImpl)
         }
         hook = PitHook.also { it.init() }
