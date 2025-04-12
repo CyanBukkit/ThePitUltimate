@@ -62,7 +62,7 @@ public final class MongoDB {
         ConnectionString connectionString = new ConnectionString("mongodb://" + address + ":" + port);
         MongoClientSettings.Builder builder1 = MongoClientSettings.builder().serverApi(ServerApi.builder()
                 .version(ServerApiVersion.V1)
-                .build()).applyConnectionString(connectionString);
+                .build()).uuidRepresentation(UuidRepresentation.STANDARD).applyConnectionString(connectionString);
         if (mongoUser != null && mongoPassword != null && !mongoUser.isEmpty() && !mongoPassword.isEmpty()) {
             final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
             MongoClientSettings thePit = builder1
