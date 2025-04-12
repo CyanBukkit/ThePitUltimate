@@ -76,16 +76,17 @@ public class BatUtil {
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
-                    Location batLoc = playerLoc.clone().add(
+                    Location clone = playerLoc.clone();
+                    Location batLoc = clone.add(
                             x * distance + randomOffset(),
                             y * distance + 0.5 + randomOffset(),
                             z * distance + randomOffset()
                     );
                     CraftWorld world = (CraftWorld) player.getWorld();
                     EntityBat entityBat = new EntityBat(world.getHandle());
-                    entityBat.teleportTo(batLoc,false);
-                    world.addEntity(entityBat, CreatureSpawnEvent.SpawnReason.DEFAULT);
+                    entityBat.setPosition(batLoc.getX(), batLoc.getY(), batLoc.getZ());
                     entityBat.noDamageTicks =  100000;
+                    world.addEntity(entityBat, CreatureSpawnEvent.SpawnReason.DEFAULT);
                     bats.add((LivingEntity) entityBat.getBukkitEntity());
                 }
             }
