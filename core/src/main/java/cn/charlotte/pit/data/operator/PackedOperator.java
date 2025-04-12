@@ -91,7 +91,11 @@ public class PackedOperator implements IOperator {
 
     final ObjectArrayList<Runnable> operations = new ObjectArrayList<>(); //safer
     Set<Runnable> pendingExecuting = new CopyOnWriteArraySet<>(); //正常情况下就一个
-
+    public void fail(Throwable throwable){
+        pending(i -> {
+            throw new RuntimeException(throwable);
+        });
+    }
     public boolean hasAnyOperation() {
         synchronized (operations) {
             return !operations.isEmpty() && !this.pendingExecuting.isEmpty();

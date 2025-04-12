@@ -53,6 +53,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -492,7 +493,20 @@ public class CombatListener implements Listener {
 
         return false;
     }
-
+    @EventHandler
+    public void onShoot(ProjectileLaunchEvent event) {
+        if (event.getEntity() instanceof Arrow arrow) {
+            if (arrow.getShooter() instanceof Player) {
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(((Player) arrow.getShooter()).getUniqueId());
+                profile.setShootAttack(profile.getShootAttack() + 1);
+            }
+        } else if (event.getEntity() instanceof FishHook hook) {
+            if (hook.getShooter() instanceof Player) {
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(((Player) hook.getShooter()).getUniqueId());
+                profile.setRodUsed(profile.getRodUsed() + 1);
+            }
+        }
+    }
 
     public void handlePlayerDeath(Player player, Player killer, boolean shouldRespawn) {
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

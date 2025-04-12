@@ -13,7 +13,6 @@ import java.util.List;
 public class BatUtil {
     public static void attachPlayerToBatsAndMove(Player player, int seconds, int health) {
         final Bat mainBat = (Bat) player.getWorld().spawnEntity(player.getLocation(), EntityType.BAT);
-        mainBat.setMetadata("CUSTOM_BAT", new FixedMetadataValue(ThePit.getInstance(), ""));
         mainBat.setPassenger(player);
         PlayerUtil.heal(player, health);
         VisibleApi.hidePlayerFromAll(player);
@@ -82,7 +81,6 @@ public class BatUtil {
                     Bat bat = player.getWorld().spawn(batLoc, Bat.class);
                     bat.setNoDamageTicks(Integer.MAX_VALUE);
                     bat.setMaximumNoDamageTicks(Integer.MAX_VALUE);
-                    bat.setMetadata("NoDamage", new FixedMetadataValue(ThePit.getInstance(), true));
                     bats.add(bat);
                 }
             }

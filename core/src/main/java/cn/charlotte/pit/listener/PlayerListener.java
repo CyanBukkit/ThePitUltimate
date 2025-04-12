@@ -77,7 +77,6 @@ public class PlayerListener implements Listener {
     boolean flagLoad = false;
     int lastSize = 0;
     Class<?> aClass;
-    MethodHandle handle;
     Set<CraftPlayer> entitiesNPC = new ObjectArraySet<>();
     private final Map<UUID, Long> goldenAppleCooldown = new HashMap<>();
     private final Map<UUID, Cooldown> firstAidEggCooldown = new HashMap<>();
@@ -163,6 +162,22 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        bungeeCheck(player);
+        processAccountStatus(profile, player);
+        postSynchronize(profile, player);
+        //todo 修复最大生命值
+        recoverMaximumHealth(profile, player);
+    }
+
+    private static void recoverMaximumHealth(PlayerProfile profile, Player player) {
+        PerkData perkData = profile.getUnlockedPerkMap().get("extra_heart_perm_perk");
+        if (perkData != null) {
+            profile.getExtraMaxHealth().put("extra_heart_perm_perk", 2.0 * perkData.getLevel());
+            player.setMaxHealth(profile.getMaxHealth());
+        }
+    }
+
+    private static void bungeeCheck(Player player) {
         if (ThePit.getBungeeServerName().equals("NULL")) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("GetServer");
@@ -173,6 +188,19 @@ public class PlayerListener implements Listener {
                 ThePit.getInstance().getLogger().warning("Failed to send getServerName message to the BungeeCord.");
             }
         }
+    }
+
+    private static void postSynchronize(PlayerProfile profile, Player player) {
+        PlayerInv playerInv = profile.getInventory();
+        playerInv.applyItemToPlayer(player);
+        InventoryUtil.supplyItems(player);
+        profile.setLastLogoutTime(System.currentTimeMillis());
+        profile.applyExperienceToPlayer(player);
+
+        PlayerUtil.clearPlayer(player, false, false);
+    }
+
+    private void processAccountStatus(PlayerProfile profile, Player player) {
         if (profile.isBanned()) {
             PlayerBanData banData = profile.getPlayerBanData();
             player.sendMessage(CC.translate("&4⚠ &c你当前已被禁止游玩天坑乱斗!"));
@@ -185,21 +213,6 @@ public class PlayerListener implements Listener {
             }
         } else {
             this.welcomePlayer(player);
-        }
-
-        PlayerInv playerInv = profile.getInventory();
-        playerInv.applyItemToPlayer(player);
-        InventoryUtil.supplyItems(player);
-        profile.setLastLogoutTime(System.currentTimeMillis());
-        profile.applyExperienceToPlayer(player);
-
-        PlayerUtil.clearPlayer(player, false, false);
-
-        //todo 修复最大生命值
-        PerkData perkData = profile.getUnlockedPerkMap().get("extra_heart_perm_perk");
-        if (perkData != null) {
-            profile.getExtraMaxHealth().put("extra_heart_perm_perk", 2.0 * perkData.getLevel());
-            player.setMaxHealth(profile.getMaxHealth());
         }
     }
 
@@ -254,7 +267,8 @@ public class PlayerListener implements Listener {
             ItemStack itemStack;
             if ("lucky_diamond".equals(internalName)) {
                 new LuckyDiamondMedal().addProgress(PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()), 1);
-                itemStack = new ItemBuilder(stack.getType()).canDrop(false).canSaveToEnderChest(false).deathDrop(true).canTrade(false).removeOnJoin(true).internalName(internalName).lore("&b幸运钻石天赋物品").buildWithUnbreakable();
+                itemStack = new ItemBuilder(stack.getType()).canDrop(false)
+                        .canSaveToEnderChest(false).deathDrop(true).canTrade(false).removeOnJoin(true).internalName(internalName).lore("&b幸运钻石天赋物品").buildWithUnbreakable();
             } else {
                 itemStack = new ItemBuilder(stack.getType()).canDrop(false).canSaveToEnderChest(true).deathDrop(true).internalName(internalName).buildWithUnbreakable();
             }
