@@ -465,9 +465,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         }
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
-            /*    new Dependency("expressible-kt", "org.panda-lang", "expessible-kt", "1.3.6", LoaderType.REFLECTION),
-                new Dependency("expressible", "org.panda-lang", "expessible", "1.3.6", LoaderType.REFLECTION),
-                //adventure-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform" }*/
+                new Dependency("fastutil", "it.unimi.dsi", "fastutil", "8.5.13", LoaderType.REFLECTION),
                 new Dependency("kotlin", "org.jetbrains.kotlin", "kotlin-stdlib", "2.1.20", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-bukkit", "net.kyori", "adventure-platform-bukkit", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-facet", "net.kyori", "adventure-platform-facet", "4.3.2", LoaderType.REFLECTION),
@@ -479,23 +477,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 new Dependency("adventure-platform-api", "net.kyori", "adventure-platform-api", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-key", "net.kyori", "adventure-key", "4.13.1", LoaderType.REFLECTION),
                 new Dependency("adventure-api", "net.kyori", "adventure-api", "4.13.1", LoaderType.REFLECTION),
-
-     /*           new Dependency("litecommands-core", "dev.rollczi", "litecommands-core", "3.4.1", LoaderType.REFLECTION),
-                new Dependency("litecommands-bukkit", "dev.rollczi", "litecommands-bukkit", "3.4.1", LoaderType.REFLECTION),
-                new Dependency("expiringmap", "net.jodah", "expiringmap", "0.5.11"
-                        , LoaderType.REFLECTION),
-                new Dependency("litecommands-framework", "dev.rollczi", "litecommands-framework", "3.4.1", LoaderType.REFLECTION),
-
-                new Dependency("litecommands-programmatic", "dev.rollczi", "litecommands-programmatic", "3.4.1", LoaderType.REFLECTION),
-                new Dependency("litecommands-annotations", "dev.rollczi", "litecommands-annotations", "3.4.1", LoaderType.REFLECTION),
-*/
-                new Dependency(
-                        "websocket",
-                        "org.java-websocket",
-                        "Java-WebSocket",
-                        "1.5.4",
-                        LoaderType.REFLECTION
-                ),
                 new Dependency("hutool", "cn.hutool", "hutool-core", "5.8.36", LoaderType.REFLECTION),
                 new Dependency("hutool-cry", "cn.hutool", "hutool-crypto", "5.8.36", LoaderType.REFLECTION),
                 new Dependency(
@@ -544,7 +525,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                         "Apache Http Client",
                         "org.apache.httpcomponents",
                         "httpclient",
-                        "4.4",
+                        "4.5.14",
                         LoaderType.REFLECTION
                 ),
                 new Dependency(
@@ -836,7 +817,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         if (provider != null) {
             luckPerms = provider.getProvider();
         } else {
-            LuckPermsProvider.get();
+            luckPerms = LuckPermsProvider.get();
         }
         return luckPerms != null;
     }

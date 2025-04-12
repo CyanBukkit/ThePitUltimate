@@ -16,12 +16,11 @@ luckperms = "5.4"
 moshi = "1.15.1"
 papi = "2.11.5"
 narshorn = "15.3"
-httpclient = "4.4"
+httpclient = "4.5.14"
 jedis = "2.9.0"
 book = "1.2"
 monjack = "4.8.1"
 slf4j = "1.7.30"
-websocket = "1.5.4"
 reflectionhelper = "1.15.2-SNAPSHOT"
 playerpoints = "3.2.4"
 decentholograms = "2.8.6"
@@ -77,7 +76,6 @@ jedis = { group = "redis.clients", name = "jedis", version.ref = "jedis" }
 book = { group = "xyz.upperlevel.spigot.book", name = "spigot-book-api", version.ref = "book" }
 mongojack = { group = "org.mongojack", name = "mongojack", version.ref = "monjack" }
 slf4j = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
-websocket = { group = "org.java-websocket", name = "Java-WebSocket", version.ref = "websocket" }
 reflectionhelper = { group = "org.inventivetalent", name = "reflectionhelper", version.ref = "reflectionhelper" }
 playerpoints = { group = "org.black_ixx", name = "playerpoints", version.ref = "playerpoints" }
 decentholograms = { group = "com.github.decentsoftware-eu", name = "decentholograms", version.ref = "decentholograms" }
