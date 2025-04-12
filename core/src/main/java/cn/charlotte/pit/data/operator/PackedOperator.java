@@ -162,16 +162,20 @@ public class PackedOperator implements IOperator {
 
     public void tick() {
         updateEntity();
+        drainTask();
+    }
+
+    public void drainTask() {
         Runnable currentOperation = gainTask();
-        if (currentOperation == null) return; //保持有序性。。。
+        if (currentOperation == null) return;
 
         Bukkit.getScheduler().runTaskAsynchronously(pit, currentOperation);
-
     }
-    public void drainTasksOnCurrentThread(){
-        while(hasAnyOperation()){
+
+    public void drainTasksOnCurrentThread() {
+        while (true) {
             Runnable runnable = gainTask();
-            if(runnable == null){
+            if (runnable == null) {
                 break;
             }
             runnable.run();
