@@ -1,11 +1,11 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.util.PublicUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import lombok.Setter;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class EventTimer implements Runnable {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd:HH:mm");
     @Setter
     private Cooldown cooldown = new Cooldown(0);
 
@@ -29,15 +28,11 @@ public class EventTimer implements Runnable {
             return;
         }
 
-
-        final String format = DATE_FORMAT.format(System.currentTimeMillis());
-        final String[] split = PublicUtil.splitByCharAt(format, ':');
-        final String minString = split[4];
         final EventFactory factory = ThePit.getInstance().getEventFactory();
-        if(factory.getActiveEpicEvent() != null) {
+        if (factory.getActiveEpicEvent() != null) {
             cooldown.reset();
         }
-        final int min = Integer.parseInt(minString);
+        final int min = LocalDateTime.now().getMinute();
         if (min == 55) {
             String major = EventsHandler.INSTANCE.nextEvent(true);
             cooldown = new Cooldown(3, TimeUnit.MINUTES);

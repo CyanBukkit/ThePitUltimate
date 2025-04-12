@@ -583,7 +583,7 @@ public class GameEffectListener implements Listener {
                 }
             } else if (method.isAnnotationPresent(NotPlayerOnly.class)) {
                 if (!(target instanceof Player) && damager == null) {
-                    ins.handleAttackEntity(level, damager, target, damage, finalDamage, boostDamage, cancel);
+                    ins.handleAttackEntity(level, null, target, damage, finalDamage, boostDamage, cancel);
                 }
             } else {
                 ins.handleAttackEntity(level, damager, target, damage, finalDamage, boostDamage, cancel);

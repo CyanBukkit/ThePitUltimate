@@ -2,12 +2,12 @@ package cn.charlotte.pit.buff;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.util.ClassUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class BuffFactory {
     private final List<AbstractPitBuff> buffs;
 
     public BuffFactory() {
-        this.buffs = new ArrayList<>();
+        this.buffs = new ObjectArrayList<>();
     }
 
     public AbstractPitBuff getBuffByInternalName(String internalName) {

@@ -17,17 +17,17 @@ object MagicLoader {
     private var isLoaded = false
 
     @JvmStatic
-    fun hook() {
+    fun load() {
         Thread {
             try {
                 val token = ThePit.getInstance().pitConfig.token
                 if (token == null || token == "xxx" || try { UUID.fromString(token); false } catch (e: IllegalArgumentException) { true }) {
-                    ThePit.getInstance().sendLogs("§c凭证未入，速启设档，于 §econfig.yml §c中录入秘钥，免关伺服。")
+                    ThePit.getInstance().sendLogs("§c未检测到凭证，请尽快在 §econfig.yml §c中填写密钥以避免服务器关闭。")
                     sleep(60)
                     Bukkit.shutdown()
                     return@Thread
                 }
-                ThePit.getInstance().info("§e正联伺信，少顷可候…")
+                ThePit.getInstance().info("§e正在验证凭证，请稍候…")
                 val magicLicense = MagicLicense(ThePit.getInstance())
                 val response = magicLicense.authenticate(
                     ThePit.getInstance().description.name,
@@ -37,9 +37,9 @@ object MagicLoader {
                 )
                 ThePit.getInstance().info(
                     if (response == Response.ACCEPT)
-                        "§a验已成，承君厚谊 §c❤"
+                        "§a验证成功，感谢您的支持 §c❤"
                     else
-                        "§c验未果，察查尔IP或凭信可安否。"
+                        "§c验证失败，请检查您的IP或凭证是否正确。"
                 )
                 synchronized(lock) {
                     isLoaded = true

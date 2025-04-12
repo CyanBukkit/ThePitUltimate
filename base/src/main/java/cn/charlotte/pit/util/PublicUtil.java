@@ -48,6 +48,7 @@ public class PublicUtil {
             return CraftItemStack.asNMSCopy(item);
         }
     }
+
     public static void removeFromWorld(Entity entity){
         if(entity instanceof CraftEntity){
             net.minecraft.server.v1_8_R3.Entity entityRaw = ((CraftEntity) entity).getHandle();
@@ -67,7 +68,7 @@ public class PublicUtil {
      * @return a array of strings
      */
     public static String[] splitByCharAt(final String line, final char delimiter) {
-        CharSequence[] temp = new CharSequence[(line.length() / 2) + 1];
+        String[] temp = new String[(line.length() / 2) + 1];
         int wordCount = 0;
         int i = 0;
         int j = line.indexOf(delimiter); // first substring

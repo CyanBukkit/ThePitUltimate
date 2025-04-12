@@ -91,13 +91,11 @@ import java.util.concurrent.RejectedExecutionException;
  */
 public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
 
-
     public static PitInternalHook api;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
     private static boolean DEBUG_SERVER = false;
     private static String bungeeServerName;
     private static ThePit instance;
-
 
     @Getter
     private MongoDB mongoDB;
@@ -203,7 +201,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.loadConfig();
 
         this.loadDatabase();
-//                this.loadOperator(); //operator
 
         this.loadItemFactor();
         this.loadMenu();
@@ -245,7 +242,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 }
             }
         }));
-//            this.printBanner();
 
         new LeaderBoardRunnable().runTaskTimerAsynchronously(this, 0, 12000);
 
@@ -260,14 +256,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             world.setGameRuleValue("mobGriefing", "false");
             world.setGameRuleValue("doDaylightCycle", "false");
         }
+
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
 
-        //Bridging
-        MagicLoader.hook();
+        MagicLoader.load();
         MagicLoader.ensureIsLoaded();
     }
 

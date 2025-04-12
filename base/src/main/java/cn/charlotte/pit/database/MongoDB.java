@@ -142,10 +142,6 @@ public final class MongoDB {
         createIndex(mailCollection, "uuidIndex", "uuid");
         log.info("Connected! (连接成功>>>>)");
         log.info("Costs " + ChronoUnit.MILLIS.between(connects, Instant.now()));
-
-//        log.info("loading cdk...");
-//        CDKData.loadAllCDKFromData();
-//        log.info("loaded!");
     }
 
     public MongoClient getMongoClient() {

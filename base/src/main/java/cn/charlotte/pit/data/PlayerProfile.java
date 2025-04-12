@@ -369,7 +369,6 @@ public class PlayerProfile {
     @Deprecated
     @JsonIgnore
     public static PlayerProfile getPlayerProfileByUuid(UUID uuid) {
-
         PlayerProfile rawCache = getRawCache(uuid);
         if (rawCache == null) {
             return NONE_PROFILE;
@@ -424,12 +423,6 @@ public class PlayerProfile {
             //load mail
             loadMail(playerProfile, uuid);
             //playerProfile.loadInvBackups();
-
-            //load inv backup
-            try {
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
         return playerProfile;
@@ -664,8 +657,7 @@ public class PlayerProfile {
     @JsonIgnore
     public UUID getPlayerUuid() {
         if (cachedUUID == null) {
-            UUID uuid1 = UUID.fromString(this.uuid);
-            cachedUUID = uuid1;
+            cachedUUID = UUID.fromString(this.uuid);
         }
         return cachedUUID;
     }

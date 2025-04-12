@@ -47,8 +47,7 @@ public class TradeRequest {
 
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof TradeRequest)) return false;
-        final TradeRequest other = (TradeRequest) o;
+        if (!(o instanceof TradeRequest other)) return false;
         if (!other.canEqual((Object) this)) return false;
         final Object this$player = this.getPlayer();
         final Object other$player = other.getPlayer();
