@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -292,5 +293,13 @@ public class ProfileOperator implements IProfilerOperator {
 
     public void wipe() {
         operators.clear();
+    }
+
+    @Override
+    public void close() throws IOException {
+        operators.removeIf((a,p) -> {
+            p.drainTasksOnCurrentThread();
+            return true;
+        });
     }
 }

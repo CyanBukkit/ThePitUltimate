@@ -288,6 +288,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             PlayerProfile.saveAllSync(false);
             CC.boardCast0("&6&l公告! &7正在关闭服务器...");
         }
+        System.out.println("Switching io executions to current thread");
+        try {
+            profileOperator.close();
+        } catch (Exception e){
+            System.err.println("Failed to execute!");
+        }
     }
 
 

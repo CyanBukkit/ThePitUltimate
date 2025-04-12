@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
@@ -160,6 +161,24 @@ public class PackedOperator implements IOperator {
     }
 
     public void tick() {
+        updateEntity();
+        Runnable currentOperation = gainTask();
+        if (currentOperation == null) return; //保持有序性。。。
+
+        Bukkit.getScheduler().runTaskAsynchronously(pit, currentOperation);
+
+    }
+    public void drainTasksOnCurrentThread(){
+        while(hasAnyOperation()){
+            Runnable runnable = gainTask();
+            if(runnable == null){
+                break;
+            }
+            runnable.run();
+        }
+    }
+
+    private void updateEntity() {
         if (lastBoundPlayer != null) {
             if (isLoaded()) {
                 Player player = Bukkit.getPlayer(this.profile.getPlayerUuid());
@@ -168,13 +187,18 @@ public class PackedOperator implements IOperator {
                 }
             }
         }
+    }
+
+    @Nullable
+    private Runnable gainTask() {
+        Runnable currentOperation;
         synchronized (operations) {
             if (operations.isEmpty()) {
-                return;
+                return null;
             }
 
             if (!pendingExecuting.isEmpty()) {
-                return; //保持有序性。。。
+                return null;
             }
 
             Runnable operation = EMPTY_RUNNABLE;
@@ -185,7 +209,8 @@ public class PackedOperator implements IOperator {
 
             pendingExecuting.add(operation);
             final Runnable operationFinaled = operation;
-            Bukkit.getScheduler().runTaskAsynchronously(pit, () -> {
+
+            currentOperation = () -> {
                 try {
                     operationFinaled.run();
                     operations.remove(operationFinaled);
@@ -194,8 +219,9 @@ public class PackedOperator implements IOperator {
                 } catch (Exception e) {
                     policy.fail(this.lastBoundPlayer, e);
                 }
-            });
+            };
         }
+        return currentOperation;
     }
 
     private static final Runnable EMPTY_RUNNABLE = () -> {
