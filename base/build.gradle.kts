@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import java.util.*
 
 plugins {
     kotlin("plugin.lombok") version "2.1.20"
@@ -9,7 +10,7 @@ plugins {
 }
 
 group = "me.huanmeng"
-version = "4.0.2A"
+version = UUID.randomUUID().toString().substring(0,4);
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()

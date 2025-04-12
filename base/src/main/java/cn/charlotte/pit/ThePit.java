@@ -37,7 +37,6 @@ import net.mizukilab.pit.npc.NpcFactory;
 import net.mizukilab.pit.pet.PetFactory;
 import net.mizukilab.pit.quest.QuestFactory;
 import net.mizukilab.pit.runnable.DayNightCycleRunnable;
-import net.mizukilab.pit.runnable.LeaderBoardRunnable;
 import net.mizukilab.pit.runnable.ProfileLoadRunnable;
 import net.mizukilab.pit.runnable.RebootRunnable;
 import net.mizukilab.pit.trade.Game;
@@ -261,9 +260,18 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
+        try{
+            //Dev build
+            System.out.println("Loading from local storage");
+            Class.forName("net.mizukilab.pit.Loader").getMethod("start").invoke(null);
+        } catch (Exception e){
 
-        MagicLoader.load();
-        MagicLoader.ensureIsLoaded();
+            System.out.println("Fetching");
+            //Non devBuild
+            MagicLoader.load();
+            MagicLoader.ensureIsLoaded();
+
+        }
     }
 
     private void loadItemFactor() {

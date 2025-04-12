@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import java.util.*
 
 plugins {
     kotlin("plugin.lombok") version "2.1.20"
@@ -8,6 +9,11 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
+var devBuild = true;
+if(devBuild) {
+    println("当前使用DevBuild模式构建!!,请详细斟酌是否构建")
+    Scanner(System.`in`).next()
+}
 group = "me.huanmeng"
 version = "core"
 repositories {
@@ -24,7 +30,7 @@ repositories {
     maven("https://repo.panda-lang.org/releases")
 }
 tasks.named<ShadowJar>("shadowJar") {
-    archiveFileName.set("ThePitUltimate-$version.jar")
+    archiveFileName.set("ThePitUltimate-$version-"+ (if(devBuild) "dev" else "") + ".jar")
     exclude("META-INF/**")
     relocate("pku.yim.license", "net.mizukilab.pit.license")
     relocate("panda","net.mizukilab.pit.libs")
@@ -39,10 +45,12 @@ tasks.named<ShadowJar>("shadowJar") {
     from("build/tmp/processed-resources")
     mergeServiceFiles()
 }
-
 dependencies {
-    compileOnly(project(":base"))
-
+    var dependencyNotation = project(":base")
+    compileOnly(dependencyNotation)
+    if(devBuild){
+        implementation(dependencyNotation)
+    }
     compileOnly(fileTree("../packLib"))
     compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
     compileOnly(libs.reflectionhelper)
