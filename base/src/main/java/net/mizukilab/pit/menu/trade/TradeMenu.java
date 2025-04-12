@@ -1,7 +1,6 @@
 package net.mizukilab.pit.menu.trade;
 
 import net.mizukilab.pit.menu.GlassPaneButton;
-import cn.charlotte.pit.menu.trade.button.*;
 import net.mizukilab.pit.menu.trade.button.*;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.StringUtil;
