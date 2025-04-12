@@ -29,7 +29,7 @@ repositories {
     maven("https://repo.panda-lang.org/releases")
 }
 tasks.named<ShadowJar>("shadowJar") {
-    archiveFileName.set("ThePitUltimate-$version-"+ (if(devBuild) "dev" else "") + ".jar")
+    archiveFileName.set("ThePitUltimate-$version"+ (if(devBuild) "-dev" else "") + ".jar")
     exclude("META-INF/**")
     relocate("pku.yim.license", "net.mizukilab.pit.license")
     relocate("panda","net.mizukilab.pit.libs")
