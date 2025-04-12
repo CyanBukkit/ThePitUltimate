@@ -83,9 +83,9 @@ public class BatUtil {
                     );
                     CraftWorld world = (CraftWorld) player.getWorld();
                     EntityBat entityBat = new EntityBat(world.getHandle());
-                    entityBat.teleportTo(batLoc,false);
-                    world.addEntity(entityBat, CreatureSpawnEvent.SpawnReason.DEFAULT);
+                    entityBat.setPosition(batLoc.getX(), batLoc.getY(), batLoc.getZ());
                     entityBat.noDamageTicks =  100000;
+                    world.addEntity(entityBat, CreatureSpawnEvent.SpawnReason.DEFAULT);
                     bats.add((LivingEntity) entityBat.getBukkitEntity());
                 }
             }
