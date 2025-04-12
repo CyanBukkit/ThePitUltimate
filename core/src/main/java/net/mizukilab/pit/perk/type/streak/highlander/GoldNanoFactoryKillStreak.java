@@ -2,9 +2,9 @@ package net.mizukilab.pit.perk.type.streak.highlander;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
-import net.mizukilab.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.random.RandomUtil;
 import org.bukkit.Bukkit;

@@ -1,10 +1,9 @@
 package net.mizukilab.pit.perk.type.prestige
 
-import net.mizukilab.pit.item.MythicColor
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
+import net.mizukilab.pit.item.MythicColor
 import net.mizukilab.pit.util.item.ItemBuilder
-
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack

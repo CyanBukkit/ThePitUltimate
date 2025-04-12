@@ -2,10 +2,10 @@ package net.mizukilab.pit.hologram;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
-import net.mizukilab.pit.util.chat.CC;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

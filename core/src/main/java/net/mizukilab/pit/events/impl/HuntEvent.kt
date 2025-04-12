@@ -1,16 +1,16 @@
 package net.mizukilab.pit.events.impl
 
 import cn.charlotte.pit.ThePit
-import net.mizukilab.pit.config.NewConfiguration.eventOnlineRequired
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.events.IEvent
 import cn.charlotte.pit.events.INormalEvent
 import cn.charlotte.pit.events.IScoreBoardInsert
+import net.minecraft.server.v1_8_R3.EnumParticle
+import net.mizukilab.pit.config.NewConfiguration.eventOnlineRequired
 import net.mizukilab.pit.util.ParticleBuilder
 import net.mizukilab.pit.util.PlayerUtil
 import net.mizukilab.pit.util.chat.CC
-import net.minecraft.server.v1_8_R3.EnumParticle
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player

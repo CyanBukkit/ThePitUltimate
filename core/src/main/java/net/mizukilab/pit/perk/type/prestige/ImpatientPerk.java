@@ -1,10 +1,10 @@
 package net.mizukilab.pit.perk.type.prestige;
 
 import cn.charlotte.pit.data.PlayerProfile;
-import net.mizukilab.pit.parm.listener.ITickTask;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
+import net.mizukilab.pit.parm.listener.ITickTask;
 import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -99,7 +99,7 @@ public class ImpatientPerk extends AbstractPerk implements ITickTask {
         } else {
             try {
                 for (PotionEffect potionEffect : player.getActivePotionEffects()) {
-                    if (potionEffect.getType().getName().equalsIgnoreCase("speed")) {
+                    if (potionEffect.getType() == PotionEffectType.SPEED) {
                         //拥有速度效果且时间小于8640秒时给予60min speed2
                         if (potionEffect.getDuration() < 8640 * 20) {
                             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 86400 * 20, 1), true);
@@ -107,8 +107,10 @@ public class ImpatientPerk extends AbstractPerk implements ITickTask {
                         }
                     }
                 }
-                //没有speed且在主城时补充效果
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 86400 * 20, 1), true);
+                if(!player.hasPotionEffect(PotionEffectType.SPEED)) {
+                    //没有speed且在主城时补充效果
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 86400 * 20, 1), true);
+                }
             } catch (Exception e) {
                 CC.printError(player, e);
             }

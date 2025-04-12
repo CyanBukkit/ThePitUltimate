@@ -2,14 +2,13 @@ package net.mizukilab.pit.enchantment.type.rare
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
+import com.google.common.util.concurrent.AtomicDouble
 import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant
 import net.mizukilab.pit.enchantment.param.item.BowOnly
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity
 import net.mizukilab.pit.util.cooldown.Cooldown
-import com.google.common.util.concurrent.AtomicDouble
-
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer

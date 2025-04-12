@@ -2,13 +2,12 @@ package net.mizukilab.pit.runnable
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
+import net.minecraft.server.v1_8_R3.MinecraftServer
 import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.util.chat.ActionBarUtil
 import net.mizukilab.pit.util.chat.CC
-import net.minecraft.server.v1_8_R3.MinecraftServer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import kotlin.collections.iterator
 
 object ActionBarDisplayRunnable {
 

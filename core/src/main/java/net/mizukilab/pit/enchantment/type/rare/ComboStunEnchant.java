@@ -1,6 +1,8 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.data.PlayerProfile;
+import com.google.common.util.concurrent.AtomicDouble;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
 import net.mizukilab.pit.enchantment.param.item.WeaponOnly;
@@ -8,8 +10,6 @@ import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
-import com.google.common.util.concurrent.AtomicDouble;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

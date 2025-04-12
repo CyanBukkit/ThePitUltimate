@@ -1,11 +1,11 @@
 package net.mizukilab.pit.hologram;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.util.chat.CC;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

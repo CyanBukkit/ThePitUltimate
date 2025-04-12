@@ -1,10 +1,10 @@
 package net.mizukilab.pit.menu.perk.prestige;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.menu.GlassPaneButton;
-import net.mizukilab.pit.menu.perk.prestige.button.PrestigePerkBuyButton;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import net.mizukilab.pit.menu.GlassPaneButton;
+import net.mizukilab.pit.menu.perk.prestige.button.PrestigePerkBuyButton;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;
 import net.mizukilab.pit.util.menu.Menu;

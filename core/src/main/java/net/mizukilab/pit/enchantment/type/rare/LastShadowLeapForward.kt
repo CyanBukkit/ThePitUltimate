@@ -11,7 +11,6 @@ import net.mizukilab.pit.util.chat.RomanUtil
 import net.mizukilab.pit.util.cooldown.Cooldown
 import net.mizukilab.pit.util.time.TimeUtil
 import net.mizukilab.pit.util.toMythicItem
-
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -20,7 +19,6 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import org.bukkit.util.Vector
 import java.util.*
 
 
@@ -87,7 +85,7 @@ class LastShadowLeapForward : AbstractEnchantment(), Listener, IActionDisplayEnc
             cooldownMap[player.uniqueId] = Cooldown(getDuration(level) * 1000L)
 
             val vector = player.location.direction.clone().multiply(1.6).apply {
-                Vector.setY = 0.5
+                this.setY(0.5)
             }
 
             Bukkit.getScheduler().runTask(ThePit.getInstance()) {

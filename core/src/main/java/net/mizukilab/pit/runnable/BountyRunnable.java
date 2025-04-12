@@ -1,10 +1,6 @@
 package net.mizukilab.pit.runnable;
 
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
-import net.mizukilab.pit.util.PlayerUtil;
-import net.mizukilab.pit.util.chat.CC;
-import net.mizukilab.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
 import io.irina.backports.utils.SWMRHashTable;
@@ -12,6 +8,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import net.mizukilab.pit.config.NewConfiguration;
+import net.mizukilab.pit.util.PlayerUtil;
+import net.mizukilab.pit.util.chat.CC;
+import net.mizukilab.pit.util.cooldown.Cooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

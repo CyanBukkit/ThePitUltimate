@@ -4,8 +4,8 @@
 
 package net.jitse.npclib.nms.v1_8_R3.packets;
 
-import net.mizukilab.pit.util.proto.Reflection;
 import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
+import net.mizukilab.pit.util.proto.Reflection;
 
 import java.util.Collection;
 import java.util.Collections;

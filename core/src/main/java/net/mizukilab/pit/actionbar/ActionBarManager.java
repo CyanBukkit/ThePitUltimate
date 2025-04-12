@@ -1,8 +1,8 @@
 package net.mizukilab.pit.actionbar;
 
-import net.mizukilab.pit.util.chat.ActionBarUtil;
 import cn.hutool.core.lang.mutable.MutablePair;
 import io.irina.backports.utils.SWMRHashTable;
+import net.mizukilab.pit.util.chat.ActionBarUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

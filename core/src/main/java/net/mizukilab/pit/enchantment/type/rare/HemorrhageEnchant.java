@@ -1,6 +1,8 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.buff.impl.HemorrhageDeBuff;
+import com.google.common.util.concurrent.AtomicDouble;
+import io.irina.backports.utils.SWMRHashTable;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
 import net.mizukilab.pit.enchantment.param.event.PlayerOnly;
@@ -10,8 +12,6 @@ import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.time.TimeUtil;
-import com.google.common.util.concurrent.AtomicDouble;
-import io.irina.backports.utils.SWMRHashTable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

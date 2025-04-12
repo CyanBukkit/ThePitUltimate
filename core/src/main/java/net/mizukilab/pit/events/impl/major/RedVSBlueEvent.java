@@ -1,7 +1,6 @@
 package net.mizukilab.pit.events.impl.major;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitAssistEvent;
 import cn.charlotte.pit.event.PitKillEvent;
@@ -9,6 +8,10 @@ import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
+import lombok.Getter;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.Utils;
@@ -17,9 +20,6 @@ import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.level.LevelUtil;
 import net.mizukilab.pit.util.time.TimeUtil;
-import lombok.Getter;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

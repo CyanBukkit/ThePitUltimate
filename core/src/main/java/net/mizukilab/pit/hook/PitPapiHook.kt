@@ -2,9 +2,9 @@ package net.mizukilab.pit.hook
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.events.genesis.team.GenesisTeam
+import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import net.mizukilab.pit.getPitProfile
 import net.mizukilab.pit.util.chat.CC
-import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 
 object PitPapiHook : PlaceholderExpansion() {

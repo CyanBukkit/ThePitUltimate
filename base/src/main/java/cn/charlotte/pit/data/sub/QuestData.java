@@ -1,8 +1,8 @@
 package cn.charlotte.pit.data.sub;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.quest.AbstractQuest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.mizukilab.pit.quest.AbstractQuest;
 
 import java.util.HashSet;
 import java.util.Set;

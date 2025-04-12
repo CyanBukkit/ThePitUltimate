@@ -1,10 +1,10 @@
 package net.mizukilab.pit.util.item;
 
 import cn.charlotte.pit.ThePit;
+import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.IItemFactory;
 import net.mizukilab.pit.util.PublicUtil;
-import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

@@ -2,10 +2,10 @@ package net.mizukilab.pit.enchantment.type.op;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.event.PitStreakKillChangeEvent;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
-import cn.charlotte.pit.event.PitStreakKillChangeEvent;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.pet.PetFactory;
 import net.mizukilab.pit.util.chat.CC;

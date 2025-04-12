@@ -1,6 +1,7 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.ThePit;
+import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
@@ -8,7 +9,6 @@ import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity;
 import net.mizukilab.pit.parm.listener.ITickTask;
 import net.mizukilab.pit.util.cooldown.Cooldown;
-import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

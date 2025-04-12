@@ -1,19 +1,18 @@
 package net.mizukilab.pit.perk.type.streak.highlander;
 
 import cn.charlotte.pit.data.PlayerProfile;
-import net.mizukilab.pit.enchantment.param.event.PlayerOnly;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
-import net.mizukilab.pit.parm.AutoRegister;
-import cn.charlotte.pit.parm.listener.*;
-import net.mizukilab.pit.parm.listener.*;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.MegaStreak;
 import cn.charlotte.pit.perk.PerkType;
+import com.google.common.util.concurrent.AtomicDouble;
+import net.mizukilab.pit.enchantment.param.event.PlayerOnly;
+import net.mizukilab.pit.parm.AutoRegister;
+import net.mizukilab.pit.parm.listener.*;
 import net.mizukilab.pit.perk.type.shop.BountyHunterPerk;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.MessageType;
-import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;

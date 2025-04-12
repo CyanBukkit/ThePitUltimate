@@ -41,14 +41,14 @@ public class PacketListener {
 
     public void start(NPCLib instance) {
         this.plugin = instance.getPlugin();
+        ProtocolLibrary.getProtocolManager().getAsynchronousManager()
+                .registerAsyncHandler(new PacketAdapter(instance.getPlugin(), PacketType.Play.Client.USE_ENTITY) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                handleInteractPacket(event.getPlayer(), event.getPacket().getHandle());
+            }
+        });
 
-        ProtocolLibrary.getProtocolManager()
-                .addPacketListener(new PacketAdapter(instance.getPlugin(), PacketType.Play.Client.USE_ENTITY) {
-                    @Override
-                    public void onPacketReceiving(PacketEvent event) {
-                        handleInteractPacket(event.getPlayer(), event.getPacket().getHandle());
-                    }
-                });
     }
 
     private void handleInteractPacket(Player player, Object packet) {

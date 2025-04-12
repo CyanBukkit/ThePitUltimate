@@ -3,6 +3,7 @@ package net.mizukilab.pit.nametag;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.events.impl.major.HamburgerEvent;
 import net.mizukilab.pit.events.impl.major.RedVSBlueEvent;
 import net.mizukilab.pit.events.impl.major.SpireEvent;
@@ -11,7 +12,6 @@ import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.nametag.BufferedNametag;
 import net.mizukilab.pit.util.nametag.NametagAdapter;
 import net.mizukilab.pit.util.rank.RankUtil;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

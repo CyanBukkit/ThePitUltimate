@@ -2,8 +2,8 @@ package cn.charlotte.pit.data
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.mail.Mail
-import net.mizukilab.pit.util.chat.CC
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.mizukilab.pit.util.chat.CC
 import org.bukkit.entity.Player
 import java.util.*
 

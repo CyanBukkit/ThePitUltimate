@@ -4,10 +4,10 @@
 
 package net.jitse.npclib.listeners;
 
-import net.mizukilab.pit.util.PlayerUtil;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.internal.NPCBase;
 import net.jitse.npclib.internal.NPCManager;
+import net.mizukilab.pit.util.PlayerUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

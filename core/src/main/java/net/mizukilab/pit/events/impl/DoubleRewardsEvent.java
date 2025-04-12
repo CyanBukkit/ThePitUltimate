@@ -3,9 +3,9 @@ package net.mizukilab.pit.events.impl;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.INormalEvent;
+import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.parm.listener.IPlayerKilledEntity;
 import net.mizukilab.pit.util.chat.CC;
-import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 

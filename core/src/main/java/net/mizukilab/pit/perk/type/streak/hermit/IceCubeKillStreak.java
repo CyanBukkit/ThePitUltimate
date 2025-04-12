@@ -2,9 +2,9 @@ package net.mizukilab.pit.perk.type.streak.hermit;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
-import net.mizukilab.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.item.ItemUtil;

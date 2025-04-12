@@ -1,12 +1,12 @@
 package net.mizukilab.pit.enchantment.menu.button
 
 import cn.charlotte.pit.data.PlayerProfile
+import lombok.RequiredArgsConstructor
 import net.mizukilab.pit.item.MythicColor
 import net.mizukilab.pit.util.inventory.InventoryUtil
 import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.menu.Button
 import net.mizukilab.pit.util.menu.Menu
-import lombok.RequiredArgsConstructor
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player

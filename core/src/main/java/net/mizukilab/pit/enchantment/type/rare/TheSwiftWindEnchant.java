@@ -1,5 +1,6 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.param.item.BowOnly;
@@ -9,7 +10,6 @@ import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
-import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;

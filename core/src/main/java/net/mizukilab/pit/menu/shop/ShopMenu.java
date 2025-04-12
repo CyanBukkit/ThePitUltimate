@@ -1,7 +1,6 @@
 package net.mizukilab.pit.menu.shop;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.menu.shop.button.type.*;
 import net.mizukilab.pit.menu.shop.button.type.*;
 import net.mizukilab.pit.menu.supporter.button.SupporterEntranceButton;
 import net.mizukilab.pit.util.PlayerUtil;

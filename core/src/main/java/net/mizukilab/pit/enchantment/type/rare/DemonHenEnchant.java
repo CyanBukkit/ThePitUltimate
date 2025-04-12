@@ -1,6 +1,10 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.ThePit;
+import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.AtomicDouble;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
+import net.minecraft.server.v1_8_R3.MathHelper;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
 import net.mizukilab.pit.enchantment.param.event.PlayerOnly;
@@ -13,10 +17,6 @@ import net.mizukilab.pit.util.SpecialUtil;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.item.ItemUtil;
 import net.mizukilab.pit.util.time.TimeUtil;
-import com.google.common.collect.Maps;
-import com.google.common.util.concurrent.AtomicDouble;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
-import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

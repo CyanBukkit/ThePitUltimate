@@ -2,13 +2,13 @@ package net.mizukilab.pit.npc;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
-import net.mizukilab.pit.npc.runnable.NpcRunnable;
-import net.mizukilab.pit.parm.AutoRegister;
 import lombok.SneakyThrows;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.events.NPCInteractEvent;
 import net.jitse.npclib.api.state.NPCSlot;
+import net.mizukilab.pit.npc.runnable.NpcRunnable;
+import net.mizukilab.pit.parm.AutoRegister;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

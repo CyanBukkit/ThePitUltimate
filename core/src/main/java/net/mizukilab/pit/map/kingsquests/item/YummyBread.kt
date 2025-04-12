@@ -1,15 +1,14 @@
 package net.mizukilab.pit.map.kingsquests.item
 
+import cn.charlotte.pit.util.hologram.HologramAPI
 import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.util.PlayerUtil
 import net.mizukilab.pit.util.chat.CC
 import net.mizukilab.pit.util.countItem
-import cn.charlotte.pit.util.hologram.HologramAPI
 import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.submit
 import net.mizukilab.pit.util.takeItem
-
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Furnace
@@ -20,7 +19,6 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.util.Vector
 
 object YummyBread : AbstractPitItem(), Listener {
 
@@ -58,7 +56,7 @@ object YummyBread : AbstractPitItem(), Listener {
 //        block.type = Material.BURNING_FURNACE
 
         val vector = player.location.direction.clone().multiply(-1).apply {
-            Vector.setY = 0.0
+            this.setY(0)
         }
 
         val hologramLoc = block.location.add(vector)

@@ -2,11 +2,15 @@ package net.mizukilab.pit.item.type
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.sub.EnchantmentRecord
-import net.mizukilab.pit.enchantment.param.item.WeaponOnly
-import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.event.PitPlayerSpawnEvent
 import cn.charlotte.pit.event.PitProfileLoadedEvent
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.TextComponent
+import net.minecraft.server.v1_8_R3.NBTTagCompound
+import net.mizukilab.pit.enchantment.param.item.WeaponOnly
+import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
 import net.mizukilab.pit.getPitProfile
 import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem
@@ -17,11 +21,6 @@ import net.mizukilab.pit.util.chat.ChatComponentBuilder
 import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.random.RandomUtil
-
-import net.md_5.bungee.api.chat.BaseComponent
-import net.md_5.bungee.api.chat.HoverEvent
-import net.md_5.bungee.api.chat.TextComponent
-import net.minecraft.server.v1_8_R3.NBTTagCompound
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack

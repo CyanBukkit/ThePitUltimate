@@ -16,7 +16,6 @@ import cn.charlotte.pit.event.PitDamagePlayerEvent;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.item.type.mythic.MythicBowItem;
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
-import cn.charlotte.pit.parm.listener.*;
 import net.mizukilab.pit.parm.listener.*;
 import net.mizukilab.pit.parm.type.BowOnly;
 import net.mizukilab.pit.parm.type.ThrowOnly;

@@ -6,12 +6,12 @@ package net.mizukilab.pit.util.item;
  */
 
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
-import net.mizukilab.pit.enchantment.AbstractEnchantment;
-import net.mizukilab.pit.util.PublicUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.*;
+import net.mizukilab.pit.enchantment.AbstractEnchantment;
+import net.mizukilab.pit.util.PublicUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;

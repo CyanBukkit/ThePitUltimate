@@ -1,12 +1,12 @@
 package net.mizukilab.pit.menu.perk.normal.buy;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.perk.AbstractPerk;
+import cn.charlotte.pit.perk.PerkType;
 import net.mizukilab.pit.menu.perk.UnKnowButton;
 import net.mizukilab.pit.menu.perk.normal.buy.button.BackToPerkChooseButton;
 import net.mizukilab.pit.menu.perk.normal.buy.button.PerkBuyButton;
 import net.mizukilab.pit.menu.perk.normal.buy.button.ResetButton;
-import cn.charlotte.pit.perk.AbstractPerk;
-import cn.charlotte.pit.perk.PerkType;
 import net.mizukilab.pit.util.menu.Button;
 import net.mizukilab.pit.util.menu.Menu;
 import org.bukkit.entity.Player;

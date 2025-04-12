@@ -4,11 +4,11 @@
 
 package net.jitse.npclib.nms.v1_8_R3.packets;
 
-import net.mizukilab.pit.util.proto.Reflection;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_8_R3.WorldSettings;
+import net.mizukilab.pit.util.proto.Reflection;
 
 import java.util.Collections;
 import java.util.List;

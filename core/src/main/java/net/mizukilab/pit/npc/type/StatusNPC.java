@@ -2,11 +2,11 @@ package net.mizukilab.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.jitse.npclib.api.skin.Skin;
 import net.mizukilab.pit.menu.status.StatusMenu;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.level.LevelUtil;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

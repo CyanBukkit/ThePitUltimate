@@ -1,12 +1,12 @@
 package net.mizukilab.pit.enchantment.type.op;
 
+import lombok.RequiredArgsConstructor;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.parm.listener.ITickTask;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.beam.beam.Beam;
 import net.mizukilab.pit.util.cooldown.Cooldown;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;

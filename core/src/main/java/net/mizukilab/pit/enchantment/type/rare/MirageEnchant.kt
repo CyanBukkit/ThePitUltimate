@@ -1,12 +1,12 @@
 package net.mizukilab.pit.enchantment.type.rare
 
 import cn.charlotte.pit.ThePit
-import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
 import cn.charlotte.pit.util.hologram.HologramAPI
 import cn.hutool.crypto.asymmetric.KeyType
 import cn.hutool.crypto.asymmetric.RSA
 import com.google.common.io.ByteArrayDataOutput
 import com.google.common.io.ByteStreams
+import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener

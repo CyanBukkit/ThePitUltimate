@@ -4,10 +4,9 @@ package net.mizukilab.pit.perk.type.streak.tothemoon
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.event.PitStreakKillChangeEvent
-import net.mizukilab.pit.parm.AutoRegister
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
-
+import net.mizukilab.pit.parm.AutoRegister
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

@@ -1,5 +1,9 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
+import com.google.common.util.concurrent.AtomicDouble;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityArrow;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
 import net.mizukilab.pit.enchantment.param.item.BowOnly;
@@ -7,10 +11,6 @@ import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
-import com.google.common.util.concurrent.AtomicDouble;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import net.minecraft.server.v1_8_R3.Entity;
-import net.minecraft.server.v1_8_R3.EntityArrow;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

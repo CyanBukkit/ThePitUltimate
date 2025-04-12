@@ -1,10 +1,10 @@
 package net.mizukilab.pit.enchantment;
 
-import net.mizukilab.pit.parm.listener.*;
-import net.mizukilab.pit.util.PublicUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.mizukilab.pit.parm.listener.*;
+import net.mizukilab.pit.util.PublicUtil;
 
 import java.util.Collection;
 import java.util.Iterator;

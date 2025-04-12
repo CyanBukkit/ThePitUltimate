@@ -1,8 +1,8 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.util.cooldown.Cooldown;
 import lombok.Setter;
+import net.mizukilab.pit.util.cooldown.Cooldown;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;

@@ -1,8 +1,8 @@
 package net.mizukilab.pit.npc;
 
-import net.mizukilab.pit.util.chat.CC;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
+import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

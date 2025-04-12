@@ -2,9 +2,9 @@ package net.mizukilab.pit.perk.type.streak.nonpurchased;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
-import net.mizukilab.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

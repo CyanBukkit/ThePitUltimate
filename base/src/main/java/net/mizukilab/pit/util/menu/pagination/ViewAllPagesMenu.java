@@ -1,9 +1,9 @@
 package net.mizukilab.pit.util.menu.pagination;
 
+import lombok.NonNull;
 import net.mizukilab.pit.util.menu.Button;
 import net.mizukilab.pit.util.menu.Menu;
 import net.mizukilab.pit.util.menu.buttons.BackButton;
-import lombok.NonNull;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

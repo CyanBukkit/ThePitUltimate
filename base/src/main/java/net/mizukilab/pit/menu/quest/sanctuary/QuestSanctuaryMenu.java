@@ -1,8 +1,8 @@
 package net.mizukilab.pit.menu.quest.sanctuary;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.menu.quest.sanctuary.button.PermanentBoostButton;
 import cn.charlotte.pit.perk.PerkFactory;
+import net.mizukilab.pit.menu.quest.sanctuary.button.PermanentBoostButton;
 import net.mizukilab.pit.util.menu.Button;
 import net.mizukilab.pit.util.menu.Menu;
 import org.bukkit.entity.Player;

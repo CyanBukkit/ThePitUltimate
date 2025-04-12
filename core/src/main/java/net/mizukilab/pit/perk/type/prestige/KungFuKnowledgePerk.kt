@@ -1,13 +1,12 @@
 package net.mizukilab.pit.perk.type.prestige
 
 import cn.charlotte.pit.data.PlayerProfile
-import net.mizukilab.pit.parm.AutoRegister
-import net.mizukilab.pit.parm.listener.IAttackEntity
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
-import net.mizukilab.pit.util.PlayerUtil
 import com.google.common.util.concurrent.AtomicDouble
-
+import net.mizukilab.pit.parm.AutoRegister
+import net.mizukilab.pit.parm.listener.IAttackEntity
+import net.mizukilab.pit.util.PlayerUtil
 import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player

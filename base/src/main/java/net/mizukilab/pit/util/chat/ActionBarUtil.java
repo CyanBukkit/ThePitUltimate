@@ -1,9 +1,9 @@
 package net.mizukilab.pit.util.chat;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.actionbar.IActionBarManager;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.mizukilab.pit.actionbar.IActionBarManager;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

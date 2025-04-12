@@ -1,8 +1,8 @@
 package net.mizukilab.pit.util.sound;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.util.ClassUtil;
 import lombok.SneakyThrows;
+import net.mizukilab.pit.util.ClassUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

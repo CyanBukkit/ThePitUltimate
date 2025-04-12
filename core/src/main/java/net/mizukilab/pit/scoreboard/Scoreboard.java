@@ -1,15 +1,16 @@
 package net.mizukilab.pit.scoreboard;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
-import net.mizukilab.pit.events.impl.major.RagePitEvent;
 import cn.charlotte.pit.perk.AbstractPerk;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.mizukilab.pit.config.NewConfiguration;
+import net.mizukilab.pit.events.impl.major.RagePitEvent;
 import net.mizukilab.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.Utils;
@@ -17,7 +18,6 @@ import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.level.LevelUtil;
 import net.mizukilab.pit.util.scoreboard.AssembleAdapter;
 import net.mizukilab.pit.util.time.TimeUtil;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;

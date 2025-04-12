@@ -1,12 +1,12 @@
 package net.mizukilab.pit.data.operator;
 
-import cn.charlotte.pit.data.operator.IOperator;
-import cn.charlotte.pit.data.operator.IProfilerOperator;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import net.mizukilab.pit.util.Utils;
+import cn.charlotte.pit.data.operator.IOperator;
+import cn.charlotte.pit.data.operator.IProfilerOperator;
 import com.google.common.annotations.Beta;
 import io.irina.backports.utils.SWMRHashTable;
+import net.mizukilab.pit.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

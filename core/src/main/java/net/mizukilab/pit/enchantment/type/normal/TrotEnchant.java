@@ -1,13 +1,13 @@
 package net.mizukilab.pit.enchantment.type.normal;
 
 import cn.charlotte.pit.data.PlayerProfile;
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.util.cooldown.Cooldown;
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import spg.lgdev.handler.MovementHandler;

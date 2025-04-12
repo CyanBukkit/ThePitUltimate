@@ -4,8 +4,8 @@
 
 package net.jitse.npclib.hologram;
 
-import net.mizukilab.pit.util.proto.Reflection;
 import net.jitse.npclib.internal.MinecraftVersion;
+import net.mizukilab.pit.util.proto.Reflection;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;

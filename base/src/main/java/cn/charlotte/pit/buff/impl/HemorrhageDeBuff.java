@@ -1,9 +1,9 @@
 package cn.charlotte.pit.buff.impl;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.UtilKt;
 import cn.charlotte.pit.buff.AbstractPitBuff;
 import cn.charlotte.pit.event.PitStackBuffEvent;
+import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.parm.AutoRegister;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;

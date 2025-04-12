@@ -1,7 +1,7 @@
 package net.mizukilab.pit.item.type;
 
-import net.mizukilab.pit.util.item.ItemBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.mizukilab.pit.util.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

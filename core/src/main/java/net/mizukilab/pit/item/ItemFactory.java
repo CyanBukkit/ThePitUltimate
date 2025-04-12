@@ -1,9 +1,9 @@
 package net.mizukilab.pit.item;
 
+import com.google.common.annotations.Beta;
 import net.mizukilab.pit.util.ItemGlobalReference;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.item.ItemUtil;
-import com.google.common.annotations.Beta;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 

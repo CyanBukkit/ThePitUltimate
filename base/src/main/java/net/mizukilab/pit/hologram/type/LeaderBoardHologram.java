@@ -2,11 +2,11 @@ package net.mizukilab.pit.hologram.type;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.LeaderBoardEntry;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.hologram.AbstractHologram;
 import net.mizukilab.pit.util.chat.StringUtil;
 import net.mizukilab.pit.util.level.LevelUtil;
 import net.mizukilab.pit.util.rank.RankUtil;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

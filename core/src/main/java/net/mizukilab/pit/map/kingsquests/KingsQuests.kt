@@ -2,13 +2,7 @@ package net.mizukilab.pit.map.kingsquests
 
 import cn.charlotte.pit.ThePit
 import net.mizukilab.pit.item.AbstractPitItem
-import net.mizukilab.pit.map.kingsquests.item.Cherry
-import net.mizukilab.pit.map.kingsquests.item.HighGradeEggs
-import net.mizukilab.pit.map.kingsquests.item.MiniCake
-import net.mizukilab.pit.map.kingsquests.item.PackagedBale
-import net.mizukilab.pit.map.kingsquests.item.Sugar
-import net.mizukilab.pit.map.kingsquests.item.Wheat
-import net.mizukilab.pit.map.kingsquests.item.YummyBread
+import net.mizukilab.pit.map.kingsquests.item.*
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 

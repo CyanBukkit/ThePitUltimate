@@ -4,7 +4,6 @@
 
 package net.jitse.npclib.nms.v1_8_R3;
 
-import net.mizukilab.pit.util.PublicUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.jitse.npclib.NPCLib;
@@ -16,6 +15,7 @@ import net.jitse.npclib.internal.MinecraftVersion;
 import net.jitse.npclib.internal.NPCBase;
 import net.jitse.npclib.nms.v1_8_R3.packets.*;
 import net.minecraft.server.v1_8_R3.*;
+import net.mizukilab.pit.util.PublicUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

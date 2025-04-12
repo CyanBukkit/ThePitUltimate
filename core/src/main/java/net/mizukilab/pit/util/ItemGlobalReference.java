@@ -1,8 +1,8 @@
 package net.mizukilab.pit.util;
 
-import net.mizukilab.pit.item.IMythicItem;
 import com.google.common.annotations.Beta;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import net.mizukilab.pit.item.IMythicItem;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;

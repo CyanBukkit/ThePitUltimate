@@ -1,5 +1,8 @@
 package net.mizukilab.pit.enchantment.type.rare
 
+import com.google.common.util.concurrent.AtomicDouble
+import net.minecraft.server.v1_8_R3.BlockPosition
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent
 import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.param.event.PlayerOnly
 import net.mizukilab.pit.enchantment.param.item.WeaponOnly
@@ -8,10 +11,6 @@ import net.mizukilab.pit.enchantment.type.ragerare.ThinkOfThePeopleEnchant
 import net.mizukilab.pit.parm.listener.IAttackEntity
 import net.mizukilab.pit.util.PlayerUtil
 import net.mizukilab.pit.util.cooldown.Cooldown
-import com.google.common.util.concurrent.AtomicDouble
-
-import net.minecraft.server.v1_8_R3.BlockPosition
-import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent
 import org.bukkit.Sound
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Entity

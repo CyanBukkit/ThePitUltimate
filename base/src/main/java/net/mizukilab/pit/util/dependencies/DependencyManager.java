@@ -25,10 +25,10 @@
 
 package net.mizukilab.pit.util.dependencies;
 
-import net.mizukilab.pit.util.dependencies.loaders.IsolatedClassLoader;
-import net.mizukilab.pit.util.dependencies.loaders.PluginClassLoader;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.ByteStreams;
+import net.mizukilab.pit.util.dependencies.loaders.IsolatedClassLoader;
+import net.mizukilab.pit.util.dependencies.loaders.PluginClassLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

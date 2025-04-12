@@ -1,6 +1,9 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.data.PlayerProfile;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
@@ -9,9 +12,6 @@ import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.time.TimeUtil;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

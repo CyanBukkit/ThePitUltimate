@@ -2,8 +2,8 @@ package net.mizukilab.pit.menu.perk.normal.choose.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import net.mizukilab.pit.menu.killstreak.StreakChooseMenu;
 import cn.charlotte.pit.perk.AbstractPerk;
+import net.mizukilab.pit.menu.killstreak.StreakChooseMenu;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;
 import org.bukkit.Material;

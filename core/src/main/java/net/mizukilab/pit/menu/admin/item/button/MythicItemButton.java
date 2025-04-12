@@ -3,7 +3,6 @@ package net.mizukilab.pit.menu.admin.item.button;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.DyeColor;
 import net.mizukilab.pit.item.IMythicItem;
-import cn.charlotte.pit.item.type.*;
 import net.mizukilab.pit.item.type.*;
 import net.mizukilab.pit.item.type.mythic.MagicFishingRod;
 import net.mizukilab.pit.item.type.mythic.MythicBowItem;

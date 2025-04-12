@@ -17,9 +17,9 @@
  */
 package net.mizukilab.pit.util.beam.beam;
 
+import com.google.common.base.Preconditions;
 import net.mizukilab.pit.util.beam.protocol.PacketFactory;
 import net.mizukilab.pit.util.beam.protocol.WrappedBeamPacket;
-import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

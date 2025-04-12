@@ -1,18 +1,18 @@
 package net.mizukilab.pit.movement;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.PitConfig;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.hutool.core.collection.ConcurrentHashSet;
+import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
+import net.mizukilab.pit.config.PitConfig;
 import net.mizukilab.pit.runnable.ProfileLoadRunnable;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.VectorUtil;
 import net.mizukilab.pit.util.aabb.AABB;
 import net.mizukilab.pit.util.chat.ActionBarUtil;
 import net.mizukilab.pit.util.chat.CC;
-import cn.hutool.core.collection.ConcurrentHashSet;
-import net.minecraft.server.v1_8_R3.EnumParticle;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
-import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;

@@ -1,9 +1,9 @@
 package net.mizukilab.pit.npc.type;
 
-import net.mizukilab.pit.config.NewConfiguration;
-import net.mizukilab.pit.npc.AbstractPitNPC;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
+import net.mizukilab.pit.config.NewConfiguration;
+import net.mizukilab.pit.npc.AbstractPitNPC;
 
 public abstract class SkinNPC extends AbstractPitNPC {
 

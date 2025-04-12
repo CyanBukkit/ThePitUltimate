@@ -1,8 +1,17 @@
 package net.mizukilab.pit.item;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import net.minecraft.server.v1_8_R3.NBTBase;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.minecraft.server.v1_8_R3.NBTTagString;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.item.type.ArmageddonBoots;
@@ -13,15 +22,6 @@ import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.RomanUtil;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.random.RandomUtil;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import net.minecraft.server.v1_8_R3.NBTBase;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagList;
-import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

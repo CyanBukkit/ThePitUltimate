@@ -1,9 +1,10 @@
 package net.mizukilab.pit.listener;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.util.FuncsKt;
 import net.mizukilab.pit.util.PlayerUtil;
@@ -11,7 +12,6 @@ import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.MessageType;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.rank.RankUtil;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,8 +1,8 @@
 package net.mizukilab.pit.data.operator;
 
-import cn.charlotte.pit.data.operator.IOperator;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.IOperator;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import lombok.ToString;

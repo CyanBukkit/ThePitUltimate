@@ -2,12 +2,12 @@ package net.mizukilab.pit.perk.type.streak.nonpurchased;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
-import net.mizukilab.pit.parm.AutoRegister;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkType;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.item.ItemBuilder;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

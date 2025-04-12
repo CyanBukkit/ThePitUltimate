@@ -1,7 +1,7 @@
 package net.mizukilab.pit.util.scoreboard;
 
-import net.mizukilab.pit.util.scoreboard.events.AssembleBoardCreateEvent;
 import io.irina.backports.utils.SWMRHashTable;
+import net.mizukilab.pit.util.scoreboard.events.AssembleBoardCreateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;

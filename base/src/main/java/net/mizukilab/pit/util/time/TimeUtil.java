@@ -1,9 +1,9 @@
 package net.mizukilab.pit.util.time;
 
-import net.mizukilab.pit.util.callback.Callback;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.mizukilab.pit.util.callback.Callback;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;

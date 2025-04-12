@@ -25,8 +25,8 @@
 
 package net.mizukilab.pit.util.dependencies;
 
-import net.mizukilab.pit.util.dependencies.loaders.LoaderType;
 import com.google.common.collect.ImmutableList;
+import net.mizukilab.pit.util.dependencies.loaders.LoaderType;
 
 import java.net.MalformedURLException;
 import java.net.URL;

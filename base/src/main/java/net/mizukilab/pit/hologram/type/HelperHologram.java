@@ -2,9 +2,9 @@ package net.mizukilab.pit.hologram.type;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.hologram.AbstractHologram;
 import net.mizukilab.pit.util.level.LevelUtil;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

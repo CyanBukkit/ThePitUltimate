@@ -1,10 +1,10 @@
 package net.mizukilab.pit.enchantment.menu.button;
 
-import net.mizukilab.pit.enchantment.menu.MythicWellMenu;
-import net.mizukilab.pit.util.menu.Button;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import net.mizukilab.pit.enchantment.menu.MythicWellMenu;
+import net.mizukilab.pit.util.menu.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;

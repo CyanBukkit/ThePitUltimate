@@ -1,9 +1,9 @@
 package net.mizukilab.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.menu.hub.HubMenu;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
+import net.mizukilab.pit.menu.hub.HubMenu;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

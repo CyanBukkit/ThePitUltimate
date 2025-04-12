@@ -2,12 +2,11 @@ package net.mizukilab.pit.perk.type.prestige
 
 import cn.charlotte.pit.event.PitProfileLoadedEvent
 import cn.charlotte.pit.event.PitStreakKillChangeEvent
-import net.mizukilab.pit.getPitProfile
-import net.mizukilab.pit.parm.AutoRegister
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
+import net.mizukilab.pit.getPitProfile
+import net.mizukilab.pit.parm.AutoRegister
 import net.mizukilab.pit.util.PlayerUtil
-
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player

@@ -1,7 +1,7 @@
 package io.irina.backports.utils;
 
-import net.mizukilab.pit.util.arithmetic.IntegerUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.mizukilab.pit.util.arithmetic.IntegerUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.lang.invoke.VarHandle;

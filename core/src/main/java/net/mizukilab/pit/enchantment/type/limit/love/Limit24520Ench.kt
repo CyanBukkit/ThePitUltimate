@@ -2,6 +2,8 @@ package net.mizukilab.pit.enchantment.type.limit.love
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
+import com.google.common.util.concurrent.AtomicDouble
+import net.minecraft.server.v1_8_R3.PacketPlayInFlying
 import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.param.event.PlayerOnly
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly
@@ -15,9 +17,6 @@ import net.mizukilab.pit.util.cooldown.Cooldown
 import net.mizukilab.pit.util.music.NBSDecoder
 import net.mizukilab.pit.util.music.PositionSongPlayer
 import net.mizukilab.pit.util.music.Song
-import com.google.common.util.concurrent.AtomicDouble
-
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying
 import org.bukkit.Bukkit
 import org.bukkit.Effect
 import org.bukkit.Location

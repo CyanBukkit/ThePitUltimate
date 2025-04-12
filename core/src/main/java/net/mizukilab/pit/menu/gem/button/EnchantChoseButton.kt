@@ -4,6 +4,7 @@ package net.mizukilab.pit.menu.gem.button
 import cn.charlotte.pit.data.sub.EnchantmentRecord
 import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
+import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.chat.CC
@@ -11,12 +12,10 @@ import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.menu.Button
 import net.mizukilab.pit.util.toMythicItem
-import net.mizukilab.pit.item.AbstractPitItem
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
-import kotlin.collections.iterator
 
 
 /*

@@ -2,10 +2,10 @@ package net.mizukilab.pit.runnable;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.events.EventFactory;
+import lombok.Getter;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.TitleUtil;
 import net.mizukilab.pit.util.time.TimeUtil;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -1,8 +1,8 @@
 package net.mizukilab.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.menu.admin.item.AdminItemMenu;
 import net.jitse.npclib.api.skin.Skin;
+import net.mizukilab.pit.menu.admin.item.AdminItemMenu;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

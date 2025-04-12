@@ -1,13 +1,13 @@
 package net.mizukilab.pit.events.impl
 
 import cn.charlotte.pit.ThePit
-import net.mizukilab.pit.config.NewConfiguration.eventOnlineRequired
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.events.IEvent
 import cn.charlotte.pit.events.INormalEvent
-import net.mizukilab.pit.util.chat.CC
 import cn.charlotte.pit.util.hologram.Hologram
 import cn.charlotte.pit.util.hologram.HologramAPI
+import net.mizukilab.pit.config.NewConfiguration.eventOnlineRequired
+import net.mizukilab.pit.util.chat.CC
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material

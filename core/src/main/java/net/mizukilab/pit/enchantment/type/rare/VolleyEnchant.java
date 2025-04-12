@@ -1,6 +1,9 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.ThePit;
+import io.irina.backports.utils.SWMRHashTable;
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.BowOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
@@ -10,12 +13,6 @@ import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.item.ItemBuilder;
-import io.irina.backports.utils.SWMRHashTable;
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_8_R3.EntityHuman;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.ItemBow;
-import net.minecraft.server.v1_8_R3.ItemStack;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -145,7 +142,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                                 isShooting.remove(player.getUniqueId());
                                 this.cancel();
                             } else {
-                                bow.a(item, entityPlayer.world, entityPlayer, value);
+                                forkItemBowEntity(bow,item, entityPlayer.world, entityPlayer, value,1);
                             }
                             tick++;
                         }
@@ -155,5 +152,54 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                 CC.printError(player, e);
             }
         }
+    }
+    public void forkItemBowEntity(ItemBow bow,ItemStack itemstack, World world, EntityHuman entityhuman, int i,int count) {
+        boolean flag = entityhuman.abilities.canInstantlyBuild || EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_INFINITE.id, itemstack) > 0;
+        if (flag || entityhuman.inventory.b(Items.ARROW)) {
+            int j = bow.d(itemstack) - i;
+            float f = (float)j / 20.0F;
+            f = (f * f + f * 2.0F) / 3.0F;
+            if ((double)f < 0.1) {
+                return;
+            }
+
+            if (f > 1.0F) {
+                f = 1.0F;
+            }
+
+            boolean shouldCritical = f == 1.0F;
+
+            int enchantmentLevel = EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_DAMAGE.id, itemstack);
+            boolean arrowDmg = enchantmentLevel > 0;
+            double d0 = 2.5 + enchantmentLevel * 0.5;
+            int enchantmentLevel1 = EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_KNOCKBACK.id, itemstack);
+            for (int k =0;k<count;k++) {
+                EntityArrow entityarrow = new EntityArrow(world, entityhuman, f * 2.0F);
+                if (shouldCritical) {
+                    entityarrow.setCritical(true);
+                }
+                if (arrowDmg) {
+                    entityarrow.b(d0);
+                }
+
+                if (enchantmentLevel1 > 0) {
+                    entityarrow.setKnockbackStrength(enchantmentLevel1);
+                }
+
+                world.addEntity(entityarrow);
+                if (flag) {
+                    entityarrow.fromPlayer = 2;
+                } else {
+                    entityhuman.inventory.a(Items.ARROW);
+                }
+            }
+
+            itemstack.damage(count, entityhuman);
+            //world.makeSound(entityhuman, "random.bow", 1.0F, 1.0F / (ThreadLocalRandom.current().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+
+
+            entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(bow)]);
+        }
+
     }
 }

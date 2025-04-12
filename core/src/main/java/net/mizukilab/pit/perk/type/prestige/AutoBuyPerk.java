@@ -2,12 +2,12 @@ package net.mizukilab.pit.perk.type.prestige;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import net.mizukilab.pit.menu.shop.ShopMenu;
-import net.mizukilab.pit.menu.shop.button.AbstractShopButton;
-import net.mizukilab.pit.parm.listener.IPlayerRespawn;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.Passive;
 import cn.charlotte.pit.perk.PerkType;
+import net.mizukilab.pit.menu.shop.ShopMenu;
+import net.mizukilab.pit.menu.shop.button.AbstractShopButton;
+import net.mizukilab.pit.parm.listener.IPlayerRespawn;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,6 +1,7 @@
 package net.mizukilab.pit.enchantment.type.rare
 
 import cn.charlotte.pit.data.PlayerProfile
+import com.google.common.util.concurrent.AtomicDouble
 import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant
 import net.mizukilab.pit.enchantment.param.event.PlayerOnly
@@ -16,8 +17,6 @@ import net.mizukilab.pit.util.PlayerUtil
 import net.mizukilab.pit.util.chat.CC
 import net.mizukilab.pit.util.chat.MessageType
 import net.mizukilab.pit.util.cooldown.Cooldown
-import com.google.common.util.concurrent.AtomicDouble
-
 import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player

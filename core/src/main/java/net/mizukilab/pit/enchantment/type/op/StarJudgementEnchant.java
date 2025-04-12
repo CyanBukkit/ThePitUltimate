@@ -2,6 +2,7 @@ package net.mizukilab.pit.enchantment.type.op;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
 import net.mizukilab.pit.enchantment.param.item.WeaponOnly;
@@ -9,7 +10,6 @@ import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.random.RandomUtil;
-import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;

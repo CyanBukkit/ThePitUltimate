@@ -1,11 +1,11 @@
 package net.mizukilab.pit.events.impl.major;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.event.ItemLiveDropEvent;
 import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.IEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.MessageType;
 import net.mizukilab.pit.util.cooldown.Cooldown;

@@ -1,8 +1,8 @@
 package net.mizukilab.pit.runnable;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.PitConfig;
 import cn.charlotte.pit.data.PlayerProfile;
+import net.mizukilab.pit.config.PitConfig;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.aabb.AABB;
 import org.bukkit.Bukkit;

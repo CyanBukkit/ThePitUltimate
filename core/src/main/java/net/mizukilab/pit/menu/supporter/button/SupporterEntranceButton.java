@@ -2,8 +2,8 @@ package net.mizukilab.pit.menu.supporter.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.api.PointsAPI;
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.impl.PlayerPointsAPIImpl;
 import net.mizukilab.pit.medal.impl.challenge.hidden.SupporterMedal;
 import net.mizukilab.pit.menu.supporter.SupporterMenu;

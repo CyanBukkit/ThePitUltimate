@@ -1,10 +1,10 @@
 package net.mizukilab.pit.quest.type;
 
 import cn.charlotte.pit.data.PlayerProfile;
+import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity;
 import net.mizukilab.pit.quest.AbstractQuest;
-import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
