@@ -8,6 +8,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import net.mizukilab.pit.config.PitConfig;
 import net.mizukilab.pit.runnable.ProfileLoadRunnable;
+import net.mizukilab.pit.util.BlockUtil;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.VectorUtil;
 import net.mizukilab.pit.util.aabb.AABB;
@@ -166,6 +167,10 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             profile.setInArena(isInArena);
 
             if (!profile.isEditingMode()) {
+                if (BlockUtil.isBlockNearby(player.getLocation(),3) && player.getGameMode() == GameMode.ADVENTURE){
+                    player.setGameMode(GameMode.SURVIVAL);
+                    return;
+                }
                 if (profile.isInArena()) {
                     if (player.getGameMode() == GameMode.ADVENTURE) {
                         player.setGameMode(GameMode.SURVIVAL);

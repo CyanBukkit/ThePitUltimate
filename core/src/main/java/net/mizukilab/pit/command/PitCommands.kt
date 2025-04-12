@@ -138,7 +138,7 @@ class PitCommands {
                 return
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
-                val lookupStrict = ThePit.getInstance().profileOperator.namedIOperator(name)
+                val lookupStrict = ThePit.getInstance()?.profileOperator?.namedIOperator(name)
                 if (lookupStrict == null) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                     return@runTaskAsynchronously

@@ -51,7 +51,6 @@ public class EnchantmentFactor {
 
     public void init(Collection<Class<? extends AbstractEnchantment>> classes) {
         log.info("Loading enchantments...");
-        log.info("Last enchantments {}", enchantmentMap);
         for (Class<?> clazz : classes) {
             if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
                 try {

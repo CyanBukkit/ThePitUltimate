@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,9 +37,11 @@ public class AdminEnchantMenu extends Menu {
         Map<Integer, Button> buttonMap = new HashMap<>();
         ObjectArrayList<AbstractEnchantment> enchantments = new ObjectArrayList<>(ThePit.getInstance().getEnchantmentFactor().getEnchantments());
 
-        int num = 45 * page;
+        enchantments.sort(Comparator.comparing(AbstractEnchantment::getRarity));
 
+        int num = 45 * page;
         int slot = 0;
+
         for (int i = 0; i < 45; i++) {
             if (enchantments.size() <= i + num) {
                 break;

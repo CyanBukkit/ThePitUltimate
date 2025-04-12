@@ -15,6 +15,7 @@ import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.enchantment.menu.MythicWellMenu
 import net.mizukilab.pit.events.impl.*
 import net.mizukilab.pit.events.impl.major.*
+import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.item.type.AngelChestplate
 import net.mizukilab.pit.item.type.ArmageddonBoots
 import net.mizukilab.pit.item.type.ChunkOfVileItem
@@ -32,6 +33,7 @@ import net.mizukilab.pit.menu.shop.ShopMenu
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.item.ItemUtil
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -254,6 +256,30 @@ object PitInternalImpl : PitInternalHook {
         return NewConfiguration.watermarks
     }
 
+    override fun addItemInHandEnchant(player: Player?, enchantName: String?, enchantLevel: Int): Int {
+        val item = player?.inventory?.itemInHand ?: return 1
+
+        if (item.type == Material.AIR) {
+            return 0
+        }
+
+        val enchant = ThePit.getInstance().enchantmentFactor.enchantmentMap[enchantName] ?: return 1
+
+        val mythicItem = Utils.getMythicItem(item) ?: return 2
+        mythicItem.enchantments[enchant] = enchantLevel
+
+        player.inventory.itemInHand = mythicItem.toItemStack()
+        return 3
+    }
+
+
+    override fun getMythicItemItemStack(itemName: String?): ItemStack {
+        val itemClass: Class<out AbstractPitItem> =
+            ThePit.getInstance().itemFactor.itemMap[itemName] ?: return ItemStack(Material.AIR)
+        val item = itemClass.getDeclaredConstructor().newInstance()
+        val itemStack = item.toItemStack()
+        return itemStack
+    }
     override fun isLoaded(): Boolean {
         return loaded
     }

@@ -3,6 +3,7 @@ package net.mizukilab.pit.runnable;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.util.BlockUtil;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.aabb.AABB;
 import org.bukkit.Bukkit;
@@ -29,7 +30,12 @@ public class ProtectRunnable extends BukkitRunnable {
                     Location location = player.getLocation();
                     final AABB playerAABB = new AABB(location.getX(), location.getY(), location.getZ(), location.getX() + 0.8, location.getY() + 2, location.getZ() + 0.8);
                     final boolean inArena = !aabb.intersectsWith(playerAABB);
-
+                    if (player.getGameMode() == GameMode.ADVENTURE) {
+                        if (BlockUtil.isBlockNearby(player.getLocation(), 5)) {
+                            player.setGameMode(GameMode.SURVIVAL);
+                            return;
+                        }
+                    }
                     if (inArena) {
                         profile.setInArena(true);
                         continue;

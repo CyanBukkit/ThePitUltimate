@@ -4,10 +4,14 @@ import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
+import net.mizukilab.pit.enchantment.AbstractEnchantment
 import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
+
+val music: MutableList<AbstractEnchantment> = mutableListOf()
+val musicIndex = listOf(11, 12, 13, 14, 15, 4, 22)
 
 fun Player.getPitProfile(): PlayerProfile {
     return PlayerProfile.getPlayerProfileByUuid(this.uniqueId)

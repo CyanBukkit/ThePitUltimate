@@ -243,6 +243,7 @@ object PitHook {
             JumpBoostPotion::class.java,
             MythicRepairKit::class.java,
             PitCactus::class.java,
+            MusicalRune::class.java,
             // 神人 SpireArmor::class.java,
             SuperPackage::class.java,
             TotallyLegitGem::class.java,
@@ -250,8 +251,8 @@ object PitHook {
             UberDrop::class.java,
             MythicEnchantingTable::class.java
         )
-
         try {
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
             if (ItemConstructor.getItems().isNotEmpty()) {
                 println("加载额外物品中...")
                 clazzList.addAll(ItemConstructor.getItems())
@@ -269,10 +270,12 @@ object PitHook {
                     println("An error occurred: ${e.message}")
                 }
             }
+            },60L)
         } catch (e: Exception) {
             println("An error occurred: ${e.message}")
         }
     }
+
 }
 
 private fun loadEnchants() {
@@ -450,16 +453,25 @@ private fun loadEnchants() {
 
     //  classes += Limit24520Ench::class.java
     //  classes += LimitXZQ1Ench::class.java
-    val enchantmentClasses: List<Class<*>> = EnchantedConstructor.getEnchantments()
-    val enchantmentCollection: List<Class<out AbstractEnchantment>> =
-        enchantmentClasses.filterIsInstance<Class<out AbstractEnchantment>>()
-    if (enchantmentCollection.isNotEmpty()) {
-        println("加载额外附魔中...")
-        classes.addAll(enchantmentCollection)
+    music.apply {
+        add(JerryEnchant())
+        add(JerryEnchant2())
+        add(JerryEnchant3())
+        add(JerryEnchant4())
+        add(JerryEnchant5())
+        add(JerryEnchant6())
+        add(JerryEnchant7())
     }
-
-    enchantmentFactor.init(classes)
-
+    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
+        val enchantmentClasses: List<Class<*>> = EnchantedConstructor.getEnchantments()
+        val enchantmentCollection: List<Class<out AbstractEnchantment>> =
+            enchantmentClasses.filterIsInstance<Class<out AbstractEnchantment>>()
+        if (enchantmentCollection.isNotEmpty()) {
+            println("加载额外附魔中...")
+            classes.addAll(enchantmentCollection)
+        }
+        enchantmentFactor.init(classes)
+    },60L)
 }
 
 private fun loadScoreBoard() {
@@ -582,6 +594,7 @@ private fun loadPerks() {
         SuperStreaker::class.java
     )
 
+    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
     val perkClasses: List<Class<*>> = PerkConstructor.getPerks()
     val perkCollection: List<Class<out AbstractPerk>> =
         perkClasses.filterIsInstance<Class<out AbstractPerk>>()
@@ -592,6 +605,7 @@ private fun loadPerks() {
         classes.addAll(perkCollection)
     }
     perkFactory.init(classes as Collection<Class<*>>?)
+    },60L)
 }
 
 private fun registerSounds() {

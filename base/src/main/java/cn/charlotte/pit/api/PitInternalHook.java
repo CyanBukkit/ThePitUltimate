@@ -34,6 +34,8 @@ public interface PitInternalHook {
 
     UUID getRunningKingsQuestsUuid();
 
+
+
     String getPitSupportPermission();
 
     boolean getRemoveSupportWhenNoPermission();
@@ -47,6 +49,10 @@ public interface PitInternalHook {
     boolean openEvent(IEvent event, Player player);
 
     String getWatermark();
+    int addItemInHandEnchant(Player player, String enchantName, int enchantLevel);
+
+
+    ItemStack getMythicItemItemStack(String itemName);
 
     default boolean isLoaded() {
         return false;
