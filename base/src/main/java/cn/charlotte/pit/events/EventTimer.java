@@ -28,7 +28,7 @@ public class EventTimer implements Runnable {
         }
 
         final EventFactory factory = ThePit.getInstance().getEventFactory();
-        if (factory.getActiveEpicEvent() != null) {
+        if (factory.getActiveEpicEvent() != null || factory.getActiveNormalEvent() != null) {
             cooldown.reset();
         }
         final int min = LocalDateTime.now().getMinute();
