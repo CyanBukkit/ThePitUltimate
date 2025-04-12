@@ -1,6 +1,7 @@
 package net.mizukilab.pit.data.operator;
 
 import cn.charlotte.pit.ThePit;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public interface ExecutionPolicy {
@@ -17,8 +18,8 @@ public interface ExecutionPolicy {
 
         @Override
         public void fail(Player player,Throwable throwable) {
-            player.kickPlayer("An error was occurred on your profile, please contact the administrator to get details. ");
-            ThePit.getInstance().getLogger().throwing("DefaultPolicy","fail",throwable);
+            throwable.printStackTrace();
+            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> player.kickPlayer("An error was occurred on your profile, please contact the administrator to get details. "));
         }
     }
 }
