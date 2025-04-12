@@ -11,6 +11,7 @@ import net.mizukilab.pit.menu.viewer.button.PitPassiveStatusButton;
 import net.mizukilab.pit.menu.viewer.button.PitStatusButton;
 import net.mizukilab.pit.menu.viewer.button.admin.TradeDataViewerButton;
 import net.mizukilab.pit.util.PlayerUtil;
+import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;
 import net.mizukilab.pit.util.menu.Menu;
@@ -51,7 +52,13 @@ public class StatusViewerMenu extends Menu {
             profile.getPlayerOption().setEnderChestVisibility(true);
             profile.getPlayerOption().setProfileVisibility(true);
         }
-        PlayerInv inventory = profile.getInventory();
+        PlayerInv inventory;
+        if (Bukkit.getPlayer(profile.getPlayerUuid()) == null) {
+            inventory = profile.getInventory();
+            player.sendMessage(CC.translate("&c该玩家离线,将查询离线档案!"));
+        } else {
+            inventory = PlayerInv.fromPlayerInventory(Bukkit.getPlayer(profile.getPlayerUuid()).getInventory());
+        }
         Map<Integer, Button> button = new HashMap<>();
 
         //Armor contents
@@ -59,7 +66,7 @@ public class StatusViewerMenu extends Menu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 if (profile.getPlayerOption().isInventoryVisibility()) {
-                    return profile.getInventory().getHelmet() == null ? new ItemBuilder(Material.AIR).build() : profile.getInventory().getHelmet();
+                    return inventory.getHelmet() == null ? new ItemBuilder(Material.AIR).build() : inventory.getHelmet();
                 }
                 return new ItemBuilder(Material.AIR).build();
             }
@@ -73,7 +80,7 @@ public class StatusViewerMenu extends Menu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 if (profile.getPlayerOption().isInventoryVisibility() || PlayerUtil.isStaff(player)) {
-                    return profile.getInventory().getChestPiece() == null ? new ItemBuilder(Material.AIR).build() : profile.getInventory().getChestPiece();
+                    return inventory.getChestPiece() == null ? new ItemBuilder(Material.AIR).build() : inventory.getChestPiece();
                 }
                 return new ItemBuilder(Material.AIR).build();
             }
@@ -87,7 +94,7 @@ public class StatusViewerMenu extends Menu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 if (profile.getPlayerOption().isInventoryVisibility() || PlayerUtil.isStaff(player)) {
-                    return profile.getInventory().getLeggings() == null ? new ItemBuilder(Material.AIR).build() : profile.getInventory().getLeggings();
+                    return inventory.getLeggings() == null ? new ItemBuilder(Material.AIR).build() : inventory.getLeggings();
                 }
                 return new ItemBuilder(Material.AIR).build();
             }
@@ -101,7 +108,7 @@ public class StatusViewerMenu extends Menu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 if (profile.getPlayerOption().isInventoryVisibility() || PlayerUtil.isStaff(player)) {
-                    return profile.getInventory().getBoots() == null ? new ItemBuilder(Material.AIR).build() : profile.getInventory().getBoots();
+                    return inventory.getBoots() == null ? new ItemBuilder(Material.AIR).build() : inventory.getBoots();
                 }
                 return new ItemBuilder(Material.AIR).build();
             }

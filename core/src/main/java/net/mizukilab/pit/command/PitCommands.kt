@@ -67,6 +67,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
+import kotlin.math.sinh
 
 /**
  * 2024/5/15<br>
@@ -138,7 +139,6 @@ class PitCommands {
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
                 val lookupStrict = ThePit.getInstance().profileOperator.namedIOperator(name)
-                    ?: ThePit.getInstance().profileOperator.lookupIOnline(name)
                 if (lookupStrict == null) {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                     return@runTaskAsynchronously
@@ -148,6 +148,10 @@ class PitCommands {
                         player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                         return@runTaskAsynchronously
                     }
+                }
+                if (lookupStrict.profile().playerUuid == player.uniqueId) {
+                    player.sendMessage(CC.translate("&c疑? 为什么要查看自己档案?"))
+                    return@runTaskAsynchronously
                 }
                 Bukkit.getScheduler().runTask(ThePit.getInstance()) {
                     StatusViewerMenu(lookupStrict.profile()).openMenu(

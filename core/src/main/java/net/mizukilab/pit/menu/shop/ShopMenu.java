@@ -2,6 +2,7 @@ package net.mizukilab.pit.menu.shop;
 
 import cn.charlotte.pit.ThePit;
 import net.mizukilab.pit.menu.shop.button.type.*;
+import net.mizukilab.pit.menu.shop.button.type.server.CloverPixelShopButton;
 import net.mizukilab.pit.menu.supporter.button.SupporterEntranceButton;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.menu.Button;
@@ -25,6 +26,9 @@ public class ShopMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> button = new HashMap<>();
+        if (ThePit.getInstance().getPitConfig().getToken().equals("bb0ce27eb-0007-7259-5975-4c2bb09f4ae")) {
+            button.put(4, new CloverPixelShopButton());
+        }
         button.put(10, new DiamondSwordShopButton());
         button.put(11, new DiamondChestplateShopButton());
         button.put(12, new DiamondBootsShopButton());

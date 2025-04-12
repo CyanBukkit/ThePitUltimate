@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.sub.PlayerInv;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;
 import net.mizukilab.pit.util.menu.Menu;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -32,7 +33,12 @@ public class InventoryViewerMenu extends Menu {
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
-        PlayerInv inventory = profile.getInventory();
+        PlayerInv inventory;
+        if (Bukkit.getPlayer(profile.getPlayerUuid()) == null) {
+            inventory = profile.getInventory();
+        } else {
+            inventory = PlayerInv.fromPlayerInventory(Bukkit.getPlayer(profile.getPlayerUuid()).getInventory());
+        }
         Map<Integer, Button> button = new HashMap<>();
         for (int i = 0; i < 36; i++) {
             int finalI = i;
