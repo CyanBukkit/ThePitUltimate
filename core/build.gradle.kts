@@ -73,12 +73,9 @@ dependencies {
     compileOnly("org.mongojack:mongojack:5.0.1")
     compileOnly("org.mongodb:mongodb-driver-sync:5.2.0")
 
-    compileOnly(libs.websocket)
-
     compileOnly(fileTree("libs"))
 
-
-    compileOnly("it.unimi.dsi:fastutil:8.5.13")
+    compileOnly(libs.fastutil)
 
     compileOnly("us.crazycrew.crazycrates:api:0.7")
     compileOnly(libs.spigot.get8())
