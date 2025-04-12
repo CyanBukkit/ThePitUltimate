@@ -231,12 +231,7 @@ public class LevelUtil {
      */
     public static String getLevelTag(int prestige, double experience) {
         int level = getLevelByExp(prestige, experience);
-        int pre = 120 * prestige / 30;
-        if (prestige > 0 && pre < 10) {
-            pre = 10;
-        }
-        String prestigeColor = getPrestigeColor(prestige);
-        return prestigeColor + "[" + getLevelColor(level) + level + prestigeColor + "]";
+        return getLevelTag(prestige, level);
     }
 
 
@@ -250,13 +245,8 @@ public class LevelUtil {
     }
 
     public static String getLevelTagTabListSpec(int prestige, int level) {
-        int pre = 120 * prestige / 30;
-        if (prestige > 0 && pre < 10) {
-            pre = 10;
-        }
         if (prestige < 91) {
-            String prestigeColor = getPrestigeColor(prestige);
-            return prestigeColor + "[" + getLevelColor(level) + level + prestigeColor + "]";
+            return getLevelTag(prestige, level);
         } else {
             return getPrestigeColor(prestige) + "P" + getLevelColor(level) + level;
         }
@@ -265,10 +255,6 @@ public class LevelUtil {
     public static String getLevelTagWithRoman(int prestige, double experience) {
         if (prestige > 0) {
             int level = getLevelByExp(prestige, experience);
-            int pre = 120 * prestige / 30;
-            if (pre < 10) {
-                pre = 10;
-            }
             return getPrestigeColor(prestige) + "[&e" + RomanUtil.convert(prestige) + getPrestigeColor(prestige) + "-" + getLevelColor(level) + level + getPrestigeColor(prestige) + "]";
         } else {
             return getLevelTag(prestige, experience);
@@ -284,10 +270,6 @@ public class LevelUtil {
     }
     public static String getLevelTagWithRoman(int prestige, int level) {
         if (prestige > 0) {
-            int pre = 120 * prestige / 30;
-            if (pre < 10) {
-                pre = 10;
-            }
             return getPrestigeColor(prestige) + "[&e" + RomanUtil.convert(prestige) + getPrestigeColor(prestige) + "-" + getLevelColor(level) + level + getPrestigeColor(prestige) + "]";
         } else {
             return getLevelTag(prestige, level);
