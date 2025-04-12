@@ -243,7 +243,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             }
         }));
 
-        new LeaderBoardRunnable().runTaskTimerAsynchronously(this, 0, 12000);
 
         try {
             EventsHandler.INSTANCE.loadFromDatabase();
