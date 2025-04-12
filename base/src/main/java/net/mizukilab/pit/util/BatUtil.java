@@ -1,8 +1,13 @@
 package net.mizukilab.pit.util;
 
 import cn.charlotte.pit.ThePit;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.server.v1_8_R3.EntityBat;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -66,9 +71,8 @@ public class BatUtil {
 
 
     private static List<LivingEntity> spawnBats(Player player, double distance) {
-        List<LivingEntity> bats = new ArrayList<>();
+        List<LivingEntity> bats = new ObjectArrayList<>(27);
         Location playerLoc = player.getLocation();
-
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
@@ -77,10 +81,12 @@ public class BatUtil {
                             y * distance + 0.5 + randomOffset(),
                             z * distance + randomOffset()
                     );
-                    Bat bat = player.getWorld().spawn(batLoc, Bat.class);
-                    bat.setNoDamageTicks(Integer.MAX_VALUE);
-                    bat.setMaximumNoDamageTicks(Integer.MAX_VALUE);
-                    bats.add(bat);
+                    CraftWorld world = (CraftWorld) player.getWorld();
+                    EntityBat entityBat = new EntityBat(world.getHandle());
+                    entityBat.teleportTo(batLoc,false);
+                    world.addEntity(entityBat, CreatureSpawnEvent.SpawnReason.DEFAULT);
+                    entityBat.noDamageTicks =  100000;
+                    bats.add((LivingEntity) entityBat.getBukkitEntity());
                 }
             }
         }

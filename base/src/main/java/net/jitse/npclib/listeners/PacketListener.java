@@ -47,7 +47,7 @@ public class PacketListener {
             public void onPacketReceiving(PacketEvent event) {
                 handleInteractPacket(event.getPlayer(), event.getPacket().getHandle());
             }
-        });
+        }).start();
 
     }
 

@@ -30,8 +30,7 @@ public class SignGui {
     protected Map<String, SignGUIListener> listeners = new ConcurrentHashMap<>();
 
     public SignGui(JavaPlugin plugin) {
-        ProtocolLibrary.getProtocolManager()
-                .addPacketListener(new PacketAdapter(plugin, PacketType.Play.Client.UPDATE_SIGN) {
+        ProtocolLibrary.getProtocolManager().getAsynchronousManager().registerAsyncHandler(new PacketAdapter(plugin, PacketType.Play.Client.UPDATE_SIGN) {
                     @Override
                     public void onPacketReceiving(PacketEvent event) {
                         final Player player = event.getPlayer();
@@ -59,7 +58,7 @@ public class SignGui {
                             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> response.onSignDone(player, lines));
                         }
                     }
-                });
+                }).start();
     }
 
 

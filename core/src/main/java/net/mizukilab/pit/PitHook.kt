@@ -689,7 +689,7 @@ private fun registerListeners() {
     }
 
     ProtocolLibrary.getProtocolManager().asynchronousManager
-        .registerAsyncHandler(PacketListener())
+        .registerAsyncHandler(PacketListener()).start()
 
     if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
         Bukkit.getPluginManager().registerEvents(MythicMobListener, ThePit.getInstance());
