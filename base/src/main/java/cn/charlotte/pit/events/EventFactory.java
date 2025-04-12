@@ -201,7 +201,7 @@ public class EventFactory {
                 if(!iterator.hasNext()){
                     iterator = animationForEpicEvent.iterator();
                 }
-                String start = "Epic Event Trigger";
+                String start = "Epic Event Bossbar";
                 if(iterator.hasNext()) {
                      start = iterator.next(); //check
                 }

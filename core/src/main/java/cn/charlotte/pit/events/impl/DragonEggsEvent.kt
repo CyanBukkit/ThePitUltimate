@@ -75,9 +75,9 @@ class DragonEggsEvent : IEvent, INormalEvent, Listener {
     }
 
     private fun setEggLocation(location: Location) {
-        prepareNewLocation()
-        eggLocation = location
         Bukkit.getScheduler().runTask(ThePit.getInstance()) {
+            prepareNewLocation()
+            eggLocation = location
             eggLocation!!.block.type = Material.DRAGON_EGG
         }
         reCreateHologram(location)

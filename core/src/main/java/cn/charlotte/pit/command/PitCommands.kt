@@ -87,7 +87,7 @@ class PitCommands {
 
     @Execute(name = "thepit", aliases = ["天坑", "天坑乱斗", "version", "ver"])
     fun info(@Context player: Player) {
-        player.sendMessage(CC.translate("§7Running Currently - §cThePitUltimate&f(&8${StringUtil.hideMiddle(ThePit.getInstance().pitConfig.token)}&f)"))
+        player.sendMessage(CC.translate("&7Currently running &cThePitUltimate&f(&8${StringUtil.hideMiddle(ThePit.getInstance().pitConfig.token)}&f)"))
     }
 
     @Execute(name = "startDate")
