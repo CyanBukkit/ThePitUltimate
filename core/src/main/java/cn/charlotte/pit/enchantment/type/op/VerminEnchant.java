@@ -10,6 +10,9 @@ import cn.charlotte.pit.util.PlayerUtil;
 import cn.charlotte.pit.util.cooldown.Cooldown;
 import cn.charlotte.pit.util.time.TimeUtil;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import real.nanoneko.register.IMagicLicense;
 
 import java.util.HashMap;
@@ -21,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2025/4/11
  */
 @WeaponOnly
-public class VerminEnchant extends AbstractEnchantment implements ITickTask, IActionDisplayEnchant, IMagicLicense {
+public class VerminEnchant extends AbstractEnchantment implements Listener,ITickTask, IActionDisplayEnchant, IMagicLicense {
 
     private static final HashMap<UUID, Cooldown> COOLDOWN = new HashMap<>();
 
@@ -49,7 +52,12 @@ public class VerminEnchant extends AbstractEnchantment implements ITickTask, IAc
     public Cooldown getCooldown() {
         return new Cooldown(15, TimeUnit.SECONDS);
     }
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        COOLDOWN.remove(player.getUniqueId());
 
+    }
     @Override
     public String getUsefulnessLore(int enchantLevel) {
         return String.format(

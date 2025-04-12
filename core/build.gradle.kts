@@ -26,7 +26,7 @@ repositories {
 tasks.named<ShadowJar>("shadowJar") {
     archiveFileName.set("ThePitUltimate-$version.jar")
     exclude("META-INF/**")
-    relocate("pku.yim.license", "cn.charlotte.pit.license")
+    relocate("pku.yim.license.*", "cn.charlotte.pit.license")
     relocate("panda","cn.charlotte.pit.libs")
     relocate("dev.rollczi","cn.charlotte.pit.libs")
     relocate("cn.hutool","cn.charlotte.pit.libs")
@@ -42,6 +42,8 @@ tasks.named<ShadowJar>("shadowJar") {
 
 dependencies {
     compileOnly(project(":base"))
+
+    compileOnly(fileTree("../packLib"))
     compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
     compileOnly(libs.reflectionhelper)
     compileOnly(libs.hutool.crypto)
@@ -67,6 +69,7 @@ dependencies {
     compileOnly(libs.websocket)
 
     compileOnly(fileTree("libs"))
+
 
     compileOnly("it.unimi.dsi:fastutil:8.5.13")
 

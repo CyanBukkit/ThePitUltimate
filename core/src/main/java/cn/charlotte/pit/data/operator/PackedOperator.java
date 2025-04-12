@@ -105,7 +105,7 @@ public class PackedOperator implements IOperator {
 
     boolean fireExit = false;
     boolean quitFlag = false;
-
+    //为了防止掉数据做的妥协
     public synchronized boolean save(boolean fireExit, boolean quitFlag) {
         if (System.currentTimeMillis() - lastHeartBeat > 1000) {
             this.fireExit = fireExit;

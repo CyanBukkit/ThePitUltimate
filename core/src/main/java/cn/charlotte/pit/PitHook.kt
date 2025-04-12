@@ -423,7 +423,8 @@ private fun loadEnchants() {
         SoulRipperEnchant::class.java,
         AceOfSpades::class.java,
         Brakes::class.java,
-        BreachingChargeEnchant::class.java
+        BreachingChargeEnchant::class.java,
+        TrotEnchant::class.java
     )
 
     /*        classes += HappyNewYearEnchant::class.java

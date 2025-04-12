@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.huanmeng"
-version = "4.0.0"
+version = "4.0.2A"
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
@@ -41,7 +41,8 @@ tasks.named<ShadowJar>("shadowJar") {
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
-    implementation(fileTree(mapOf("dir" to "../libs", "include" to listOf("magic-license-1.0.7.jar"))))
+
+    implementation(fileTree("../packLib"))
     api(libs.reflectionhelper)
     api(libs.hutool.crypto)
     api(libs.book)

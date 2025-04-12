@@ -20,8 +20,6 @@ import spg.lgdev.iSpigot;
 @ArmorOnly
 public class TrotEnchant extends AbstractEnchantment implements MovementHandler {
 
-    private static final TrotEnchant trotEnchant = new TrotEnchant();
-
     @SneakyThrows
     public TrotEnchant() {
         try {
@@ -63,30 +61,31 @@ public class TrotEnchant extends AbstractEnchantment implements MovementHandler 
     @Override
     public void handleUpdateLocation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
         IMythicItem leggings = (IMythicItem) PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
+        float walkSpeed = player.getWalkSpeed();
         if (leggings != null) {
-            int level = trotEnchant.getItemEnchantLevel(leggings);
+            int level = this.getItemEnchantLevel(leggings);
             if (level == 1) {
-                if (player.getWalkSpeed() != 0.21F) {
+                if (walkSpeed != 0.21F) {
                     player.setWalkSpeed(0.21F);
                 }
             } else if (level == 2) {
-                if (player.getWalkSpeed() != 0.22F) {
+                if (walkSpeed != 0.22F) {
                     player.setWalkSpeed(0.22F);
                 }
             } else if (level == 3) {
 
-                if (player.getWalkSpeed() != 0.24F) {
+                if (walkSpeed != 0.24F) {
                     player.setWalkSpeed(0.24F);
                 }
             } else {
-                if (player.getWalkSpeed() != 0.2F) {
+                if (walkSpeed != 0.2F) {
                     player.setWalkSpeed(0.2F);
                 }
             }
 
         } else {
 
-            if (player.getWalkSpeed() != 0.2F) {
+            if (walkSpeed != 0.2F) {
                 player.setWalkSpeed(0.2F);
             }
         }

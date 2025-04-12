@@ -39,16 +39,13 @@ public class DataListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         PackedOperator orLoadOperator = ((ProfileOperator) ThePit.getInstance().getProfileOperator()).getOrLoadOperator(player);
-        orLoadOperator.ifLoaded(() -> {
+        orLoadOperator.pendingUntilLoaded(prof -> {
             if (statusCheck(orLoadOperator)) return;
             //post init, when checked
-            orLoadOperator.pendingUntilLoaded(prof -> {
-                orLoadOperator.heartBeat();
-                this.whenLoaded(prof);
-            });
+            orLoadOperator.heartBeat();
+            this.whenLoaded(prof);
         });
         event.setJoinMessage(null);
-
     }
 
     private static boolean statusCheck(PackedOperator orLoadOperator) {
