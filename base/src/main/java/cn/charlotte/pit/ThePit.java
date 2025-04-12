@@ -51,7 +51,6 @@ import net.mizukilab.pit.util.dependencies.loaders.LoaderType;
 import net.mizukilab.pit.util.dependencies.loaders.ReflectionClassLoader;
 import net.mizukilab.pit.util.menu.MenuUpdateTask;
 import net.mizukilab.pit.util.nametag.NametagHandler;
-import net.mizukilab.pit.util.rank.LuckPermsUtil;
 import net.mizukilab.pit.util.rank.RankUtil;
 import net.mizukilab.pit.util.sign.SignGui;
 import net.mizukilab.pit.util.sound.SoundFactory;
@@ -80,6 +79,7 @@ import spg.lgdev.iSpigot;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -154,8 +154,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Getter
     private IActionBarManager actionBarManager;
 
+    //这里别用fastutil 依赖没加载会报错
     @Getter
-    private final Set<AbstractPerk> disabledPerks = new ObjectOpenHashSet<>();
+    private final Set<AbstractPerk> disabledPerks = new HashSet<>();
 
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
@@ -464,7 +465,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         }
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
-                new Dependency("fastutil", "it.unimi.dsi", "fastutil", "8.5.13", LoaderType.REFLECTION),
+                new Dependency("fastutil", "it.unimi.dsi", "fastutil", "8.5.15", LoaderType.REFLECTION),
                 new Dependency("kotlin", "org.jetbrains.kotlin", "kotlin-stdlib", "2.1.20", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-bukkit", "net.kyori", "adventure-platform-bukkit", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-facet", "net.kyori", "adventure-platform-facet", "4.3.2", LoaderType.REFLECTION),
@@ -806,7 +807,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         } else {
             luckPerms = LuckPermsProvider.get();
         }
-        LuckPermsUtil.setLuckPerms(luckPerms);
         return luckPerms != null;
     }
 

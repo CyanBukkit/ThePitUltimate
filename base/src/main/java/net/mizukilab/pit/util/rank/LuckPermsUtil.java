@@ -1,6 +1,7 @@
 package net.mizukilab.pit.util.rank;
 
 import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.GroupManager;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
@@ -11,15 +12,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class LuckPermsUtil {
 
-    static LuckPerms luckPerms = null;
+    static LuckPerms luckPerms = LuckPermsProvider.get();
     static UserManager userManager = luckPerms.getUserManager();
     static GroupManager groupManager = luckPerms.getGroupManager();
 
     public LuckPermsUtil() {
-    }
-
-    public static void setLuckPerms(final LuckPerms luckPerms) {
-        LuckPermsUtil.luckPerms = luckPerms;
     }
 
     public static String getPrefix(UUID uuid) {
