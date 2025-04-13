@@ -1,7 +1,7 @@
 package net.mizukilab.pit.events.impl;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.parm.listener.IPlayerKilledEntity;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @Author: Starry_Killer
  * @Created_In: 2024/1/6
  */
-public class DoubleRewardsEvent implements IEvent, INormalEvent, IPlayerKilledEntity {
+public class DoubleRewardsEvent extends AbstractEvent implements INormalEvent, IPlayerKilledEntity {
 
     private boolean isActive = false;
 

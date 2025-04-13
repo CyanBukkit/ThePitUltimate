@@ -3,7 +3,7 @@ package net.mizukilab.pit.menu.previewer.button;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.events.EventsHandler;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import lombok.RequiredArgsConstructor;
 import net.mizukilab.pit.util.item.ItemBuilder;
@@ -28,7 +28,7 @@ public class EventPreviewButton extends Button {
 
     private static String getNormalEventNameByInternalName(String internal) {
         for (INormalEvent normalEvent : ThePit.getInstance().getEventFactory().getNormalEvents()) {
-            IEvent event = (IEvent) normalEvent;
+            AbstractEvent event = (AbstractEvent) normalEvent;
             if (event.getEventInternalName().equalsIgnoreCase(internal)) {
                 return event.getEventName();
             }
@@ -38,7 +38,7 @@ public class EventPreviewButton extends Button {
 
     private static String getEpicEventNameByInternalName(String internal) {
         for (IEpicEvent epicEvent : ThePit.getInstance().getEventFactory().getEpicEvents()) {
-            IEvent event = (IEvent) epicEvent;
+            AbstractEvent event = (AbstractEvent) epicEvent;
             if (event.getEventInternalName().equalsIgnoreCase(internal)) {
                 return event.getEventName();
             }

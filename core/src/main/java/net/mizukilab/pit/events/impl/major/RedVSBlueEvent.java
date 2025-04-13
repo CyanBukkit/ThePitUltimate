@@ -6,7 +6,7 @@ import cn.charlotte.pit.event.PitAssistEvent;
 import cn.charlotte.pit.event.PitKillEvent;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/2/4 12:31
  */
 @Getter
-public class RedVSBlueEvent implements IEvent, IEpicEvent, Listener, IScoreBoardInsert {
+public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listener, IScoreBoardInsert {
 
     private final List<UUID> redTeam = new ArrayList<>();
     private final List<UUID> blueTeam = new ArrayList<>();

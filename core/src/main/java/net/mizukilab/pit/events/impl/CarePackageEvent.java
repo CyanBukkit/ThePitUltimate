@@ -1,7 +1,7 @@
 package net.mizukilab.pit.events.impl;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import cn.charlotte.pit.util.hologram.Hologram;
@@ -44,7 +44,7 @@ import java.util.UUID;
  * @Date: 2021/1/30 16:41
  */
 
-public class CarePackageEvent implements INormalEvent, IEvent, Listener, IScoreBoardInsert {
+public class CarePackageEvent extends AbstractEvent implements INormalEvent, Listener, IScoreBoardInsert {
 
     @Getter
     private Location chest;

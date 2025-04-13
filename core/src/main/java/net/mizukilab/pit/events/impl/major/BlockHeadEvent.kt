@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.event.PitProfileLoadedEvent
 import cn.charlotte.pit.events.IEpicEvent
-import cn.charlotte.pit.events.IEvent
+import cn.charlotte.pit.events.AbstractEvent
 import cn.charlotte.pit.events.IScoreBoardInsert
 import eu.decentsoftware.holograms.api.DHAPI
 import eu.decentsoftware.holograms.api.holograms.Hologram
@@ -49,7 +49,7 @@ import kotlin.random.Random
  * @ Time 21:49
  */
 
-class BlockHeadEvent : IEvent, IEpicEvent, IScoreBoardInsert, Listener {
+class BlockHeadEvent : AbstractEvent, IEpicEvent, IScoreBoardInsert, Listener {
     companion object {
         @JvmStatic
         private val format = DecimalFormat("##.##")

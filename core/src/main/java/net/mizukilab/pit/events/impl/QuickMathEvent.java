@@ -2,7 +2,7 @@ package net.mizukilab.pit.events.impl;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import net.mizukilab.pit.config.NewConfiguration;
@@ -28,7 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @Author: Misoryan
  * @Created_In: 2021/2/7 11:08
  */
-public class QuickMathEvent implements IEvent, INormalEvent, Listener {
+public class QuickMathEvent extends AbstractEvent implements INormalEvent, Listener {
 
     public String TheEquation;
     public String TheEquationQuests;

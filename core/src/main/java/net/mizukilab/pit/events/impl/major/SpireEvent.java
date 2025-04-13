@@ -57,7 +57,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Author: EmptyIrony
  * @Date: 2021/3/21 11:02
  */
-public class SpireEvent implements IEvent, IEpicEvent, Listener, IPrepareEvent, ISortedEvent, IScoreBoardInsert {
+public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, IPrepareEvent, ISortedEvent, IScoreBoardInsert {
 
     private final Map<UUID, PlayerSpireData> dataMap;
     private final Map<UUID, Integer> rankMap = new HashMap<>();

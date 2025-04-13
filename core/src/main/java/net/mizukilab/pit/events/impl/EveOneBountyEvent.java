@@ -2,7 +2,7 @@ package net.mizukilab.pit.events.impl;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.util.chat.CC;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @Author: Misoryan
  * @Created_In: 2021/2/8 21:25
  */
-public class EveOneBountyEvent implements IEvent, INormalEvent {
+public class EveOneBountyEvent extends AbstractEvent implements INormalEvent {
 
     @Override
     public String getEventInternalName() {

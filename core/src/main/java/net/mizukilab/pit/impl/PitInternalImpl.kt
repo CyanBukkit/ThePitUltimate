@@ -6,7 +6,7 @@ import cn.charlotte.pit.data.PlayerInvBackup
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.TradeData
 import cn.charlotte.pit.events.IEpicEvent
-import cn.charlotte.pit.events.IEvent
+import cn.charlotte.pit.events.AbstractEvent
 import cn.charlotte.pit.events.INormalEvent
 import cn.charlotte.pit.events.genesis.team.GenesisTeam
 import cn.charlotte.pit.util.hologram.Hologram
@@ -165,7 +165,7 @@ object PitInternalImpl : PitInternalHook {
         return openEvent(event, player)
     }
 
-    override fun openEvent(event: IEvent, player: Player?): Boolean {
+    override fun openEvent(event: AbstractEvent, player: Player?): Boolean {
 
         val factory = ThePit.getInstance().eventFactory
         if (event is IEpicEvent) {

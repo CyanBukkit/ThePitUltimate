@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitKillEvent;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
@@ -65,7 +65,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/3/13 11:48
  */
 @Getter
-public class HamburgerEvent implements IEvent, IEpicEvent, Listener, IScoreBoardInsert {
+public class HamburgerEvent extends AbstractEvent implements IEpicEvent, Listener, IScoreBoardInsert {
 
     private final static String skinValue;
 

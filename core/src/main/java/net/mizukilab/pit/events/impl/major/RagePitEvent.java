@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitDamageEvent;
 import cn.charlotte.pit.event.PitKillEvent;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.util.TaskManager;
 import com.sk89q.worldedit.BlockVector;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/1/30 0:33
  */
 
-public class RagePitEvent implements IEvent, IEpicEvent, Listener {
+public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener {
 
     @Getter
     private final Map<UUID, DamageData> damageMap = new HashMap<>();
@@ -58,7 +58,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
     private int killed = 0;
     private BukkitRunnable runnable;
     @Getter
-    private Cooldown timer = new Cooldown(5, TimeUnit.MINUTES);
+    private Cooldown timer;
 
     public int getDamageRank(Player player) {
         DamageData damage = damageMap.get(player.getUniqueId());
@@ -130,6 +130,7 @@ public class RagePitEvent implements IEvent, IEpicEvent, Listener {
                 player.sendMessage(CC.translate("&5&l大型事件! &6&l疯狂天坑 &7事件开始!"));
             }
 
+            timer = new Cooldown(5, TimeUnit.MINUTES);
 
             runnable = new BukkitRunnable() {
                 @Override

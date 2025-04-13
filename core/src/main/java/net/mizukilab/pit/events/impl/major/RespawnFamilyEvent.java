@@ -3,7 +3,7 @@ package net.mizukilab.pit.events.impl.major;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.ItemLiveDropEvent;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.util.chat.CC;
@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class RespawnFamilyEvent implements IEvent, IEpicEvent, Listener, IScoreBoardInsert {
+public class RespawnFamilyEvent extends AbstractEvent implements IEpicEvent, Listener, IScoreBoardInsert {
 
     private Cooldown timer;
     private BukkitRunnable runnable;
