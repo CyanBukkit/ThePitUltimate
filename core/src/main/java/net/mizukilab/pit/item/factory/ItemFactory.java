@@ -1,6 +1,9 @@
-package net.mizukilab.pit.item;
+package net.mizukilab.pit.item.factory;
 
 import com.google.common.annotations.Beta;
+import net.mizukilab.pit.item.AbstractPitItem;
+import net.mizukilab.pit.item.IItemFactory;
+import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.util.ItemGlobalReference;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.item.ItemUtil;

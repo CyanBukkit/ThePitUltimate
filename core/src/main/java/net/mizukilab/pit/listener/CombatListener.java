@@ -20,7 +20,7 @@ import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.EnchantmentFactor;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.IMythicItem;
-import net.mizukilab.pit.item.ItemFactory;
+import net.mizukilab.pit.item.factory.ItemFactory;
 import net.mizukilab.pit.item.type.LuckyChestplate;
 import net.mizukilab.pit.item.type.mythic.MythicBowItem;
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;

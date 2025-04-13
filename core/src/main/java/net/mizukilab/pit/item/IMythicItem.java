@@ -55,7 +55,9 @@ public abstract class IMythicItem extends AbstractPitItem {
     public boolean boostedByBook = false;
 
     public UUID uuid;
+
     // 0=false 1=true -1=unset
+
     public int forceCanTrade = -1;
 
     public IMythicItem() {

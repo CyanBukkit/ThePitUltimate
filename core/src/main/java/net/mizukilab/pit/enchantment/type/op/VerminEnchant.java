@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2025/4/11
  */
 @WeaponOnly
-public class VerminEnchant extends AbstractEnchantment implements Listener,ITickTask, IActionDisplayEnchant, IMagicLicense {
+public class VerminEnchant extends AbstractEnchantment implements Listener,ITickTask, IActionDisplayEnchant {
 
     private static final HashMap<UUID, Cooldown> COOLDOWN = new HashMap<>();
 

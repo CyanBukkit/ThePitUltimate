@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.PitHook;
 import net.mizukilab.pit.actionbar.ActionBarManager;
 import net.mizukilab.pit.data.operator.ProfileOperator;
-import net.mizukilab.pit.item.ItemFactory;
+import net.mizukilab.pit.item.factory.ItemFactory;
 import net.mizukilab.pit.util.PublicUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;

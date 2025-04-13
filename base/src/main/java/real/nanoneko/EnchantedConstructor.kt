@@ -1,7 +1,7 @@
 package real.nanoneko
 
 import real.nanoneko.register.IMagicLicense
-
+@Deprecated("No use")
 object EnchantedConstructor {
     private val enchantments: MutableList<Class<*>> = mutableListOf()
 

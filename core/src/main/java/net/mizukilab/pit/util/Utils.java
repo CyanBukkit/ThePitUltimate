@@ -12,7 +12,7 @@ import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.IMythicItem;
-import net.mizukilab.pit.item.ItemFactory;
+import net.mizukilab.pit.item.factory.ItemFactory;
 import net.mizukilab.pit.item.MythicColor;
 import net.mizukilab.pit.item.type.*;
 import net.mizukilab.pit.item.type.mythic.MagicFishingRod;

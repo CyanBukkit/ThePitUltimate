@@ -6,6 +6,7 @@ import real.nanoneko.register.IMagicLicense
  * @author Araykal
  * @since 2025/1/31
  */
+@Deprecated("No use")
 object PerkConstructor {
     private val perks: MutableList<Class<*>> = mutableListOf()
 

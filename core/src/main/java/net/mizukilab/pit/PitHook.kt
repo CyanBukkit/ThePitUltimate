@@ -44,7 +44,7 @@ import net.mizukilab.pit.events.impl.major.*
 import net.mizukilab.pit.hologram.HologramListener
 import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.item.AbstractPitItem
-import net.mizukilab.pit.item.ItemFactory
+import net.mizukilab.pit.item.factory.ItemFactory
 import net.mizukilab.pit.item.type.*
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests

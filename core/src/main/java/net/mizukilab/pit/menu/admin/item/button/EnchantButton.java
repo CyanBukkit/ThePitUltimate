@@ -9,7 +9,7 @@ import net.mizukilab.pit.enchantment.param.item.RodOnly;
 import net.mizukilab.pit.enchantment.param.item.WeaponOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.item.IMythicItem;
-import net.mizukilab.pit.item.ItemFactory;
+import net.mizukilab.pit.item.factory.ItemFactory;
 import net.mizukilab.pit.item.type.mythic.MagicFishingRod;
 import net.mizukilab.pit.item.type.mythic.MythicBowItem;
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;

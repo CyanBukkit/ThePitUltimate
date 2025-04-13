@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -204,6 +205,25 @@ public class InventoryUtil {
             armor = new ItemStack[4];
         }
 
+        serializeItemStack(builder, armor);
+
+        if (inv.getContents() == null) {
+            inv.setContents(new ItemStack[36]);
+        }
+
+        return prependContents(builder, inv.getContents());
+    }
+
+    @NotNull
+    private static String prependContents(StringBuilder builder, ItemStack[] contents) {
+        for (int i = 0; i < contents.length; ++i) {
+            builder.append(i).append("#").append(serializeItemStack(contents[i]))
+                    .append((i == contents.length - 1) ? "" : ";");
+        }
+
+        return builder.toString();
+    }
+    private static void serializeItemStack(StringBuilder builder, ItemStack[] armor) {
         for (int i = 0; i < armor.length; i++) {
             if (i == 3) {
                 if (armor[i] == null) {
@@ -221,47 +241,15 @@ public class InventoryUtil {
         }
 
         builder.append("|");
-
-        if (inv.getContents() == null) {
-            inv.setContents(new ItemStack[36]);
-        }
-
-        for (int i = 0; i < inv.getContents().length; ++i) {
-            builder.append(i).append("#").append(serializeItemStack(inv.getContents()[i]))
-                    .append((i == inv.getContents().length - 1) ? "" : ";");
-        }
-
-        return builder.toString();
     }
 
     public static String playerInventoryToString(PlayerInventory inv) {
         StringBuilder builder = new StringBuilder();
         ItemStack[] armor = inv.getArmorContents();
 
-        for (int i = 0; i < armor.length; i++) {
-            if (i == 3) {
-                if (armor[i] == null) {
-                    builder.append(serializeItemStack(new ItemStack(Material.AIR)));
-                } else {
-                    builder.append(serializeItemStack(armor[3]));
-                }
-            } else {
-                if (armor[i] == null) {
-                    builder.append(serializeItemStack(new ItemStack(Material.AIR))).append(";");
-                } else {
-                    builder.append(serializeItemStack(armor[i])).append(";");
-                }
-            }
-        }
+        serializeItemStack(builder, armor);
 
-        builder.append("|");
-
-        for (int i = 0; i < inv.getContents().length; ++i) {
-            builder.append(i).append("#").append(serializeItemStack(inv.getContents()[i]))
-                    .append((i == inv.getContents().length - 1) ? "" : ";");
-        }
-
-        return builder.toString();
+        return prependContents(builder, inv.getContents());
     }
 
     public static PlayerInv playerInventoryFromString(String in) {

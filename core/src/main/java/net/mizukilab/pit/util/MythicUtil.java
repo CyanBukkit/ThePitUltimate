@@ -2,7 +2,7 @@ package net.mizukilab.pit.util;
 
 import cn.charlotte.pit.ThePit;
 import net.mizukilab.pit.item.IMythicItem;
-import net.mizukilab.pit.item.ItemFactory;
+import net.mizukilab.pit.item.factory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 
 public class MythicUtil {
