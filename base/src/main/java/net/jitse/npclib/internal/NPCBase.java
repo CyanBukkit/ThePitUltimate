@@ -215,7 +215,7 @@ public abstract class NPCBase implements NPC, NPCPacketHandler {
         getShown().remove(player.getUniqueId()); // Don't need to use NPC#hide since the entity is not registered in the NMS server.
         hasTeamRegistered.remove(player.getUniqueId());
     }
-
+    static int viewDistance = Bukkit.getViewDistance();
     public boolean inRangeOf(Player player) {
         if (player == null) return false;
         if (!player.getWorld().equals(location.getWorld())) {
@@ -227,7 +227,7 @@ public abstract class NPCBase implements NPC, NPCPacketHandler {
         // This will cause issues otherwise (e.g. custom skin disappearing).
         double hideDistance = instance.getAutoHideDistance();
         double distanceSquared = player.getLocation().distanceSquared(location);
-        double bukkitRange = Bukkit.getViewDistance() << 4;
+        double bukkitRange = viewDistance << 4;
 
         return distanceSquared <= MathUtil.squareTwo(hideDistance) && distanceSquared <= MathUtil.squareTwo(bukkitRange);
     }

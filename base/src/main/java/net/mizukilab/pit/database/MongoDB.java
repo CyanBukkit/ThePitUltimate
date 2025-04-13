@@ -17,6 +17,7 @@ import org.mongojack.JacksonMongoCollection;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -60,21 +61,19 @@ public final class MongoDB {
 
         //hook PowerOFTwo
         ConnectionString connectionString = new ConnectionString("mongodb://" + address + ":" + port);
+        MongoClientSettings thePit;
         MongoClientSettings.Builder builder1 = MongoClientSettings.builder().serverApi(ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build()).uuidRepresentation(UuidRepresentation.STANDARD).applyConnectionString(connectionString);
         if (mongoUser != null && mongoPassword != null && !mongoUser.isEmpty() && !mongoPassword.isEmpty()) {
-            final MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
-            MongoClientSettings thePit = builder1
+            MongoCredential credential = MongoCredential.createCredential(mongoUser, databaseName, mongoPassword.toCharArray());
+            thePit = builder1
                     .credential(credential).applicationName("ThePitRequiredPass")
                     .build();
-            this.mongoClient = MongoClients.create(thePit);
         } else {
-            MongoClientSettings thePit = builder1.applicationName("ThePitUnsafe").build();
-
-            this.mongoClient = MongoClients.create(thePit);
+            thePit = builder1.applicationName("ThePitUnsafe").build();
         }
-
+        this.mongoClient = MongoClients.create(thePit);
         this.database = mongoClient.getDatabase(databaseName);
         this.collection = database.getCollection("players");
 
