@@ -73,6 +73,10 @@ public class HealShieldEnchant extends AbstractEnchantment implements Listener, 
         shield.putIfAbsent(myself.getUniqueId(), 0);
         if (shield.get(myself.getUniqueId()) > 0) {
             shield.put(myself.getUniqueId(), shield.get(myself.getUniqueId()) - 1);
+            Cooldown cooldown1 = cooldown.get(myself.getUniqueId());
+            if(cooldown1 != null){
+                cooldown1.reset();
+            }
             cancel.set(true);
             myself.sendMessage(CC.translate("&c你的一层护盾因受到攻击而破裂! 剩余层数: " + shield.get(myself.getUniqueId())));
             attacker.sendMessage(CC.translate("&c对方的一层护盾抵消了你的攻击而破裂!"));
@@ -88,8 +92,9 @@ public class HealShieldEnchant extends AbstractEnchantment implements Listener, 
         shield.putIfAbsent(player.getUniqueId(), 0);
         cooldown.putIfAbsent(player.getUniqueId(), new Cooldown(30 - enchantLevel * 5L, TimeUnit.SECONDS));
         if (shield.get(player.getUniqueId()) < 3) {
-            if (cooldown.get(player.getUniqueId()).hasExpired()) {
-                cooldown.put(player.getUniqueId(), new Cooldown(30 - enchantLevel * 5L, TimeUnit.SECONDS));
+            Cooldown cooldown1 = cooldown.get(player.getUniqueId());
+            if (cooldown1.hasExpired()) {
+                cooldown1.reset();
                 shield.put(player.getUniqueId(), shield.get(player.getUniqueId()) + 1);
                 CC.send(MessageType.MISC, player, "&a你恢复了一层护盾,当前护盾层数: " + shield.get(player.getUniqueId()) + "/3");
             }
@@ -100,7 +105,9 @@ public class HealShieldEnchant extends AbstractEnchantment implements Listener, 
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        cooldown.remove(e.getPlayer().getUniqueId());
+        UUID uniqueId = e.getPlayer().getUniqueId();
+        shield.remove(uniqueId);
+        cooldown.remove(uniqueId);
     }
 
     @Override

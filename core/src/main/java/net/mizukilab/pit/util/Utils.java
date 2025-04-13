@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.mizukilab.pit.config.PitConfig;
 import net.mizukilab.pit.data.operator.PackedOperator;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
@@ -18,12 +19,15 @@ import net.mizukilab.pit.item.type.mythic.MagicFishingRod;
 import net.mizukilab.pit.item.type.mythic.MythicBowItem;
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem;
+import net.mizukilab.pit.util.aabb.AABB;
 import net.mizukilab.pit.util.arithmetic.IntegerUtils;
 import net.mizukilab.pit.util.item.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -271,5 +275,15 @@ public class Utils {
 
     public static boolean check(Material material) {
         return material == Material.HOPPER || material == Material.ENDER_CHEST;
+    }
+
+    public static boolean isInArena(Player player) {
+        PitConfig config = ThePit.getInstance().getPitConfig();
+        final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
+
+        Location location = player.getLocation();
+        final AABB playerAABB = new AABB(location.getX(), location.getY(), location.getZ(), location.getX() + 0.8, location.getY() + 2, location.getZ() + 0.8);
+        final boolean inArena = !aabb.intersectsWith(playerAABB);
+        return inArena;
     }
 }
