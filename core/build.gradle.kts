@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.shadow)
 }
 var devBuild = false
-if(devBuild) {
+if (devBuild) {
     println("当前使用DevBuild模式构建!!,请详细斟酌是否构建")
     Scanner(System.`in`).next()
 }
@@ -29,16 +29,16 @@ repositories {
     maven("https://repo.panda-lang.org/releases")
 }
 tasks.named<ShadowJar>("shadowJar") {
-    archiveFileName.set("ThePitUltimate-$version"+ (if(devBuild) "-dev" else "") + ".jar")
+    archiveFileName.set("ThePitUltimate-$version" + (if (devBuild) "-dev" else "") + ".jar")
     exclude("META-INF/**")
     relocate("pku.yim.license", "net.mizukilab.pit.license")
-    relocate("panda","net.mizukilab.pit.libs")
-    relocate("dev.rollczi","net.mizukilab.pit.libs")
-    relocate("cn.hutool","net.mizukilab.pit.libs")
-    relocate("net.kyori","net.mizukilab.pit.libs")
-    relocate("net.jodah","net.mizukilab.pit.libs")
-    relocate("net.jitse","net.mizukilab.pit.libs")
-    relocate("xyz.upperlevel.spigot","net.mizukilab.pit.libs")
+    relocate("panda", "net.mizukilab.pit.libs")
+    relocate("dev.rollczi", "net.mizukilab.pit.libs")
+    relocate("cn.hutool", "net.mizukilab.pit.libs")
+    relocate("net.kyori", "net.mizukilab.pit.libs")
+    relocate("net.jodah", "net.mizukilab.pit.libs")
+    relocate("net.jitse", "net.mizukilab.pit.libs")
+    relocate("xyz.upperlevel.spigot", "net.mizukilab.pit.libs")
     exclude("org/**")
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
@@ -47,7 +47,7 @@ tasks.named<ShadowJar>("shadowJar") {
 dependencies {
     var dependencyNotation = project(":base")
     compileOnly(dependencyNotation)
-    if(devBuild){
+    if (devBuild) {
         implementation(dependencyNotation)
     }
     compileOnly(fileTree("../packLib"))
