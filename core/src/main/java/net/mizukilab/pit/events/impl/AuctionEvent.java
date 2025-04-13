@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * @Creator Misoryan
  * @Date 2021/5/25 16:30
  */
-public class AuctionEvent implements AbstractEvent, INormalEvent, Listener {
+public class AuctionEvent extends AbstractEvent implements INormalEvent, Listener {
 
     private static final String prefix = "&6&l竞拍! &7";
     private static final double rate = 1.15;
