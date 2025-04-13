@@ -85,7 +85,7 @@ class DragonEggsEvent : IEvent, INormalEvent, Listener {
 
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
-        if (!isActive || event.clickedBlock.location.equals(eggLocation) || event.clickedBlock?.type != Material.DRAGON_EGG) return
+        if (!isActive || eggLocation?.equals(event.clickedBlock?.location) == true || event.clickedBlock?.type != Material.DRAGON_EGG) return
         event.isCancelled = true
         if (!isClick) {
             despawnHolograms()
