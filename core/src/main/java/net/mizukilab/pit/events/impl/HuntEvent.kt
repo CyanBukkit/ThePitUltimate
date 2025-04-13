@@ -90,9 +90,6 @@ class HuntEvent : IEvent, INormalEvent, Listener, IScoreBoardInsert {
         if (isActive) {
             val profile = PlayerProfile.getPlayerProfileByUuid(event.killer.uniqueId)
             val playerName = event.killer.name
-            if (event.target.hasMetadata("NPC")) {
-                return
-            }
             playerName?.let {
                 val eventData = killMap.getOrPut(it) { EventData() }
                 if (eventData.prestige >= 5) {
