@@ -706,8 +706,16 @@ public class CombatListener implements Listener {
             }
 
             if (respawnTime > 0.1) {
-                TitleUtil.sendTitle(player, "&c你死了！", "&7将在 &6" + respawnTime + "秒 &7后复活", 5, 5, 20);
-                player.setGameMode(GameMode.SPECTATOR);
+                double finalRespawnTime = respawnTime;
+                for (int i = 0; i < finalRespawnTime; i++) {
+                    final int remainingTime = (int) (finalRespawnTime - i);
+
+                    int delay = i * 20;
+                    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                        TitleUtil.sendTitle(player, "&c你死了！", "&7将在 &6" + remainingTime + "秒 &7后复活", 5, 5, 20);
+                    }, delay);
+                }
+
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
                     this.doRespawn(player);
                 }, (long) (respawnTime * 20L));
