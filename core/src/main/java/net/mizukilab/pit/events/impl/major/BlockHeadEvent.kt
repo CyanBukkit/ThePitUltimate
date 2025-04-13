@@ -49,7 +49,7 @@ import kotlin.random.Random
  * @ Time 21:49
  */
 
-class BlockHeadEvent : AbstractEvent, IEpicEvent, IScoreBoardInsert, Listener {
+class BlockHeadEvent : AbstractEvent(), IEpicEvent, IScoreBoardInsert, Listener {
     companion object {
         @JvmStatic
         private val format = DecimalFormat("##.##")

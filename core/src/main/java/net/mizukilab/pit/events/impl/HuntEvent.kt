@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable
  * @author Araykal
  * @since 2025/2/8
  */
-class HuntEvent : AbstractEvent, INormalEvent, Listener, IScoreBoardInsert {
+class HuntEvent : AbstractEvent(), INormalEvent, Listener, IScoreBoardInsert {
     private val killMap: MutableMap<String, EventData> = mutableMapOf()
     private val KILL_COUNT_THRESHOLD = 15
     private var isActive = false

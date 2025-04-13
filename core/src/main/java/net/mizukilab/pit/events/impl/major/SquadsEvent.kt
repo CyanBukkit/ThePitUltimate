@@ -39,7 +39,7 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 
-class SquadsEvent : IEpicEvent, AbstractEvent, IPrepareEvent, Listener, IScoreBoardInsert, ISortedEvent {
+class SquadsEvent : IEpicEvent, AbstractEvent(), IPrepareEvent, Listener, IScoreBoardInsert, ISortedEvent {
 
     companion object {
         @JvmStatic

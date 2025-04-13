@@ -22,7 +22,7 @@ import java.util.*
  * @author Araykal
  * @since 2025/1/17
  */
-class DragonEggsEvent : AbstractEvent, INormalEvent, Listener {
+class DragonEggsEvent : AbstractEvent(), INormalEvent, Listener {
     private var eggLocation: Location? = null
     private var clicks: Int = 0
     private var firstHologram: Hologram? = null
