@@ -9,7 +9,7 @@ public class DayNightCycleRunnable extends BukkitRunnable {
     @Override
     public void run() {
         long minecraftTick = TimeUtil.getMinecraftTick();
-        Bukkit.getWorlds().forEach(world -> world.setTime(minecraftTick)
+            Bukkit.getWorlds().forEach(world -> world.setTime(minecraftTick)
         );
     }
 }
