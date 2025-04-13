@@ -24,4 +24,5 @@ public class MythicBowItem extends IMythicItem {
     public Material getItemDisplayMaterial() {
         return Material.BOW;
     }
+
 }

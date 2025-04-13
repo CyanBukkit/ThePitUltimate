@@ -15,6 +15,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.events.impl.AuctionEvent
+import net.mizukilab.pit.item.type.ChunkOfVileItem
+import net.mizukilab.pit.item.type.MythicBook
+import net.mizukilab.pit.item.type.PitCactus
 import net.mizukilab.pit.menu.cdk.generate.CDKMenu
 import net.mizukilab.pit.menu.cdk.view.CDKViewMenu
 import net.mizukilab.pit.menu.mail.MailMenu
@@ -199,29 +202,48 @@ class PitAdminSimpleCommand {
         @Arg("amount") amount: Int
     ) {
         val player = Bukkit.getPlayer(target)
+
         if (player == null) {
             sender.sendMessage("§c玩家不存在！")
             return
         }
-        if (itemsID == "exp") {
-            PlayerProfile.getPlayerProfileByUuid(player.uniqueId).experience += amount
-            sender.sendMessage("§a添加成功!")
-            return
+
+        when (itemsID.lowercase()) {
+            "exp" -> {
+                PlayerProfile.getPlayerProfileByUuid(player.uniqueId).experience += amount
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "coins" -> {
+                PlayerProfile.getPlayerProfileByUuid(player.uniqueId).coins += amount
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "chunkofvile" -> {
+                player.inventory.addItem(ChunkOfVileItem.toItemStack().apply { this.amount = amount })
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "mythicbook" -> {
+                player.inventory.addItem(MythicBook.toItemStack().apply { this.amount = amount })
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "cactus" -> {
+                player.inventory.addItem(PitCactus.toItemStack().apply { this.amount = amount })
+                sender.sendMessage("§a添加成功!")
+            }
+
+            else -> {
+                val itemStack = ThePit.getApi().getMythicItemItemStack(itemsID)
+                if (itemStack == null || itemStack.type == Material.AIR) {
+                    sender.sendMessage("§c物品不存在")
+                } else {
+                    player.inventory.addItem(itemStack.apply { this.amount = amount })
+                    sender.sendMessage("§a添加成功!")
+                }
+            }
         }
-        if (itemsID == "coins") {
-            PlayerProfile.getPlayerProfileByUuid(player.uniqueId).coins += amount
-            sender.sendMessage("§a添加成功!")
-            return
-        }
-        val i = ThePit.getApi().getMythicItemItemStack(itemsID)
-        if (i == null || i.type == Material.AIR) {
-            sender.sendMessage("§c物品不存在")
-            return
-        }
-        player.inventory.addItem(i.apply {
-            this.amount = amount
-        })
-        sender.sendMessage("§a添加成功!")
     }
 
     @Execute(name = "unwipe")
@@ -281,7 +303,6 @@ class PitAdminSimpleCommand {
         PagedMenu(profile.profile().playerName + " 的背包备份", buttons).openMenu(player)
         return CC.translate("总计: $i 个")
     }
-
     @Execute(name = "forceSpawn")
     @Permission("pit.admin")
     fun forceSpawn(@Context player: Player, @Arg("target") target: Player) {
@@ -466,25 +487,7 @@ class PitAdminSimpleCommand {
     @Execute(name = "giveBook")
     @Permission("pit.admin")
     fun giveBook(@Context player: Player): String {
-        player.inventory.addItem(
-            ItemBuilder(Material.PAPER)
-                .name("&d附魔卷轴")
-                .deathDrop(false)
-                .canDrop(true)
-                .canSaveToEnderChest(true)
-                .internalName("mythic_reel")
-                .uuid(UUID.randomUUID())
-                .lore(
-                    "",
-                    "&7将&6神话物品&7和&d附魔卷轴&7放入神话之井",
-                    "&7将会为该&6神话物品&7带来一个随机的三级 &d&l稀有! &7附魔",
-                    "",
-                    "&7在神话之井使用"
-                )
-                .shiny()
-                .dontStack()
-                .build()
-        )
+        player.inventory.addItem(MythicBook.toItemStack())
         return "§a添加到你的背包"
     }
 }

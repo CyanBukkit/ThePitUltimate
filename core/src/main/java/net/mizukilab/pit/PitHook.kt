@@ -46,6 +46,9 @@ import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.item.factory.ItemFactory
 import net.mizukilab.pit.item.type.*
+import net.mizukilab.pit.item.type.mythic.MythicBowItem
+import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
+import net.mizukilab.pit.item.type.mythic.MythicSwordItem
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests
 import net.mizukilab.pit.menu.shop.button.type.BowBundleShopButton
@@ -233,6 +236,9 @@ object PitHook {
 
     private fun loadItems() {
         val clazzList = mutableListOf(
+            MythicBowItem::class.java,
+            MythicSwordItem::class.java,
+            MythicLeggingsItem::class.java,
             AngelChestplate::class.java,
             ArmageddonBoots::class.java,
             BountySolventPotion::class.java,
@@ -243,6 +249,7 @@ object PitHook {
             JumpBoostPotion::class.java,
             MythicRepairKit::class.java,
             PitCactus::class.java,
+            SpireSword::class.java,
             MusicalRune::class.java,
             // 神人 SpireArmor::class.java,
             SuperPackage::class.java,

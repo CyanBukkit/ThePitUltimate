@@ -65,13 +65,13 @@ public class InventoryUtil {
         int amount = 0;
         for (int i = 0; i < 36; i++) {
             ItemStack itemStack = player.getInventory().getItem(i);
-            if (itemStack != null && ItemUtil.getInternalName(itemStack) != null && ItemUtil.getInternalName(itemStack).equals(internalName)) {
-                amount += player.getInventory().getItem(i).getAmount();
+            String internalName1 = ItemUtil.getInternalName(itemStack);
+            if (itemStack != null && internalName1 != null && internalName1.equals(internalName)) {
+                amount += itemStack.getAmount();
             }
         }
         return amount;
     }
-
     public static boolean removeItem(Player player, ItemStack item, Integer amount) {
         if (getAmountOfItem(player, item) < amount) return false;
         int requirement = amount;
