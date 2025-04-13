@@ -316,7 +316,7 @@ public class PlayerUtil {
         if (lc1.getWorld() != lc2.getWorld()) {
             return Float.MAX_VALUE;
         }
-        return MathHelper.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2) + Math.pow(lc1.getY() - lc2.getY(), 2) + Math.pow(lc1.getZ() - lc2.getZ(), 2));
+        return (float) lc1.distance(lc2);
     }
 
     public static int getPlayerUnlockedPerkLevel(Player player, String internal) {

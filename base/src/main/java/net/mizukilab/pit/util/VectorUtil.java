@@ -95,7 +95,7 @@ public class VectorUtil {
         double distance = MathHelper.sqrt(x * x + z * z);
         if (distance != 0.0D) {
             if (launchAngle == null) {
-                launchAngle = Math.atan((40.0D * elevation + Math.pow(velocity, 2.0D)) / (40.0D * elevation + 2.0D * Math.pow(velocity, 2.0D)));
+                launchAngle = Math.atan((40.0D * elevation + velocity * velocity) / (40.0D * elevation + 2.0D * velocity * velocity));
             }
             double hangTime = calculateHangTime(launchAngle, velocity, elevation);
             test.setY(Math.tan(launchAngle) * distance);
@@ -103,7 +103,7 @@ public class VectorUtil {
             Vector noise = Vector.getRandom();
             noise = noise.multiply(0.1D);
             test.add(noise);
-            velocity = velocity + 1.188D * Math.pow(hangTime, 2.0D) + (random.nextDouble() - 0.8D) / 2.0D;
+            velocity = velocity + 1.188D * hangTime * hangTime + (random.nextDouble() - 0.8D) / 2.0D;
             test = test.multiply(velocity / 20.0D);
             return test;
         }
@@ -113,20 +113,20 @@ public class VectorUtil {
     private static double calculateHangTime(double launchAngle, double v, double elev) {
         double a = v * Math.sin(launchAngle);
         double b = -2.0D * 20.0 * elev;
-        return Math.pow(a, 2.0D) + b < 0.0D ? 0.0D : (a + Math.sqrt(Math.pow(a, 2.0D) + b)) / 20.0;
+        return (a * a) + b < 0.0D ? 0.0D : (a + Math.sqrt((a * a) + b)) / 20.0;
     }
 
     private static Vector normalizeVector(Vector victor) {
-        double mag = MathHelper.sqrt(Math.pow(victor.getX(), 2.0D) + Math.pow(victor.getY(), 2.0D) + Math.pow(victor.getZ(), 2.0D));
+        double mag = MathHelper.sqrt(victor.getX() * victor.getX() + victor.getY() * victor.getY() + victor.getZ() * victor.getZ());
         return mag != 0.0D ? victor.multiply(1.0D / mag) : victor.multiply(0);
     }
 
     private static Double calculateLaunchAngle(Location from, Location to, double v, double elevation) {
         Vector vector = from.clone().subtract(to).toVector();
-        double distance = MathHelper.sqrt(Math.pow(vector.getX(), 2.0D) + Math.pow(vector.getZ(), 2.0D));
-        double v2 = Math.pow(v, 2.0D);
-        double v4 = Math.pow(v, 4.0D);
-        double check = 20.0 * (20.0 * Math.pow(distance, 2.0D) + 2.0D * elevation * v2);
+        double distance = MathHelper.sqrt(vector.getX() * vector.getX() + vector.getZ() * vector.getZ());
+        double v2 = v * v;
+        double v4 = v2 * v2;
+        double check = 20.0 * (20.0 * (distance * distance) + 2.0 * elevation * v2);
         return v4 < check ? null : Math.atan((v2 - MathHelper.sqrt(v4 - check)) / (20.0 * distance));
     }
 }

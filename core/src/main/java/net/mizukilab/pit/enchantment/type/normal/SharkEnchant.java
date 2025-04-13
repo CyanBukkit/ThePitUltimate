@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SharkEnchant extends AbstractEnchantment implements IAttackEntity {
 
     public static float getDistance(final Location lc1, final Location lc2) {
-        return (float) Math.sqrt(Math.pow(lc1.getX() - lc2.getX(), 2.0) + Math.pow(lc1.getY() - lc2.getY(), 2.0) + Math.pow(lc1.getZ() - lc2.getZ(), 2.0));
+        return (float) lc1.distance(lc2);
     }
 
     @Override
