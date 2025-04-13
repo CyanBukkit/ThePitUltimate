@@ -25,7 +25,7 @@ public class TheSwiftWindEnchant extends AbstractEnchantment implements IAttackE
 
     @Override
     public String getEnchantName() {
-        return "&b迅捷之风";
+        return "迅捷之风";
     }
 
     @Override

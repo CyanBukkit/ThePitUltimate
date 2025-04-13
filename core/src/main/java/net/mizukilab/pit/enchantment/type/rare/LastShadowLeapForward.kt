@@ -36,7 +36,7 @@ class LastShadowLeapForward : AbstractEnchantment(), Listener, IActionDisplayEnc
     }
 
     override fun getNbtName(): String {
-        return "last_shadow_leap_forward"
+        return "leapfrog"
     }
 
     override fun getRarity(): EnchantmentRarity {

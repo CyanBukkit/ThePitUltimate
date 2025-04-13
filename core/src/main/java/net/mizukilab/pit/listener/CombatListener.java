@@ -718,6 +718,7 @@ public class CombatListener implements Listener {
 
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
                     this.doRespawn(player);
+                    TitleUtil.sendTitle(player, "&a已复活！", " ", 5, 5, 20);
                 }, (long) (respawnTime * 20L));
             } else {
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> doRespawn(player), 1L);

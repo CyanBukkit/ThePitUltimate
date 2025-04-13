@@ -284,6 +284,7 @@ private fun loadEnchants() {
         //new
         ThunderArrowEnchant::class.java,
         UndeadArrowEnchant::class.java,
+        LastShadowLeapForward::class.java,
         //end
         ComboUnpredictablyEnchant::class.java,
         ComboDazzlingGoldEnchant::class.java,
@@ -433,12 +434,12 @@ private fun loadEnchants() {
         AceOfSpades::class.java,
         Brakes::class.java,
         BreachingChargeEnchant::class.java,
+        WitheredAndPiercingThroughTheHeart::class.java,
         TrotEnchant::class.java
     )
 
     /*        classes += HappyNewYearEnchant::class.java
-            classes += WitheredAndPiercingThroughTheHeart::class.java
-            classes += LastShadowLeapForward::class.java
+            classes += WitheredAndPiercingThroughTheHeart::class.ja
 */
 //        classes += TrotEnchant::class.java
 //        classes += TrytoGiveEnchant::class.java
