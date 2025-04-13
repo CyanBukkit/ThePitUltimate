@@ -149,9 +149,9 @@ class PitAdminSimpleCommand {
         ThePit.api.openMenu(player, "admin_item")
     }
 
-    @Execute(name = "reboot")
+    @Execute(name = "reboots")
     @Permission("pit.admin")
-    fun reboot(
+    fun reboots(
         @Context sender: CommandSender,
         @Arg("duration") duration: Duration,
         @OptionalArg("reason") reason: String = "计划外重启"
@@ -160,6 +160,18 @@ class PitAdminSimpleCommand {
             .rebootRunnable
             .addRebootTask(RebootTask(reason, System.currentTimeMillis() + duration.toMillis()))
     }
+
+    @Execute(name = "reboot")
+    @Permission("pit.admin")
+    fun reboot(
+        @Context sender: CommandSender,
+        @Arg("duration") duration: Duration,
+    ) {
+        ThePit.getInstance()
+            .rebootRunnable
+            .addRebootTask(RebootTask("修复BUG", System.currentTimeMillis() + duration.toMillis()))
+    }
+
 
     @Execute(name = "cancelReboot")
     @Permission("pit.admin")
@@ -303,6 +315,7 @@ class PitAdminSimpleCommand {
         PagedMenu(profile.profile().playerName + " 的背包备份", buttons).openMenu(player)
         return CC.translate("总计: $i 个")
     }
+
     @Execute(name = "forceSpawn")
     @Permission("pit.admin")
     fun forceSpawn(@Context player: Player, @Arg("target") target: Player) {

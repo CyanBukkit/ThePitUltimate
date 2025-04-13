@@ -82,7 +82,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7射箭时同时射出 &e" + (enchantLevel + 2) + " &7支箭矢";
+        return "&7射箭时同时射出 &e" + (enchantLevel + 3) + " &7支箭矢";
     }
 
     private Map<UUID, Boolean> isShooting = new SWMRHashTable<>();
@@ -111,6 +111,9 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
                 if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
 
                     //shoot 5 arrows need 400ms u suck why u set it to 200ms
+                    if (player.isSneaking()) {
+                        return;
+                    }
 
                     final ItemStack item = Utils.toNMStackQuick(itemInHand);
                     final ItemBow bow = (ItemBow) item.getItem();
@@ -137,7 +140,7 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
 
                         @Override
                         public void run() {
-                            if (tick >= level) {
+                            if (tick >= level + 2) {
                                 cooldown.put(player.getUniqueId(), new Cooldown(15L, TimeUnit.MILLISECONDS));
                                 isShooting.remove(player.getUniqueId());
                                 this.cancel();
