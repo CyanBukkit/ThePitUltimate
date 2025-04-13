@@ -1,5 +1,6 @@
 package cn.charlotte.pit.menu.rune.button
 
+import cn.charlotte.pit.data.sub.EnchantmentRecord
 import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.util.chat.CC
@@ -47,8 +48,12 @@ class DJEnchantButton(
         if (ItemUtil.getInternalName(itemStack) == "mythic_leggings") {
             val leggingsItem = MythicLeggingsItem()
             leggingsItem.loadFromItemStack(itemStack)
-            leggingsItem.enchantments[enchantment] = 1
-
+            leggingsItem.enchantments.put(enchantment, 1)
+            leggingsItem.enchantmentRecords += EnchantmentRecord(
+                player.name,
+                "MusicRune",
+                System.currentTimeMillis()
+            )
             player.playSound(player.location, Sound.ANVIL_USE, 1f, 99f)
             player.sendMessage(CC.translate("&6&l铸造！ &7成功为你的神话之裤增加了${enchantment.enchantName}附魔"))
 

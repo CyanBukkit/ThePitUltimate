@@ -189,6 +189,30 @@ class PitAdminSimpleCommand {
         }
     }
 
+
+    @Execute(name = "giveitems")
+    @Permission("pit.admin")
+    fun giveItem(
+        @Context sender: CommandSender,
+        @Arg("target") target: String,
+        @Arg("itemsID") itemsID: String,
+        @Arg("amount") amount: Int
+    ) {
+        val player = Bukkit.getPlayer(target)
+        if (player == null) {
+            sender.sendMessage("§c玩家不存在！")
+            return
+        }
+        val i = ThePit.getApi().getMythicItemItemStack(itemsID)
+        if (i == null || i.type == Material.AIR) {
+            sender.sendMessage("§c物品不存在")
+            return
+        }
+        player.inventory.addItem(i.apply {
+            this.amount = amount
+        })
+    }
+
     @Execute(name = "unwipe")
     @Permission("pit.admin")
     @Async
@@ -218,7 +242,6 @@ class PitAdminSimpleCommand {
     @Async
     fun rollback(@Context player: Player, @Arg("name") name: String): String {
         val profile = ThePit.getInstance().profileOperator.namedIOperator(name)
-            ?: ThePit.getInstance().profileOperator.lookupIOnline(name)
         if (profile.profile() == null) {
             return CC.translate("&c该玩家不存在")
         }

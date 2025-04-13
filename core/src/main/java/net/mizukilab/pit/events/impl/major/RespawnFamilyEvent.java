@@ -32,7 +32,7 @@ public class RespawnFamilyEvent implements IEvent, IEpicEvent, Listener, IScoreB
 
     @Override
     public String getEventName() {
-        return "活全家";
+        return "庇护";
     }
 
     @Override
@@ -66,7 +66,7 @@ public class RespawnFamilyEvent implements IEvent, IEpicEvent, Listener, IScoreB
         };
         this.runnable.runTaskTimer(ThePit.getInstance(), 20, 10);
 
-        CC.boardCast(MessageType.EVENT, "&a&l大型事件! &7所有人都活全家了, 不掉毛, 不掉命。");
+        CC.boardCast(MessageType.EVENT, "&a&l大型事件! &7庇护，现在所有人都不会掉毛,掉命。");
         Bukkit.getPluginManager().registerEvents(this, ThePit.getInstance());
     }
 

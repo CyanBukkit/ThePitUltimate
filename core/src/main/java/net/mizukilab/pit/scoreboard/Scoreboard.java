@@ -258,7 +258,7 @@ public class Scoreboard implements AssembleAdapter {
 
         lines.add(" ");
         if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c跑路! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
+            lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
         }
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
