@@ -479,7 +479,7 @@ private fun loadEnchants() {
             classes.addAll(enchantmentCollection)
         }
         enchantmentFactor.init(classes)
-    },60L)
+    },40L)
 }
 
 private fun loadScoreBoard() {
