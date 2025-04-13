@@ -203,6 +203,16 @@ class PitAdminSimpleCommand {
             sender.sendMessage("§c玩家不存在！")
             return
         }
+        if (itemsID == "exp") {
+            PlayerProfile.getPlayerProfileByUuid(player.uniqueId).experience += amount
+            sender.sendMessage("§a添加成功!")
+            return
+        }
+        if (itemsID == "coins") {
+            PlayerProfile.getPlayerProfileByUuid(player.uniqueId).coins += amount
+            sender.sendMessage("§a添加成功!")
+            return
+        }
         val i = ThePit.getApi().getMythicItemItemStack(itemsID)
         if (i == null || i.type == Material.AIR) {
             sender.sendMessage("§c物品不存在")
@@ -211,6 +221,7 @@ class PitAdminSimpleCommand {
         player.inventory.addItem(i.apply {
             this.amount = amount
         })
+        sender.sendMessage("§a添加成功!")
     }
 
     @Execute(name = "unwipe")
