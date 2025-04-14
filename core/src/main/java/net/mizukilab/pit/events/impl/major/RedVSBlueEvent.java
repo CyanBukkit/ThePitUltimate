@@ -5,8 +5,8 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitAssistEvent;
 import cn.charlotte.pit.event.PitKillEvent;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
-import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.AbstractEvent;
+import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
@@ -160,8 +160,6 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
                 redKills++;
             }
 
-            CC.boardCast(CC.CHAT_BAR);
-            CC.boardCast("&6&l天坑事件结束: " + this.getEventName() + "&6&l!");
 
             List<Map.Entry<UUID, Integer>> list = kaMap.entrySet().stream()
                     .sorted(Comparator.comparingInt(Map.Entry::getValue))
@@ -177,6 +175,8 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
 
 
             for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage(CC.translate(CC.CHAT_BAR));
+                player.sendMessage(CC.translate("&6&l天坑事件结束: " + this.getEventName() + "&6&l!"));
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 boolean redTeam = isRedTeam(player);
                 int rewardCoins = 0;
@@ -264,6 +264,7 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
                         player.sendMessage(CC.translate(" &e&l#" + (j + 1) + " " + displayName + " &e获得了 " + (isRedTeam(target) ? "&c" : "&9") + kaMap.get(target.getUniqueId()) + " 击杀和助攻"));
                     }
                 }
+                player.sendMessage(CC.translate(CC.CHAT_BAR));
 
             }
         } catch (Exception e) {
@@ -272,7 +273,6 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
                 CC.printError(error, e);
             });
         }
-        CC.boardCast(CC.CHAT_BAR);
 
         this.redKills = 0;
         this.blueKills = 0;

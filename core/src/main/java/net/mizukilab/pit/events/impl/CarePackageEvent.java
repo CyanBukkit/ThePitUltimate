@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: EmptyIrony
@@ -52,7 +53,7 @@ public class CarePackageEvent extends AbstractEvent implements INormalEvent, Lis
     private ChestData chestData;
 
 
-    private Cooldown endTimer;
+    private final Cooldown endTimer = new Cooldown(5, TimeUnit.MINUTES);
 
     @Override
     public String getEventInternalName() {
@@ -188,7 +189,6 @@ public class CarePackageEvent extends AbstractEvent implements INormalEvent, Lis
 
         chestData.getFirstHologram().spawn();
         chestData.getSecondHologram().spawn();
-        endTimer = ThePit.getInstance().getEventFactory().getNormalEnd();
     }
 
 

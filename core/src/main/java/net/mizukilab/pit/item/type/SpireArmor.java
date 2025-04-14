@@ -1,58 +1,39 @@
 package net.mizukilab.pit.item.type;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Misoryan
  * @Created_In: 2021/3/22 17:14
  */
 
-public class SpireArmor extends AbstractPitItem {
+public class SpireArmor  {
 
-    private final Material material;
 
-    public SpireArmor(Material material) {
-        this.material = material;
-    }
 
-    @Override
-    public String getInternalName() {
-        return "spire_armor";
-    }
-
-    @Override
-    public String getItemDisplayName() {
-        return material.name();
-    }
-
-    @Override
-    public Material getItemDisplayMaterial() {
-        return material;
-    }
-
-    @Override
-    public ItemStack toItemStack() {
-        final List<String> lore = this.getEnchantLore();
+    public static ItemStack toItemStack(Material material) {
+        final List<String> lore = new ArrayList<>();
         lore.add(0, "");
         lore.add(0, "&7事件物品");
 
-        return new ItemBuilder(this.getItemDisplayMaterial())
-                .name(this.getItemDisplayName())
-                .internalName(this.getInternalName())
+        return new ItemBuilder(material)
+                .name(material.name())
+                .internalName("spire_armor")
                 .removeOnJoin(true)
                 .deathDrop(true)
                 .lore(lore)
                 .buildWithUnbreakable();
     }
 
-    @Override
-    public void loadFromItemStack(ItemStack item) {
-
-    }
 
 }

@@ -14,6 +14,7 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.blocks.BlockID;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.function.mask.BlockMask;
+import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.patterns.SingleBlockPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
@@ -229,33 +230,22 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
             final SpireSword sword = new SpireSword(Material.WOOD_SWORD);
             player.getInventory().addItem(sword.toItemStack());
         } else if (floor == 1 || floor == 2) {
-            final SpireSword sword = new SpireSword(Material.WOOD_SWORD);
-            player.getInventory().addItem(sword.toItemStack());
+            player.getInventory().addItem(SpireArmor.toItemStack(Material.WOOD_SWORD));
+            player.getInventory().setChestplate(SpireArmor.toItemStack(Material.LEATHER_CHESTPLATE));
 
-            final SpireArmor chest = new SpireArmor(Material.LEATHER_CHESTPLATE);
-            player.getInventory().setChestplate(chest.toItemStack());
-            final SpireArmor leg = new SpireArmor(Material.CHAINMAIL_LEGGINGS);
-            player.getInventory().setLeggings(leg.toItemStack());
+            player.getInventory().setLeggings(SpireArmor.toItemStack(Material.CHAINMAIL_LEGGINGS));
         } else if (floor == 3 || floor == 4 || floor == 5) {
-            final SpireSword sword = new SpireSword(Material.IRON_SWORD);
-            player.getInventory().addItem(sword.toItemStack());
+            player.getInventory().addItem(SpireArmor.toItemStack(Material.IRON_SWORD));
 
-            final SpireArmor chest = new SpireArmor(Material.IRON_CHESTPLATE);
-            player.getInventory().setChestplate(chest.toItemStack());
-            final SpireArmor leg = new SpireArmor(Material.CHAINMAIL_LEGGINGS);
-            player.getInventory().setLeggings(leg.toItemStack());
-            final SpireArmor boots = new SpireArmor(Material.IRON_BOOTS);
-            player.getInventory().setBoots(boots.toItemStack());
+            player.getInventory().setChestplate(SpireArmor.toItemStack(Material.IRON_CHESTPLATE));
+            player.getInventory().setLeggings(SpireArmor.toItemStack(Material.CHAINMAIL_LEGGINGS));
+            player.getInventory().setBoots(SpireArmor.toItemStack(Material.IRON_BOOTS));
         } else if (floor >= 6) {
             final SpireSword sword = new SpireSword(Material.DIAMOND_SWORD);
             player.getInventory().addItem(sword.toItemStack());
-
-            final SpireArmor chest = new SpireArmor(Material.DIAMOND_CHESTPLATE);
-            player.getInventory().setChestplate(chest.toItemStack());
-            final SpireArmor leg = new SpireArmor(Material.IRON_LEGGINGS);
-            player.getInventory().setLeggings(leg.toItemStack());
-            final SpireArmor boots = new SpireArmor(Material.DIAMOND_BOOTS);
-            player.getInventory().setBoots(boots.toItemStack());
+            player.getInventory().setChestplate(SpireArmor.toItemStack(Material.DIAMOND_CHESTPLATE));
+            player.getInventory().setLeggings(SpireArmor.toItemStack(Material.IRON_LEGGINGS));
+            player.getInventory().setBoots(SpireArmor.toItemStack(Material.DIAMOND_BOOTS));
         }
 
     }

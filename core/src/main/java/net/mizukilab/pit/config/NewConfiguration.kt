@@ -289,6 +289,7 @@ object NewConfiguration {
         //自定义活动人数需求
         "event-online-required.hunt" to 5,
         "event-online-required.dragon_egg" to 5,
+        "event-online-required.respawn_family" to 5,
         "event-online-required.auction" to 10,
         "event-online-required.cake" to 10,
         "event-online-required.care_package" to 20,

@@ -1,9 +1,9 @@
 package net.mizukilab.pit.item.type;
 
 import cn.charlotte.pit.ThePit;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.util.item.ItemBuilder;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
