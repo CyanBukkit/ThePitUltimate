@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @AutoRegister
-public class SiltedUpBuuff extends AbstractPitBuff implements Listener {
+public class SiltedUpBuff extends AbstractPitBuff implements Listener {
 
     @Override
     public String getInternalBuffName() {
@@ -33,24 +33,29 @@ public class SiltedUpBuuff extends AbstractPitBuff implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBuffStack(PitStackBuffEvent pitStackBuffEvent) {
-        if (pitStackBuffEvent.isCancel() || !pitStackBuffEvent.getBuff().getInternalBuffName().equalsIgnoreCase(getInternalBuffName()))
+    public void onBuffStack(PitStackBuffEvent event) {
+        if (event.isCancel() || !getInternalBuffName().equalsIgnoreCase(event.getBuff().getInternalBuffName())) {
             return;
-        if (getPlayerBuffData(pitStackBuffEvent.getPlayer()).getTier() < 1)
-            (new rundebuff(pitStackBuffEvent)).runTaskTimer(ThePit.getInstance(), 0L, 10L);
-    }
-
-    class rundebuff extends BukkitRunnable {
-
-        Player player;
-
-        rundebuff(PitStackBuffEvent event) {
-            player = event.getPlayer();
         }
 
+        if (getPlayerBuffData(event.getPlayer()).getTier() < 1) {
+            new BuffDebuffTask(event.getPlayer()).runTaskTimer(ThePit.getInstance(), 0L, 10L);
+        }
+    }
+
+    private class BuffDebuffTask extends BukkitRunnable {
+
+        private final Player player;
+
+        BuffDebuffTask(Player player) {
+            this.player = player;
+        }
+
+        @Override
         public void run() {
             player.removePotionEffect(PotionEffectType.SPEED);
             player.removePotionEffect(PotionEffectType.JUMP);
+
             if (getPlayerBuffData(player).getTier() < 1) {
                 cancel();
             }

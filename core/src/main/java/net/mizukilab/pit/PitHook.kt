@@ -301,6 +301,7 @@ private fun loadEnchants() {
         MysticRealmEnchant::class.java,
         TheSwiftWindEnchant::class.java,
         SoulEarterEnchant::class.java,
+        PinDownEnchant::class.java,
         PhantomShieldEnchant::class.java,
         KingKillersEnchant::class.java,
         //end
