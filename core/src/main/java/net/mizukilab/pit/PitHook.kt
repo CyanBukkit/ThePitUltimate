@@ -42,6 +42,7 @@ import net.mizukilab.pit.enchantment.type.special.SoulRipperEnchant
 import net.mizukilab.pit.events.impl.*
 import net.mizukilab.pit.events.impl.major.*
 import net.mizukilab.pit.hologram.HologramListener
+import net.mizukilab.pit.hook.ItemPapiHook
 import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.item.factory.ItemFactory
@@ -126,6 +127,7 @@ object PitHook {
 
         Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
             PitPapiHook.register()
+            ItemPapiHook.register()
         }
 
         val description = ThePit.getInstance().description

@@ -60,8 +60,8 @@ public class GlobalAttentionGem extends AbstractPitItem implements Listener {
                 .lore(
                         "&7死亡时保留",
                         "",
-                        "&7增加附魔物品的一级附魔, 并使神话物品生命后添加 ♦ 的字符",
-                        "&7(普通及特殊附魔除外, 不可超过上限)",
+                        "&7增加附魔物品的一级 &d&l稀有! &7附魔",
+                        "&7(不可用于普通及特殊附魔, 不可超过上限)",
                         "&8一件物品只能使用一次",
                         "",
                         "&e右键使用"

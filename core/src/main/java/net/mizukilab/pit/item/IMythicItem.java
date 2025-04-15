@@ -145,7 +145,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         if (maxLive != 0) {
-            lore.add(("&7寄期: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive)
+            lore.add(("&7生命: " + (live / (maxLive * 1.0) <= 0.6 ? (live / (maxLive * 1.0) <= 0.3 ? "&c" : "&e") : "&a") + live + "&7/" + maxLive)
                     + (isBoostedByGem() ? "&a ♦" : "") + (isBoostedByGlobalGem() ? "&b ♦" : "") + (boostedByBook ? "&6 ᥀" : ""));
             lore.add("");
         }
@@ -179,13 +179,13 @@ public abstract class IMythicItem extends AbstractPitItem {
             }
 
         } else {
-            lore.add("&7死后保留");
+            lore.add("&7死亡后保留");
             lore.add("");
             if (this instanceof MythicLeggingsItem) {
-                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "在神话之井盖中附魔");
+                lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "在神话之井中附魔");
                 lore.add((dyeColor == null ? color.getChatColor() : dyeColor.getChatColor()) + "同时,也是一种象征 &8| " + NewConfiguration.INSTANCE.getWatermarks());
             } else {
-                lore.add("&7在神话之井盖中附魔 &8| " + ThePit.getApi().getWatermark());
+                lore.add("&7在神话之井中附魔 &8| " + ThePit.getApi().getWatermark());
             }
             this.tier = 0;
         }

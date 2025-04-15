@@ -205,6 +205,39 @@ class PitAdminSimpleCommand {
     }
 
 
+    @Execute(name = "takeitems")
+    @Permission("pit.admin")
+    fun takeItem(
+        @Context sender: CommandSender, @Arg("target") target: Player, @Arg("itemsID") itemsID: String,
+        @Arg("amount") amount: Int
+    ) {
+        val player = Bukkit.getPlayer(target.uniqueId)
+        if (player == null) {
+            sender.sendMessage("§c玩家不存在!")
+            return
+        }
+        val profile = PlayerProfile.getPlayerProfileByUuid(target.uniqueId)
+        when (itemsID.lowercase()) {
+            "exp" -> {
+                profile.experience -= amount
+                sender.sendMessage("§a扣除成功!")
+            }
+
+            "coins" -> {
+                profile.coins -= amount
+                sender.sendMessage("§a扣除成功!")
+            }
+
+            else -> {
+                if (InventoryUtil.removeItem(player, itemsID, amount)) {
+                    sender.sendMessage("§a扣除成功!")
+                } else {
+                    sender.sendMessage("§c该玩家背包内并没有或小于此物品的数量!")
+                }
+            }
+        }
+    }
+
     @Execute(name = "giveitems")
     @Permission("pit.admin")
     fun giveItem(
