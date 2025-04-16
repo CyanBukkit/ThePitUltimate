@@ -66,9 +66,12 @@ public class HedgeFundEnchant extends AbstractEnchantment implements IPlayerKill
                             .containsKey(internalName);
             if (isMythicItem) {
                 Integer tier = ItemUtil.getItemIntData(targetPlayer.getInventory().getLeggings(), "tier");
-                if (tier >= 1) {
-                    coins.getAndAdd(66);
+                if (tier != null) {
+                    if (tier >= 1) {
+                        coins.getAndAdd(66);
+                    }
                 }
+
             }
         }
     }

@@ -7,7 +7,7 @@ import cn.charlotte.pit.data.mail.Mail;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.events.EventFactory;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * @Creator Misoryan
  * @Date 2021/5/25 16:30
  */
-public class AuctionEvent implements IEvent, INormalEvent, Listener {
+public class AuctionEvent extends AbstractEvent implements INormalEvent, Listener {
 
     private static final String prefix = "&6&l竞拍! &7";
     private static final double rate = 1.15;

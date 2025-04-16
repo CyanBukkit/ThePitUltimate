@@ -15,6 +15,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.events.impl.AuctionEvent
+import net.mizukilab.pit.item.type.ChunkOfVileItem
+import net.mizukilab.pit.item.type.MythicBook
+import net.mizukilab.pit.item.type.PitCactus
 import net.mizukilab.pit.menu.cdk.generate.CDKMenu
 import net.mizukilab.pit.menu.cdk.view.CDKViewMenu
 import net.mizukilab.pit.menu.mail.MailMenu
@@ -146,9 +149,9 @@ class PitAdminSimpleCommand {
         ThePit.api.openMenu(player, "admin_item")
     }
 
-    @Execute(name = "reboot")
+    @Execute(name = "reboots")
     @Permission("pit.admin")
-    fun reboot(
+    fun reboots(
         @Context sender: CommandSender,
         @Arg("duration") duration: Duration,
         @OptionalArg("reason") reason: String = "计划外重启"
@@ -157,6 +160,18 @@ class PitAdminSimpleCommand {
             .rebootRunnable
             .addRebootTask(RebootTask(reason, System.currentTimeMillis() + duration.toMillis()))
     }
+
+    @Execute(name = "reboot")
+    @Permission("pit.admin")
+    fun reboot(
+        @Context sender: CommandSender,
+        @Arg("duration") duration: Duration,
+    ) {
+        ThePit.getInstance()
+            .rebootRunnable
+            .addRebootTask(RebootTask("修复BUG", System.currentTimeMillis() + duration.toMillis()))
+    }
+
 
     @Execute(name = "cancelReboot")
     @Permission("pit.admin")
@@ -189,6 +204,93 @@ class PitAdminSimpleCommand {
         }
     }
 
+
+    @Execute(name = "takeitems")
+    @Permission("pit.admin")
+    fun takeItem(
+        @Context sender: CommandSender, @Arg("target") target: Player, @Arg("itemsID") itemsID: String,
+        @Arg("amount") amount: Int
+    ) {
+        val player = Bukkit.getPlayer(target.uniqueId)
+        if (player == null) {
+            sender.sendMessage("§c玩家不存在!")
+            return
+        }
+        val profile = PlayerProfile.getPlayerProfileByUuid(target.uniqueId)
+        when (itemsID.lowercase()) {
+            "exp" -> {
+                profile.experience -= amount
+                sender.sendMessage("§a扣除成功!")
+            }
+
+            "coins" -> {
+                profile.coins -= amount
+                sender.sendMessage("§a扣除成功!")
+            }
+
+            else -> {
+                if (InventoryUtil.removeItem(player, itemsID, amount)) {
+                    sender.sendMessage("§a扣除成功!")
+                } else {
+                    sender.sendMessage("§c该玩家背包内并没有或小于此物品的数量!")
+                }
+            }
+        }
+    }
+
+    @Execute(name = "giveitems")
+    @Permission("pit.admin")
+    fun giveItem(
+        @Context sender: CommandSender,
+        @Arg("target") target: String,
+        @Arg("itemsID") itemsID: String,
+        @Arg("amount") amount: Int
+    ) {
+        val player = Bukkit.getPlayer(target)
+
+        if (player == null) {
+            sender.sendMessage("§c玩家不存在！")
+            return
+        }
+
+        when (itemsID.lowercase()) {
+            "exp" -> {
+                PlayerProfile.getPlayerProfileByUuid(player.uniqueId).experience += amount
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "coins" -> {
+                PlayerProfile.getPlayerProfileByUuid(player.uniqueId).coins += amount
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "chunkofvile" -> {
+                player.inventory.addItem(ChunkOfVileItem.toItemStack().apply { this.amount = amount })
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "mythicbook" -> {
+                player.inventory.addItem(MythicBook.toItemStack().apply { this.amount = amount })
+                sender.sendMessage("§a添加成功!")
+            }
+
+            "cactus" -> {
+                player.inventory.addItem(PitCactus.toItemStack().apply { this.amount = amount })
+                sender.sendMessage("§a添加成功!")
+            }
+
+            else -> {
+                val itemStack = ThePit.getApi().getMythicItemItemStack(itemsID)
+                if (itemStack == null || itemStack.type == Material.AIR) {
+                    sender.sendMessage("§c物品不存在")
+                } else {
+                    player.inventory.addItem(itemStack.apply { this.amount = amount })
+                    sender.sendMessage("§a添加成功!")
+                }
+            }
+        }
+    }
+
     @Execute(name = "unwipe")
     @Permission("pit.admin")
     @Async
@@ -218,7 +320,6 @@ class PitAdminSimpleCommand {
     @Async
     fun rollback(@Context player: Player, @Arg("name") name: String): String {
         val profile = ThePit.getInstance().profileOperator.namedIOperator(name)
-            ?: ThePit.getInstance().profileOperator.lookupIOnline(name)
         if (profile.profile() == null) {
             return CC.translate("&c该玩家不存在")
         }
@@ -432,25 +533,7 @@ class PitAdminSimpleCommand {
     @Execute(name = "giveBook")
     @Permission("pit.admin")
     fun giveBook(@Context player: Player): String {
-        player.inventory.addItem(
-            ItemBuilder(Material.PAPER)
-                .name("&d附魔卷轴")
-                .deathDrop(false)
-                .canDrop(true)
-                .canSaveToEnderChest(true)
-                .internalName("mythic_reel")
-                .uuid(UUID.randomUUID())
-                .lore(
-                    "",
-                    "&7将&6神话物品&7和&d附魔卷轴&7放入神话之井",
-                    "&7将会为该&6神话物品&7带来一个随机的三级 &d&l稀有! &7附魔",
-                    "",
-                    "&7在神话之井使用"
-                )
-                .shiny()
-                .dontStack()
-                .build()
-        )
+        player.inventory.addItem(MythicBook.toItemStack())
         return "§a添加到你的背包"
     }
 }

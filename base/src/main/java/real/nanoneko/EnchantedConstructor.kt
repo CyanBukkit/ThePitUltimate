@@ -1,5 +1,6 @@
 package real.nanoneko
 
+import cn.charlotte.pit.ThePit
 import real.nanoneko.register.IMagicLicense
 @Deprecated("No use")
 object EnchantedConstructor {
@@ -16,7 +17,6 @@ object EnchantedConstructor {
             throw IllegalArgumentException("Only classes implementing IMagicLicense can be added as enchantments.")
         }
     }
-
     fun removeEnchantment(enchantment: Class<*>) {
         enchantments.remove(enchantment)
     }

@@ -492,6 +492,7 @@ public class CombatListener implements Listener {
 
         return false;
     }
+
     @EventHandler
     public void onShoot(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Arrow arrow) {
@@ -706,10 +707,23 @@ public class CombatListener implements Listener {
             }
 
             if (respawnTime > 0.1) {
-                TitleUtil.sendTitle(player, "&c你死了！", "&7将在 &6" + respawnTime + "秒 &7后复活", 5, 5, 20);
-                player.setGameMode(GameMode.SPECTATOR);
+                new BukkitRunnable() {
+                    private int remainingTime = (int) respawnTime;
+
+                    @Override
+                    public void run() {
+                        if (remainingTime <= 0) {
+                            this.cancel();
+                            return;
+                        }
+                        TitleUtil.sendTitle(player, "&c你死了！", "&7将在 &6" + remainingTime + "秒 &7后复活", 5, 5, 20);
+                        remainingTime--;
+                    }
+                }.runTaskTimer(ThePit.getInstance(), 0, 20);
+
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
                     this.doRespawn(player);
+                    TitleUtil.sendTitle(player, "&a已复活！", " ", 5, 5, 20);
                 }, (long) (respawnTime * 20L));
             } else {
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> doRespawn(player), 1L);

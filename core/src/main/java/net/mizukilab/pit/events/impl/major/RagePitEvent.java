@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitDamageEvent;
 import cn.charlotte.pit.event.PitKillEvent;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.util.TaskManager;
 import com.sk89q.worldedit.BlockVector;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/1/30 0:33
  */
 
-public class RagePitEvent implements IEvent, IEpicEvent, Listener {
+public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener {
 
     @Getter
     private final Map<UUID, DamageData> damageMap = new HashMap<>();

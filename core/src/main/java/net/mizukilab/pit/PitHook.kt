@@ -42,10 +42,14 @@ import net.mizukilab.pit.enchantment.type.special.SoulRipperEnchant
 import net.mizukilab.pit.events.impl.*
 import net.mizukilab.pit.events.impl.major.*
 import net.mizukilab.pit.hologram.HologramListener
+import net.mizukilab.pit.hook.ItemPapiHook
 import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.item.factory.ItemFactory
 import net.mizukilab.pit.item.type.*
+import net.mizukilab.pit.item.type.mythic.MythicBowItem
+import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
+import net.mizukilab.pit.item.type.mythic.MythicSwordItem
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests
 import net.mizukilab.pit.menu.shop.button.type.BowBundleShopButton
@@ -123,6 +127,7 @@ object PitHook {
 
         Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
             PitPapiHook.register()
+            ItemPapiHook.register()
         }
 
         val description = ThePit.getInstance().description
@@ -233,6 +238,9 @@ object PitHook {
 
     private fun loadItems() {
         val clazzList = mutableListOf(
+            MythicBowItem::class.java,
+            MythicSwordItem::class.java,
+            MythicLeggingsItem::class.java,
             AngelChestplate::class.java,
             ArmageddonBoots::class.java,
             BountySolventPotion::class.java,
@@ -243,8 +251,9 @@ object PitHook {
             JumpBoostPotion::class.java,
             MythicRepairKit::class.java,
             PitCactus::class.java,
+            SpireSword::class.java,
             MusicalRune::class.java,
-            // 神人 SpireArmor::class.java,
+          SpireArmor::class.java,
             SuperPackage::class.java,
             TotallyLegitGem::class.java,
             GlobalAttentionGem::class.java,
@@ -284,6 +293,7 @@ private fun loadEnchants() {
         //new
         ThunderArrowEnchant::class.java,
         UndeadArrowEnchant::class.java,
+        LastShadowLeapForward::class.java,
         //end
         ComboUnpredictablyEnchant::class.java,
         ComboDazzlingGoldEnchant::class.java,
@@ -291,6 +301,7 @@ private fun loadEnchants() {
         MysticRealmEnchant::class.java,
         TheSwiftWindEnchant::class.java,
         SoulEarterEnchant::class.java,
+        PinDownEnchant::class.java,
         PhantomShieldEnchant::class.java,
         KingKillersEnchant::class.java,
         //end
@@ -303,6 +314,7 @@ private fun loadEnchants() {
         NewDealEnchant::class.java,
         ReallyToxicEnchant::class.java,
         SingularityEnchant::class.java,
+        CurseEnchant::class.java,
         GrimReaperEnchant::class.java,
         HedgeFundEnchant::class.java,
         MindAssaultEnchant::class.java,
@@ -406,6 +418,7 @@ private fun loadEnchants() {
         AbsorptionEnchant::class.java,
         ArchangelEnchant::class.java,
         AssassinEnchant::class.java,
+        BloodFeatherEnchant::class.java,
         BillionaireEnchant::class.java,
         ComboStrikeEnchant::class.java,
         ComboStunEnchant::class.java,
@@ -433,12 +446,12 @@ private fun loadEnchants() {
         AceOfSpades::class.java,
         Brakes::class.java,
         BreachingChargeEnchant::class.java,
+        WitheredAndPiercingThroughTheHeart::class.java,
         TrotEnchant::class.java
     )
 
     /*        classes += HappyNewYearEnchant::class.java
-            classes += WitheredAndPiercingThroughTheHeart::class.java
-            classes += LastShadowLeapForward::class.java
+            classes += WitheredAndPiercingThroughTheHeart::class.ja
 */
 //        classes += TrotEnchant::class.java
 //        classes += TrytoGiveEnchant::class.java
@@ -471,7 +484,7 @@ private fun loadEnchants() {
             classes.addAll(enchantmentCollection)
         }
         enchantmentFactor.init(classes)
-    },60L)
+    },40L)
 }
 
 private fun loadScoreBoard() {
@@ -661,7 +674,7 @@ private fun loadEvents() {
         RagePitEvent::class.java,
         RedVSBlueEvent::class.java,
         BlockHeadEvent::class.java,
-//            SpireEvent::class.java,
+       SpireEvent::class.java,
         AuctionEvent::class.java,
         CakeEvent::class.java,
         DragonEggsEvent::class.java,

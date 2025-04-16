@@ -37,7 +37,7 @@ public class EventTimer implements Runnable {
             cooldown = new Cooldown(3, TimeUnit.MINUTES);
             factory.getEpicEvents()
                     .stream()
-                    .map(event -> (IEvent) event)
+                    .map(event -> (AbstractEvent) event)
                     .filter(iEvent -> iEvent.getEventInternalName().equals(major))
                     .findFirst()
                     .ifPresent(iEvent -> factory.pushEvent((IEpicEvent) iEvent));
@@ -63,7 +63,7 @@ public class EventTimer implements Runnable {
 
                     factory.getNormalEvents()
                             .stream()
-                            .map(event -> (IEvent) event)
+                            .map(event -> (AbstractEvent) event)
                             .filter(iEvent -> iEvent.getEventInternalName().equals(mini))
                             .findFirst()
                             .ifPresent(iEvent -> factory.pushEvent((INormalEvent) iEvent));

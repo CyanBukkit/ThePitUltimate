@@ -2,7 +2,7 @@ package net.mizukilab.pit.events.impl;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.util.TaskManager;
@@ -44,7 +44,7 @@ import java.util.UUID;
  * @Author: EmptyIrony
  * @Date: 2021/2/5 23:37
  */
-public class CakeEvent implements IEvent, INormalEvent, Listener {
+public class CakeEvent extends AbstractEvent implements INormalEvent, Listener {
 
     private static CuboidRegion[] regions;
     private final DecimalFormat numFormatTwo = new DecimalFormat("0.00");

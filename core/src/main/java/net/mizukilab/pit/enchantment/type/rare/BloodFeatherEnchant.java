@@ -1,6 +1,5 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
-import cn.charlotte.pit.data.PlayerProfile;
 import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
@@ -24,7 +23,7 @@ public class BloodFeatherEnchant extends AbstractEnchantment implements IPlayerK
 
     @Override
     public String getEnchantName() {
-        return "血羽";
+        return "羽毛掠夺者";
     }
 
     @Override
@@ -50,39 +49,49 @@ public class BloodFeatherEnchant extends AbstractEnchantment implements IPlayerK
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return (new StringBuilder()).insert(0, "&7击杀玩家时有 ").append(iIiIii(enchantLevel)).append(IIiIIi(enchantLevel)).append("% &7的概率强制目标额外掉落 &f1x &3时髦的羽毛 ").append(enchantLevel >= 3 ? "&7并掠夺" : "").toString();
+        String color = getColorCode(enchantLevel);
+        int chance = getChance(enchantLevel);
 
+        return String.format("&7击杀玩家时有 %s%d%% &7的概率强制目标额外掉落 &f1x &3时髦的羽毛 %s",
+                color, chance, enchantLevel >= 3 ? "&7并掠夺" : "");
     }
 
     @Override
     public void handlePlayerKilled(int enchantLevel, Player myself, Entity target, AtomicDouble coins, AtomicDouble experience) {
-        PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(myself.getUniqueId());
-        if (RandomUtil.hasSuccessfullyByChance(0.01D * IIiIIi(enchantLevel)) && playerProfile.isLoaded()) {
-            InventoryUtil.removeItem((Player) target, "funky_feather", 1);
-            if (enchantLevel > 3) {
-                myself.getInventory().addItem(FunkyFeather.toItemStack());
-                myself.sendMessage(CC.translate("&c&l血&3&l羽&f! &7你的附魔掠夺对方一根 &f1x &3时髦的羽毛"));
-                target.sendMessage(CC.translate("&c&l血&3&l羽&f! &7对方的附魔掠夺了你一根 &f1x &3时髦的羽毛"));
-            } else {
-                myself.sendMessage(CC.translate("&c&l血&3&l羽&f! &7你的附魔使对方强制掉落了一根 &f1x &3时髦的羽毛"));
-                target.sendMessage(CC.translate("&c&l血&3&l羽&f! &7对方的附魔使你强制掉落了一根 &f1x &3时髦的羽毛"));
+
+        if (RandomUtil.hasSuccessfullyByChance(0.01D * getChance(enchantLevel))) {
+            Player player = (Player) target;
+            if (InventoryUtil.getAmountOfItem(player, "funky_feather") >= 1) {
+                InventoryUtil.removeItem((Player) target, "funky_feather", 1);
+
+                if (enchantLevel > 3) {
+                    myself.getInventory().addItem(FunkyFeather.toItemStack());
+                    sendMessage(myself, target, "&7掠夺对方 &fx1 &3时髦的羽毛", "&7对方掠夺了你 &f1x &3时髦的羽毛");
+                } else {
+                    sendMessage(myself, target, "&7使对方强制掉落了一根 &f1x &3时髦的羽毛", "&7对方使你强制掉落了一根 &f1x &3时髦的羽毛");
+                }
             }
         }
     }
 
-    private int IIiIIi(int a) {
-        return switch (a) {
+    private int getChance(int enchantLevel) {
+        return switch (enchantLevel) {
             case 2 -> 50;
             case 3 -> 35;
             default -> 25;
         };
     }
 
-    private String iIiIii(int a) {
-        return switch (a) {
+    private String getColorCode(int enchantLevel) {
+        return switch (enchantLevel) {
             case 2 -> "&6";
             case 3 -> "&c";
             default -> "&e";
         };
+    }
+
+    private void sendMessage(Player myself, Entity target, String myselfMessage, String targetMessage) {
+        myself.sendMessage(CC.translate("&c&l羽毛掠夺者! " + myselfMessage));
+        target.sendMessage(CC.translate("&c&l羽毛掠夺者! " + targetMessage));
     }
 }

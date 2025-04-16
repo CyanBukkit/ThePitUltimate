@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.event.PitPotionEffectEvent;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.MegaStreak;
 import cn.charlotte.pit.perk.PerkType;
@@ -456,7 +456,7 @@ public class PlayerUtil {
 
         double extraMaxHealth = profile.getExtraMaxHealthValue();
 
-        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() != null && ((IEvent) ThePit.getInstance().getEventFactory().getActiveEpicEvent()).getEventInternalName().equals("rage_pit")) {
+        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() != null && ((AbstractEvent) ThePit.getInstance().getEventFactory().getActiveEpicEvent()).getEventInternalName().equals("rage_pit")) {
             player.setMaxHealth(40.0 + extraMaxHealth);
         } else {
             player.setMaxHealth(profile.getMaxHealth());

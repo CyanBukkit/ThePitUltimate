@@ -72,7 +72,6 @@ public class InventoryUtil {
         }
         return amount;
     }
-
     public static boolean removeItem(Player player, ItemStack item, Integer amount) {
         if (getAmountOfItem(player, item) < amount) return false;
         int requirement = amount;

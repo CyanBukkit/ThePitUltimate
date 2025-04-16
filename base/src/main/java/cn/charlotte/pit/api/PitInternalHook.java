@@ -3,7 +3,7 @@ package cn.charlotte.pit.api;
 import cn.charlotte.pit.data.PlayerInvBackup;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.util.hologram.Hologram;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -46,7 +46,7 @@ public interface PitInternalHook {
 
     int getItemEnchantLevel(ItemStack item, String enchantName);
 
-    boolean openEvent(IEvent event, Player player);
+    boolean openEvent(AbstractEvent event, Player player);
 
     String getWatermark();
     int addItemInHandEnchant(Player player, String enchantName, int enchantLevel);

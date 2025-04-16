@@ -3,7 +3,7 @@ package net.mizukilab.pit.events.impl
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.event.PitKillEvent
-import cn.charlotte.pit.events.IEvent
+import cn.charlotte.pit.events.AbstractEvent
 import cn.charlotte.pit.events.INormalEvent
 import cn.charlotte.pit.events.IScoreBoardInsert
 import net.minecraft.server.v1_8_R3.EnumParticle
@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable
  * @author Araykal
  * @since 2025/2/8
  */
-class HuntEvent : IEvent, INormalEvent, Listener, IScoreBoardInsert {
+class HuntEvent : AbstractEvent(), INormalEvent, Listener, IScoreBoardInsert {
     private val killMap: MutableMap<String, EventData> = mutableMapOf()
     private val KILL_COUNT_THRESHOLD = 15
     private var isActive = false
@@ -90,9 +90,6 @@ class HuntEvent : IEvent, INormalEvent, Listener, IScoreBoardInsert {
         if (isActive) {
             val profile = PlayerProfile.getPlayerProfileByUuid(event.killer.uniqueId)
             val playerName = event.killer.name
-            if (event.target.hasMetadata("NPC")) {
-                return
-            }
             playerName?.let {
                 val eventData = killMap.getOrPut(it) { EventData() }
                 if (eventData.prestige >= 5) {

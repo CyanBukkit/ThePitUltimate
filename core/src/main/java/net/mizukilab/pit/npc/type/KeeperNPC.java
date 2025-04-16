@@ -25,8 +25,8 @@ public class KeeperNPC extends SkinNPC {
     @Override
     public List<String> getNpcDisplayName(Player player) {
         List<String> lines = new ObjectArrayList<>(3);
-        lines.add("&6&l武林盟主");
-        lines.add("&7加入武林争霸RPG");
+        lines.add("&6&l看门狗");
+        lines.add("&7玩累了？点击返回大厅");
         return lines;
     }
 

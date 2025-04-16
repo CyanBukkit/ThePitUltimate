@@ -3,7 +3,7 @@ package net.mizukilab.pit.events.impl.major;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.ItemLiveDropEvent;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.util.chat.CC;
@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class RespawnFamilyEvent implements IEvent, IEpicEvent, Listener, IScoreBoardInsert {
+public class RespawnFamilyEvent extends AbstractEvent implements IEpicEvent, Listener, IScoreBoardInsert {
 
     private Cooldown timer;
     private BukkitRunnable runnable;
@@ -32,7 +32,7 @@ public class RespawnFamilyEvent implements IEvent, IEpicEvent, Listener, IScoreB
 
     @Override
     public String getEventName() {
-        return "活全家";
+        return "庇护";
     }
 
     @Override
@@ -66,7 +66,7 @@ public class RespawnFamilyEvent implements IEvent, IEpicEvent, Listener, IScoreB
         };
         this.runnable.runTaskTimer(ThePit.getInstance(), 20, 10);
 
-        CC.boardCast(MessageType.EVENT, "&a&l大型事件! &7所有人都活全家了, 不掉毛, 不掉命。");
+        CC.boardCast(MessageType.EVENT, "&a&l大型事件! &7庇护，现在所有人都不会掉毛,掉命。");
         Bukkit.getPluginManager().registerEvents(this, ThePit.getInstance());
     }
 

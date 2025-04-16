@@ -49,7 +49,7 @@ public class EventFactory {
     }
 
     public void pushEvent(IEpicEvent event, boolean force) {
-        if (Bukkit.getOnlinePlayers().size() >= ((IEvent) event).requireOnline()) {
+        if (Bukkit.getOnlinePlayers().size() >= ((AbstractEvent) event).requireOnline()) {
             readyEpicEvent(event);
         }
     }
@@ -59,7 +59,7 @@ public class EventFactory {
     }
 
     public void pushEvent(INormalEvent event, boolean force) {
-        if (Bukkit.getOnlinePlayers().size() >= ((IEvent) event).requireOnline()) {
+        if (Bukkit.getOnlinePlayers().size() >= ((AbstractEvent) event).requireOnline()) {
             activeEvent(event);
         }
     }
@@ -92,22 +92,23 @@ public class EventFactory {
         if (activeEpicEvent == null) {
             return null;
         }
-        return ((IEvent) activeEpicEvent).getEventInternalName();
+        return ((AbstractEvent) activeEpicEvent).getEventInternalName();
     }
 
     public String getActiveNormalEventName() {
         if (activeNormalEvent == null) {
             return null;
         }
-        return ((IEvent) activeNormalEvent).getEventInternalName();
+        return ((AbstractEvent) activeNormalEvent).getEventInternalName();
     }
 
     public void activeEvent(INormalEvent event) {
+        AbstractEvent iEvent = (AbstractEvent) event;
+        iEvent.onActive();
+        iEvent.setActive(true);
         this.lastNormalEvent = System.currentTimeMillis();
         this.activeNormalEvent = event;
-        IEvent iEvent = (IEvent) event;
         this.normalEnd = new Cooldown(5, TimeUnit.MINUTES);
-        iEvent.onActive();
 
         new BukkitRunnable() {
             int tick = 0;
@@ -160,7 +161,8 @@ public class EventFactory {
         if (activeNormalEvent != event) return;
 
         this.activeNormalEvent = null;
-        IEvent iEvent = (IEvent) event;
+        AbstractEvent iEvent = (AbstractEvent) event;
+        iEvent.setActive(false);
         iEvent.onInactive();
     }
 
@@ -177,7 +179,7 @@ public class EventFactory {
     public void readyEpicEvent(IEpicEvent event) {
         this.nextEpicEvent = event;
         this.nextEpicEventTimer = new Cooldown(5, TimeUnit.MINUTES);
-        IEvent iEvent = (IEvent) event;
+        AbstractEvent iEvent = (AbstractEvent) event;
 
         if (event instanceof IPrepareEvent) {
             ((IPrepareEvent) event).onPreActive();
@@ -221,20 +223,22 @@ public class EventFactory {
     }
 
     public void activeEvent(IEpicEvent event) {
+        AbstractEvent iEvent = (AbstractEvent) event;
+        iEvent.onActive();
+        iEvent.setActive(true);
         this.nextEpicEvent = null;
         this.activeEpicEvent = event;
-        IEvent iEvent = (IEvent) event;
         this.normalEnd = new Cooldown(5, TimeUnit.MINUTES);
-        iEvent.onActive();
     }
 
     public void inactiveEvent(IEpicEvent event) {
         if (activeEpicEvent != event) return;
 
         this.activeEpicEvent = null;
-        IEvent iEvent = (IEvent) event;
+        AbstractEvent iEvent = (AbstractEvent) event;
 
         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), BURP, 1, 0.72F));
+        iEvent.setActive(false);
         iEvent.onInactive();
     }
 

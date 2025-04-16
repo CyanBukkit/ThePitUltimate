@@ -229,7 +229,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
         this.miniGameController = new MiniGameController();
         this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
-        new DayNightCycleRunnable().runTaskTimerAsynchronously(this, 20, 20);
+        new DayNightCycleRunnable().runTaskTimer(this, 20, 20);
 
         Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
             if (e instanceof ArmorStand) {

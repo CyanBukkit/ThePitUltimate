@@ -2,7 +2,7 @@ package net.mizukilab.pit.events.impl
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
-import cn.charlotte.pit.events.IEvent
+import cn.charlotte.pit.events.AbstractEvent
 import cn.charlotte.pit.events.INormalEvent
 import cn.charlotte.pit.util.hologram.Hologram
 import cn.charlotte.pit.util.hologram.HologramAPI
@@ -22,7 +22,7 @@ import java.util.*
  * @author Araykal
  * @since 2025/1/17
  */
-class DragonEggsEvent : IEvent, INormalEvent, Listener {
+class DragonEggsEvent : AbstractEvent(), INormalEvent, Listener {
     private var eggLocation: Location? = null
     private var clicks: Int = 0
     private var firstHologram: Hologram? = null

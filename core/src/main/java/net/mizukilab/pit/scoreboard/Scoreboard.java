@@ -3,7 +3,7 @@ package net.mizukilab.pit.scoreboard;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IEvent;
+import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.INormalEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
@@ -52,6 +52,7 @@ public class Scoreboard implements AssembleAdapter {
     }
 
     private final ObjectArrayList<String> carrierList = new ObjectArrayList<>(16);
+
     @Override
     public List<String> getLines(Player player) {
 
@@ -74,11 +75,10 @@ public class Scoreboard implements AssembleAdapter {
         IEpicEvent activeEpicEvent = ThePit.getInstance().getEventFactory().getActiveEpicEvent();
         INormalEvent activeNormalEvent = ThePit.getInstance().getEventFactory().getActiveNormalEvent();
         if (activeEpicEvent != null) {
-            IEvent event = (IEvent) activeEpicEvent;
-//            lines.add("&f事件: &c" + event.getEventName());
+            AbstractEvent event = (AbstractEvent) activeEpicEvent;
             lines.add(" ");
             lines.add("&f事件: &6" + event.getEventName());
-            if (event instanceof RagePitEvent ragePit) {
+            if (event instanceof RagePitEvent ragePit && ragePit.isActive()) {
                 lines.add("&f剩余: &a" + TimeUtil.millisToTimer(ragePit.getTimer().getRemaining()));
                 if (ragePit.getDamageMap().get(player.getUniqueId()) != null) {
                     int damage = (int) (ragePit.getDamageMap().get(player.getUniqueId()).getDamage() / 2);
@@ -103,7 +103,7 @@ public class Scoreboard implements AssembleAdapter {
         } else if (activeNormalEvent != null) {
             if (activeNormalEvent instanceof IScoreBoardInsert insert) {
                 lines.add(" ");
-                lines.add("&f事件: &a" + ((IEvent) activeNormalEvent).getEventName());
+                lines.add("&f事件: &a" + ((AbstractEvent) activeNormalEvent).getEventName());
                 List<String> insert1 = insert.insert(player);
                 if (insert1 != null) {
                     lines.addAll(insert1);
@@ -258,7 +258,7 @@ public class Scoreboard implements AssembleAdapter {
 
         lines.add(" ");
         if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c跑路! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
+            lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
         }
         if (ThePit.isDEBUG_SERVER()) {
             lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));

@@ -68,7 +68,7 @@ public class BackupShowMenu extends Menu {
         }
 
         if (!right) {
-            buttonMap.put(40, new RollbackButton(new ItemBuilder(Material.CHEST).name("&a回滚至该背包").shiny().build(), playerProfile, backup));
+            buttonMap.put(36, new RollbackButton(new ItemBuilder(Material.CHEST).name("&a回滚至该背包").shiny().build(), playerProfile, backup));
         }
 
         List<Button> buttons = new ObjectArrayList<>();
