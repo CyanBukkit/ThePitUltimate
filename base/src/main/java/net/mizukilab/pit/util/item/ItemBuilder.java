@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -274,14 +275,8 @@ public class ItemBuilder {
 
     public ItemBuilder changeNbt(String key, String value) {
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(is);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            extra = new NBTTagCompound();
-        }
+        NBTTagCompound tag = getNbtTagCompound(nmsItem.getTag());
+        NBTTagCompound extra = getNbtTagCompound(tag.getCompound("extra"));
         if (value == null) {
             extra.remove(key);
         } else {
@@ -298,14 +293,8 @@ public class ItemBuilder {
 
     public ItemBuilder changeNbt(String key, boolean value) {
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(is);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            extra = new NBTTagCompound();
-        }
+        NBTTagCompound tag = getNbtTagCompound(nmsItem.getTag());
+        NBTTagCompound extra = getNbtTagCompound(tag.getCompound("extra"));
         extra.setBoolean(key, value);
         tag.set("extra", extra);
 
@@ -318,14 +307,8 @@ public class ItemBuilder {
 
     public ItemBuilder changeNbt(String key, int value) {
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(is);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            extra = new NBTTagCompound();
-        }
+        NBTTagCompound tag = getNbtTagCompound(nmsItem.getTag());
+        NBTTagCompound extra = getNbtTagCompound(tag.getCompound("extra"));
         extra.setInt(key, value);
         tag.set("extra", extra);
 
@@ -338,14 +321,8 @@ public class ItemBuilder {
 
     public ItemBuilder changeNbt(String key, double value) {
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(is);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            extra = new NBTTagCompound();
-        }
+        NBTTagCompound tag = getNbtTagCompound(nmsItem.getTag());
+        NBTTagCompound extra = getNbtTagCompound(tag.getCompound("extra"));
         extra.setDouble(key, value);
         tag.set("extra", extra);
 
@@ -356,13 +333,19 @@ public class ItemBuilder {
         return this;
     }
 
+    @NotNull
+    private static NBTTagCompound getNbtTagCompound(NBTTagCompound tag) {
+        NBTTagCompound extra = tag;
+        if (extra == null) {
+            extra = new NBTTagCompound();
+        }
+        return extra;
+    }
+
     public ItemStack buildWithUnbreakable() {
 
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(is);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
+        NBTTagCompound tag = getNbtTagCompound(nmsItem.getTag());
         tag.setBoolean("Unbreakable", true);
         nmsItem.setTag(tag);
 
@@ -400,14 +383,8 @@ public class ItemBuilder {
 
     public ItemBuilder enchant(Map<AbstractEnchantment, Integer> enchant) {
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(is);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
-        NBTTagCompound extra = tag.getCompound("extra");
-        if (extra == null) {
-            extra = new NBTTagCompound();
-        }
+        NBTTagCompound tag = getNbtTagCompound(nmsItem.getTag());
+        NBTTagCompound extra = getNbtTagCompound(tag.getCompound("extra"));
         NBTTagList nbtTagList = new NBTTagList();
 
         for (Map.Entry<AbstractEnchantment, Integer> entry : enchant.entrySet()) {
@@ -443,10 +420,7 @@ public class ItemBuilder {
 
     public ItemBuilder itemDamage(double damageValue) {
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(is);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
+        NBTTagCompound tag = getNbtTagCompound(nmsItem.getTag());
 
         NBTTagList modifiers = new NBTTagList();
         NBTTagCompound damage = new NBTTagCompound();

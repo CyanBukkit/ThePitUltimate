@@ -1,4 +1,8 @@
-package net.mizukilab.pit.util.homo;
+package net.mizukilab.pit.util.number;
+
+import cn.charlotte.pit.ThePit;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import org.bukkit.Bukkit;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -6,15 +10,15 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HomoGenerator {
+public class NumberGenerator {
 
-    static HomoGenerator INSTANCE;
+    static NumberGenerator INSTANCE;
 
     static {
-        INSTANCE = new HomoGenerator();
+        INSTANCE = new NumberGenerator();
     }
 
-    public static HomoGenerator get() {
+    public static NumberGenerator get() {
         return INSTANCE;
     }
 
@@ -30,16 +34,19 @@ public class HomoGenerator {
     private static final Pattern FINISHER_OUTERMOST_BRACKET_PATTERN = Pattern.compile("^\\(([^()]+)\\)$");
     private static final Pattern NUM_PATTERN = Pattern.compile("\\d+|⑨");
 
-    public HomoGenerator() {
+    public NumberGenerator() {
         this.NUMBERS = new HashMap<>();
+
         initializeNums();
         // Extract integer keys, filter positive, sort ascendingly
-        this.numsReversed = new ArrayList<>();
-        for (String key : NUMBERS.keySet()) {
-            if (isIntegerKey(key) && Integer.parseInt(key) > 0) {
-                numsReversed.add(Integer.parseInt(key));
-            }
-        }
+        this.numsReversed = new ArrayList<>(){
+            {
+                for (String key : NUMBERS.keySet()) {
+                    if (isIntegerKey(key) && Integer.parseInt(key) > 0) {
+                        add(Integer.parseInt(key));
+                    }
+                }
+            }};
         Collections.sort(numsReversed);
     }
 
@@ -48,7 +55,7 @@ public class HomoGenerator {
      */
     private void initializeNums() {
         // Initialize with provided key-value pairs
-        NUMBERS = new HashMap<>() {{
+        NUMBERS = new Object2ObjectOpenHashMap<>() {{
             put("229028", "⌈sin(114514°)+cos(114514°)⌉");  // 通过三角函数取整
             put("114514", "√(114514²)");                   // 平方根恒等式
             put("58596", "114×⌊tan(514°)⌋");               // 三角函数取整运算

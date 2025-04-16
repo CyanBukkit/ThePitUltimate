@@ -48,11 +48,11 @@ public final class TimeUtil {
     public static long getMinecraftTick(long mills) {
         //0~36min
         long time = mills % (36 * 60 * 1000);
-        double percent;
+        float percent;
         if (time <= 24 * 60 * 1000) { //0~24min
-            percent = ((double) time) / (24 * 60 * 1000);
+            percent = (float) (time) / (24 * 60 * 1000);
         } else {
-            percent = 1 + ((double) time - 24 * 60 * 1000) / (12 * 60 * 1000);
+            percent = 1 + ((float) time - 24 * 60 * 1000) / (12 * 60 * 1000);
         }
         return (long) (percent * 12000);
     }

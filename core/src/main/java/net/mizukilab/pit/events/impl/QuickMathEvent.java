@@ -9,7 +9,7 @@ import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.medal.impl.challenge.QuickMathsMedal;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.TitleUtil;
-import net.mizukilab.pit.util.homo.HomoGenerator;
+import net.mizukilab.pit.util.number.NumberGenerator;
 import net.mizukilab.pit.util.level.LevelUtil;
 import net.mizukilab.pit.util.time.TimeUtil;
 import org.bukkit.Bukkit;
@@ -65,11 +65,11 @@ public class QuickMathEvent extends AbstractEvent implements INormalEvent, Liste
 
     @Override
     public void onActive() {
-        HomoGenerator homoGenerator = HomoGenerator.get();
+        NumberGenerator numberGenerator = NumberGenerator.get();
         try {
             if (TheEquation == null || TheEquationQuests == null) {
                 int homo = 10000 + ThreadLocalRandom.current().nextInt(1000);
-                this.TheEquationQuests = homoGenerator.homo(homo);
+                this.TheEquationQuests = numberGenerator.homo(homo);
                 this.TheEquation = String.valueOf(homo);
             }
 

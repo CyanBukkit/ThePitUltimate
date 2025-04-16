@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,34 +39,38 @@ public class ProfileLoadRunnable extends BukkitRunnable { //这是什么用的? 
 
     @Override
     public void run() {
-        for (Map.Entry<UUID, Cooldown> entry : cooldownMap.entrySet()) {
-            final Player player = Bukkit.getPlayer(entry.getKey());
-            if (player == null || !player.isOnline()) {
-                cooldownMap.remove(entry.getKey());
-                continue;
-            }
+        Iterator<Map.Entry<UUID, Cooldown>> iterator = cooldownMap.entrySet().iterator();
+        while(iterator.hasNext()){
+            tickLoad(iterator);
+        }
+    }
 
+    private void tickLoad(Iterator<Map.Entry<UUID, Cooldown>> iterator) {
+        Map.Entry<UUID, Cooldown> entry = iterator.next();
+        final Player player = Bukkit.getPlayer(entry.getKey());
+        if (player == null || !player.isOnline()) {
+            iterator.remove();
+            return;
+        }
 
-            final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
-            if (profile.isLoaded()) {
-                cooldownMap.remove(entry.getKey());
+        if (profile.isLoaded()) {
+            iterator.remove();
+            player.removePotionEffect(PotionEffectType.WEAKNESS);
+            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(PotionEffectType.JUMP);
+            return;
+        }
 
-                player.removePotionEffect(PotionEffectType.WEAKNESS);
-                player.removePotionEffect(PotionEffectType.SPEED);
-                player.removePotionEffect(PotionEffectType.JUMP);
-                continue;
-            }
-
-            if (entry.getValue().hasExpired()) {
-                player.sendMessage(CC.translate("&c档案加载异常,请尝试重新进入!"));
-                ByteArrayDataOutput out = ByteStreams.newDataOutput();
-                out.writeUTF("ConnectOther");
-                out.writeUTF(player.getName());
-                out.writeUTF("L_MainLobby#1"); //大唐王朝大厅。
-                Objects.requireNonNull(Iterables.getFirst(Bukkit.getOnlinePlayers(), null)).sendPluginMessage(ThePit.getInstance(), "BungeeCord", out.toByteArray());
-                cooldownMap.remove(entry.getKey());
-            }
+        if (entry.getValue().hasExpired()) {
+            player.sendMessage(CC.translate("&c档案加载异常,请尝试重新进入!"));
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("ConnectOther");
+            out.writeUTF(player.getName());
+            out.writeUTF("L_MainLobby#1"); //大唐王朝大厅。
+            Objects.requireNonNull(Iterables.getFirst(Bukkit.getOnlinePlayers(), null)).sendPluginMessage(ThePit.getInstance(), "BungeeCord", out.toByteArray());
+            iterator.remove();
         }
     }
 
