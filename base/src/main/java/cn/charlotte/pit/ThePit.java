@@ -260,7 +260,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
-
+        this.getClassLoader().getResourceAsStream("ME")
         try {
             this.getLogger().warning("Loading from local storage");
             Class.forName("net.mizukilab.pit.Loader").getMethod("start").invoke(null);
