@@ -52,6 +52,7 @@ import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests
+import net.mizukilab.pit.map.kingsquests.item.*
 import net.mizukilab.pit.menu.shop.button.type.BowBundleShopButton
 import net.mizukilab.pit.menu.shop.button.type.CombatSpadeShopButton
 import net.mizukilab.pit.menu.shop.button.type.PantsBundleShopButton
@@ -253,7 +254,7 @@ object PitHook {
             PitCactus::class.java,
             SpireSword::class.java,
             MusicalRune::class.java,
-          SpireArmor::class.java,
+            SpireArmor::class.java,
             SuperPackage::class.java,
             TotallyLegitGem::class.java,
             GlobalAttentionGem::class.java,
@@ -262,24 +263,24 @@ object PitHook {
         )
         try {
             Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
-            if (ItemConstructor.getItems().isNotEmpty()) {
-                println("加载额外物品中...")
-                clazzList.addAll(ItemConstructor.getItems())
-            }
-            for (clazz in clazzList) {
-                try {
-                    val pitItem = clazz.getDeclaredConstructor().newInstance()
-                    if (pitItem is AbstractPitItem) {
-                        if (pitItem is Listener) {
-                            Bukkit.getPluginManager().registerEvents(pitItem, ThePit.getInstance())
-                        }
-                        ThePit.getInstance().itemFactor.registerItem(pitItem)
-                    }
-                } catch (e: Exception) {
-                    println("An error occurred: ${e.message}")
+                if (ItemConstructor.getItems().isNotEmpty()) {
+                    println("加载额外物品中...")
+                    clazzList.addAll(ItemConstructor.getItems())
                 }
-            }
-            },60L)
+                for (clazz in clazzList) {
+                    try {
+                        val pitItem = clazz.getDeclaredConstructor().newInstance()
+                        if (pitItem is AbstractPitItem) {
+                            if (pitItem is Listener) {
+                                Bukkit.getPluginManager().registerEvents(pitItem, ThePit.getInstance())
+                            }
+                            ThePit.getInstance().itemFactor.registerItem(pitItem)
+                        }
+                    } catch (e: Exception) {
+                        println("An error occurred: ${e.message}")
+                    }
+                }
+            }, 60L)
         } catch (e: Exception) {
             println("An error occurred: ${e.message}")
         }
@@ -484,7 +485,7 @@ private fun loadEnchants() {
             classes.addAll(enchantmentCollection)
         }
         enchantmentFactor.init(classes)
-    },40L)
+    }, 40L)
 }
 
 private fun loadScoreBoard() {
@@ -608,17 +609,17 @@ private fun loadPerks() {
     )
 
     Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
-    val perkClasses: List<Class<*>> = PerkConstructor.getPerks()
-    val perkCollection: List<Class<out AbstractPerk>> =
-        perkClasses.filterIsInstance<Class<out AbstractPerk>>()
+        val perkClasses: List<Class<*>> = PerkConstructor.getPerks()
+        val perkCollection: List<Class<out AbstractPerk>> =
+            perkClasses.filterIsInstance<Class<out AbstractPerk>>()
 
 
-    if (perkCollection.isNotEmpty()) {
-        println("加载额外增益中...")
-        classes.addAll(perkCollection)
-    }
-    perkFactory.init(classes as Collection<Class<*>>?)
-    },60L)
+        if (perkCollection.isNotEmpty()) {
+            println("加载额外增益中...")
+            classes.addAll(perkCollection)
+        }
+        perkFactory.init(classes as Collection<Class<*>>?)
+    }, 60L)
 }
 
 private fun registerSounds() {
@@ -674,7 +675,7 @@ private fun loadEvents() {
         RagePitEvent::class.java,
         RedVSBlueEvent::class.java,
         BlockHeadEvent::class.java,
-       SpireEvent::class.java,
+        SpireEvent::class.java,
         AuctionEvent::class.java,
         CakeEvent::class.java,
         DragonEggsEvent::class.java,

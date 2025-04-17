@@ -31,6 +31,7 @@ import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.level.LevelUtil
 import net.mizukilab.pit.util.rank.RankUtil
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

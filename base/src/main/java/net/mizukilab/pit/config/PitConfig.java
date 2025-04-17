@@ -87,11 +87,6 @@ public class PitConfig extends Configuration {
     @ConfigSerializer(serializer = LocationSerializer.class)
     private List<Location> spawnLocations = new ArrayList<>();
     @ConfigData(
-            path = "loc.hologram.spawn"
-    )
-    @ConfigSerializer(serializer = LocationSerializer.class)
-    private Location hologramLocation;
-    @ConfigData(
             path = "loc.npc.shop"
     )
     @ConfigSerializer(serializer = LocationSerializer.class)
@@ -140,6 +135,12 @@ public class PitConfig extends Configuration {
     )
     @ConfigSerializer(serializer = LocationSerializer.class)
     private Location genesisAngelNpcLocation;
+
+    @ConfigData(
+            path = "loc.hologram.spawn"
+    )
+    @ConfigSerializer(serializer = LocationSerializer.class)
+    private Location hologramLocation;
     @ConfigData(
             path = "loc.hologram.leaderBoard"
     )

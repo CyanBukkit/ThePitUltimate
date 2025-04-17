@@ -108,6 +108,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         int rareAmount = 0; //amount of rare enchant in this item
+        int opAmount = 0;
         int enchantTotalLevel = 0; //total level of enchant item
         for (AbstractEnchantment abstractEnchantment : enchantments.keySet()) {
             if (abstractEnchantment.getRarity() == EnchantmentRarity.RARE) {
@@ -117,6 +118,11 @@ public abstract class IMythicItem extends AbstractPitItem {
                 rareAmount++;
             }
             enchantTotalLevel += enchantments.get(abstractEnchantment);
+        }
+        for (AbstractEnchantment abstractEnchantment : enchantments.keySet()) {
+            if (abstractEnchantment.getRarity() == EnchantmentRarity.OP) {
+                opAmount++;
+            }
         }
         if (enchantTotalLevel >= 8) {
             if (color == MythicColor.RAGE) {
@@ -132,10 +138,26 @@ public abstract class IMythicItem extends AbstractPitItem {
                 this.prefix = "精制的"; //Artifact
             }
         }
-        if (rareAmount >= 2) {
+        if (rareAmount == 2) {
             this.prefix = "不凡的"; //ExtraOrdinary
         }
 
+        if (rareAmount >= 3){
+            this.prefix = "不朽的";
+        }
+        if (enchantTotalLevel >= 7 && this.maxLive >= 100){
+            this.prefix = "强大的";
+        }
+        if (rareAmount >= 3 && this.maxLive >= 100) {
+            this.prefix = "万里挑一的";
+        }
+        if (rareAmount == 2 && this.maxLive >= 100) {
+            this.prefix = "奇迹般的";
+        }
+
+        if (opAmount >= 1){
+            this.prefix = "可怕的";
+        }
         if (this.prefix != null) {
             name = name.substring(0, 2) + this.prefix + " " + name;
         }
@@ -201,7 +223,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (customName != null) {
             builder.customName(customName);
         }
-        if (uuid != null){
+        if (uuid != null) {
             boolean equals = uuid == null || defUUID.equals(uuid);
             lore.add("&8" + (equals ? "DEFAULT_TPU_UUID" : uuid.toString()));
         }

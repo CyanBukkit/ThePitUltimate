@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.PublicUtil;
+import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.item.ItemUtil;
 import org.bukkit.Bukkit;
@@ -370,12 +371,20 @@ public class InventoryUtil {
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
         int slot = 0;
+        int illegalItems = 0;
         PlayerInventory inventory = player.getInventory();
         for (ItemStack item : inventory) {
             if (item == null) {
                 slot++;
                 continue;
             }
+            if (ItemUtil.isIllegalItem(item)) {
+                player.getInventory().remove(item);
+                illegalItems++;
+                slot++;
+                continue;
+            }
+
             //fixme: why remove the default item (sword & bow slot will reset)
 
             if (ItemUtil.isDefaultItem(item)) {
@@ -419,6 +428,26 @@ public class InventoryUtil {
             if (cobblestone < 32) {
                 inventory.addItem(new ItemBuilder(Material.COBBLESTONE).deathDrop(true).amount(32 - cobblestone).canDrop(false).canSaveToEnderChest(false).internalName("perk_miner").build());
             }
+        }
+        if (ItemUtil.isIllegalItem(inventory.getHelmet()) || ItemUtil.isRemovedOnJoin(inventory.getHelmet())) {
+            inventory.setHelmet(null);
+            illegalItems++;
+        }
+        if (ItemUtil.isIllegalItem(inventory.getChestplate()) || ItemUtil.isRemovedOnJoin(inventory.getChestplate())) {
+            inventory.setChestplate(null);
+            illegalItems++;
+        }
+        if (ItemUtil.isIllegalItem(inventory.getLeggings()) || ItemUtil.isRemovedOnJoin(inventory.getLeggings())) {
+            inventory.setLeggings(null);
+            illegalItems++;
+        }
+        if (ItemUtil.isIllegalItem(inventory.getBoots()) || ItemUtil.isRemovedOnJoin(inventory.getBoots())) {
+            inventory.setBoots(null);
+            illegalItems++;
+        }
+
+        if (illegalItems > 0) {
+            player.sendMessage(CC.translate("今从君之囊中寻得 &e『" + illegalItems + "』&c 异物，已悉数除却，恕罪。"));
         }
         if (playerProfile.getPlayerOption().isOutfit()) {
         if (ItemUtil.isDefaultItem(inventory.getHelmet())) {
