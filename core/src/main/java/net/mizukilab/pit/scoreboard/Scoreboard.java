@@ -185,7 +185,7 @@ public class Scoreboard implements AssembleAdapter {
                 if (!b) {
 
                     String combatTimerFormatted = numFormat.format(profile.getCombatTimer().getRemaining() / 1000D);
-                    lines.add("&f状态: &c占坑中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
+                    lines.add("&f状态: &c战斗中" + (profile.getCombatTimer().getRemaining() / 1000D <= 5
                             ? "&7 (" + combatTimerFormatted + "s)"
                             : (bounty != 0
                             ? "&7 (" + combatTimerFormatted + "s)"

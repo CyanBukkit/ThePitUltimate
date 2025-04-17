@@ -46,14 +46,20 @@ class DJEnchantButton(
         currentItem: ItemStack
     ) {
         if (ItemUtil.getInternalName(itemStack) == "mythic_leggings") {
-            val leggingsItem = MythicLeggingsItem()
-            leggingsItem.loadFromItemStack(itemStack)
-            leggingsItem.enchantments.put(enchantment, 1)
-            leggingsItem.enchantmentRecords += EnchantmentRecord(
-                player.name,
-                "MusicRune",
-                System.currentTimeMillis()
-            )
+            val leggingsItem = MythicLeggingsItem().apply {
+
+                if (tier < 1) {
+                    tier = 1
+                    maxLive = 3
+                    live = 3
+                }
+                this.enchantments.put(enchantment,1)
+                enchantmentRecords += EnchantmentRecord(
+                    player.name,
+                    "MusicRune",
+                    System.currentTimeMillis()
+                )
+            }
             player.playSound(player.location, Sound.ANVIL_USE, 1f, 99f)
             player.sendMessage(CC.translate("&6&l铸造！ &7成功为你的神话之裤增加了${enchantment.enchantName}附魔"))
 

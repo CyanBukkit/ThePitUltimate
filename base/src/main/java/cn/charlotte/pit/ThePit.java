@@ -230,8 +230,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
         new DayNightCycleRunnable().runTaskTimer(this, 20, 20);
 
-        loadEventPoller();
 
+        try {
+            EventsHandler.INSTANCE.loadFromDatabase();
+        } catch (Exception ignored) {
+
+        }
         bootstrapWorld();
 
         Messenger messenger = this.getServer().getMessenger();
