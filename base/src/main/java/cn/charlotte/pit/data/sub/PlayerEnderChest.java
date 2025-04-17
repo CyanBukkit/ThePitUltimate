@@ -49,8 +49,15 @@ public class PlayerEnderChest {
             inventory.setItem(i, new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c未解锁的槽位").durability(14).lore("", "&7前面的区域, 以后再来探索吧!").internalName("not_unlock_slot").build());
         }
         for (int i = 27; i < this.inventory.getContents().length; i++) {
-            if (i < limit && inventory.getItem(i) != null && ItemUtil.getInternalName(inventory.getItem(i)) != null && ItemUtil.getInternalName(inventory.getItem(i)).equalsIgnoreCase("not_unlock_slot")) {
-                inventory.setItem(i, new ItemBuilder(Material.AIR).build());
+            if (i >= limit) {
+                break;
+            }
+            ItemStack item = inventory.getItem(i);
+            if (item != null) {
+                String internalName = ItemUtil.getInternalName(item);
+                if (internalName != null && internalName.equalsIgnoreCase("not_unlock_slot")) {
+                    inventory.setItem(i, new ItemBuilder(Material.AIR).build());
+                }
             }
         }
 

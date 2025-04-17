@@ -11,7 +11,7 @@ import kotlin.concurrent.Volatile
 import kotlin.system.exitProcess
 
 object MagicLoader {
-    private val lock = Any()
+    private val lock = Object()
     private var exception: Exception? = null
 
     @Volatile
@@ -44,12 +44,12 @@ object MagicLoader {
                 )
                 synchronized(lock) {
                     isLoaded = true
-                    (lock as Object).notifyAll()
+                    lock.notifyAll()
                 }
             } catch (ex: Exception) {
                 synchronized(lock) {
                     exception = ex
-                    (lock as Object).notifyAll()
+                    lock.notifyAll()
                 }
             }
         }.start()

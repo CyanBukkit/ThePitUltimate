@@ -29,6 +29,7 @@ import net.mizukilab.pit.enchantment.EnchantmentFactor;
 import net.mizukilab.pit.hologram.HologramFactory;
 import net.mizukilab.pit.item.IItemFactory;
 import net.mizukilab.pit.item.ItemFactor;
+import net.mizukilab.pit.license.CommonLoader;
 import net.mizukilab.pit.license.MagicLoader;
 import net.mizukilab.pit.medal.MedalFactory;
 import net.mizukilab.pit.minigame.MiniGameController;
@@ -68,6 +69,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.slf4j.Logger;
 import pku.yim.license.PluginProxy;
@@ -213,10 +215,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.loadEnchantment();
         this.loadQuest();
         this.loadEvents();
-        try {
-            this.loadMoveHandler();
-        } catch (Exception ignored) {
-        }
+        this.loadMoveHandler();
 
         this.loadQuest();
         this.initBossBar();
@@ -231,43 +230,39 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.miniGameController.runTaskTimerAsynchronously(this, 1, 1);
         new DayNightCycleRunnable().runTaskTimer(this, 20, 20);
 
-        Bukkit.getWorlds().forEach(w -> w.getEntities().forEach(e -> {
-            if (e instanceof ArmorStand) {
-                e.remove();
-            }
-            if (e instanceof Item it) {
-                if (it.getItemStack().getType() == Material.GOLD_INGOT) {
-                    it.remove(); //garbage remove pieces 修复内存碎片整合慢问题
-                }
-            }
-        }));
+        loadEventPoller();
 
+        bootstrapWorld();
 
-        try {
-            EventsHandler.INSTANCE.loadFromDatabase();
-        } catch (Exception ignored) {
-
-        }
-
-        for (World world : Bukkit.getWorlds()) {
-            world.setGameRuleValue("keepInventory", "true");
-            world.setGameRuleValue("mobGriefing", "false");
-            world.setGameRuleValue("doDaylightCycle", "false");
-        }
-
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
+        Messenger messenger = this.getServer().getMessenger();
+        messenger.registerOutgoingPluginChannel(this, "BungeeCord");
+        messenger.registerIncomingPluginChannel(this, "BungeeCord", this);
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
+        CommonLoader.bootstrap(this);
+    }
 
-        try {
-            this.getLogger().warning("Loading from local storage");
-            Class.forName("net.mizukilab.pit.Loader").getMethod("start").invoke(null);
-        } catch (Exception e) {
-            this.getLogger().warning("Fetching");
-            MagicLoader.load();
-            MagicLoader.ensureIsLoaded();
+    private static void loadEventPoller() {
+        EventsHandler.INSTANCE.loadFromDatabase();
+    }
+
+    private static void bootstrapWorld() {
+        for (World world : Bukkit.getWorlds()) {
+            world.getEntities().forEach(e -> {
+                        if (e instanceof ArmorStand) {
+                            e.remove();
+                            return;
+                        }
+                        if (e instanceof Item it) {
+                            if (it.getItemStack().getType() == Material.GOLD_INGOT) {
+                                it.remove(); //garbage remove pieces 修复内存碎片整合慢问题
+                            }
+                        }
+                    });
+            world.setGameRuleValue("keepInventory", "true");
+            world.setGameRuleValue("mobGriefing", "false");
+            world.setGameRuleValue("doDaylightCycle", "false");
         }
     }
 
