@@ -231,11 +231,13 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         new DayNightCycleRunnable().runTaskTimer(this, 20, 20);
 
 
-        try {
+/*        try {
             EventsHandler.INSTANCE.loadFromDatabase();
         } catch (Exception ignored) {
 
-        }
+        }*/
+        //TODO 待修复
+        loadEventPoller();
         bootstrapWorld();
 
         Messenger messenger = this.getServer().getMessenger();
