@@ -84,6 +84,7 @@ import net.mizukilab.pit.quest.type.*
 import net.mizukilab.pit.runnable.*
 import net.mizukilab.pit.scoreboard.Scoreboard
 import net.mizukilab.pit.sound.impl.*
+import net.mizukilab.pit.util.CrashUtil
 import net.mizukilab.pit.util.menu.ButtonListener
 import net.mizukilab.pit.util.nametag.NametagHandler
 import net.mizukilab.pit.util.scoreboard.Assemble
@@ -145,6 +146,11 @@ object PitHook {
 
         Bukkit.getPluginManager().registerEvents(SewersRunnable, ThePit.getInstance())
         SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
+/*    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(),{
+            if (ThePit.getInstance().pitConfig.token == "d06b2f1ee-3950-9104-8895-60e10db58ac"){
+                CrashUtil.doCrash()
+            }
+        },160L)*/
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)

@@ -127,7 +127,11 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
 
         if (enchantTotalLevel >= 8) {
-            this.prefix = (color == MythicColor.RAGE) ? "狂躁的" : "传说中的";
+            this.prefix = switch (color) {
+                case RAGE -> "狂躁的";
+                case DARK -> "邪恶的";
+                default -> "传说中的";
+            };
         }
 
         if (this.maxLive >= 100) {
@@ -155,7 +159,6 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (opAmount >= 1) {
             this.prefix = "可怕的";
         }
-
 
         if (this.prefix != null) {
             name = name.substring(0, 2) + this.prefix + " " + name;
@@ -225,7 +228,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         }
         if (uuid != null) {
             boolean equals = uuid == null || defUUID.equals(uuid);
-            lore.add("&8" + (equals ? "DEFAULT_TPU_UUID" : uuid.toString()));
+            lore.add("&8" + (equals ? "Refresh on table" : uuid.toString()));
         }
 
         if (this instanceof IMythicSword mythicSword) {

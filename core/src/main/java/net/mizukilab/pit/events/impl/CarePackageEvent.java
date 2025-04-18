@@ -53,7 +53,9 @@ public class CarePackageEvent extends AbstractEvent implements INormalEvent, Lis
     private ChestData chestData;
 
 
+/*
     private final Cooldown endTimer = new Cooldown(5, TimeUnit.MINUTES);
+*/
 
     @Override
     public String getEventInternalName() {
@@ -213,14 +215,14 @@ public class CarePackageEvent extends AbstractEvent implements INormalEvent, Lis
         String targetDirection = DirectionUtil.getDetailedDirection(player, chest);
         int distance = (int) player.getLocation().distance(chest);
 
-        if (endTimer.getRemaining() > 2 * 60 * 1000L) {
+  /*      if (endTimer.getRemaining() > 2 * 60 * 1000L) {
             lines.add("&f剩余: &a" + TimeUtil.millisToTimer(endTimer.getRemaining()));
         } else if (endTimer.getRemaining() >= 60 * 1000L) {
             lines.add("&f剩余: &e" + TimeUtil.millisToTimer(endTimer.getRemaining()));
         } else {
             lines.add("&f剩余: &c" + TimeUtil.millisToTimer(endTimer.getRemaining()));
         }
-
+*/
         if (!chestData.getRewarded().contains(player.getUniqueId())) {
             if (chestData.getNum() == 200) {
                 lines.add("&f追踪: &c&l? &f" + distance + "m");
