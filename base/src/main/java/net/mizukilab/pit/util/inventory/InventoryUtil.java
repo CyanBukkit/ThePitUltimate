@@ -371,7 +371,7 @@ public class InventoryUtil {
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
         int slot = 0;
-        int illegalItems = 0;
+        int illegalItems = -1;
         PlayerInventory inventory = player.getInventory();
         for (ItemStack item : inventory) {
             if (item == null) {
