@@ -107,38 +107,60 @@ public abstract class IMythicItem extends AbstractPitItem {
             name = (tier >= 3 ? "&c" : "&b") + (tier > 0 ? RomanUtil.convert(tier) + " 阶" : "") + getItemDisplayName();
         }
 
-        int rareAmount = 0; //amount of rare enchant in this item
-        int enchantTotalLevel = 0; //total level of enchant item
+        int rareAmount = 0;
+        int opAmount = 0;
+        int enchantTotalLevel = 0;
+
+
         for (AbstractEnchantment abstractEnchantment : enchantments.keySet()) {
+            int enchantLevel = enchantments.get(abstractEnchantment);
+            enchantTotalLevel += enchantLevel;
+
             if (abstractEnchantment.getRarity() == EnchantmentRarity.RARE) {
-                if (color == MythicColor.RAGE && abstractEnchantment.getMaxEnchantLevel() == enchantments.get(abstractEnchantment)) {
+                rareAmount++;
+                if (color == MythicColor.RAGE && abstractEnchantment.getMaxEnchantLevel() == enchantLevel) {
                     this.prefix = "不可思议的";
                 }
-                rareAmount++;
+            } else if (abstractEnchantment.getRarity() == EnchantmentRarity.OP) {
+                opAmount++;
             }
-            enchantTotalLevel += enchantments.get(abstractEnchantment);
         }
+
         if (enchantTotalLevel >= 8) {
-            if (color == MythicColor.RAGE) {
-                this.prefix = "狂躁的"; //Manic
-            } else {
-                this.prefix = "传说中的"; //Legendary
-            }
+            this.prefix = (color == MythicColor.RAGE) ? "狂躁的" : "传说中的";
         }
+
         if (this.maxLive >= 100) {
             if (color == MythicColor.DARK) {
                 name = color.getChatColor() + (tier > 0 ? RomanUtil.convert(tier) + " 阶" : "") + "恶魔之甲";
             } else {
-                this.prefix = "精制的"; //Artifact
+                this.prefix = "精制的";
             }
         }
-        if (rareAmount >= 2) {
-            this.prefix = "不凡的"; //ExtraOrdinary
+
+        if (rareAmount >= 3 && this.maxLive >= 100) {
+            this.prefix = "万里挑一的";
+        } else if (rareAmount == 2 && this.maxLive >= 100) {
+            this.prefix = "奇迹般的";
+        } else if (rareAmount >= 3) {
+            this.prefix = "不朽的";
+        } else if (rareAmount == 2) {
+            this.prefix = "不凡的";
         }
+
+        if (enchantTotalLevel >= 7 && this.maxLive >= 100) {
+            this.prefix = "强大的";
+        }
+
+        if (opAmount >= 1) {
+            this.prefix = "可怕的";
+        }
+
 
         if (this.prefix != null) {
             name = name.substring(0, 2) + this.prefix + " " + name;
         }
+
 
         if (this.customName != null) {
             name = customName;
@@ -201,7 +223,7 @@ public abstract class IMythicItem extends AbstractPitItem {
         if (customName != null) {
             builder.customName(customName);
         }
-        if (uuid != null){
+        if (uuid != null) {
             boolean equals = uuid == null || defUUID.equals(uuid);
             lore.add("&8" + (equals ? "DEFAULT_TPU_UUID" : uuid.toString()));
         }

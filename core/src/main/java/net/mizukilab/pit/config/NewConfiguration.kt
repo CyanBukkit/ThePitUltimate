@@ -215,11 +215,7 @@ object NewConfiguration {
             return 0.02
         }
 
-        if (PlusPlayer.on) {
-            if (player.isPlusPlayer) {
-                return PlusPlayer.probability
-            }
-        }
+
 
         return list.filter {
             player.hasPermission(it.permission)

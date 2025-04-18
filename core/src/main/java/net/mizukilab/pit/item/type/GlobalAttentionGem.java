@@ -60,11 +60,12 @@ public class GlobalAttentionGem extends AbstractPitItem implements Listener {
                 .lore(
                         "&7死亡时保留",
                         "",
-                        "&7增加附魔物品的一级 &d&l稀有! &7附魔",
-                        "&7(不可用于普通及特殊附魔, 不可超过上限)",
-                        "&8一件物品只能使用一次",
+                        "&7增加附魔物品的一级 &d&l稀有! &7附魔, 并附加 &b♦ &7标识",
+                        "&7(仅适用于特定附魔, 且不超出上限)",
+                        "&8单个物品仅可使用一次",
                         "",
                         "&e右键使用"
+
                 )
                 .canSaveToEnderChest(true)
                 .build();
