@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -211,6 +212,12 @@ public class EnchantButton extends Button {
         menu.openMenu(player);
     }
 
+    /**
+     * 面对过程式 附魔, 害得我键盘也给附魔了
+     * @param item
+     * @param player
+     * @param mythicItem
+     */
     private void doEnchant(ItemStack item, Player player, IMythicItem mythicItem) {
 
         mythicItem.loadFromItemStack(item);
@@ -497,12 +504,23 @@ public class EnchantButton extends Button {
                     int amount = mythicItem.getEnchantments().size();
                     if (amount == 1) { // If this item have only 1 enchantment
                         AbstractEnchantment enchantment = null;
-                        if (getPlayerMythicBook(player, item)) {
+                        if (getPlayerMythicBook(player, item)) { //定义不明
                             AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
                             mythicItem.getEnchantments().put(rareEnchant, 3);
                             announcement = true;
                             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                             profile.setEnchantingBook(null);
+                            //add logic TODO
+                            results.removeAll(enchantments);
+                            if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+                                announcement = true;
+                                rareResults.removeAll(enchantments);
+                                enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                            } else {
+                                enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                            }
+                            enchantments.add(enchantment);
+                            mythicItem.getEnchantments().put(enchantment, 1);
                         } else {
                             for (int i = 0; i < 2; i++) {
                                 results.removeAll(enchantments);
@@ -533,7 +551,12 @@ public class EnchantButton extends Button {
                     } else if (amount == 2) { //21 -> 311
                         if (getPlayerMythicBook(player, item)) {
                             AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
-                            mythicItem.getEnchantments().put(rareEnchant, 3);
+                            Object2IntOpenHashMap<AbstractEnchantment> enchantments1 = mythicItem.getEnchantments();
+                            int levelCurrentlyEnchantment = 0;
+                            for (Integer value : enchantments1.values()) {
+                                levelCurrentlyEnchantment+= value;
+                            }
+                            enchantments1.put(rareEnchant, levelCurrentlyEnchantment >= 6 ? 2 : 3);
                             announcement = true;
                             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                             profile.setEnchantingBook(null);

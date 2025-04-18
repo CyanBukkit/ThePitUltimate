@@ -57,9 +57,14 @@ object EventsHandler {
     fun loadFromDatabase() {
         this.epicQueue.clear()
         this.normalQueue.clear()
-
-        val queue = ThePit.getInstance().mongoDB.eventQueueCollection.findOne()
-        if (queue == null) {
+        val queue: EventQueue;
+        try {
+            queue = ThePit.getInstance().mongoDB.eventQueueCollection.findOne()
+            if (queue == null) {
+                refreshEvents()
+                return
+            }
+        } catch (e: Exception){
             refreshEvents()
             return
         }

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +35,13 @@ public class NumberGenerator {
     private static final Pattern FINISHER_OUTERMOST_BRACKET_PATTERN = Pattern.compile("^\\(([^()]+)\\)$");
     private static final Pattern NUM_PATTERN = Pattern.compile("\\d+|⑨");
 
+    public static void main(String[] args) {
+        NumberGenerator numberGenerator = NumberGenerator.get();
+        
+        for (int i = 0;i < 10000;i++) {
+            numberGenerator.homo(i);
+        }
+    }
     public NumberGenerator() {
         this.NUMBERS = new HashMap<>();
 
