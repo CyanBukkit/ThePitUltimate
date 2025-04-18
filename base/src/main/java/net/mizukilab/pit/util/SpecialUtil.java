@@ -19,7 +19,7 @@ public class SpecialUtil {
     private static Set<String> SPECIALS = new HashSet<String>();
     private static Set<String> BLACKS = new HashSet<>();
 
-    static {
+    static { 
 /*        SPECIALS.add("Love_E");
         SPECIALS.add("114514211");*/
     }
