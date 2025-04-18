@@ -198,7 +198,18 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
         iSpigot spigot = new iSpigot();
         Bukkit.getServer().getPluginManager().registerEvents(spigot, this);
+        //preload
+        preLoad(whiteList);
+        CommonLoader.bootstrap(this);
+        //Post load
+        postLoad();
+    }
 
+    private void postLoad() {
+        loadEventPoller();
+    }
+
+    private void preLoad(boolean whiteList) {
         this.loadConfig();
 
         this.loadDatabase();
@@ -231,9 +242,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         new DayNightCycleRunnable().runTaskTimer(this, 20, 20);
 
 
-
         //TODO 待修复
-        loadEventPoller();
         bootstrapWorld();
 
         Messenger messenger = this.getServer().getMessenger();
@@ -242,10 +251,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         FixedRewardData.Companion.refreshAll();
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
-        CommonLoader.bootstrap(this);
     }
 
-    private static void loadEventPoller() {
+    private void loadEventPoller() {
         EventsHandler.INSTANCE.loadFromDatabase();
     }
 
