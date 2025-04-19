@@ -17,7 +17,9 @@ import java.util.List;
 public class SpireSword extends AbstractPitItem {
 
     private Material material;
-
+    public SpireSword() {
+        this(Material.WOOD_SWORD);
+    }
     public SpireSword(Material material) {
         this.material = material;
         this.enchantments.put(ThePit.getInstance().getEnchantmentFactor().getEnchantmentMap().get("soul_ripper_enchant"), 1);

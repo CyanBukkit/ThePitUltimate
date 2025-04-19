@@ -1,10 +1,12 @@
 package net.mizukilab.pit.item.factory;
 
 import com.google.common.annotations.Beta;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.IItemFactory;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.util.ItemGlobalReference;
+import net.mizukilab.pit.util.PublicUtil;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.item.ItemUtil;
 import org.bukkit.Bukkit;
@@ -20,7 +22,7 @@ public class ItemFactory implements IItemFactory {
 
     //简易LRU
     public boolean hasItem(UUID uuid) {
-        return theReference.containsKey(uuid.toString());
+        return theReference.containsKey(uuid.hashCode());
     }
 
     @Override
@@ -44,7 +46,7 @@ public class ItemFactory implements IItemFactory {
     }
 
     public IMythicItem getItem(UUID uuid) {
-        return theReference.get(uuid.toString());
+        return theReference.getValue(uuid);
     }
 
     Runnable EMPTY_RUNNABLE = () -> {
@@ -61,12 +63,16 @@ public class ItemFactory implements IItemFactory {
 
     @Beta
     public IMythicItem getIMythicItem(ItemStack stack, Runnable runnable) {
-
-        Object[] objects = readIMythicItemUUIDAndInternalName(stack);
-        if (objects == null) return null;
-        String internalName = (String) objects[0];
-        String uuidString = (String) objects[1];
-        IMythicItem iMythicItem = getIMythicItemFromUUIDString(uuidString);
+        NBTTagCompound extra = ItemUtil.getExtra(stack);
+        String internalName = ItemUtil.getInternalName0(extra);
+        if(internalName == null){
+            return null;
+        }
+        int hashCodeForUUID = ItemUtil.getHashCodeForUUID0(stack,extra);
+        if(hashCodeForUUID == -1){
+            return null;
+        }
+        IMythicItem iMythicItem = getIMythicItem(hashCodeForUUID);
 
         if (iMythicItem == null || clientSide) { //会导致不掉命bug, 有点厉害
             runnable.run();
@@ -88,11 +94,15 @@ public class ItemFactory implements IItemFactory {
     }
 
     public IMythicItem getIMythicItemFromUUIDString(String uuidString) {
+        return getIMythicItem(PublicUtil._uuidHashCode(uuidString));
+    }
+
+    private IMythicItem getIMythicItem(int hashcode) {
         IMythicItem iMythicItem;
         if (!Bukkit.isPrimaryThread()) { //async get sucks
-            iMythicItem = theReference.get(uuidString);
+            iMythicItem = theReference.get(hashcode);
         } else {
-            iMythicItem = theReference.getValue(uuidString);
+            iMythicItem = theReference.getValue(hashcode);
         }
         return iMythicItem;
     }

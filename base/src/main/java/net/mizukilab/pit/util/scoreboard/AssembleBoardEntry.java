@@ -5,6 +5,8 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.ConcurrentModificationException;
+
 public class AssembleBoardEntry {
 
     private final AssembleBoard board;
@@ -49,7 +51,11 @@ public class AssembleBoardEntry {
 
         // Register the team if it does not exist.
         if (team == null) {
-            team = scoreboard.registerNewTeam(teamName);
+            try {
+                team = scoreboard.registerNewTeam(teamName);
+            } catch (IllegalArgumentException e) {
+                team = scoreboard.getTeam(teamName);
+            }
         }
 
         // Add the entry to the team.
@@ -100,7 +106,14 @@ public class AssembleBoardEntry {
         }
 
         Score score = this.board.getObjective().getScore(this.identifier);
-        score.setScore(position);
+        int score1 = score.getScore();
+        if (score1 != position) {
+            try {
+                score.setScore(position);
+            } catch (ConcurrentModificationException e){
+                return;
+            }
+        }
     }
 
     public void setPrefixCheckEqual(Team team, String prefix) {

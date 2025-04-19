@@ -15,6 +15,7 @@ object ItemConstructor {
     }
 
     fun addItems(enchantment: Class<*>) {
+        println("This class is deprecated, please use PerkFactory.init(?..), this feature will be removed in future!!!")
         if (IMagicLicense::class.java.isAssignableFrom(enchantment)) {
             items.add(enchantment)
         } else {

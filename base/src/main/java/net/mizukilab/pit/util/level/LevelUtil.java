@@ -169,7 +169,7 @@ public class LevelUtil {
         double[] plevelMappingRaw = new double[(limit + 40) * (ThePit.getInstance().getPitConfig().maxLevel + 1)];
         for (int i = 0; i <= limit; i++) {
             int append = i * ThePit.getInstance().getPitConfig().maxLevel;
-            for (int ia = 0; ia <= ThePit.getInstance().getPitConfig().maxLevel; ia++) {
+            for (int ia = 0; ia < ThePit.getInstance().getPitConfig().maxLevel; ia++) {
                 plevelMappingRaw[append + ia] = getLevelExpRequired(i, ia);
             }
         }

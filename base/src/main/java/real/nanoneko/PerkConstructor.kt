@@ -15,6 +15,8 @@ object PerkConstructor {
     }
 
     fun addPerk(enchantment: Class<*>) {
+
+        println("This class is deprecated, please use EnchantmentFactor.init(?..), this feature will be removed in future!!!")
         if (IMagicLicense::class.java.isAssignableFrom(enchantment)) {
             perks.add(enchantment)
         } else {

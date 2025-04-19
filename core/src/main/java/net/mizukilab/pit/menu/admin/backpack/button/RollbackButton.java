@@ -2,6 +2,7 @@ package net.mizukilab.pit.menu.admin.backpack.button;
 
 import cn.charlotte.pit.data.PlayerInvBackup;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.sub.PlayerInv;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.menu.buttons.DisplayButton;
 import org.bukkit.Bukkit;
@@ -27,14 +28,13 @@ public class RollbackButton extends DisplayButton {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        profile.setInventory(backup.getInv());
-
+        PlayerInv inv = backup.getInv();
         Player target = Bukkit.getPlayer(profile.getPlayerUuid());
         if (target != null && target.isOnline()) {
-            profile.getInventory().applyItemToPlayer(target);
-        } else {
-            profile.saveData(null);
+            inv.applyItemToPlayer(player);
         }
+        profile.setInventoryUnsafe(inv);
+        profile.saveData(null);
         player.closeInventory();
         player.sendMessage(CC.translate("&a回滚完成"));
     }

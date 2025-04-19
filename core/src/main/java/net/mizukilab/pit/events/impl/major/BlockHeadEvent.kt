@@ -416,6 +416,7 @@ class BlockHeadEvent : AbstractEvent(), IEpicEvent, IScoreBoardInsert, Listener 
                 BuffData()
                     .also {
                         it.cooldown = Cooldown(0)
+                        it.uuid = UUID.randomUUID()
                         it.location = location
                         it.type = BuffType.values()[Random.nextInt(BuffType.values().size)]
                     }
@@ -612,33 +613,34 @@ class BlockHeadEvent : AbstractEvent(), IEpicEvent, IScoreBoardInsert, Listener 
     class BlockCache(val material: Material, val data: Byte)
 
     class BuffData {
-        lateinit var uuid: UUID
-        lateinit var hologram: Hologram
-        lateinit var type: BuffType
-        lateinit var location: Location
+         var uuid: UUID? = null
+         var hologram: Hologram? = null
+         var type: BuffType? = null
+         var location: Location? = null
         var cooldown = Cooldown(0)
 
         fun spawn() {
-            val add = location.clone().add(0.0, 1.0, 0.0)
-
-            hologram = DHAPI.createHologram(uuid.toString(), add, false)
-            val page = hologram.addPage()
-            page.addLine(HologramLine(page, location, CC.translate(type.display)))
-            page.addLine(HologramLine(page, location, "#ICON:${type.name}"))
-
-            hologram.showAll()
+            val add = location?.clone()?.add(0.0, 1.0, 0.0)
+            hologram = DHAPI.getHologram(uuid.toString())
+            if(hologram == null) {
+                hologram = DHAPI.createHologram(uuid.toString(), add, false)
+            }
+            val page = hologram?.addPage()
+                page?.addLine(HologramLine(page, location!!, CC.translate(type?.display)))
+                page?.addLine(HologramLine(page, location!!, "#ICON:${type?.name}"))
+            hologram?.showAll()
         }
 
         fun changeItem(boolean: Boolean) {
-            val page = hologram.getPage(0)
+            val page = hologram?.getPage(0)
 
 
             if (boolean) {
-                page.getLine(0).setContent(CC.translate(type.display))
-                page.getLine(1).setContent("#ICON:${type.name}")
+                page?.getLine(0)?.setContent(CC.translate(type?.display))
+                page?.getLine(1)?.setContent("#ICON:${type?.name}")
             } else {
-                page.getLine(0).setContent(CC.translate("${CC.translate(type.display)} &7-&c 冷却中"))
-                page.getLine(1).setContent("#ICON:${Material.BARRIER.name}")
+                page?.getLine(0)?.setContent(CC.translate("${CC.translate(type?.display)} &7-&c 冷却中"))
+                page?.getLine(1)?.setContent("#ICON:${Material.BARRIER.name}")
             }
         }
 

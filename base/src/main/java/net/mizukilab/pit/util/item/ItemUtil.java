@@ -20,6 +20,29 @@ public class ItemUtil {
     public static String getUUID(ItemStack item) {
         return getItemStringData(item, "uuid");
     }
+    public static int getHashCodeForUUID(ItemStack item) {
+        NBTTagCompound extra = getExtra(item);
+        return getHashCodeForUUID0(item, extra);
+
+    }
+
+    public static int getHashCodeForUUID0(ItemStack item, NBTTagCompound extra) {
+        if(extra == null) {
+            return -1;
+        }
+        long up = getLong(extra, "up");
+        long down = getLong(extra, "do");
+        if(up == 0 || down == 0) {
+            UUID uuidObj = getUUIDObj(item);
+            if (uuidObj != null) {
+                setUUIDObj(item, uuidObj);
+                return uuidObj.hashCode();
+            } else {
+                return -1;
+            }
+        }
+        return PublicUtil.hashTwoLong(up, down);
+    }
 
     public static UUID getUUIDObj(ItemStack stack) {
         String uuid = getUUID(stack);
@@ -35,9 +58,23 @@ public class ItemUtil {
         NBTTagCompound extra = getExtra(stack);
         if (extra != null) {
             extra.setString("uuid", uuid);
+            updateMagic(extra,uuid);
+        }
+    }
+    public static long getLong(NBTTagCompound tag,String what) {
+        NBTBase nbtBase = tag.get(what);
+        if(nbtBase instanceof NBTTagLong){
+            return ((NBTTagLong) nbtBase).c();
+        } else {
+            return 0;
         }
     }
 
+    public static void updateMagic(NBTTagCompound tag,String uuidseq) {
+        tag.setLong("up",PublicUtil.getMostSignificantBits(uuidseq));
+        tag.setLong("do",PublicUtil.getLeastSignificantBits(uuidseq));
+
+    }
     public static void setVer(ItemStack stack, String ver) {
         NBTTagCompound extra = getExtra(stack);
         if (extra != null) {
@@ -70,7 +107,6 @@ public class ItemUtil {
                 if (item == null) {
                     break;
                 }
-
             }
         } else {
             uuid = UUID.randomUUID();
@@ -168,7 +204,7 @@ public class ItemUtil {
     public static Object[] getInternalNameAndUUID(ItemStack stack) {
         NBTTagCompound extra = getExtra(stack);
         Object[] objects = new Object[2];
-        String internal = getItemStringData0(extra, "internal");
+        String internal = getInternalName0(extra);
         String uuid = getItemStringData0(extra, "uuid");
         objects[0] = internal;
         objects[1] = uuid;
@@ -207,10 +243,11 @@ public class ItemUtil {
         }
         return null;
     }
-
     public static String getItemStringData(ItemStack item, String key) {
         return getItemStringData0(getExtra(item), key);
-
     }
 
+    public static String getInternalName0(NBTTagCompound extra) {
+        return getItemStringData0(extra,"internal");
+    }
 }

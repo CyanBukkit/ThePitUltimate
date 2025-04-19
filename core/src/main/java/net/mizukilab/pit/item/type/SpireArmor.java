@@ -19,7 +19,9 @@ import java.util.Map;
 
 public class SpireArmor  {
 
+    public SpireArmor() {
 
+    }
 
     public static ItemStack toItemStack(Material material) {
         final List<String> lore = new ArrayList<>();

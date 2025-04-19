@@ -94,18 +94,13 @@ public class AssembleThread implements Runnable {
 
                     // Reverse the lines because scoreboard scores are in descending order.
                     boolean descending = this.assemble.getAssembleStyle().isDescending();
-                    if (!descending) {
-                        Collections.reverse(newLines);
-                    }
 
                     // Remove excessive amount of board entries.
                     int size = board.getEntries().size();
                     boolean b = size > size1;
                     if (b) {
                         for (int i = size1; i < size; i++) {
-
                             AssembleBoardEntry entry = board.getEntryAtPosition(i);
-
                             if (entry != null) {
                                 entry.remove();
                             }
@@ -113,13 +108,17 @@ public class AssembleThread implements Runnable {
                     }
 
                     // Update existing entries / add new entries.
-                    int cache = this.assemble.getAssembleStyle().getStartNumber();
+                    int cache = descending ? this.assemble.getAssembleStyle().getStartNumber() : size1;
                     for (int i = 0; i < size1; i++) {
                         AssembleBoardEntry entry = board.getEntryAtPosition(i);
 
                         // Translate any colors.
+                        String textToTranslate = newLines.get(i);
+                        if(textToTranslate == null){
+                            continue;
+                        }
                         String line = ChatColor.
-                                translateAlternateColorCodes('&', newLines.get(i));
+                                translateAlternateColorCodes('&', textToTranslate);
 
                         // If the entry is null, just create a new one.
                         // Creating a new AssembleBoardEntry instance will add
@@ -131,7 +130,7 @@ public class AssembleThread implements Runnable {
                         // Update text, setup the team, and update the display values.
                         entry.setText(line);
                         entry.setup();
-                        entry.send(descending ? cache-- : cache++);
+                        entry.send(descending ? cache++ : cache--);
                     }
                 }
 

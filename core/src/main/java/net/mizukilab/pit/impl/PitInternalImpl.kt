@@ -189,7 +189,6 @@ object PitInternalImpl : PitInternalHook {
                     factory.pushEvent(event, true)
                 }
             } else {
-
                 factory.pushEvent(event, true)
             }
         } else {

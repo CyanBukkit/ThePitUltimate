@@ -45,6 +45,7 @@ import net.mizukilab.pit.hologram.HologramListener
 import net.mizukilab.pit.hook.ItemPapiHook
 import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.item.AbstractPitItem
+import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.item.factory.ItemFactory
 import net.mizukilab.pit.item.type.*
 import net.mizukilab.pit.item.type.mythic.MythicBowItem
@@ -268,25 +269,11 @@ object PitHook {
             MythicEnchantingTable::class.java
         )
         try {
-            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
-                if (ItemConstructor.getItems().isNotEmpty()) {
-                    println("加载额外物品中...")
-                    clazzList.addAll(ItemConstructor.getItems())
-                }
-                for (clazz in clazzList) {
-                    try {
-                        val pitItem = clazz.getDeclaredConstructor().newInstance()
-                        if (pitItem is AbstractPitItem) {
-                            if (pitItem is Listener) {
-                                Bukkit.getPluginManager().registerEvents(pitItem, ThePit.getInstance())
-                            }
-                            ThePit.getInstance().itemFactor.registerItem(pitItem)
-                        }
-                    } catch (e: Exception) {
-                        println("An error occurred: ${e.message}")
-                    }
-                }
-            }, 60L)
+            var itemFactor = ThePit.getInstance().itemFactor
+            itemFactor.registerItems(clazzList)
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(),{
+                itemFactor.registerItems(ItemConstructor.getItems())
+            },10)
         } catch (e: Exception) {
             println("An error occurred: ${e.message}")
         }
@@ -483,16 +470,12 @@ private fun loadEnchants() {
         add(JerryEnchant6())
         add(JerryEnchant7())
     }
-    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
-        val enchantmentClasses: List<Class<*>> = EnchantedConstructor.getEnchantments()
-        val enchantmentCollection: List<Class<out AbstractEnchantment>> =
-            enchantmentClasses.filterIsInstance<Class<out AbstractEnchantment>>()
-        if (enchantmentCollection.isNotEmpty()) {
-            println("加载额外附魔中...")
-            classes.addAll(enchantmentCollection)
-        }
-        enchantmentFactor.init(classes)
-    }, 40L)
+    enchantmentFactor.init(classes)
+    EnchantedConstructor.apply {
+        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
+            enchantmentFactor.init(getEnchantments())
+        },10);
+    }
 }
 
 private fun loadScoreBoard() {
@@ -615,18 +598,10 @@ private fun loadPerks() {
         SuperStreaker::class.java
     )
 
-    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
-        val perkClasses: List<Class<*>> = PerkConstructor.getPerks()
-        val perkCollection: List<Class<out AbstractPerk>> =
-            perkClasses.filterIsInstance<Class<out AbstractPerk>>()
-
-
-        if (perkCollection.isNotEmpty()) {
-            println("加载额外增益中...")
-            classes.addAll(perkCollection)
-        }
-        perkFactory.init(classes as Collection<Class<*>>?)
-    }, 60L)
+    perkFactory.init(classes as Collection<Class<*>>?)
+    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(),{
+        perkFactory.init(PerkConstructor.getPerks())
+    },10)
 }
 
 private fun registerSounds() {

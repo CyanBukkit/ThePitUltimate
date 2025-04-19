@@ -30,7 +30,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
@@ -48,7 +50,6 @@ public class Utils {
      * 随机color
      */
     private static final ChatColor[] CHAT_COLORS = ChatColor.values();
-
     public static ChatColor randomColor() {
         return CHAT_COLORS[ThreadLocalRandom.current().nextInt(Math.max(0, CHAT_COLORS.length - 1))];
     }

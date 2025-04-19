@@ -1,6 +1,9 @@
 package net.mizukilab.pit.util;
 
 import com.google.common.annotations.Beta;
+import it.unimi.dsi.fastutil.Hash;
+import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.mizukilab.pit.item.IMythicItem;
 
@@ -9,19 +12,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.LongSupplier;
 
-public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, IMythicItem> {
+public class ItemGlobalReference extends Long2ObjectLinkedOpenHashMap<IMythicItem> {
 
     ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     AtomicBoolean shouldLRU = new AtomicBoolean(false);
     AtomicBoolean removeLast = new AtomicBoolean(false);
     LongSupplier limit;
-
     public ItemGlobalReference(LongSupplier limit) {
-        super();
         this.limit = limit;
     }
 
-    public IMythicItem getValue(String key) {
+    public IMythicItem getValue(long key) {
         removeLast.setOpaque(true);
         IMythicItem andMoveToFirst = get(key);
         removeLast.setOpaque(false);
@@ -29,11 +30,11 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
     }
 
     public IMythicItem getValue(UUID key) {
-        return getValue(key.toString());
+        return getValue(key.hashCode());
     }
 
     @Beta
-    public void putValue(String key, IMythicItem value) {
+    public void putValue(long key, IMythicItem value) {
         putAndMoveToFirst(key, value);
     }
 
@@ -60,7 +61,7 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
     }
 
     @Override
-    public IMythicItem putAndMoveToFirst(String string, IMythicItem mythicItem) {
+    public IMythicItem putAndMoveToFirst(long string, IMythicItem mythicItem) {
         removeLast.setOpaque(true);
         lock.writeLock().lock();
         IMythicItem iMythicItem = super.putAndMoveToFirst(string, mythicItem);
@@ -72,7 +73,7 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
     }
 
     @Override
-    public IMythicItem put(String uuid, IMythicItem mythicItem) {
+    public IMythicItem put(long uuid, IMythicItem mythicItem) {
         try {
             lock.writeLock().lock();
             shouldLRU.setOpaque(true);
@@ -84,7 +85,7 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
 
     public void putValue(UUID uuid, IMythicItem item) {
 
-        putValue(uuid.toString(), item);
+        putValue(uuid.hashCode(), item);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class ItemGlobalReference extends Object2ObjectLinkedOpenHashMap<String, 
     public IMythicItem remove(UUID key) {
         try {
             lock.writeLock().lock();
-            return super.remove(key);
+            return super.remove(key.hashCode());
         } finally {
             lock.writeLock().unlock();
         }
