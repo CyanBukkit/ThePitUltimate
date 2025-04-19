@@ -31,7 +31,7 @@ public class RollbackButton extends DisplayButton {
         PlayerInv inv = backup.getInv();
         Player target = Bukkit.getPlayer(profile.getPlayerUuid());
         if (target != null && target.isOnline()) {
-            inv.applyItemToPlayer(player);
+            inv.applyItemToPlayer(target);
         }
         profile.setInventoryUnsafe(inv);
         profile.saveData(null);
