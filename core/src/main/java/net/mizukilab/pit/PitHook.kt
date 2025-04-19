@@ -255,6 +255,7 @@ object PitHook {
             ChunkOfVileItem::class.java,
             FunkyFeather::class.java,
             GoldenHelmet::class.java,
+            LuckyGem::class.java,
             JewelSword::class.java,
             JumpBoostPotion::class.java,
             MythicRepairKit::class.java,

@@ -25,7 +25,7 @@ object NewConfiguration {
     var dateFormat = "MM/dd HH:mm"
 
     var bountyTickInterval = 1;
-
+    var luckGem = 0.30;
     var noobProtect = true
     var noobProtectLevel = 120
     var noobDamageBoost = 1.1
@@ -67,6 +67,7 @@ object NewConfiguration {
     fun load() {
         refreshAndSave()
 
+        luckGem = config.getDouble("luck-gem", 0.30)
         forbidEnchant = config.getStringList("forbidEnchant")
 
         vipPrice = config.getInt("vip-price", 500)
@@ -215,7 +216,9 @@ object NewConfiguration {
             return 0.02
         }
 
-
+        if (player.hasMetadata("lucky")) {
+            return luckGem
+        }
 
         return list.filter {
             player.hasPermission(it.permission)
@@ -246,6 +249,7 @@ object NewConfiguration {
 
     private val defaults = mapOf(
         "water-marks" to watermarks,
+        "luck-gem" to luckGem,
         "vip-price" to 500,
         "price-name" to "点券",
         "lobby-command" to "hub",
