@@ -349,6 +349,7 @@ private fun loadEnchants() {
         BillyEnchant::class.java,
         BooBooEnchant::class.java,
         BountyHunterEnchant::class.java,
+        BreakTheMirror::class.java,
         BowComboEnchant::class.java,
         BruiserEnchant::class.java,
         BulletTimeEnchant::class.java,
