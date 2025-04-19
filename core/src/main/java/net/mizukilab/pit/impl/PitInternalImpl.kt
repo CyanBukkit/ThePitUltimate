@@ -32,6 +32,7 @@ import net.mizukilab.pit.menu.main.AuctionMenu
 import net.mizukilab.pit.menu.shop.ShopMenu
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.item.ItemUtil
+import net.mizukilab.pit.util.menu.Menu
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -68,6 +69,17 @@ object PitInternalImpl : PitInternalHook {
         enderChest: Boolean
     ) {
         BackupShowMenu(profile, backups, backup, enderChest).openMenu(player)
+    }
+
+    override fun openBackupShowMenu(
+        player: Player?,
+        profile: PlayerProfile?,
+        backups: MutableList<PlayerInvBackup>?,
+        backup: PlayerInvBackup?,
+        previousMenu: Menu?,
+        enderChest: Boolean
+    ) {
+        BackupShowMenu(profile, backups, backup, enderChest,previousMenu).openMenu(player)
     }
 
     override fun openMenu(player: Player, menuName: String) {

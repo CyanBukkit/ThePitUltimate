@@ -253,7 +253,9 @@ public class InventoryUtil {
     }
 
     public static PlayerInv playerInventoryFromString(String in) {
-        if (in == null || in.equals("unset") || in.equals("null") || in.equals("'null'")) return null;
+        if (in == null || in.equals("unset") || in.equals("null") || in.equals("'null'")){
+            return null;
+        }
 
         PlayerInv inv = new PlayerInv();
 

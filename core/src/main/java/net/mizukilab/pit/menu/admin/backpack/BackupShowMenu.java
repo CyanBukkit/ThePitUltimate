@@ -34,12 +34,17 @@ public class BackupShowMenu extends Menu {
     private final PlayerInvBackup backup;
     private final List<PlayerInvBackup> backups;
     private final boolean right;
+    private Menu fatherMenu;
 
     public BackupShowMenu(PlayerProfile playerProfile, List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean right) {
+        this(playerProfile,backups,backup,right,null);
+    }
+    public BackupShowMenu(PlayerProfile playerProfile, List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean right,Menu father) {
         this.playerProfile = playerProfile;
         this.backup = backup;
         this.backups = backups;
         this.right = right;
+        this.fatherMenu = father;
     }
 
     @Override
@@ -70,22 +75,22 @@ public class BackupShowMenu extends Menu {
         if (!right) {
             buttonMap.put(36, new RollbackButton(new ItemBuilder(Material.CHEST).name("&a回滚至该背包").shiny().build(), playerProfile, backup));
         }
-
-        List<Button> buttons = new ObjectArrayList<>();
-        int i = 0;
-        for (PlayerInvBackup invBackup : backups) {
-            buttons.add(new ShowInvBackupButton(backups,
-                    new ItemBuilder(Material.BOOK)
-                            .name("&a备份时间: " + format.format(invBackup.getTimeStamp()))
-                            .lore(("&e物品数: " + InventoryUtil.getInventoryFilledSlots(invBackup.getInv().getContents())))
-                            .amount(Math.min(64, InventoryUtil.getInventoryFilledSlots(invBackup.getInv().getContents())))
-                            .build(), invBackup, playerProfile));
-            i++;
+        if(fatherMenu == null) {
+            List<Button> buttons = new ObjectArrayList<>();
+            int i = 0;
+            for (PlayerInvBackup invBackup : backups) {
+                buttons.add(new ShowInvBackupButton(backups,
+                        new ItemBuilder(Material.BOOK)
+                                .name("&a备份时间: " + format.format(invBackup.getTimeStamp()))
+                                .lore(("&e物品数: " + InventoryUtil.getInventoryFilledSlots(invBackup.getInv().getContents())))
+                                .amount(Math.min(64, InventoryUtil.getInventoryFilledSlots(invBackup.getInv().getContents())))
+                                .build(), invBackup, playerProfile));
+                i++;
+            }
+            Collections.reverse(buttons);
+            fatherMenu = new PagedMenu(playerProfile.getPlayerName() + " 的背包备份", buttons);
         }
-
-        Collections.reverse(buttons);
-
-        buttonMap.put(41, new BackButton(new PagedMenu(playerProfile.getPlayerName() + " 的背包备份", buttons)));
+        buttonMap.put(41, new BackButton(fatherMenu));
 
         return buttonMap;
     }

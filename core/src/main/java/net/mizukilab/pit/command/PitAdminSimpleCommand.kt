@@ -2,6 +2,7 @@ package net.mizukilab.pit.command
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.CDKData
+import cn.charlotte.pit.data.PlayerInvBackup
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.events.EventsHandler.refreshEvents
 import dev.rollczi.litecommands.annotations.argument.Arg
@@ -323,10 +324,14 @@ class PitAdminSimpleCommand {
         if (profile.profile() == null) {
             return CC.translate("&c该玩家不存在")
         }
-        val backups = ObjectArrayList(profile.profile().invBackups.iterator())
+        val backups: MutableList<PlayerInvBackup> = mutableListOf()
+        profile.profile().invBackups.forEach {
+            backups.add(it)
+        }
 
         val buttons: MutableList<Button?> = ObjectArrayList()
         var i = 0
+        val menuPtr = PagedMenu(profile.profile().playerName + " 的背包备份",null)
         for (invBackup in backups) {
             if (invBackup.inv == null) continue
             buttons.add(
@@ -337,15 +342,15 @@ class PitAdminSimpleCommand {
                             min(
                                 64.0, InventoryUtil.getInventoryFilledSlots(invBackup.inv.contents).toDouble()
                             ).toInt()
-                        ).build(), invBackup, profile.profile()
+                        ).build(), invBackup,menuPtr, profile.profile()
                 )
             )
             i++
         }
 
         buttons.reverse()
-
-        PagedMenu(profile.profile().playerName + " 的背包备份", buttons).openMenu(player)
+        menuPtr.flushButton(buttons)
+        menuPtr.openMenu(player)
         return CC.translate("总计: $i 个")
     }
 

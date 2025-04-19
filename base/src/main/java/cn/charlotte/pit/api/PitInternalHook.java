@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.util.hologram.Hologram;
+import net.mizukilab.pit.util.menu.Menu;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +26,7 @@ public interface PitInternalHook {
     void openTradeTrackMenu(Player player, PlayerProfile profile, List<TradeData> data);
 
     void openBackupShowMenu(Player player, PlayerProfile profile, List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean enderChest);
+    void openBackupShowMenu(Player player, PlayerProfile profile, List<PlayerInvBackup> backups, PlayerInvBackup backup, Menu previousMenu, boolean enderChest);
 
     void openMenu(Player player, String menuName);
 

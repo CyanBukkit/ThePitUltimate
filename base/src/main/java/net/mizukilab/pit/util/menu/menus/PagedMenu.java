@@ -19,7 +19,7 @@ import java.util.Map;
 public class PagedMenu extends Menu {
 
     private final String title;
-    private final List<Button> buttons;
+    private List<Button> buttons;
     private final Map<Integer, Button> extraButtons;
     private final int[] displaySlots = new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
 
@@ -37,7 +37,9 @@ public class PagedMenu extends Menu {
         this.extraButtons = extraButtons;
     }
 
-
+    public void flushButton(List<Button> buttons){
+        this.buttons = buttons;
+    }
     @Override
     public String getTitle(Player player) {
         String title = this.title;

@@ -16,7 +16,7 @@ public class PlayerInvSerializer extends JsonSerializer<PlayerInv> {
 
     @Override
     public void serialize(PlayerInv value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        try {
+        try {;
             gen.writeStartObject();
             gen.writeStringField("inv", InventoryUtil.playerInvToString(value));
             gen.writeEndObject();
