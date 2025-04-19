@@ -49,7 +49,7 @@ public class EventFactory {
     }
 
     public void pushEvent(IEpicEvent event, boolean force) {
-        if (Bukkit.getOnlinePlayers().size() >= ((AbstractEvent) event).requireOnline()) {
+        if (force || Bukkit.getOnlinePlayers().size() >= ((AbstractEvent) event).requireOnline()) {
             readyEpicEvent(event);
         }
     }

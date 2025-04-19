@@ -1,6 +1,7 @@
 package net.mizukilab.pit.listener;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.data.sub.PerkData;
 import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.KillRecap;
@@ -481,29 +482,25 @@ public class GameEffectListener implements Listener {
     private void processPerksDMGed(EntityDamageByEntityEvent event, Player player, PlayerProfile profile, PerkFactory perkFactory, Set<AbstractPerk> disabledPerks, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         profile.getUnlockedPerkMap().values().forEach(i -> {
             AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
-            if (!abstractPerk.isPassive()) {
-                return;
-            }
-            if (disabledPerks.contains(abstractPerk)) {
-                return;
-            }
-            if (abstractPerk instanceof IPlayerDamaged ins) {
-                processPlayerDamaged(ins, i.getLevel(), player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
-            }
+            takeEffect(event, player, disabledPerks, finalDamage, boostDamage, cancel, i, abstractPerk);
         });
         profile.getChosePerk().values().forEach(i -> {
             AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
-            if (abstractPerk.isPassive()) {
-                return;
-            }
-            if (disabledPerks.contains(abstractPerk)) {
-                return;
-            }
-            if (abstractPerk instanceof IPlayerDamaged ins) {
-
-                processPlayerDamaged(ins, i.getLevel(), player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
-            }
+            takeEffect(event, player, disabledPerks, finalDamage, boostDamage, cancel, i, abstractPerk);
         });
+    }
+
+    private void takeEffect(EntityDamageByEntityEvent event, Player player, Set<AbstractPerk> disabledPerks, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel, PerkData i, AbstractPerk abstractPerk) {
+        if (abstractPerk.isPassive()) {
+            return;
+        }
+        if (disabledPerks.contains(abstractPerk)) {
+            return;
+        }
+        if (abstractPerk instanceof IPlayerDamaged ins) {
+
+            processPlayerDamaged(ins, i.getLevel(), player, event.getDamager(), event.getFinalDamage(), finalDamage, boostDamage, cancel);
+        }
     }
 
     @EventHandler
