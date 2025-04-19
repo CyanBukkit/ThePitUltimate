@@ -447,7 +447,7 @@ public class InventoryUtil {
         }
 
         if (illegalItems > 0) {
-            player.sendMessage(CC.translate("今从君之囊中寻得 &e『" + illegalItems + "』&c 异物，已悉数除却，恕罪。"));
+            player.sendMessage(CC.translate("&c今从君之囊中寻得 &e" + illegalItems + "&c 异物，已悉数除却，恕罪"));
         }
         if (playerProfile.getPlayerOption().isOutfit()) {
             if (ItemUtil.isDefaultItem(inventory.getHelmet())) {
