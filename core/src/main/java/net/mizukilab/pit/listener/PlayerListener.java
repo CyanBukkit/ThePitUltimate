@@ -104,6 +104,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
+
         ProfileLoadRunnable.getInstance().handleJoin(player);
         if (FuncsKt.isSpecial(player)) {
             hideBot(player);
@@ -362,6 +363,7 @@ public class PlayerListener implements Listener {
                 PerkData data = profile.getUnlockedPerkMap().get("Mythicism");
                 if (data != null) {
                     ThePit.getApi().openMythicWellMenu(event.getPlayer());
+                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.CHICKEN_EGG_POP, 1, 0.9F);
                     return;
                 }
                 event.getPlayer().sendMessage(CC.translate("&c你需要达到 " + LevelUtil.getLevelTag(0, 120) + " &c解锁精通玩法并解锁精通天赋 &6神话附魔师 &c以使用神话之井!"));
