@@ -148,7 +148,7 @@ public class CC {
 
     @SneakyThrows
     public static String printErrorWithCode(Exception e) {
-        StringBuilder sb = new StringBuilder();
+/*        StringBuilder sb = new StringBuilder();
         sb.append(e.toString()).append("\n");
         for (StackTraceElement element : e.getStackTrace()) {
             sb.append("在 ")
@@ -167,7 +167,8 @@ public class CC {
             JsonObject responseObject = gson.fromJson(EntityUtils.toString(response.getEntity()), JsonObject.class);
             return responseObject.get("key").getAsString();
         }
-        client.close();
+        client.close();*/
+        System.out.println(e.getMessage());
         return "FAILED";
     }
 
