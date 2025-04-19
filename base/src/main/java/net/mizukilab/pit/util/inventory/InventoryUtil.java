@@ -223,6 +223,7 @@ public class InventoryUtil {
 
         return builder.toString();
     }
+
     private static void serializeItemStack(StringBuilder builder, ItemStack[] armor) {
         for (int i = 0; i < armor.length; i++) {
             if (i == 3) {
@@ -373,7 +374,7 @@ public class InventoryUtil {
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
         int slot = 0;
-        int illegalItems = -1;
+        int illegalItems = 0;
         PlayerInventory inventory = player.getInventory();
         for (ItemStack item : inventory) {
             if (item == null) {
@@ -431,48 +432,47 @@ public class InventoryUtil {
                 inventory.addItem(new ItemBuilder(Material.COBBLESTONE).deathDrop(true).amount(32 - cobblestone).canDrop(false).canSaveToEnderChest(false).internalName("perk_miner").build());
             }
         }
-        if (ItemUtil.isIllegalItem(inventory.getHelmet()) || ItemUtil.isRemovedOnJoin(inventory.getHelmet())) {
-            inventory.setHelmet(null);
-            illegalItems++;
-        }
-        if (ItemUtil.isIllegalItem(inventory.getChestplate()) || ItemUtil.isRemovedOnJoin(inventory.getChestplate())) {
-            inventory.setChestplate(null);
-            illegalItems++;
-        }
-        if (ItemUtil.isIllegalItem(inventory.getLeggings()) || ItemUtil.isRemovedOnJoin(inventory.getLeggings())) {
-            inventory.setLeggings(null);
-            illegalItems++;
-        }
-        if (ItemUtil.isIllegalItem(inventory.getBoots()) || ItemUtil.isRemovedOnJoin(inventory.getBoots())) {
-            inventory.setBoots(null);
-            illegalItems++;
+        for (ArmorType type : ArmorType.values()) {
+            ItemStack armorPiece = inventory.getItem(type.ordinal());
+            if (armorPiece == null) {
+                continue;
+            }
+            boolean isIllegal = ItemUtil.isIllegalItem(armorPiece);
+            boolean isRemoved = ItemUtil.isRemovedOnJoin(armorPiece);
+
+            if (isIllegal || isRemoved) {
+                inventory.setItem(type.ordinal(), null);
+                if (isIllegal) {
+                    illegalItems++;
+                }
+            }
         }
 
         if (illegalItems > 0) {
             player.sendMessage(CC.translate("&c今从君之囊中寻得 &e" + illegalItems + "&c 异物，已悉数除却，恕罪"));
         }
         if (playerProfile.getPlayerOption().isOutfit()) {
-        if (ItemUtil.isDefaultItem(inventory.getHelmet())) {
-            inventory.setHelmet(new ItemStack(Material.AIR));
-        }
-        if (ItemUtil.isDefaultItem(inventory.getChestplate())) {
-            inventory.setChestplate(new ItemStack(Material.AIR));
-        }
-        if (ItemUtil.isDefaultItem(inventory.getLeggings())) {
-            inventory.setLeggings(new ItemStack(Material.AIR));
-        }
-        if (ItemUtil.isDefaultItem(inventory.getBoots())) {
-            inventory.setBoots(new ItemStack(Material.AIR));
-        }
+            if (ItemUtil.isDefaultItem(inventory.getHelmet())) {
+                inventory.setHelmet(new ItemStack(Material.AIR));
+            }
+            if (ItemUtil.isDefaultItem(inventory.getChestplate())) {
+                inventory.setChestplate(new ItemStack(Material.AIR));
+            }
+            if (ItemUtil.isDefaultItem(inventory.getLeggings())) {
+                inventory.setLeggings(new ItemStack(Material.AIR));
+            }
+            if (ItemUtil.isDefaultItem(inventory.getBoots())) {
+                inventory.setBoots(new ItemStack(Material.AIR));
+            }
 
-        if (!swordFound) {
-            inventory
-                    .addItem(DEFAULT_SWORD);
-        }
-        if (!bowFound) {
-            inventory
-                    .addItem(DEFAULT_BOW);
-        }
+            if (!swordFound) {
+                inventory
+                        .addItem(DEFAULT_SWORD);
+            }
+            if (!bowFound) {
+                inventory
+                        .addItem(DEFAULT_BOW);
+            }
         }
         /*
         player.getInventory()
@@ -525,6 +525,10 @@ public class InventoryUtil {
                 }
             }
         }
+    }
+
+    enum ArmorType {
+        HELMET, CHESTPLATE, LEGGINGS, BOOTS
     }
 
     public static int getArmorSlot(Material material) {

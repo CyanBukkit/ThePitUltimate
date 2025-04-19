@@ -66,7 +66,6 @@ public class HealShieldEnchant extends AbstractEnchantment implements IPlayerDam
         return "&7每 &e" + (30 - enchantLevel * 5) + " &7秒获得一层护盾 (可以抵消1次玩家伤害)"
                 + "/s&7(最高3层) , 每层护盾破裂恢复自身 &c20% &7最大生命值";
     }
-
     @Override
     @PlayerOnly
     public void handlePlayerDamaged(int enchantLevel, Player myself, Entity attacker, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
@@ -74,31 +73,29 @@ public class HealShieldEnchant extends AbstractEnchantment implements IPlayerDam
         if (shield.get(myself.getUniqueId()) > 0) {
             shield.put(myself.getUniqueId(), shield.get(myself.getUniqueId()) - 1);
             cancel.set(true);
-            myself.sendMessage(CC.translate("&c你的一层护盾因受到攻击而破裂！ 剩余层数: " + shield.get(myself.getUniqueId())));
-            attacker.sendMessage(CC.translate("&c对方的一层护盾抵消了你的攻击而破裂！"));
-            ((Player) attacker).playSound(attacker.getLocation(), Sound.ANVIL_LAND, 1, 1);
-            myself.playSound(attacker.getLocation(), Sound.ANVIL_LAND, 1, 1);
+            myself.sendMessage(CC.translate("&c你的一层护盾因受到攻击而破裂! 剩余层数: " + shield.get(myself.getUniqueId())));
+            attacker.sendMessage(CC.translate("&c对方的一层护盾抵消了你的攻击而破裂!"));
+            if (attacker instanceof Player) {
+                ((Player) attacker).playSound(attacker.getLocation(), Sound.ANVIL_LAND, 1, 1);
+            }
+            myself.playSound(myself.getLocation(), Sound.ANVIL_LAND, 1, 1);
             PlayerUtil.heal(myself, 0.2 * myself.getMaxHealth());
         }
     }
 
     @Override
     public void handle(int enchantLevel, Player player) {
-        if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) {
-            return;
-        }
+        if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) return;
         shield.putIfAbsent(player.getUniqueId(), 0);
         cooldown.putIfAbsent(player.getUniqueId(), new Cooldown(30 - enchantLevel * 5L, TimeUnit.SECONDS));
-        if (shield.get(player.getUniqueId()) < 3) {
-            if (cooldown.get(player.getUniqueId()).hasExpired()) {
-                cooldown.put(player.getUniqueId(), new Cooldown(30 - enchantLevel * 5L, TimeUnit.SECONDS));
-                shield.put(player.getUniqueId(), shield.get(player.getUniqueId()) + 1);
-                CC.send(MessageType.MISC, player, "&a你恢复了一层护盾,当前护盾层数: " + shield.get(player.getUniqueId()) + "/3");
-            }
-        } else {
-            cooldown.put(player.getUniqueId(), new Cooldown(0));
+        if (cooldown.get(player.getUniqueId()).hasExpired()) {
+            cooldown.put(player.getUniqueId(), new Cooldown(30 - enchantLevel * 5L, TimeUnit.SECONDS));
+            int currentShieldCount = Math.min(shield.get(player.getUniqueId()) + 1, 3);
+            shield.put(player.getUniqueId(), currentShieldCount);
+            CC.send(MessageType.MISC, player, "&a你恢复了一层护盾,当前护盾层数: " + currentShieldCount + "/3");
         }
     }
+
 
     @Override
     public int loopTick(int enchantLevel) {
@@ -113,3 +110,4 @@ public class HealShieldEnchant extends AbstractEnchantment implements IPlayerDam
         return (shield.get(player.getUniqueId()) < 3 ? "&e&l" : "&a&l") + shield.get(player.getUniqueId()) + "/3 " + duration;
     }
 }
+
