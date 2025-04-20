@@ -12,21 +12,14 @@ import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.concurrent.TimeUnit;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.enchantment.type.rare.PaparazziEnchant;
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
 import net.mizukilab.pit.perk.type.prestige.SelfConfidencePerk;
@@ -42,13 +35,9 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -71,7 +60,14 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
     private final Map<UUID, PlayerBlockHeadData> dataMap = new HashMap<>();
     private final Map<UUID, Integer> rankMap = new HashMap<>();
     public final Map<UUID, PowerUP> pup = new HashMap<>();
-    private static final List<Material> canBeUsed = Arrays.asList(Material.STONE, Material.GRASS, Material.DIRT, Material.COBBLESTONE, Material.WOOD, Material.BEDROCK, Material.STATIONARY_LAVA, Material.SAND, Material.GRAVEL, Material.GOLD_ORE, Material.IRON_ORE, Material.COAL_ORE, Material.LOG, Material.LEAVES, Material.SPONGE, Material.GLASS, Material.LAPIS_ORE, Material.LAPIS_BLOCK, Material.DISPENSER, Material.SANDSTONE, Material.NOTE_BLOCK, Material.BED_BLOCK, Material.PISTON_STICKY_BASE, Material.WOOL, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.BRICK, Material.TNT, Material.BOOKSHELF, Material.MOSSY_COBBLESTONE, Material.OBSIDIAN, Material.WOOD_STAIRS, Material.CHEST, Material.DIAMOND_ORE, Material.DIAMOND_BLOCK, Material.WORKBENCH, Material.SOIL, Material.FURNACE, Material.BURNING_FURNACE, Material.WOODEN_DOOR, Material.COBBLESTONE_STAIRS, Material.REDSTONE_ORE, Material.SNOW, Material.ICE, Material.SNOW_BLOCK, Material.CACTUS, Material.CLAY, Material.JUKEBOX, Material.PUMPKIN, Material.NETHERRACK, Material.SOUL_SAND, Material.GLOWSTONE, Material.PORTAL, Material.STAINED_GLASS, Material.SMOOTH_BRICK, Material.THIN_GLASS, Material.MELON_BLOCK, Material.PUMPKIN_STEM, Material.MELON_STEM, Material.VINE, Material.FENCE_GATE, Material.BRICK_STAIRS, Material.SMOOTH_STAIRS, Material.MYCEL, Material.NETHER_BRICK, Material.ENDER_STONE, Material.EMERALD_ORE, Material.TRIPWIRE_HOOK, Material.EMERALD_BLOCK, Material.HAY_BLOCK, Material.OBSIDIAN);
+    private static final List<Material> canBeUsed = Arrays.asList(Material.STONE, Material.GRASS, Material.DIRT, Material.COBBLESTONE, Material.WOOD, Material.BEDROCK
+            , Material.GOLD_ORE, Material.IRON_ORE, Material.COAL_ORE
+            , Material.LOG, Material.LAPIS_ORE,
+            Material.LAPIS_BLOCK, Material.SANDSTONE, Material.NOTE_BLOCK, Material.BED_BLOCK, Material.PISTON_STICKY_BASE
+            , Material.WOOL, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.BRICK, Material.TNT, Material.BOOKSHELF, Material.MOSSY_COBBLESTONE, Material.OBSIDIAN,
+            Material.DIAMOND_ORE, Material.DIAMOND_BLOCK , Material.FURNACE, Material.BURNING_FURNACE,  Material.REDSTONE_ORE, Material.ICE, Material.GLOWSTONE, Material.SMOOTH_BRICK, Material.MELON_BLOCK
+            , Material.PUMPKIN_STEM, Material.MELON_STEM,
+           Material.NETHER_BRICK, Material.ENDER_STONE, Material.EMERALD_ORE, Material.OBSIDIAN);
     private final Map<String, BlockData> oriBlock = new HashMap<>();
     private  final List<Material> selectedMaterials = new ArrayList<>();
     private final List<Entity> entities = new ArrayList<>();
@@ -79,31 +75,6 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
     private BukkitRunnable runnable;
     private int allblocks = 0;
     private static final Random random = new Random();
-    private static final List<Location> powerup;
-
-
-    static {
-        World world = Bukkit.getWorld("world");
-        powerup = new ArrayList<>(Arrays.asList(
-                new Location(world, 42.5, 39.1, -72.5),
-                new Location(world, 78.5, 38.1, 41.5),
-                new Location(world, -47.5, 47.1, 70.5),
-                new Location(world, -50.5, 40.1, -63.5),
-                new Location(world, -2.5, 40.1, -35.5),
-                new Location(world, 30.5, 40.1, -1.5),
-                new Location(world, -1.5, 40.1, 30.5),
-                new Location(world, -33.5, 40.1, -1.5),
-                new Location(world, -92.5, 42.1, 31.5),
-                new Location(world, -66.5, 39.1, -40.5),
-                new Location(world, -14.5, 41.1, -65.5),
-                new Location(world, 75.5, 39.1, -18.5),
-                new Location(world, 94.5, 39.1, -57.5),
-                new Location(world, 11.5, 40.1, -88.5),
-                new Location(world, -102.5, 56.1, 34.5),
-                new Location(world, 51.5, 38.1, 72.5),
-                new Location(world, -41.5, 39.5, 51.5)
-        ));
-    }
 
 
     @Override
@@ -129,29 +100,37 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
+        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        if(!profile.isLoaded() || profile.isInArena()){
+            return;
+        }
         PlayerBlockHeadData data = dataMap.get(player.getUniqueId());
-        if (System.currentTimeMillis() - get(player, "trail") < 15000) {
-            if (!player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.AIR) && !player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.STATIONARY_WATER) && !player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.SNOW)) {
-                Location belowLocation = new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() - 1, player.getLocation().getZ());
-                if (oriBlock.containsKey(loc(belowLocation))) {
-                    Player blockBelonger = oriBlock.get(loc(belowLocation)).getBelonger();
-                    if (dataMap.containsKey(blockBelonger.getUniqueId())) {
-                        dataMap.get(blockBelonger.getUniqueId()).belong --;
+
+        if(data != null) {
+            if (System.currentTimeMillis() - get(player, "trail") < 15000) {
+                if (!player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.AIR) && !player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.STATIONARY_WATER) && !player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.SNOW)) {
+                    Location belowLocation = new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() - 1, player.getLocation().getZ());
+                    if (oriBlock.containsKey(loc(belowLocation))) {
+                        Player blockBelonger = oriBlock.get(loc(belowLocation)).getBelonger();
+                        if (dataMap.containsKey(blockBelonger.getUniqueId())) {
+                            dataMap.get(blockBelonger.getUniqueId()).belong--;
+                        }
+                        oriBlock.get(loc(belowLocation)).setBelonger(player);
+                        data.belong++;
+                        belowLocation.getBlock().setType(data.block);
+                    } else {
+                        BlockData blockData = new BlockData(belowLocation.getBlock().getType(), belowLocation.getBlock().getData(), player);
+                        oriBlock.put(loc(belowLocation), blockData);
+                        data.belong++;
+                        allblocks++;
+                        belowLocation.getBlock().setType(data.block);
                     }
-                    oriBlock.get(loc(belowLocation)).setBelonger(player);
-                    data.belong++;
-                    belowLocation.getBlock().setType(data.block);
-                } else {
-                    BlockData blockData = new BlockData(belowLocation.getBlock().getType(), belowLocation.getBlock().getData(), player);
-                    oriBlock.put(loc(belowLocation), blockData);
-                    data.belong++;
-                    allblocks++;
-                    belowLocation.getBlock().setType(data.block);
                 }
             }
         }
         entities.forEach(nearbyEntities -> {
-            if (nearbyEntities.getType() != EntityType.ARMOR_STAND && nearbyEntities.getLocation().distanceSquared(player.getLocation()) > 1){
+            Location location = nearbyEntities.getLocation();
+            if (nearbyEntities.getType() != EntityType.ARMOR_STAND || nearbyEntities.isDead() || (location.distanceSquared(player.getLocation()) > 1 && location.subtract(0,-1,0).distanceSquared(player.getLocation()) > 1)){
                 return;
             }
             ArmorStand stand = (ArmorStand) nearbyEntities;
@@ -177,7 +156,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                 inventory.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
                 inventory.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
                 inventory.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-                if (!InventoryUtil.isInvFull(player,3)) {
+                if (!InventoryUtil.isInvFull(player,2)) {
                     if(chestplate != null){
                      inventory.addItem(chestplate);
                     }
@@ -207,6 +186,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                 player.playSound(player.getLocation(), Sound.ORB_PICKUP, 100.0f, 1.0f);
                 player.sendMessage(CC.translate("&9&l战斗加成！ &7击杀玩家后,方块爆炸的半径增加！"));
             }
+            stand.remove();
         });
     }
 
@@ -312,8 +292,10 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
         for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.setDropItem(false);
         }
-
-        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> victim.getInventory().setHelmet(new ItemStack(victimData.block)), 10L);
+        if (victim.getInventory().getHelmet() == null) {
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> victim.getInventory().setHelmet(new ItemStack(victimData.block)), 10L);
+        }
+        pup.remove(victim.getUniqueId());
     }
 
     @EventHandler
@@ -341,144 +323,144 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @Override
     public void onActive() {
-        Bukkit.getPluginManager().registerEvents(this, ThePit.getInstance());
-        selectedMaterials.clear();
-        this.allblocks = 0;
-        this.timer = new Cooldown(5L, TimeUnit.MINUTES);
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                if (BlockHeadEvent.this.timer.hasExpired()) {
-                    this.cancel();
-                    if (BlockHeadEvent.this.equals(ThePit.getInstance().getEventFactory().getActiveEpicEvent())) {
-                        ThePit.getInstance().getEventFactory().inactiveEvent(BlockHeadEvent.this);
-                    }
+        Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+            Bukkit.getPluginManager().registerEvents(this, ThePit.getInstance());
+            selectedMaterials.clear();
+            this.allblocks = 0;
+            this.timer = new Cooldown(5L, TimeUnit.MINUTES);
+            List<String> types = Arrays.asList("quicktrail", "combatboost", "superheal", "diamondarmor");
+
+            for (Location location : ThePit.getInstance().getPitConfig().getBlockHeadLocations()) {
+                entities.add(spawnPowerUp(location, types.get(random.nextInt(types.size()))));
+            }
+
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                player.sendMessage(CC.translate("&5&l大型事件！ &9&l方块划地战 &7事件开始！"));
+                if (PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).isLoaded()) {
+                    newdata(player);
                 }
             }
-        }.runTaskTimer(ThePit.getInstance(), 20L, 20L);
-        List<String> types = Arrays.asList("quicktrail", "combatboost", "superheal", "diamondarmor");
-        for (Location location : powerup) {
-            entities.add(spawnPowerUp(location, types.get(random.nextInt(types.size()))));
-        }
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            player.sendMessage(CC.translate("&5&l大型事件！ &9&l方块划地战 &7事件开始！"));
-            if (PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).isLoaded()) {
-                newdata(player);
-            }
-        }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (BlockHeadEvent.this.timer.hasExpired()) {
+                        this.cancel();
+                        if (BlockHeadEvent.this.equals(ThePit.getInstance().getEventFactory().getActiveEpicEvent())) {
+                            ThePit.getInstance().getEventFactory().inactiveEvent(BlockHeadEvent.this);
+                        }
+                    } else {
+                        List<Entity> curEnt = new ArrayList<>(entities.size());
+                        Iterator<Entity> iterator = entities.iterator();
+                        while (iterator.hasNext()) {
+                            Entity entity = iterator.next();
+                            if(entity.isDead()){
+                                iterator.remove();
+                                curEnt.add(spawnPowerUp(entity.getLocation(), types.get(random.nextInt(types.size()))));
+                            }
+                        }
+                        entities.addAll(curEnt);
+                    }
+                }
+            }.runTaskTimer(ThePit.getInstance(), 20L, 20L);
+
+        });
     }
 
     @Override
     public void onInactive() {
-        ThePit.getInstance().getBossBar().getBossBar().setTitle("");
-        HashSet<Map.Entry<UUID, PlayerBlockHeadData>> entry = new HashSet<>(dataMap.entrySet());
-        List collect = entry.stream().map(Map.Entry::getValue).sorted(Comparator.comparingDouble(PlayerBlockHeadData::getBelong).reversed()).collect(Collectors.toList());
-        int rank = 1;
-        for (Object data : collect) {
-            Player player = Bukkit.getPlayer(((PlayerBlockHeadData)data).uuid);
-            if (player == null || !player.isOnline()) {
-                continue;
-            }
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-            if(!profile.isLoaded()){
-                continue;
-            }
-            player.sendMessage(CC.GOLD + CC.CHAT_BAR);
-            player.sendMessage(CC.translate("&6&l天坑事件结束: &c" + this.getEventName()));
-            double rewardCoins = 0.0;
-            int rewardRenown = 0;
-            if (rank <= 3) {
-                rewardCoins += 2000.0;
-                rewardRenown += 2;
-            } else if (rank <= 20) {
-                rewardCoins += 500.0;
-                ++rewardRenown;
-            } else {
-                rewardCoins += 100.0;
-            }
-            if (allblocks >= 10000) {
-                rewardCoins = 1250;
-            }
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
-                ++rewardRenown;
-            }
-            int enchantBoostLevel = ThePit.getInstance().getEnchantmentFactor().getEnchantmentMap().get("paparazzi_enchant").getItemEnchantLevel(player.getInventory().getLeggings());
-            if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) {
-                enchantBoostLevel = 0;
-            }
-            if (enchantBoostLevel > 0) {
-                rewardCoins += 0.5 * (double)enchantBoostLevel * rewardCoins;
-                rewardRenown = (int)((double)rewardRenown + Math.floor(0.5 * (double)enchantBoostLevel * (double)rewardRenown));
-                MythicLeggingsItem mythicLeggings = new MythicLeggingsItem();
-                mythicLeggings.loadFromItemStack(player.getInventory().getLeggings());
-                if (mythicLeggings.isEnchanted()) {
-                    if (mythicLeggings.getMaxLive() > 0 && mythicLeggings.getLive() <= 2) {
-                        player.getInventory().setLeggings(new ItemStack(Material.AIR));
-                    } else {
-                        mythicLeggings.setLive(mythicLeggings.getLive() - 2);
-                        player.getInventory().setLeggings(mythicLeggings.toItemStack());
+        Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+            ThePit.getInstance().getBossBar().getBossBar().setTitle("");
+            HashSet<Map.Entry<UUID, PlayerBlockHeadData>> entry = new HashSet<>(dataMap.entrySet());
+            List collect = entry.stream().map(Map.Entry::getValue).sorted(Comparator.comparingDouble(PlayerBlockHeadData::getBelong).reversed()).collect(Collectors.toList());
+            int rank = 1;
+            for (Object data : collect) {
+                Player player = Bukkit.getPlayer(((PlayerBlockHeadData)data).uuid);
+                if (player == null || !player.isOnline()) {
+                    continue;
+                }
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+                if(!profile.isLoaded()){
+                    continue;
+                }
+                player.sendMessage(CC.GOLD + CC.CHAT_BAR);
+                player.sendMessage(CC.translate("&6&l天坑事件结束: &c" + this.getEventName()));
+                double rewardCoins = 0.0;
+                int rewardRenown = 0;
+                if (rank <= 3) {
+                    rewardCoins += 2000.0;
+                    rewardRenown += 2;
+                } else if (rank <= 20) {
+                    rewardCoins += 500.0;
+                    ++rewardRenown;
+                } else {
+                    rewardCoins += 100.0;
+                }
+                if (allblocks >= 10000) {
+                    rewardCoins = 1250;
+                }
+                if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+                    ++rewardRenown;
+                }
+                if (PlayerUtil.isPlayerUnlockedPerk(player, "self_confidence")) {
+                    if (rank <= 5) {
+                        rewardCoins += 5000.0;
+                    } else if (rank <= 10) {
+                        rewardCoins += 2500.0;
+                    } else if (rank <= 15) {
+                        rewardCoins += 1000.0;
                     }
                 }
-            }
-            if (PlayerUtil.isPlayerUnlockedPerk(player, "self_confidence")) {
-                if (rank <= 5) {
-                    rewardCoins += 5000.0;
-                } else if (rank <= 10) {
-                    rewardCoins += 2500.0;
-                } else if (rank <= 15) {
-                    rewardCoins += 1000.0;
+                profile.grindCoins(rewardCoins);
+                profile.setCoins(profile.getCoins() + rewardCoins);
+                profile.setRenown(profile.getRenown() + rewardRenown);
+                //KingQuestData.addQuestRenown(player, rewardRenown);
+                player.sendMessage(CC.translate("&6你的奖励: &6+" + rewardCoins + "硬币 &e+" + rewardRenown + "声望"));
+                if (allblocks >= 10000) {
+                    player.sendMessage(CC.translate("&6&l全局奖励: &a&l成功！ &7所有人额外获得1250硬币！"));
+                } else {
+                    player.sendMessage(CC.translate("&6&l全局奖励: &c&l失败！ &7全服只占领了" + allblocks + "个方块"));
                 }
-            }
-            profile.grindCoins(rewardCoins);
-            profile.setCoins(profile.getCoins() + rewardCoins);
-            profile.setRenown(profile.getRenown() + rewardRenown);
-            //KingQuestData.addQuestRenown(player, rewardRenown);
-            player.sendMessage(CC.translate("&6你的奖励: &6+" + rewardCoins + "硬币 &e+" + rewardRenown + "声望"));
-            if (allblocks >= 10000) {
-                player.sendMessage(CC.translate("&6&l全局奖励: &a&l成功！ &7所有人额外获得1250硬币！"));
-            } else {
-                player.sendMessage(CC.translate("&6&l全局奖励: &c&l失败！ &7全服只占领了" + allblocks + "个方块"));
-            }
-            player.sendMessage(CC.translate("&6&l你: &7共占领了 " + dataMap.get(player.getUniqueId()).belong + " 个方块！ &7(排名#" + getRank(player) + ")"));
-            if (collect.size() >= 3) {
-                player.sendMessage(CC.translate("&6顶级玩家: "));
-                for (int i = 0; i < 3; ++i) {
-                    Player top = Bukkit.getPlayer(((PlayerBlockHeadData)collect.get(i)).uuid);
-                    if (top == null || !top.isOnline()) {
-                        continue;
+                player.sendMessage(CC.translate("&6&l你: &7共占领了 " + dataMap.get(player.getUniqueId()).belong + " 个方块！ &7(排名#" + getRank(player) + ")"));
+                if (collect.size() >= 3) {
+                    player.sendMessage(CC.translate("&6顶级玩家: "));
+                    for (int i = 0; i < 3; ++i) {
+                        Player top = Bukkit.getPlayer(((PlayerBlockHeadData)collect.get(i)).uuid);
+                        if (top == null || !top.isOnline()) {
+                            continue;
+                        }
+                        PlayerProfile topProfile = PlayerProfile.getPlayerProfileByUuid(top.getUniqueId());
+                        player.sendMessage(CC.translate(" &e&l#" + (i + 1) + " " + topProfile.getFormattedName() + " &9共占领了 &e" + dataMap.get(top.getUniqueId()).belong + " &9个方块"));
                     }
-                    PlayerProfile topProfile = PlayerProfile.getPlayerProfileByUuid(top.getUniqueId());
-                    player.sendMessage(CC.translate(" &e&l#" + (i + 1) + " " + topProfile.getFormattedName() + " &9共占领了 &e" + dataMap.get(top.getUniqueId()).belong + " &9个方块"));
+                }
+                player.sendMessage(CC.GOLD + CC.CHAT_BAR);
+                ++rank;
+            }
+            allblocks = 0;
+            HandlerList.unregisterAll(this);
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+                profile.setTempInvUsing(false);
+                PlayerBlockHeadData data = dataMap.get(player.getUniqueId());
+                if (data != null) {
+                    dataMap.remove(player.getUniqueId());
+                }
+                PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getInventory().applyItemToPlayer(player);
+            }
+            entities.removeIf(i -> {
+                i.remove();
+                return true;
+            });
+            for (String loc : oriBlock.keySet()) {
+                Location location = toLoc(loc);
+                BlockData blockData = oriBlock.get(loc);
+                if (oriBlock.get(loc) != null) {
+                    location.getBlock().setType(blockData.getType());
+                    location.getBlock().setData(blockData.getData());
                 }
             }
-            player.sendMessage(CC.GOLD + CC.CHAT_BAR);
-            ++rank;
-        }
-        allblocks = 0;
-        HandlerList.unregisterAll(this);
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-            profile.setTempInvUsing(false);
-            PlayerBlockHeadData data = dataMap.get(player.getUniqueId());
-            if (data != null) {
-                dataMap.remove(player.getUniqueId());
-            }
-            PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getInventory().applyItemToPlayer(player);
-        }
-        entities.removeIf(i -> {
-            i.remove();
-            return true;
+            oriBlock.clear();
+            pup.clear();
         });
-        for (String loc : oriBlock.keySet()) {
-            Location location = toLoc(loc);
-            BlockData blockData = oriBlock.get(loc);
-            if (oriBlock.get(loc) != null) {
-                location.getBlock().setType(blockData.getType());
-                location.getBlock().setData(blockData.getData());
-            }
-        }
-        oriBlock.clear();
-        pup.clear();
     }
 
     @Override

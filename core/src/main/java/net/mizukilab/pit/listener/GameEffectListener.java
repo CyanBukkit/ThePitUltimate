@@ -451,7 +451,8 @@ public class GameEffectListener implements Listener {
     private void processPerkATK(EntityDamageByEntityEvent event, PlayerProfile profile, PerkFactory perkFactory, Set<AbstractPerk> disabledPerks, Player finalDamager1, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         profile.getUnlockedPerkMap().values().forEach(i -> {
             AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
-            if (!abstractPerk.isPassive()) {
+
+            if (abstractPerk == null || !abstractPerk.isPassive()) {
                 return;
             }
             if (disabledPerks.contains(abstractPerk)) {
@@ -465,7 +466,7 @@ public class GameEffectListener implements Listener {
         });
         profile.getChosePerk().values().forEach(i -> {
             AbstractPerk abstractPerk = i.getHandle(perkFactory.getPerkMap());
-            if (abstractPerk.isPassive()) {
+            if (abstractPerk == null || abstractPerk.isPassive()) {
                 return;
             }
             if (disabledPerks.contains(abstractPerk)) {
@@ -491,7 +492,7 @@ public class GameEffectListener implements Listener {
     }
 
     private void takeEffect(EntityDamageByEntityEvent event, Player player, Set<AbstractPerk> disabledPerks, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel, PerkData i, AbstractPerk abstractPerk) {
-        if (abstractPerk.isPassive()) {
+        if (abstractPerk == null || abstractPerk.isPassive()) {
             return;
         }
         if (disabledPerks.contains(abstractPerk)) {

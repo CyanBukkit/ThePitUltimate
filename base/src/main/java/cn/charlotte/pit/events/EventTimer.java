@@ -23,11 +23,21 @@ public class EventTimer implements Runnable {
     @Override
     public void run() {
 
+        final EventFactory factory = ThePit.getInstance().getEventFactory();
+
+        if (factory.getNormalEnd().hasExpired() || factory.getNextEpicEvent() != null) { // patch
+            INormalEvent activeNormalEvent = factory.getActiveNormalEvent();
+            if (activeNormalEvent != null) {
+                factory.inactiveEvent(activeNormalEvent);
+            }
+
+            cooldown = new Cooldown(3, TimeUnit.MINUTES);
+        }
+
         if (!cooldown.hasExpired()) {
             return;
         }
 
-        final EventFactory factory = ThePit.getInstance().getEventFactory();
         if (factory.getActiveEpicEvent() != null || factory.getActiveNormalEvent() != null) {
             cooldown.reset();
         }
@@ -44,14 +54,6 @@ public class EventTimer implements Runnable {
         }
 
         boolean b = min != 55 && min != 50;
-        if (factory.getNormalEnd().hasExpired()) { // patch
-            INormalEvent activeNormalEvent = factory.getActiveNormalEvent();
-            if (activeNormalEvent != null) {
-                factory.inactiveEvent(activeNormalEvent);
-            }
-
-            cooldown = new Cooldown(3, TimeUnit.MINUTES);
-        }
         if (b) {
             if (factory.getActiveEpicEvent() == null && factory.getNextEpicEvent() == null) {
                 if (factory.getActiveNormalEvent() == null) {

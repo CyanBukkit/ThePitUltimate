@@ -97,7 +97,17 @@ class PitAdminCommands {
 
         return CC.translate("&a成功!添加第" + num + "个出生点")
     }
-
+    @Execute(name = "readyEpic")
+    @Async
+    fun readyEpic(@Context player: Player) {
+        var nextEpicEvent = ThePit.getInstance().eventFactory.nextEpicEvent
+        if(nextEpicEvent != null) {
+            CC.boardCast("&c&l跳过! &f管理员已经跳过事件延迟")
+            ThePit.getInstance().eventFactory.nextEpicEventTimer.fastExpired()
+        } else {
+            player.sendMessage("There is no epic event currently available")
+        }
+    }
     @Execute(name = "loc")
     @Async
     fun dumpLocation(@Context player: Player) {
