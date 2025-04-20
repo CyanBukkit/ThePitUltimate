@@ -47,13 +47,7 @@ class DJEnchantButton(
     ) {
         if (ItemUtil.getInternalName(itemStack) == "mythic_leggings") {
             val leggingsItem = MythicLeggingsItem().apply {
-
-                if (tier < 1) {
-                    tier = 1
-                    maxLive = 3
-                    live = 3
-                }
-                this.enchantments.put(enchantment,1)
+                this.enchantments[enchantment] = 1
                 enchantmentRecords += EnchantmentRecord(
                     player.name,
                     "MusicRune",

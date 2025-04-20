@@ -69,14 +69,15 @@ class LuckyGem : AbstractPitItem(), Listener {
             CC.boardCast("&e&l幸运宝石! &f${player.name} &7使用了幸运宝石,个人运气提升!")
             Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), object : BukkitRunnable() {
                 private var tick = 0
-
                 override fun run() {
-                    if (tick >= 1200 || player == null || !player.isOnline) {
+                    if (tick >= 1200) {
+                        player.sendMessage(CC.translate("&e&l幸运! &7自身运气已降低。"))
+                        player.removeMetadata("lucky_gem", ThePit.getInstance())
                         this.cancel()
-                        if (tick >= 1200) {
-                            player.sendMessage(CC.translate("&e&l幸运! &7自身运气已降低。"))
-                            player.removeMetadata("lucky_gem", ThePit.getInstance())
-                        }
+                        return
+                    }
+                    if (!player.isOnline) {
+                        this.cancel()
                         return
                     }
 

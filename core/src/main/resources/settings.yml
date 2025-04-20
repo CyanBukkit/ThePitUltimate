@@ -1,5 +1,5 @@
 Name: ThePitUltimate
-Version: 4.0.7
+Version: 4.0.8
 EntryClass: net.mizukilab.pit.Loader
 EntryPoint: start
 InfPort: false
