@@ -196,7 +196,9 @@ public class ItemUtil {
     public static boolean isRemovedOnJoin(ItemStack item) {
         return getItemBoolData(item, "removeOnJoin");
     }
-
+    public static boolean isMythicItem(ItemStack stack){
+        return getVer(stack) != null;
+    }
     public static String getInternalName(ItemStack item) {
         return getItemStringData(item, "internal");
     }

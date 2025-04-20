@@ -360,6 +360,18 @@ public class InventoryUtil {
         }
         return true;
     }
+    public static boolean isInvFull(Player player,int vl) {
+        int vlC = 0;
+        for (ItemStack itemStack : player.getInventory()) {
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
+                vlC++;
+                if(vlC > vl) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     private static final ItemStack DEFAULT_SWORD = new ItemBuilder(Material.IRON_SWORD).internalName("default_sword").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable();
     private static final ItemStack DEFAULT_BOW = new ItemBuilder(Material.BOW).internalName("default_bow").defaultItem().canDrop(false).canSaveToEnderChest(false).buildWithUnbreakable();

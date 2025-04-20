@@ -1837,7 +1837,7 @@ public class PlayerProfile {
         this.lastRenameTime = lastRenameTime;
     }
 
-    private static class NullProfile extends PlayerProfile {
+    public static class NullProfile extends PlayerProfile {
         public NullProfile() {
             super(PlayerProfile.CONSTANT_UUID_BOT_UNLOADED_PLAYER, "NotLoadPlayer");
         }
