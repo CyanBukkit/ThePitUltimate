@@ -571,6 +571,7 @@ public class PlayerListener implements Listener {
 
     private void welcomePlayer(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+
         if (profile.isNicked()) {
             player.sendMessage(CC.translate("&2&l匿名模式! &7你现在对外显示的游戏名为: " + profile.getFormattedNameWithRoman()));
         }

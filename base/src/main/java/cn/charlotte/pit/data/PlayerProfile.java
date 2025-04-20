@@ -65,7 +65,6 @@ import java.util.concurrent.TimeUnit;
         "screenShareQQ",
         "mailData",
         "tempInvUsing",
-        "nicked",
         "nickPrestige",
         "nickLevel",
         "invBackups",
@@ -208,9 +207,14 @@ public class PlayerProfile {
     private KillRecap killRecap;
     private boolean screenShare;
     private String screenShareQQ;
+
+    //nick
     private boolean nicked;
+    private String nickName;
     private int nickPrestige;
     private int nickLevel;
+
+
     private boolean tempInvUsing;
     private boolean noDamageAnimations;
     private double liteStreakKill;
@@ -539,8 +543,8 @@ public class PlayerProfile {
             try {
                 final Player player = Bukkit.getPlayer(profile.getPlayerUuid());
                 if (player != null) {
-                    if (!player.getName().equals(player.getDisplayName())) {
-                        profile.nicked = true;
+                    if (profile.isNicked()) {
+                        player.setDisplayName(profile.nickName);
                         if (profile.prestige <= 0) {
                             profile.nickPrestige = 0;
                         } else {
@@ -1093,8 +1097,8 @@ public class PlayerProfile {
     }
 
     public String bountyColor() {
-      //  Player player = Bukkit.getPlayer(getPlayerUuid());
-       // if (player != null) {
+        //  Player player = Bukkit.getPlayer(getPlayerUuid());
+        // if (player != null) {
 //            boolean itemHasEnchant = Limit24520Ench.instance.isItemHasEnchant(player.getInventory().getLeggings());
 //            if (itemHasEnchant) {
 //                return "&d";
@@ -1630,6 +1634,15 @@ public class PlayerProfile {
 
     public void setNicked(boolean nicked) {
         this.nicked = nicked;
+    }
+
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getNickName() {
+        return nickName;
     }
 
     public int getNickPrestige() {

@@ -1020,8 +1020,9 @@ class PitCommands {
     @Permission("pit.nick")
     fun nick(@Context player: Player,@Arg("name") name: String) {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-        player.displayName = name
         profile.isNicked = true
+        profile.nickName = name
+        player.displayName = name
         player.sendMessage(CC.translate("&a成功设置名称: ${name}"))
     }
 
@@ -1031,6 +1032,7 @@ class PitCommands {
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
         player.displayName = player.name
         profile.isNicked = false
+        profile.nickName = player.name
         player.sendMessage(CC.translate("&c成功取消Nick"))
     }
 

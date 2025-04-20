@@ -146,6 +146,7 @@ public class NameTagImpl implements NametagAdapter {
                 displayName = displayName.substring(0, 15);
 
             }
+
             tags.add(new BufferedNametag(
                     i + "",
                     //&7 refers to Prefix
