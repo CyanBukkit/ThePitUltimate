@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scheduler.BukkitTask
 
 
 /**
@@ -57,8 +58,11 @@ class LuckyGem : AbstractPitItem(), Listener {
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
         val player = event.player
+        // 检查玩家手中是否有物品，避免空指针异常
+        val item = event.item ?: return
 
-        if ("lucky_gem" == ItemUtil.getInternalName(event.item)) {
+        if ("lucky_gem" == ItemUtil.getInternalName(item)) {
+            // 取消默认事件行为
             event.isCancelled = true
             event.setUseInteractedBlock(Event.Result.DENY)
             event.setUseItemInHand(Event.Result.DENY)
@@ -67,22 +71,27 @@ class LuckyGem : AbstractPitItem(), Listener {
             PlayerUtil.takeOneItemInHand(player)
             player.setMetadata("lucky_gem", FixedMetadataValue(ThePit.getInstance(), true))
             CC.boardCast("&e&l幸运宝石! &f${player.name} &7使用了幸运宝石,个人运气提升!")
-            Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), object : BukkitRunnable() {
-                private var tick = 0
+
+            var scheduledTask: BukkitTask? = null
+
+            val task = object : BukkitRunnable() {
+                var tick = 0
                 override fun run() {
+
                     if (tick >= 1200) {
                         player.sendMessage(CC.translate("&e&l幸运! &7自身运气已降低。"))
                         player.removeMetadata("lucky_gem", ThePit.getInstance())
-                        this.cancel()
+                        scheduledTask?.cancel()
                         return
                     }
-                    if (!player.isOnline) {
-                        this.cancel()
+
+                    if (!player.isOnline || player == null) {
+                        scheduledTask?.cancel()
                         return
                     }
 
                     ParticleBuilder(
-                        player.location.add(0.0, 2.0, 0.0),
+                        player.location.clone().add(0.0, 2.0, 0.0),
                         EnumParticle.VILLAGER_HAPPY
                     ).apply {
                         setVelocity(0.5f)
@@ -91,7 +100,8 @@ class LuckyGem : AbstractPitItem(), Listener {
                     }
                     tick++
                 }
-            }, 0L, 20L)
+            }
+            scheduledTask = task.runTaskTimer(ThePit.getInstance(), 0L, 20L)
         }
     }
 

@@ -64,6 +64,23 @@ import kotlin.math.min
 class PitAdminSimpleCommand {
     private val format: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
 
+
+    @Execute(name = "setportalPosA")
+    @Permission("pit.admin")
+    fun setportalPosA(@Context player: Player){
+        ThePit.getInstance().pitConfig.portalPosA = player.location
+        ThePit.getInstance().pitConfig.save()
+        player.sendMessage(CC.translate("&a设置传送门点位A"))
+    }
+
+    @Execute(name = "setportalPosB")
+    @Permission("pit.admin")
+    fun setportalPosB(@Context player: Player){
+        ThePit.getInstance().pitConfig.portalPosB = player.location
+        ThePit.getInstance().pitConfig.save()
+        player.sendMessage(CC.translate("&a设置传送门点位b"))
+    }
+
     @Execute(name = "openMenu")
     @Permission("pit.admin")
     fun openMenu(@Context player: Player, @Arg("menu") menu: String) {

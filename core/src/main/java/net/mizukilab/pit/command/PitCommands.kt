@@ -1016,6 +1016,23 @@ class PitCommands {
         return "§a成功取消重命名!"
     }
 
+    @Execute(name = "nick")
+    @Permission("pit.nick")
+    fun nick(@Context player: Player,@Arg("name") name: String) {
+        val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+        player.displayName = name
+        profile.isNicked = true
+        player.sendMessage(CC.translate("&a成功设置名称: ${name}"))
+    }
+
+    @Execute(name = "unnick")
+    @Permission("pit.nick")
+    fun unnick(@Context player: Player ) {
+        val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+        player.displayName = player.name
+        profile.isNicked = false
+        player.sendMessage(CC.translate("&c成功取消Nick"))
+    }
 
     @Execute(name = "python")
 
