@@ -217,6 +217,9 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
 
         PlayerBlockHeadData killerData = null;
         final PlayerBlockHeadData victimData = dataMap.get(victim.getUniqueId());
+        if(victimData == null){
+            return;
+        }
         if (killer != null) {
             killerData = dataMap.get(killer.getUniqueId());
         }
