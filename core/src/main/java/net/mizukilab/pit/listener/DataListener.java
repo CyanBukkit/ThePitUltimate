@@ -61,10 +61,8 @@ public class DataListener implements Listener {
                     profile.disallow();
                     checkIllegalProfile(profile);
                     profile.setLogin(false); //我草泥马
-                    profileOper.pending(i -> {
                         //fire at post
-                        profile.setInventoryUnsafe(playerInv).allow();
-                    });
+                    profile.setInventoryUnsafe(playerInv).allow();
                     triggerDeath(event, profile);
                     //handle Death
                     profile.setBounty(0);

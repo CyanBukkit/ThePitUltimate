@@ -31,10 +31,12 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
+import spg.lgdev.handler.MovementHandler
 import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -150,8 +152,11 @@ class BlockHeadEvent : AbstractEvent(), IEpicEvent, IScoreBoardInsert, Listener 
     override fun requireOnline(): Int {
         return Int.MAX_VALUE
     }
-
-    fun onMove(player: Player, from: Location, to: Location) {
+    @EventHandler
+    fun onMove(e: PlayerMoveEvent) {
+        val player: Player = e.player
+        val from: Location = e.from;
+        val to: Location = e.to
         for (data in buffCache) {
             if (!data.cooldown.hasExpired()) continue
 
