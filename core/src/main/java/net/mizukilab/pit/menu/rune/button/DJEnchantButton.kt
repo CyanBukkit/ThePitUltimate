@@ -2,11 +2,11 @@ package cn.charlotte.pit.menu.rune.button
 
 import cn.charlotte.pit.data.sub.EnchantmentRecord
 import net.mizukilab.pit.enchantment.AbstractEnchantment
-import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.util.chat.CC
 import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.menu.Button
+import net.mizukilab.pit.util.toMythicItem
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -46,7 +46,7 @@ class DJEnchantButton(
         currentItem: ItemStack
     ) {
         if (ItemUtil.getInternalName(itemStack) == "mythic_leggings") {
-            val leggingsItem = MythicLeggingsItem().apply {
+            val leggingsItem = itemStack.toMythicItem()?.apply {
                 this.enchantments[enchantment] = 1
                 enchantmentRecords += EnchantmentRecord(
                     player.name,
@@ -57,7 +57,7 @@ class DJEnchantButton(
             player.playSound(player.location, Sound.ANVIL_USE, 1f, 99f)
             player.sendMessage(CC.translate("&6&l铸造！ &7成功为你的神话之裤增加了${enchantment.enchantName}附魔"))
 
-            player.inventory.setItem(index, leggingsItem.toItemStack())
+            player.inventory.setItem(index, leggingsItem?.toItemStack())
             updatePlayerInventory(player)
 
             player.closeInventory()

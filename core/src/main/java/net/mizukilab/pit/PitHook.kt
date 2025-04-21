@@ -537,6 +537,7 @@ private fun loadPerks() {
         MarathonPerk::class.java,
         MonsterPerk::class.java,
         MythicismPerk::class.java,
+        MythicDropPerk::class.java,
         ObsidianStackShopPerk::class.java,
         OlympusPerk::class.java,
         PantsBundleShopPerk::class.java,

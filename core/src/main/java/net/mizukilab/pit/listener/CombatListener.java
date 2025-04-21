@@ -992,18 +992,21 @@ public class CombatListener implements Listener {
 
                     ItemStack itemStack = item.toItemStack();
 
-                    if (InventoryUtil.isInvFull(killer.getInventory())) {
-                        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-                            beKilledPlayer.getWorld().dropItemNaturally(beKilledPlayer.getLocation(), itemStack);
-                        });
+                    if (!killerProfile.isNotMythDrop()) {
+                        if (InventoryUtil.isInvFull(killer.getInventory())) {
+                            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                                beKilledPlayer.getWorld().dropItemNaturally(beKilledPlayer.getLocation(), itemStack);
+                            });
+                        } else {
+                            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                                InventoryUtil.addInvReverse(killer.getInventory(), itemStack);
+                            });
+                        }
+                        CC.send(MessageType.MISC, killer, "&d&l神话武器! &7你在战斗中拾取了掉落的神话物品!");
                     } else {
-
-                        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-                            InventoryUtil.addInvReverse(killer.getInventory(), itemStack);
-                        });
+                        PlayerUtil.addAbsorptionHearts(killer, 8);
+                        CC.send(MessageType.MISC, killer, "&6&l炼金术士! &7成功将神话物品转化为 &64❤ 生命吸收");
                     }
-
-                    CC.send(MessageType.MISC, killer, "&d&l神话武器! &7你在战斗中拾取了掉落的神话物品!");
                     //fixme: change to sound system
                     new BukkitRunnable() {
                         int task = 0;

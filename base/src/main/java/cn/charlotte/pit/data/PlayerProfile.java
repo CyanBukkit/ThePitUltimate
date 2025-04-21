@@ -214,6 +214,8 @@ public class PlayerProfile {
     private int nickPrestige;
     private int nickLevel;
 
+    //drop
+    private boolean isNotMythDrop;
 
     private boolean tempInvUsing;
     private boolean noDamageAnimations;
@@ -1659,6 +1661,14 @@ public class PlayerProfile {
 
     public void setNickLevel(int nickLevel) {
         this.nickLevel = nickLevel;
+    }
+
+    public boolean isNotMythDrop() {
+        return isNotMythDrop;
+    }
+
+    public void setNotMythDrop(boolean notMythDrop) {
+        isNotMythDrop = notMythDrop;
     }
 
     public boolean isTempInvUsing() {

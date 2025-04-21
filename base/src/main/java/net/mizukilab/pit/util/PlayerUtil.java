@@ -70,6 +70,13 @@ public class PlayerUtil {
         return player.hasMetadata("combo_venom") && player.getMetadata("combo_venom").get(0).asLong() > System.currentTimeMillis();
     }
 
+    public static void addAbsorptionHearts(Player player, float extraHearts) {
+        if (player instanceof CraftPlayer) {
+            CraftPlayer craftPlayer = (CraftPlayer) player;
+            float currentHearts = craftPlayer.getHandle().getAbsorptionHearts();
+            craftPlayer.getHandle().setAbsorptionHearts(currentHearts + extraHearts);
+        }
+    }
 
     public static boolean isEquippingSomber(Player player) {
         return player.getInventory().getLeggings() != null && ThePit.getApi().getItemEnchantLevel(player.getInventory().getLeggings(), "somber_enchant") > 0;

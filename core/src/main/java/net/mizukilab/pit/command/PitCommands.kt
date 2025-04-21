@@ -67,7 +67,6 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
-import kotlin.math.sinh
 
 /**
  * 2024/5/15<br>
@@ -1016,25 +1015,43 @@ class PitCommands {
         return "§a成功取消重命名!"
     }
 
-    @Execute(name = "nick")
-    @Permission("pit.nick")
-    fun nick(@Context player: Player,@Arg("name") name: String) {
-        val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-        profile.isNicked = true
-        profile.nickName = name
-        player.displayName = name
-        player.sendMessage(CC.translate("&a成功设置名称: ${name}"))
+
+    @Execute(name = "drop")
+    fun mythicDrop(@Context player: Player): String {
+        val profile = ThePit.getInstance().profileOperator.namedIOperator(player.name).profile()
+            ?: return "§c读取你的数据错误，请重进！"
+
+        if (!PlayerUtil.isPlayerUnlockedPerk(player, "MythicDrop")) {
+            player.sendMessage(CC.translate("&c你当前无法使用该指令!"))
+            return "§c你当前无法使用该指令!"
+        }
+
+        profile.isNotMythDrop = !profile.isNotMythDrop
+        val stateMessage = if (profile.isNotMythDrop) "&c否" else "&a是"
+        return "§7切换掉落状态为: $stateMessage"
     }
 
-    @Execute(name = "unnick")
-    @Permission("pit.nick")
-    fun unnick(@Context player: Player ) {
-        val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-        player.displayName = player.name
-        profile.isNicked = false
-        profile.nickName = player.name
-        player.sendMessage(CC.translate("&c成功取消Nick"))
-    }
+    /*
+        @Execute(name = "nick")
+        @Permission("pit.nick")
+        fun nick(@Context player: Player,@Arg("name") name: String) {
+            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+            profile.isNicked = true
+            profile.nickName = name
+            player.displayName = name
+            player.sendMessage(CC.translate("&a成功设置名称: ${name}"))
+        }
+
+        @Execute(name = "unnick")
+        @Permission("pit.nick")
+        fun unnick(@Context player: Player ) {
+            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+            player.displayName = player.name
+            profile.isNicked = false
+            profile.nickName = player.name
+            player.sendMessage(CC.translate("&c成功取消Nick"))
+        }
+    */
 
     @Execute(name = "python")
 
