@@ -4,57 +4,47 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.event.PitPlayerSpawnEvent;
+import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.events.AbstractEvent;
 import cn.charlotte.pit.events.IEpicEvent;
 import cn.charlotte.pit.events.IPrepareEvent;
 import cn.charlotte.pit.events.IScoreBoardInsert;
-import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.concurrent.TimeUnit;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import net.mizukilab.pit.config.NewConfiguration;
-import net.mizukilab.pit.enchantment.type.rare.PaparazziEnchant;
-import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
-import net.mizukilab.pit.perk.type.prestige.SelfConfidencePerk;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.inventory.InventoryUtil;
 import net.mizukilab.pit.util.item.ItemUtil;
 import net.mizukilab.pit.util.time.TimeUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.util.Vector;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
+import org.bukkit.util.Vector;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listener, IPrepareEvent, IScoreBoardInsert {
     private final Map<UUID, PlayerBlockHeadData> dataMap = new HashMap<>();
@@ -65,14 +55,13 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
             , Material.LOG, Material.LAPIS_ORE,
             Material.LAPIS_BLOCK, Material.SANDSTONE, Material.NOTE_BLOCK, Material.BED_BLOCK, Material.PISTON_STICKY_BASE
             , Material.WOOL, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.BRICK, Material.TNT, Material.BOOKSHELF, Material.MOSSY_COBBLESTONE, Material.OBSIDIAN,
-            Material.DIAMOND_ORE, Material.DIAMOND_BLOCK , Material.FURNACE, Material.BURNING_FURNACE,  Material.REDSTONE_ORE, Material.ICE, Material.GLOWSTONE, Material.SMOOTH_BRICK, Material.MELON_BLOCK
+            Material.DIAMOND_ORE, Material.DIAMOND_BLOCK, Material.FURNACE, Material.BURNING_FURNACE, Material.REDSTONE_ORE, Material.ICE, Material.GLOWSTONE, Material.SMOOTH_BRICK, Material.MELON_BLOCK
             , Material.PUMPKIN_STEM, Material.MELON_STEM,
-           Material.NETHER_BRICK, Material.ENDER_STONE, Material.EMERALD_ORE, Material.OBSIDIAN);
+            Material.NETHER_BRICK, Material.ENDER_STONE, Material.EMERALD_ORE, Material.OBSIDIAN);
     private final Map<String, BlockData> oriBlock = new HashMap<>();
-    private  final List<Material> selectedMaterials = new ArrayList<>();
+    private final List<Material> selectedMaterials = new ArrayList<>();
     private final List<Entity> entities = new ArrayList<>();
-    private Cooldown timer;
-    private BukkitRunnable runnable;
+    private final Cooldown timer = new Cooldown(5L, TimeUnit.MINUTES);
     private int allblocks = 0;
     private static final Random random = new Random();
 
@@ -101,12 +90,13 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
     public void onMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if(!profile.isLoaded() || profile.isInArena()){
+        if (!profile.isLoaded()) {
             return;
         }
+
         PlayerBlockHeadData data = dataMap.get(player.getUniqueId());
 
-        if(data != null) {
+        if (data != null) {
             if (System.currentTimeMillis() - get(player, "trail") < 15000) {
                 if (!player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.AIR) && !player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.STATIONARY_WATER) && !player.getLocation().add(0.0, -1.0, 0.0).getBlock().getType().equals(Material.SNOW)) {
                     Location belowLocation = new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() - 1, player.getLocation().getZ());
@@ -130,7 +120,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
         }
         entities.forEach(nearbyEntities -> {
             Location location = nearbyEntities.getLocation();
-            if (nearbyEntities.getType() != EntityType.ARMOR_STAND || nearbyEntities.isDead() || (location.distanceSquared(player.getLocation()) > 1 && location.subtract(0,-1,0).distanceSquared(player.getLocation()) > 1)){
+            if (nearbyEntities.getType() != EntityType.ARMOR_STAND || nearbyEntities.isDead() || (location.distanceSquared(player.getLocation()) > 1 && location.subtract(0, -1, 0).distanceSquared(player.getLocation()) > 1)) {
                 return;
             }
             ArmorStand stand = (ArmorStand) nearbyEntities;
@@ -156,25 +146,25 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                 inventory.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
                 inventory.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
                 inventory.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-                if (!InventoryUtil.isInvFull(player,2)) {
-                    if(chestplate != null){
-                     inventory.addItem(chestplate);
+                if (!InventoryUtil.isInvFull(player, 2)) {
+                    if (chestplate != null) {
+                        inventory.addItem(chestplate);
                     }
-                    if(leggings != null){
+                    if (leggings != null) {
                         inventory.addItem(leggings);
                     }
-                    if(boot != null){
+                    if (boot != null) {
                         inventory.addItem(boot);
                     }
 
                 } else {
-                    if(chestplate != null && ItemUtil.isMythicItem(chestplate)){
+                    if (chestplate != null && ItemUtil.isMythicItem(chestplate)) {
                         inventory.setChestplate(chestplate);
                     }
-                    if(leggings != null && ItemUtil.isMythicItem(leggings)){
+                    if (leggings != null && ItemUtil.isMythicItem(leggings)) {
                         inventory.setLeggings(leggings);
                     }
-                    if(boot != null && ItemUtil.isMythicItem(boot)){
+                    if (boot != null && ItemUtil.isMythicItem(boot)) {
                         inventory.setBoots(boot);
                     }
                 }
@@ -197,7 +187,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
 
         PlayerBlockHeadData killerData = null;
         final PlayerBlockHeadData victimData = dataMap.get(victim.getUniqueId());
-        if(victimData == null){
+        if (victimData == null) {
             return;
         }
         if (killer != null) {
@@ -215,7 +205,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                     if (oriBlock.containsKey(loc(blockLocation))) {
                         Player blockBelonger = oriBlock.get(loc(blockLocation)).getBelonger();
                         if (dataMap.containsKey(blockBelonger.getUniqueId())) {
-                            dataMap.get(blockBelonger.getUniqueId()).belong --;
+                            dataMap.get(blockBelonger.getUniqueId()).belong--;
                         }
                         oriBlock.get(loc(blockLocation)).setBelonger(killer);
                         killerData.belong++;
@@ -231,7 +221,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                     if (oriBlock.containsKey(loc(blockLocation.add(0.0, -1.0, 0.0)))) {
                         Player blockBelonger = oriBlock.get(loc(blockLocation.add(0.0, -1.0, 0.0))).getBelonger();
                         if (dataMap.containsKey(blockBelonger.getUniqueId())) {
-                            dataMap.get(blockBelonger.getUniqueId()).belong --;
+                            dataMap.get(blockBelonger.getUniqueId()).belong--;
                         }
                         oriBlock.get(loc(blockLocation.add(0.0, -1.0, 0.0))).setBelonger(killer);
                         killerData.belong++;
@@ -247,7 +237,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                     if (oriBlock.containsKey(loc(blockLocation.add(0.0, -2.0, 0.0)))) {
                         Player blockBelonger = oriBlock.get(loc(blockLocation.add(0.0, -2.0, 0.0))).getBelonger();
                         if (dataMap.containsKey(blockBelonger.getUniqueId())) {
-                            dataMap.get(blockBelonger.getUniqueId()).belong --;
+                            dataMap.get(blockBelonger.getUniqueId()).belong--;
                         }
                         oriBlock.get(loc(blockLocation.add(0.0, -2.0, 0.0))).setBelonger(killer);
                         killerData.belong++;
@@ -264,20 +254,20 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
         }
 
         World world = killer.getLocation().getWorld();
-        world.createExplosion(killer.getLocation().getX(), killer.getLocation().getY(), killer.getLocation().getZ(), (float)0, false, false);
+        world.createExplosion(killer.getLocation().getX(), killer.getLocation().getY(), killer.getLocation().getZ(), (float) 0, false, false);
         Location location = killer.getLocation().add(0.0, 2.0, 0.0);
         Vector vector = killer.getLocation().getDirection().multiply(6.5);
         if (vector.getY() > 2.0) {
             vector.setY(2.0);
         }
-        FallingBlock fb = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
-        FallingBlock fb2 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
-        FallingBlock fb3 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
-        FallingBlock fb4 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
-        FallingBlock fb5 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
-        FallingBlock fb6 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
-        FallingBlock fb7 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
-        FallingBlock fb8 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte)0);
+        FallingBlock fb = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
+        FallingBlock fb2 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
+        FallingBlock fb3 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
+        FallingBlock fb4 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
+        FallingBlock fb5 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
+        FallingBlock fb6 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
+        FallingBlock fb7 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
+        FallingBlock fb8 = location.getWorld().spawnFallingBlock(location, killerData.block, (byte) 0);
         double vector1 = 0.4;
         double vector2 = 0.3;
         fb.setVelocity(new Vector(vector1, 0.0, 0.0));
@@ -323,11 +313,10 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @Override
     public void onActive() {
-        Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
             Bukkit.getPluginManager().registerEvents(this, ThePit.getInstance());
             selectedMaterials.clear();
             this.allblocks = 0;
-            this.timer = new Cooldown(5L, TimeUnit.MINUTES);
             List<String> types = Arrays.asList("quicktrail", "combatboost", "superheal", "diamondarmor");
 
             for (Location location : ThePit.getInstance().getPitConfig().getBlockHeadLocations()) {
@@ -335,7 +324,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
             }
 
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                player.sendMessage(CC.translate("&5&l大型事件！ &9&l方块划地战 &7事件开始！"));
+                player.sendMessage(CC.translate("&5&l大型事件！ &9&l方块划地战 &7开始！"));
                 if (PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).isLoaded()) {
                     newdata(player);
                 }
@@ -353,7 +342,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                         Iterator<Entity> iterator = entities.iterator();
                         while (iterator.hasNext()) {
                             Entity entity = iterator.next();
-                            if(entity.isDead()){
+                            if (entity.isDead()) {
                                 iterator.remove();
                                 curEnt.add(spawnPowerUp(entity.getLocation(), types.get(random.nextInt(types.size()))));
                             }
@@ -368,18 +357,18 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @Override
     public void onInactive() {
-        Bukkit.getScheduler().runTask(ThePit.getInstance(),() -> {
+        Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
             ThePit.getInstance().getBossBar().getBossBar().setTitle("");
             HashSet<Map.Entry<UUID, PlayerBlockHeadData>> entry = new HashSet<>(dataMap.entrySet());
             List collect = entry.stream().map(Map.Entry::getValue).sorted(Comparator.comparingDouble(PlayerBlockHeadData::getBelong).reversed()).collect(Collectors.toList());
             int rank = 1;
             for (Object data : collect) {
-                Player player = Bukkit.getPlayer(((PlayerBlockHeadData)data).uuid);
+                Player player = Bukkit.getPlayer(((PlayerBlockHeadData) data).uuid);
                 if (player == null || !player.isOnline()) {
                     continue;
                 }
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-                if(!profile.isLoaded()){
+                if (!profile.isLoaded()) {
                     continue;
                 }
                 player.sendMessage(CC.GOLD + CC.CHAT_BAR);
@@ -424,7 +413,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                 if (collect.size() >= 3) {
                     player.sendMessage(CC.translate("&6顶级玩家: "));
                     for (int i = 0; i < 3; ++i) {
-                        Player top = Bukkit.getPlayer(((PlayerBlockHeadData)collect.get(i)).uuid);
+                        Player top = Bukkit.getPlayer(((PlayerBlockHeadData) collect.get(i)).uuid);
                         if (top == null || !top.isOnline()) {
                             continue;
                         }
@@ -645,7 +634,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
     public static ArmorStand spawnPowerUp(Location location, final String type) {
         location.setPitch(0.0f);
         location.setYaw(0.0f);
-        final ArmorStand stand = (ArmorStand)location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+        final ArmorStand stand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
         stand.setCanPickupItems(false);
         stand.setVisible(false);
         switch (type) {
@@ -664,8 +653,8 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
         }
         stand.setCustomNameVisible(true);
         stand.setGravity(false);
-        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
-        SkullMeta sm = (SkullMeta)is.getItemMeta();
+        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        SkullMeta sm = (SkullMeta) is.getItemMeta();
         GameProfile profile = new GameProfile(UUID.randomUUID(), "");
         switch (type) {
             case "quicktrail":
@@ -685,8 +674,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
             Field profileField = sm.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
             profileField.set(sm, profile);
-        }
-        catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
             e.printStackTrace();
         }
         is.setItemMeta(sm);

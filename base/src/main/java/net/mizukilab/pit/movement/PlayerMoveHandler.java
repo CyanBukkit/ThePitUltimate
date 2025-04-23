@@ -199,17 +199,26 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
 
             if (to.clone().add(0, -1, 0).getBlock().getType() == Material.SLIME_BLOCK) {
                 BlockIterator blockIterator = new BlockIterator(player.getLocation());
-                for (int i = 0; i < 30; i++) {
+                for (int i = 0; i < 30 && blockIterator.hasNext(); i++) {
                     blockIterator.next();
                 }
                 to.setPitch(-30);
                 player.getLocation().setPitch(-30);
-                VectorUtil.entityPush(player, blockIterator.next().getLocation(), 110);
-
+                if (blockIterator.hasNext()) {
+                    VectorUtil.entityPush(player, blockIterator.next().getLocation(), 110);
+                }
                 player.playSound(player.getLocation(), Sound.EXPLODE, 1, 1);
-                PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.EXPLOSION_LARGE, true, (float) to.getX(), (float) to.getY(), (float) to.getZ(), 0, 0, 0, 0, 1, 1);
+                PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
+                        EnumParticle.EXPLOSION_LARGE,
+                        true,
+                        (float) to.getX(),
+                        (float) to.getY(),
+                        (float) to.getZ(),
+                        0, 0, 0, 0, 1, 1
+                );
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             }
+
         }
 
     }

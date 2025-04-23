@@ -3,6 +3,7 @@ package net.mizukilab.pit.menu.perk.normal.buy.button;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.perk.AbstractPerk;
+import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.RomanUtil;
 import net.mizukilab.pit.util.level.LevelUtil;
@@ -33,7 +34,7 @@ public class BoostButton extends Button {
     public ItemStack getButtonItem(Player player) {
         int level = 0;
         int[] price = new int[0];
-        int[] limit = new int[]{0, 10, 20, 30, 40};
+        int[] limit = new int[]{0, 10, 20, 30, 40, 50};
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         List<String> lore = new ArrayList<>();
         for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
@@ -46,24 +47,26 @@ public class BoostButton extends Button {
         }
         lore.addAll(perk.getDescription(player));
         lore.add(" ");
-        if (level >= 5) {
-            lore.add("&c此加成等级已达到上限!");
+        boolean unlocked = PlayerUtil.isPlayerUnlockedPerk(player, "GoingFurther");
+        if (level >= 6 && unlocked) {
+            lore.add("&c此加成等级已达到上限！");
+        } else if (level >= 5 && !unlocked) {
+            lore.add("&c此加成等级已达到上限！");
         } else {
-
             if (perk.getInternalPerkName().equals("XPBoost")) {
-                price = new int[]{500, 1000, 2500, 10000, 25000};
+                price = new int[]{500, 1000, 2500, 10000, 25000, 40000};
             }
             if (perk.getInternalPerkName().equals("CoinBoost")) {
-                price = new int[]{1000, 2500, 10000, 25000, 40000};
+                price = new int[]{1000, 2500, 10000, 25000, 40000, 50000};
             }
             if (perk.getInternalPerkName().equals("MeleeBoost") || perk.getInternalPerkName().equals("ArrowBoost") || perk.getInternalPerkName().equals("DmgReduceBoost")) {
-                price = new int[]{450, 1050, 1500, 2250, 3000};
+                price = new int[]{450, 1050, 1500, 2250, 3000, 4000};
             }
             if (perk.getInternalPerkName().equals("BuilderBattleBoost")) {
-                price = new int[]{750, 1750, 2750, 3750, 5000};
+                price = new int[]{750, 1750, 2750, 3750, 5000, 6500};
             }
             if (perk.getInternalPerkName().equals("ElGatoBoost")) {
-                price = new int[]{1000, 2000, 3000, 4000, 5000};
+                price = new int[]{1000, 2000, 3000, 4000, 5000, 6000};
             }
             if (limit[level] > profile.getLevel()) {
                 lore.add("&c等级不足: " + LevelUtil.getLevelTag(profile.getPrestige(), limit[level]));
@@ -84,15 +87,16 @@ public class BoostButton extends Button {
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
         int level = 0;
         int[] price = new int[0];
-        int[] limit = limit = new int[]{0, 10, 20, 30, 40};
+        int[] limit = new int[]{0, 10, 20, 30, 40, 50};
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        boolean unlocked = PlayerUtil.isPlayerUnlockedPerk(player, "GoingFurther");
         for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
             if (entry.getValue().getPerkInternalName().equals(perk.getInternalPerkName())) {
                 level = entry.getValue().getLevel();
                 break;
             }
         }
-        if (level < 5) {
+        if (level < 5 && !unlocked) {
             if (perk.getInternalPerkName().equals("XPBoost")) {
                 price = new int[]{500, 1000, 2500, 10000, 25000};
             }
@@ -116,6 +120,32 @@ public class BoostButton extends Button {
                     profile.getChosePerk().put(page, new PerkData(perk.getInternalPerkName(), level + 1));
                     profile.setCoins(profile.getCoins() - price[level]);
                     player.sendMessage(CC.translate("&a&l升级成功! &7成功升级加成 &a" + perk.getDisplayName() + " &7至等级 &b" + RomanUtil.convert(level + 1) + " &7."));
+                }
+            }
+        } else if (level < 6 && unlocked) {
+            if (perk.getInternalPerkName().equals("XPBoost")) {
+                price = new int[]{500, 1000, 2500, 10000, 25000, 40000};
+            }
+            if (perk.getInternalPerkName().equals("CoinBoost")) {
+                price = new int[]{1000, 2500, 10000, 25000, 40000, 50000};
+            }
+            if (perk.getInternalPerkName().equals("MeleeBoost") || perk.getInternalPerkName().equals("ArrowBoost") || perk.getInternalPerkName().equals("DmgReduceBoost")) {
+                price = new int[]{450, 1050, 1500, 2250, 3000, 4000};
+            }
+            if (perk.getInternalPerkName().equals("BuilderBattleBoost")) {
+                price = new int[]{750, 1750, 2750, 3750, 5000, 6500};
+            }
+            if (perk.getInternalPerkName().equals("ElGatoBoost")) {
+                price = new int[]{1000, 2000, 3000, 4000, 5000, 6000};
+            }
+            if (limit[level] > profile.getLevel()) {
+                return;
+            }
+            if (price.length >= level + 1) {
+                if (price[level] <= profile.getCoins()) {
+                    profile.getChosePerk().put(page, new PerkData(perk.getInternalPerkName(), level + 1));
+                    profile.setCoins(profile.getCoins() - price[level]);
+                    player.sendMessage(CC.translate("&a&l升级成功！ &7成功升级加成 &a" + perk.getDisplayName() + " &7至等级 &b" + RomanUtil.convert(level + 1) + " &7."));
                 }
             }
         }

@@ -21,6 +21,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.medal.impl.challenge.HundredLevelMedal;
+import net.mizukilab.pit.medal.impl.challenge.MaxBountyMedal;
 import net.mizukilab.pit.quest.AbstractQuest;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.MessageType;
@@ -1121,12 +1122,12 @@ public class PlayerProfile {
     }
 
     public void setBounty(int bounty) {
-        if (bounty >= 5000) {
-//            final Player player = Bukkit.getPlayer(this.getPlayerUuid());
-//            if (player != null) {
-//                new MaxBountyMedal().setProgress(PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()), 1);
-//            }
-        }
+    /*    if (bounty >= 5000) {
+           final Player player = Bukkit.getPlayer(this.getPlayerUuid());
+          if (player != null) {
+                new MaxBountyMedal().setProgress(PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()), 1);
+           }
+        }*/
         this.bounty = bounty;
     }
 

@@ -14,6 +14,5 @@ object Loader {
             setApi(PitInternalImpl)
         }
         hook = PitHook.also { it.init() }
-        loaded = true
     }
 }

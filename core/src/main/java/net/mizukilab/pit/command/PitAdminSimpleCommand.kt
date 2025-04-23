@@ -17,6 +17,7 @@ import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.events.impl.AuctionEvent
 import net.mizukilab.pit.item.type.ChunkOfVileItem
+import net.mizukilab.pit.item.type.FunkyFeather
 import net.mizukilab.pit.item.type.MythicBook
 import net.mizukilab.pit.item.type.PitCactus
 import net.mizukilab.pit.menu.cdk.generate.CDKMenu
@@ -67,7 +68,7 @@ class PitAdminSimpleCommand {
 
     @Execute(name = "setportalPosA")
     @Permission("pit.admin")
-    fun setportalPosA(@Context player: Player){
+    fun setportalPosA(@Context player: Player) {
         ThePit.getInstance().pitConfig.portalPosA = player.location
         ThePit.getInstance().pitConfig.save()
         player.sendMessage(CC.translate("&a设置传送门点位A"))
@@ -75,7 +76,7 @@ class PitAdminSimpleCommand {
 
     @Execute(name = "setportalPosB")
     @Permission("pit.admin")
-    fun setportalPosB(@Context player: Player){
+    fun setportalPosB(@Context player: Player) {
         ThePit.getInstance().pitConfig.portalPosB = player.location
         ThePit.getInstance().pitConfig.save()
         player.sendMessage(CC.translate("&a设置传送门点位b"))
@@ -282,6 +283,13 @@ class PitAdminSimpleCommand {
                 sender.sendMessage("§a添加成功!")
             }
 
+            "funky_feather" -> {
+                player.inventory.addItem(FunkyFeather.toItemStack().apply {
+                    this.amount = amount
+                })
+                sender.sendMessage("§a添加成功!")
+            }
+
             "chunkofvile" -> {
                 player.inventory.addItem(ChunkOfVileItem.toItemStack().apply { this.amount = amount })
                 sender.sendMessage("§a添加成功!")
@@ -348,7 +356,7 @@ class PitAdminSimpleCommand {
 
         val buttons: MutableList<Button?> = ObjectArrayList()
         var i = 0
-        val menuPtr = PagedMenu(profile.profile().playerName + " 的背包备份",null)
+        val menuPtr = PagedMenu(profile.profile().playerName + " 的背包备份", null)
         for (invBackup in backups) {
             if (invBackup.inv == null) continue
             buttons.add(
@@ -359,7 +367,7 @@ class PitAdminSimpleCommand {
                             min(
                                 64.0, InventoryUtil.getInventoryFilledSlots(invBackup.inv.contents).toDouble()
                             ).toInt()
-                        ).build(), invBackup,menuPtr, profile.profile()
+                        ).build(), invBackup, menuPtr, profile.profile()
                 )
             )
             i++

@@ -1022,7 +1022,6 @@ class PitCommands {
             ?: return "§c读取你的数据错误，请重进！"
 
         if (!PlayerUtil.isPlayerUnlockedPerk(player, "MythicDrop")) {
-            player.sendMessage(CC.translate("&c你当前无法使用该指令!"))
             return "§c你当前无法使用该指令!"
         }
 

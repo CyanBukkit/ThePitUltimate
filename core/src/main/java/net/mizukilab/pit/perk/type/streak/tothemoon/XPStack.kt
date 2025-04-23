@@ -5,6 +5,7 @@ import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.event.PitStreakKillChangeEvent
 import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.perk.PerkType
+import net.mizukilab.pit.parm.AutoRegister
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -12,7 +13,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import kotlin.math.min
 
-
+@AutoRegister
 class XPStack : AbstractPerk(), Listener {
     override fun getInternalPerkName(): String {
         return "xp_stack"

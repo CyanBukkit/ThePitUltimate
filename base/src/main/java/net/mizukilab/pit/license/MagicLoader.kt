@@ -40,7 +40,7 @@ object MagicLoader {
                     if (response == Response.ACCEPT)
                         "§a验证成功，感谢您的支持 §c❤"
                     else
-                        "§c验证失败，请检查您的IP或凭证是否正确。"
+                        response.toString()
                 )
                 synchronized(lock) {
                     isLoaded = true

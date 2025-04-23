@@ -55,10 +55,17 @@ public class VectorUtil {
     public static void entityPush(Entity entity, Location to, double velocity) {
         Location from = entity.getLocation();
         Vector vector = getPushVector(from, to, velocity);
-        if (vector.getX() != 0 && vector.getY() != 0 && vector.getZ() != 0) {
+
+        double maxVelocity = 3.0;
+        vector.setX(Math.min(maxVelocity, Math.max(-maxVelocity, vector.getX())));
+        vector.setY(Math.min(maxVelocity, Math.max(-maxVelocity, vector.getY())));
+        vector.setZ(Math.min(maxVelocity, Math.max(-maxVelocity, vector.getZ())));
+
+        if (vector.length() > 0) {
             entity.setVelocity(vector);
         }
     }
+
 
     public static void entityPushBack(Entity entity, double power) {
         Location location = entity.getLocation();

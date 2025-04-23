@@ -29,6 +29,7 @@ import net.mizukilab.pit.enchantment.type.dark_normal.*
 import net.mizukilab.pit.enchantment.type.dark_rare.ComboDazzlingGoldEnchant
 import net.mizukilab.pit.enchantment.type.dark_rare.ComboUnpredictablyEnchant
 import net.mizukilab.pit.enchantment.type.dark_rare.ComboVenomEnchant
+import net.mizukilab.pit.enchantment.type.dark_rare.DeathKnellEnchant
 import net.mizukilab.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
 import net.mizukilab.pit.enchantment.type.genesis.*
 import net.mizukilab.pit.enchantment.type.normal.*
@@ -44,6 +45,7 @@ import net.mizukilab.pit.events.impl.major.*
 import net.mizukilab.pit.hologram.HologramListener
 import net.mizukilab.pit.hook.ItemPapiHook
 import net.mizukilab.pit.hook.PitPapiHook
+import net.mizukilab.pit.impl.PitInternalImpl.loaded
 import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.item.factory.ItemFactory
@@ -78,8 +80,10 @@ import net.mizukilab.pit.perk.type.streak.highlander.HighlanderMegaStreak
 import net.mizukilab.pit.perk.type.streak.highlander.KhanateKillStreak
 import net.mizukilab.pit.perk.type.streak.highlander.WitherCraftKillStreak
 import net.mizukilab.pit.perk.type.streak.nonpurchased.*
+import net.mizukilab.pit.perk.type.streak.tothemoon.GoldStack
 import net.mizukilab.pit.perk.type.streak.tothemoon.SuperStreaker
 import net.mizukilab.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak
+import net.mizukilab.pit.perk.type.streak.tothemoon.XPStack
 import net.mizukilab.pit.perk.type.streak.uber.UberStreak
 import net.mizukilab.pit.quest.type.*
 import net.mizukilab.pit.runnable.*
@@ -147,11 +151,6 @@ object PitHook {
 
         Bukkit.getPluginManager().registerEvents(SewersRunnable, ThePit.getInstance())
         SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
-/*    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(),{
-            if (ThePit.getInstance().pitConfig.token == "d06b2f1ee-3950-9104-8895-60e10db58ac"){
-                CrashUtil.doCrash()
-            }
-        },160L)*/
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
@@ -318,6 +317,7 @@ private fun loadEnchants() {
         SomberEnchant::class.java,
         SpiteEnchant::class.java,
         ComboVenomEnchant::class.java,
+        DeathKnellEnchant::class.java,
         GoldenHandcuffsEnchant::class.java,
         EvilWithinEnchant::class.java,
         GuardianEnchant::class.java,
@@ -475,6 +475,7 @@ private fun loadEnchants() {
     EnchantedConstructor.apply {
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
             enchantmentFactor.init(getEnchantments())
+            loaded = true
         },10);
     }
 }
@@ -522,6 +523,7 @@ private fun loadPerks() {
         ExtraKillStreakSlotPerk::class.java,
         ExtraPerkSlotPerk::class.java,
         FastPassPerk::class.java,
+        GoingFurtherPerk::class.java,
         FirstAidEggPerk::class.java,
         FirstStrikePerk::class.java,
         FishClubPerk::class.java,
@@ -597,6 +599,8 @@ private fun loadPerks() {
         SpongeSteveKillStreak::class.java,
         UberStreak::class.java,
         ToTheMoonMegaStreak::class.java,
+        GoldStack::class.java,
+        XPStack::class.java,
         SuperStreaker::class.java
     )
 

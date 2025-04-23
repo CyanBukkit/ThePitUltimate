@@ -58,7 +58,7 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
     private int killed = 0;
     private BukkitRunnable runnable;
     @Getter
-    private Cooldown timer;
+    private Cooldown timer = new Cooldown(5, TimeUnit.MINUTES);
 
     public int getDamageRank(Player player) {
         DamageData damage = damageMap.get(player.getUniqueId());
@@ -129,8 +129,6 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
                 player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.5F);
                 player.sendMessage(CC.translate("&5&l大型事件! &6&l疯狂天坑 &7事件开始!"));
             }
-
-            timer = new Cooldown(5, TimeUnit.MINUTES);
 
             runnable = new BukkitRunnable() {
                 @Override
