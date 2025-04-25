@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.item.IMythicItem;
+import net.mizukilab.pit.park.Parker;
 import net.mizukilab.pit.parm.listener.ITickTask;
 import net.mizukilab.pit.util.Utils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -46,6 +47,7 @@ public class TickHandler extends BukkitRunnable {
             tickPerks(player, profile);
             tickItemInHand(player, tickLeggings(player, profile), profile); //别问我为什么这样写 lol
         }
+        ((Parker)ThePit.getInstance().getParker()).tick();
     }
 
     private void tickItemInHand(Player player, PlayerInventory inventory, PlayerProfile profile) {

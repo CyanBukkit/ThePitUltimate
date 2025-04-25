@@ -9,6 +9,7 @@ import cn.charlotte.pit.event.PitGainCoinsEvent;
 import cn.charlotte.pit.event.PitGainRenownEvent;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
 import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.park.IParker;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.annotations.Beta;
@@ -18,6 +19,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import io.irina.backports.utils.SWMRHashTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.medal.impl.challenge.HundredLevelMedal;
@@ -34,6 +36,7 @@ import net.mizukilab.pit.util.rank.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.Warning;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.mongojack.JacksonMongoCollection;
@@ -1646,6 +1649,14 @@ public class PlayerProfile {
 
     public String getNickName() {
         return nickName;
+    }
+    public void updateNick() {
+        Player player = Bukkit.getPlayer(getPlayerUuid());
+        if (player != null) {
+            IParker parker = ThePit.getInstance().getParker();
+            parker.hideAlways(player);
+            parker.showAlways(player);
+        }
     }
 
     public int getNickPrestige() {

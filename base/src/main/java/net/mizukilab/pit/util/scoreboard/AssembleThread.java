@@ -113,8 +113,13 @@ public class AssembleThread implements Runnable {
                         AssembleBoardEntry entry = board.getEntryAtPosition(i);
 
                         // Translate any colors.
-                        String textToTranslate = newLines.get(i);
-                        if(textToTranslate == null){
+                        String textToTranslate;
+                        try {
+                            textToTranslate = newLines.get(i);
+                            if (textToTranslate == null) {
+                                continue;
+                            }
+                        } catch (Exception e){
                             continue;
                         }
                         String line = ChatColor.

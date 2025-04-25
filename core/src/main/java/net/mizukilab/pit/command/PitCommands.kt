@@ -1030,7 +1030,6 @@ class PitCommands {
         return "§7切换掉落状态为: $stateMessage"
     }
 
-    /*
         @Execute(name = "nick")
         @Permission("pit.nick")
         fun nick(@Context player: Player,@Arg("name") name: String) {
@@ -1050,7 +1049,14 @@ class PitCommands {
             profile.nickName = player.name
             player.sendMessage(CC.translate("&c成功取消Nick"))
         }
-    */
+    @Execute(name = "nickFlush")
+
+    @Permission("pit.nick")
+    fun flush(@Context player: Player ){
+        ThePit.getInstance().parker.hideAlways(player)
+
+        ThePit.getInstance().parker.showAlways(player)
+    }
 
     @Execute(name = "python")
 

@@ -54,6 +54,7 @@ import net.mizukilab.pit.menu.shop.button.type.SwordBundleShopButton
 import net.mizukilab.pit.menu.trade.TradeListener
 import net.mizukilab.pit.nametag.NameTagImpl
 import net.mizukilab.pit.npc.type.*
+import net.mizukilab.pit.park.Parker
 import net.mizukilab.pit.perk.type.boost.*
 import net.mizukilab.pit.perk.type.prestige.*
 import net.mizukilab.pit.perk.type.shop.*
@@ -103,6 +104,7 @@ object PitHook {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        loadParker()
         loadOperator()
         loadItemFactory()
         loadActionBar()
@@ -145,6 +147,10 @@ object PitHook {
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { loaded = true }, 20L)
+    }
+
+    private fun loadParker() {
+        ThePit.getInstance().parker = Parker();
     }
 
     private fun filter() {

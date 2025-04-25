@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 
 @ToString
 public class PackedOperator implements IOperator {
+    Throwable throwable;
     ExecutionPolicy policy;
     ThePit pit;
     long lastHeartBeat = 0;
@@ -220,9 +221,10 @@ public class PackedOperator implements IOperator {
                     operationFinaled.run();
                     operations.remove(operationFinaled);
                     pendingExecuting.remove(operationFinaled);
-                    policy.success(this.lastBoundPlayer);
+                    policy.success(PackedOperator.this);
                 } catch (Exception e) {
-                    policy.fail(this.lastBoundPlayer, e);
+                    throwable = e;
+                    policy.fail(PackedOperator.this, e);
                 }
             };
         }

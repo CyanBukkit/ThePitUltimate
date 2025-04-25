@@ -5,10 +5,12 @@ import cn.charlotte.pit.data.FixedRewardData;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.mizukilab.pit.data.operator.PackedOperator;
 import net.mizukilab.pit.data.operator.ProfileOperator;
 import net.mizukilab.pit.util.PitProfileUpdater;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,12 +33,14 @@ public class DataListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
+        ThePit.getInstance().getParker().hideAlways(player);
         PackedOperator orLoadOperator = ((ProfileOperator) ThePit.getInstance().getProfileOperator()).getOrLoadOperator(player);
         orLoadOperator.pendingUntilLoaded(prof -> {
             if (statusCheck(orLoadOperator)) return;
             //post init, when checked
             orLoadOperator.heartBeat();
-            this.whenLoaded(prof);
+
+            this.whenLoaded(prof,player);
         });
         event.setJoinMessage(null);
     }
@@ -93,8 +97,7 @@ public class DataListener implements Listener {
 
 
 
-    public void whenLoaded(PlayerProfile load) {
-        Player player = Bukkit.getPlayer(load.getPlayerUuid());
+    public void whenLoaded(PlayerProfile load,Player player) {
         updateLoginTime(load);
 
         if (load.getProfileFormatVersion() == 0) {
@@ -106,8 +109,8 @@ public class DataListener implements Listener {
                 new PitProfileLoadedEvent(load).callEvent();
             });
             FixedRewardData.Companion.sendMail(load, player);
+            ThePit.getInstance().getParker().showAlways(player);
         }
-
     }
 
     private static void updateLoginTime(PlayerProfile load) {

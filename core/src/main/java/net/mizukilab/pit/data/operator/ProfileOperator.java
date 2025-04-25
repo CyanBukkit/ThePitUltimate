@@ -183,6 +183,9 @@ public class ProfileOperator implements IProfilerOperator {
             Player player = Bukkit.getPlayer(uniqueId);
             operator.tick();
             if (player == null || !player.isOnline()) {
+                if(operator.throwable != null){
+                    return true;
+                }
                 if (operator.profile.code == -2) {
                     return false;
                 }

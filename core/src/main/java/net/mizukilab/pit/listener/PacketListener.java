@@ -1,7 +1,14 @@
 package net.mizukilab.pit.listener;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.IOperator;
+import cn.charlotte.pit.data.operator.IProfilerOperator;
 import cn.charlotte.pit.event.PotionAddEvent;
+import com.comphenix.protocol.reflect.EquivalentConverter;
+import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.wrappers.*;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
 import net.mizukilab.pit.events.impl.major.RedVSBlueEvent;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import com.comphenix.protocol.PacketType;
@@ -20,6 +27,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @Author: EmptyIrony
@@ -28,24 +39,90 @@ import java.lang.reflect.Field;
 public class PacketListener extends PacketAdapter {
 
     public PacketListener() {
-        super(ThePit.getInstance(), PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.ENTITY_EFFECT);
+        super(ThePit.getInstance(), PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.ENTITY_EFFECT);//PacketType.Play.Server.SCOREBOARD_TEAM, PacketType.Play.Server.PLAYER_INFO);
     }
 
     @Override
     @SneakyThrows
     public void onPacketSending(PacketEvent event) {
-        final Packet<?> packet = (Packet<?>) event.getPacket().getHandle();
+        PacketContainer packet = event.getPacket();
         final Player player = event.getPlayer();
-
-        if (packet instanceof PacketPlayOutEntityEquipment) {
-            processRvBPackets(packet);
-        } else if (packet instanceof PacketPlayOutEntityEffect) {
+        if (packet.getType() == PacketType.Play.Server.ENTITY_EQUIPMENT) {
+            processRvBPackets((Packet<?>) packet.getHandle());
+        } else if (packet.getType() == PacketType.Play.Server.ENTITY_EFFECT) {
             processPotionAddEvent(packet, player);
+       } //else if (packet.getType() == PacketType.Play.Server.PLAYER_INFO) {
+//            processPlayerInfo(player,packet);
+//        } else if(packet.getType() == PacketType.Play.Server.SCOREBOARD_TEAM) {
+//            processPlayerTeam(player,packet);
+//        }
+    }
+    private static void processPlayerTeam(Player player,PacketContainer container){
+        String read = container.getStrings().read(0);
+        if(read.startsWith("TANK")){
+            System.out.println(read);
+        }
+        Player player1 = Bukkit.getPlayer(read);
+
+        if(player1 != null){
+            System.out.println(player1);
+            PlayerProfile playerProfileByUuid = PlayerProfile.getPlayerProfileByUuid(player1.getUniqueId());
+
+
+            if (playerProfileByUuid.isLoaded()) {
+                if(playerProfileByUuid.isNicked()){
+                    container.getStrings().write(0,playerProfileByUuid.getNickName());
+                    System.out.println(container.getHandle());
+                }
+            }
+        }
+    }
+   // static ListConvertor listConvertor = new ListConvertor();
+    public static class ListConvertor implements EquivalentConverter<String> {
+
+        @Override
+        public Object getGeneric(String strings) {
+            return strings;
+        }
+
+        @Override
+        public String getSpecific(Object o) {
+            return o.toString();
+        }
+
+        @Override
+        public Class<String> getSpecificType() {
+            return String.class;
+        }
+    }
+    private static void processPlayerInfo(Player player,PacketContainer packet) {
+        IProfilerOperator profileOperator = ThePit.getInstance().getProfileOperator();
+        List<PlayerInfoData> read = packet.getPlayerInfoDataLists().read(0);
+        ArrayList<PlayerInfoData> objects = new ArrayList<>(read.size());
+        EnumWrappers.PlayerInfoAction read1 = packet.getPlayerInfoAction().read(0);
+        if (read1 == EnumWrappers.PlayerInfoAction.ADD_PLAYER) {
+            Iterator<PlayerInfoData> iterator = read.iterator();
+            while (iterator.hasNext()) {
+                PlayerInfoData next = iterator.next();
+                IOperator iOperator = profileOperator.getIOperator(next.getProfile().getUUID());
+                if (iOperator != null && iOperator.isLoaded()) {
+                    System.out.println(iOperator);
+                    PlayerProfile profile = iOperator.profile();
+                    if (profile.isNicked()) {
+                        WrappedGameProfile wrappedGameProfile = new WrappedGameProfile(next.getProfileId(), profile.getNickName());
+                        PlayerInfoData e = new PlayerInfoData(next.getProfileId(), 20, next.isListed(), next.getGameMode(), wrappedGameProfile, WrappedChatComponent.fromLegacyText(profile.getNickName()), next.getProfileKeyData());
+
+                        objects.add(e);
+                        iterator.remove();
+                    }
+                }
+            }
+            objects.addAll(read);
+            packet.getPlayerInfoDataLists().write(0, objects);
         }
     }
 
-    private static void processPotionAddEvent(Packet<?> packet, Player player) {
-        final PacketContainer container = PacketContainer.fromPacket(packet);
+    private static void processPotionAddEvent(PacketContainer container, Player player) {
         final Integer entityId = container.getIntegers().read(0);
         if (player.getEntityId() != entityId) return;
 

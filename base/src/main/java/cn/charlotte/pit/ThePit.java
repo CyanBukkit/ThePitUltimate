@@ -9,6 +9,7 @@ import cn.charlotte.pit.data.operator.IProfilerOperator;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.EventsHandler;
+import cn.charlotte.pit.park.IParker;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
@@ -158,6 +159,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     //这里别用fastutil 依赖没加载会报错
     @Getter
     private final Set<AbstractPerk> disabledPerks = new HashSet<>();
+    @Getter
+    @Setter
+    private IParker parker;
 
     public static boolean isDEBUG_SERVER() {
         return ThePit.DEBUG_SERVER;
