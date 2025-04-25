@@ -40,6 +40,7 @@ import java.util.function.Predicate;
  */
 public class PlayerUtil {
     public static String BOT_NAME = "bot";
+
     public static String getActiveMegaStreak(Player player) {
         return CC.translate(getActiveMegaStreakObj(player).getDisplayName());
     }
@@ -74,7 +75,9 @@ public class PlayerUtil {
         if (player instanceof CraftPlayer) {
             CraftPlayer craftPlayer = (CraftPlayer) player;
             float currentHearts = craftPlayer.getHandle().getAbsorptionHearts();
-            craftPlayer.getHandle().setAbsorptionHearts(currentHearts + extraHearts);
+            if (currentHearts < 40) {
+                craftPlayer.getHandle().setAbsorptionHearts(currentHearts + extraHearts);
+            }
         }
     }
 
@@ -561,9 +564,11 @@ public class PlayerUtil {
         }
         event.getPlayer().addPotionEffect(event.getPotionEffect(), force);
     }
+
     public static void sendParticle(Location location, EnumParticle particle, int count) {
         new ParticleBuilder(location, particle).setCount(count).play();
     }
+
     public enum DamageType {
         NORMAL,
         TRUE

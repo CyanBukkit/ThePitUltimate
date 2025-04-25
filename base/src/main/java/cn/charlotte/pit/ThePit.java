@@ -15,7 +15,6 @@ import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -30,7 +29,7 @@ import net.mizukilab.pit.hologram.HologramFactory;
 import net.mizukilab.pit.item.IItemFactory;
 import net.mizukilab.pit.item.ItemFactor;
 import net.mizukilab.pit.license.CommonLoader;
-import net.mizukilab.pit.license.MagicLoader;
+import net.mizukilab.pit.listener.SafetyJoinListener;
 import net.mizukilab.pit.medal.MedalFactory;
 import net.mizukilab.pit.minigame.MiniGameController;
 import net.mizukilab.pit.movement.PlayerMoveHandler;
@@ -214,6 +213,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
         this.loadDatabase();
 
+        this.loadListener();
         this.loadItemFactor();
         this.loadMenu();
         this.loadNpc();
@@ -260,16 +260,16 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private static void bootstrapWorld() {
         for (World world : Bukkit.getWorlds()) {
             world.getEntities().forEach(e -> {
-                        if (e instanceof ArmorStand) {
-                            e.remove();
-                            return;
-                        }
-                        if (e instanceof Item it) {
-                            if (it.getItemStack().getType() == Material.GOLD_INGOT) {
-                                it.remove(); //garbage remove pieces 修复内存碎片整合慢问题
-                            }
-                        }
-                    });
+                if (e instanceof ArmorStand) {
+                    e.remove();
+                    return;
+                }
+                if (e instanceof Item it) {
+                    if (it.getItemStack().getType() == Material.GOLD_INGOT) {
+                        it.remove(); //garbage remove pieces 修复内存碎片整合慢问题
+                    }
+                }
+            });
             world.setGameRuleValue("keepInventory", "true");
             world.setGameRuleValue("mobGriefing", "false");
             world.setGameRuleValue("doDaylightCycle", "false");
@@ -380,6 +380,11 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.buffFactory.init();
     }
 
+
+    private void loadListener() {
+        this.getServer().getPluginManager().registerEvents(new SafetyJoinListener(), this);
+    }
+
     private void loadGame() {
         new ClearRunnable()
                 .runTaskTimer(ThePit.getInstance(), 20, 20);
@@ -452,6 +457,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.eventFactory = new EventFactory();
         log.info("Loaded Events!");
     }
+
 
     public final void onLoad() {
         try {

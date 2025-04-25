@@ -3,7 +3,6 @@ package net.mizukilab.pit
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.CDKData
 import cn.charlotte.pit.events.genesis.listener.GenesisCombatListener
-import cn.charlotte.pit.perk.AbstractPerk
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable
 import com.comphenix.protocol.ProtocolLibrary
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory
@@ -20,17 +19,12 @@ import net.mizukilab.pit.command.handler.HandHasItemValidator
 import net.mizukilab.pit.command.handler.metaKey
 import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.data.operator.ProfileOperator
-import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.type.aqua.ClubRodEnchant
 import net.mizukilab.pit.enchantment.type.aqua.GrandmasterEnchant
 import net.mizukilab.pit.enchantment.type.aqua.LuckOfPondEnchant
 import net.mizukilab.pit.enchantment.type.aqua.RogueEnchant
 import net.mizukilab.pit.enchantment.type.dark_normal.*
-import net.mizukilab.pit.enchantment.type.dark_rare.ComboDazzlingGoldEnchant
-import net.mizukilab.pit.enchantment.type.dark_rare.ComboUnpredictablyEnchant
-import net.mizukilab.pit.enchantment.type.dark_rare.ComboVenomEnchant
-import net.mizukilab.pit.enchantment.type.dark_rare.DeathKnellEnchant
-import net.mizukilab.pit.enchantment.type.dark_rare.GoldenHandcuffsEnchant
+import net.mizukilab.pit.enchantment.type.dark_rare.*
 import net.mizukilab.pit.enchantment.type.genesis.*
 import net.mizukilab.pit.enchantment.type.normal.*
 import net.mizukilab.pit.enchantment.type.op.*
@@ -46,8 +40,6 @@ import net.mizukilab.pit.hologram.HologramListener
 import net.mizukilab.pit.hook.ItemPapiHook
 import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.impl.PitInternalImpl.loaded
-import net.mizukilab.pit.item.AbstractPitItem
-import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.item.factory.ItemFactory
 import net.mizukilab.pit.item.type.*
 import net.mizukilab.pit.item.type.mythic.MythicBowItem
@@ -55,7 +47,6 @@ import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests
-import net.mizukilab.pit.map.kingsquests.item.*
 import net.mizukilab.pit.menu.shop.button.type.BowBundleShopButton
 import net.mizukilab.pit.menu.shop.button.type.CombatSpadeShopButton
 import net.mizukilab.pit.menu.shop.button.type.PantsBundleShopButton
@@ -89,7 +80,6 @@ import net.mizukilab.pit.quest.type.*
 import net.mizukilab.pit.runnable.*
 import net.mizukilab.pit.scoreboard.Scoreboard
 import net.mizukilab.pit.sound.impl.*
-import net.mizukilab.pit.util.CrashUtil
 import net.mizukilab.pit.util.menu.ButtonListener
 import net.mizukilab.pit.util.nametag.NametagHandler
 import net.mizukilab.pit.util.scoreboard.Assemble
@@ -154,6 +144,7 @@ object PitHook {
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
+        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { loaded = true }, 20L)
     }
 
     private fun filter() {
@@ -271,9 +262,9 @@ object PitHook {
         try {
             var itemFactor = ThePit.getInstance().itemFactor
             itemFactor.registerItems(clazzList)
-            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(),{
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
                 itemFactor.registerItems(ItemConstructor.getItems())
-            },10)
+            }, 10)
         } catch (e: Exception) {
             println("An error occurred: ${e.message}")
         }
@@ -475,8 +466,7 @@ private fun loadEnchants() {
     EnchantedConstructor.apply {
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
             enchantmentFactor.init(getEnchantments())
-            loaded = true
-        },10);
+        }, 10);
     }
 }
 
@@ -605,9 +595,9 @@ private fun loadPerks() {
     )
 
     perkFactory.init(classes as Collection<Class<*>>?)
-    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(),{
+    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
         perkFactory.init(PerkConstructor.getPerks())
-    },10)
+    }, 10)
 }
 
 private fun registerSounds() {
@@ -694,7 +684,6 @@ private fun registerListeners() {
         BowBundleShopButton::class.java,
         CombatSpadeShopButton::class.java,
         MailSendListener::class.java,
-        SafetyJoinListener::class.java,
         ButtonListener::class.java,
         GenesisCombatListener::class.java,
         TradeListener::class.java,
