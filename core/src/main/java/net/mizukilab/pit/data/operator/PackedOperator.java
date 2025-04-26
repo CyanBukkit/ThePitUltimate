@@ -65,12 +65,11 @@ public class PackedOperator implements IOperator {
             });
         }
         this.heartBeat();
-        ;
     }
 
     public void loadAs(PlayerProfile profile) {
 
-        if (profile == PlayerProfile.NONE_PROFILE) {
+        if (profile == PlayerProfile.NONE_PROFILE || profile == null) {
             return;
         }
         lastBoundPlayer = Bukkit.getPlayer(profile.getPlayerUuid());
@@ -94,11 +93,13 @@ public class PackedOperator implements IOperator {
 
     final ObjectArrayList<Runnable> operations = new ObjectArrayList<>(); //safer
     Set<Runnable> pendingExecuting = new CopyOnWriteArraySet<>(); //正常情况下就一个
-    public void fail(Throwable throwable){
+
+    public void fail(Throwable throwable) {
         pending(i -> {
             throw new RuntimeException(throwable);
         });
     }
+
     public boolean hasAnyOperation() {
         synchronized (operations) {
             return !operations.isEmpty() && !this.pendingExecuting.isEmpty();
@@ -107,6 +108,7 @@ public class PackedOperator implements IOperator {
 
     boolean fireExit = false;
     boolean quitFlag = false;
+
     //为了防止掉数据做的妥协
     public synchronized boolean save(boolean fireExit, boolean quitFlag) {
         if (System.currentTimeMillis() - lastHeartBeat > 1000) {

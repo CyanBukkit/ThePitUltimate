@@ -346,7 +346,7 @@ class PitAdminSimpleCommand {
     @Async
     fun rollback(@Context player: Player, @Arg("name") name: String): String {
         val profile = ThePit.getInstance().profileOperator.namedIOperator(name)
-        if (profile.profile() == null) {
+        if (profile.profile() == null || profile.profile().playerName == "NotLoadPlayer") {
             return CC.translate("&c该玩家不存在")
         }
         val backups: MutableList<PlayerInvBackup> = mutableListOf()

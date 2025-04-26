@@ -138,7 +138,7 @@ class PitCommands {
             }
             Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance()) {
                 val lookupStrict = ThePit.getInstance()?.profileOperator?.namedIOperator(name)
-                if (lookupStrict == null) {
+                if (lookupStrict == null || lookupStrict.profile().playerName == "NotLoadPlayer") {
                     player.sendMessage(CC.translate("&c此玩家的档案不存在,请检查输入是否有误."))
                     return@runTaskAsynchronously
                 }
@@ -148,10 +148,10 @@ class PitCommands {
                         return@runTaskAsynchronously
                     }
                 }
-                if (lookupStrict.profile().playerUuid == player.uniqueId) {
+/*                if (lookupStrict.profile().playerUuid == player.uniqueId) {
                     player.sendMessage(CC.translate("&c疑? 为什么要查看自己档案?"))
                     return@runTaskAsynchronously
-                }
+                }*/
                 Bukkit.getScheduler().runTask(ThePit.getInstance()) {
                     StatusViewerMenu(lookupStrict.profile()).openMenu(
                         player
@@ -1029,34 +1029,27 @@ class PitCommands {
         val stateMessage = if (profile.isNotMythDrop) "&c否" else "&a是"
         return "§7切换掉落状态为: $stateMessage"
     }
+    /*
+            @Execute(name = "nick")
+            @Permission("pit.nick")
+            fun nick(@Context player: Player,@Arg("name") name: String) {
+                val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+                profile.isNicked = true
+                profile.nickName = name
+                player.displayName = name
+                player.sendMessage(CC.translate("&a成功设置名称: ${name}"))
+            }
 
-        @Execute(name = "nick")
-        @Permission("pit.nick")
-        fun nick(@Context player: Player,@Arg("name") name: String) {
-            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-            profile.isNicked = true
-            profile.nickName = name
-            player.displayName = name
-            player.sendMessage(CC.translate("&a成功设置名称: ${name}"))
-        }
+            @Execute(name = "unnick")
+            @Permission("pit.nick")
+            fun unnick(@Context player: Player ) {
+                val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+                player.displayName = player.name
+                profile.isNicked = false
+                profile.nickName = player.name
+                player.sendMessage(CC.translate("&c成功取消Nick"))
+            }*/
 
-        @Execute(name = "unnick")
-        @Permission("pit.nick")
-        fun unnick(@Context player: Player ) {
-            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
-            player.displayName = player.name
-            profile.isNicked = false
-            profile.nickName = player.name
-            player.sendMessage(CC.translate("&c成功取消Nick"))
-        }
-    @Execute(name = "nickFlush")
-
-    @Permission("pit.nick")
-    fun flush(@Context player: Player ){
-        ThePit.getInstance().parker.hideAlways(player)
-
-        ThePit.getInstance().parker.showAlways(player)
-    }
 
     @Execute(name = "python")
 

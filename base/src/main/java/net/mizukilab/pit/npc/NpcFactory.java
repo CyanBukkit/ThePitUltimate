@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.events.NPCInteractEvent;
+import net.jitse.npclib.api.state.NPCAnimation;
 import net.jitse.npclib.api.state.NPCSlot;
 import net.mizukilab.pit.npc.runnable.NpcRunnable;
 import net.mizukilab.pit.parm.AutoRegister;
@@ -51,7 +52,9 @@ public class NpcFactory implements Listener {
                 if (abstractPitNPC.getNpcHeldItem() != null) {
                     npc.setItem(NPCSlot.MAINHAND, abstractPitNPC.getNpcHeldItem());
                 }
-
+                if (abstractPitNPC.getAnimation() != null){
+                    npc.playAnimation(abstractPitNPC.getAnimation());
+                }
                 abstractPitNPC.setNpc(npc);
                 abstractPitNPC.initSkin(npc);
 

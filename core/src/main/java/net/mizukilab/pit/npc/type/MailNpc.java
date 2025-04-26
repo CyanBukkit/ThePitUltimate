@@ -6,6 +6,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.mail.Mail;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
+import net.jitse.npclib.api.state.NPCAnimation;
 import net.mizukilab.pit.menu.mail.MailMenu;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,6 +45,11 @@ public class MailNpc extends SkinNPC {
         }
 
         return hologram;
+    }
+
+    @Override
+    public NPCAnimation getAnimation() {
+        return null;
     }
 
     @Override
