@@ -45,6 +45,7 @@ import net.mizukilab.pit.item.type.*
 import net.mizukilab.pit.item.type.mythic.MythicBowItem
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem
+import net.mizukilab.pit.item.type.perk.Sceptre
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests
 import net.mizukilab.pit.menu.shop.button.type.BowBundleShopButton
@@ -71,6 +72,7 @@ import net.mizukilab.pit.perk.type.streak.highlander.GoldNanoFactoryKillStreak
 import net.mizukilab.pit.perk.type.streak.highlander.HighlanderMegaStreak
 import net.mizukilab.pit.perk.type.streak.highlander.KhanateKillStreak
 import net.mizukilab.pit.perk.type.streak.highlander.WitherCraftKillStreak
+import net.mizukilab.pit.perk.type.streak.king.Despot
 import net.mizukilab.pit.perk.type.streak.nonpurchased.*
 import net.mizukilab.pit.perk.type.streak.tothemoon.GoldStack
 import net.mizukilab.pit.perk.type.streak.tothemoon.SuperStreaker
@@ -255,6 +257,7 @@ object PitHook {
             JewelSword::class.java,
             JumpBoostPotion::class.java,
             MythicRepairKit::class.java,
+            Sceptre::class.java,
             PitCactus::class.java,
             SpireSword::class.java,
             MusicalRune::class.java,
@@ -597,7 +600,9 @@ private fun loadPerks() {
         ToTheMoonMegaStreak::class.java,
         GoldStack::class.java,
         XPStack::class.java,
-        SuperStreaker::class.java
+        SuperStreaker::class.java,
+
+        Despot::class.java,
     )
 
     perkFactory.init(classes as Collection<Class<*>>?)

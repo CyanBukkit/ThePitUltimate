@@ -77,6 +77,9 @@ public class NameTagImpl implements NametagAdapter {
             } else {
                 displayName = CC.translate(profile.getFormattedLevelTagTabSpec() + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
                 if (profile.getChosePerk().get(5) != null) {
+                    if (profile.getChosePerk().get(5).getPerkInternalName().equalsIgnoreCase("despot_streak") && profile.getStreakKills() >= 200) {
+                        displayName = CC.translate("&c&l暴君" + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
+                    }
                     if (profile.getChosePerk().get(5).getPerkInternalName().equalsIgnoreCase("over_drive") && profile.getStreakKills() >= 50) {
                         displayName = CC.translate("&e&l超速传动" + " " + RankUtil.getPlayerRankColor(profile.getPlayerUuid()));
                     }
