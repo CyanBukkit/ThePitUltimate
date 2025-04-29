@@ -40,7 +40,8 @@ import kotlin.math.sin
  * @since 2025/4/27
  */
 @AutoRegister
-class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEntity, IPlayerKilledEntity, IPlayerBeKilledByEntity {
+class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEntity, IPlayerKilledEntity,
+    IPlayerBeKilledByEntity {
 
     override fun getInternalPerkName() = "despot_streak"
 
@@ -152,7 +153,11 @@ class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEnti
         val profile = PlayerProfile.getPlayerProfileByUuid(myself.uniqueId) ?: return
         if (profile.streakKills >= 200) {
             if ((profile.streakKills - 200) % 50 == 0.toDouble()) {
-                myself.maxHealth -= 1
+                if (myself.health >= 1.5) {
+                    myself.maxHealth -= 1
+                } else {
+                    PlayerUtil.deadPlayer(myself)
+                }
                 runEffect(myself.location)
             }
             Utils.playBlockBreak(target.location, Material.REDSTONE_BLOCK)

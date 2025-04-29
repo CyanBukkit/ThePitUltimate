@@ -59,14 +59,11 @@ public class AssassinEnchant extends AbstractEnchantment implements Listener, IP
     }
 
     public int getCooldownInt(int enchantLevel) {
-        switch (enchantLevel) {
-            case 2:
-                return 5;
-            case 3:
-                return 3;
-            default:
-                return 10;
-        }
+        return switch (enchantLevel) {
+            case 2 -> 5;
+            case 3 -> 3;
+            default -> 10;
+        };
     }
 
     @Override
@@ -79,8 +76,7 @@ public class AssassinEnchant extends AbstractEnchantment implements Listener, IP
     public void handlePlayerDamaged(int enchantLevel, Player myself, Entity attacker, double damage, AtomicDouble finalDamage, AtomicDouble boostDamage, AtomicBoolean cancel) {
         if (myself == attacker) return;
 
-        cooldown.putIfAbsent(myself.getUniqueId(), new Cooldown(0));
-        if (myself.isSneaking() && cooldown.get(myself.getUniqueId()).hasExpired()) {
+        if (myself.isSneaking() && cooldown.getOrDefault(myself.getUniqueId(),new Cooldown(0L)).hasExpired()) {
             Location location = attacker.getLocation();
             Location newLoc = location.add(attacker.getLocation().getDirection().clone().multiply(-1.5));
 
