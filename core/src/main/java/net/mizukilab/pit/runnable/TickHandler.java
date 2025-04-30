@@ -33,24 +33,28 @@ public class TickHandler extends BukkitRunnable {
 
     final Map<String, ITickTask> ticksPerk = ThePit.getInstance().getPerkFactory().getTickTasks();
 
-    private long tick = 0;
+    private int tick = 0;
 
     @SneakyThrows
     @Override
     public void run() {
+        long currentTickTime = Utils.toUnsignedInt(tick);
         Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
         for (Player player : onlinePlayers) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
             if (!profile.isLoaded()) {
                 continue;
             }
-            tickPerks(player, profile);
-            tickItemInHand(player, tickLeggings(player, profile), profile); //别问我为什么这样写 lol
+            tickPerks(player, profile,currentTickTime);
+            tickItemInHand(player, tickLeggings(player, profile,currentTickTime), profile,currentTickTime); //别问我为什么这样写 lol
         }
         ((Parker)ThePit.getInstance().getParker()).tick();
+        incTickTime();
     }
-
-    private void tickItemInHand(Player player, PlayerInventory inventory, PlayerProfile profile) {
+    private void incTickTime(){
+        tick++;
+    }
+    private void tickItemInHand(Player player, PlayerInventory inventory, PlayerProfile profile,long tick) {
         ItemStack itemInHand = inventory.getItemInHand();
         if (itemInHand != null) {
             Material type = itemInHand.getType();
@@ -59,12 +63,12 @@ public class TickHandler extends BukkitRunnable {
                 if (heldItemStack != null) {
                     if (heldItemStack == itemInHand) { //only compare java object equal
                         if (profile.heldItem instanceof IMythicItem ii)
-                            tickIMythicItem(player, ii);
+                            tickIMythicItem(player, ii,tick);
                     } else {
-                        tickItemStackHand(player, profile, itemInHand);
+                        tickItemStackHand(player, profile, itemInHand,tick);
                     }
                 } else {
-                    tickItemStackHand(player, profile, itemInHand);
+                    tickItemStackHand(player, profile, itemInHand,tick);
                 }
             } else {
                 profile.heldItem = null;
@@ -74,7 +78,7 @@ public class TickHandler extends BukkitRunnable {
     }
 
     @NotNull
-    private PlayerInventory tickLeggings(Player player, PlayerProfile profile) {
+    private PlayerInventory tickLeggings(Player player, PlayerProfile profile,long tick) {
         //裤子
         PlayerInventory inventory = player.getInventory();
         final ItemStack leggings = inventory.getLeggings();
@@ -83,12 +87,12 @@ public class TickHandler extends BukkitRunnable {
             if (leggingItemStack != null) {
                 if (leggingItemStack == leggings) { //only compare java object equal
                     if (profile.leggings instanceof IMythicItem ii)
-                        tickIMythicItem(player, ii);
+                        tickIMythicItem(player, ii,tick);
                 } else {
-                    tickItemStack(player, profile, leggings);
+                    tickItemStack(player, profile, leggings,tick);
                 }
             } else {
-                tickItemStack(player, profile, leggings);
+                tickItemStack(player, profile, leggings,tick);
             }
 
         } else {
@@ -98,21 +102,21 @@ public class TickHandler extends BukkitRunnable {
         return inventory;
     }
 
-    private void tickItemStack(Player player, PlayerProfile profile, ItemStack leggings) {
+    private void tickItemStack(Player player, PlayerProfile profile, ItemStack leggings,long tick) {
         profile.leggingItemStack = leggings;
-        profile.leggings = handleIMythicItemTickTasks(leggings, player);
+        profile.leggings = handleIMythicItemTickTasks(leggings, player,tick);
     }
 
-    private void tickItemStackHand(Player player, PlayerProfile profile, ItemStack leggings) {
+    private void tickItemStackHand(Player player, PlayerProfile profile, ItemStack leggings,long tick) {
         profile.heldItemStack = leggings;
-        profile.heldItem = handleIMythicItemTickTasks(leggings, player);
+        profile.heldItem = handleIMythicItemTickTasks(leggings, player,tick);
     }
 
-    private void tickPerks(Player player, PlayerProfile profile) {
+    private void tickPerks(Player player, PlayerProfile profile,long tick) {
         for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
             final ITickTask task = entry.getValue().getITickTask(ticksPerk);
             if (task != null) {
-                if (tick % task.loopTick(entry.getValue().getLevel()) == 0) {
+                if (tick % Math.max(0,task.loopTick(entry.getValue().getLevel())) == 0) {
                     task.handle(entry.getValue().getLevel(), player);
                 }
             }
@@ -128,16 +132,16 @@ public class TickHandler extends BukkitRunnable {
         }
     }
 
-    public IMythicItem handleIMythicItemTickTasks(ItemStack stack, Player player) {
+    public IMythicItem handleIMythicItemTickTasks(ItemStack stack, Player player,long tick) {
 
         final IMythicItem imythicItem = Utils.getMythicItem(stack);
 
         //U can set it on your profile
-        tickIMythicItem(player, imythicItem);
+        tickIMythicItem(player, imythicItem,tick);
         return imythicItem;
     }
 
-    private void tickIMythicItem(Player player, IMythicItem imythicItem) {
+    private void tickIMythicItem(Player player, IMythicItem imythicItem,long tick) {
         if (imythicItem != null) {
             for (Object2IntMap.Entry<AbstractEnchantment> entry : imythicItem.getEnchantments().object2IntEntrySet()) {
                 final ITickTask task = enchantTicks.get(entry.getKey().getNbtName());

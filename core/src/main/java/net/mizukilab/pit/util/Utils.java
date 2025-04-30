@@ -48,7 +48,9 @@ public class Utils {
     public static net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
         return PublicUtil.toNMStackQuick(item);
     }
-
+    public static final long toUnsignedInt(int data){
+        return data & 0xFFFFFFFFL;
+    }
     /**
      * 随机color
      */
