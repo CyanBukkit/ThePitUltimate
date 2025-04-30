@@ -19,13 +19,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PublicUtil {
-
+    public static final int TICK_OFF_MAGIC_CODE = -1;
     public static String signVer = "Loader";
     public static String itemVersion = "Loader";
     protected static VarHandle METHOD_;
     private static final char[] HEX_DIGITS =
             new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
     private static final int[] HEX_VALUES = new int[128];
 
     static {

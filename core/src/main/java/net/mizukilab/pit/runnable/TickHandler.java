@@ -7,6 +7,7 @@ import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.park.Parker;
 import net.mizukilab.pit.parm.listener.ITickTask;
+import net.mizukilab.pit.util.PublicUtil;
 import net.mizukilab.pit.util.Utils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.SneakyThrows;
@@ -116,7 +117,11 @@ public class TickHandler extends BukkitRunnable {
         for (Map.Entry<Integer, PerkData> entry : profile.getChosePerk().entrySet()) {
             final ITickTask task = entry.getValue().getITickTask(ticksPerk);
             if (task != null) {
-                if (tick % Math.max(0,task.loopTick(entry.getValue().getLevel())) == 0) {
+                int b = task.loopTick(entry.getValue().getLevel());
+                if(b == PublicUtil.TICK_OFF_MAGIC_CODE){
+                    return;
+                }
+                if (tick % Math.max(0, b) == 0) {
                     task.handle(entry.getValue().getLevel(), player);
                 }
             }
@@ -125,7 +130,11 @@ public class TickHandler extends BukkitRunnable {
         for (Map.Entry<String, PerkData> entry : profile.getUnlockedPerkMap().entrySet()) {
             final ITickTask task = ticksPerk.get(entry.getValue().getPerkInternalName());
             if (task != null) {
-                if (tick % Math.max(0, task.loopTick(entry.getValue().getLevel())) == 0) {
+                int b = task.loopTick(entry.getValue().getLevel());
+                if(b == PublicUtil.TICK_OFF_MAGIC_CODE){
+                    return;
+                }
+                if (tick % Math.max(0, b) == 0) {
                     task.handle(entry.getValue().getLevel(), player);
                 }
             }
@@ -151,7 +160,9 @@ public class TickHandler extends BukkitRunnable {
 
                 final int level = entry.getIntValue();
                 int i = Math.max(1, task.loopTick(level)); //KaMa byZero Fix
-
+                if(i == PublicUtil.TICK_OFF_MAGIC_CODE){
+                    return;
+                }
                 if (tick % i == 0) {
                     task.handle(level, player);
                 }
