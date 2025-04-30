@@ -84,7 +84,7 @@ public class PublicUtil {
         builder.append("&7");
         int heats = totalHearts - nowHearts - damageHearts;
         builder.append("❤".repeat(Math.max(0, heats)));
-        ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(finalDamage) + "HP" : ""), 1, false);
+        ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(finalDamage) + "HP" : ""), 2, false);
     }
 
     public static void processActionBarWithSetting(Player victim, Player damager, int damage,double finalDamage) {
