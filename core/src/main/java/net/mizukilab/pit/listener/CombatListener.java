@@ -315,7 +315,7 @@ public class CombatListener implements Listener {
             int heats = totalHearts - nowHearts - damageHearts;
             builder.append("❤".repeat(Math.max(0, heats)));
             builder.append(" &7(&a").append(total).append("&f -> &c").append(Math.max(0, total - (int) damage)).append("&7)");
-            ActionBarUtil.sendActionBar1(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""), 7);
+            ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""), 7,true);
 
             player.setMetadata("showing_damage_data", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
         }

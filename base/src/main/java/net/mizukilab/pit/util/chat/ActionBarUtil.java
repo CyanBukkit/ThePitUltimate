@@ -37,29 +37,5 @@ public class ActionBarUtil {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
-    public static void sendActionBar(Player player, String message, int duration) {
-        sendActionBar(player, message);
-
-        if (duration >= 0) {
-            // Sends empty message at the end of the duration. Allows messages shorter than 3 seconds, ensures precision.
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    sendActionBar(player, "");
-                }
-            }.runTaskLaterAsynchronously(ThePit.getInstance(), duration + 1);
-        }
-
-        // Re-sends the messages every 3 seconds so it doesn't go away from the player's screen.
-        while (duration > 40) {
-            duration -= 40;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    sendActionBar(player, message);
-                }
-            }.runTaskLaterAsynchronously(ThePit.getInstance(), duration);
-        }
-    }
 
 }
