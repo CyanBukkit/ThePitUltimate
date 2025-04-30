@@ -65,7 +65,7 @@ public class GambleEnchant extends AbstractEnchantment implements IAttackEntity 
             if (gamblePlayer.getHealth() > enchantLevel * 2) {
                 PlayerUtil.damage(attacker,gamblePlayer, PlayerUtil.DamageType.TRUE, enchantLevel * 2,false);
             } else {
-                gamblePlayer.setHealth(0);
+                gamblePlayer.damage(1000);
             }
         }
     }
