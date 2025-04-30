@@ -184,7 +184,7 @@ public class PlayerUtil {
      * @param canImmune  此伤害能否被免疫 / 降低
      * @return 此伤害是否被免疫
      */
-    public static boolean damage(Player victim, DamageType damageType, Double damage, Boolean canImmune) {
+    public static boolean damage(Player victim, DamageType damageType, Double damage, boolean canImmune) {
         boolean immune = false;
         if (victim.getInventory().getLeggings() != null && victim.getInventory().getLeggings().getType() != Material.AIR) {
             immune = canImmune && ThePit.getApi().getItemEnchantLevel(victim.getInventory().getLeggings(), "Mirror") >= 1;
@@ -196,7 +196,8 @@ public class PlayerUtil {
                 break;
             case TRUE:
                 if (victim.getHealth() > damage) {
-                    victim.setHealth(Math.min(victim.getMaxHealth(), Math.max(victim.getHealth() - damage, 0.0)));
+                    double max = Math.max(victim.getHealth() - damage, 0.0);
+                    victim.setHealth(Math.min(victim.getMaxHealth(), max));
                 } else {
                     victim.setNoDamageTicks(0);
                     victim.damage(victim.getMaxHealth() * 100);
@@ -224,7 +225,7 @@ public class PlayerUtil {
      * @param canImmune  此伤害能否被免疫 / 降低
      * @return 此伤害是否被免疫
      */
-    public static void damage(Player attacker, Player victim, DamageType damageType, Double damage, boolean canImmune) {
+    public static void damage(Player attacker, Player victim, DamageType damageType, double damage, boolean canImmune) {
         boolean immune = damage(victim, damageType, damage, canImmune);
         if (immune) {
             //Mirror附魔反弹伤害
@@ -233,11 +234,9 @@ public class PlayerUtil {
                 if (level >= 2) damage(attacker, damageType, damage * (0.25 * level - 0.25), false);
             }
         }
+        PublicUtil.processActionBarWithSetting(attacker,victim,(int) damage,damage);
     }
 
-    public static void damage(Player attacker, Entity victim, DamageType damageType, Double damage, Boolean canImmune) {
-
-    }
 
     public static boolean isStaffSpectating(Player player) {
         return false;

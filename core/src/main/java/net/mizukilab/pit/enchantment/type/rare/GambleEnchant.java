@@ -6,6 +6,7 @@ import net.mizukilab.pit.enchantment.param.event.PlayerOnly;
 import net.mizukilab.pit.enchantment.param.item.WeaponOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.parm.listener.IAttackEntity;
+import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.random.RandomUtil;
 import org.bukkit.entity.Entity;
@@ -62,9 +63,9 @@ public class GambleEnchant extends AbstractEnchantment implements IAttackEntity 
                 gamblePlayer = targetPlayer;
             }
             if (gamblePlayer.getHealth() > enchantLevel * 2) {
-                gamblePlayer.setHealth(Math.max(0.1, gamblePlayer.getHealth() - enchantLevel * 2));
+                PlayerUtil.damage(attacker,gamblePlayer, PlayerUtil.DamageType.TRUE, enchantLevel * 2,false);
             } else {
-                gamblePlayer.damage(gamblePlayer.getMaxHealth() * 100);
+                gamblePlayer.setHealth(0);
             }
         }
     }

@@ -69,6 +69,9 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+import static net.mizukilab.pit.util.PublicUtil.processActionBar;
+import static net.mizukilab.pit.util.PublicUtil.processActionBarWithSettingProvided;
+
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/1 11:16
@@ -164,7 +167,7 @@ public class CombatListener implements Listener {
                     }
                 }
 
-                this.handleDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), false);
+                this.postDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), false);
                 playerProfile.setLastDamageAt(System.currentTimeMillis());
             } else if (event.getDamager() instanceof Projectile
                     && ((Projectile) event.getDamager()).getShooter() instanceof Player damager) {
@@ -175,7 +178,7 @@ public class CombatListener implements Listener {
                 PlayerProfile damagerProfile
                         = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
 
-                handleDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), true);
+                postDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), true);
 
                 playerProfile.setLastDamageAt(System.currentTimeMillis());
             } else if (event.getDamager() instanceof TNTPrimed && event.getEntity() instanceof Player) {
@@ -255,7 +258,7 @@ public class CombatListener implements Listener {
 
     }
 
-    private void handleDamage(EntityDamageByEntityEvent event, Player player, Player damager, PlayerProfile playerProfile, PlayerProfile damagerProfile, double damage, boolean isShoot) {
+    private void postDamage(@NotNull EntityDamageByEntityEvent event, Player player, Player damager, PlayerProfile playerProfile, PlayerProfile damagerProfile, double damage, boolean isShoot) {
         playerProfile.setCombatTimer(new Cooldown((playerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
         damagerProfile.setCombatTimer(new Cooldown((damagerProfile.getBounty() == 0 ? 24 : 48), TimeUnit.SECONDS));
 
@@ -275,12 +278,18 @@ public class CombatListener implements Listener {
 
         playerProfile.setHurtDamage((long) (playerProfile.getHurtDamage() + damage));
         if (isShoot) {
-            if (event.getDamager() instanceof Arrow) {
+            Entity damager1;
+            if(event != null){
+                damager1 = event.getDamager();
+            } else {
+                damager1 = damager;
+            }
+            if (damager1 instanceof Arrow) {
 
                 playerProfile.setBowHurtDamage((long) (playerProfile.getBowHurtDamage() + damage));
                 damagerProfile.setBowHit(damagerProfile.getBowHit() + 1);
                 damagerProfile.setArrowTotalDamage((long) (damagerProfile.getArrowTotalDamage() + damage));
-            } else if (event.getDamager() instanceof FishHook) {
+            } else if (damager1 instanceof FishHook) {
                 damagerProfile.setRodHit(damagerProfile.getRodHit() + 1);
             }
         } else {
@@ -289,36 +298,7 @@ public class CombatListener implements Listener {
             damagerProfile.setMeleeTotalDamage((long) (damagerProfile.getMeleeTotalDamage() + damage));
         }
         damagerProfile.setTotalDamage((long) (damagerProfile.getTotalDamage() + damage));
-
-        int absorptionHearts1 = (int) ((CraftPlayer) player).getHandle().getAbsorptionHearts();
-        int absorptionHearts = (int) (absorptionHearts1 / 2);
-        int totalHearts = (int) player.getMaxHealth() / 2;
-        int health = (int) player.getHealth();
-        int nowHearts = health / 2;
-        int damageHearts = (int) damage / 2;
-        int total = absorptionHearts1 + health;
-        if (damagerProfile.getPlayerOption().getBarPriority() != PlayerOption.BarPriority.ENCHANT_ONLY) {
-            StringBuilder builder = new StringBuilder();
-            builder.append(RankUtil.getPlayerColoredName(player.getUniqueId()));
-            boolean venom = !PlayerUtil.isNPC(player) && PlayerUtil.isVenom(player);
-            builder.append(venom ? " &2" : " &4");
-            builder.append("❤".repeat(Math.max(0, nowHearts)));
-
-            if (absorptionHearts > 0) {
-                builder.append("&e");
-            }
-            builder.append("❤".repeat(Math.max(0, absorptionHearts)));
-
-            builder.append(venom ? "&a" : "&c");
-            builder.append("❤".repeat(Math.max(0, damageHearts)));
-            builder.append("&7");
-            int heats = totalHearts - nowHearts - damageHearts;
-            builder.append("❤".repeat(Math.max(0, heats)));
-            builder.append(" &7(&a").append(total).append("&f -> &c").append(Math.max(0, total - (int) damage)).append("&7)");
-            ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(event.getFinalDamage()) + "HP" : ""), 7,true);
-
-            player.setMetadata("showing_damage_data", new FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis()));
-        }
+        processActionBarWithSettingProvided(player, damager, (int) damage, event.getFinalDamage(), damagerProfile);
         if (playerProfile.isLoaded()) {
             if (player.hasMetadata("backing")) {
                 player.sendMessage(CC.translate("&c回城被取消."));
@@ -356,8 +336,9 @@ public class CombatListener implements Listener {
                     .add(playerData);
         }
         //handle kill recap - end
-
     }
+
+
 
     public void handleKill(Player killer, PlayerProfile killerProfile, LivingEntity player, PlayerProfile playerProfile) {
         try {

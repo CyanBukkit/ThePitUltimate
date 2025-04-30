@@ -1,20 +1,27 @@
 package net.mizukilab.pit.util;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.sub.PlayerOption;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.World;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.parm.listener.*;
+import net.mizukilab.pit.util.rank.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,10 +30,9 @@ public class PublicUtil {
     public static String signVer = "Loader";
     public static String itemVersion = "Loader";
     protected static VarHandle METHOD_;
-    private static final char[] HEX_DIGITS =
-            new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     private static final int[] HEX_VALUES = new int[128];
 
+    private static final DecimalFormat numFormat = new DecimalFormat("0.00");
     static {
         Arrays.fill(HEX_VALUES, -1);
 
@@ -55,7 +61,40 @@ public class PublicUtil {
         HEX_VALUES['E'] = 0xe;
         HEX_VALUES['F'] = 0xf;
     }
+    public static void processActionBar(Player victim, Player damager, int damage,double finalDamage) {
+        int absorptionHearts1 = (int) ((CraftPlayer) victim).getHandle().getAbsorptionHearts();
+        int absorptionHearts = (int) (absorptionHearts1 / 2);
+        int totalHearts = (int) victim.getMaxHealth() / 2;
+        int health = (int) victim.getHealth();
+        int nowHearts = health / 2;
+        int damageHearts = damage / 2;
+        StringBuilder builder = new StringBuilder();
+        builder.append(RankUtil.getPlayerColoredName(victim.getUniqueId()));
+        boolean venom = !PlayerUtil.isNPC(victim) && PlayerUtil.isVenom(victim);
+        builder.append(venom ? " &2" : " &4");
+        builder.append("❤".repeat(Math.max(0, nowHearts)));
 
+        if (absorptionHearts > 0) {
+            builder.append("&e");
+        }
+        builder.append("❤".repeat(Math.max(0, absorptionHearts)));
+
+        builder.append(venom ? "&a" : "&c");
+        builder.append("❤".repeat(Math.max(0, damageHearts)));
+        builder.append("&7");
+        int heats = totalHearts - nowHearts - damageHearts;
+        builder.append("❤".repeat(Math.max(0, heats)));
+        ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(finalDamage) + "HP" : ""), 7, false);
+    }
+
+    public static void processActionBarWithSetting(Player victim, Player damager, int damage,double finalDamage) {
+        processActionBarWithSettingProvided(victim,damager,damage,finalDamage,PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId()));
+    }
+    public static void processActionBarWithSettingProvided(Player victim, Player damager, int damage,double finalDamage,PlayerProfile damagerProfile) {
+        if (damagerProfile.isLoaded() && damagerProfile.getPlayerOption().getBarPriority() != PlayerOption.BarPriority.ENCHANT_ONLY) {
+            processActionBar(victim, damager, (int) damage,finalDamage);
+        }
+    }
     static int getHexValueForChar(final char c) {
         try {
             if (HEX_VALUES[c] < 0) {
