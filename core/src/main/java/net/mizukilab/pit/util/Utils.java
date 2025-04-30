@@ -51,6 +51,11 @@ public class Utils {
     public static final long toUnsignedInt(int data){
         return data & 0xFFFFFFFFL;
     }
+
+
+    public static boolean shouldTick(long tick, int b) {
+        return tick % Math.max(1, b) == 0;
+    }
     /**
      * 随机color
      */

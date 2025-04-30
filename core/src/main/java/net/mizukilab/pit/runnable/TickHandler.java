@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Map;
 
+import static net.mizukilab.pit.util.Utils.shouldTick;
+
 /**
  * @Author: EmptyIrony
  * @Date: 2021/1/5 0:30
@@ -121,7 +123,7 @@ public class TickHandler extends BukkitRunnable {
                 if(b == PublicUtil.TICK_OFF_MAGIC_CODE){
                     return;
                 }
-                if (tick % Math.max(0, b) == 0) {
+                if (shouldTick(tick, b)) {
                     task.handle(entry.getValue().getLevel(), player);
                 }
             }
@@ -134,7 +136,7 @@ public class TickHandler extends BukkitRunnable {
                 if(b == PublicUtil.TICK_OFF_MAGIC_CODE){
                     return;
                 }
-                if (tick % Math.max(0, b) == 0) {
+                if (shouldTick(tick, b)) {
                     task.handle(entry.getValue().getLevel(), player);
                 }
             }
@@ -159,11 +161,11 @@ public class TickHandler extends BukkitRunnable {
                 }
 
                 final int level = entry.getIntValue();
-                int i = Math.max(1, task.loopTick(level)); //KaMa byZero Fix
-                if(i == PublicUtil.TICK_OFF_MAGIC_CODE){
+                int b = task.loopTick(level);
+                if(b == PublicUtil.TICK_OFF_MAGIC_CODE){
                     return;
                 }
-                if (tick % i == 0) {
+                if (shouldTick(tick,b)) {
                     task.handle(level, player);
                 }
             }
