@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
+import net.jitse.npclib.api.state.NPCAnimation;
 import net.mizukilab.pit.menu.shop.ShopMenu;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.level.LevelUtil;
@@ -36,6 +37,11 @@ public class ShopNPC extends SkinNPC {
             lines.add("&c在 " + LevelUtil.getLevelTag(profile.getPrestige(), 10) + " &c时解锁");
         }
         return lines;
+    }
+
+    @Override
+    public NPCAnimation getAnimation() {
+        return null;
     }
 
     @Override

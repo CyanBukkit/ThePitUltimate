@@ -14,9 +14,7 @@ public abstract class SkinNPC extends AbstractPitNPC {
             String signature = NewConfiguration.INSTANCE
                     .getConfig()
                     .getString("not-netease-skins." + getNpcInternalName() + "-signature");
-            npc.setSkin(
-                    new Skin(skinValue, signature)
-            );
+            npc.setSkin(new Skin(skinValue, signature));
         }
     }
 }

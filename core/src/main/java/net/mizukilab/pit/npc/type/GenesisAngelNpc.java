@@ -3,6 +3,7 @@ package net.mizukilab.pit.npc.type;
 import cn.charlotte.pit.ThePit;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
+import net.jitse.npclib.api.state.NPCAnimation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +29,11 @@ public class GenesisAngelNpc extends SkinNPC {
         lines.add("&f&l天使");
         lines.add("&e&l右键查看");
         return lines;
+    }
+
+    @Override
+    public NPCAnimation getAnimation() {
+        return null;
     }
 
     @Override

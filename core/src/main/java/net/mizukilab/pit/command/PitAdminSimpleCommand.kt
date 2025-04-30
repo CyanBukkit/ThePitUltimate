@@ -16,10 +16,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.events.impl.AuctionEvent
+import net.mizukilab.pit.item.MythicColor
 import net.mizukilab.pit.item.type.ChunkOfVileItem
 import net.mizukilab.pit.item.type.FunkyFeather
 import net.mizukilab.pit.item.type.MythicBook
 import net.mizukilab.pit.item.type.PitCactus
+import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
+import net.mizukilab.pit.map.kingsquests.item.*
 import net.mizukilab.pit.menu.cdk.generate.CDKMenu
 import net.mizukilab.pit.menu.cdk.view.CDKViewMenu
 import net.mizukilab.pit.menu.mail.MailMenu
@@ -47,6 +50,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -272,6 +276,28 @@ class PitAdminSimpleCommand {
             return
         }
 
+        fun addItemToPlayer(itemStack: ItemStack) {
+            player.inventory.addItem(itemStack.apply { this.amount = amount })
+            sender.sendMessage("§a添加成功!")
+        }
+
+        if (itemsID.contains(":")) {
+            val split = itemsID.split(":")
+            if (split[0] == "mythic_leggings") {
+                val color = try {
+                    MythicColor.valueOf(split[1].uppercase())
+                } catch (e: IllegalArgumentException) {
+                    val validColors = MythicColor.entries.joinToString(", ") { it.name.lowercase() }
+                    sender.sendMessage("§c无效的颜色类型！有效颜色包括: $validColors")
+                    return
+                }
+                addItemToPlayer(
+                    MythicLeggingsItem().apply { this.color = color }.toItemStack()
+                )
+                return
+            }
+        }
+
         when (itemsID.lowercase()) {
             "exp" -> {
                 PlayerProfile.getPlayerProfileByUuid(player.uniqueId).experience += amount
@@ -283,35 +309,23 @@ class PitAdminSimpleCommand {
                 sender.sendMessage("§a添加成功!")
             }
 
-            "funky_feather" -> {
-                player.inventory.addItem(FunkyFeather.toItemStack().apply {
-                    this.amount = amount
-                })
-                sender.sendMessage("§a添加成功!")
-            }
-
-            "chunkofvile" -> {
-                player.inventory.addItem(ChunkOfVileItem.toItemStack().apply { this.amount = amount })
-                sender.sendMessage("§a添加成功!")
-            }
-
-            "mythicbook" -> {
-                player.inventory.addItem(MythicBook.toItemStack().apply { this.amount = amount })
-                sender.sendMessage("§a添加成功!")
-            }
-
-            "cactus" -> {
-                player.inventory.addItem(PitCactus.toItemStack().apply { this.amount = amount })
-                sender.sendMessage("§a添加成功!")
-            }
-
+            "funky_feather" -> addItemToPlayer(FunkyFeather.toItemStack())
+            "chunkofvile" -> addItemToPlayer(ChunkOfVileItem.toItemStack())
+            "mythicbook" -> addItemToPlayer(MythicBook.toItemStack())
+            "cactus" -> addItemToPlayer(PitCactus.toItemStack())
+            "cherry" -> addItemToPlayer(Cherry.toItemStack())
+            "eggs" -> addItemToPlayer(HighGradeEggs.toItemStack())
+            "cake" -> addItemToPlayer(MiniCake.toItemStack())
+            "package" -> addItemToPlayer(PackagedBale.toItemStack())
+            "sugar" -> addItemToPlayer(Sugar.toItemStack())
+            "wheat" -> addItemToPlayer(Wheat.toItemStack())
+            "yummy" -> addItemToPlayer(YummyBread.toItemStack())
             else -> {
                 val itemStack = ThePit.getApi().getMythicItemItemStack(itemsID)
                 if (itemStack == null || itemStack.type == Material.AIR) {
                     sender.sendMessage("§c物品不存在")
                 } else {
-                    player.inventory.addItem(itemStack.apply { this.amount = amount })
-                    sender.sendMessage("§a添加成功!")
+                    addItemToPlayer(itemStack)
                 }
             }
         }
@@ -346,7 +360,7 @@ class PitAdminSimpleCommand {
     @Async
     fun rollback(@Context player: Player, @Arg("name") name: String): String {
         val profile = ThePit.getInstance().profileOperator.namedIOperator(name)
-        if (profile.profile() == null) {
+        if (profile.profile() == null || profile.profile().playerName == "NotLoadPlayer") {
             return CC.translate("&c该玩家不存在")
         }
         val backups: MutableList<PlayerInvBackup> = mutableListOf()

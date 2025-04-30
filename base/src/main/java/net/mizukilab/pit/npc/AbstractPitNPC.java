@@ -2,6 +2,7 @@ package net.mizukilab.pit.npc;
 
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
+import net.jitse.npclib.api.state.NPCAnimation;
 import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -34,6 +35,8 @@ public abstract class AbstractPitNPC {
         return text;
     }
 
+    //NPC 动画
+    public abstract NPCAnimation getAnimation();
     //NPC 生成位置
     public abstract Location getNpcSpawnLocation();
 

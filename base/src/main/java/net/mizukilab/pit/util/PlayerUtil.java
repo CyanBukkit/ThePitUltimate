@@ -489,7 +489,9 @@ public class PlayerUtil {
             player.sendMessage(message);
         }
     }
-
+    public static void deadPlayer(Player player) {
+        PlayerUtil.damage(player, PlayerUtil.DamageType.TRUE, player.getMaxHealth() * 100, false);
+    }
 
     public static Collection<Player> getNearbyPlayers(Location location, double radius) {
         return getNearbyEntitiesByType(Player.class, location, radius, radius, radius, null);

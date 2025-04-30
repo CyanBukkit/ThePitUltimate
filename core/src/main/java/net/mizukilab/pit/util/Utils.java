@@ -4,8 +4,10 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.SneakyThrows;
+import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent;
 import net.mizukilab.pit.config.PitConfig;
 import net.mizukilab.pit.data.operator.PackedOperator;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
@@ -26,6 +28,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -164,7 +167,10 @@ public class Utils {
         }
         return getMythicItem0(item);
     }
-
+    public static void playBlockBreak(Location location, Material material) {
+        PacketPlayOutWorldEvent ppowe = new PacketPlayOutWorldEvent(2001, new BlockPosition(location.getX(), location.getY(), location.getZ()), material.getId(), false);
+        Bukkit.getOnlinePlayers().forEach(p -> ((CraftPlayer)p).getHandle().playerConnection.sendPacket(ppowe));
+    }
     public static PackedOperator constructUnsafeOperator(String searchName) {
         PlayerProfile playerProfile = PlayerProfile.loadPlayerProfileByName(searchName);
         PackedOperator packedOperator = new PackedOperator(ThePit.getInstance());

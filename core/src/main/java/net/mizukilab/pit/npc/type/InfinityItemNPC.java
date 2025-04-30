@@ -2,6 +2,7 @@ package net.mizukilab.pit.npc.type;
 
 import cn.charlotte.pit.ThePit;
 import net.jitse.npclib.api.skin.Skin;
+import net.jitse.npclib.api.state.NPCAnimation;
 import net.mizukilab.pit.menu.admin.item.AdminItemMenu;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,6 +30,11 @@ public class InfinityItemNPC extends SkinNPC {
                 "&b大物品制造者",
                 "&e右键查看"
         );
+    }
+
+    @Override
+    public NPCAnimation getAnimation() {
+        return null;
     }
 
     @Override

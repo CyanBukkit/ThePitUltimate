@@ -3,6 +3,7 @@ package net.mizukilab.pit.npc.type;
 import cn.charlotte.pit.ThePit;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
+import net.jitse.npclib.api.state.NPCAnimation;
 import net.mizukilab.pit.menu.hub.HubMenu;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -28,6 +29,11 @@ public class KeeperNPC extends SkinNPC {
         lines.add("&6&l看门狗");
         lines.add("&7玩累了？点击返回大厅");
         return lines;
+    }
+
+    @Override
+    public NPCAnimation getAnimation() {
+        return null;
     }
 
     @Override
