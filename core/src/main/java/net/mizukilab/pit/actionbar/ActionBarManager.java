@@ -17,22 +17,20 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ActionBarManager implements IActionBarManager {
 
-    Map<UUID, Map<String, MutablePair<String, Integer>>> multiMap = new SWMRHashTable<>();
-
-    StringBuilder builder = new StringBuilder();
+    Map<UUID, MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>>> multiMap = new SWMRHashTable<>();
     ReentrantLock lock = new ReentrantLock();
     public void addActionBarOnQueue(Player player, String arg, String val, int repeat,boolean flush) {
         UUID uniqueId = player.getUniqueId();
-        Map<String, MutablePair<String, Integer>> stringStringMap = multiMap.get(uniqueId);
+        MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>> stringStringMap = multiMap.get(uniqueId);
         if (stringStringMap == null) {
-            stringStringMap = new SWMRHashTable<>();
+            stringStringMap = new MutablePair<>(new StringBuilder(),new SWMRHashTable<>());
             multiMap.put(uniqueId, stringStringMap);
         }
-        stringStringMap.put(arg, new MutablePair<>(val, repeat));
+        stringStringMap.getValue().put(arg, new MutablePair<>(val, repeat));
         if(flush) {
             //All are synchronous
-            if (lock.tryLock()) {
-                tickPiece(player.getUniqueId(), stringStringMap, false);
+            if (lock.tryLock()) {//最大限度的解决性能浪费
+                tickPiece(player.getUniqueId(), stringStringMap.getValue(),stringStringMap.getKey(), false);
                 lock.unlock();
             }
         }
@@ -44,13 +42,13 @@ public class ActionBarManager implements IActionBarManager {
 
     public void tick() {
         lock.lock();
-        ((SWMRHashTable<UUID, Map<String, MutablePair<String, Integer>>>) multiMap).removeIf((uuid, mappedString) -> { //forEach as multimap
-            return tickPiece(uuid, mappedString,true);
+        ((SWMRHashTable<UUID, MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>>>) multiMap).removeIf((uuid, mappedString) -> { //forEach as multimap
+            return tickPiece(uuid, mappedString.getValue(),mappedString.getKey(),true);
         });
         lock.unlock();
     }
 
-    private boolean tickPiece(UUID uuid, Map<String, MutablePair<String, Integer>> mappedString,boolean reduce) {
+    private boolean tickPiece(UUID uuid, Map<String, MutablePair<String, Integer>> mappedString,StringBuilder builder,boolean reduce) {
         Player player = Bukkit.getPlayer(uuid); //get Players
         if (mappedString.isEmpty() || player == null || !player.isOnline()) {
             //remove immediately
@@ -59,6 +57,7 @@ public class ActionBarManager implements IActionBarManager {
         AtomicBoolean ab = new AtomicBoolean(false);
         AtomicInteger index = new AtomicInteger();
         int size = mappedString.size();
+
         ((SWMRHashTable<String, MutablePair<String, Integer>>) mappedString).removeIf((key, value) -> {
             String rawString = value.getKey();
             Integer repeat = value.getValue();
@@ -72,7 +71,9 @@ public class ActionBarManager implements IActionBarManager {
             } else if (!rawString.isEmpty()) {
                 ab.set(true);
             }
-            value.setValue(i1); //setting the value instead create new one, do not use SimpleEntry, because of its rehashing operation
+            if(reduce) {
+                value.setValue(i1); //setting the value instead create new one, do not use SimpleEntry, because of its rehashing operation
+            }
             return false;
         });
         if (ab.get()) {
