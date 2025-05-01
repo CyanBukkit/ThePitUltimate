@@ -95,7 +95,7 @@ import real.nanoneko.PerkConstructor
 
 object PitHook {
     @JvmStatic
-    val gitVersion = "53c934dac"
+    val gitVersion = "f0c0097c"
 
     @JvmStatic
     val itemVersion = "p1_uuid"

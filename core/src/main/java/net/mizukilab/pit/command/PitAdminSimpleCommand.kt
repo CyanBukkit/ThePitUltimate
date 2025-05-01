@@ -309,17 +309,17 @@ class PitAdminSimpleCommand {
                 sender.sendMessage("§a添加成功!")
             }
 
-            "funky_feather" -> addItemToPlayer(FunkyFeather.toItemStack())
-            "chunkofvile" -> addItemToPlayer(ChunkOfVileItem.toItemStack())
-            "mythicbook" -> addItemToPlayer(MythicBook.toItemStack())
-            "cactus" -> addItemToPlayer(PitCactus.toItemStack())
-            "cherry" -> addItemToPlayer(Cherry.toItemStack())
-            "eggs" -> addItemToPlayer(HighGradeEggs.toItemStack())
-            "cake" -> addItemToPlayer(MiniCake.toItemStack())
-            "package" -> addItemToPlayer(PackagedBale.toItemStack())
-            "sugar" -> addItemToPlayer(Sugar.toItemStack())
-            "wheat" -> addItemToPlayer(Wheat.toItemStack())
-            "yummy" -> addItemToPlayer(YummyBread.toItemStack())
+            "funky_feather" -> addItemToPlayer(FunkyFeather.toItemStack()) //羽毛
+            "chunk_of_vile_item" -> addItemToPlayer(ChunkOfVileItem.toItemStack())//煤炭
+            "mythic_reel" -> addItemToPlayer(MythicBook.toItemStack())//附魔卷轴
+            "cactus" -> addItemToPlayer(PitCactus.toItemStack())//仙人掌
+            "cherry" -> addItemToPlayer(Cherry.toItemStack())//樱桃
+            "eggs" -> addItemToPlayer(HighGradeEggs.toItemStack())//高级鸡蛋
+            "cake" -> addItemToPlayer(MiniCake.toItemStack())//迷你蛋糕
+            "package" -> addItemToPlayer(PackagedBale.toItemStack())//干草
+            "sugar" -> addItemToPlayer(Sugar.toItemStack())//颗粒
+            "wheat" -> addItemToPlayer(Wheat.toItemStack())//小麦
+            "yummy" -> addItemToPlayer(YummyBread.toItemStack())//美味面包
             else -> {
                 val itemStack = ThePit.getApi().getMythicItemItemStack(itemsID)
                 if (itemStack == null || itemStack.type == Material.AIR) {
