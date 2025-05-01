@@ -59,7 +59,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +68,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import static net.mizukilab.pit.util.PublicUtil.processActionBar;
 import static net.mizukilab.pit.util.PublicUtil.processActionBarWithSettingProvided;
 
 /**
@@ -279,7 +277,7 @@ public class CombatListener implements Listener {
         playerProfile.setHurtDamage((long) (playerProfile.getHurtDamage() + damage));
         if (isShoot) {
             Entity damager1;
-            if(event != null){
+            if (event != null) {
                 damager1 = event.getDamager();
             } else {
                 damager1 = damager;
@@ -298,7 +296,7 @@ public class CombatListener implements Listener {
             damagerProfile.setMeleeTotalDamage((long) (damagerProfile.getMeleeTotalDamage() + damage));
         }
         damagerProfile.setTotalDamage((long) (damagerProfile.getTotalDamage() + damage));
-        if(damager.getHealth() - event.getFinalDamage() > 0) {
+        if (damager.getHealth() - event.getFinalDamage() > 0) {
             processActionBarWithSettingProvided(player, damager, (int) damage, event.getFinalDamage(), damagerProfile);
         }
         if (playerProfile.isLoaded()) {
@@ -339,7 +337,6 @@ public class CombatListener implements Listener {
         }
         //handle kill recap - end
     }
-
 
 
     public void handleKill(Player killer, PlayerProfile killerProfile, LivingEntity player, PlayerProfile playerProfile) {
@@ -718,11 +715,15 @@ public class CombatListener implements Listener {
         if (!player.isOnline()) {
             return;
         }
-
         Location location = ThePit.getInstance().getPitConfig()
                 .getSpawnLocations()
                 .get(ThreadLocalRandom.current().nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
 
+        if (player.getInventory().getLeggings() != null) {
+            if (Utils.getEnchantLevel(player.getInventory().getLeggings(), "trash_panda_enchant") >= 1) {
+                location = ThePit.getInstance().getPitConfig().getSewersLocation();
+            }
+        }
         player.teleport(location);
 
         PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).setInArena(false);

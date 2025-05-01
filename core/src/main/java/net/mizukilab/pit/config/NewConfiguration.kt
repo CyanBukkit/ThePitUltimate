@@ -5,8 +5,6 @@ import net.mizukilab.pit.enchantment.type.rare.ThePunchEnchant
 import net.mizukilab.pit.item.MythicColor
 import net.mizukilab.pit.listener.CombatListener
 import net.mizukilab.pit.menu.prestige.button.PrestigeStatusButton
-import net.mizukilab.pit.util.PlusPlayer
-import net.mizukilab.pit.util.isPlusPlayer
 import net.mizukilab.pit.util.level.LevelUtil
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -19,6 +17,7 @@ object NewConfiguration {
     var watermarks = "&cThePitUltimate"
     var forbidEnchant = listOf("false");
     var vipPrice = 500
+    var sewersSpawn = 60;
     var priceName = "点券"
     var lobbyCommand = "spb connect lobby"
 
@@ -71,6 +70,7 @@ object NewConfiguration {
         forbidEnchant = config.getStringList("forbidEnchant")
 
         vipPrice = config.getInt("vip-price", 500)
+        sewersSpawn = config.getInt("sewers-spawn", 60)
         priceName = config.getString("price-name", "点券")
         lobbyCommand = config.getString("lobby-command", "hub")
 
@@ -163,6 +163,21 @@ object NewConfiguration {
                 this += Rate(permission, chance)
             }
         }
+
+        rareRate[MythicColor.DARK_GREEN] = ArrayList<Rate>().apply {
+            val normalSection = config.getConfigurationSection("rate.sewers")
+
+            for (key in normalSection.getKeys(false)) {
+                val permission = normalSection.getString("${key}.test")
+                val chance = normalSection.getDouble("${key}.value")
+
+                if (permission == null) {
+                    continue
+                }
+
+                this += Rate(permission, chance)
+            }
+        }
         rareRate[MythicColor.RAGE] = ArrayList<Rate>().apply {
             val rageSection = config.getConfigurationSection("rate.rage")
 
@@ -203,7 +218,7 @@ object NewConfiguration {
 
     fun getChance(player: Player, color: MythicColor): Double {
         val list = when (color) {
-            MythicColor.DARK, MythicColor.RAGE -> {
+            MythicColor.DARK, MythicColor.RAGE, MythicColor.DARK_GREEN -> {
                 rareRate[color]
             }
 
@@ -251,6 +266,7 @@ object NewConfiguration {
         "water-marks" to watermarks,
         "luck-gem" to luckGem,
         "vip-price" to 500,
+        "sewers-spawn" to sewersSpawn,
         "price-name" to "点券",
         "lobby-command" to "hub",
 
@@ -364,6 +380,14 @@ object NewConfiguration {
         "rate.rage.vip2.test" to "pit.vip2",
         "rate.rage.vip2.value" to 0.04,
         "rate.rage.default.value" to 0.02,
+
+
+        "rate.sewers.vip1.test" to "pit.vip1",
+        "rate.sewers.vip1.value" to 0.08,
+        "rate.sewers.vip2.test" to "pit.vip2",
+        "rate.sewers.vip2.value" to 0.04,
+        "rate.sewers.default.value" to 0.02,
+
 
         "mythicDropChance.vip1.test" to "permission.vip1",
         "mythicDropChance.vip1.value" to 0.01,

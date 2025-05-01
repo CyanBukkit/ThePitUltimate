@@ -34,6 +34,7 @@ import net.mizukilab.pit.enchantment.type.ragerare.Regularity
 import net.mizukilab.pit.enchantment.type.ragerare.ThinkOfThePeopleEnchant
 import net.mizukilab.pit.enchantment.type.rare.*
 import net.mizukilab.pit.enchantment.type.sewer_normal.AegisEnchant
+import net.mizukilab.pit.enchantment.type.sewer_rare.TrashPandaEnchant
 import net.mizukilab.pit.enchantment.type.special.SoulRipperEnchant
 import net.mizukilab.pit.events.impl.*
 import net.mizukilab.pit.events.impl.major.*
@@ -146,7 +147,7 @@ object PitHook {
         CDKData.loadAllCDKFromData()
 
         Bukkit.getPluginManager().registerEvents(SewersRunnable, ThePit.getInstance())
-        SewersRunnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
+        SewersRunnable.runTaskTimer(ThePit.getInstance(), 10L, 10L)
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
@@ -443,13 +444,16 @@ private fun loadEnchants() {
         SpeedyHitEnchant::class.java,
         ThePunchEnchant::class.java,
         VolleyEnchant::class.java,
-        AegisEnchant::class.java,
         SoulRipperEnchant::class.java,
         AceOfSpades::class.java,
         Brakes::class.java,
         BreachingChargeEnchant::class.java,
         WitheredAndPiercingThroughTheHeart::class.java,
-        TrotEnchant::class.java
+        TrotEnchant::class.java,
+
+        //下水道附魔
+        AegisEnchant::class.java,
+        TrashPandaEnchant::class.java,
     )
 
     /*        classes += HappyNewYearEnchant::class.java

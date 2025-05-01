@@ -1,6 +1,7 @@
 package net.mizukilab.pit.runnable
 
 import cn.charlotte.pit.ThePit
+import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.getPitProfile
 import net.mizukilab.pit.item.MythicColor
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
@@ -26,7 +27,6 @@ object SewersRunnable : BukkitRunnable(), Listener {
 
     private var existSewersChest: List<Location>? = null
     private var lastClaimed = -1L
-    private val claimCooldown = 2
 
     private val randomList = RandomList(
         "xp" to 100,
@@ -55,8 +55,9 @@ object SewersRunnable : BukkitRunnable(), Listener {
             }
         }
 
-        if (System.currentTimeMillis() - lastClaimed < 1000 * claimCooldown) return
+        if (System.currentTimeMillis() - lastClaimed < 1000 * NewConfiguration.sewersSpawn) return
 
+        CC.boardCast("&9§l下水道! &7箱子已刷新")
         locs.filter { it.block.type == Material.AIR || !it.block.hasMetadata("Sewers_Chest") }
             .forEach { loc ->
                 loc.block.apply {

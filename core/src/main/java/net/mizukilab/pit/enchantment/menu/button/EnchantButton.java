@@ -631,6 +631,12 @@ public class EnchantButton extends Button {
             }
         }
 
+        if (mythicItem.color == MythicColor.DARK_GREEN && mythicItem.getEnchantmentLevel("trash_panda_enchant") >= 1) {
+            int randomLive = RandomUtil.random.nextInt(30, 41);
+            mythicItem.live = randomLive;
+            mythicItem.maxLive = randomLive;
+        }
+
         mythicItem.getEnchantmentRecords()
                 .add(new EnchantmentRecord(
                         player.getName(),
