@@ -84,7 +84,7 @@ public class PublicUtil {
         builder.append("&7");
         int heats = totalHearts - nowHearts - damageHearts;
         builder.append("❤".repeat(Math.max(0, heats)));
-        ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(finalDamage) + "HP" : ""), 2, false);
+        ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(finalDamage) + "HP" : ""), 3, false);
     }
 
     public static void processActionBarWithSetting(Player victim, Player damager, int damage,double finalDamage) {
@@ -201,6 +201,10 @@ public class PublicUtil {
     }
 
     public static void removeFromWorld(Entity entity){
+        if (!Bukkit.isPrimaryThread()) {
+            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> removeFromWorld(entity));
+            return;
+        }
         if(entity instanceof CraftEntity){
             net.minecraft.server.v1_8_R3.Entity entityRaw = ((CraftEntity) entity).getHandle();
             int i = entityRaw.ae;

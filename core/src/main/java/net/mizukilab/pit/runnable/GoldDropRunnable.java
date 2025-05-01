@@ -34,8 +34,8 @@ public class GoldDropRunnable extends BukkitRunnable {
             Iterator<Item> iterator = itemGarbageList.iterator();
             while (iterator.hasNext()) {
                 Item item = iterator.next();
+                item.removeMetadata("gold", ThePit.getInstance());
                 if (item.isValid()) {
-                    item.removeMetadata("gold", ThePit.getInstance());
                     item.remove();
                 }
                 iterator.remove();
