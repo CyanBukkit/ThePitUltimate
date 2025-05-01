@@ -98,7 +98,7 @@ object PitHook {
     val gitVersion = "53c934dac"
 
     @JvmStatic
-    val itemVersion = "p_uuid"
+    val itemVersion = "p1_uuid"
     fun init() {
         try {
             NewConfiguration.loadFile()
