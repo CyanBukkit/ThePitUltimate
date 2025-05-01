@@ -214,6 +214,7 @@ public class EnchantButton extends Button {
 
     /**
      * 面对过程式 附魔, 害得我键盘也给附魔了
+     *
      * @param item
      * @param player
      * @param mythicItem
@@ -306,6 +307,10 @@ public class EnchantButton extends Button {
             results = list.stream()
                     .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RAGE).collect(Collectors.toList());
             rareResults = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.RAGE_RARE).collect(Collectors.toList());
+        } else if (color == MythicColor.DARK_GREEN) {
+            results = list.stream()
+                    .filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.SEWER_NORMAL).collect(Collectors.toList());
+            rareResults = list.stream().filter(abstractEnchantment -> abstractEnchantment.getRarity() == EnchantmentRarity.SEWER_RARE).collect(Collectors.toList());
         }
         rareResults = rareResults.stream().filter(abstractEnchantment -> !isBlackList(player, abstractEnchantment)).collect(Collectors.toList());
         results = results.stream().filter(abstractEnchantment -> !isBlackList(player, abstractEnchantment)).collect(Collectors.toList());
@@ -554,7 +559,7 @@ public class EnchantButton extends Button {
                             Object2IntOpenHashMap<AbstractEnchantment> enchantments1 = mythicItem.getEnchantments();
                             int levelCurrentlyEnchantment = 0;
                             for (Integer value : enchantments1.values()) {
-                                levelCurrentlyEnchantment+= value;
+                                levelCurrentlyEnchantment += value;
                             }
                             enchantments1.put(rareEnchant, levelCurrentlyEnchantment >= 6 ? 2 : 3);
                             announcement = true;

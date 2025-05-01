@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.huanmeng"
-version = /*UUID.randomUUID().toString().substring(0,4);*/"4.1.2"
+version = /*UUID.randomUUID().toString().substring(0,4);*/"4.1.4"
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()

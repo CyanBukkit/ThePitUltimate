@@ -19,6 +19,7 @@ import net.mizukilab.pit.command.handler.HandHasItemValidator
 import net.mizukilab.pit.command.handler.metaKey
 import net.mizukilab.pit.config.NewConfiguration
 import net.mizukilab.pit.data.operator.ProfileOperator
+import net.mizukilab.pit.enchantment.type.addon.AngelArmsEnchant
 import net.mizukilab.pit.enchantment.type.aqua.ClubRodEnchant
 import net.mizukilab.pit.enchantment.type.aqua.GrandmasterEnchant
 import net.mizukilab.pit.enchantment.type.aqua.LuckOfPondEnchant
@@ -46,6 +47,7 @@ import net.mizukilab.pit.item.type.mythic.MythicBowItem
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem
 import net.mizukilab.pit.item.type.perk.Sceptre
+import net.mizukilab.pit.item.type.sewers.Rubbish
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests
 import net.mizukilab.pit.menu.shop.button.type.BowBundleShopButton
@@ -266,7 +268,9 @@ object PitHook {
             TotallyLegitGem::class.java,
             GlobalAttentionGem::class.java,
             UberDrop::class.java,
-            MythicEnchantingTable::class.java
+            MythicEnchantingTable::class.java,
+            //下水道
+            Rubbish::class.java,
         )
         try {
             var itemFactor = ThePit.getInstance().itemFactor
@@ -284,6 +288,8 @@ object PitHook {
 private fun loadEnchants() {
     val enchantmentFactor = ThePit.getInstance().enchantmentFactor
     val classes = mutableListOf(
+        //addon
+        AngelArmsEnchant::class.java,
         //new
         ThunderArrowEnchant::class.java,
         UndeadArrowEnchant::class.java,
@@ -694,6 +700,7 @@ private fun registerListeners() {
         SwordBundleShopButton::class.java,
         BowBundleShopButton::class.java,
         CombatSpadeShopButton::class.java,
+        SewersRunnable::class.java,
         MailSendListener::class.java,
         ButtonListener::class.java,
         GenesisCombatListener::class.java,

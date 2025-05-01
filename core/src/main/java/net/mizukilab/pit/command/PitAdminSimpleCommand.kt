@@ -310,8 +310,8 @@ class PitAdminSimpleCommand {
             }
 
             "funky_feather" -> addItemToPlayer(FunkyFeather.toItemStack()) //羽毛
-            "chunk_of_vile_item" -> addItemToPlayer(ChunkOfVileItem.toItemStack())//煤炭
-            "mythic_reel" -> addItemToPlayer(MythicBook.toItemStack())//附魔卷轴
+            "chunk_of_vile_item", "chunkofvile" -> addItemToPlayer(ChunkOfVileItem.toItemStack())//煤炭
+            "mythic_reel", "mythicbook" -> addItemToPlayer(MythicBook.toItemStack())//附魔卷轴
             "cactus" -> addItemToPlayer(PitCactus.toItemStack())//仙人掌
             "cherry" -> addItemToPlayer(Cherry.toItemStack())//樱桃
             "eggs" -> addItemToPlayer(HighGradeEggs.toItemStack())//高级鸡蛋

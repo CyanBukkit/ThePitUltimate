@@ -1,6 +1,7 @@
 package net.mizukilab.pit.enchantment.type.sewer_normal;
 
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
+import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.parm.listener.ITickTask;
 import net.mizukilab.pit.util.cooldown.Cooldown;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
  * @Created_In: 2021/3/16 21:43
  */
 
+@ArmorOnly
 public class AegisEnchant extends AbstractEnchantment implements ITickTask {
 
     @Override

@@ -14,12 +14,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
 import kotlin.random.Random
 
 object SewersRunnable : BukkitRunnable(), Listener {
 
-    private var existSewersChest: Location? = null
+    private var existSewersChest: List<Location>? = null
 
     private var lastClaimed = -1L
 
@@ -36,14 +37,12 @@ object SewersRunnable : BukkitRunnable(), Listener {
     override fun run() {
         val locs = ThePit.getInstance().pitConfig.sewersChestsLocations
         if (locs.isEmpty()) {
+
             return
         }
-
-        if (existSewersChest != null) {
-            val location = existSewersChest ?: return
-
-            repeat(10) {
-                val particleLoc = location.clone().add(
+        locs.forEach { ass ->
+            repeat(1) {
+                val particleLoc = ass.clone().add(
                     Random.nextDouble(-0.5, 0.5),
                     Random.nextDouble(-0.5, 0.5),
                     Random.nextDouble(-0.5, 0.5)
@@ -52,20 +51,22 @@ object SewersRunnable : BukkitRunnable(), Listener {
                 particleLoc.world.playEffect(
                     particleLoc,
                     Effect.HAPPY_VILLAGER,
-                    1, 1
+                    2, 2
                 )
             }
-            return
         }
 
         if (System.currentTimeMillis() - lastClaimed < 1000 * 20) {
             return
         }
-
-        val location = locs.random()
-        existSewersChest = location
-        val block = location.block
-        block.type = Material.CHEST
+        locs.forEach { ass ->
+            val block = ass.block
+            if (block.type == Material.AIR) {
+                block.type = Material.CHEST
+                block.setMetadata("Swers_Chest", FixedMetadataValue(ThePit.getInstance(), true))
+                existSewersChest = locs
+            }
+        }
     }
 
     @EventHandler
@@ -73,16 +74,16 @@ object SewersRunnable : BukkitRunnable(), Listener {
         if (e.action != Action.RIGHT_CLICK_BLOCK) {
             return
         }
-
         val player = e.player
-        if (e.clickedBlock.location == existSewersChest) {
-            claim(player)
+        if (e.clickedBlock.type == Material.CHEST) {
+            if (e.clickedBlock.hasMetadata("Swers_Chest")) {
+                claim(player, e.clickedBlock.location)
+            }
         }
     }
 
-    private fun claim(player: Player) {
-        existSewersChest?.block?.type = Material.AIR
-        existSewersChest = null
+    private fun claim(player: Player, location: Location) {
+        location.block.type = Material.AIR
         lastClaimed = System.currentTimeMillis()
 
         val profile = player.getPitProfile()
@@ -113,38 +114,31 @@ object SewersRunnable : BukkitRunnable(), Listener {
             }
 
             "diamond_leggings" -> {
-                ItemBuilder(Material.DIAMOND_LEGGINGS)
-                    .deathDrop(true)
-                    .canSaveToEnderChest(true)
-                    .canTrade(true)
-                    .internalName("shopItem")
-                    .buildWithUnbreakable()
+                player.inventory.addItem(
+                    ItemBuilder(Material.DIAMOND_LEGGINGS)
+                        .deathDrop(true)
+                        .canSaveToEnderChest(true)
+                        .canTrade(true)
+                        .internalName("shopItem")
+                        .buildWithUnbreakable()
+                )
+
             }
 
             "diamond_boots" -> {
-                ItemBuilder(Material.DIAMOND_BOOTS)
-                    .deathDrop(true)
-                    .canSaveToEnderChest(true)
-                    .canTrade(true)
-                    .internalName("shopItem")
-                    .buildWithUnbreakable()
+                player.inventory.addItem(
+                    ItemBuilder(Material.DIAMOND_BOOTS)
+                        .deathDrop(true)
+                        .canSaveToEnderChest(true)
+                        .canTrade(true)
+                        .internalName("shopItem")
+                        .buildWithUnbreakable()
+                )
             }
 
             "rubbish" -> {
                 player.inventory.addItem(
-                    ItemBuilder(Material.INK_SACK)
-                        .name("&9下水道废弃物")
-                        .durability(15)
-                        .deathDrop(false)
-                        .canSaveToEnderChest(true)
-                        .canTrade(true)
-                        .lore(
-                            "&7死亡后保留",
-                            "&7使用 64 个废弃物可以找 &9下水道鱼&7",
-                            "&7换取稀有护甲"
-                        )
-                        .internalName("rubbish")
-                        .build()
+                    ThePit.getApi().getMythicItemItemStack("rubbish")
                 )
             }
 
