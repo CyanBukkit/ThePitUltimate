@@ -89,6 +89,9 @@ class PitAdminSimpleCommand {
     @Execute(name = "openMenu")
     @Permission("pit.admin")
     fun openMenu(@Context player: Player, @Arg("menu") menu: String) {
+        if (menu.equals("sewers", ignoreCase = true)) {
+            ThePit.api.openMenu(player, "sewers")
+        }
         if (menu.equals("shop", ignoreCase = true)) {
             ThePit.api.openMenu(player, "shop")
         }

@@ -29,6 +29,7 @@ import net.mizukilab.pit.menu.admin.trade.TradeTrackerMenu
 import net.mizukilab.pit.menu.genesis.GenesisMenu
 import net.mizukilab.pit.menu.heresy.HeresyMenu
 import net.mizukilab.pit.menu.main.AuctionMenu
+import net.mizukilab.pit.menu.sewers.SewersMenu
 import net.mizukilab.pit.menu.shop.ShopMenu
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.item.ItemUtil
@@ -96,6 +97,9 @@ object PitInternalImpl : PitInternalHook {
                 AdminItemMenu().openMenu(player)
             }
 
+            "sewers" -> {
+                SewersMenu().openMenu(player)
+            }
             "heresy" -> {
                 HeresyMenu().openMenu(player)
             }

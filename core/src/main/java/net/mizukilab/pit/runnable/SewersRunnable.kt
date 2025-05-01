@@ -2,6 +2,9 @@ package net.mizukilab.pit.runnable
 
 import cn.charlotte.pit.ThePit
 import net.mizukilab.pit.getPitProfile
+import net.mizukilab.pit.item.MythicColor
+import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
+import net.mizukilab.pit.sendMultiMessage
 import net.mizukilab.pit.util.RandomList
 import net.mizukilab.pit.util.chat.CC
 import net.mizukilab.pit.util.item.ItemBuilder
@@ -16,13 +19,14 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
-import kotlin.random.Random
+import kotlin.math.cos
+import kotlin.math.sin
 
 object SewersRunnable : BukkitRunnable(), Listener {
 
     private var existSewersChest: List<Location>? = null
-
     private var lastClaimed = -1L
+    private val claimCooldown = 2
 
     private val randomList = RandomList(
         "xp" to 100,
@@ -31,53 +35,43 @@ object SewersRunnable : BukkitRunnable(), Listener {
         "diamond_leggings" to 50,
         "diamond_boots" to 50,
         "rubbish" to 50,
-        "milk_buckets" to 10,
+        "mythic_leggings" to 30,
+        "milk_buckets" to 10
     )
 
     override fun run() {
         val locs = ThePit.getInstance().pitConfig.sewersChestsLocations
-        if (locs.isEmpty()) {
+        if (locs.isEmpty()) return
 
-            return
-        }
-        locs.forEach { ass ->
-            repeat(1) {
-                val particleLoc = ass.clone().add(
-                    Random.nextDouble(-0.5, 0.5),
-                    Random.nextDouble(-0.5, 0.5),
-                    Random.nextDouble(-0.5, 0.5)
-                )
+        locs.forEach { loc ->
+            for (i in 0..360 step 15) {
+                val radians = Math.toRadians(i.toDouble())
+                val radius = 1.2
+                val xOffset = cos(radians) * radius
+                val zOffset = sin(radians) * radius
+                val particleLoc = loc.clone().add(xOffset, 0.5, zOffset)
 
-                particleLoc.world.playEffect(
-                    particleLoc,
-                    Effect.HAPPY_VILLAGER,
-                    2, 2
-                )
+                particleLoc.world.playEffect(particleLoc, Effect.HAPPY_VILLAGER, 2, 2)
             }
         }
 
-        if (System.currentTimeMillis() - lastClaimed < 1000 * 20) {
-            return
-        }
-        locs.forEach { ass ->
-            val block = ass.block
-            if (block.type == Material.AIR) {
-                block.type = Material.CHEST
-                block.setMetadata("Swers_Chest", FixedMetadataValue(ThePit.getInstance(), true))
-                existSewersChest = locs
+        if (System.currentTimeMillis() - lastClaimed < 1000 * claimCooldown) return
+
+        locs.filter { it.block.type == Material.AIR || !it.block.hasMetadata("Sewers_Chest") }
+            .forEach { loc ->
+                loc.block.apply {
+                    type = Material.CHEST
+                    setMetadata("Sewers_Chest", FixedMetadataValue(ThePit.getInstance(), true))
+                }
             }
-        }
+        existSewersChest = locs
     }
 
     @EventHandler
-    fun e(e: PlayerInteractEvent) {
-        if (e.action != Action.RIGHT_CLICK_BLOCK) {
-            return
-        }
-        val player = e.player
-        if (e.clickedBlock.type == Material.CHEST) {
-            if (e.clickedBlock.hasMetadata("Swers_Chest")) {
-                claim(player, e.clickedBlock.location)
+    fun onPlayerInteract(event: PlayerInteractEvent) {
+        if (event.action == Action.RIGHT_CLICK_BLOCK && event.clickedBlock.type == Material.CHEST) {
+            if (event.clickedBlock.hasMetadata("Sewers_Chest")) {
+                claim(event.player, event.clickedBlock.location)
             }
         }
     }
@@ -87,79 +81,60 @@ object SewersRunnable : BukkitRunnable(), Listener {
         lastClaimed = System.currentTimeMillis()
 
         val profile = player.getPitProfile()
-
         val id = randomList.random() ?: return
+
         player.playSound(player.location, Sound.LEVEL_UP, 1f, 1f)
         player.sendMessage(CC.translate("&9下水道! &7你领取了下水道奖励."))
-        when (id) {
+
+        val rewardMessage = when (id) {
             "xp" -> {
                 profile.experience += 100
                 profile.applyExperienceToPlayer(player)
+                "- &b100经验"
             }
 
             "gold" -> {
                 profile.coins += 200
                 profile.grindCoins(200.0)
+                "- &e200金币"
             }
 
             "diamond_chestplate" -> {
-                player.inventory.addItem(
-                    ItemBuilder(Material.DIAMOND_CHESTPLATE)
-                        .deathDrop(true)
-                        .canSaveToEnderChest(true)
-                        .canTrade(true)
-                        .internalName("shopItem")
-                        .buildWithUnbreakable()
-                )
+                player.inventory.addItem(ItemBuilder(Material.DIAMOND_CHESTPLATE).buildWithUnbreakable())
+                "- 钻石甲"
             }
 
             "diamond_leggings" -> {
-                player.inventory.addItem(
-                    ItemBuilder(Material.DIAMOND_LEGGINGS)
-                        .deathDrop(true)
-                        .canSaveToEnderChest(true)
-                        .canTrade(true)
-                        .internalName("shopItem")
-                        .buildWithUnbreakable()
-                )
-
+                player.inventory.addItem(ItemBuilder(Material.DIAMOND_LEGGINGS).buildWithUnbreakable())
+                "- 钻石裤"
             }
 
             "diamond_boots" -> {
-                player.inventory.addItem(
-                    ItemBuilder(Material.DIAMOND_BOOTS)
-                        .deathDrop(true)
-                        .canSaveToEnderChest(true)
-                        .canTrade(true)
-                        .internalName("shopItem")
-                        .buildWithUnbreakable()
-                )
+                player.inventory.addItem(ItemBuilder(Material.DIAMOND_BOOTS).buildWithUnbreakable())
+                "- 钻石鞋"
             }
 
             "rubbish" -> {
-                player.inventory.addItem(
-                    ThePit.getApi().getMythicItemItemStack("rubbish")
-                )
+                player.inventory.addItem(ThePit.getApi().getMythicItemItemStack("rubbish"))
+                "- &2下水道废弃物"
+            }
+
+            "mythic_leggings" -> {
+                player.inventory.addItem(MythicLeggingsItem().apply { color = MythicColor.DARK_GREEN }.toItemStack())
+                "- &2下水道之甲"
             }
 
             "milk_buckets" -> {
                 player.inventory.addItem(
                     ItemBuilder(Material.MILK_BUCKET)
-                        .deathDrop(false)
-                        .canSaveToEnderChest(true)
-                        .canDrop(false)
-                        .canTrade(true)
-                        .lore(
-                            "&7死亡后保留",
-                            "",
-                            "&a生命恢复 I(2:00)",
-                            "&7补钙"
-                        )
-                        .internalName("milk_bucket")
+                        .lore("&7死亡后保留", "&a生命恢复 I(2:00)", "&7补钙")
                         .build()
                 )
+                "- &f牛奶桶"
             }
 
+            else -> return
         }
+        player.sendMultiMessage("&7获得奖励: /s&7$rewardMessage")
     }
 }

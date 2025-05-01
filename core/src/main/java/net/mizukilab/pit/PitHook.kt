@@ -643,6 +643,7 @@ private fun loadNpcs() {
             QuestNpc::class.java,
             ShopNPC::class.java,
             StatusNPC::class.java,
+            SewersNpc::class.java
         )
     )
     println("load Npc...")
@@ -700,7 +701,6 @@ private fun registerListeners() {
         SwordBundleShopButton::class.java,
         BowBundleShopButton::class.java,
         CombatSpadeShopButton::class.java,
-        SewersRunnable::class.java,
         MailSendListener::class.java,
         ButtonListener::class.java,
         GenesisCombatListener::class.java,

@@ -176,6 +176,15 @@ class PitAdminCommands {
         return CC.translate("&a成功设置天使阵营NPC位置!")
     }
 
+    @Execute(name = "sewersFishLoc")
+    @Async
+    fun setSewersFishLocation(@Context player: Player): String {
+        ThePit.getInstance().pitConfig.sewersFishNpcLocation = player.location
+
+        ThePit.getInstance().pitConfig.save()
+
+        return CC.translate("&a成功设置下水道鱼NPC位置!")
+    }
     @Execute(name = "shopNpc")
     @Async
     fun setShopNpcLocation(@Context player: Player): String {
@@ -321,6 +330,14 @@ class PitAdminCommands {
         return CC.translate("&a成功设置附魔方块位置: ${ThePit.getInstance().pitConfig.enchantLocation}")
     }
 
+
+    @Execute(name = "sewers")
+    @Async
+    fun setSewers(@Context player: Player): String {
+        ThePit.getInstance().pitConfig.sewersLocation = player.location
+        ThePit.getInstance().pitConfig.save()
+        return CC.translate("&a成功设置下水道出生点")
+    }
     @Execute(name = "ham")
     fun hamNpc(@Context player: Player): String {
         val config = ThePit.getInstance()

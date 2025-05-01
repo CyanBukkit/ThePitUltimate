@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.mizukilab.pit.enchantment.AbstractEnchantment
+import net.mizukilab.pit.util.chat.CC
 import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
@@ -33,6 +34,9 @@ fun Player.sendMessage(message: Component) {
 val Player.audience: Audience
     get() = ThePit.getInstance().audiences.player(this)
 
+fun Player.sendMultiMessage(message: String) {
+    message.split("/s").forEach { this.sendMessage(CC.translate(it)) }
+}
 class Util {
     companion object {
         @JvmStatic

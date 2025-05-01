@@ -137,6 +137,12 @@ public class PitConfig extends Configuration {
     private Location genesisAngelNpcLocation;
 
     @ConfigData(
+            path = "loc.npc.sewers_fish"
+    )
+    @ConfigSerializer(serializer = LocationSerializer.class)
+    private Location sewersFishNpcLocation;
+
+    @ConfigData(
             path = "loc.hologram.spawn"
     )
     @ConfigSerializer(serializer = LocationSerializer.class)
@@ -166,6 +172,12 @@ public class PitConfig extends Configuration {
     )
     @ConfigSerializer(serializer = LocationSerializer.class)
     private Location enchantLocation;
+
+    @ConfigData(
+            path = "loc.region.sewers"
+    )
+    @ConfigSerializer(serializer = LocationSerializer.class)
+    private Location sewersLocation;
     @ConfigData(
             path = "loc.events.hamburger.shop"
     )
@@ -751,6 +763,14 @@ public class PitConfig extends Configuration {
         this.genesisAngelNpcLocation = genesisAngelNpcLocation;
     }
 
+    public void setSewersFishNpcLocation(Location sewersFishNpcLocation) {
+        this.sewersFishNpcLocation = sewersFishNpcLocation;
+    }
+
+    public Location getSewersFishNpcLocation() {
+        return sewersFishNpcLocation;
+    }
+
     public void setLeaderBoardHologram(Location leaderBoardHologram) {
         this.leaderBoardHologram = leaderBoardHologram;
     }
@@ -769,6 +789,14 @@ public class PitConfig extends Configuration {
 
     public void setEnchantLocation(Location enchantLocation) {
         this.enchantLocation = enchantLocation;
+    }
+
+    public void setSewersLocation(Location sewersLocation) {
+        this.sewersLocation = sewersLocation;
+    }
+
+    public Location getSewersLocation() {
+        return sewersLocation;
     }
 
     public void setHamburgerShopLoc(Location hamburgerShopLoc) {
