@@ -34,6 +34,8 @@ import net.mizukilab.pit.enchantment.type.ragerare.Regularity
 import net.mizukilab.pit.enchantment.type.ragerare.ThinkOfThePeopleEnchant
 import net.mizukilab.pit.enchantment.type.rare.*
 import net.mizukilab.pit.enchantment.type.sewer_normal.AegisEnchant
+import net.mizukilab.pit.enchantment.type.sewer_normal.EliminatePowerEnchant
+import net.mizukilab.pit.enchantment.type.sewer_normal.SpywareEnchant
 import net.mizukilab.pit.enchantment.type.sewer_rare.TrashPandaEnchant
 import net.mizukilab.pit.enchantment.type.special.SoulRipperEnchant
 import net.mizukilab.pit.events.impl.*
@@ -454,6 +456,8 @@ private fun loadEnchants() {
         //下水道附魔
         AegisEnchant::class.java,
         TrashPandaEnchant::class.java,
+        EliminatePowerEnchant::class.java,
+        SpywareEnchant::class.java,
     )
 
     /*        classes += HappyNewYearEnchant::class.java

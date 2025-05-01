@@ -57,14 +57,19 @@ object SewersRunnable : BukkitRunnable(), Listener {
 
         if (System.currentTimeMillis() - lastClaimed < 1000 * NewConfiguration.sewersSpawn) return
 
-        CC.boardCast("&9§l下水道! &7箱子已刷新")
+
+        var count = 0
         locs.filter { it.block.type == Material.AIR || !it.block.hasMetadata("Sewers_Chest") }
             .forEach { loc ->
                 loc.block.apply {
                     type = Material.CHEST
                     setMetadata("Sewers_Chest", FixedMetadataValue(ThePit.getInstance(), true))
+                    count++
                 }
+                CC.boardCast("&9§l下水道! &7箱子点位${count}已刷新: ${loc.block.location}")
             }
+
+
         existSewersChest = locs
     }
 

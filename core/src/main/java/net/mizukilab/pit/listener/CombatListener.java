@@ -722,6 +722,7 @@ public class CombatListener implements Listener {
         if (player.getInventory().getLeggings() != null) {
             if (Utils.getEnchantLevel(player.getInventory().getLeggings(), "trash_panda_enchant") >= 1) {
                 location = ThePit.getInstance().getPitConfig().getSewersLocation();
+                player.sendMessage(CC.translate("&2&l垃圾拾荒者! &7你于下水道重生"));
             }
         }
         player.teleport(location);
