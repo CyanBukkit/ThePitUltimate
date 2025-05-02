@@ -5,8 +5,8 @@ import cn.charlotte.pit.api.PitInternalHook
 import cn.charlotte.pit.data.PlayerInvBackup
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.TradeData
-import cn.charlotte.pit.events.IEpicEvent
 import cn.charlotte.pit.events.AbstractEvent
+import cn.charlotte.pit.events.IEpicEvent
 import cn.charlotte.pit.events.INormalEvent
 import cn.charlotte.pit.events.genesis.team.GenesisTeam
 import cn.charlotte.pit.util.hologram.Hologram
@@ -34,6 +34,7 @@ import net.mizukilab.pit.menu.shop.ShopMenu
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.menu.Menu
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -80,7 +81,7 @@ object PitInternalImpl : PitInternalHook {
         previousMenu: Menu?,
         enderChest: Boolean
     ) {
-        BackupShowMenu(profile, backups, backup, enderChest,previousMenu).openMenu(player)
+        BackupShowMenu(profile, backups, backup, enderChest, previousMenu).openMenu(player)
     }
 
     override fun openMenu(player: Player, menuName: String) {
@@ -100,6 +101,7 @@ object PitInternalImpl : PitInternalHook {
             "sewers" -> {
                 SewersMenu().openMenu(player)
             }
+
             "heresy" -> {
                 HeresyMenu().openMenu(player)
             }
@@ -124,6 +126,7 @@ object PitInternalImpl : PitInternalHook {
             "qm" -> {
                 QuickMathEvent()
             }
+
             "hunt" -> {
                 HuntEvent()
             }
@@ -271,6 +274,15 @@ object PitInternalImpl : PitInternalHook {
         return NewConfiguration.watermarks
     }
 
+    override fun playSound(player: Player, soundName: String): Boolean {
+        if (Bukkit.getPlayer(player.name) == null) {
+            return false
+        }
+        ThePit.getInstance().soundFactory.playSound(soundName, player)
+        return true
+    }
+
+
     override fun addItemInHandEnchant(player: Player?, enchantName: String?, enchantLevel: Int): Int {
         val item = player?.inventory?.itemInHand ?: return 1
 
@@ -295,6 +307,7 @@ object PitInternalImpl : PitInternalHook {
         val itemStack = item.toItemStack()
         return itemStack
     }
+
     override fun isLoaded(): Boolean {
         return loaded
     }
