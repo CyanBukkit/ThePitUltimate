@@ -518,7 +518,7 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
             runnable.cancel();
         } catch (Exception ignored) {
         }
-        if (!startByAdmin && ThePit.getInstance().getPitConfig().isGenesisEnable() && bidHistories.isEmpty()) {
+        if (!startByAdmin && ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && bidHistories.isEmpty()) {
             return;
         }
         if (bidHistories.isEmpty()) {

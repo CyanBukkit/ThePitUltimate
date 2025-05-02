@@ -69,11 +69,11 @@ public class GenesisSpawnButton extends Button {
     private List<Location> getLocations() {
         if (displayTeam == GenesisTeam.ANGEL) {
             return ThePit.getInstance()
-                    .getPitConfig()
+                    .getPitWorldConfig()
                     .getAngelSpawns();
         } else {
             return ThePit.getInstance()
-                    .getPitConfig()
+                    .getPitWorldConfig()
                     .getDemonSpawns();
         }
     }

@@ -225,10 +225,10 @@ class PitAdminCommands {
 
             return CC.translate("&a设置成功!")
         }
-
+        val pitGlobal = ThePit.getInstance().globalConfig
         if (type.equals("toggle", ignoreCase = true)) {
-            pitConfig.isDebugServer = !pitConfig.isDebugServer
-            pitConfig.save()
+            pitGlobal.isDebugServer = !pitGlobal.isDebugServer
+            pitGlobal.save()
 
             ThePit.getInstance().rebootRunnable.addRebootTask(
                 RebootTask(
@@ -236,8 +236,7 @@ class PitAdminCommands {
                     System.currentTimeMillis() + 10 * 1000
                 )
             )
-
-            if (pitConfig.isDebugServer) {
+            if (pitGlobal.isDebugServer) {
                 return CC.translate("&a现在开启了，重启以生效")
             } else {
                 return CC.translate("&c现在关闭了，重启以生效")
@@ -246,21 +245,21 @@ class PitAdminCommands {
 
         if (type == "enchNpc") {
             pitConfig.enchantNpcLocation = player.location
-            pitConfig.save()
+            pitGlobal.save()
 
             return CC.translate("&a设置成功!")
         }
 
         if (type == "toPublic") {
-            pitConfig.isDebugServerPublic = true
-            pitConfig.save()
+            pitGlobal.isDebugServerPublic = true
+            pitGlobal.save()
 
             return CC.translate("&a现在开启了")
         }
 
         if (type == "toPrivate") {
-            pitConfig.isDebugServerPublic = false
-            pitConfig.save()
+            pitGlobal.isDebugServerPublic = false
+            pitGlobal.save()
 
             return CC.translate("&c现在关闭了")
         }

@@ -23,7 +23,8 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.mizukilab.pit.actionbar.IActionBarManager;
-import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.config.PitGlobalConfig;
+import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.database.MongoDB;
 import net.mizukilab.pit.enchantment.EnchantmentFactor;
 import net.mizukilab.pit.hologram.HologramFactory;
@@ -78,11 +79,17 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 
 /**
@@ -100,8 +107,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private MongoDB mongoDB;
     @Getter
     private JedisPool jedis;
+    //ol
     @Getter
-    private PitConfig pitConfig;
+    private PitWorldConfig pitConfig;
     @Setter
     @Getter
     private EnchantmentFactor enchantmentFactor;
@@ -202,7 +210,13 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         iSpigot spigot = new iSpigot();
         Bukkit.getServer().getPluginManager().registerEvents(spigot, this);
         //preload
-        preLoad(whiteList);
+        try {
+            preLoad(whiteList);
+        } catch (Exception e){
+            e.printStackTrace();
+            disablePlugin();
+            return;
+        }
         CommonLoader.bootstrap(this);
         //Post load
         postLoad();
@@ -212,8 +226,10 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         loadEventPoller();
     }
 
-    private void preLoad(boolean whiteList) {
-        this.loadConfig();
+    private void preLoad(boolean whiteList) throws Exception{
+        if(!this.loadConfig()){
+            throw new IllegalStateException("Failed to load config");
+        }
 
         this.loadDatabase();
 
@@ -353,7 +369,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     }
 
     private void loadRedisLock() {
-        PitConfig pitConfig = ThePit.getInstance().getPitConfig();
+        PitWorldConfig pitWorldConfig = ThePit.getInstance().getPitConfig();
     }
 
     private void loadHologram() {
@@ -406,20 +422,23 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     public void loadQuest() {
         this.questFactory = new QuestFactory();
     }
-
-    private void loadConfig() {
+    @Getter
+    @Setter
+    PitGlobalConfig globalConfig ;
+    List<PitWorldConfig> pitConfigs = new ArrayList<>();
+    private boolean loadConfig() throws IOException {
         log.info("Loading configuration...");
-        this.pitConfig = new PitConfig(this);
-        this.pitConfig.load();
+        PitGlobalConfig pitWorldConfig = new PitGlobalConfig(this);
+        pitWorldConfig.load();
+        this.globalConfig = pitWorldConfig;
         log.info("Loaded configuration!");
-
-        DEBUG_SERVER = this.pitConfig.isDebugServer();
+        DEBUG_SERVER = pitWorldConfig.isDebugServer();
         if (DEBUG_SERVER) {
             this.getServer().getPluginManager().registerEvents(new Listener() {
                 @EventHandler
                 public void permissionCheckOnJoin(PlayerLoginEvent event) {
                     final Player player = event.getPlayer();
-                    if (pitConfig.isDebugServerPublic()) {
+                    if (pitWorldConfig.isDebugServerPublic()) {
                         final String name = RankUtil.getPlayerRealColoredName(player.getUniqueId());
                         if (name.contains("&7") || name.contains("§7")) {
                             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "你所在的用户组当前无法进入此分区!");
@@ -431,16 +450,51 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             }, this);
         }
 
-        if (pitConfig.isRedisEnable()) {
+        if (pitWorldConfig.isRedisEnable()) {
             jedis = new JedisPool(
                     new GenericObjectPoolConfig(),
-                    pitConfig.getRedisAddress(),
-                    pitConfig.getRedisPort(),
+                    pitWorldConfig.getRedisAddress(),
+                    pitWorldConfig.getRedisPort(),
                     Protocol.DEFAULT_TIMEOUT,
-                    pitConfig.getRedisPassword(),
+                    pitWorldConfig.getRedisPassword(),
                     false
             );
         }
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        Stream<Path> walk = Files.walk(this.getDataFolder().toPath(), FileVisitOption.FOLLOW_LINKS);
+        Optional<Path> worlds = walk.filter(i -> {
+            File file = i.toFile();
+            return file.isDirectory() && file.getName().equals("worlds");
+        }).findFirst();
+        walk.close();
+        worlds.ifPresentOrElse(i -> {
+            atomicBoolean.set(true);
+            try {
+                Stream<Path> walk1 = Files.walk(i, FileVisitOption.FOLLOW_LINKS);
+                walk1.forEach(b -> {
+                    PitWorldConfig pitWorldConfig1 = new PitWorldConfig(globalConfig,ThePit.this,b.toFile().getName(),i.toFile().getName());
+                    pitWorldConfig1.load();
+                    this.pitConfigs.add(pitWorldConfig1);
+                });
+                walk1.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }, () -> {
+            System.out.println("Didn't have any worlds, shutting down");
+            this.disablePlugin();
+        });
+        boolean b = atomicBoolean.get();
+        if(b){
+            if(pitConfigs.isEmpty()){
+                b = false;
+                System.out.println("Didn't have any worlds, shutting down");
+                this.disablePlugin();
+            } else {
+                this.pitConfig = pitConfigs.get(0);
+            }
+        }
+        return b;
     }
 
     private void loadDatabase() {

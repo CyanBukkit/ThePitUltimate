@@ -14,7 +14,6 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.blocks.BlockID;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.function.mask.BlockMask;
-import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.patterns.SingleBlockPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
@@ -117,9 +116,9 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
             player.setMaxHealth(player.getMaxHealth());
             player.setHealth(player.getMaxHealth());
 
-            Location location = ThePit.getInstance().getPitConfig()
+            Location location = ThePit.getInstance().getPitWorldConfig()
                     .getSpawnLocations()
-                    .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
+                    .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitWorldConfig().getSpawnLocations().size()));
             player.teleport(location);
             player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.5F);
         }
@@ -132,7 +131,7 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
 
             final InputStream inputStream = ThePit.getInstance().getClass().getClassLoader().getResourceAsStream("spire.schematic");
 
-            final Location location = ThePit.getInstance().getPitConfig().getSpireLoc();
+            final Location location = ThePit.getInstance().getPitWorldConfig().getSpireLoc();
 
             final BukkitWorld world = new BukkitWorld(location.getWorld());
 
@@ -153,17 +152,17 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
                 e.printStackTrace();
             }
 
-            Location middle = ThePit.getInstance().getPitConfig().getRagePitMiddle();
+            Location middle = ThePit.getInstance().getPitWorldConfig().getRagePitMiddle();
             BlockVector wallVec = new BlockVector(middle.getBlockX(), middle.getBlockY(), middle.getBlockZ());
             wall = FaweAPI.getEditSessionBuilder(world).build();
-            wall.makeCylinder(wallVec, new SingleBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitConfig().getRagePitRadius(), ThePit.getInstance().getPitConfig().getRagePitHeight(), false);
+            wall.makeCylinder(wallVec, new SingleBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitWorldConfig().getRagePitRadius(), ThePit.getInstance().getPitWorldConfig().getRagePitHeight(), false);
             wall.flushQueue();
 
             if (teleport == null) {
                 teleport = FaweAPI.getEditSessionBuilder(world).build();
 
-                Location portalA = ThePit.getInstance().getPitConfig().getPortalPosA();
-                Location portalB = ThePit.getInstance().getPitConfig().getPortalPosB();
+                Location portalA = ThePit.getInstance().getPitWorldConfig().getPortalPosA();
+                Location portalB = ThePit.getInstance().getPitWorldConfig().getPortalPosB();
                 BlockVector posA = new BlockVector(portalA.getBlockX(), portalA.getBlockY(), portalA.getBlockZ());
                 BlockVector posB = new BlockVector(portalB.getBlockX(), portalB.getBlockY(), portalB.getBlockZ());
 
@@ -386,7 +385,7 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
 
     private void teleportPlayer(Player player, PlayerSpireData data) {
         final List<Location> loc = ThePit.getInstance()
-                .getPitConfig()
+                .getPitWorldConfig()
                 .getSpireFloorLoc();
 
         final Location center = loc.get(data.floor);
@@ -456,9 +455,9 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
                     profile.setTempInvUsing(false);
                 }
 
-                Location location = ThePit.getInstance().getPitConfig()
+                Location location = ThePit.getInstance().getPitWorldConfig()
                         .getSpawnLocations()
-                        .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
+                        .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitWorldConfig().getSpawnLocations().size()));
 
                 player.teleport(location);
             });
@@ -511,7 +510,7 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
             if (data != null && data.reachedSixFloor) {
                 rewardRenown++;
             }
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                 rewardRenown++;
             }
             int enchantBoostLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "Paparazzi");

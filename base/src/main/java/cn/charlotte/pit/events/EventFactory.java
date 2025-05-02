@@ -3,7 +3,8 @@ package cn.charlotte.pit.events;
 import cn.charlotte.pit.ThePit;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
-import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.config.PitGlobalConfig;
+import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.util.bossbar.BossBar;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
@@ -184,9 +185,9 @@ public class EventFactory {
         if (event instanceof IPrepareEvent) {
             ((IPrepareEvent) event).onPreActive();
         }
-        PitConfig pitConfig = ThePit.getInstance().getPitConfig();
-        List<String> animationForEpicEvent = pitConfig.animationForEpicEvent;
-        int periodForEpicEvent = pitConfig.periodForEpicEvent;
+        PitGlobalConfig pitWorldConfig = ThePit.getInstance().getGlobalConfig();
+        List<String> animationForEpicEvent = pitWorldConfig.animationForEpicEvent;
+        int periodForEpicEvent = pitWorldConfig.periodForEpicEvent;
         new BukkitRunnable() {
             Iterator<String> iterator = animationForEpicEvent.iterator();
             @Override

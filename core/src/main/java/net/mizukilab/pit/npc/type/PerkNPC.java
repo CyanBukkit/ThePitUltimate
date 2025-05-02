@@ -46,7 +46,7 @@ public class PerkNPC extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitConfig().getPerkNpcLocation();
+        return ThePit.getInstance().getPitWorldConfig().getPerkNpcLocation();
     }
 
     @Override

@@ -47,7 +47,7 @@ public class QuestNpc extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitConfig().getQuestNpcLocation();
+        return ThePit.getInstance().getPitWorldConfig().getQuestNpcLocation();
     }
 
     @Override

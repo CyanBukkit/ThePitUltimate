@@ -27,7 +27,7 @@ public class GenesisCombatListener implements Listener {
                 PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 PlayerProfile damagerProfile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
 
-                if (ThePit.getInstance().getPitConfig().isGenesisEnable() && damagerProfile.getGenesisData().getTeam() != GenesisTeam.NONE) {
+                if (ThePit.getInstance().getGlobalConfig().isGenesisEnable() && damagerProfile.getGenesisData().getTeam() != GenesisTeam.NONE) {
                     //Tier 1 Check Start
                     if (damagerProfile.getGenesisData().getTier() >= 1) {
                         if (playerProfile.getGenesisData().getTeam() != GenesisTeam.NONE && playerProfile.getGenesisData().getTeam() != damagerProfile.getGenesisData().getTeam()) {

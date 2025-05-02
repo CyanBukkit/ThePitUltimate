@@ -89,7 +89,7 @@ public class ProtectListener implements Listener {
 
             Location location = event.getBlock().getLocation();
 
-            if (location.getBlockY() >= ThePit.getInstance().getPitConfig().getArenaHighestY()) {
+            if (location.getBlockY() >= ThePit.getInstance().getPitWorldConfig().getArenaHighestY()) {
                 event.setCancelled(true);
                 return;
             }

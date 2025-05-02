@@ -149,7 +149,7 @@ public class GenesisPerkButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        if (!ThePit.getInstance().getPitConfig().isGenesisEnable() && !ThePit.isDEBUG_SERVER() && !PlayerUtil.isStaff(player))
+        if (!ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && !ThePit.isDEBUG_SERVER() && !PlayerUtil.isStaff(player))
             return;
         if (tier > 7) return;
         HashMap<Integer, Integer> tierRequirement = new HashMap<>();

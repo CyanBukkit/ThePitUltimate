@@ -715,13 +715,13 @@ public class CombatListener implements Listener {
         if (!player.isOnline()) {
             return;
         }
-        Location location = ThePit.getInstance().getPitConfig()
+        Location location = ThePit.getInstance().getPitWorldConfig()
                 .getSpawnLocations()
-                .get(ThreadLocalRandom.current().nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
+                .get(ThreadLocalRandom.current().nextInt(ThePit.getInstance().getPitWorldConfig().getSpawnLocations().size()));
 
         if (player.getInventory().getLeggings() != null) {
             if (Utils.getEnchantLevel(player.getInventory().getLeggings(), "trash_panda_enchant") >= 1) {
-                location = ThePit.getInstance().getPitConfig().getSewersLocation();
+                location = ThePit.getInstance().getPitWorldConfig().getSewersLocation();
                 player.sendMessage(CC.translate("&2&l垃圾拾荒者! &7你于下水道重生"));
             }
         }
@@ -887,7 +887,7 @@ public class CombatListener implements Listener {
         //handle bounty - start
         if (playerProfile.getBounty() != 0 && ThePit.getInstance().getEventFactory().getActiveEpicEvent() == null) {
             String bountyColor = "&6";
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
                 if (playerProfile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
                     bountyColor = "&b";
                 }
@@ -896,7 +896,7 @@ public class CombatListener implements Listener {
                 }
             }
             CC.boardCast(MessageType.BOUNTY, CC.translate("&6&l赏金! " + playerProfile.getFormattedName() + " &7被 " + killerProfile.getFormattedName() + " &7击杀. " + bountyColor + "&l(" + playerProfile.getBounty() + "g)"));
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && killerProfile.getGenesisData().getTier() >= 5) {
+            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && killerProfile.getGenesisData().getTier() >= 5) {
                 coin.set(1.5 * playerProfile.getBounty());
                 killerProfile.grindCoins(1.5 * playerProfile.getBounty());
                 killerProfile.setCoins(killerProfile.getCoins() + 1.5 * playerProfile.getBounty());
@@ -1095,7 +1095,7 @@ public class CombatListener implements Listener {
     @NotNull
     private static String getBountyString(PlayerProfile killerProfile) {
         String bountyColor = "&6";
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
             GenesisTeam team = killerProfile.getGenesisData().getTeam();
             if (team == GenesisTeam.ANGEL) {
                 bountyColor = "&b";
@@ -1114,7 +1114,7 @@ public class CombatListener implements Listener {
         }
 
         String genesisStatus = "";
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable() && killerProfile.getGenesisData().getTeam() != GenesisTeam.NONE) {
+        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && killerProfile.getGenesisData().getTeam() != GenesisTeam.NONE) {
             if (killerProfile.getGenesisData().getTeam() == playerProfile.getGenesisData().getTeam()) {
                 killerProfile.getGenesisData().setPoints(killerProfile.getGenesisData().getPoints() + 1);
                 if (killerProfile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
@@ -1406,7 +1406,7 @@ public class CombatListener implements Listener {
     }
 
     public static boolean isNight() {
-        if (!ThePit.getInstance().getPitConfig().isCurfewEnable()) {
+        if (!ThePit.getInstance().getPitWorldConfig().isCurfewEnable()) {
             return false;
         }
 
@@ -1414,6 +1414,6 @@ public class CombatListener implements Listener {
         instance.setTimeInMillis(System.currentTimeMillis());
         final int hour = instance.get(Calendar.HOUR_OF_DAY);
 
-        return hour >= ThePit.getInstance().getPitConfig().getCurfewStart() && hour <= ThePit.getInstance().getPitConfig().getCurfewEnd();
+        return hour >= ThePit.getInstance().getPitWorldConfig().getCurfewStart() && hour <= ThePit.getInstance().getPitWorldConfig().getCurfewEnd();
     }
 }

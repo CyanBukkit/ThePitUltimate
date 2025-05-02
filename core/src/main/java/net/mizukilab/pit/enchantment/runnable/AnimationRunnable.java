@@ -1,7 +1,7 @@
 package net.mizukilab.pit.enchantment.runnable;
 
 import cn.charlotte.pit.ThePit;
-import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.config.PitWorldConfig;
 import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.enchantment.menu.MythicWellMenu;
 import net.mizukilab.pit.item.MythicColor;
@@ -33,8 +33,8 @@ public class AnimationRunnable extends BukkitRunnable {
     private final List<Location> animationLocations;
 
     public AnimationRunnable() {
-        final PitConfig pitConfig = ThePit.getInstance().getPitConfig();
-        final Location loc = pitConfig.getEnchantLocation();
+        final PitWorldConfig pitWorldConfig = ThePit.getInstance().getPitWorldConfig();
+        final Location loc = pitWorldConfig.getEnchantLocation();
         final Location center;
         if (loc == null) {
             center = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);

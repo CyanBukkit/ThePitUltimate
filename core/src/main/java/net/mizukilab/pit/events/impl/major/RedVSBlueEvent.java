@@ -203,7 +203,7 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
                         rewardCoins += 200;
                     }
                 }
-                if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+                if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                     rewardRenown++;
                 }
                 int enchantBoostLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "Paparazzi");

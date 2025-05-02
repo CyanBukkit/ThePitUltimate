@@ -48,7 +48,7 @@ public class GenesisMenu extends Menu {
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         Map<Integer, Button> button = new HashMap<>();
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable() || bypassed) {
+        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() || bypassed) {
             for (int i = 0; i < 7; i++) {
                 button.put(10 + i, new GenesisPerkButton(genesisTeam, profile, i + 1));
                 //button.put(19 + i, new GenesisPerkButton(genesisTeam, profile, i + 8));

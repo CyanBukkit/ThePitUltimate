@@ -17,10 +17,8 @@ import net.mizukilab.pit.menu.pack.PackageMenu;
 import net.mizukilab.pit.util.DirectionUtil;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.CC;
-import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.random.RandomUtil;
-import net.mizukilab.pit.util.time.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,7 +36,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: EmptyIrony
@@ -136,7 +133,7 @@ public class CarePackageEvent extends AbstractEvent implements INormalEvent, Lis
 
     @Override
     public void onActive() {
-        final List<Location> locations = ThePit.getInstance().getPitConfig().getPackageLocations();
+        final List<Location> locations = ThePit.getInstance().getPitWorldConfig().getPackageLocations();
         if (locations.isEmpty()) {
             CC.boardCast0("&c警告! &6空投&7 坐标信息未配置, 请联系管理员");
             ThePit.getInstance().getEventFactory().inactiveEvent(this);

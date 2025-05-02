@@ -125,7 +125,7 @@ public class LevelUtil {
         } else if (booted && plevelMapping != null) {
             if (plevelMapping.length > prestige) {
                 try {
-                    return plevelMapping[prestige * ThePit.getInstance().getPitConfig().maxLevel + level];
+                    return plevelMapping[prestige * ThePit.getInstance().getGlobalConfig().maxLevel + level];
                 } catch (Exception e) {
                     return Double.MAX_VALUE - 1000.0D;
                 }
@@ -166,10 +166,10 @@ public class LevelUtil {
         booting = true;
         booted = false;
         int limit = PrestigeStatusButton.limit;
-        double[] plevelMappingRaw = new double[(limit + 40) * (ThePit.getInstance().getPitConfig().maxLevel + 1)];
+        double[] plevelMappingRaw = new double[(limit + 40) * (ThePit.getInstance().getGlobalConfig().maxLevel + 1)];
         for (int i = 0; i <= limit; i++) {
-            int append = i * ThePit.getInstance().getPitConfig().maxLevel;
-            for (int ia = 0; ia < ThePit.getInstance().getPitConfig().maxLevel; ia++) {
+            int append = i * ThePit.getInstance().getGlobalConfig().maxLevel;
+            for (int ia = 0; ia < ThePit.getInstance().getGlobalConfig().maxLevel; ia++) {
                 plevelMappingRaw[append + ia] = getLevelExpRequired(i, ia);
             }
         }
@@ -186,7 +186,7 @@ public class LevelUtil {
     public static int getLevelByExp(int prestige, double exp) {
         double experience = exp;
         int level = 0;
-        for (int i = 0; i <= ThePit.getInstance().getPitConfig().maxLevel; i++) {
+        for (int i = 0; i <= ThePit.getInstance().getGlobalConfig().maxLevel; i++) {
             level = i;
             double levelExpRequired = getLevelExpRequired(prestige, i);
             if (experience >= levelExpRequired) {
@@ -216,7 +216,7 @@ public class LevelUtil {
 
     public static float getLevelProgress(int prestige, double experience) {
         int level = LevelUtil.getLevelByExp(prestige, experience);
-        if (level >= ThePit.getInstance().getPitConfig().maxLevel) {
+        if (level >= ThePit.getInstance().getGlobalConfig().maxLevel) {
             return 1;
         } else {
             double levelExpRequired = getLevelExpRequired(prestige, level);

@@ -19,11 +19,9 @@ import com.mongodb.client.model.ReplaceOptions;
 import io.irina.backports.utils.SWMRHashTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.medal.impl.challenge.HundredLevelMedal;
-import net.mizukilab.pit.medal.impl.challenge.MaxBountyMedal;
 import net.mizukilab.pit.quest.AbstractQuest;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.MessageType;
@@ -36,7 +34,6 @@ import net.mizukilab.pit.util.rank.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.Warning;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.mongojack.JacksonMongoCollection;
@@ -638,8 +635,8 @@ public class PlayerProfile {
     public void applyExperienceToPlayer(Player player) {
         int level = getLevel();
         player.setLevel(level);
-        if (level >= ThePit.getInstance().getPitConfig().maxLevel) {
-            this.experience = LevelUtil.getLevelTotalExperience(this.prestige, ThePit.getInstance().getPitConfig().maxLevel);
+        if (level >= ThePit.getInstance().getGlobalConfig().maxLevel) {
+            this.experience = LevelUtil.getLevelTotalExperience(this.prestige, ThePit.getInstance().getGlobalConfig().maxLevel);
             player.setExp(1);
             return;
         }
@@ -683,13 +680,13 @@ public class PlayerProfile {
 
     @JsonIgnore
     public void refreshGenesisData() {
-        if (ThePit.getInstance().getPitConfig().getGenesisSeason() != this.getGenesisData().getSeason()) {
+        if (ThePit.getInstance().getGlobalConfig().getGenesisSeason() != this.getGenesisData().getSeason()) {
             int boostTier = this.getGenesisData().getBoostTier();
             GenesisTeam team = this.getGenesisData().getTeam();
             this.setGenesisData(new GenesisData());
             this.getGenesisData().setBoostTier(boostTier);
             this.getGenesisData().setTeam(team);
-            this.getGenesisData().setSeason(ThePit.getInstance().getPitConfig().getGenesisSeason());
+            this.getGenesisData().setSeason(ThePit.getInstance().getGlobalConfig().getGenesisSeason());
         }
     }
 
@@ -1114,7 +1111,7 @@ public class PlayerProfile {
 
         GenesisData genesisData1 = getGenesisData();
         GenesisTeam team = genesisData1.getTeam();
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+        if (ThePit.getInstance().getGlobalConfig().isGenesisEnable()) {
             return switch (team) {
                 case ANGEL -> "&b";
                 case DEMON -> "&c";

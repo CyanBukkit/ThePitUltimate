@@ -127,7 +127,7 @@ public class NameTagImpl implements NametagAdapter {
                 if (profile.isSupporter() && profile.getPlayerOption().isSupporterStarDisplay() && !profile.isNicked()) {
                     suffix.append(" &e✬");
                 }
-                if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+                if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
                     suffix.append(" ").append(profile.bountyColor());
                     if (profile.getBounty() != 0) {
                         suffix.append("&l").append(profile.getBounty()).append("g");

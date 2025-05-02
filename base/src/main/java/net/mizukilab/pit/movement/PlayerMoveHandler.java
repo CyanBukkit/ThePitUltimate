@@ -6,7 +6,7 @@ import cn.hutool.core.collection.ConcurrentHashSet;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
-import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.runnable.ProfileLoadRunnable;
 import net.mizukilab.pit.util.BlockUtil;
 import net.mizukilab.pit.util.PlayerUtil;
@@ -224,7 +224,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
     }
 
     private static boolean isInArena(Location to) {
-        PitConfig config = ThePit.getInstance().getPitConfig();
+        PitWorldConfig config = ThePit.getInstance().getPitConfig();
         final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
 
         final AABB playerAABB = new AABB(to.getX(), to.getY(), to.getZ(), to.getX() + 0.8, to.getY() + 2, to.getZ() + 0.8);

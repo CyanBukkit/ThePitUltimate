@@ -94,7 +94,7 @@ public class EnchantButton extends Button {
             }
         }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.DEMON && profile.getGenesisData().getTier() >= 3) {
+        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.DEMON && profile.getGenesisData().getTier() >= 3) {
             return (int) (0.35 * AbstractShopButton.getDiscountPrice(player, price));
         }
         return AbstractShopButton.getDiscountPrice(player, price);

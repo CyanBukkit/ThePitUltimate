@@ -17,7 +17,6 @@ import org.mongojack.JacksonMongoCollection;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -46,17 +45,17 @@ public final class MongoDB {
         log.info("Connecting to database... (正在连接数据库<<<<)");
         Instant connects = Instant.now();
 
-        String address = ThePit.getInstance().getPitConfig().getMongoDBAddress();
-        int port = ThePit.getInstance().getPitConfig().getMongoDBPort();
+        String address = ThePit.getInstance().getGlobalConfig().getMongoDBAddress();
+        int port = ThePit.getInstance().getGlobalConfig().getMongoDBPort();
 
-        final String mongoUser = ThePit.getInstance().getPitConfig().getMongoUser();
-        final String mongoPassword = ThePit.getInstance().getPitConfig().getMongoPassword();
+        final String mongoUser = ThePit.getInstance().getGlobalConfig().getMongoUser();
+        final String mongoPassword = ThePit.getInstance().getGlobalConfig().getMongoPassword();
 
         final String databaseName;
-        if (ThePit.getInstance().getPitConfig().getDatabaseName() == null) {
+        if (ThePit.getInstance().getGlobalConfig().getDatabaseName() == null) {
             databaseName = "thePit";
         } else {
-            databaseName = ThePit.getInstance().getPitConfig().getDatabaseName();
+            databaseName = ThePit.getInstance().getGlobalConfig().getDatabaseName();
         }
 
         //hook PowerOFTwo

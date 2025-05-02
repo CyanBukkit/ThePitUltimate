@@ -38,7 +38,7 @@ public class GenesisAngelNpc extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitConfig().getGenesisAngelNpcLocation();
+        return ThePit.getInstance().getPitWorldConfig().getGenesisAngelNpcLocation();
     }
 
     @Override

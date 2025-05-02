@@ -8,7 +8,7 @@ import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent;
-import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.data.operator.PackedOperator;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
@@ -33,9 +33,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
@@ -292,7 +290,7 @@ public class Utils {
     }
 
     public static boolean isInArena(Player player) {
-        PitConfig config = ThePit.getInstance().getPitConfig();
+        PitWorldConfig config = ThePit.getInstance().getPitWorldConfig();
         final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
 
         Location location = player.getLocation();

@@ -21,7 +21,7 @@ object MagicLoader {
     fun load() {
         Thread {
             try {
-                val token = ThePit.getInstance().pitConfig.token
+                val token = ThePit.getInstance().globalConfig.token
                 if (token == null || token == "xxx" || try { UUID.fromString(token); false } catch (e: IllegalArgumentException) { true }) {
                     ThePit.getInstance().sendLogs("§c未检测到凭证，请尽快在 §econfig.yml §c中填写密钥以避免服务器关闭。")
                     sleep(360)

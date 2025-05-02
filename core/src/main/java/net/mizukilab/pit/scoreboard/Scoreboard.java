@@ -117,7 +117,7 @@ public class Scoreboard implements AssembleAdapter {
         String genesisPrefix = "";
         String genesisTeam = "";
         if (bounty == 0) {
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
+            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
                 switch (profile.getGenesisData().getTeam()) {
                     case ANGEL -> {
                         genesisPrefix = "&b";
@@ -261,9 +261,9 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
         }
         if (ThePit.isDEBUG_SERVER()) {
-            lines.add("&3测试 " + (ThePit.getInstance().getPitConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
+            lines.add("&3测试 " + (ThePit.getInstance().getPitWorldConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
-            lines.add(ThePit.getInstance().getPitConfig().getServerName());
+            lines.add(ThePit.getInstance().getPitWorldConfig().getServerName());
         }
         return lines;
     }

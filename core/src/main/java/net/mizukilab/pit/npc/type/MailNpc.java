@@ -54,7 +54,7 @@ public class MailNpc extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitConfig().getMailNpcLocation();
+        return ThePit.getInstance().getPitWorldConfig().getMailNpcLocation();
     }
 
     @Override

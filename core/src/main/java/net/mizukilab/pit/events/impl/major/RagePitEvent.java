@@ -99,14 +99,14 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
             Bukkit.getPluginManager()
                     .registerEvents(this, ThePit.getInstance());
             //build wall - start
-            Location middle = ThePit.getInstance().getPitConfig().getRagePitMiddle();
+            Location middle = ThePit.getInstance().getPitWorldConfig().getRagePitMiddle();
             BlockVector vector = new BlockVector(middle.getBlockX(), middle.getBlockY(), middle.getBlockZ());
             BukkitWorld world = new BukkitWorld(Bukkit.getWorlds().get(0));
             session = FaweAPI.getEditSessionBuilder(world).build();
 
 
             TaskManager.IMP.async(() -> {
-                session.makeCylinder(vector, new JustAirBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitConfig().getRagePitRadius(), ThePit.getInstance().getPitConfig().getRagePitHeight(), false);
+                session.makeCylinder(vector, new JustAirBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitWorldConfig().getRagePitRadius(), ThePit.getInstance().getPitWorldConfig().getRagePitHeight(), false);
                 session.flushQueue();
             });
 
@@ -122,9 +122,9 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
                 player.setMaxHealth(player.getMaxHealth() * 2);
                 player.setHealth(player.getMaxHealth());
 
-                Location location = ThePit.getInstance().getPitConfig()
+                Location location = ThePit.getInstance().getPitWorldConfig()
                         .getSpawnLocations()
-                        .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
+                        .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitWorldConfig().getSpawnLocations().size()));
                 player.teleport(location);
                 player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.5F);
                 player.sendMessage(CC.translate("&5&l大型事件! &6&l疯狂天坑 &7事件开始!"));
@@ -229,7 +229,7 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
             if (killed >= 600) {
                 rewardCoins = 2 * rewardCoins;
             }
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                 rewardRenown++;
             }
             int enchantBoostLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "Paparazzi");

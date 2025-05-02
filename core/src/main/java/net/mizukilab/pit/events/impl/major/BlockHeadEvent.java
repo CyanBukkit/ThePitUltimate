@@ -319,7 +319,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
             this.allblocks = 0;
             List<String> types = Arrays.asList("quicktrail", "combatboost", "superheal", "diamondarmor");
 
-            for (Location location : ThePit.getInstance().getPitConfig().getBlockHeadLocations()) {
+            for (Location location : ThePit.getInstance().getPitWorldConfig().getBlockHeadLocations()) {
                 entities.add(spawnPowerUp(location, types.get(random.nextInt(types.size()))));
             }
 
@@ -387,7 +387,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                 if (allblocks >= 10000) {
                     rewardCoins = 1250;
                 }
-                if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+                if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                     ++rewardRenown;
                 }
                 if (PlayerUtil.isPlayerUnlockedPerk(player, "self_confidence")) {

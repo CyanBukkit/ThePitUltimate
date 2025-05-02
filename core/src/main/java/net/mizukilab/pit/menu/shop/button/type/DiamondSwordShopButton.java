@@ -89,7 +89,7 @@ public class DiamondSwordShopButton extends AbstractShopButton {
     @Override
     public int getPrice(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
+        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
             return (int) (0.35 * 150);
         }
         return 150;

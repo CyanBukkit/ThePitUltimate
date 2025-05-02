@@ -46,7 +46,7 @@ public class ShopNPC extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitConfig().getShopNpcLocation();
+        return ThePit.getInstance().getPitWorldConfig().getShopNpcLocation();
     }
 
     @Override

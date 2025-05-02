@@ -85,7 +85,7 @@ public class CombatSpadeShopButton extends AbstractShopButton implements Listene
     @Override
     public int getPrice(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
+        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
             return (int) (0.35 * 350);
         }
         return 350;

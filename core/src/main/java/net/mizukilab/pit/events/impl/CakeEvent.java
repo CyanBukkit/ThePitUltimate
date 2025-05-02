@@ -15,7 +15,7 @@ import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import net.mizukilab.pit.config.NewConfiguration;
-import net.mizukilab.pit.config.PitConfig;
+import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.medal.impl.challenge.CakeEventMedal;
 import net.mizukilab.pit.util.LocationUtil;
 import net.mizukilab.pit.util.aabb.AABB;
@@ -55,7 +55,7 @@ public class CakeEvent extends AbstractEvent implements INormalEvent, Listener {
 
     public CakeEvent() {
         if (regions == null) {
-            PitConfig config = ThePit.getInstance().getPitConfig();
+            PitWorldConfig config = ThePit.getInstance().getPitWorldConfig();
             regions = new CuboidRegion[]{
                     new CuboidRegion(BukkitUtil.toVector(config.getCakeZoneAPosA()), BukkitUtil.toVector(config.getCakeZoneAPosB())),
                     new CuboidRegion(BukkitUtil.toVector(config.getCakeZoneBPosA()), BukkitUtil.toVector(config.getCakeZoneBPosB())),

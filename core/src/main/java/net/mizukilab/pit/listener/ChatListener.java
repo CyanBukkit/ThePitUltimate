@@ -39,7 +39,7 @@ public class ChatListener implements Listener {
         if (processChatCooldown(event, player)) return;
 
         String tag = profile.getFormattedLevelTagWithRoman();
-        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
             if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
                 tag = "&b♆ " + tag;
             }

@@ -88,11 +88,11 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
 
         PlayerUtil.clearPlayer(player, true);
-        if (!pit.getPitConfig().getSpawnLocations().isEmpty()) {
+        if (!pit.getPitWorldConfig().getSpawnLocations().isEmpty()) {
             Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
-                Location location = pit.getPitConfig()
+                Location location = pit.getPitWorldConfig()
                         .getSpawnLocations()
-                        .get(random.nextInt(pit.getPitConfig().getSpawnLocations().size()));
+                        .get(random.nextInt(pit.getPitWorldConfig().getSpawnLocations().size()));
 
                 player.teleport(location);
             }, 3L);
