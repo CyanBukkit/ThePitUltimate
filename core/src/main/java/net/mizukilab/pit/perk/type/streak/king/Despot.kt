@@ -155,8 +155,6 @@ class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEnti
             if ((profile.streakKills - 200) % 50 == 0.toDouble()) {
                 if (myself.health >= 1.5) {
                     myself.maxHealth -= 1
-                } else {
-                    PlayerUtil.deadPlayer(myself)
                 }
                 runEffect(myself.location)
             }

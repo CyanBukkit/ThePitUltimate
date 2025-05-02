@@ -22,6 +22,7 @@ import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.random.Random
 
 object SewersRunnable : BukkitRunnable(), Listener {
 
@@ -36,7 +37,8 @@ object SewersRunnable : BukkitRunnable(), Listener {
         "diamond_boots" to 50,
         "rubbish" to 50,
         "mythic_leggings" to 30,
-        "milk_buckets" to 10
+        "milk_buckets" to 10,
+        "speed_eggs" to 10,
     )
 
     override fun run() {
@@ -66,7 +68,7 @@ object SewersRunnable : BukkitRunnable(), Listener {
                     setMetadata("Sewers_Chest", FixedMetadataValue(ThePit.getInstance(), true))
                     count++
                 }
-                CC.boardCast("&9§l下水道! &7箱子点位${count}已刷新: ${loc.block.location}")
+                CC.boardCast("&9§l下水道! &7箱子点位${count}已刷新: x: ${loc.block.location.x}, y: ${loc.block.location.y}, z: ${loc.block.location.z}")
             }
 
 
@@ -94,15 +96,17 @@ object SewersRunnable : BukkitRunnable(), Listener {
 
         val rewardMessage = when (id) {
             "xp" -> {
-                profile.experience += 100
+                val random = Random.nextInt(99, 8001)
+                profile.experience += random.toDouble()
                 profile.applyExperienceToPlayer(player)
-                "- &b100经验"
+                "- &b${random}经验"
             }
 
             "gold" -> {
-                profile.coins += 200
-                profile.grindCoins(200.0)
-                "- &e200金币"
+                val random = Random.nextInt(99, 8001)
+                profile.coins += random.toDouble()
+                profile.grindCoins(random.toDouble())
+                "- &e${random}金币"
             }
 
             "diamond_chestplate" -> {
@@ -130,13 +134,16 @@ object SewersRunnable : BukkitRunnable(), Listener {
                 "- &2下水道之甲"
             }
 
+            "speed_eggs" -> {
+                player.inventory.addItem(ThePit.getApi().getMythicItemItemStack("speed_eggs"))
+                "- &b速度蛋"
+            }
+
             "milk_buckets" -> {
                 player.inventory.addItem(
-                    ItemBuilder(Material.MILK_BUCKET)
-                        .lore("&7死亡后保留", "&a生命恢复 I(2:00)", "&7补钙")
-                        .build()
+                    ThePit.getApi().getMythicItemItemStack("milk")
                 )
-                "- &f牛奶桶"
+                "- &f牛奶"
             }
 
             else -> return

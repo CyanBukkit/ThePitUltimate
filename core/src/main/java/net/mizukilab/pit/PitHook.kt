@@ -46,10 +46,12 @@ import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.impl.PitInternalImpl.loaded
 import net.mizukilab.pit.item.factory.ItemFactory
 import net.mizukilab.pit.item.type.*
+import net.mizukilab.pit.item.type.egg.SpeedEggs
 import net.mizukilab.pit.item.type.mythic.MythicBowItem
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem
 import net.mizukilab.pit.item.type.perk.Sceptre
+import net.mizukilab.pit.item.type.sewers.Milk
 import net.mizukilab.pit.item.type.sewers.Rubbish
 import net.mizukilab.pit.listener.*
 import net.mizukilab.pit.map.kingsquests.KingsQuests
@@ -274,6 +276,8 @@ object PitHook {
             MythicEnchantingTable::class.java,
             //下水道
             Rubbish::class.java,
+            Milk::class.java,
+            SpeedEggs::class.java,
         )
         try {
             var itemFactor = ThePit.getInstance().itemFactor

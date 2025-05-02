@@ -487,7 +487,7 @@ public class PlayerListener implements Listener {
                 }
                 new CactusMenu().openMenu(player);
             }
-        } else if (item.getType() == Material.MILK_BUCKET) {
+        } /*else if (item.getType() == Material.MILK_BUCKET) {
             if ("milk_bucket".equals(ItemUtil.getInternalName(item))) {
                 e.setCancelled(true);
                 PlayerUtil.takeOneItemInHand(e.getPlayer());
@@ -495,7 +495,7 @@ public class PlayerListener implements Listener {
                 e.getPlayer().sendMessage(CC.translate("&f牛奶! &7你喝下了牛奶"));
                 e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.DRINK, 1f, 1f);
             }
-        }
+        }*/
     }
 
     @EventHandler

@@ -42,7 +42,6 @@ public class RespawnFamilyEvent extends AbstractEvent implements IEpicEvent, Lis
 
     @EventHandler
     public void onItemLiveDrop(ItemLiveDropEvent e) {
-
         e.setCancelled(true);
     }
 
