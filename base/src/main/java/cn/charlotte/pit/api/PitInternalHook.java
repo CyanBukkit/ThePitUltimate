@@ -52,8 +52,6 @@ public interface PitInternalHook {
 
     String getWatermark();
 
-    boolean playSound(Player player, String soundName);
-
     int addItemInHandEnchant(Player player, String enchantName, int enchantLevel);
 
 

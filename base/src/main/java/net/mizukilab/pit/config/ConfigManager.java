@@ -1,8 +1,10 @@
 package net.mizukilab.pit.config;
 
 import cn.charlotte.pit.ThePit;
+import lombok.Getter;
 import net.mizukilab.pit.util.configuration.Configuration;
 import org.apache.commons.lang3.Validate;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,15 +13,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class ConfigManager {
     PitGlobalConfig global;
-    List<PitWorldConfig> pitConfigs = new ArrayList<>();
+    @Getter
+    Map<Integer,PitWorldConfig> pitConfigs = new ConcurrentHashMap<>();
+    int maxId;
     ThePit instance;
-    int cursor;
+    @Getter
+    long cursor;
     public ConfigManager(ThePit thePit){
         this.instance = thePit;
     }
@@ -30,10 +38,18 @@ public class ConfigManager {
     }
     public int setCursor(int index){
         this.cursor = index;
+        synchronizeGlobal();
         return index;
     }
     public void nextConfig(){
         cursor++;
+        synchronizeGlobal();
+    }
+    public void synchronize(Consumer<PitGlobalConfig> global){
+        global.accept(this.global);
+    }
+    public void synchronizeGlobal(){
+        this.global.setCurrentMapId(cursor);
     }
     public void synchronizeLegacy(){
         PitWorldConfig selectedWorldConfig = getSelectedWorldConfig();
@@ -43,7 +59,11 @@ public class ConfigManager {
     }
     public PitWorldConfig getSelectedWorldConfig() {
         if(!pitConfigs.isEmpty()){
-            return pitConfigs.get(cursor%pitConfigs.size());
+            PitWorldConfig pitWorldConfig1;
+            pitWorldConfig1 = getPitWorldConfig();
+            if (pitWorldConfig1 == null) return null;
+            synchronizeGlobal();
+            return pitWorldConfig1;
         }
         try {
             AtomicBoolean atomicBoolean = new AtomicBoolean();
@@ -62,7 +82,15 @@ public class ConfigManager {
                             for (File file1 : files) {
                                 PitWorldConfig pitWorldConfig1 = new PitWorldConfig(global, instance, file1.getName(), i.toFile().getName());
                                 pitWorldConfig1.load();
-                                this.pitConfigs.add(pitWorldConfig1);
+                                int id = pitWorldConfig1.getId();
+                                if(id <= 0){
+                                    System.out.println("Can't load the config which was identified as negative number or zero " + file1.getName());
+                                    continue;
+                                }
+                                if(id > this.maxId){
+                                    this.maxId = id;
+                                }
+                                this.pitConfigs.put(id,pitWorldConfig1);
                             }
                         }
                     } else {
@@ -78,7 +106,7 @@ public class ConfigManager {
                     System.out.println("Didn't have any worlds, shutting down");
                     return null;
                 } else {
-                    return pitConfigs.get(0);
+                    return pitConfigs.values().iterator().next();
                 }
             }
         } catch (Exception e){
@@ -87,9 +115,42 @@ public class ConfigManager {
         return null;
     }
 
+    @Nullable
+    private PitWorldConfig getPitWorldConfig() {
+        PitWorldConfig pitWorldConfig1;
+        while(true) {
+            long l = cursor % maxId + 1;
+            pitWorldConfig1 = pitConfigs.get((int) l);
+            if (pitWorldConfig1 != null) {
+                break;
+            }
+            if(maxId == 0){
+                return null;
+            }
+            cursor++;
+        }
+        return pitWorldConfig1;
+    }
+    @Nullable
+    public PitWorldConfig getPitWorldConfigSpecific(long cursor) {
+        PitWorldConfig pitWorldConfig1;
+        while(true) {
+            long l = cursor % maxId + 1;
+            pitWorldConfig1 = pitConfigs.get((int) l);
+            if (pitWorldConfig1 != null) {
+                break;
+            }
+            if(maxId == 0){
+                return null;
+            }
+            cursor++;
+        }
+        return pitWorldConfig1;
+    }
+
     public void save(){
         global.save();
-        this.pitConfigs.forEach(Configuration::save);
+        this.pitConfigs.values().forEach(Configuration::save);
     }
     public void reload(){
         global.load();

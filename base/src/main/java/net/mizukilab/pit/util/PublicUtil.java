@@ -67,7 +67,7 @@ public class PublicUtil {
         int totalHearts = (int) victim.getMaxHealth() / 2;
         int health = (int) victim.getHealth();
         int nowHearts = health / 2;
-        int damageHearts = damage / 2;
+        int damageHearts = ((int)finalDamage) / 2;
         StringBuilder builder = new StringBuilder();
         builder.append(RankUtil.getPlayerColoredName(victim.getUniqueId()));
         boolean venom = !PlayerUtil.isNPC(victim) && PlayerUtil.isVenom(victim);

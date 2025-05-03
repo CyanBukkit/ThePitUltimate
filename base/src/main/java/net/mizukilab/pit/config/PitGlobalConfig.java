@@ -140,12 +140,6 @@ public class PitGlobalConfig extends Configuration {
     @Setter
     @Getter
     @ConfigData(
-            path = "switchmap.cooldown"
-    )
-    private long switchMapCooldown;
-    @Setter
-    @Getter
-    @ConfigData(
             path = "scoreboard.viewSwitchMapCooldownPre30s"
     )
     private boolean cooldownView;
@@ -153,6 +147,21 @@ public class PitGlobalConfig extends Configuration {
     @Getter
     @ConfigData(path = "server-name")
     private String serverName = "&e天坑乱斗";
+
+    @Setter
+    @Getter
+    @ConfigData(path = "currentMapId")
+    private long currentMapId = 0;
+
+    @Setter
+    @Getter
+    @ConfigData(path = "duration")
+    private long duration = 60000;
+    @Setter
+    @Getter
+    @ConfigData(path = "startDate")
+    private long startDate = System.currentTimeMillis();
+
     public boolean isGenesisEnable() {
         try {
             return System.currentTimeMillis() >= getGenesisStartTime() && System.currentTimeMillis() < getGenesisEndTime();

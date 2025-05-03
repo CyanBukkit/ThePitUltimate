@@ -322,6 +322,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         }
         System.out.println("Switching io executions to current thread");
         try {
+            configManager.save();
             profileOperator.close();
         } catch (Exception e) {
             System.err.println("Failed to execute!");

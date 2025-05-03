@@ -61,6 +61,26 @@ class PitAdminCommands {
         }
         mapSelector.switchMapIndexed(cursor.toInt());
     }
+    @Execute(name = "lookupAndSwitchMap")
+    @Shortcut("lookupSWM")
+    fun lookupMap(@Context player: Player,@OptionalArg("cursorName") cursor: String){
+        var mapSelector = ThePit.getInstance().mapSelector
+        if(cursor == null){
+            var cursorInt: Int = -1;
+            ThePit.getInstance().configManager.pitConfigs.values.forEach {
+                if (it.worldName.equals(cursor)) {
+                   cursorInt = it.id
+                }
+            };
+            if(cursorInt == -1){
+                player.sendMessage("error")
+                return;
+            }
+            mapSelector.switchMapIndexed(cursorInt)
+            return;
+        }
+        player.sendMessage("error")
+    }
     @Execute(name = "createEquation")
     @Shortcut("eq")
     fun eqEvent(@Context player: Player, @Arg("eqQuest") eq: String, @Arg("eqAns") ans: String) {

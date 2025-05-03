@@ -38,12 +38,27 @@ public class MapSelector {
         reset();
     }
     public void reload() {
-        long switchMapCooldown = config.getGlobal().getSwitchMapCooldown();
-        if (switchMapCooldown > 0) {
-            switchCooldown = new Cooldown(switchMapCooldown * 1000);
-        } else {
+        long start = config.getGlobal().getStartDate();
+        long duration = config.getGlobal().getDuration();
+        if(duration == -1 && start == -1){
             switchCooldown = null;
+            return;
         }
+        long curTime = System.currentTimeMillis();
+        long diff = curTime - start;
+        long maps = diff / duration;
+        long remain = diff - duration * maps;
+        long currentCooldown;
+        if (remain > 0) {
+            currentCooldown = remain;
+        } else {
+            maps += 1;
+            currentCooldown = duration;
+        }
+        long id = config.getGlobal().getCurrentMapId() + maps;
+        config.setCursor((int) id);
+        config.synchronizeLegacy();
+        switchCooldown = new Cooldown(currentCooldown);
     }
     public void reset(){
         reInitNpc();
@@ -101,7 +116,13 @@ public class MapSelector {
                 return;
             }
             switchMap();
-            switchCooldown.reset();
+            long duration = config.getGlobal().getDuration();
+            if(switchCooldown.getDuration() != duration){
+                switchCooldown = new Cooldown(duration);
+            } else {
+                switchCooldown.reset();
+            }
+            this.config.getGlobal().setStartDate(System.currentTimeMillis());
             CC.boardCast("&a&l地图! &7地图切换成功, 已经清空所有玩家的状态, 祝刷坑愉快!");
         }
     }

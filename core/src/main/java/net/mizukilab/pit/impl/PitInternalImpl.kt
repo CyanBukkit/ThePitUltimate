@@ -34,6 +34,7 @@ import net.mizukilab.pit.menu.shop.ShopMenu
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.menu.Menu
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -270,6 +271,7 @@ object PitInternalImpl : PitInternalHook {
     override fun getWatermark(): String {
         return NewConfiguration.watermarks
     }
+
 
     override fun addItemInHandEnchant(player: Player?, enchantName: String?, enchantLevel: Int): Int {
         val item = player?.inventory?.itemInHand ?: return 1

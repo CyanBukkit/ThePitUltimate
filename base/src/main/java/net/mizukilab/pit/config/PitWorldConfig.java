@@ -28,6 +28,12 @@ public class PitWorldConfig extends Configuration {
     @Setter
     @Getter
     @ConfigData(
+            path = "id"
+    )
+    private int id;
+    @Setter
+    @Getter
+    @ConfigData(
             path = "arenaHighestY"
     )
     private int arenaHighestY;

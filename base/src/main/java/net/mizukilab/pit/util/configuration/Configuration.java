@@ -53,7 +53,6 @@ public class Configuration {
 
         try {
             this.config.load(this.file);
-            System.out.println(this.config.saveToString());
         } catch (InvalidConfigurationException | IOException var2) {
             var2.printStackTrace();
         }

@@ -32,6 +32,13 @@ object PitPapiHook : PlaceholderExpansion() {
         }
 
         when (params) {
+            "next_map" -> {
+                val map = ThePit.getInstance().configManager.getPitWorldConfigSpecific(ThePit.getInstance().configManager.cursor + 1L)
+                    if(map != null){
+                        return map.worldName
+                    }
+                return "NO"
+            }
             "cooldown_switchmap" -> {
                 ThePit.getInstance().mapSelector.remainTime.toString()
             }
