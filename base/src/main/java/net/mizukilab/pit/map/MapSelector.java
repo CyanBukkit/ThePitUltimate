@@ -40,7 +40,7 @@ public class MapSelector {
     public void reload() {
         long start = config.getGlobal().getStartDate();
         long duration = config.getGlobal().getDuration();
-        if(duration == -1 && start == -1){
+        if(duration == -1 || start == -1){
             switchCooldown = null;
             return;
         }
