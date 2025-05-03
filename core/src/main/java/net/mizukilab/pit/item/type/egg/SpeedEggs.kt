@@ -48,8 +48,8 @@ class SpeedEggs : AbstractPitItem(), Listener {
         val player = event.player
         val item = event.item ?: return
 
-        if (cooldowns.getOrDefault(player.uniqueId, Cooldown(0L)).hasExpired()) {
-            if ("speed_eggs" == ItemUtil.getInternalName(item)) {
+        if ("speed_eggs" == ItemUtil.getInternalName(item)) {
+            if (cooldowns.getOrDefault(player.uniqueId, Cooldown(0L)).hasExpired()) {
                 event.isCancelled = true
                 event.setUseInteractedBlock(Event.Result.DENY)
                 event.setUseItemInHand(Event.Result.DENY)
@@ -58,10 +58,15 @@ class SpeedEggs : AbstractPitItem(), Listener {
                 player.playSound(player.location, Sound.EAT, 1f, 1f)
 
                 player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 400, 1))
+            } else {
+                player.sendMultiMessage(
+                    "&c再次使用需等 ${
+                        cooldowns[player.uniqueId]?.let {
+                            TimeUtil.millisToRoundedTime(it.remaining).replace(" ", "")
+                        }
+                    }."
+                )
             }
-        } else {
-            player.sendMultiMessage(
-                "&c再次使用需等 ${cooldowns[player.uniqueId]?.let { TimeUtil.millisToRoundedTime(it.remaining).replace(" ", "") }}.")
         }
     }
 

@@ -26,6 +26,7 @@ public interface PitInternalHook {
     void openTradeTrackMenu(Player player, PlayerProfile profile, List<TradeData> data);
 
     void openBackupShowMenu(Player player, PlayerProfile profile, List<PlayerInvBackup> backups, PlayerInvBackup backup, boolean enderChest);
+
     void openBackupShowMenu(Player player, PlayerProfile profile, List<PlayerInvBackup> backups, PlayerInvBackup backup, Menu previousMenu, boolean enderChest);
 
     void openMenu(Player player, String menuName);
@@ -35,7 +36,6 @@ public interface PitInternalHook {
     Hologram createHologram(Location location, String text);
 
     UUID getRunningKingsQuestsUuid();
-
 
 
     String getPitSupportPermission();
@@ -51,6 +51,9 @@ public interface PitInternalHook {
     boolean openEvent(AbstractEvent event, Player player);
 
     String getWatermark();
+
+    boolean playSound(Player player, String soundName);
+
     int addItemInHandEnchant(Player player, String enchantName, int enchantLevel);
 
 

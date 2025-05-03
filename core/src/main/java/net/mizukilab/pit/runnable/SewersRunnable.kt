@@ -146,7 +146,14 @@ object SewersRunnable : BukkitRunnable(), Listener {
                 "- &f牛奶"
             }
 
-            else -> return
+            else -> {
+                if (ThePit.getApi().getMythicItemItemStack(id).type != Material.AIR) {
+                    val item = ThePit.getApi().getMythicItemItemStack(id)
+                    player.inventory.addItem(item)
+                    "- ${item.itemMeta.displayName}"
+                }
+                return
+            }
         }
         player.sendMultiMessage("&7获得奖励: /s&7$rewardMessage")
     }
