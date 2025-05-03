@@ -10,14 +10,6 @@ service:
     #不需要直接删除即可
     user: admin
     password: admin
-  # redis 支持
-  # 如果你有跨服需求(两个pit子服共享数据), 一定要开, 否则会刷物品
-  redis:
-    enable: false
-    ip: 127.0.0.1
-    port: 6379
-    #不需要直接删除即可
-    password: admin
 #debug选项
 debug:
   debugServer: false

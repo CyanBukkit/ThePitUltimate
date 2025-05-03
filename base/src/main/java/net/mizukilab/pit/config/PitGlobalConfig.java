@@ -111,7 +111,7 @@ public class PitGlobalConfig extends Configuration {
     )
     private String mongoPassword;
 
-    @Setter
+/*    @Setter
     @Getter
     @ConfigData(
             path = "service.redis.enable"
@@ -136,7 +136,7 @@ public class PitGlobalConfig extends Configuration {
     @ConfigData(
             path = "service.redis.password"
     )
-    private String redisPassword;
+    private String redisPassword;*/
     @Setter
     @Getter
     @ConfigData(
