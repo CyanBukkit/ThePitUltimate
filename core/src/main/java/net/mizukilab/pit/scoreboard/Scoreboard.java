@@ -10,6 +10,8 @@ import cn.charlotte.pit.events.genesis.GenesisTeam;
 import cn.charlotte.pit.perk.AbstractPerk;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.config.NewConfiguration;
+import net.mizukilab.pit.config.PitGlobalConfig;
+import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.events.impl.major.RagePitEvent;
 import net.mizukilab.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak;
 import net.mizukilab.pit.util.PlayerUtil;
@@ -67,13 +69,14 @@ public class Scoreboard implements AssembleAdapter {
         int level = profile.getLevel();
 
         long currentSystemTime = System.currentTimeMillis();
+        ThePit instance = ThePit.getInstance();
         if (NewConfiguration.INSTANCE.getScoreboardShowtime()) {
             lines.add("&7" +
-                    dateFormat.format(currentSystemTime) + " &8" + ThePit.getInstance().getServerId());
+                    dateFormat.format(currentSystemTime) + " &8" + instance.getServerId());
         }
 
-        IEpicEvent activeEpicEvent = ThePit.getInstance().getEventFactory().getActiveEpicEvent();
-        INormalEvent activeNormalEvent = ThePit.getInstance().getEventFactory().getActiveNormalEvent();
+        IEpicEvent activeEpicEvent = instance.getEventFactory().getActiveEpicEvent();
+        INormalEvent activeNormalEvent = instance.getEventFactory().getActiveNormalEvent();
         if (activeEpicEvent != null) {
             AbstractEvent event = (AbstractEvent) activeEpicEvent;
             lines.add(" ");
@@ -116,8 +119,9 @@ public class Scoreboard implements AssembleAdapter {
 
         String genesisPrefix = "";
         String genesisTeam = "";
+        PitWorldConfig pitConfig = instance.getPitConfig();
         if (bounty == 0) {
-            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
+            if (pitConfig.isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
                 switch (profile.getGenesisData().getTeam()) {
                     case ANGEL -> {
                         genesisPrefix = "&b";
@@ -257,13 +261,20 @@ public class Scoreboard implements AssembleAdapter {
         }
 
         lines.add(" ");
-        if (ThePit.getInstance().getRebootRunnable().getCurrentTask() != null) {
-            lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
+        PitGlobalConfig globalConfig = ThePit.getInstance().getGlobalConfig();
+        if(globalConfig.isCooldownView()) {
+            int remainTime = ThePit.getInstance().getMapSelector().getRemainTime();
+            if (remainTime > 0 && remainTime < 30) {
+                lines.add("&a切换地图! &c(" + remainTime + "s)");
+            }
+        }
+        if (instance.getRebootRunnable().getCurrentTask() != null) {
+            lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(instance.getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
         }
         if (ThePit.isDEBUG_SERVER()) {
-            lines.add("&3测试 " + (ThePit.getInstance().getGlobalConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
+            lines.add("&3测试 " + (instance.getGlobalConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
-            lines.add(ThePit.getInstance().getGlobalConfig().getServerName());
+            lines.add(instance.getGlobalConfig().getServerName());
         }
         return lines;
     }

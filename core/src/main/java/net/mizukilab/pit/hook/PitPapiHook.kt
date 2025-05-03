@@ -32,6 +32,9 @@ object PitPapiHook : PlaceholderExpansion() {
         }
 
         when (params) {
+            "cooldown_switchmap" -> {
+                ThePit.getInstance().mapSelector.remainTime.toString()
+            }
             "level_tag_roman" -> {
                 return CC.translate(profile?.formattedLevelTagWithRoman ?: "&7[0]")
             }

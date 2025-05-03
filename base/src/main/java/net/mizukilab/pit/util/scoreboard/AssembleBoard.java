@@ -65,13 +65,14 @@ public class AssembleBoard {
      */
     public Objective getObjective() {
         Scoreboard scoreboard = getScoreboard();
-        if (scoreboard.getObjective("Assemble") == null) {
-            Objective objective = scoreboard.registerNewObjective("Assemble", "dummy");
-            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-            objective.setDisplayName(getAssemble().getAdapter().getTitle(Bukkit.getPlayer(getUuid())));
-            return objective;
+        Objective kqc = scoreboard.getObjective("kqc");
+        if (kqc == null) {
+            kqc = scoreboard.registerNewObjective("kqc", "dummy");
+            kqc.setDisplaySlot(DisplaySlot.SIDEBAR);
+            kqc.setDisplayName(getAssemble().getAdapter().getTitle(Bukkit.getPlayer(getUuid())));
+            return kqc;
         } else {
-            return scoreboard.getObjective("Assemble");
+            return kqc;
         }
     }
 

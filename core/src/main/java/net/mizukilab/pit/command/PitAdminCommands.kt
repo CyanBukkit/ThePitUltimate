@@ -395,6 +395,7 @@ class PitAdminCommands {
         ThePit.getInstance().configManager.reload()
         loadFile()
         load()
+        ThePit.getInstance().mapSelector.reload()
         sender.sendMessage(CC.translate("&7 重载完成!"))
     }
 

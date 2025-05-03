@@ -8,6 +8,7 @@ import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import com.google.common.base.Predicates;
 import net.mizukilab.pit.config.ConfigManager;
 import net.mizukilab.pit.config.PitWorldConfig;
+import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
@@ -21,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 public class MapSelector {
-    Cooldown switchCooldown
+    Cooldown switchCooldown;
     ThePit thePit;
     ConfigManager config;
     public MapSelector(ThePit thePit){
@@ -29,11 +30,20 @@ public class MapSelector {
         Validate.notNull(configManager);
         config = configManager;
         this.thePit = thePit;
+        reload();
     }
     public void switchMap(){
         config.nextConfig();
         config.synchronizeLegacy();
         reset();
+    }
+    public void reload() {
+        long switchMapCooldown = config.getGlobal().getSwitchMapCooldown();
+        if (switchMapCooldown > 0) {
+            switchCooldown = new Cooldown(switchMapCooldown * 1000);
+        } else {
+            switchCooldown = null;
+        }
     }
     public void reset(){
         reInitNpc();
@@ -75,10 +85,10 @@ public class MapSelector {
         });
     }
     public int getRemainTime(){
-        return (int)(switchCooldown.getRemaining()/1000L);
+        return switchCooldown == null ? -1 : (int)(switchCooldown.getRemaining()/1000L);
     }
     public void tick(){
-        if(switchCooldown.hasExpired()) {
+        if(switchCooldown != null && switchCooldown.hasExpired()) {
             EventFactory eventFactory = ThePit.getInstance().getEventFactory();
             IEpicEvent activeEpicEvent = eventFactory.getActiveEpicEvent();
             if (activeEpicEvent != null) {
@@ -92,7 +102,7 @@ public class MapSelector {
             }
             switchMap();
             switchCooldown.reset();
-            Bukkit.broadcastMessage()
+            CC.boardCast("&a&l地图! &7地图切换成功, 已经清空所有玩家的状态, 祝刷坑愉快!");
         }
     }
 

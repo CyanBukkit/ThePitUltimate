@@ -137,7 +137,18 @@ public class PitGlobalConfig extends Configuration {
             path = "service.redis.password"
     )
     private String redisPassword;
-
+    @Setter
+    @Getter
+    @ConfigData(
+            path = "switchmap.cooldown"
+    )
+    private long switchMapCooldown;
+    @Setter
+    @Getter
+    @ConfigData(
+            path = "scoreboard.viewSwitchMapCooldownPre30s"
+    )
+    private boolean cooldownView;
     @Setter
     @Getter
     @ConfigData(path = "server-name")
@@ -180,4 +191,5 @@ public class PitGlobalConfig extends Configuration {
         }
         return season;
     }
+
 }

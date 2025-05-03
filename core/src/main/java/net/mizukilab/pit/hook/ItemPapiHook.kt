@@ -1,5 +1,6 @@
 package net.mizukilab.pit.hook
 
+import cn.charlotte.pit.ThePit
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import net.mizukilab.pit.util.inventory.InventoryUtil
 import org.bukkit.entity.Player

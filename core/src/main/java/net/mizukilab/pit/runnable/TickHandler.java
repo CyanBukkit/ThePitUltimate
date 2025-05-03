@@ -51,6 +51,7 @@ public class TickHandler extends BukkitRunnable {
             tickPerks(player, profile,currentTickTime);
             tickItemInHand(player, tickLeggings(player, profile,currentTickTime), profile,currentTickTime); //别问我为什么这样写 lol
         }
+        ThePit.getInstance().getMapSelector().tick();
         ((Parker)ThePit.getInstance().getParker()).tick();
         incTickTime();
     }
