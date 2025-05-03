@@ -16,7 +16,7 @@ public class PlayerOption {
             eventNotify = true,
             combatNotify = true,
             chatMsg = true,
-            otherMsg = true,outfit = true,
+            otherMsg = true, outfit = true, levelBar = false,
 
     bountyHiddenWhenNear = false,
 
@@ -160,6 +160,15 @@ public class PlayerOption {
 
     public void setOutfit(boolean outfit) {
         this.outfit = outfit;
+    }
+
+
+    public boolean isLevelBar() {
+        return levelBar;
+    }
+
+    public void setLevelBar(boolean levelBar) {
+        this.levelBar = levelBar;
     }
 
     public enum BarPriority {

@@ -2,11 +2,11 @@ package net.mizukilab.pit.scoreboard;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.events.AbstractEvent;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert;
-import cn.charlotte.pit.events.genesis.GenesisTeam;
 import cn.charlotte.pit.perk.AbstractPerk;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.config.NewConfiguration;
@@ -15,6 +15,7 @@ import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.events.impl.major.RagePitEvent;
 import net.mizukilab.pit.perk.type.streak.tothemoon.ToTheMoonMegaStreak;
 import net.mizukilab.pit.util.PlayerUtil;
+import net.mizukilab.pit.util.ProgressBar;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.level.LevelUtil;
@@ -135,14 +136,19 @@ public class Scoreboard implements AssembleAdapter {
             }
         }
         if (prestige > 0) {
-            lines.add("&f等级: &e" + LevelUtil.getLevelTagWithRoman(prestige,level) + genesisTeam);
+            lines.add("&f等级: &e" + LevelUtil.getLevelTagWithRoman(prestige, level) + genesisTeam);
         } else {
             lines.add("&f等级: " + LevelUtil.getLevelTagWithOutAnyPS(level) + genesisTeam);
         }
         if (level >= NewConfiguration.INSTANCE.getMaxLevel()) {
             lines.add("&f经验: &e&lMax");
         } else {
-            lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Xp");
+            if (!profile.getPlayerOption().isLevelBar()) {
+                lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Xp");
+            } else {
+                lines.add("&f下级: ");
+                lines.add("&8[ " + ProgressBar.getProgressBar(profile.getExperience(), LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience(), 10) + " &8]");
+            }
         }
 
         if (profile.getCurrentQuest() != null) {
@@ -226,7 +232,7 @@ public class Scoreboard implements AssembleAdapter {
             if (bounty != 0) {
                 String genesisColor = profile.bountyColor();
                 if (profile.getStreakKills() < 1D) {
-                    lines.add("&f赏金: "  + genesisColor +"&l" + bounty + "g");
+                    lines.add("&f赏金: " + genesisColor + "&l" + bounty + "g");
                 } else {
                     lines.add("&f赏金: &a" + numFormat.format(profile.getStreakKills()) + " " + genesisColor + "&l" + bounty + "g");
 
@@ -262,7 +268,7 @@ public class Scoreboard implements AssembleAdapter {
 
         lines.add(" ");
         PitGlobalConfig globalConfig = ThePit.getInstance().getGlobalConfig();
-        if(globalConfig.isCooldownView()) {
+        if (globalConfig.isCooldownView()) {
             int remainTime = ThePit.getInstance().getMapSelector().getRemainTime();
             if (remainTime > 0 && remainTime < 30) {
                 lines.add("&a切换地图! &c(" + remainTime + "s)");
