@@ -270,6 +270,11 @@ public class ProfileOperator implements IProfilerOperator {
         ifPresentAndLoaded(target, function::accept);
     }
 
+    @Override
+    public void forEach(Consumer<IOperator> function) {
+        this.operators.values().forEach(function);
+    }
+
     public void randomGC() {
         if (Bukkit.getOnlinePlayers().size() <= 2) {
             return;

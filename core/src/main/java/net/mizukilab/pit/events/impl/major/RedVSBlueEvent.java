@@ -6,8 +6,8 @@ import cn.charlotte.pit.event.PitAssistEvent;
 import cn.charlotte.pit.event.PitKillEvent;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IScoreBoardInsert;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
@@ -203,7 +203,7 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
                         rewardCoins += 200;
                     }
                 }
-                if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+                if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                     rewardRenown++;
                 }
                 int enchantBoostLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "Paparazzi");

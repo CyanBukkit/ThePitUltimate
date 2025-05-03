@@ -2,7 +2,7 @@ package net.mizukilab.pit.menu.genesis.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;
@@ -69,11 +69,11 @@ public class GenesisSpawnButton extends Button {
     private List<Location> getLocations() {
         if (displayTeam == GenesisTeam.ANGEL) {
             return ThePit.getInstance()
-                    .getPitWorldConfig()
+                    .getPitConfig()
                     .getAngelSpawns();
         } else {
             return ThePit.getInstance()
-                    .getPitWorldConfig()
+                    .getPitConfig()
                     .getDemonSpawns();
         }
     }

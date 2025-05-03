@@ -2,11 +2,11 @@ package net.mizukilab.pit.scoreboard;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.INormalEvent;
-import cn.charlotte.pit.events.IScoreBoardInsert;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import cn.charlotte.pit.perk.AbstractPerk;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.config.NewConfiguration;
@@ -117,7 +117,7 @@ public class Scoreboard implements AssembleAdapter {
         String genesisPrefix = "";
         String genesisTeam = "";
         if (bounty == 0) {
-            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
+            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() != GenesisTeam.NONE) {
                 switch (profile.getGenesisData().getTeam()) {
                     case ANGEL -> {
                         genesisPrefix = "&b";
@@ -261,9 +261,9 @@ public class Scoreboard implements AssembleAdapter {
             lines.add("&c重启! &7" + TimeUtil.millisToRoundedTime(ThePit.getInstance().getRebootRunnable().getCurrentTask().getEndTime() - currentSystemTime).replace(" ", "") + "后");
         }
         if (ThePit.isDEBUG_SERVER()) {
-            lines.add("&3测试 " + (ThePit.getInstance().getPitWorldConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
+            lines.add("&3测试 " + (ThePit.getInstance().getGlobalConfig().isDebugServerPublic() ? "&a#Public" : "&c#Private"));
         } else {
-            lines.add(ThePit.getInstance().getPitWorldConfig().getServerName());
+            lines.add(ThePit.getInstance().getGlobalConfig().getServerName());
         }
         return lines;
     }

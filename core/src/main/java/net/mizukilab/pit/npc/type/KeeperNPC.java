@@ -38,7 +38,7 @@ public class KeeperNPC extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitWorldConfig().getKeeperNpcLocation();
+        return ThePit.getInstance().getPitConfig().getKeeperNpcLocation();
     }
 
     @Override

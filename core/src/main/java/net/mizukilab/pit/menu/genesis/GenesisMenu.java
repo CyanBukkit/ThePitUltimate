@@ -2,7 +2,7 @@ package net.mizukilab.pit.menu.genesis;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import net.mizukilab.pit.menu.genesis.button.GenesisPerkButton;
 import net.mizukilab.pit.menu.genesis.button.GenesisSpawnButton;
 import net.mizukilab.pit.menu.genesis.button.GenesisStatusButton;
@@ -48,7 +48,7 @@ public class GenesisMenu extends Menu {
 
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         Map<Integer, Button> button = new HashMap<>();
-        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() || bypassed) {
+        if (ThePit.getInstance().getPitConfig().isGenesisEnable() || bypassed) {
             for (int i = 0; i < 7; i++) {
                 button.put(10 + i, new GenesisPerkButton(genesisTeam, profile, i + 1));
                 //button.put(19 + i, new GenesisPerkButton(genesisTeam, profile, i + 8));

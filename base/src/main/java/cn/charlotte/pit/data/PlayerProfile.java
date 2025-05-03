@@ -8,8 +8,9 @@ import cn.charlotte.pit.data.sub.*;
 import cn.charlotte.pit.event.PitGainCoinsEvent;
 import cn.charlotte.pit.event.PitGainRenownEvent;
 import cn.charlotte.pit.event.PitStreakKillChangeEvent;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import cn.charlotte.pit.park.IParker;
+import cn.charlotte.pit.perk.AbstractPerk;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.annotations.Beta;
@@ -382,7 +383,20 @@ public class PlayerProfile {
         }
         return rawCache;
     }
+    public AbstractPerk getActiveMegaStreakObj() {
+        if (!isLoaded()) {
+            return null;
+        }
 
+        PerkData perkData = getChosePerk().get(5);
+        if (perkData == null) {
+            return null;
+        }
+        return perkData.getHandle(ThePit.getInstance().getPerkFactory().getPerkMap());
+    }
+    public void deActiveMegaSteak(){
+        setStrengthNum(0);
+    }
     public static PlayerProfile getRawCache(UUID uuid) {
         IOperator operator = ThePit.getInstance().getProfileOperator().getIOperator(uuid);
         if (operator == null || !operator.isLoaded()) {

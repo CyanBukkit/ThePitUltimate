@@ -6,9 +6,9 @@ import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.event.PitPlayerSpawnEvent;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.IEpicEvent;
-import cn.charlotte.pit.events.IPrepareEvent;
-import cn.charlotte.pit.events.IScoreBoardInsert;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.addon.IPreparative;
+import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
@@ -46,7 +46,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listener, IPrepareEvent, IScoreBoardInsert {
+public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listener, IPreparative, IScoreBoardInsert {
     private final Map<UUID, PlayerBlockHeadData> dataMap = new HashMap<>();
     private final Map<UUID, Integer> rankMap = new HashMap<>();
     public final Map<UUID, PowerUP> pup = new HashMap<>();
@@ -319,7 +319,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
             this.allblocks = 0;
             List<String> types = Arrays.asList("quicktrail", "combatboost", "superheal", "diamondarmor");
 
-            for (Location location : ThePit.getInstance().getPitWorldConfig().getBlockHeadLocations()) {
+            for (Location location : ThePit.getInstance().getPitConfig().getBlockHeadLocations()) {
                 entities.add(spawnPowerUp(location, types.get(random.nextInt(types.size()))));
             }
 
@@ -387,7 +387,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                 if (allblocks >= 10000) {
                     rewardCoins = 1250;
                 }
-                if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+                if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                     ++rewardRenown;
                 }
                 if (PlayerUtil.isPlayerUnlockedPerk(player, "self_confidence")) {

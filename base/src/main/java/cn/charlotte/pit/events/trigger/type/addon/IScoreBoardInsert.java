@@ -1,4 +1,4 @@
-package cn.charlotte.pit.events;
+package cn.charlotte.pit.events.trigger.type.addon;
 
 import org.bukkit.entity.Player;
 

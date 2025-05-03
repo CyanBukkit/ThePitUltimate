@@ -1,7 +1,7 @@
 package net.mizukilab.pit.hook
 
 import cn.charlotte.pit.ThePit
-import cn.charlotte.pit.events.genesis.team.GenesisTeam
+import cn.charlotte.pit.events.genesis.GenesisTeam
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import net.mizukilab.pit.getPitProfile
 import net.mizukilab.pit.util.chat.CC

@@ -10,6 +10,7 @@ import dev.rollczi.litecommands.annotations.command.Command
 import dev.rollczi.litecommands.annotations.context.Context
 import dev.rollczi.litecommands.annotations.execute.Execute
 import dev.rollczi.litecommands.annotations.flag.Flag
+import dev.rollczi.litecommands.annotations.optional.OptionalArg
 import dev.rollczi.litecommands.annotations.permission.Permission
 import dev.rollczi.litecommands.annotations.shortcut.Shortcut
 import net.kyori.adventure.text.Component
@@ -49,6 +50,17 @@ import kotlin.math.min
 @Command(name = "pit")
 @Permission("pit.admin")
 class PitAdminCommands {
+    @Execute(name = "switchMap")
+    @Shortcut("swm")
+    fun switchMap(@Context player: Player,@OptionalArg("cursor") cursor: Integer){
+        player.sendMessage("成功切换")
+        var mapSelector = ThePit.getInstance().mapSelector
+        if(cursor == null){
+            mapSelector.switchMap();
+            return;
+        }
+        mapSelector.switchMapIndexed(cursor.toInt());
+    }
     @Execute(name = "createEquation")
     @Shortcut("eq")
     fun eqEvent(@Context player: Player, @Arg("eqQuest") eq: String, @Arg("eqAns") ans: String) {
@@ -380,7 +392,7 @@ class PitAdminCommands {
     @Execute(name = "reload")
     fun reloadConfig(@Context sender: CommandSender) {
         sender.sendMessage(CC.translate("&7 重载中..."))
-        ThePit.getInstance().pitConfig.load()
+        ThePit.getInstance().configManager.reload()
         loadFile()
         load()
         sender.sendMessage(CC.translate("&7 重载完成!"))

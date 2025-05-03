@@ -1,10 +1,12 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.addon.IPreparative;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.SneakyThrows;
 import net.mizukilab.pit.config.PitGlobalConfig;
-import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.util.bossbar.BossBar;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
@@ -182,8 +184,8 @@ public class EventFactory {
         this.nextEpicEventTimer = new Cooldown(5, TimeUnit.MINUTES);
         AbstractEvent iEvent = (AbstractEvent) event;
 
-        if (event instanceof IPrepareEvent) {
-            ((IPrepareEvent) event).onPreActive();
+        if (event instanceof IPreparative) {
+            ((IPreparative) event).onPreActive();
         }
         PitGlobalConfig pitWorldConfig = ThePit.getInstance().getGlobalConfig();
         List<String> animationForEpicEvent = pitWorldConfig.animationForEpicEvent;
@@ -237,7 +239,6 @@ public class EventFactory {
 
         this.activeEpicEvent = null;
         AbstractEvent iEvent = (AbstractEvent) event;
-
         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), BURP, 1, 0.72F));
         iEvent.setActive(false);
         iEvent.onInactive();

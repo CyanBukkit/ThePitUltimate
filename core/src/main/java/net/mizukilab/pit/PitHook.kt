@@ -2,7 +2,7 @@ package net.mizukilab.pit
 
 import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.CDKData
-import cn.charlotte.pit.events.genesis.listener.GenesisCombatListener
+import cn.charlotte.pit.events.genesis.GenesisCombatListener
 import cn.charlotte.pit.util.hologram.packet.PacketHologramRunnable
 import com.comphenix.protocol.ProtocolLibrary
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory

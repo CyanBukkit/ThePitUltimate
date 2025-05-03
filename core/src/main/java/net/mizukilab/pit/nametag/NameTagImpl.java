@@ -2,7 +2,7 @@ package net.mizukilab.pit.nametag;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mizukilab.pit.events.impl.major.HamburgerEvent;
 import net.mizukilab.pit.events.impl.major.RedVSBlueEvent;
@@ -127,7 +127,7 @@ public class NameTagImpl implements NametagAdapter {
                 if (profile.isSupporter() && profile.getPlayerOption().isSupporterStarDisplay() && !profile.isNicked()) {
                     suffix.append(" &e✬");
                 }
-                if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
+                if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
                     suffix.append(" ").append(profile.bountyColor());
                     if (profile.getBounty() != 0) {
                         suffix.append("&l").append(profile.getBounty()).append("g");

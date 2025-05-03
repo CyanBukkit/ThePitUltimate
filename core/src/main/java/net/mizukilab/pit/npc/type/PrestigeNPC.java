@@ -46,7 +46,7 @@ public class PrestigeNPC extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitWorldConfig().getPrestigeNpcLocation();
+        return ThePit.getInstance().getPitConfig().getPrestigeNpcLocation();
     }
 
     @Override

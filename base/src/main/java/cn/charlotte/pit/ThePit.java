@@ -23,6 +23,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.mizukilab.pit.actionbar.IActionBarManager;
+import net.mizukilab.pit.config.ConfigManager;
 import net.mizukilab.pit.config.PitGlobalConfig;
 import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.database.MongoDB;
@@ -32,6 +33,7 @@ import net.mizukilab.pit.item.IItemFactory;
 import net.mizukilab.pit.item.ItemFactor;
 import net.mizukilab.pit.license.CommonLoader;
 import net.mizukilab.pit.listener.SafetyJoinListener;
+import net.mizukilab.pit.map.MapSelector;
 import net.mizukilab.pit.medal.MedalFactory;
 import net.mizukilab.pit.minigame.MiniGameController;
 import net.mizukilab.pit.movement.PlayerMoveHandler;
@@ -108,6 +110,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Getter
     private JedisPool jedis;
     //ol
+    @Setter
     @Getter
     private PitWorldConfig pitConfig;
     @Setter
@@ -136,7 +139,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private SignGui signGui;
     @Getter
     private BossBarHandler bossBar;
-
+    @Getter
+    private MapSelector mapSelector;
     @Getter
     private ItemFactor itemFactor;
     @Getter
@@ -230,6 +234,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         if(!this.loadConfig()){
             throw new IllegalStateException("Failed to load config");
         }
+        this.loadMapSelector();
 
         this.loadDatabase();
 
@@ -272,7 +277,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
     }
-
+    private void loadMapSelector(){
+        this.mapSelector = new MapSelector(this);
+    }
     private void loadEventPoller() {
         EventsHandler.INSTANCE.loadFromDatabase();
     }
@@ -425,10 +432,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Getter
     @Setter
     PitGlobalConfig globalConfig ;
-    List<PitWorldConfig> pitConfigs = new ArrayList<>();
+    @Getter
+    @Setter
+    ConfigManager configManager;
     private boolean loadConfig() throws IOException {
         log.info("Loading configuration...");
-        PitGlobalConfig pitWorldConfig = new PitGlobalConfig(this);
+        ConfigManager cfgMan = new ConfigManager(this);
+        configManager = cfgMan;
+        PitGlobalConfig pitWorldConfig = cfgMan.getGlobal();
         pitWorldConfig.load();
         this.globalConfig = pitWorldConfig;
         log.info("Loaded configuration!");
@@ -450,51 +461,19 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             }, this);
         }
 
-        if (pitWorldConfig.isRedisEnable()) {
-            jedis = new JedisPool(
-                    new GenericObjectPoolConfig(),
-                    pitWorldConfig.getRedisAddress(),
-                    pitWorldConfig.getRedisPort(),
-                    Protocol.DEFAULT_TIMEOUT,
-                    pitWorldConfig.getRedisPassword(),
-                    false
-            );
-        }
-        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
-        Stream<Path> walk = Files.walk(this.getDataFolder().toPath(), FileVisitOption.FOLLOW_LINKS);
-        Optional<Path> worlds = walk.filter(i -> {
-            File file = i.toFile();
-            return file.isDirectory() && file.getName().equals("worlds");
-        }).findFirst();
-        walk.close();
-        worlds.ifPresentOrElse(i -> {
-            atomicBoolean.set(true);
-            try {
-                Stream<Path> walk1 = Files.walk(i, FileVisitOption.FOLLOW_LINKS);
-                walk1.forEach(b -> {
-                    PitWorldConfig pitWorldConfig1 = new PitWorldConfig(globalConfig,ThePit.this,b.toFile().getName(),i.toFile().getName());
-                    pitWorldConfig1.load();
-                    this.pitConfigs.add(pitWorldConfig1);
-                });
-                walk1.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }, () -> {
-            System.out.println("Didn't have any worlds, shutting down");
-            this.disablePlugin();
-        });
-        boolean b = atomicBoolean.get();
-        if(b){
-            if(pitConfigs.isEmpty()){
-                b = false;
-                System.out.println("Didn't have any worlds, shutting down");
-                this.disablePlugin();
-            } else {
-                this.pitConfig = pitConfigs.get(0);
-            }
-        }
-        return b;
+//        if (pitWorldConfig.isRedisEnable()) {
+//            jedis = new JedisPool(
+//                    new GenericObjectPoolConfig(),
+//                    pitWorldConfig.getRedisAddress(),
+//                    pitWorldConfig.getRedisPort(),
+//                    Protocol.DEFAULT_TIMEOUT,
+//                    pitWorldConfig.getRedisPassword(),
+//                    false
+//            );
+//        }
+        PitWorldConfig selectedWorldConfig = cfgMan.getSelectedWorldConfig();
+        this.pitConfig = selectedWorldConfig;
+        return selectedWorldConfig != null;
     }
 
     private void loadDatabase() {

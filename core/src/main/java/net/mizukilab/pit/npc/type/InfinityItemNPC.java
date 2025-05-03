@@ -39,7 +39,7 @@ public class InfinityItemNPC extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitWorldConfig().getInfinityNpcLocation();
+        return ThePit.getInstance().getPitConfig().getInfinityNpcLocation();
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.mizukilab.pit.util.configuration.Configuration;
 import net.mizukilab.pit.util.configuration.annotations.ConfigData;
 import net.mizukilab.pit.util.configuration.annotations.ConfigSerializer;
 import net.mizukilab.pit.util.configuration.serializer.LocationSerializer;
+import net.mizukilab.pit.util.configuration.serializer.LocationsSerializer;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,11 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author: EmptyIrony
- * @Date: 2020/12/30 22:02
+ * @Author: KleeLoveLife
+ * @Date: 2025/5/3 16:39
  */
 public class PitWorldConfig extends Configuration {
-
+    @Setter
+    @Getter
+    @ConfigData(
+            path = "worldName"
+    )
+    private String worldName;
     @Setter
     @Getter
     @ConfigData(
@@ -356,7 +362,7 @@ public class PitWorldConfig extends Configuration {
 
     PitGlobalConfig global;
     public PitWorldConfig(PitGlobalConfig globalConfig, JavaPlugin plugin, String worldYml,String directory) {
-        super(plugin,worldYml);
+        super(plugin,worldYml,directory,false);
         this.global = globalConfig;
     }
 

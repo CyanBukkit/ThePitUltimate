@@ -27,7 +27,9 @@ public class Configuration {
     public Configuration(JavaPlugin plugin, String filename) {
         this(plugin, filename, plugin.getDataFolder().getPath());
     }
-
+    public Configuration(JavaPlugin plugin, String filename, String directory,boolean pathTo) {
+        this(plugin,filename,plugin.getDataFolder().getPath() + "/" + directory);
+    }
     public Configuration(JavaPlugin plugin, String filename, String directory) {
         this.plugin = plugin;
         this.directory = new File(directory);
@@ -51,6 +53,7 @@ public class Configuration {
 
         try {
             this.config.load(this.file);
+            System.out.println(this.config.saveToString());
         } catch (InvalidConfigurationException | IOException var2) {
             var2.printStackTrace();
         }
@@ -156,6 +159,7 @@ public class Configuration {
                                     f.set(this, this.deserializeValue(f, object.toString()));
                                 } catch (InstantiationException | IllegalAccessException var12) {
                                     System.out.println("Error reading value in configuration file: " + this.config.getName() + " path: " + configData.path());
+                                    var12.printStackTrace();
                                 }
                             }
                         }
@@ -165,6 +169,7 @@ public class Configuration {
 //                              Object object = this.config.get(configData.path());
                                 f.set(this, this.deserializeValue(f, null));
                             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException var12) {
+                                var12.printStackTrace();
                                 System.out.println("Error reading value in configuration file: " + this.config.getName() + " path: " + configData.path());
                             }
                         }

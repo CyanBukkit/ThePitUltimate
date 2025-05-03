@@ -46,7 +46,7 @@ public class StatusNPC extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitWorldConfig().getStatusNpcLocation();
+        return ThePit.getInstance().getPitConfig().getStatusNpcLocation();
     }
 
     @Override

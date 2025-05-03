@@ -2,7 +2,7 @@ package net.mizukilab.pit.menu.genesis.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;
@@ -62,8 +62,8 @@ public class GenesisStatusButton extends Button {
             lines.add(teamColor + "1 对立阵营玩家击杀 = 2 活动点数");
             lines.add(teamColor + "1 相同阵营玩家击杀 = 1 活动点数");
             lines.add(" ");
-            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
-                lines.add("&7本期活动结束时间: &f" + df.format(new Date(ThePit.getInstance().getPitWorldConfig().getGenesisEndTime())));
+            if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
+                lines.add("&7本期活动结束时间: &f" + df.format(new Date(ThePit.getInstance().getPitConfig().getGenesisEndTime())));
                 lines.add("&7活动点数与奖励进度(不包括永久加成)会在活动结束后重置!");
             }
         } else if (profile.getGenesisData().getPoints() < 500) {

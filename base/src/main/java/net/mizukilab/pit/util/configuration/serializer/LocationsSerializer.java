@@ -26,6 +26,9 @@ public class LocationsSerializer extends AbstractSerializer<List<Location>> {
 
     @Override
     public List<Location> fromString(String var1) {
+        if(var1 == null){
+            return new ArrayList<>();
+        }
         String[] strings = var1.split(";");
         List<Location> locations = new ArrayList<>();
 

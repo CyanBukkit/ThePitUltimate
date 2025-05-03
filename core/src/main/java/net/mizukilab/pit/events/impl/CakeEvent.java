@@ -3,7 +3,7 @@ package net.mizukilab.pit.events.impl;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.util.TaskManager;
 import com.sk89q.worldedit.EditSession;
@@ -55,7 +55,7 @@ public class CakeEvent extends AbstractEvent implements INormalEvent, Listener {
 
     public CakeEvent() {
         if (regions == null) {
-            PitWorldConfig config = ThePit.getInstance().getPitWorldConfig();
+            PitWorldConfig config = ThePit.getInstance().getPitConfig();
             regions = new CuboidRegion[]{
                     new CuboidRegion(BukkitUtil.toVector(config.getCakeZoneAPosA()), BukkitUtil.toVector(config.getCakeZoneAPosB())),
                     new CuboidRegion(BukkitUtil.toVector(config.getCakeZoneBPosA()), BukkitUtil.toVector(config.getCakeZoneBPosB())),

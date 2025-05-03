@@ -38,7 +38,7 @@ public class GenesisDemonNpc extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitWorldConfig().getGenesisDemonNpcLocation();
+        return ThePit.getInstance().getPitConfig().getGenesisDemonNpcLocation();
     }
 
     @Override

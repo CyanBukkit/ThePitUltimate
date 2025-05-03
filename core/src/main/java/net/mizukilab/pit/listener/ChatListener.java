@@ -2,7 +2,7 @@ package net.mizukilab.pit.listener;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.parm.AutoRegister;
@@ -39,7 +39,7 @@ public class ChatListener implements Listener {
         if (processChatCooldown(event, player)) return;
 
         String tag = profile.getFormattedLevelTagWithRoman();
-        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
+        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
             if (profile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
                 tag = "&b♆ " + tag;
             }

@@ -8,7 +8,7 @@ import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AllArgsConstructor;
@@ -518,7 +518,7 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
             runnable.cancel();
         } catch (Exception ignored) {
         }
-        if (!startByAdmin && ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && bidHistories.isEmpty()) {
+        if (!startByAdmin && ThePit.getInstance().getPitConfig().isGenesisEnable() && bidHistories.isEmpty()) {
             return;
         }
         if (bidHistories.isEmpty()) {

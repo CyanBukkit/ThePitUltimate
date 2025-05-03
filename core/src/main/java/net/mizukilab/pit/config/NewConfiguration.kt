@@ -196,7 +196,7 @@ object NewConfiguration {
         epicEventTitleAnimation = config.getList("title.event.epic.animation", epicEventTitleAnimation) as List<String>
 
         epicTitleUpdateInterval = config.getInt("title.event.epic.interval", epicTitleUpdateInterval)
-        val pitConfig = ThePit.getInstance().pitConfig
+        val pitConfig = ThePit.getInstance().globalConfig
         pitConfig.maxLevel = maxLevel;
         pitConfig.animationForEpicEvent = epicEventTitleAnimation
         pitConfig.periodForEpicEvent = epicTitleUpdateInterval

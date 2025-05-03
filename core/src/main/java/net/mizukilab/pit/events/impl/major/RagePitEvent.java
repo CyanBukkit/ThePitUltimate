@@ -4,7 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitDamageEvent;
 import cn.charlotte.pit.event.PitKillEvent;
-import cn.charlotte.pit.events.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.events.AbstractEvent;
 import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.util.TaskManager;
@@ -50,7 +50,6 @@ import java.util.stream.Collectors;
  */
 
 public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener {
-
     @Getter
     private final Map<UUID, DamageData> damageMap = new HashMap<>();
     private EditSession session;
@@ -59,7 +58,13 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
     private BukkitRunnable runnable;
     @Getter
     private Cooldown timer = new Cooldown(5, TimeUnit.MINUTES);
-
+    @Override
+    public boolean processTrigger(TrigAction action,Player player,Object... objects){
+        if(action == TrigAction.CLEAR){
+            player.setMaxHealth(((PlayerProfile)objects[0]).getExtraMaxHealthValue() + 40);
+        }
+        return false;
+    }
     public int getDamageRank(Player player) {
         DamageData damage = damageMap.get(player.getUniqueId());
         HashSet<Map.Entry<UUID, DamageData>> entry = new HashSet<>(damageMap.entrySet());
@@ -99,14 +104,14 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
             Bukkit.getPluginManager()
                     .registerEvents(this, ThePit.getInstance());
             //build wall - start
-            Location middle = ThePit.getInstance().getPitWorldConfig().getRagePitMiddle();
+            Location middle = ThePit.getInstance().getPitConfig().getRagePitMiddle();
             BlockVector vector = new BlockVector(middle.getBlockX(), middle.getBlockY(), middle.getBlockZ());
             BukkitWorld world = new BukkitWorld(Bukkit.getWorlds().get(0));
             session = FaweAPI.getEditSessionBuilder(world).build();
 
 
             TaskManager.IMP.async(() -> {
-                session.makeCylinder(vector, new JustAirBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitWorldConfig().getRagePitRadius(), ThePit.getInstance().getPitWorldConfig().getRagePitHeight(), false);
+                session.makeCylinder(vector, new JustAirBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitConfig().getRagePitRadius(), ThePit.getInstance().getPitConfig().getRagePitHeight(), false);
                 session.flushQueue();
             });
 
@@ -122,9 +127,9 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
                 player.setMaxHealth(player.getMaxHealth() * 2);
                 player.setHealth(player.getMaxHealth());
 
-                Location location = ThePit.getInstance().getPitWorldConfig()
+                Location location = ThePit.getInstance().getPitConfig()
                         .getSpawnLocations()
-                        .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitWorldConfig().getSpawnLocations().size()));
+                        .get(RandomUtil.random.nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
                 player.teleport(location);
                 player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.5F);
                 player.sendMessage(CC.translate("&5&l大型事件! &6&l疯狂天坑 &7事件开始!"));
@@ -229,7 +234,7 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
             if (killed >= 600) {
                 rewardCoins = 2 * rewardCoins;
             }
-            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                 rewardRenown++;
             }
             int enchantBoostLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "Paparazzi");

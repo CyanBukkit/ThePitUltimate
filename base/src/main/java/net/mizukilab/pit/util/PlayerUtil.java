@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.event.PitPotionEffectEvent;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
-import cn.charlotte.pit.events.AbstractEvent;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.MegaStreak;
 import cn.charlotte.pit.perk.PerkType;
@@ -47,24 +47,7 @@ public class PlayerUtil {
 
     public static AbstractPerk getActiveMegaStreakObj(Player player) {
         final PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if (!profile.isLoaded()) {
-            return null;
-        }
-
-        if (profile.getChosePerk().get(5) == null) {
-            return null;
-        }
-        for (AbstractPerk abstractPerk : ThePit.getInstance().getPerkFactory().getPerks()) { //无意义stream
-            if (abstractPerk.getPerkType() == PerkType.MEGA_STREAK
-                    && abstractPerk.getInternalPerkName().equals(profile.getChosePerk().get(5).getPerkInternalName())) {
-                if (abstractPerk instanceof MegaStreak mega) {
-                    if (profile.getStreakKills() >= mega.getStreakNeed()) {
-                        return abstractPerk;
-                    }
-                }
-            }
-        }
-        return null;
+        return profile.getActiveMegaStreakObj();
     }
 
     public static boolean isVenom(Player player) {
@@ -423,15 +406,15 @@ public class PlayerUtil {
         return ping;
     }
 
-    public static void clearPlayer(Player player) {
-        clearPlayer(player, true, true);
+    public static void resetPlayer(Player player) {
+        resetPlayer(player, true, true);
     }
 
-    public static void clearPlayer(Player player, boolean closeInventor) {
-        clearPlayer(player, closeInventor, true);
+    public static void resetPlayer(Player player, boolean closeInventor) {
+        resetPlayer(player, closeInventor, true);
     }
 
-    public static void clearPlayer(Player player, boolean closeInventory, boolean clearInventory) {
+    public static void resetPlayer(Player player, boolean closeInventory, boolean clearInventory) {
         player.setSaturation(12.8F);
         player.setMaximumNoDamageTicks(20);
         player.setFireTicks(0);
@@ -450,11 +433,10 @@ public class PlayerUtil {
             player.closeInventory();
         }
         player.setGameMode(GameMode.SURVIVAL);
-        for (PotionEffect activePotionEffect : player.getActivePotionEffects()) {
-            player.removePotionEffect(activePotionEffect.getType());
-        }
+
         EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
         entityPlayer.getDataWatcher().watch(9, (byte) 0);
+        entityPlayer.removeAllEffects();
         entityPlayer.setAbsorptionHearts(0.0F);
 
         //apply stats - start
@@ -463,12 +445,11 @@ public class PlayerUtil {
         //temp disable
         player.setWalkSpeed(0.2F);
 
-        double extraMaxHealth = profile.getExtraMaxHealthValue();
-
-        if (ThePit.getInstance().getEventFactory().getActiveEpicEvent() != null && ((AbstractEvent) ThePit.getInstance().getEventFactory().getActiveEpicEvent()).getEventInternalName().equals("rage_pit")) {
-            player.setMaxHealth(40.0 + extraMaxHealth);
-        } else {
-            player.setMaxHealth(profile.getMaxHealth());
+        IEpicEvent activeEpicEvent = ThePit.getInstance().getEventFactory().getActiveEpicEvent();
+        if(activeEpicEvent != null){
+            if (activeEpicEvent.processTrigger(IEpicEvent.TrigAction.CLEAR,player,profile)) {
+                player.setMaxHealth(profile.getMaxHealth());
+            }
         }
         //apply stats - end
         //heal player

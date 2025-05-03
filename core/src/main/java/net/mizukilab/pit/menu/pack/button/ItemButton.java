@@ -2,7 +2,7 @@ package net.mizukilab.pit.menu.pack.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import net.mizukilab.pit.events.impl.CarePackageEvent;
 import net.mizukilab.pit.menu.pack.PackageMenu;
 import net.mizukilab.pit.util.chat.CC;

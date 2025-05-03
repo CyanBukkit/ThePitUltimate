@@ -3,7 +3,7 @@ package net.mizukilab.pit.events.impl;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.medal.impl.challenge.QuickMathsMedal;

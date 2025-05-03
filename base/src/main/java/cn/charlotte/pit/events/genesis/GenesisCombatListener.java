@@ -1,8 +1,7 @@
-package cn.charlotte.pit.events.genesis.listener;
+package cn.charlotte.pit.events.genesis;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

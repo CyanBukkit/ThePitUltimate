@@ -40,11 +40,11 @@ public class PerkData {
     }
 
     @JsonIgnore
-    public AbstractPerk getHandle(Map<String, AbstractPerk> tickTasks) {
+    public AbstractPerk getHandle(Map<String, AbstractPerk> perks) {
         if (handle != null) {
             return handle;
         }
-        handle = tickTasks.get(getPerkInternalName());
+        handle = perks.get(getPerkInternalName());
         return handle;
     }
 

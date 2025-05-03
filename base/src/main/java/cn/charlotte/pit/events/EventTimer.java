@@ -1,6 +1,8 @@
 package cn.charlotte.pit.events;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import lombok.Setter;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 

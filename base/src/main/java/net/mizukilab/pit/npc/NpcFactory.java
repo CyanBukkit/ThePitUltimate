@@ -2,12 +2,14 @@ package net.mizukilab.pit.npc;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.events.NPCInteractEvent;
 import net.jitse.npclib.api.state.NPCAnimation;
 import net.jitse.npclib.api.state.NPCSlot;
+import net.jitse.npclib.nms.v1_8_R3.NPC_v1_8_R3;
 import net.mizukilab.pit.npc.runnable.NpcRunnable;
 import net.mizukilab.pit.parm.AutoRegister;
 import org.bukkit.Bukkit;
@@ -25,17 +27,32 @@ import java.util.List;
  */
 @AutoRegister
 public class NpcFactory implements Listener {
+    NPCLib npcLib = new NPCLib(ThePit.getInstance());
+    @Getter
+    private final List<AbstractPitNPC> pitNpc = new ArrayList<>();
 
-    private static final List<AbstractPitNPC> pitNpc = new ArrayList<>();
-
-    public static List<AbstractPitNPC> getPitNpc() {
-        return NpcFactory.pitNpc;
+    public void reload(){
+        pitNpc.forEach(i -> {
+            initNpc(i.getNpc(),i);
+            ((NPC_v1_8_R3)i.getNpc()).createPackets();
+        });
+        Bukkit.getOnlinePlayers().forEach(this::show);
     }
-
+    public void show(Player player){
+        pitNpc.forEach(i -> {
+            i.getNpc().create();
+            if(!i.getNpc().isShown(player)) {
+                i.getNpc().show(player);
+            } else {
+                i.getNpc().hide(player);
+                i.getNpc().show(player);
+            }
+            i.getNpc()
+                    .setText(player, i.getNpcTextLine(player));
+        });
+    }
     @SneakyThrows
-    public void init(Collection<Class<? extends AbstractPitNPC>> classes) {
-        NPCLib npcLib = new NPCLib(ThePit.getInstance());
-
+    public void init(Collection<Class<? extends AbstractPitNPC>> classes) {;
         for (Class<?> clazz : classes) {
             if (!ThePit.isDEBUG_SERVER()) {
                 if (clazz.getName().contains("InfinityItemNPC")) {
@@ -47,21 +64,25 @@ public class NpcFactory implements Listener {
                 AbstractPitNPC abstractPitNPC = (AbstractPitNPC) clazz.getConstructor().newInstance();
 
                 NPC npc = npcLib.createNPC();
-                npc.setLocation(abstractPitNPC.getNpcSpawnLocation());
-
-                if (abstractPitNPC.getNpcHeldItem() != null) {
-                    npc.setItem(NPCSlot.MAINHAND, abstractPitNPC.getNpcHeldItem());
-                }
-                if (abstractPitNPC.getAnimation() != null){
-                    npc.playAnimation(abstractPitNPC.getAnimation());
-                }
-                abstractPitNPC.setNpc(npc);
-                abstractPitNPC.initSkin(npc);
+                initNpc(npc, abstractPitNPC);
 
                 pitNpc.add(abstractPitNPC);
             }
         }
         new NpcRunnable().runTaskTimerAsynchronously(ThePit.getInstance(), 20, 20);
+    }
+
+    private static void initNpc(NPC npc, AbstractPitNPC abstractPitNPC) {
+        npc.setLocation(abstractPitNPC.getNpcSpawnLocation());
+
+        if (abstractPitNPC.getNpcHeldItem() != null) {
+            npc.setItem(NPCSlot.MAINHAND, abstractPitNPC.getNpcHeldItem());
+        }
+        if (abstractPitNPC.getAnimation() != null){
+            npc.playAnimation(abstractPitNPC.getAnimation());
+        }
+        abstractPitNPC.setNpc(npc);
+        abstractPitNPC.initSkin(npc);
     }
 
     @EventHandler
@@ -71,15 +92,7 @@ public class NpcFactory implements Listener {
         if (player == null || !player.isOnline()) {
             return;
         }
-
-        for (AbstractPitNPC pitNpc : pitNpc) {
-            pitNpc.getNpc().create();
-            if (!pitNpc.getNpc().isShown(player)) {
-                pitNpc.getNpc().show(player);
-            }
-            pitNpc.getNpc()
-                    .setText(player, pitNpc.getNpcTextLine(player));
-        }
+        show(player);
 
     }
 

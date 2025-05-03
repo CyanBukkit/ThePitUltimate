@@ -1,4 +1,4 @@
-package cn.charlotte.pit.events.genesis.team;
+package cn.charlotte.pit.events.genesis;
 
 /**
  * @Author: Misoryan

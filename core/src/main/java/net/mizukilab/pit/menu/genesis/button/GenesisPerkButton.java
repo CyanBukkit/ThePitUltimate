@@ -2,7 +2,7 @@ package net.mizukilab.pit.menu.genesis.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.item.type.AngelChestplate;
 import net.mizukilab.pit.item.type.ArmageddonBoots;
@@ -149,7 +149,7 @@ public class GenesisPerkButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        if (!ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && !ThePit.isDEBUG_SERVER() && !PlayerUtil.isStaff(player))
+        if (!ThePit.getInstance().getPitConfig().isGenesisEnable() && !ThePit.isDEBUG_SERVER() && !PlayerUtil.isStaff(player))
             return;
         if (tier > 7) return;
         HashMap<Integer, Integer> tierRequirement = new HashMap<>();

@@ -290,7 +290,7 @@ public class Utils {
     }
 
     public static boolean isInArena(Player player) {
-        PitWorldConfig config = ThePit.getInstance().getPitWorldConfig();
+        PitWorldConfig config = ThePit.getInstance().getPitConfig();
         final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
 
         Location location = player.getLocation();

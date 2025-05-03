@@ -87,7 +87,7 @@ class PitCommands {
 
     @Execute(name = "thepit", aliases = ["天坑", "天坑乱斗", "version", "ver"])
     fun info(@Context player: Player) {
-        player.sendMessage(CC.translate("&7Currently running &cThePitUltimate&f(&8${StringUtil.hideMiddle(ThePit.getInstance().pitConfig.token)}&f)"))
+        player.sendMessage(CC.translate("&7Currently running &cThePitUltimate&f(&8${StringUtil.hideMiddle(ThePit.getInstance().globalConfig.token)}&f)"))
     }
 
     @Execute(name = "startDate")
@@ -427,7 +427,7 @@ class PitCommands {
 
                     PitPlayerSpawnEvent(player).callEvent()
 
-                    PlayerUtil.clearPlayer(player, true, false)
+                    PlayerUtil.resetPlayer(player, true, false)
                 }
             }
         }, 1)
@@ -448,7 +448,7 @@ class PitCommands {
             player.sendMessage(CC.translate("&c&l错误! &7未找到有效的近期死亡回放数据,抱歉!"))
             return
         }
-        val title = Component.text("huanmeng_qwq")
+        val title = Component.text("KleefuckYou")
         player.audience.openBook(Book.book(title, title, buildList {
             add(
                 Component.text(CC.translate("&c&l死亡回放"))

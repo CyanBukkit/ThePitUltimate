@@ -4,9 +4,9 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.event.PitKillEvent;
 import cn.charlotte.pit.event.PitProfileLoadedEvent;
-import cn.charlotte.pit.events.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.IScoreBoardInsert;
+import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
 import com.boydti.fawe.FaweAPI;
@@ -180,11 +180,11 @@ public class HamburgerEvent extends AbstractEvent implements IEpicEvent, Listene
 
 
         BukkitWorld world = new BukkitWorld(Bukkit.getWorlds().get(0));
-        this.location = ThePit.getInstance().getPitWorldConfig().getHamburgerOfferNpcLocA(); //villager location
+        this.location = ThePit.getInstance().getPitConfig().getHamburgerOfferNpcLocA(); //villager location
 
         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
             final Collection<Player> players = PlayerUtil.getNearbyPlayers(location, 5);
-            final List<Location> locations = ThePit.getInstance().getPitWorldConfig().getSpawnLocations();
+            final List<Location> locations = ThePit.getInstance().getPitConfig().getSpawnLocations();
 
             for (Player player : players) {
                 player.teleport(locations.get(RandomUtil.random.nextInt(locations.size())));
@@ -350,7 +350,7 @@ public class HamburgerEvent extends AbstractEvent implements IEpicEvent, Listene
             if (done >= 600) {
                 rewardCoins = 2 * rewardCoins;
             }
-            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
+            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTier() >= 5 && rewardRenown > 0) {
                 rewardRenown++;
             }
             int enchantBoostLevel = Utils.getEnchantLevel(player.getInventory().getLeggings(), "Paparazzi");
@@ -420,7 +420,7 @@ public class HamburgerEvent extends AbstractEvent implements IEpicEvent, Listene
     }
 
     private void spawnVillager() {
-        final List<Location> configLoc = ThePit.getInstance().getPitWorldConfig().getHamburgerNpcLocA();
+        final List<Location> configLoc = ThePit.getInstance().getPitConfig().getHamburgerNpcLocA();
         final List<Location> locations = new ArrayList<>(configLoc);
         locations.removeAll(spawnedLocations);
         final Location location = locations.get(RandomUtil.random.nextInt(locations.size()));

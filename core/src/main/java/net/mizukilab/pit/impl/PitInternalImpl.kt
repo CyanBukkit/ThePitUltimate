@@ -5,10 +5,10 @@ import cn.charlotte.pit.api.PitInternalHook
 import cn.charlotte.pit.data.PlayerInvBackup
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.data.TradeData
-import cn.charlotte.pit.events.IEpicEvent
+import cn.charlotte.pit.events.trigger.type.IEpicEvent
 import cn.charlotte.pit.events.AbstractEvent
-import cn.charlotte.pit.events.INormalEvent
-import cn.charlotte.pit.events.genesis.team.GenesisTeam
+import cn.charlotte.pit.events.trigger.type.INormalEvent
+import cn.charlotte.pit.events.genesis.GenesisTeam
 import cn.charlotte.pit.util.hologram.Hologram
 import cn.charlotte.pit.util.hologram.packet.PacketHologram
 import net.mizukilab.pit.config.NewConfiguration

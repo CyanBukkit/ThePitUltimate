@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import net.mizukilab.pit.parm.listener.ITickTask;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.music.NBSDecoder;

@@ -52,7 +52,7 @@ public class NPC_v1_8_R3 extends NPCBase {
 
     @Override
     public void createPackets() {
-        Bukkit.getOnlinePlayers().forEach(this::createPackets);
+        createPackets(null);
     }
 
     @Override

@@ -2,9 +2,9 @@ package net.mizukilab.pit.menu.previewer.button;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.events.EventsHandler;
-import cn.charlotte.pit.events.IEpicEvent;
+import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import lombok.RequiredArgsConstructor;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;

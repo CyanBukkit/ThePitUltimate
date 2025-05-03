@@ -5,7 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.*;
 import cn.charlotte.pit.event.*;
 import cn.charlotte.pit.events.EventFactory;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -532,7 +532,7 @@ public class CombatListener implements Listener {
 
         double respawnTime = playerProfile.getRespawnTime();
 
-        PlayerUtil.clearPlayer(player, true, false);
+        PlayerUtil.resetPlayer(player, true, false);
         double mythicProtectChance = 0;
 
         PlayerInventory inventory = player.getInventory();
@@ -660,7 +660,7 @@ public class CombatListener implements Listener {
 
         //save status - start
         playerProfile.getDamageMap().clear();
-        playerProfile.setStreakKills(0);
+        playerProfile.deActiveMegaSteak();
         playerProfile.setInArena(false);
         playerProfile.setDeaths(playerProfile.getDeaths() + 1);
         playerProfile.setCombatTimer(new Cooldown(0));
@@ -715,13 +715,13 @@ public class CombatListener implements Listener {
         if (!player.isOnline()) {
             return;
         }
-        Location location = ThePit.getInstance().getPitWorldConfig()
+        Location location = ThePit.getInstance().getPitConfig()
                 .getSpawnLocations()
-                .get(ThreadLocalRandom.current().nextInt(ThePit.getInstance().getPitWorldConfig().getSpawnLocations().size()));
+                .get(ThreadLocalRandom.current().nextInt(ThePit.getInstance().getPitConfig().getSpawnLocations().size()));
 
         if (player.getInventory().getLeggings() != null) {
             if (Utils.getEnchantLevel(player.getInventory().getLeggings(), "trash_panda_enchant") >= 1) {
-                location = ThePit.getInstance().getPitWorldConfig().getSewersLocation();
+                location = ThePit.getInstance().getPitConfig().getSewersLocation();
                 player.sendMessage(CC.translate("&2&l垃圾拾荒者! &7你于下水道重生"));
             }
         }
@@ -729,7 +729,7 @@ public class CombatListener implements Listener {
 
         PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).setInArena(false);
 
-        PlayerUtil.clearPlayer(player, true, false);
+        PlayerUtil.resetPlayer(player, true, false);
         player.setGameMode(GameMode.SURVIVAL);
 
         PlayerProfile.getPlayerProfileByUuid(player.getUniqueId())
@@ -887,7 +887,7 @@ public class CombatListener implements Listener {
         //handle bounty - start
         if (playerProfile.getBounty() != 0 && ThePit.getInstance().getEventFactory().getActiveEpicEvent() == null) {
             String bountyColor = "&6";
-            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
+            if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
                 if (playerProfile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
                     bountyColor = "&b";
                 }
@@ -896,7 +896,7 @@ public class CombatListener implements Listener {
                 }
             }
             CC.boardCast(MessageType.BOUNTY, CC.translate("&6&l赏金! " + playerProfile.getFormattedName() + " &7被 " + killerProfile.getFormattedName() + " &7击杀. " + bountyColor + "&l(" + playerProfile.getBounty() + "g)"));
-            if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && killerProfile.getGenesisData().getTier() >= 5) {
+            if (ThePit.getInstance().getPitConfig().isGenesisEnable() && killerProfile.getGenesisData().getTier() >= 5) {
                 coin.set(1.5 * playerProfile.getBounty());
                 killerProfile.grindCoins(1.5 * playerProfile.getBounty());
                 killerProfile.setCoins(killerProfile.getCoins() + 1.5 * playerProfile.getBounty());
@@ -1095,7 +1095,7 @@ public class CombatListener implements Listener {
     @NotNull
     private static String getBountyString(PlayerProfile killerProfile) {
         String bountyColor = "&6";
-        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable()) {
+        if (ThePit.getInstance().getPitConfig().isGenesisEnable()) {
             GenesisTeam team = killerProfile.getGenesisData().getTeam();
             if (team == GenesisTeam.ANGEL) {
                 bountyColor = "&b";
@@ -1114,7 +1114,7 @@ public class CombatListener implements Listener {
         }
 
         String genesisStatus = "";
-        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && killerProfile.getGenesisData().getTeam() != GenesisTeam.NONE) {
+        if (ThePit.getInstance().getPitConfig().isGenesisEnable() && killerProfile.getGenesisData().getTeam() != GenesisTeam.NONE) {
             if (killerProfile.getGenesisData().getTeam() == playerProfile.getGenesisData().getTeam()) {
                 killerProfile.getGenesisData().setPoints(killerProfile.getGenesisData().getPoints() + 1);
                 if (killerProfile.getGenesisData().getTeam() == GenesisTeam.ANGEL) {
@@ -1406,7 +1406,7 @@ public class CombatListener implements Listener {
     }
 
     public static boolean isNight() {
-        if (!ThePit.getInstance().getPitWorldConfig().isCurfewEnable()) {
+        if (!ThePit.getInstance().getGlobalConfig().isCurfewEnable()) {
             return false;
         }
 
@@ -1414,6 +1414,6 @@ public class CombatListener implements Listener {
         instance.setTimeInMillis(System.currentTimeMillis());
         final int hour = instance.get(Calendar.HOUR_OF_DAY);
 
-        return hour >= ThePit.getInstance().getPitWorldConfig().getCurfewStart() && hour <= ThePit.getInstance().getPitWorldConfig().getCurfewEnd();
+        return hour >= ThePit.getInstance().getGlobalConfig().getCurfewStart() && hour <= ThePit.getInstance().getGlobalConfig().getCurfewEnd();
     }
 }

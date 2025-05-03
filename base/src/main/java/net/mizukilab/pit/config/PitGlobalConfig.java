@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PitGlobalConfig extends Configuration {
     public PitGlobalConfig(JavaPlugin plugin) {
-        super(plugin,"global.yml");
+        super(plugin,"config.yml");
     }
     @Setter
     @Getter

@@ -26,7 +26,7 @@ public class ShopMenu extends Menu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> button = new HashMap<>();
-        if (ThePit.getInstance().getPitWorldConfig().getToken().equals("bb0ce27eb-0007-7259-5975-4c2bb09f4ae")) {
+        if (ThePit.getInstance().getGlobalConfig().getToken().equals("bb0ce27eb-0007-7259-5975-4c2bb09f4ae")) {
             button.put(4, new CloverPixelShopButton());
         }
         button.put(10, new DiamondSwordShopButton());

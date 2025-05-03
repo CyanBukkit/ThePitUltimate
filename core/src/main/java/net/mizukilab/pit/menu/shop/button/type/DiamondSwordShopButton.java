@@ -3,7 +3,7 @@ package net.mizukilab.pit.menu.shop.button.type;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
-import cn.charlotte.pit.events.genesis.team.GenesisTeam;
+import cn.charlotte.pit.events.genesis.GenesisTeam;
 import net.mizukilab.pit.menu.shop.button.AbstractShopButton;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import org.bukkit.Material;
@@ -89,7 +89,7 @@ public class DiamondSwordShopButton extends AbstractShopButton {
     @Override
     public int getPrice(Player player) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if (ThePit.getInstance().getPitWorldConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
+        if (ThePit.getInstance().getPitConfig().isGenesisEnable() && profile.getGenesisData().getTeam() == GenesisTeam.ANGEL && profile.getGenesisData().getTier() >= 3) {
             return (int) (0.35 * 150);
         }
         return 150;

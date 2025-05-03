@@ -24,4 +24,5 @@ public interface IProfilerOperator extends Closeable {
     @NotNull IOperator lookupIOnline(@NotNull String name);
 
     @NotNull void ifPresentAndILoaded(@NotNull Player target, @NotNull Consumer<IOperator> function);
+    void forEach(Consumer<IOperator> function);
 }

@@ -4,6 +4,10 @@ import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.events.*
+import cn.charlotte.pit.events.trigger.type.IEpicEvent
+import cn.charlotte.pit.events.trigger.type.addon.IPreparative
+import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert
+import cn.charlotte.pit.events.trigger.type.addon.ISortable
 import net.minecraft.server.v1_8_R3.EnumParticle
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles
 import net.mizukilab.pit.Util.Companion.chatColorToColor
@@ -39,7 +43,10 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 
-class SquadsEvent : IEpicEvent, AbstractEvent(), IPrepareEvent, Listener, IScoreBoardInsert, ISortedEvent {
+class SquadsEvent : IEpicEvent, AbstractEvent(),
+    IPreparative, Listener,
+    IScoreBoardInsert,
+    ISortable {
 
     companion object {
         @JvmStatic

@@ -2,8 +2,8 @@ package net.mizukilab.pit.events.impl;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.INormalEvent;
-import cn.charlotte.pit.events.IScoreBoardInsert;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -133,7 +133,7 @@ public class CarePackageEvent extends AbstractEvent implements INormalEvent, Lis
 
     @Override
     public void onActive() {
-        final List<Location> locations = ThePit.getInstance().getPitWorldConfig().getPackageLocations();
+        final List<Location> locations = ThePit.getInstance().getPitConfig().getPackageLocations();
         if (locations.isEmpty()) {
             CC.boardCast0("&c警告! &6空投&7 坐标信息未配置, 请联系管理员");
             ThePit.getInstance().getEventFactory().inactiveEvent(this);

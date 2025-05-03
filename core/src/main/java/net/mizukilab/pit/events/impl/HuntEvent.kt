@@ -4,8 +4,8 @@ import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.event.PitKillEvent
 import cn.charlotte.pit.events.AbstractEvent
-import cn.charlotte.pit.events.INormalEvent
-import cn.charlotte.pit.events.IScoreBoardInsert
+import cn.charlotte.pit.events.trigger.type.INormalEvent
+import cn.charlotte.pit.events.trigger.type.addon.IScoreBoardInsert
 import net.minecraft.server.v1_8_R3.EnumParticle
 import net.mizukilab.pit.config.NewConfiguration.eventOnlineRequired
 import net.mizukilab.pit.util.ParticleBuilder
@@ -26,7 +26,8 @@ import org.bukkit.scheduler.BukkitRunnable
  * @author Araykal
  * @since 2025/2/8
  */
-class HuntEvent : AbstractEvent(), INormalEvent, Listener, IScoreBoardInsert {
+class HuntEvent : AbstractEvent(), INormalEvent, Listener,
+    IScoreBoardInsert {
     private val killMap: MutableMap<String, EventData> = mutableMapOf()
     private val KILL_COUNT_THRESHOLD = 15
     private var isActive = false

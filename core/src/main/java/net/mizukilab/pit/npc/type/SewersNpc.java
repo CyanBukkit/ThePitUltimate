@@ -39,7 +39,7 @@ public class SewersNpc extends SkinNPC {
 
     @Override
     public Location getNpcSpawnLocation() {
-        return ThePit.getInstance().getPitWorldConfig().getSewersFishNpcLocation();
+        return ThePit.getInstance().getPitConfig().getSewersFishNpcLocation();
     }
 
     @Override

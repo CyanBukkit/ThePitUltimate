@@ -2,7 +2,7 @@ package net.mizukilab.pit.events.impl;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.events.AbstractEvent;
-import cn.charlotte.pit.events.INormalEvent;
+import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.parm.listener.IPlayerKilledEntity;
 import net.mizukilab.pit.util.chat.CC;

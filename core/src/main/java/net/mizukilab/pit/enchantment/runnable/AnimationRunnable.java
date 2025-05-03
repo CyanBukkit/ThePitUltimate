@@ -33,7 +33,7 @@ public class AnimationRunnable extends BukkitRunnable {
     private final List<Location> animationLocations;
 
     public AnimationRunnable() {
-        final PitWorldConfig pitWorldConfig = ThePit.getInstance().getPitWorldConfig();
+        final PitWorldConfig pitWorldConfig = ThePit.getInstance().getPitConfig();
         final Location loc = pitWorldConfig.getEnchantLocation();
         final Location center;
         if (loc == null) {
