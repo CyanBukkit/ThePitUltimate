@@ -19,10 +19,14 @@ public class EnchantDisplayButton extends Button {
 
     private final ItemStack item;
     private final MythicWellMenu menuInstance;
-
+    private final boolean onlyView;
     public EnchantDisplayButton(ItemStack item, MythicWellMenu menu) {
+        this(item,menu,false);
+    }
+    public EnchantDisplayButton(ItemStack item, MythicWellMenu menu,boolean onlyView) {
         this.item = item;
         this.menuInstance = menu;
+        this.onlyView = onlyView;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class EnchantDisplayButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        if (InventoryUtil.isInvFull(player)) {
+        if (onlyView || InventoryUtil.isInvFull(player)) {
             return;
         }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());

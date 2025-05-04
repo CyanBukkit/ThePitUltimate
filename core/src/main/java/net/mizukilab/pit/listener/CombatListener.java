@@ -294,9 +294,8 @@ public class CombatListener implements Listener {
             damagerProfile.setMeleeTotalDamage((long) (damagerProfile.getMeleeTotalDamage() + damage));
         }
         damagerProfile.setTotalDamage((long) (damagerProfile.getTotalDamage() + damage));
-        if (damager.getHealth() - event.getFinalDamage() > 0) {
-            processActionBarWithSettingProvided(player, damager, (int) damage, event.getFinalDamage(), damagerProfile);
-        }
+        processActionBarWithSettingProvided(player, damager, (int) damage, Math.min(player.getHealth(),event.getFinalDamage()), damagerProfile);
+
         if (playerProfile.isLoaded()) {
             if (player.hasMetadata("backing")) {
                 player.sendMessage(CC.translate("&c回城被取消."));

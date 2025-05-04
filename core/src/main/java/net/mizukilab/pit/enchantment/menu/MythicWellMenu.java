@@ -6,8 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import net.mizukilab.pit.enchantment.menu.button.*;
 import net.mizukilab.pit.enchantment.runnable.AnimationRunnable;
+import net.mizukilab.pit.item.DyeColor;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.item.MythicColor;
+import net.mizukilab.pit.item.type.mythic.MagicFishingRod;
+import net.mizukilab.pit.item.type.mythic.MythicBowItem;
+import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
+import net.mizukilab.pit.item.type.mythic.MythicSwordItem;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.CC;
@@ -25,6 +30,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +48,20 @@ public class MythicWellMenu extends Menu {
     private final int CLICK_SLOT = 25;
     private final MythicWellMenu instance;
     private AnimationRunnable.AnimationData animationData;
+
+    static ItemStack[] stacks = null;
+    static {
+        List<ItemStack> stacksList = new ArrayList<>();
+        stacksList.add(new MythicSwordItem().toItemStack());
+        stacksList.add( new MythicBowItem().toItemStack());
+        stacksList.add(new MagicFishingRod().toItemStack());
+        MythicLeggingsItem mythicLeggingsItem = new MythicLeggingsItem();
+        for (MythicColor color : MythicColor.values()){
+            mythicLeggingsItem.color = color;
+            stacksList.add(mythicLeggingsItem.toItemStack());
+        }
+        stacks = stacksList.toArray(new ItemStack[0]);
+    }
 
     public static AnimationRunnable runnable = new AnimationRunnable();
 
@@ -82,7 +104,7 @@ public class MythicWellMenu extends Menu {
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 return button;
             }
-            button.put(INPUT_SLOT, new EnchantDisplayButton(itemStack, this));
+            button.put(INPUT_SLOT, new EnchantDisplayButton(itemStack, this,false));
             button.put(CLICK_SLOT, new EnchantButton(itemStack, this));
 
 
@@ -181,9 +203,14 @@ public class MythicWellMenu extends Menu {
             } else {
                 this.animationData.setColor((byte) 6);
             }
-
-            button.put(INPUT_SLOT, new EnchantDisplayButton(enchantingItem, this));
-            button.put(CLICK_SLOT, new EnchantButton(enchantingItem, this));
+            if(enchantingItem.getType() != Material.AIR) {
+                button.put(INPUT_SLOT, new EnchantDisplayButton(enchantingItem, this, false));
+                button.put(CLICK_SLOT, new EnchantButton(enchantingItem, this));
+            } else {
+                int currentTick = (int) (Utils.toUnsignedInt(animationData.getAnimationGlobalTick()) / 2L);
+                button.put(CLICK_SLOT - 2, new DisplayButton(stacks[currentTick % stacks.length], true));
+                button.put(CLICK_SLOT, new EnchantButton(enchantingItem, this));
+            }
         }
 
         return button;

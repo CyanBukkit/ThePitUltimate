@@ -69,6 +69,7 @@ public class AnimationRunnable extends BukkitRunnable {
             });
 
             for (AnimationData data : animations.values()) {
+                data.animationGlobalTick++;
                 Menu menu = Menu.currentlyOpenedMenus.get(data.getPlayer().getName());
 
                 if (data.isFinished()) {
@@ -191,6 +192,7 @@ public class AnimationRunnable extends BukkitRunnable {
     public static class AnimationData {
 
         private final Player player;
+        private int animationGlobalTick = 0;
         private int animationTick = 0;
         private byte color = (byte) 6;
         private boolean startEnchanting = false;
