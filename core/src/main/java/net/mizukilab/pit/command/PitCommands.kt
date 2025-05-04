@@ -37,16 +37,13 @@ import net.mizukilab.pit.menu.trade.TradeMenu
 import net.mizukilab.pit.menu.viewer.StatusViewerMenu
 import net.mizukilab.pit.sendMessage
 import net.mizukilab.pit.trade.TradeMonitorRunnable
+import net.mizukilab.pit.util.*
 import net.mizukilab.pit.util.DateCodeUtils.codeToDate
-import net.mizukilab.pit.util.MythicUtil
-import net.mizukilab.pit.util.PlayerUtil
-import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.chat.CC
 import net.mizukilab.pit.util.chat.ChatComponentBuilder
 import net.mizukilab.pit.util.chat.StringUtil
 import net.mizukilab.pit.util.cooldown.Cooldown
 import net.mizukilab.pit.util.inventory.InventoryUtil
-import net.mizukilab.pit.util.isSpecial
 import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.level.LevelUtil
@@ -94,6 +91,20 @@ class PitCommands {
     fun startDate(@Context player: Player) {
         val convertedDate: LocalDate = codeToDate(ThePit.getInstance().serverId)
         player.sendMessage(CC.translate("&e最后运行日期: &a${convertedDate.format(DateTimeFormatter.ISO_LOCAL_DATE)}"));
+    }
+
+    @Execute(name = "bar")
+    fun getBar(@Context player: Player) {
+        val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+
+        player.sendMessage(
+            "§8[ " + ProgressBar.getProgressBar(
+                profile.experience,
+                LevelUtil.getLevelTotalExperience(profile.prestige, profile.level),
+                LevelUtil.getLevelTotalExperience(profile.prestige, profile.level + 1),
+                12
+            ) + " §8]"
+        )
     }
 
     @Execute(name = "option", aliases = ["options", "opt", "setting", "settings"])
@@ -148,10 +159,10 @@ class PitCommands {
                         return@runTaskAsynchronously
                     }
                 }
-/*                if (lookupStrict.profile().playerUuid == player.uniqueId) {
-                    player.sendMessage(CC.translate("&c疑? 为什么要查看自己档案?"))
-                    return@runTaskAsynchronously
-                }*/
+                /*                if (lookupStrict.profile().playerUuid == player.uniqueId) {
+                                    player.sendMessage(CC.translate("&c疑? 为什么要查看自己档案?"))
+                                    return@runTaskAsynchronously
+                                }*/
                 Bukkit.getScheduler().runTask(ThePit.getInstance()) {
                     StatusViewerMenu(lookupStrict.profile()).openMenu(
                         player

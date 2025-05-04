@@ -21,7 +21,6 @@ import net.mizukilab.pit.item.type.mythic.MythicSwordItem;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.RomanUtil;
 import net.mizukilab.pit.util.item.ItemBuilder;
-import net.mizukilab.pit.util.item.ItemUtil;
 import net.mizukilab.pit.util.random.RandomUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -110,6 +109,7 @@ public abstract class IMythicItem extends AbstractPitItem {
 
         int rareAmount = 0;
         int opAmount = 0;
+        int uberAmount = 0;
         int enchantTotalLevel = 0;
 
 
@@ -124,6 +124,8 @@ public abstract class IMythicItem extends AbstractPitItem {
                 }
             } else if (abstractEnchantment.getRarity() == EnchantmentRarity.OP) {
                 opAmount++;
+            } else if (abstractEnchantment.getRarity() == EnchantmentRarity.UBER_LIMITED_RARE || abstractEnchantment.getRarity() == EnchantmentRarity.UBER_LIMITED) {
+                uberAmount++;
             }
         }
 
@@ -157,10 +159,12 @@ public abstract class IMythicItem extends AbstractPitItem {
             this.prefix = "强大的";
         }
 
+        if (uberAmount >= 1) {
+            this.prefix = "登峰造极的";
+        }
         if (opAmount >= 1) {
             this.prefix = "可怕的";
         }
-
         if (this.prefix != null) {
             name = name.substring(0, 2) + this.prefix + " " + name;
         }

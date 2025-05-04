@@ -143,11 +143,11 @@ public class Scoreboard implements AssembleAdapter {
         if (level >= NewConfiguration.INSTANCE.getMaxLevel()) {
             lines.add("&f经验: &e&lMax");
         } else {
-            if (!profile.getPlayerOption().isLevelBar()) {
+            if (!profile.getPlayerOption().isLevelBar() && prestige <= 100) {
                 lines.add("&f下级: &b" + numFormatTwo.format((LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience())) + " Xp");
             } else {
                 lines.add("&f下级: ");
-                lines.add("&8[ " + ProgressBar.getProgressBar(profile.getExperience(), LevelUtil.getLevelTotalExperience(prestige, level + 1) - profile.getExperience(), 10) + " &8]");
+                lines.add("§7[ " + ProgressBar.getProgressBar(profile.getExperience(), LevelUtil.getLevelTotalExperience(prestige, level), LevelUtil.getLevelTotalExperience(prestige, level + 1), 9) + " §7]");
             }
         }
 
