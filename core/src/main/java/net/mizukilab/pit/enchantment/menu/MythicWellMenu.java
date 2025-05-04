@@ -317,7 +317,7 @@ public class MythicWellMenu extends Menu {
                     }
                 }
             }
-            IMythicItem mythicItem = Utils.getMythicItem(item);
+            IMythicItem mythicItem = Utils.getMythicItem0(item); //only support raw check
 
             if (mythicItem == null) return;
 
