@@ -2,6 +2,7 @@ package net.mizukilab.pit.actionbar;
 
 import cn.hutool.core.lang.mutable.MutablePair;
 import io.irina.backports.utils.SWMRHashTable;
+import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.ActionBarUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 不要使用SimpleEntry, 会污染HashMap
  */
 public class ActionBarManager implements IActionBarManager {
-
+    int tick = 0;
     Map<UUID, MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>>> multiMap = new SWMRHashTable<>();
     ReentrantLock lock = new ReentrantLock();
     public void addActionBarOnQueue(Player player, String arg, String val, int repeat,boolean flush) {
@@ -26,14 +27,14 @@ public class ActionBarManager implements IActionBarManager {
             stringStringMap = new MutablePair<>(new StringBuilder(),new SWMRHashTable<>());
             multiMap.put(uniqueId, stringStringMap);
         }
-        stringStringMap.getValue().put(arg, new MutablePair<>(val, repeat));
-        if(flush) {
-            //All are synchronous
-            if (lock.tryLock()) {//最大限度的解决性能浪费
-                tickPiece(player.getUniqueId(), stringStringMap.getValue(),stringStringMap.getKey(), false);
-                lock.unlock();
-            }
+        Map<String, MutablePair<String, Integer>> value = stringStringMap.getValue();
+        MutablePair<String, Integer> stringIntegerMutablePair = value.get(arg);
+        if(stringIntegerMutablePair != null) {
+            stringIntegerMutablePair = new MutablePair<>(val, -repeat);
+        } else {
+            stringIntegerMutablePair = new MutablePair<>(val, repeat);
         }
+        value.put(arg, stringIntegerMutablePair);
     }
 
     public void addActionBarOnQueue(Player player, String arg, String val, int repeat) {
@@ -43,12 +44,14 @@ public class ActionBarManager implements IActionBarManager {
     public void tick() {
         lock.lock();
         ((SWMRHashTable<UUID, MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>>>) multiMap).removeIf((uuid, mappedString) -> { //forEach as multimap
-            return tickPiece(uuid, mappedString.getValue(),mappedString.getKey(),true);
+            return tickPiece(uuid, mappedString.getValue(),mappedString.getKey());
         });
         lock.unlock();
     }
 
-    private boolean tickPiece(UUID uuid, Map<String, MutablePair<String, Integer>> mappedString,StringBuilder builder,boolean reduce) {
+    private boolean tickPiece(UUID uuid, Map<String, MutablePair<String, Integer>> mappedString,StringBuilder builder) {
+        tick++;
+        long tick = Utils.toUnsignedInt(this.tick);
         Player player = Bukkit.getPlayer(uuid); //get Players
         if (mappedString.isEmpty() || player == null || !player.isOnline()) {
             //remove immediately
@@ -61,19 +64,28 @@ public class ActionBarManager implements IActionBarManager {
         ((SWMRHashTable<String, MutablePair<String, Integer>>) mappedString).removeIf((key, value) -> {
             String rawString = value.getKey();
             Integer repeat = value.getValue();
+            boolean reduce = false;
+            if(repeat < 0) {
+                reduce = true;
+                repeat = -repeat;
+            } else {
+                if ((tick % 5) != 0) {
+                    return false;
+                }
+            }
             builder.append(rawString);
             if (index.incrementAndGet() < size) {
                 builder.append("&7| ");
             }
-            int i1 = reduce ? --repeat : repeat;
+
+            int i1 = !reduce ? --repeat : repeat;
             if (i1 <= 0) {
                 return true;
             } else if (!rawString.isEmpty()) {
                 ab.set(true);
             }
-            if(reduce) {
-                value.setValue(i1); //setting the value instead create new one, do not use SimpleEntry, because of its rehashing operation
-            }
+            //always set it seems not expensive only memory operation
+            value.setValue(i1); //setting the value instead create new one, do not use SimpleEntry, because of its rehashing operation
             return false;
         });
         if (ab.get()) {

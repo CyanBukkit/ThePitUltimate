@@ -33,7 +33,7 @@ public class AsyncTickHandler extends BukkitRunnable {
     public void run() {
         //trade
         ActionBarManager actionBarManager = (ActionBarManager) instance.getActionBarManager();
-        if (actionBarManager != null && tick % 5 == 0) {
+        if (actionBarManager != null) {
             actionBarManager.tick();
         }
         if (tick % 10 == 0) {

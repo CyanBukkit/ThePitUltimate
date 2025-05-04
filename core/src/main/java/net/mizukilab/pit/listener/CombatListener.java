@@ -166,7 +166,6 @@ public class CombatListener implements Listener {
                 }
 
                 this.postDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), false);
-                playerProfile.setLastDamageAt(System.currentTimeMillis());
             } else if (event.getDamager() instanceof Projectile
                     && ((Projectile) event.getDamager()).getShooter() instanceof Player damager) {
                 Player player = (Player) event.getEntity();
@@ -178,7 +177,6 @@ public class CombatListener implements Listener {
 
                 postDamage(event, player, damager, playerProfile, damagerProfile, event.getFinalDamage(), true);
 
-                playerProfile.setLastDamageAt(System.currentTimeMillis());
             } else if (event.getDamager() instanceof TNTPrimed && event.getEntity() instanceof Player) {
                 List<MetadataValue> metadata = event.getDamager().getMetadata("internal");
                 if (!metadata.isEmpty()) {
@@ -336,6 +334,7 @@ public class CombatListener implements Listener {
                     .add(playerData);
         }
         //handle kill recap - end
+        playerProfile.setLastDamageAt(System.currentTimeMillis());
     }
 
 
