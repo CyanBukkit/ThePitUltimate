@@ -61,7 +61,9 @@ object PitPapiHook : PlaceholderExpansion() {
                 }
                 return ""
             }
-
+            "coins_int" ->{
+                return profile?.coins?.toInt().toString()
+            }
             "coins" -> {
                 return profile?.coins?.toString() ?: "0.0"
             }
