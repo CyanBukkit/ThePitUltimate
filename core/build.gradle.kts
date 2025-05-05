@@ -8,12 +8,12 @@ plugins {
     kotlin("jvm") version "2.1.20"
     alias(libs.plugins.shadow)
 }
-var devBuild = false
+var devBuild = true
 if (devBuild) {
     println("当前使用DevBuild模式构建!!,请详细斟酌是否构建")
     Scanner(System.`in`).next()
 }
-group = "me.huanmeng"
+group = "cn.klee"
 version = "core"
 repositories {
     maven("https://maven.aliyun.com/repository/public/")

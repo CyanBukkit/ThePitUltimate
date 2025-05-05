@@ -49,14 +49,21 @@ public class PacketListener extends PacketAdapter {
             processRvBPackets((Packet<?>) packet.getHandle());
         } else if (packet.getType() == PacketType.Play.Server.ENTITY_EFFECT) {
             processPotionAddEvent(packet, player);
-       } else if (packet.getType() == PacketType.Play.Client.CUSTOM_PAYLOAD){
-            process(event);
-        }
+       }
 //            processPlayerInfo(player,packet);
 //        } else if(packet.getType() == PacketType.Play.Server.SCOREBOARD_TEAM) {
 //            processPlayerTeam(player,packet);
 //        }
     }
+
+    @Override
+    public void onPacketReceiving(PacketEvent event) {
+        PacketContainer packet = event.getPacket();
+        if (packet.getType() == PacketType.Play.Client.CUSTOM_PAYLOAD){
+            process(event);
+        }
+    }
+
     public void process(PacketEvent event){
         Object handle = event.getPacket().getHandle();
         if(handle instanceof PacketPlayInCustomPayload oh){
