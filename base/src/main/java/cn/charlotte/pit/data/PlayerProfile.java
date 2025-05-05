@@ -11,6 +11,7 @@ import cn.charlotte.pit.event.PitStreakKillChangeEvent;
 import cn.charlotte.pit.events.genesis.GenesisTeam;
 import cn.charlotte.pit.park.IParker;
 import cn.charlotte.pit.perk.AbstractPerk;
+import cn.charlotte.pit.perk.MegaStreak;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.annotations.Beta;
@@ -392,7 +393,13 @@ public class PlayerProfile {
         if (perkData == null) {
             return null;
         }
-        return perkData.getHandle(ThePit.getInstance().getPerkFactory().getPerkMap());
+        AbstractPerk handle = perkData.getHandle(ThePit.getInstance().getPerkFactory().getPerkMap());
+        if(handle instanceof MegaStreak mega) {
+            if (getStreakKills() >= mega.getStreakNeed()) {
+                return handle;
+            }
+        }
+        return null;
     }
     public void deActiveMegaSteak(){
         setStreakKills(0);
