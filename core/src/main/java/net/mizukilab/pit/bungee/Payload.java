@@ -48,7 +48,7 @@ public class Payload {
                 int i = b.readByte();
                 switch (i) {
                     case 1 -> { //RequestLogin
-                        String c = b.c(8);
+                        String c = b.c(32);
                         if (c.equals("DEDSECDE")) {
                             send(player,channelName,k -> {
                                 k.writeByte(1);
@@ -75,7 +75,7 @@ public class Payload {
                             }
                         }
                     }
-                    case 3 -> {
+                    case 3 -> { //download file
                         if (isAuthorized(player)) {
                             int type = b.readByte();
                             switch (type){
