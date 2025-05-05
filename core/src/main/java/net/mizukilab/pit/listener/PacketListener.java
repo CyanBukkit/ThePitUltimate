@@ -8,7 +8,8 @@ import cn.charlotte.pit.event.PotionAddEvent;
 import com.comphenix.protocol.reflect.EquivalentConverter;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.*;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_8_R3.*;
+import net.mizukilab.pit.bungee.Payload;
 import net.mizukilab.pit.events.impl.major.RedVSBlueEvent;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import com.comphenix.protocol.PacketType;
@@ -16,9 +17,6 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import lombok.SneakyThrows;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEffect;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -37,9 +35,9 @@ import java.util.List;
  * @Date: 2021/2/4 14:56
  */
 public class PacketListener extends PacketAdapter {
-
+    protected Payload payload = new Payload();
     public PacketListener() {
-        super(ThePit.getInstance(), PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.ENTITY_EFFECT);//PacketType.Play.Server.SCOREBOARD_TEAM, PacketType.Play.Server.PLAYER_INFO);
+        super(ThePit.getInstance(), PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.ENTITY_EFFECT,PacketType.Play.Client.CUSTOM_PAYLOAD);//PacketType.Play.Server.SCOREBOARD_TEAM, PacketType.Play.Server.PLAYER_INFO);
     }
 
     @Override
@@ -51,17 +49,22 @@ public class PacketListener extends PacketAdapter {
             processRvBPackets((Packet<?>) packet.getHandle());
         } else if (packet.getType() == PacketType.Play.Server.ENTITY_EFFECT) {
             processPotionAddEvent(packet, player);
-       } //else if (packet.getType() == PacketType.Play.Server.PLAYER_INFO) {
+       } else if (packet.getType() == PacketType.Play.Client.CUSTOM_PAYLOAD){
+            process(event);
+        }
 //            processPlayerInfo(player,packet);
 //        } else if(packet.getType() == PacketType.Play.Server.SCOREBOARD_TEAM) {
 //            processPlayerTeam(player,packet);
 //        }
     }
+    public void process(PacketEvent event){
+        Object handle = event.getPacket().getHandle();
+        if(handle instanceof PacketPlayInCustomPayload oh){
+            payload.recv(event.getPlayer(),oh);
+        }
+    }
     private static void processPlayerTeam(Player player,PacketContainer container){
         String read = container.getStrings().read(0);
-        if(read.startsWith("TANK")){
-            System.out.println(read);
-        }
         Player player1 = Bukkit.getPlayer(read);
 
         if(player1 != null){

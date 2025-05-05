@@ -120,6 +120,7 @@ public class AssembleThread implements Runnable {
                                 continue;
                             }
                         } catch (Exception e){
+                            e.printStackTrace();
                             continue;
                         }
                         String line = ChatColor.

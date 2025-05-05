@@ -54,7 +54,6 @@ public class Scoreboard implements AssembleAdapter {
         return text;
     }
 
-    private final ObjectArrayList<String> carrierList = new ObjectArrayList<>(16);
 
     @Override
     public List<String> getLines(Player player) {
@@ -63,8 +62,7 @@ public class Scoreboard implements AssembleAdapter {
         if (!profile.isLoaded()) {
             return NewConfiguration.INSTANCE.getLoadingBoardTips();
         }
-        List<String> lines = carrierList;
-        lines.clear();
+        List<String> lines = new ObjectArrayList<>(16);
 
         int prestige = profile.getPrestige();
         int level = profile.getLevel();

@@ -1,5 +1,6 @@
 package net.mizukilab.pit.util.scoreboard;
 
+import lombok.Getter;
 import net.mizukilab.pit.util.scoreboard.events.AssembleBoardCreateEvent;
 import net.mizukilab.pit.util.scoreboard.events.AssembleBoardDestroyEvent;
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+@Getter
 public class AssembleListener implements Listener {
 
     private final Assemble assemble;
@@ -48,7 +50,4 @@ public class AssembleListener implements Listener {
         event.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
     }
 
-    public Assemble getAssemble() {
-        return this.assemble;
-    }
 }
