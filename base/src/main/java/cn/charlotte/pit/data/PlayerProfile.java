@@ -395,7 +395,7 @@ public class PlayerProfile {
         return perkData.getHandle(ThePit.getInstance().getPerkFactory().getPerkMap());
     }
     public void deActiveMegaSteak(){
-        setStrengthNum(0);
+        setStreakKills(0);
     }
     public static PlayerProfile getRawCache(UUID uuid) {
         IOperator operator = ThePit.getInstance().getProfileOperator().getIOperator(uuid);
