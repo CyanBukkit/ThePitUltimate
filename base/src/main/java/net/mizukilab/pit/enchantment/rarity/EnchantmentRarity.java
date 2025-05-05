@@ -30,6 +30,10 @@ public enum EnchantmentRarity {
     AUCTION_LIMITED("&6拍限! ", RarityType.NORMAL, 1),
     AUCTION_LIMITED_RARE("&6拍限! ", RarityType.RARE, 1),
 
+
+    UBER_LIMITED("", RarityType.NORMAL, 4),
+    UBER_LIMITED_RARE("&3登封!", RarityType.NORMAL, 2),
+
     NOSTALGIA("", RarityType.NORMAL, 14),
     NOSTALGIA_RARE("&d稀有! ", RarityType.RARE, 14);
 

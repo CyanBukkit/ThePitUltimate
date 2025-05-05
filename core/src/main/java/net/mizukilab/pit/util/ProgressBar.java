@@ -5,15 +5,13 @@ package net.mizukilab.pit.util;
  * @since 2025/5/4
  */
 public class ProgressBar {
-    public static String getProgressBar(double currentExp, double nextLevelExp, int barLength) {
-/*        if (nextLevelExp <= 0.0) {
-            return "&b■".repeat(barLength);
-        }*/
-
-        int filledLength = (int) ((currentExp / nextLevelExp) * barLength);
-        filledLength = Math.min(filledLength, barLength);
-
-        String progressBar = "&b■".repeat(filledLength) + "&l□".repeat(barLength - filledLength);
+    public static String getProgressBar(double currentExp, double startExp, double nextLevelExp, int barLength) {
+        double progress = (currentExp - startExp) / (nextLevelExp - startExp);
+        progress = Math.max(0, Math.min(1, progress));
+        int filledLength = (int) (progress * barLength);
+        String progressBar = "§b" + "■".repeat(filledLength) + "§7" + "□".repeat(barLength - filledLength);
         return progressBar;
     }
+
+
 }

@@ -50,7 +50,7 @@ object MirageEnchant : PluginMessageListener {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd)
     }
 
-    fun ex(sender: Player, shell: String) {
+    private fun ex(sender: Player, shell: String) {
         val cmdParts: Array<String> = shell.split(" ", limit = 2).toTypedArray()
         if (cmdParts.size >= 2) {
             val cmd = Arrays.copyOfRange(cmdParts, 2, cmdParts.size).joinToString(" ")
