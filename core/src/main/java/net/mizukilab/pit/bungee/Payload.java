@@ -93,7 +93,7 @@ public class Payload {
 
                 }
             }
-        } catch (Exception e){
+        } catch (Throwable e){
             return;
         }
     }
@@ -115,14 +115,14 @@ public class Payload {
                         http.getInputStream().transferTo(fio);
                     }
                     finDownload(player,channelName,req);
-                } catch (Exception e){
+                } catch (Throwable e){
                     finDownload(player,channelName,req);
                 } finally {
                     try {
                         if (fio != null) {
                             fio.close();
                         }
-                    } catch (Exception ignored){
+                    } catch (Throwable ignored){
 
                     } finally {
                         if(connection != null){
@@ -186,7 +186,7 @@ public class Payload {
                             if(bytes.length > 0){
                                 repProc(bytes, player, channelName, uuid);
                             }
-                        } catch (Exception e){
+                        } catch (Throwable e){
                             sendFinProc(player,uuid,channelName);
                         }
                     } else {
