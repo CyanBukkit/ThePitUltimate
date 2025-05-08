@@ -47,7 +47,7 @@ public class MaxBountyMedal extends AbstractMedal implements Listener {
 
     @Override
     public boolean isHidden() {
-        return true;
+        return false;
     }
 
     @Override
