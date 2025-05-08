@@ -36,6 +36,10 @@ public class MedalFactory implements Listener {
             if (AbstractMedal.class.isAssignableFrom(clazz)) {
                 Object instance = clazz.newInstance();
                 medals.add((AbstractMedal) instance);
+                if (Listener.class.isAssignableFrom(clazz)) {
+                    Listener listener = (Listener) clazz.newInstance();
+                    Bukkit.getPluginManager().registerEvents(listener, ThePit.getInstance());
+                }
             }
         }
     }

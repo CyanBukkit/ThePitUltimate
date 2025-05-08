@@ -1,7 +1,11 @@
 package net.mizukilab.pit.medal.impl.challenge;
 
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.event.PitKillEvent;
 import net.mizukilab.pit.medal.AbstractMedal;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 
 /**
@@ -9,7 +13,7 @@ import net.mizukilab.pit.medal.AbstractMedal;
  * @Date 2021/6/9 23:02
  */
 
-public class MaxBountyHunterMedal extends AbstractMedal {
+public class MaxBountyHunterMedal extends AbstractMedal implements Listener {
 
     @Override
     public String getInternalName() {
@@ -49,5 +53,15 @@ public class MaxBountyHunterMedal extends AbstractMedal {
     @Override
     public void handleProfileLoaded(PlayerProfile profile) {
 
+    }
+
+    @EventHandler
+    public void onPitKill(PitKillEvent event) {
+        Player player = (Player) event.getTarget();
+        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        PlayerProfile pitProfile = PlayerProfile.getPlayerProfileByUuid(event.getKiller().getUniqueId());
+        if (profile.getBounty() >= 5000) {
+            setProgress(pitProfile, 1);
+        }
     }
 }
