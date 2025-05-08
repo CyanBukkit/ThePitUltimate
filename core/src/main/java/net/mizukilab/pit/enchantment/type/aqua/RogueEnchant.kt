@@ -54,7 +54,7 @@ class RogueEnchant : AbstractEnchantment(), IAttackEntity, IPlayerDamaged {
     ) {
         if (target is Player) {
             var toMythicItem = target.inventory.leggings?.toMythicItem() as IMythicItem
-            if (toMythicItem?.color == MythicColor.AQUA) {
+            if (toMythicItem.color == MythicColor.AQUA) {
                 boostDamage.addAndGet(0.25)
             }
         }
@@ -71,8 +71,8 @@ class RogueEnchant : AbstractEnchantment(), IAttackEntity, IPlayerDamaged {
         cancel: AtomicBoolean?
     ) {
         if (attacker is Player) {
-            var toMythicItem = attacker.inventory.leggings?.toMythicItem() as IMythicItem
-            if (toMythicItem?.color == MythicColor.AQUA) {
+            val toMythicItem = attacker.inventory.leggings?.toMythicItem() as IMythicItem
+            if (toMythicItem.color == MythicColor.AQUA) {
                 boostDamage.set(boostDamage.get() - 0.1)
             }
         }

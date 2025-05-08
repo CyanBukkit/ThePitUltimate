@@ -25,7 +25,7 @@ public class MagicFishingRod extends IMythicItem {
 
     @Override
     public String getItemDisplayName() {
-        return "&b神奇鱼竿";
+        return "&b&o神奇鱼竿";
     }
 
     @Override

@@ -32,7 +32,6 @@ import net.mizukilab.pit.util.item.ItemBuilder
 import net.mizukilab.pit.util.level.LevelUtil
 import net.mizukilab.pit.util.rank.RankUtil
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -416,8 +415,14 @@ class PitAdminCommands {
         loadFile()
         load()
         ThePit.getInstance().mapSelector.reload()
+        for (npc in ThePit.getInstance().npcFactory.pitNpc) {
+            npc.npc.setLocation(npc.getNpcSpawnLocation())
+        }
+
         sender.sendMessage(CC.translate("&7 重载完成!"))
     }
+
+
 
     @Execute(name = "edit")
     fun changeEdit(@Context player: Player) {

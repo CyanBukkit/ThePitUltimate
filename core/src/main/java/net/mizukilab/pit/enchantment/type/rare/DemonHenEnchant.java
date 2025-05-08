@@ -70,9 +70,6 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
                     nearbyEntities.forEach(a -> {
                         if (a instanceof Player) {
                             Player player = (Player) a;
-                            if (SpecialUtil.isPrivate(player) || SpecialUtil.isSpecial(player)) {
-                                return;
-                            }
                             player.setVelocity(new Vector(xyz, Math.abs(xyz), xyz));
                             return;
                         }

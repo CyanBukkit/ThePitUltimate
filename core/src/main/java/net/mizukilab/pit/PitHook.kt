@@ -457,6 +457,8 @@ private fun loadEnchants() {
         WitheredAndPiercingThroughTheHeart::class.java,
         TrotEnchant::class.java,
 
+        //new
+        DemonHenEnchant::class.java,
         //下水道附魔
         AegisEnchant::class.java,
         TrashPandaEnchant::class.java,

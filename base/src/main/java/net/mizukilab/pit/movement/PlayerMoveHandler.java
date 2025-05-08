@@ -16,16 +16,21 @@ import net.mizukilab.pit.util.chat.ActionBarUtil;
 import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import spg.lgdev.handler.MovementHandler;
 import xyz.upperlevel.spigot.book.BookUtil;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -167,7 +172,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             profile.setInArena(isInArena);
 
             if (!profile.isEditingMode()) {
-                if (BlockUtil.isBlockNearby(player.getLocation(),3) && player.getGameMode() == GameMode.ADVENTURE){
+                if (BlockUtil.isBlockNearby(player.getLocation(), 3) && player.getGameMode() == GameMode.ADVENTURE) {
                     player.setGameMode(GameMode.SURVIVAL);
                     return;
                 }
@@ -196,33 +201,35 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
                 }
             }
 
-
+            float initialYaw = player.getLocation().getYaw();
+            float initialPitch = player.getLocation().getPitch();
             if (to.clone().add(0, -1, 0).getBlock().getType() == Material.SLIME_BLOCK) {
                 BlockIterator blockIterator = new BlockIterator(player.getLocation());
+
                 for (int i = 0; i < 30 && blockIterator.hasNext(); i++) {
                     blockIterator.next();
                 }
-                to.setPitch(-30);
-                player.getLocation().setPitch(-30);
+
+
+                player.getLocation().setYaw(initialYaw);
+                player.getLocation().setPitch(initialPitch);
+
                 if (blockIterator.hasNext()) {
-                    VectorUtil.entityPush(player, blockIterator.next().getLocation(), 110);
+                    VectorUtil.entityPush(player, blockIterator.next().getLocation(), 180);
                 }
                 player.playSound(player.getLocation(), Sound.EXPLODE, 1, 1);
                 PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
-                        EnumParticle.EXPLOSION_LARGE,
-                        true,
-                        (float) to.getX(),
-                        (float) to.getY(),
-                        (float) to.getZ(),
+                        EnumParticle.EXPLOSION_LARGE, true,
+                        (float) to.getX(), (float) to.getY(), (float) to.getZ(),
                         0, 0, 0, 0, 1, 1
                 );
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-            }
 
+                }
         }
 
     }
-
+    private Map<Player, ArmorStand> armorStandMap = new HashMap<>();
     private static boolean isInArena(Location to) {
         PitWorldConfig config = ThePit.getInstance().getPitConfig();
         final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
