@@ -25,6 +25,8 @@ import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.medal.impl.challenge.HundredLevelMedal;
 import net.mizukilab.pit.quest.AbstractQuest;
+import net.mizukilab.pit.util.PlayerUtil;
+import net.mizukilab.pit.util.PublicUtil;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.MessageType;
 import net.mizukilab.pit.util.chat.TitleUtil;
@@ -2395,6 +2397,11 @@ public class PlayerProfile {
         @Override
         public void setBoughtPerkMap(Map<String, PerkData> boughtPerkMap) {
 
+        }
+
+        @Override
+        public boolean isInArena() {
+            return false;
         }
 
         @Override

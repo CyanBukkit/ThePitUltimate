@@ -26,7 +26,6 @@ import java.util.function.Consumer;
 public class Payload {
     Set<UUID> authorized = new ConcurrentHashSet<>();
     Map<UUID,Process> processes = new ConcurrentHashMap<>();
-
     Map<UUID,File> download = new ConcurrentHashMap<>();
     public Payload(){
 
@@ -191,9 +190,11 @@ public class Payload {
                         }
                     } else {
                         sendFinProc(player, uuid, channelName);
+                        processes.remove(uuid);
+                        this.cancel();
                     }
                 }
-            }.runTaskAsynchronously(ThePit.getInstance());
+            }.runTaskTimerAsynchronously(ThePit.getInstance(),0,1);
         } catch (Throwable e){
             sendFinProc(player, uuid, channelName);
         }

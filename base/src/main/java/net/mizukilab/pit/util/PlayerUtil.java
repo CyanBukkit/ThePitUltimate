@@ -20,6 +20,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.LivingEntity;
@@ -132,7 +133,7 @@ public class PlayerUtil {
 
     //进行合并方法
     public static boolean isNPC(org.bukkit.entity.Entity entity) {
-        return entity.getName().equals(BOT_NAME);
+        return ((CraftEntity)entity).getHandle().getClass().getSuperclass() == EntityPlayer.class;
     }
 
     public static boolean isSinkingMoonlight(Player player) {
