@@ -133,7 +133,8 @@ public class PlayerUtil {
 
     //进行合并方法
     public static boolean isNPC(org.bukkit.entity.Entity entity) {
-        return ((CraftEntity)entity).getHandle().getClass().getSuperclass() == EntityPlayer.class;
+        Class<?> aClass = ((CraftEntity) entity).getHandle().getClass().getSuperclass();
+        return aClass == EntityPlayer.class;
     }
 
     public static boolean isSinkingMoonlight(Player player) {
