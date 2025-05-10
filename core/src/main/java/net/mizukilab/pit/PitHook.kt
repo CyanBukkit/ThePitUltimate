@@ -66,6 +66,7 @@ import net.mizukilab.pit.park.Parker
 import net.mizukilab.pit.perk.type.boost.*
 import net.mizukilab.pit.perk.type.prestige.*
 import net.mizukilab.pit.perk.type.shop.*
+import net.mizukilab.pit.perk.type.streak.addon.uber.UberSteakPlus
 import net.mizukilab.pit.perk.type.streak.beastmode.BeastModeMegaStreak
 import net.mizukilab.pit.perk.type.streak.beastmode.RAndRKillStreak
 import net.mizukilab.pit.perk.type.streak.beastmode.TacticalRetreatKillStreak
@@ -624,6 +625,10 @@ private fun loadPerks() {
 
         Despot::class.java,
     )
+
+    if (ThePit.getInstance().globalConfig.token == "d06b2f1ee-3950-9104-8895-60e10db58ac") {
+        classes += UberSteakPlus::class.java
+    }
 
     perkFactory.init(classes as Collection<Class<*>>?)
     Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {

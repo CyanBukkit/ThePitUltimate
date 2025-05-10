@@ -561,6 +561,9 @@ public class CombatListener implements Listener {
                         || PlayerUtil.isPlayerChosePerk(player, "to_the_moon")) {
                     mythicProtectChance = 1;
                 }
+                if (PlayerUtil.isPlayerChosePerk(player,"uber_streak_plus") && playerProfile.getStreakKills() >= 1000){
+                    mythicProtectChance = 1;
+                }
             }
         }
         //Funky Feather Item
@@ -1075,7 +1078,6 @@ public class CombatListener implements Listener {
                         int bounty = (int) RandomUtil.helpMeToChooseOne(100, 150, 200, 250);
                         killerProfile.setBounty(Math.min((PlayerUtil.isPlayerChosePerk(killer, "high_lander") && killerProfile.getStreakKills() >= 50) ? 10000 : 5000, killerProfile.getBounty() + bounty));
                         killerProfile.setBountyStreak(0);
-
                         String bountyColor = getBountyString(killerProfile);
                         CC.boardCast(MessageType.BOUNTY, "&6&l赏金! " + killerProfile.getFormattedName() + " &7当前已经被以 " + bountyColor + killerProfile.getBounty() + bountyColor + "g &7的金额悬赏了!");
                     }

@@ -1900,6 +1900,11 @@ public class PlayerProfile {
         }
 
         @Override
+        public boolean isInArena() {
+            return true;
+        }
+
+        @Override
         public PlayerProfile save(Player player) {
             return this;
         }

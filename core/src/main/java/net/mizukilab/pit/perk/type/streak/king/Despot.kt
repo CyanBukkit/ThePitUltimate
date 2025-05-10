@@ -160,8 +160,8 @@ class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEnti
             }
             Utils.playBlockBreak(target.location, Material.REDSTONE_BLOCK)
             Utils.playBlockBreak(target.location.clone().add(0.0, 1.0, 0.0), Material.REDSTONE_BLOCK)
-            experience.addAndGet(experience.get() * 0.3)
-            coins.addAndGet(coins.get() * 1.5)
+            experience.addAndGet(experience.get() + 0.3)
+            coins.addAndGet(coins.get() + 1.5)
         }
     }
 
