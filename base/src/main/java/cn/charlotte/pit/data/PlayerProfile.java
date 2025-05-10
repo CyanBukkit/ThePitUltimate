@@ -25,8 +25,6 @@ import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.medal.impl.challenge.HundredLevelMedal;
 import net.mizukilab.pit.quest.AbstractQuest;
-import net.mizukilab.pit.util.PlayerUtil;
-import net.mizukilab.pit.util.PublicUtil;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.chat.MessageType;
 import net.mizukilab.pit.util.chat.TitleUtil;
@@ -386,6 +384,7 @@ public class PlayerProfile {
         }
         return rawCache;
     }
+
     public AbstractPerk getActiveMegaStreakObj() {
         if (!isLoaded()) {
             return null;
@@ -396,16 +395,18 @@ public class PlayerProfile {
             return null;
         }
         AbstractPerk handle = perkData.getHandle(ThePit.getInstance().getPerkFactory().getPerkMap());
-        if(handle instanceof MegaStreak mega) {
+        if (handle instanceof MegaStreak mega) {
             if (getStreakKills() >= mega.getStreakNeed()) {
                 return handle;
             }
         }
         return null;
     }
-    public void deActiveMegaSteak(){
+
+    public void deActiveMegaSteak() {
         setStreakKills(0);
     }
+
     public static PlayerProfile getRawCache(UUID uuid) {
         IOperator operator = ThePit.getInstance().getProfileOperator().getIOperator(uuid);
         if (operator == null || !operator.isLoaded()) {
@@ -1670,6 +1671,7 @@ public class PlayerProfile {
     public String getNickName() {
         return nickName;
     }
+
     public void updateNick() {
         Player player = Bukkit.getPlayer(getPlayerUuid());
         if (player != null) {
@@ -1903,7 +1905,7 @@ public class PlayerProfile {
 
         @Override
         public boolean isInArena() {
-            return false;
+            return true;
         }
 
         @Override
