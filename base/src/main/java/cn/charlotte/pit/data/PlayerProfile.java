@@ -1905,7 +1905,7 @@ public class PlayerProfile {
 
         @Override
         public boolean isInArena() {
-            return true;
+            return false;
         }
 
         @Override
