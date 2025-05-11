@@ -272,7 +272,10 @@ class PitCommands {
                 return
             }
         }
-
+        if (player.name == target.name) {
+            player.sendMessage(CC.translate("&c你无法对自己发起交易!"))
+            return
+        }
         val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
         val targetProfile = PlayerProfile.getPlayerProfileByUuid(target.uniqueId)
         if (!profile.combatTimer.hasExpired()) {
@@ -870,6 +873,10 @@ class PitCommands {
                         ) + " &7时解锁."
                     )
                 )
+                return@ifPresentAndILoaded
+            }
+            if (player.name == targetPlayer) {
+                player.sendMessage(CC.translate("&c你无法对自己发起交易!"))
                 return@ifPresentAndILoaded
             }
 

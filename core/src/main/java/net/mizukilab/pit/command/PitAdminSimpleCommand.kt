@@ -569,7 +569,7 @@ class PitAdminSimpleCommand {
             it.lots = AuctionEvent.LotsData(arrayOf(itemStack.clone()), price, 0)
             it.setStartByAdmin(true)
             it.isCustom = true;
-            ThePit.getInstance().eventFactory.activeEvent(it)
+            ThePit.getInstance().eventFactory.pushEvent(it)
         }
     }
 
