@@ -1903,10 +1903,7 @@ public class PlayerProfile {
             return false;
         }
 
-        @Override
-        public boolean isInArena() {
-            return false;
-        }
+
 
         @Override
         public PlayerProfile save(Player player) {

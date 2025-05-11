@@ -58,7 +58,6 @@ import net.mizukilab.pit.util.nametag.NametagHandler;
 import net.mizukilab.pit.util.rank.RankUtil;
 import net.mizukilab.pit.util.sign.SignGui;
 import net.mizukilab.pit.util.sound.SoundFactory;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
@@ -78,20 +77,14 @@ import org.slf4j.Logger;
 import pku.yim.license.PluginProxy;
 import pku.yim.license.Resource;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Protocol;
 import spg.lgdev.iSpigot;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Stream;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -104,7 +97,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private static boolean DEBUG_SERVER = false;
     private static String bungeeServerName;
     private static ThePit instance;
-
+    public static boolean isMechanical;
     @Getter
     private MongoDB mongoDB;
     @Getter
@@ -205,6 +198,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
         saveDefaultConfig();
 
+        hookMechanical();
         if (!hookPlayerPoints()) this.getLogger().warning("Dependency not found: PlayerPoints");
         if (!hookLuckPerms()) this.getLogger().warning("Dependency not found: LuckPerms");
 
@@ -216,7 +210,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         //preload
         try {
             preLoad(whiteList);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             disablePlugin();
             return;
@@ -230,8 +224,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         loadEventPoller();
     }
 
-    private void preLoad(boolean whiteList) throws Exception{
-        if(!this.loadConfig()){
+    private void preLoad(boolean whiteList) throws Exception {
+        if (!this.loadConfig()) {
             throw new IllegalStateException("Failed to load config");
         }
         this.loadMapSelector();
@@ -277,9 +271,11 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         Bukkit.getServer().setWhitelist(whiteList);
         new ProfileLoadRunnable(this);
     }
-    private void loadMapSelector(){
+
+    private void loadMapSelector() {
         this.mapSelector = new MapSelector(this);
     }
+
     private void loadEventPoller() {
         EventsHandler.INSTANCE.loadFromDatabase();
     }
@@ -430,12 +426,14 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     public void loadQuest() {
         this.questFactory = new QuestFactory();
     }
+
     @Getter
     @Setter
-    PitGlobalConfig globalConfig ;
+    PitGlobalConfig globalConfig;
     @Getter
     @Setter
     ConfigManager configManager;
+
     private boolean loadConfig() throws IOException {
         log.info("Loading configuration...");
         ConfigManager cfgMan = new ConfigManager(this);
@@ -847,6 +845,11 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     private boolean hookPlayerPoints() {
         this.playerPoints = ((PlayerPoints) Bukkit.getPluginManager().getPlugin("PlayerPoints")).getAPI();
         return playerPoints != null;
+    }
+
+    private boolean hookMechanical() {
+        isMechanical = Bukkit.getPluginManager().isPluginEnabled("ThePitMechanical");
+        return isMechanical;
     }
 
     private boolean hookLuckPerms() {

@@ -7,9 +7,8 @@ import cn.charlotte.pit.event.PitPotionEffectEvent;
 import cn.charlotte.pit.event.PitRegainHealthEvent;
 import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.perk.AbstractPerk;
-import cn.charlotte.pit.perk.MegaStreak;
-import cn.charlotte.pit.perk.PerkType;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.citizensnpcs.api.CitizensAPI;
 import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.item.AbstractPitItem;
@@ -133,9 +132,17 @@ public class PlayerUtil {
 
     //进行合并方法
     public static boolean isNPC(org.bukkit.entity.Entity entity) {
-        Class<?> aClass = ((CraftEntity) entity).getHandle().getClass().getSuperclass();
-        return aClass == EntityPlayer.class;
+        if (!ThePit.isMechanical) {
+            return false;
+        }
+
+        if (CitizensAPI.getNPCRegistry().isNPC(entity)) {
+            return false;
+        }
+
+        return ((CraftEntity) entity).getHandle().getClass().getSuperclass() == EntityPlayer.class;
     }
+
 
     public static boolean isSinkingMoonlight(Player player) {
         return player.hasMetadata("sinking_moonlight") && player.getMetadata("sinking_moonlight").get(0).asLong() > System.currentTimeMillis();
@@ -219,7 +226,7 @@ public class PlayerUtil {
                 if (level >= 2) damage(attacker, damageType, damage * (0.25 * level - 0.25), false);
             }
         }
-        PublicUtil.processActionBarWithSetting(attacker,victim,(int) damage,damage);
+        PublicUtil.processActionBarWithSetting(attacker, victim, (int) damage, damage);
     }
 
 
@@ -448,8 +455,8 @@ public class PlayerUtil {
         player.setWalkSpeed(0.2F);
 
         IEpicEvent activeEpicEvent = ThePit.getInstance().getEventFactory().getActiveEpicEvent();
-        if(activeEpicEvent != null){
-            if (activeEpicEvent.processTrigger(IEpicEvent.TrigAction.CLEAR,player,profile)) {
+        if (activeEpicEvent != null) {
+            if (activeEpicEvent.processTrigger(IEpicEvent.TrigAction.CLEAR, player, profile)) {
                 player.setMaxHealth(profile.getMaxHealth());
             }
         }
@@ -471,6 +478,7 @@ public class PlayerUtil {
             player.sendMessage(message);
         }
     }
+
     public static void deadPlayer(Player player) {
         PlayerUtil.damage(player, PlayerUtil.DamageType.TRUE, player.getMaxHealth() * 100, false);
     }

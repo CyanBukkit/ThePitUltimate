@@ -287,7 +287,7 @@ public class ProtectListener implements Listener {
         if (event.getDamager() instanceof Projectile) {
             if (((Projectile) event.getDamager()).getShooter() instanceof Player) {
                 Player shooter = (Player) (((Projectile) event.getDamager()).getShooter());
-                if(!PlayerUtil.isNPC(shooter)) {
+                if (!PlayerUtil.isNPC(shooter)) {
                     if (event.getEntity().getUniqueId().equals(shooter.getUniqueId())) {
                         event.setCancelled(true);
                     }
@@ -301,7 +301,7 @@ public class ProtectListener implements Listener {
 
         if (event.getDamager() instanceof Player) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getDamager().getUniqueId());
-            if(!PlayerUtil.isNPC(event.getDamager())) {
+            if (!PlayerUtil.isNPC(event.getDamager())) {
                 if (!profile.isInArena()) {
                     event.setCancelled(true);
                 }

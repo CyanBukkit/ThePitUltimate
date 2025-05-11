@@ -38,6 +38,7 @@ object SewersRunnable : BukkitRunnable(), Listener {
         "rubbish" to 50,
         "mythic_leggings" to 30,
         "milk_buckets" to 10,
+        "renown" to 10,
         "speed_eggs" to 10,
     )
 
@@ -110,17 +111,19 @@ object SewersRunnable : BukkitRunnable(), Listener {
             }
 
             "diamond_chestplate" -> {
-                player.inventory.addItem(ItemBuilder(Material.DIAMOND_CHESTPLATE).buildWithUnbreakable())
+                player.inventory.addItem(
+                    ItemBuilder(Material.DIAMOND_CHESTPLATE).deathDrop(true).buildWithUnbreakable()
+                )
                 "- 钻石甲"
             }
 
             "diamond_leggings" -> {
-                player.inventory.addItem(ItemBuilder(Material.DIAMOND_LEGGINGS).buildWithUnbreakable())
+                player.inventory.addItem(ItemBuilder(Material.DIAMOND_LEGGINGS).deathDrop(true).buildWithUnbreakable())
                 "- 钻石裤"
             }
 
             "diamond_boots" -> {
-                player.inventory.addItem(ItemBuilder(Material.DIAMOND_BOOTS).buildWithUnbreakable())
+                player.inventory.addItem(ItemBuilder(Material.DIAMOND_BOOTS).deathDrop(true).buildWithUnbreakable())
                 "- 钻石鞋"
             }
 
@@ -137,6 +140,11 @@ object SewersRunnable : BukkitRunnable(), Listener {
             "speed_eggs" -> {
                 player.inventory.addItem(ThePit.getApi().getMythicItemItemStack("speed_eggs"))
                 "- &b速度蛋"
+            }
+
+            "renown" -> {
+                profile.renown += 1
+                "- &e声望 +1"
             }
 
             "milk_buckets" -> {

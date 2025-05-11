@@ -27,6 +27,9 @@ public class EventTimer implements Runnable {
 
         final EventFactory factory = ThePit.getInstance().getEventFactory();
 
+        if (!cooldown.hasExpired()) {
+            return;
+        }
         if (factory.getNormalEnd().hasExpired() || factory.getNextEpicEvent() != null) { // patch
             INormalEvent activeNormalEvent = factory.getActiveNormalEvent();
             if (activeNormalEvent != null) {
@@ -36,9 +39,7 @@ public class EventTimer implements Runnable {
             cooldown = new Cooldown(3, TimeUnit.MINUTES);
         }
 
-        if (!cooldown.hasExpired()) {
-            return;
-        }
+
 
         if (factory.getActiveEpicEvent() != null || factory.getActiveNormalEvent() != null) {
             cooldown.reset();
