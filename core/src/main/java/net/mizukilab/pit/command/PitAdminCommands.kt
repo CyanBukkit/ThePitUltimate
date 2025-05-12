@@ -15,6 +15,7 @@ import dev.rollczi.litecommands.annotations.permission.Permission
 import dev.rollczi.litecommands.annotations.shortcut.Shortcut
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
+import net.mizukilab.pit.PitHook
 import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.config.NewConfiguration.load
 import net.mizukilab.pit.config.NewConfiguration.loadFile
@@ -412,13 +413,11 @@ class PitAdminCommands {
     fun reloadConfig(@Context sender: CommandSender) {
         sender.sendMessage(CC.translate("&7 重载中..."))
         ThePit.getInstance().configManager.reload()
-        loadFile()
-        load()
+        PitHook.loadConfig()
         ThePit.getInstance().mapSelector.reload()
         for (npc in ThePit.getInstance().npcFactory.pitNpc) {
             npc.npc.setLocation(npc.getNpcSpawnLocation())
         }
-
         sender.sendMessage(CC.translate("&7 重载完成!"))
     }
 

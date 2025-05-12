@@ -248,7 +248,7 @@ object PitHook {
     }
 
 
-    private fun loadConfig() {
+    fun loadConfig() {
         try {
             NewConfiguration.loadFile()
             NewConfiguration.load()
