@@ -18,6 +18,7 @@ import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.command.handler.HandHasItemValidator
 import net.mizukilab.pit.command.handler.metaKey
 import net.mizukilab.pit.config.NewConfiguration
+import net.mizukilab.pit.config.TabConfiguration
 import net.mizukilab.pit.data.operator.ProfileOperator
 import net.mizukilab.pit.enchantment.type.addon.AngelArmsEnchant
 import net.mizukilab.pit.enchantment.type.aqua.ClubRodEnchant
@@ -91,6 +92,7 @@ import net.mizukilab.pit.quest.type.*
 import net.mizukilab.pit.runnable.*
 import net.mizukilab.pit.scoreboard.Scoreboard
 import net.mizukilab.pit.sound.impl.*
+import net.mizukilab.pit.tab.TabHandle
 import net.mizukilab.pit.util.menu.ButtonListener
 import net.mizukilab.pit.util.nametag.NametagHandler
 import net.mizukilab.pit.util.scoreboard.Assemble
@@ -108,12 +110,7 @@ object PitHook {
     @JvmStatic
     val itemVersion = "p1_uuid"
     fun init() {
-        try {
-            NewConfiguration.loadFile()
-            NewConfiguration.load()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        loadConfig()
         loadParker()
         loadOperator()
         loadItemFactory()
@@ -131,9 +128,8 @@ object PitHook {
         registerSounds()
 
         loadCommands()
-
+        loadTab()
         loadNpcs()
-
         Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
             PitPapiHook.register()
             ItemPapiHook.register()
@@ -157,6 +153,7 @@ object PitHook {
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { loaded = true }, 20L)
+
     }
 
     private fun loadParker() {
@@ -248,6 +245,24 @@ object PitHook {
             5,
             NewConfiguration.bountyTickInterval.toLong()
         )
+    }
+
+
+    private fun loadConfig() {
+        try {
+            NewConfiguration.loadFile()
+            NewConfiguration.load()
+            TabConfiguration.loadFile()
+            TabConfiguration.load()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadTab() {
+        if (TabConfiguration.enable) {
+            TabHandle().fetchTab()
+        }
     }
 
     private fun loadItems() {

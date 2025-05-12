@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit
 import cn.charlotte.pit.events.genesis.GenesisTeam
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import net.mizukilab.pit.getPitProfile
+import net.mizukilab.pit.listener.CombatListener
 import net.mizukilab.pit.util.chat.CC
 import org.bukkit.entity.Player
 
@@ -32,6 +33,9 @@ object PitPapiHook : PlaceholderExpansion() {
         }
 
         when (params) {
+            "boost" -> {
+                return CombatListener.eventBoost.toString()
+            }
             "next_map" -> {
                 val map = ThePit.getInstance().configManager.getPitWorldConfigSpecific(ThePit.getInstance().configManager.cursor + 1L)
                     if(map != null){

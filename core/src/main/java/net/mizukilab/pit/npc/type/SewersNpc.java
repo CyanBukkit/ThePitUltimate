@@ -21,7 +21,7 @@ import java.util.List;
 public class SewersNpc extends SkinNPC {
     @Override
     public String getNpcInternalName() {
-        return "Sewers_Caviar";
+        return "sewers";
     }
 
     @Override
