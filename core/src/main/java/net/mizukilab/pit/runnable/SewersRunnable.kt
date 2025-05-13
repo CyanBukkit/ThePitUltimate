@@ -29,6 +29,8 @@ object SewersRunnable : BukkitRunnable(), Listener {
     private var existSewersChest: List<Location>? = null
     private var lastClaimed = -1L
 
+    var isParticle = false
+
     private val randomList = RandomList(
         "xp" to 90,
         "gold" to 90,
@@ -46,20 +48,22 @@ object SewersRunnable : BukkitRunnable(), Listener {
         val locs = ThePit.getInstance().pitConfig.sewersChestsLocations
         if (locs.isEmpty()) return
 
-        locs.forEach { loc ->
-            for (i in 0..360 step 15) {
-                val radians = Math.toRadians(i.toDouble())
-                val radius = 1.2
-                val xOffset = cos(radians) * radius
-                val zOffset = sin(radians) * radius
-                val particleLoc = loc.clone().add(xOffset, 0.5, zOffset)
 
-                particleLoc.world.playEffect(particleLoc, Effect.HAPPY_VILLAGER, 2, 2)
-            }
+        if (!isParticle) {
+            isParticle = true
+            object : BukkitRunnable() {
+                override fun run() {
+                    if (!isParticle) {
+                        cancel()
+                    }
+                    locs.forEach { loc ->
+                        generateRandomParticlesAroundChest(loc, Effect.HAPPY_VILLAGER)
+                    }
+                }
+            }.runTaskTimer(ThePit.getInstance(), 0L, 20L)
         }
 
         if (System.currentTimeMillis() - lastClaimed < 1000 * NewConfiguration.sewersSpawn) return
-
 
         var count = 0
         locs.filter { it.block.type == Material.AIR || !it.block.hasMetadata("Sewers_Chest") }
@@ -72,7 +76,6 @@ object SewersRunnable : BukkitRunnable(), Listener {
                 CC.boardCast("&9§l下水道! &7箱子点位${count}已刷新: x: ${loc.block.location.x}, y: ${loc.block.location.y}, z: ${loc.block.location.z}")
             }
 
-
         existSewersChest = locs
     }
 
@@ -84,6 +87,19 @@ object SewersRunnable : BukkitRunnable(), Listener {
             }
         }
     }
+
+    private fun generateRandomParticlesAroundChest(center: Location, effect: Effect) {
+        repeat(15) { // 生成 6 个随机粒子
+            val randomXOffset = Random.nextDouble(-1.0, 1.0) // 随机 X 偏移
+            val randomZOffset = Random.nextDouble(-1.0, 1.0) // 随机 Z 偏移
+            val randomHeightOffset = Random.nextDouble(0.3, 1.2) // 随机高度变化
+
+            val particleLoc = center.clone().add(randomXOffset, randomHeightOffset, randomZOffset)
+
+            particleLoc.world.playEffect(particleLoc, effect, 2, 2)
+        }
+    }
+
 
     private fun claim(player: Player, location: Location) {
         location.block.type = Material.AIR

@@ -36,7 +36,7 @@ class HiddenGemsEnchant : AbstractEnchantment(), IPlayerKilledEntity, IPlayerBeK
     override fun getCooldown(): Cooldown? = null
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
-        return "&7穿戴此下水道之甲,连续击杀 &e$killThreshold &7位玩家/s&7将变为 &dI阶 &7神话之甲,&7并随机带来一个 &bIII级 &7附魔"
+        return "&7穿戴此下水道之甲, 连续击杀 &e$killThreshold &7名玩家/s&7将变为 &eI 阶 &7神话之甲, &7并随机带来一个 &cIII 级 &7附魔"
     }
 
     @PlayerOnly
