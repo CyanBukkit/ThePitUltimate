@@ -34,14 +34,14 @@ public class EveOneBountyEvent extends AbstractEvent implements INormalEvent {
     public void onActive() {
         Bukkit.broadcastMessage(CC.translate("&6&l全员通缉! &7所有人现在都被以 &6100g &7的赏金悬赏了!"));
         for (Player player : Bukkit.getOnlinePlayers()) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+            PlayerProfile profile = ThePit.getInstance().getProfileOperator().namedIOperator(player.getName()).profile();
             if (profile.isInArena()) {
                 profile.setBounty(profile.getBounty() + 100);
             }
         }
         ThePit.getInstance()
                 .getEventFactory()
-                .safeInactiveEvent(this);
+                .inactiveEvent(this);
     }
 
     @Override
