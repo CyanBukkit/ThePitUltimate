@@ -30,16 +30,16 @@ object SewersRunnable : BukkitRunnable(), Listener {
     private var lastClaimed = -1L
 
     private val randomList = RandomList(
-        "xp" to 100,
-        "gold" to 100,
+        "xp" to 90,
+        "gold" to 90,
         "diamond_chestplate" to 50,
         "diamond_leggings" to 50,
         "diamond_boots" to 50,
-        "rubbish" to 50,
-        "mythic_leggings" to 30,
+        "rubbish" to 30,
+        "mythic_leggings" to 3,
         "milk_buckets" to 10,
-        "renown" to 10,
-        "speed_eggs" to 10,
+        "renown" to 3,
+        "speed_eggs" to 5,
     )
 
     override fun run() {
