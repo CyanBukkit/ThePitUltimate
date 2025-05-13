@@ -58,6 +58,7 @@ class HiddenGemsEnchant : AbstractEnchantment(), IPlayerKilledEntity, IPlayerBeK
                 (if (RandomUtil.hasSuccessfullyByChance(0.2)) rareEnchantments else commonEnchantments)
                     .randomOrNull() ?: return
 
+
             myself.inventory.leggings?.let { itemStack ->
                 val item = itemStack.toMythicItem() as? IMythicItem ?: return
                 val randomLive = Random.nextInt(2, 5)

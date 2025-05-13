@@ -487,15 +487,15 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
             runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (timer.hasExpired()) {
-                        onInactive();
-                        this.cancel();
-                    }
                     if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() != AuctionEvent.this) {
                         this.cancel(); // cancel first
                         return;
                     }
 
+                    if (timer.hasExpired() && ThePit.getInstance().getEventFactory().getActiveNormalEvent() != null) {
+                        ThePit.getInstance().getEventFactory().inactiveEvent(ThePit.getInstance().getEventFactory().getActiveNormalEvent());
+                        this.cancel();
+                    }
 
                     if (Math.floorDiv(getTimer().getRemaining(), 1000L) % 10 == 0 && getTimer().getRemaining() > 5 * 1000L) {
                         Bukkit.getOnlinePlayers().forEach(player ->

@@ -26,8 +26,8 @@ class ClubRodEnchant : AbstractEnchantment() {
 //                                .deathDrop(false)
 //                                .internalName("fishing_rod_aqua")
 //                                .buildWithUnbreakable()
-//                        )
 //                    }
+//                        )
 //                }
 //            }, 20L, 20L)
         }

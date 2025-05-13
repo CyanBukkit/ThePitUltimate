@@ -40,7 +40,7 @@ class SpywareEnchant : AbstractEnchantment(), IPlayerKilledEntity, ITickTask {
     }
 
     override fun getUsefulnessLore(enchantLevel: Int): String {
-        return "&7穿戴此下水道之甲时 , 你将获得 &b速度I &7同时每次击杀 &b经验 &7额外加成 &e20%"
+        return "&7穿戴此下水道之甲时, 你将获得 &b速度I &7同时每次击杀 &b经验 &7额外加成 &e20%"
     }
 
     override fun handlePlayerKilled(
