@@ -81,6 +81,7 @@ dependencies {
     compileOnly(libs.playerpoints)
     compileOnly(libs.decentholograms)
     compileOnly(libs.adventure.bukkit)
+    implementation(kotlin("reflect"))
 }
 kotlin {
     jvmToolchain(17)

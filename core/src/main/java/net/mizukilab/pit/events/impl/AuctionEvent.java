@@ -6,8 +6,8 @@ import cn.charlotte.pit.data.TradeData;
 import cn.charlotte.pit.data.mail.Mail;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.data.sub.PlayerInv;
-import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.AbstractEvent;
+import cn.charlotte.pit.events.EventFactory;
 import cn.charlotte.pit.events.trigger.type.INormalEvent;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -487,10 +487,15 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
             runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if (timer.hasExpired()) {
+                        onInactive();
+                        this.cancel();
+                    }
                     if (ThePit.getInstance().getEventFactory().getActiveNormalEvent() != AuctionEvent.this) {
                         this.cancel(); // cancel first
                         return;
                     }
+
 
                     if (Math.floorDiv(getTimer().getRemaining(), 1000L) % 10 == 0 && getTimer().getRemaining() > 5 * 1000L) {
                         Bukkit.getOnlinePlayers().forEach(player ->

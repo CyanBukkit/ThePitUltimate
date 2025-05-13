@@ -37,6 +37,7 @@ import net.mizukilab.pit.enchantment.type.rare.*
 import net.mizukilab.pit.enchantment.type.sewer_normal.AegisEnchant
 import net.mizukilab.pit.enchantment.type.sewer_normal.EliminatePowerEnchant
 import net.mizukilab.pit.enchantment.type.sewer_normal.SpywareEnchant
+import net.mizukilab.pit.enchantment.type.sewer_rare.HiddenGemsEnchant
 import net.mizukilab.pit.enchantment.type.sewer_rare.TrashPandaEnchant
 import net.mizukilab.pit.enchantment.type.special.SoulRipperEnchant
 import net.mizukilab.pit.events.impl.*
@@ -478,6 +479,7 @@ private fun loadEnchants() {
         //下水道附魔
         AegisEnchant::class.java,
         TrashPandaEnchant::class.java,
+        HiddenGemsEnchant::class.java,
         EliminatePowerEnchant::class.java,
         SpywareEnchant::class.java,
     )
@@ -657,6 +659,7 @@ private fun registerSounds() {
         TripleStreakSound,
         QuadraStreakSound,
         StreakSound,
+        GemsSound,
         SuccessfullySound
     ).forEach {
         ThePit.getInstance().soundFactory.registerSound(it)
