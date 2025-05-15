@@ -25,44 +25,11 @@ public class MagicFishingRod extends IMythicItem {
 
     @Override
     public String getItemDisplayName() {
-        return "&b&o神奇鱼竿";
+        return "神奇鱼竿";
     }
 
     @Override
     public Material getItemDisplayMaterial() {
         return Material.FISHING_ROD;
     }
-
-    @Override
-    public ItemStack toItemStack() {
-        List<String> lore = new ArrayList<>();
-        if (isEnchanted()) {
-            lore.add("");
-            for (Map.Entry<AbstractEnchantment, Integer> entry : this.enchantments.entrySet()) {
-                getEnchantLore(lore, entry, enchantments.entrySet());
-            }
-        } else {
-            lore.add("&7死亡后保留");
-            lore.add("");
-            lore.add("&7在神话之井中使用 &8| " + ThePit.getApi().getWatermark());
-        }
-
-
-        ItemBuilder builder = new ItemBuilder(this.getItemDisplayMaterial())
-                .name(getItemDisplayName())
-                .lore(lore)
-                .internalName(getInternalName())
-                .deathDrop(false)
-                .canDrop(false)
-                .canTrade(true)
-                .canSaveToEnderChest(true)
-                .removeOnJoin(false)
-                .enchant(enchantments);
-        if (isEnchanted()) {
-            builder.shiny();
-        }
-        return builder.build();
-    }
-
-
 }

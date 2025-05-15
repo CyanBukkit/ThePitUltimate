@@ -660,6 +660,7 @@ private fun registerSounds() {
         QuadraStreakSound,
         StreakSound,
         GemsSound,
+        CherrySound,
         SuccessfullySound
     ).forEach {
         ThePit.getInstance().soundFactory.registerSound(it)

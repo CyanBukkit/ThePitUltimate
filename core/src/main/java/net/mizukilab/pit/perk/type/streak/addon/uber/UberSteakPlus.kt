@@ -1,6 +1,7 @@
 package net.mizukilab.pit.perk.type.streak.addon.uber
 
 import cn.charlotte.pit.ThePit
+import cn.charlotte.pit.data.PlayerProfile
 import cn.charlotte.pit.event.PitStreakKillChangeEvent
 import cn.charlotte.pit.event.PotionAddEvent
 import cn.charlotte.pit.perk.AbstractPerk
@@ -10,6 +11,7 @@ import com.google.common.util.concurrent.AtomicDouble
 import net.mizukilab.pit.enchantment.param.event.PlayerOnly
 import net.mizukilab.pit.getPitProfile
 import net.mizukilab.pit.parm.listener.IAttackEntity
+import net.mizukilab.pit.parm.listener.IPlayerDamaged
 import net.mizukilab.pit.parm.listener.IPlayerKilledEntity
 import net.mizukilab.pit.parm.listener.ITickTask
 import net.mizukilab.pit.util.PlayerUtil
@@ -23,15 +25,18 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.math.floor
 
 /**
  * @author Araykal
  * @since 2025/5/4
  */
-class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity, IAttackEntity, ITickTask {
+class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity, IAttackEntity, ITickTask,
+    IPlayerDamaged {
     override fun getInternalPerkName(): String {
         return "uber_steak_plus"
     }
@@ -41,7 +46,7 @@ class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity,
     }
 
     override fun getIcon(): Material {
-        return Material.GRASS
+        return Material.DIAMOND_SWORD
     }
 
     override fun requireCoins(): Double {
@@ -61,7 +66,50 @@ class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity,
     }
 
     override fun getDescription(player: Player): MutableList<String> {
-        return mutableListOf("", "")
+        return mutableListOf(
+            "&7激活要求连杀数: &c1000 连杀",
+            "",
+            "&7当激活时: ",
+            "  &d◼ +200% &7获得神话物品的概率",
+            "  &a◼ &7击杀时额外获得+ &6175% &7金币",
+            "  &a◼ &7击杀时额外获得+ &6375% &7经验",
+            "",
+            "&7但是: ",
+            "  &c◼ &7每1000击杀将额外承受&c +20%&7 的伤害",
+            "&7       (从1000连杀开始)",
+            "  &c◼ &7赏金将&c无上限增长",
+            "  &c◼ &7自身获取的&a药水效果&7无法超越 &cII &7级",
+            "",
+            "&7连杀期间: ",
+            " &6◼ &71000 杀: &7对被悬赏的玩家造成的伤害 &c-60%",
+            " &6◼ &72000 杀: &7最大生命值减少 &c4❤",
+            " &6◼ &73000 杀: &7药水持续时间 &c-80%",
+            " &6◼ &74000 杀: &7生命值恢复 &c-50%",
+            " &6◼ &75000 杀: &7每秒减少 &c1❤ &7生命值",
+            " &6◼ &76000 杀: &c谢幕",
+            "",
+            "&7当死亡时: ",
+            "  &e◼ &7当死亡时击杀到达 &e6000 &7获得将 &c超级登峰造极掉落物",
+        )
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onRegen(event: EntityRegainHealthEvent) {
+        val player = event.entity
+        if (player is Player) {
+            val profile = PlayerProfile.getPlayerProfileByUuid(player.uniqueId)
+            if (!profile.isLoaded) {
+                return
+            }
+
+            if (!hasUberPlus(player)) {
+                return
+            }
+
+            if (profile.streakKills < 4000) {
+                return
+            }
+            event.amount /= 2
+        }
     }
 
     override fun getMaxLevel(): Int {
@@ -85,7 +133,6 @@ class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity,
                 "&c&l超级连杀! ${event.playerProfile.formattedNameWithRoman} &7激活了 ${this.displayName} &7!"
             )
             Bukkit.getOnlinePlayers().forEach { it.playSound(it.location, Sound.WITHER_SPAWN, 0.8f, 1.5f) }
-
         }
     }
 
@@ -114,6 +161,13 @@ class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity,
             coins.addAndGet(1.75)
             experience.addAndGet(1.75)
         }
+        if (profile.streakKills >= 2000) {
+            myself.maxHealth -= 8
+        }
+
+        if (profile.streakKills >= 4000) {
+            PlayerUtil.addPotionEffect(myself, PotionEffect(PotionEffectType.CONFUSION, 100000, 0, false))
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -132,7 +186,7 @@ class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity,
             return
         }
 
-        if (effect.amplifier > 1){
+        if (effect.amplifier > 1) {
             event.isCancelled = true
             return
         }
@@ -162,15 +216,9 @@ class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity,
         val profile = ThePit.getInstance().profileOperator.namedIOperator(attacker.name).profile()
         if (profile.streakKills >= 1000) {
             val targetProfile = ThePit.getInstance().profileOperator.namedIOperator(target.name).profile()
-            if (targetProfile.bounty >= 100) {
+            if (targetProfile.bounty >= 1) {
                 finalDamage.set(finalDamage.get() - 0.6)
             }
-        }
-        if (profile.streakKills >= 2000) {
-            attacker.maxHealth -= 8
-        }
-        if (profile.streakKills >= 4000){
-            PlayerUtil.addPotionEffect(attacker,PotionEffect(PotionEffectType.CONFUSION,100000,0,false))
         }
 
 
@@ -186,5 +234,24 @@ class UberSteakPlus : AbstractPerk(), MegaStreak, Listener, IPlayerKilledEntity,
 
     override fun loopTick(enchantLevel: Int): Int {
         return 20
+    }
+
+    override fun handlePlayerDamaged(
+        enchantLevel: Int,
+        myself: Player,
+        attacker: Entity,
+        damage: Double,
+        finalDamage: AtomicDouble,
+        boostDamage: AtomicDouble,
+        cancel: AtomicBoolean
+    ) {
+        val profile = ThePit.getInstance().profileOperator.namedIOperator(myself.name).profile() ?: return
+        val streakKills = profile.streakKills
+
+        if (streakKills >= 1000) {
+            val extraBoost = floor((streakKills - 1000) / 1000.0)
+            finalDamage.addAndGet(extraBoost * 0.2)
+        }
+
     }
 }

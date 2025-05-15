@@ -47,7 +47,7 @@ class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEnti
 
     override fun getDisplayName() = "&c暴君"
 
-    override fun getIcon() = Material.DIAMOND_SWORD
+    override fun getIcon() = Material.REDSTONE
 
     override fun requireCoins() = 100000.0
 

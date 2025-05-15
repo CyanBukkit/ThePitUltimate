@@ -179,7 +179,7 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
     }
 
     public static LotsData randomEnchantment() {
-
+        int price = RandomUtil.random.nextInt(7999, 10999);
         IMythicItem mythicItem = null;
 
         //        if ("mythic_sword".equals(internalName)) {
@@ -198,6 +198,7 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
         IMythicItem finalMythicItem = mythicItem;
         if (RandomUtil.hasSuccessfullyByChance(0.01)) { //Artifact Prefix -> 100 Lives
             mythicItem.setMaxLive(100);
+            price = price * 3;
         } else {
             mythicItem.setMaxLive(random.nextInt(8) + 16); //16-23
         }
@@ -391,6 +392,9 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
                 }
                 boolean badLuck = true;
                 for (AbstractEnchantment abstractEnchantment : mythicItem.getEnchantments().keySet()) {
+                    if (abstractEnchantment.getRarity() == EnchantmentRarity.RARE) {
+                        price = price * 2;
+                    }
                     if (mythicItem.getEnchantments().get(abstractEnchantment) >= 3) {
                         badLuck = false;
                         break;
@@ -410,7 +414,7 @@ public class AuctionEvent extends AbstractEvent implements INormalEvent, Listene
                     ));
         }
         ItemStack itemStack = mythicItem.toItemStack();
-        return new LotsData(new ItemStack[]{itemStack}, 8000, 0, itemStack);
+        return new LotsData(new ItemStack[]{itemStack}, price, 0, itemStack);
     }
 
     public double getRate() {

@@ -15,6 +15,7 @@ import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.item.type.ArmageddonBoots;
+import net.mizukilab.pit.item.type.mythic.MagicFishingRod;
 import net.mizukilab.pit.item.type.mythic.MythicBowItem;
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem;
@@ -105,6 +106,8 @@ public abstract class IMythicItem extends AbstractPitItem {
             name = (tier >= 3 ? "&c" : "&e") + (tier > 0 ? RomanUtil.convert(tier) + " 阶" : "") + getItemDisplayName();
         } else if (this instanceof MythicBowItem) {
             name = (tier >= 3 ? "&c" : "&b") + (tier > 0 ? RomanUtil.convert(tier) + " 阶" : "") + getItemDisplayName();
+        } else if (this instanceof MagicFishingRod) {
+            name = (tier >= 3 ? "&c" : "&a") + (tier > 0 ? RomanUtil.convert(tier) + " 阶" : "") + getItemDisplayName();
         }
 
         int rareAmount = 0;

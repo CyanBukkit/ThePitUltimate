@@ -847,9 +847,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         return playerPoints != null;
     }
 
-    private boolean hookMechanical() {
+    private void hookMechanical() {
         isMechanical = Bukkit.getPluginManager().isPluginEnabled("ThePitMechanical");
-        return isMechanical;
     }
 
     private boolean hookLuckPerms() {

@@ -294,7 +294,7 @@ public class CombatListener implements Listener {
             damagerProfile.setMeleeTotalDamage((long) (damagerProfile.getMeleeTotalDamage() + damage));
         }
         damagerProfile.setTotalDamage((long) (damagerProfile.getTotalDamage() + damage));
-        processActionBarWithSettingProvided(player, damager, (int) damage, Math.min(player.getHealth(),event.getFinalDamage()), damagerProfile);
+        processActionBarWithSettingProvided(player, damager, (int) damage, Math.min(player.getHealth(), event.getFinalDamage()), damagerProfile);
 
         if (playerProfile.isLoaded()) {
             if (player.hasMetadata("backing")) {
@@ -561,7 +561,7 @@ public class CombatListener implements Listener {
                         || PlayerUtil.isPlayerChosePerk(player, "to_the_moon")) {
                     mythicProtectChance = 1;
                 }
-                if (PlayerUtil.isPlayerChosePerk(player,"uber_streak_plus") && playerProfile.getStreakKills() >= 1000){
+                if (PlayerUtil.isPlayerChosePerk(player, "uber_streak_plus") && playerProfile.getStreakKills() >= 1000) {
                     mythicProtectChance = 1;
                 }
             }
@@ -940,9 +940,11 @@ public class CombatListener implements Listener {
     }
 
     private void handleCherryDrop(Player player) {
-        boolean success = RandomUtil.hasSuccessfullyByChance(0.0001);
+        boolean success = RandomUtil.hasSuccessfullyByChance(0.0002);
         if (success) {
             player.getInventory().addItem(Cherry.INSTANCE.toItemStack());
+            ThePit.getInstance().getSoundFactory().playSound("cherry_sound", player);
+            player.sendMessage(CC.translate("&d&l樱桃! &7你在战斗中获得樱桃!"));
         }
     }
 

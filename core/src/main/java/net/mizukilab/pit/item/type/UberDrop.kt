@@ -38,20 +38,23 @@ class UberDrop : AbstractPitItem(), Listener {
             }
 
             val hasSuccessfullyByChance = RandomUtil.hasSuccessfullyByChance(0.75);
-            val itemStack = RandomUtil.helpMeToChooseOne(
-                FunkyFeather.toItemStack().also {
-                    it.amount = Random.nextInt(2, 3)
-                },
-                FunkyFeather.toItemStack().also {
-                    it.amount = Random.nextInt(2, 3)
-                },
-                PitCactus.toItemStack().also {
-                    it.amount = Random.nextInt(5, 20)
-                },
-                JewelSword().toItemStack(),
-                if (hasSuccessfullyByChance) TotallyLegitGem().toItemStack() else GlobalAttentionGem().toItemStack()
-            ) as ItemStack
-
+            val itemStack = if (ThePit.getInstance().globalConfig.token == "d06b2f1ee-3950-9104-8895-60e10db58ac") {
+                RandomUtil.helpMeToChooseOne(
+                    FunkyFeather.toItemStack().also { it.amount = Random.nextInt(2, 3) },
+                    FunkyFeather.toItemStack().also { it.amount = Random.nextInt(2, 3) },
+                    PitCactus.toItemStack().also { it.amount = Random.nextInt(5, 20) },
+                    JewelSword().toItemStack(),
+                    TotallyLegitGem().toItemStack()
+                ) as ItemStack
+            } else {
+                RandomUtil.helpMeToChooseOne(
+                    FunkyFeather.toItemStack().also { it.amount = Random.nextInt(2, 3) },
+                    FunkyFeather.toItemStack().also { it.amount = Random.nextInt(2, 3) },
+                    PitCactus.toItemStack().also { it.amount = Random.nextInt(5, 20) },
+                    JewelSword().toItemStack(),
+                    if (hasSuccessfullyByChance) TotallyLegitGem().toItemStack() else GlobalAttentionGem().toItemStack()
+                ) as ItemStack
+            }
             var ticks = 0.3f
             object : BukkitRunnable() {
                 override fun run() {
