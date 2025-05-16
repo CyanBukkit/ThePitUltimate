@@ -83,7 +83,7 @@ public class HamburgerEvent extends AbstractEvent implements IEpicEvent, Listene
     private int done;
     private boolean end;
     private BukkitRunnable runnable;
-    private Cooldown timer;
+    private Cooldown timer = new Cooldown(5, TimeUnit.MINUTES);
     private EditSession session;
 
     @SneakyThrows
@@ -150,7 +150,6 @@ public class HamburgerEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @Override
     public void onActive() {
-        this.timer = new Cooldown(5, TimeUnit.MINUTES);
 
         this.runnable = new BukkitRunnable() {
             @Override

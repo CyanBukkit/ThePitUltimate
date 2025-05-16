@@ -338,6 +338,14 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
                             ThePit.getInstance().getEventFactory().inactiveEvent(BlockHeadEvent.this);
                         }
                     } else {
+                        ThePit.getInstance()
+                                .getBossBar()
+                                .getBossBar()
+                                .setTitle(CC.translate("&5&l大型事件! &6&l" + getEventName() + " &7将在 &a" + TimeUtil.millisToTimer(timer.getRemaining()) + "&7 后结束!"));
+                        ThePit.getInstance()
+                                .getBossBar()
+                                .getBossBar()
+                                .setProgress(timer.getRemaining() / (1000 * 60 * 5f));
                         List<Entity> curEnt = new ArrayList<>(entities.size());
                         Iterator<Entity> iterator = entities.iterator();
                         while (iterator.hasNext()) {

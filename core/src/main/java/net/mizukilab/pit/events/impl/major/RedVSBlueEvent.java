@@ -110,7 +110,16 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
                             .getEventFactory()
                             .inactiveEvent(RedVSBlueEvent.this);
                     cancel();
+
                 }
+                ThePit.getInstance()
+                        .getBossBar()
+                        .getBossBar()
+                        .setTitle(CC.translate("&5&l大型事件! &6&l" + getEventName() + " &7将在 &a" + TimeUtil.millisToTimer(timer.getRemaining()) + "&7 后结束!"));
+                ThePit.getInstance()
+                        .getBossBar()
+                        .getBossBar()
+                        .setProgress(timer.getRemaining() / (1000 * 60 * 5f));
             }
         }.runTaskTimer(ThePit.getInstance(), 20, 20);
 
