@@ -64,6 +64,13 @@ public class PlayerUtil {
         }
     }
 
+    public static void clearAbsorptionHearts(Player player) {
+        if (player instanceof CraftPlayer) {
+            CraftPlayer craftPlayer = (CraftPlayer) player;
+            craftPlayer.getHandle().setAbsorptionHearts(0);
+        }
+    }
+
     public static boolean isEquippingSomber(Player player) {
         return player.getInventory().getLeggings() != null && ThePit.getApi().getItemEnchantLevel(player.getInventory().getLeggings(), "somber_enchant") > 0;
     }

@@ -77,6 +77,9 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @EventHandler
     public void onProfileLoad(PitProfileLoadedEvent event) {
+        if (event.getPlayerProfile() == PlayerProfile.NONE_PROFILE){
+            return;
+        }
         if (redTeam.size() > blueTeam.size()) {
             blueTeam.add(event.getPlayerProfile().getPlayerUuid());
         } else {
@@ -121,6 +124,9 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
     }
 
     private void scatterTeam(Player player) {
+        if (player.hasMetadata("Bot")){
+            return;
+        }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.getPrestige() < 1) {
             if (redTeam.size() >= blueTeam.size()) {
