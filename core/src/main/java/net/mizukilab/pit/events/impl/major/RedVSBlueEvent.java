@@ -77,7 +77,7 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @EventHandler
     public void onProfileLoad(PitProfileLoadedEvent event) {
-        if (event.getPlayerProfile() == PlayerProfile.NONE_PROFILE){
+        if (event.getPlayerProfile() == PlayerProfile.NONE_PROFILE) {
             return;
         }
         if (redTeam.size() > blueTeam.size()) {
@@ -124,7 +124,7 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
     }
 
     private void scatterTeam(Player player) {
-        if (player.hasMetadata("Bot")){
+        if (player.hasMetadata("NPC") || player.hasMetadata("Bot")) {
             return;
         }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -335,6 +335,9 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
             return;
         }
 
+        if (event.getDamager().hasMetadata("NPC") || event.getEntity().hasMetadata("NPC")) {
+            return;
+        }
         if (isRedTeam(damager)) {
             if (isRedTeam((Player) event.getEntity())) {
                 event.setCancelled(true);

@@ -48,6 +48,8 @@ public class JerryEnchant2 extends AbstractEnchantment implements ITickTask, Mov
         new BukkitRunnable() {
             @Override
             public void run() {
+
+
                 Set<Map.Entry<UUID, PositionSongPlayer>> entries = new HashSet<>(playerMap.entrySet());
                 for (Map.Entry<UUID, PositionSongPlayer> entry : entries) {
                     Player player = Bukkit.getPlayer(entry.getKey());
@@ -125,6 +127,7 @@ public class JerryEnchant2 extends AbstractEnchantment implements ITickTask, Mov
 
             this.playerMap.put(target.getUniqueId(), player);
         } else {
+
             target.getWorld().playEffect(target.getLocation().clone().add(0, 3, 0), Effect.NOTE, 1);
         }
     }

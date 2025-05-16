@@ -103,6 +103,7 @@ import org.bukkit.plugin.PluginDescriptionFile
 import real.nanoneko.EnchantedConstructor
 import real.nanoneko.ItemConstructor
 import real.nanoneko.PerkConstructor
+import spg.lgdev.iSpigot
 
 object PitHook {
     @JvmStatic
@@ -743,6 +744,7 @@ private fun registerListeners() {
         ButtonListener::class.java,
         GenesisCombatListener::class.java,
         TradeListener::class.java,
+        iSpigot::class.java,
         HologramListener::class.java,
     )
     for (aClass in classes) {
