@@ -77,6 +77,9 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @EventHandler
     public void onProfileLoad(PitProfileLoadedEvent event) {
+        if (event.getPlayerProfile() == PlayerProfile.NONE_PROFILE) {
+            return;
+        }
         if (redTeam.size() > blueTeam.size()) {
             blueTeam.add(event.getPlayerProfile().getPlayerUuid());
         } else {
@@ -107,7 +110,16 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
                             .getEventFactory()
                             .inactiveEvent(RedVSBlueEvent.this);
                     cancel();
+
                 }
+                ThePit.getInstance()
+                        .getBossBar()
+                        .getBossBar()
+                        .setTitle(CC.translate("&5&l大型事件! &6&l" + getEventName() + " &7将在 &a" + TimeUtil.millisToTimer(timer.getRemaining()) + "&7 后结束!"));
+                ThePit.getInstance()
+                        .getBossBar()
+                        .getBossBar()
+                        .setProgress(timer.getRemaining() / (1000 * 60 * 5f));
             }
         }.runTaskTimer(ThePit.getInstance(), 20, 20);
 
@@ -121,6 +133,9 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
     }
 
     private void scatterTeam(Player player) {
+        if (player.hasMetadata("NPC") || player.hasMetadata("Bot")) {
+            return;
+        }
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.getPrestige() < 1) {
             if (redTeam.size() >= blueTeam.size()) {
@@ -329,6 +344,9 @@ public class RedVSBlueEvent extends AbstractEvent implements IEpicEvent, Listene
             return;
         }
 
+        if (event.getDamager().hasMetadata("NPC") || event.getEntity().hasMetadata("NPC")) {
+            return;
+        }
         if (isRedTeam(damager)) {
             if (isRedTeam((Player) event.getEntity())) {
                 event.setCancelled(true);

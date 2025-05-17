@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class EventTimer implements Runnable {
 
     @Setter
-    private Cooldown cooldown = new Cooldown(0);
+    private Cooldown cooldown = new Cooldown(0L);
 
     public Cooldown getCooldown() {
         return cooldown;
@@ -35,17 +35,14 @@ public class EventTimer implements Runnable {
             if (activeNormalEvent != null) {
                 factory.inactiveEvent(activeNormalEvent);
             }
-
-            cooldown = new Cooldown(3, TimeUnit.MINUTES);
+            cooldown = new Cooldown(5L, TimeUnit.MINUTES);
         }
-
-
 
         if (factory.getActiveEpicEvent() != null || factory.getActiveNormalEvent() != null) {
-            cooldown.reset();
+            cooldown = new Cooldown(5L, TimeUnit.MINUTES);
         }
         final int min = LocalDateTime.now().getMinute();
-        if (min == 55) {
+        if (min >= 50) {
             String major = EventsHandler.INSTANCE.nextEvent(true);
             cooldown = new Cooldown(3, TimeUnit.MINUTES);
             factory.getEpicEvents()

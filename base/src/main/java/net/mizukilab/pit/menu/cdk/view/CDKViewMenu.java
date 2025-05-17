@@ -1,6 +1,8 @@
 package net.mizukilab.pit.menu.cdk.view;
 
 import cn.charlotte.pit.data.CDKData;
+import cn.charlotte.pit.data.PlayerMailData;
+import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.menu.cdk.view.button.CDKButton;
 import net.mizukilab.pit.util.item.ItemBuilder;
 import net.mizukilab.pit.util.menu.Button;
@@ -36,7 +38,6 @@ public class CDKViewMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<String, CDKData> dataMap = new HashMap<>(CDKData.getCachedCDK());
         List<CDKData> dataList = new ArrayList<>(dataMap.values());
-
         Map<Integer, Button> map = new HashMap<>();
         final int size = dataList.size();
         for (int i = 0; i < 45; i++) {
