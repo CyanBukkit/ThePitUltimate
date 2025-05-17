@@ -2398,6 +2398,10 @@ public class PlayerProfile {
 
         }
 
+        @Override
+        public boolean isInArena() {
+            return false;
+        }
 
         @Override
         public int getBounty() {

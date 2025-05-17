@@ -19,7 +19,7 @@ public class ProtectRunnable extends BukkitRunnable {
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-            if (!profile.isEditingMode() || !PlayerUtil.isStaffSpectating(player)) {
+            if (profile.isLoaded() && (!profile.isEditingMode() || !PlayerUtil.isStaffSpectating(player))) {
                 GameMode gameMode = player.getGameMode();
                 if (!profile.isInArena()) {
                     final boolean inArena = Utils.isInArena(player);

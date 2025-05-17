@@ -257,7 +257,7 @@ public class ProtectListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     private void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
@@ -270,6 +270,7 @@ public class ProtectListener implements Listener {
             }
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
             if (!profile.isInArena() && !PlayerUtil.isNPC(event.getEntity())) {
+
                 event.setCancelled(true);
             }
         }
@@ -294,6 +295,7 @@ public class ProtectListener implements Listener {
                     PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(shooter.getUniqueId());
                     if (!profile.isInArena()) {
                         event.setCancelled(true);
+
                     }
                 }
             }
