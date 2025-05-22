@@ -1186,7 +1186,6 @@ public class CombatListener implements Listener {
                 CC.send(MessageType.COMBAT, (Player) beKilledPlayer, deathMsg.create());
             }
         }
-
     }
 
     private void handleGivePlayerKillReward(Player killer) {

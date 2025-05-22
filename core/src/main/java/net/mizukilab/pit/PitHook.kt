@@ -25,6 +25,9 @@ import net.mizukilab.pit.enchantment.type.aqua.ClubRodEnchant
 import net.mizukilab.pit.enchantment.type.aqua.GrandmasterEnchant
 import net.mizukilab.pit.enchantment.type.aqua.LuckOfPondEnchant
 import net.mizukilab.pit.enchantment.type.aqua.RogueEnchant
+import net.mizukilab.pit.enchantment.type.auction.FractionalReserveEnchant
+import net.mizukilab.pit.enchantment.type.auction.rare.PaparazziEnchant
+import net.mizukilab.pit.enchantment.type.auction.rare.PitMBAEnchant
 import net.mizukilab.pit.enchantment.type.dark_normal.*
 import net.mizukilab.pit.enchantment.type.dark_rare.*
 import net.mizukilab.pit.enchantment.type.genesis.*
@@ -110,7 +113,7 @@ object PitHook {
     val gitVersion = "f0c0097c"
 
     @JvmStatic
-    val itemVersion = "p1_uuid"
+    val itemVersion = "p2_uuid"
     fun init() {
         loadConfig()
         loadParker()
@@ -432,6 +435,7 @@ private fun loadEnchants() {
         EchoOfSnowlandPEnchant::class.java,
         EchoOfSnowlandWEnchant::class.java,
         EmergencyColonyEnchant::class.java,
+        PrimordialStrikerEnchant::class.java,
         KFCBoomerEnchant::class.java,
         LaserEnchant::class.java,
         MultiExchangeLocationEnchant::class.java,

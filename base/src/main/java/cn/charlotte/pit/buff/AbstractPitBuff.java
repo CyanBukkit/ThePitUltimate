@@ -26,6 +26,7 @@ public abstract class AbstractPitBuff {
 
     public void stackBuff(Player player, long duration) {
         stackBuff(player, duration, 1);
+
     }
 
     public void stackBuff(Player player, long duration, int times) {
@@ -34,6 +35,7 @@ public abstract class AbstractPitBuff {
         if (event.isCancel()) {
             return;
         }
+
         for (int i = 0; i < times; i++) {
             getPlayerBuffData(player).stackBuffData(duration);
         }

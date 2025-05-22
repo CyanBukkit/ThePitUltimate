@@ -52,7 +52,7 @@ public class CurseEnchant extends AbstractEnchantment implements IPlayerKilledEn
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        return "&7击杀穿戴 &6神话之甲 &7的玩家 施加 &c诅咒 &f(00:20) &7状态" + "/s&7状态 &c诅咒 &7: 复活将延长15秒";
+        return "&7击杀穿戴 &6神话之甲 &7的玩家 施加 &c诅咒 &f(00:10) &7状态" + "/s&7状态 &c诅咒 &7: 复活将延长15秒";
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CurseEnchant extends AbstractEnchantment implements IPlayerKilledEn
                 Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
                     playerProfile.setRespawnTime(0.1d);
                     targetPlayer.sendMessage(CC.translate("&c&l诅咒! &7诅咒驱散!"));
-                }, 20 * 20L);
+                }, 20 * 10);
             }
         }
     }

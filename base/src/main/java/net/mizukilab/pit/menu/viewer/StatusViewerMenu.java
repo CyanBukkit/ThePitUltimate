@@ -66,7 +66,7 @@ public class StatusViewerMenu extends Menu {
         button.put(0, new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
-                if (profile.getPlayerOption().isInventoryVisibility()) {
+                if (profile.getPlayerOption().isInventoryVisibility() || PlayerUtil.isStaff(player)) {
                     return inventory.getHelmet() == null ? new ItemBuilder(Material.AIR).build() : inventory.getHelmet();
                 }
                 return new ItemBuilder(Material.AIR).build();

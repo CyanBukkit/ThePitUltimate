@@ -12,7 +12,7 @@ import net.minecraft.server.v1_8_R3.EnumParticle
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles
 import net.mizukilab.pit.Util.Companion.chatColorToColor
 import net.mizukilab.pit.Util.Companion.chatColorToData
-import net.mizukilab.pit.enchantment.type.rare.PaparazziEnchant
+import net.mizukilab.pit.enchantment.type.auction.rare.PaparazziEnchant
 import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem
 import net.mizukilab.pit.util.BoomFirework
 import net.mizukilab.pit.util.PlayerUtil
@@ -213,7 +213,8 @@ class SquadsEvent : IEpicEvent, AbstractEvent(),
             if (ThePit.getInstance().pitConfig.isGenesisEnable && profile.genesisData.tier >= 5 && rewardRenown > 0) {
                 rewardRenown++
             }
-            var enchantBoostLevel = PaparazziEnchant().getItemEnchantLevel(player.inventory.leggings)
+            var enchantBoostLevel = PaparazziEnchant()
+                .getItemEnchantLevel(player.inventory.leggings)
             if (PlayerUtil.shouldIgnoreEnchant(player)) {
                 enchantBoostLevel = 0
             }
