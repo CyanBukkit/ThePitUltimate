@@ -26,6 +26,7 @@ public class WorkshopEntranceButton extends Button {
         lines.add("");
         lines.add("&c染色仅影响外观,不影响其升阶所需神话之甲颜色/改变自身颜色属性.");
         lines.add("");
+
         if (profile.isSupporter() || PlayerUtil.isStaff(player)) {
             if (profile.getEnchantingItem() != null && InventoryUtil.deserializeItemStack(profile.getEnchantingItem()) != null && InventoryUtil.deserializeItemStack(profile.getEnchantingItem()).getType().equals(Material.LEATHER_LEGGINGS)) {
                 ItemStack itemStack = InventoryUtil.deserializeItemStack(profile.getEnchantingItem());

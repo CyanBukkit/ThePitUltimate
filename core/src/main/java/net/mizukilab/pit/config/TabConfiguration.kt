@@ -93,7 +93,6 @@ object TabConfiguration {
                 this.config.set(it.key, it.value)
             }
         }
-
         this.config.save(File(ThePit.getInstance().dataFolder, "tab.yml"))
     }
 

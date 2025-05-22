@@ -110,10 +110,10 @@ import spg.lgdev.iSpigot
 
 object PitHook {
     @JvmStatic
-    val gitVersion = "f0c0097c"
+    val gitVersion = "bc234c94"
 
     @JvmStatic
-    val itemVersion = "p2_uuid"
+    val itemVersion = "p3_uuid"
     fun init() {
         loadConfig()
         loadParker()
@@ -255,10 +255,12 @@ object PitHook {
 
     fun loadConfig() {
         try {
+            println("Loaded config...")
             NewConfiguration.loadFile()
             NewConfiguration.load()
             TabConfiguration.loadFile()
             TabConfiguration.load()
+
         } catch (e: Exception) {
             e.printStackTrace()
         }

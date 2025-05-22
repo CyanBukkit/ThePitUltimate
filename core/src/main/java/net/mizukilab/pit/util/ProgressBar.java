@@ -9,8 +9,7 @@ public class ProgressBar {
         double progress = (currentExp - startExp) / (nextLevelExp - startExp);
         progress = Math.max(0, Math.min(1, progress));
         int filledLength = (int) (progress * barLength);
-        String progressBar = "§b" + "■".repeat(filledLength) + "§7" + "□".repeat(barLength - filledLength);
-        return progressBar;
+        return "§b" + "■".repeat(filledLength) + "§7" + "□".repeat(barLength - filledLength);
     }
 
 
