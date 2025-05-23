@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -86,7 +87,10 @@ public class BatUtil {
                     EntityBat entityBat = new EntityBat(world.getHandle());
                     entityBat.setPosition(batLoc.getX(), batLoc.getY(), batLoc.getZ());
                     entityBat.noDamageTicks =  100000;
+                    entityBat.setHealth(20000);
+
                     world.addEntity(entityBat, CreatureSpawnEvent.SpawnReason.DEFAULT);
+
                     bats.add((LivingEntity) entityBat.getBukkitEntity());
                 }
             }

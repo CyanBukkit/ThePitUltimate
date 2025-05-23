@@ -1,4 +1,4 @@
-package net.mizukilab.pit.enchantment.type.normal;
+package net.mizukilab.pit.enchantment.type.auction;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;

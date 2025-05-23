@@ -221,7 +221,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     }
 
     private void postLoad() {
-        loadEventPoller();
+     loadEventPoller();
     }
 
     private void preLoad(boolean whiteList) throws Exception {
@@ -513,7 +513,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
                 new Dependency("fastutil", "it.unimi.dsi", "fastutil", "8.5.15", LoaderType.REFLECTION),
-                new Dependency("kotlin", "org.jetbrains.kotlin", "kotlin-stdlib", "2.1.20", LoaderType.REFLECTION),
+                new Dependency("kotlin", "org.jetbrains.kotlin", "kotlin-stdlib", "2.1.20", LoaderType.ISOLATED),
                 new Dependency("adventure-platform-bukkit", "net.kyori", "adventure-platform-bukkit", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-platform-facet", "net.kyori", "adventure-platform-facet", "4.3.2", LoaderType.REFLECTION),
                 new Dependency("adventure-text-serializer-legacy", "net.kyori", "adventure-text-serializer-legacy", "4.13.1", LoaderType.REFLECTION),

@@ -1,4 +1,4 @@
-package net.mizukilab.pit.enchantment.type.rare;
+package net.mizukilab.pit.enchantment.type.auction.rare;
 
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;

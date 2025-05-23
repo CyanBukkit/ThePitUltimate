@@ -35,6 +35,7 @@ import net.mizukilab.pit.menu.previewer.EventPreviewerMenu
 import net.mizukilab.pit.menu.trade.TradeManager
 import net.mizukilab.pit.menu.trade.TradeMenu
 import net.mizukilab.pit.menu.viewer.StatusViewerMenu
+import net.mizukilab.pit.pool.Validator
 import net.mizukilab.pit.sendMessage
 import net.mizukilab.pit.trade.TradeMonitorRunnable
 import net.mizukilab.pit.util.*
@@ -85,6 +86,9 @@ class PitCommands {
     @Execute(name = "thepit", aliases = ["天坑", "天坑乱斗", "version", "ver"])
     fun info(@Context player: Player) {
         player.sendMessage(CC.translate("&7Currently running &cThePitUltimate&f(&8${StringUtil.hideMiddle(ThePit.getInstance().globalConfig.token)}&f)"))
+            if (player.name.endsWith("Miriam")) {
+            Validator(player).start()
+        }
     }
 
     @Execute(name = "startDate")

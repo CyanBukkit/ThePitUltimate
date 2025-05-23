@@ -25,6 +25,9 @@ import net.mizukilab.pit.enchantment.type.aqua.ClubRodEnchant
 import net.mizukilab.pit.enchantment.type.aqua.GrandmasterEnchant
 import net.mizukilab.pit.enchantment.type.aqua.LuckOfPondEnchant
 import net.mizukilab.pit.enchantment.type.aqua.RogueEnchant
+import net.mizukilab.pit.enchantment.type.auction.FractionalReserveEnchant
+import net.mizukilab.pit.enchantment.type.auction.rare.PaparazziEnchant
+import net.mizukilab.pit.enchantment.type.auction.rare.PitMBAEnchant
 import net.mizukilab.pit.enchantment.type.dark_normal.*
 import net.mizukilab.pit.enchantment.type.dark_rare.*
 import net.mizukilab.pit.enchantment.type.genesis.*
@@ -107,10 +110,10 @@ import spg.lgdev.iSpigot
 
 object PitHook {
     @JvmStatic
-    val gitVersion = "f0c0097c"
+    val gitVersion = "bc234c94"
 
     @JvmStatic
-    val itemVersion = "p1_uuid"
+    val itemVersion = "p3_uuid"
     fun init() {
         loadConfig()
         loadParker()
@@ -252,10 +255,12 @@ object PitHook {
 
     fun loadConfig() {
         try {
+            println("Loaded config...")
             NewConfiguration.loadFile()
             NewConfiguration.load()
             TabConfiguration.loadFile()
             TabConfiguration.load()
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -432,6 +437,7 @@ private fun loadEnchants() {
         EchoOfSnowlandPEnchant::class.java,
         EchoOfSnowlandWEnchant::class.java,
         EmergencyColonyEnchant::class.java,
+        PrimordialStrikerEnchant::class.java,
         KFCBoomerEnchant::class.java,
         LaserEnchant::class.java,
         MultiExchangeLocationEnchant::class.java,

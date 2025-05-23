@@ -70,7 +70,7 @@ public class PublicUtil {
         int damageHearts = ((int)finalDamage) / 2;
         StringBuilder builder = new StringBuilder();
         builder.append(RankUtil.getPlayerColoredName(victim.getUniqueId()));
-        boolean venom = !PlayerUtil.isNPC(victim) && PlayerUtil.isVenom(victim);
+        boolean venom = !PlayerUtil.    isNPC(victim) && PlayerUtil.isVenom(victim);
         builder.append(venom ? " &2" : " &4");
         builder.append("❤".repeat(Math.max(0, nowHearts)));
 

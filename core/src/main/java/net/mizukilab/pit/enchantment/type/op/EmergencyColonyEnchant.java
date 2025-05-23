@@ -2,6 +2,7 @@ package net.mizukilab.pit.enchantment.type.op;
 
 import cn.charlotte.pit.buff.impl.HealPoisonDeBuff;
 import cn.charlotte.pit.buff.impl.HemorrhageDeBuff;
+import cn.charlotte.pit.buff.impl.SiltedUpBuff;
 import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
@@ -31,6 +32,8 @@ public class EmergencyColonyEnchant extends AbstractEnchantment implements ITick
 
     private static final HealPoisonDeBuff healPoisonDeBuff = new HealPoisonDeBuff();
     private static final HemorrhageDeBuff hemorrhageDeBuff = new HemorrhageDeBuff();
+    private static final SiltedUpBuff siltedUpDebuff = new SiltedUpBuff();
+
     private static final HashMap<UUID, Integer> hitCount = new HashMap<>();
 
     @Override
@@ -93,6 +96,7 @@ public class EmergencyColonyEnchant extends AbstractEnchantment implements ITick
             if (p.getUniqueId().equals(player.getUniqueId())) {
                 continue;
             }
+            siltedUpDebuff.stackBuff(player,10 * 1000L);
             healPoisonDeBuff.stackBuff(p, 10 * 1000L, 5);
             hemorrhageDeBuff.stackBuff(p, 10 * 1000L);
             if ((System.currentTimeMillis() / 1000) % 3 == 0) {

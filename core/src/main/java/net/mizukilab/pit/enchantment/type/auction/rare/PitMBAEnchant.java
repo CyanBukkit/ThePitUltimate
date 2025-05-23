@@ -1,4 +1,4 @@
-package net.mizukilab.pit.enchantment.type.normal;
+package net.mizukilab.pit.enchantment.type.auction.rare;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import com.google.common.util.concurrent.AtomicDouble;

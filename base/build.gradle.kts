@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.huanmeng"
-version = /*UUID.randomUUID().toString().substring(0,4);*/"4.2.6"
+version = /*UUID.randomUUID().toString().substring(0,4);*/"4.2.8"
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
@@ -34,7 +34,7 @@ tasks.named<ShadowJar>("shadowJar") {
     relocate("net.jodah","net.mizukilab.pit.libs")
     relocate("net.jitse","net.mizukilab.pit.libs")
     relocate("xyz.upperlevel.spigot","net.mizukilab.pit.libs")
-    exclude("kotlin/**", "junit/**", "org/junit/**")
+    exclude("kotlin/**","junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
     mergeServiceFiles()
 }
@@ -50,6 +50,7 @@ dependencies {
     api(libs.slf4j)
     api(libs.litecommands)
     api(libs.adventure.bukkit)
+    api(libs.kotlin)
     compileOnly("com.caoccao.javet:javet:3.1.4") // Linux and Windows (x86_64)
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
