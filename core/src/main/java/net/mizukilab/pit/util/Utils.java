@@ -33,6 +33,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -264,6 +265,27 @@ public class Utils {
 
     public static boolean isNPC(org.bukkit.entity.Entity entity) {
         return PlayerUtil.isNPC(entity);
+    }
+    public static void serializePlayer(Player player){
+        PlayerInventory inventory = player.getInventory();
+        inventory.setArmorContents(copy(inventory.getArmorContents()));
+        inventory.setContents(copy(inventory.getContents()));
+    }
+
+    private static ItemStack[] copy(ItemStack[] armorContents) {
+        ItemStack[] itemStacks = new ItemStack[armorContents.length];
+        for (int i = 0; i < armorContents.length; i++) {
+            ItemStack armorContent = armorContents[i];
+            if(armorContent != null){
+                IMythicItem mythicItem = Utils.getMythicItem(armorContent);
+                if(mythicItem != null){
+                    itemStacks[i] = mythicItem.toItemStack();
+                } else {
+                    itemStacks[i] = armorContent;
+                }
+            }
+        }
+        return itemStacks;
     }
 
     public static ItemStack subtractLive(ItemStack item) {

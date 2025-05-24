@@ -77,7 +77,14 @@ class PitAdminSimpleCommand {
         ThePit.getInstance().pitConfig.save()
         player.sendMessage(CC.translate("&a设置传送门点位A"))
     }
-
+    @Execute(name = "reserialize")
+    @Permission("pit.admin")
+    fun reserializePlayer(@Context player: Player, @Arg("playerName") playerName: String) {
+        Bukkit.getPlayer(playerName)?.let {
+            Utils.serializePlayer(it)
+            player.sendMessage("Done")
+        }
+    }
     @Execute(name = "setportalPosB")
     @Permission("pit.admin")
     fun setportalPosB(@Context player: Player) {
