@@ -37,6 +37,7 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.MobEffectList;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.*;
@@ -156,6 +157,12 @@ public class GameEffectListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player attacker) {
+            if(event.getEntity() instanceof CraftLivingEntity livingEntity) { //特性修复
+                if (livingEntity.getHandle().hurtTicks > 5) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
             //修正伤害
             ItemStack itemInHand = attacker.getItemInHand();
             if (itemInHand == null || itemInHand.getType() == Material.AIR
