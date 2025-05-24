@@ -56,7 +56,7 @@ object ActionBarDisplayRunnable {
                     4
                 )
             }
-        }, 0L, 20L)
+        }, 0L, 5L)
     }
 
     private fun Player.handleActionDisplay(itemStack: AbstractPitItem?, builder: StringBuilder) {
