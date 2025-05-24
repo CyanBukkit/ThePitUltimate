@@ -157,7 +157,7 @@ public class GameEffectListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player attacker) {
-            if(event.getEntity() instanceof CraftLivingEntity livingEntity) { //特性修复
+            if(event.getEntity() instanceof CraftLivingEntity livingEntity) { //特性修复 //TODO
                 if (livingEntity.getHandle().hurtTicks > 5) {
                     event.setCancelled(true);
                     return;

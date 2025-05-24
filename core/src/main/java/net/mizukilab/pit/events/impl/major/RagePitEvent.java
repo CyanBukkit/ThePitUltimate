@@ -10,6 +10,7 @@ import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.util.TaskManager;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.blocks.BlockID;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -107,13 +108,25 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
             Location middle = ThePit.getInstance().getPitConfig().getRagePitMiddle();
             BlockVector vector = new BlockVector(middle.getBlockX(), middle.getBlockY(), middle.getBlockZ());
             BukkitWorld world = new BukkitWorld(Bukkit.getWorlds().get(0));
-            session = FaweAPI.getEditSessionBuilder(world).build();
+            try {
+                session = FaweAPI.getEditSessionBuilder(world).build();
 
 
-            TaskManager.IMP.async(() -> {
-                session.makeCylinder(vector, new JustAirBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitConfig().getRagePitRadius(), ThePit.getInstance().getPitConfig().getRagePitHeight(), false);
-                session.flushQueue();
-            });
+                Runnable runnable1 = () -> {
+                    session.makeCylinder(vector, new JustAirBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitConfig().getRagePitRadius(), ThePit.getInstance().getPitConfig().getRagePitHeight(), false);
+                    session.flushQueue();
+                };
+
+                TaskManager.IMP.async(runnable1);
+            } catch (Throwable e){
+                session = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, Integer.MAX_VALUE);
+
+                Runnable runnable1 = () -> {
+                    session.makeCylinder(vector, new JustAirBlockPattern(new BaseBlock(BlockID.GLASS)), ThePit.getInstance().getPitConfig().getRagePitRadius(), ThePit.getInstance().getPitConfig().getRagePitHeight(), false);
+                    session.flushQueue();
+                };
+                Bukkit.getScheduler().runTask(ThePit.getInstance(), runnable1);
+            }
 
 
             ClearRunnable.getClearRunnable().getPlacedBlock().removeIf((loc, blockData) -> {
@@ -189,10 +202,17 @@ public class RagePitEvent extends AbstractEvent implements IEpicEvent, Listener 
         //取消Runnable
         runnable.cancel();
         //还原建筑
+        try{
         FaweAPI.getTaskManager().async(() -> {
             session.undo(session);
             session.flushQueue();
         });
+        } catch (Throwable e){
+            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                session.undo(session);
+                session.flushQueue();
+            });
+        }
         /* TaskManager.IMP.async(() -> {
             session.undo(session);
             session.flushQueue();
