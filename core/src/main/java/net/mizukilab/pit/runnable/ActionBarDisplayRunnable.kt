@@ -53,7 +53,7 @@ object ActionBarDisplayRunnable {
                     player,
                     "skill",
                     CC.translate(builder.toString()),
-                    4
+                    16
                 )
             }
         }, 0L, 5L)
