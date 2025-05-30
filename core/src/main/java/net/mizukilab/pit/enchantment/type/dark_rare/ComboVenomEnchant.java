@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ArmorOnly
 @AutoRegister
-public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant, Listener {
+public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
 
     @Override
     public String getEnchantName() {
@@ -108,12 +108,5 @@ public class ComboVenomEnchant extends AbstractEnchantment implements IAttackEnt
     public String getText(int level, Player player) {
         int hit = (player.getItemInHand() != null && player.getItemInHand().getType() == Material.BOW ? PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getBowHit() : PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).getMeleeHit());
         return (hit % 3 == 0 ? "&a&l✔" : "&e&l" + (3 - hit % 3));
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPoisonDamage(EntityDamageEvent event) {
-        if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
-            event.setCancelled(true);
-        }
     }
 }
