@@ -268,25 +268,27 @@ public class ProtectListener implements Listener {
             }
             if (PlayerUtil.isStaffSpectating((Player) event.getEntity())) {
                 event.setCancelled(true);
-                return;
-            }
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
-            if (!profile.isInArena() && !PlayerUtil.isNPC(event.getEntity())) {
-                event.setCancelled(true);
             }
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageByEntityEvent event) {
+        boolean damagerInArena = false;
+        boolean entityInArena = false;
         if (event.getEntity() instanceof Player) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
             if (!profile.isInArena() && !PlayerUtil.isNPC(event.getEntity())) {
-                event.setCancelled(true);
+                entityInArena = true;
             }
         }
-
         Entity damager = event.getDamager();
+        if (damager instanceof Player) {
+            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
+            if (!PlayerUtil.isNPC(damager) && !profile.isInArena()) {
+                damagerInArena = true;
+            }
+        }
         if (damager instanceof Projectile) {
             if (((Projectile) damager).getShooter() instanceof Player) {
                 Player shooter = (Player) (((Projectile) damager).getShooter());
@@ -296,19 +298,14 @@ public class ProtectListener implements Listener {
                     }
                     PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(shooter.getUniqueId());
                     if (!profile.isInArena()) {
-                        event.setCancelled(true);
-
+                        damagerInArena = true;
                     }
                 }
             }
         }
+        event.setCancelled(damagerInArena && entityInArena);
 
-        if (damager instanceof Player) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
-            if (!PlayerUtil.isNPC(damager) && !profile.isInArena()) {
-                    event.setCancelled(true);
-            }
-        }
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
