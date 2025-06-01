@@ -1,34 +1,15 @@
 package net.mizukilab.pit.listener;
 
 import cn.charlotte.pit.ThePit;
-import cn.charlotte.pit.data.sub.PerkData;
-import net.mizukilab.pit.config.NewConfiguration;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.KillRecap;
+import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.data.sub.QuestData;
-import net.mizukilab.pit.enchantment.AbstractEnchantment;
-import net.mizukilab.pit.enchantment.EnchantmentFactor;
-import net.mizukilab.pit.enchantment.param.event.NotPlayerOnly;
-import net.mizukilab.pit.enchantment.param.event.PlayerOnly;
-import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import cn.charlotte.pit.event.OriginalTimeChangeEvent;
 import cn.charlotte.pit.event.PitDamageEvent;
 import cn.charlotte.pit.event.PitDamagePlayerEvent;
-import net.mizukilab.pit.item.IMythicItem;
-import net.mizukilab.pit.item.type.mythic.MythicBowItem;
-import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
-import net.mizukilab.pit.parm.listener.*;
-import net.mizukilab.pit.parm.type.BowOnly;
-import net.mizukilab.pit.parm.type.ThrowOnly;
 import cn.charlotte.pit.perk.AbstractPerk;
 import cn.charlotte.pit.perk.PerkFactory;
-import net.mizukilab.pit.quest.AbstractQuest;
-import net.mizukilab.pit.quest.QuestFactory;
-import net.mizukilab.pit.util.PlayerUtil;
-import net.mizukilab.pit.util.RangedStreamLineList;
-import net.mizukilab.pit.util.Utils;
-import net.mizukilab.pit.util.chat.CC;
-import net.mizukilab.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.SneakyThrows;
@@ -36,8 +17,26 @@ import net.minecraft.server.v1_8_R3.EnchantmentManager;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.MobEffectList;
+import net.mizukilab.pit.config.NewConfiguration;
+import net.mizukilab.pit.enchantment.AbstractEnchantment;
+import net.mizukilab.pit.enchantment.EnchantmentFactor;
+import net.mizukilab.pit.enchantment.param.event.NotPlayerOnly;
+import net.mizukilab.pit.enchantment.param.event.PlayerOnly;
+import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
+import net.mizukilab.pit.item.IMythicItem;
+import net.mizukilab.pit.item.type.mythic.MythicBowItem;
+import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
+import net.mizukilab.pit.parm.listener.*;
+import net.mizukilab.pit.parm.type.BowOnly;
+import net.mizukilab.pit.parm.type.ThrowOnly;
+import net.mizukilab.pit.quest.AbstractQuest;
+import net.mizukilab.pit.quest.QuestFactory;
+import net.mizukilab.pit.util.PlayerUtil;
+import net.mizukilab.pit.util.RangedStreamLineList;
+import net.mizukilab.pit.util.Utils;
+import net.mizukilab.pit.util.chat.CC;
+import net.mizukilab.pit.util.item.ItemUtil;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.*;
@@ -157,10 +156,12 @@ public class GameEffectListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player attacker) {
-            if(event.getEntity() instanceof CraftLivingEntity livingEntity) { //特性修复 //TODO
-                if (livingEntity.getHandle().hurtTicks > 5) {
-                    event.setCancelled(true);
-                    return;
+            if (NewConfiguration.INSTANCE.getRepairFeatures()) {
+                if (event.getEntity() instanceof CraftLivingEntity livingEntity) { //特性修复 //TODO
+                    if (livingEntity.getHandle().hurtTicks > 5) {
+                        event.setCancelled(true);
+                        return;
+                    }
                 }
             }
             //修正伤害

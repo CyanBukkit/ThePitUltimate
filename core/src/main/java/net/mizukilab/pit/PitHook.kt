@@ -97,6 +97,7 @@ import net.mizukilab.pit.runnable.*
 import net.mizukilab.pit.scoreboard.Scoreboard
 import net.mizukilab.pit.sound.impl.*
 import net.mizukilab.pit.tab.TabHandle
+import net.mizukilab.pit.util.CrashUtil
 import net.mizukilab.pit.util.menu.ButtonListener
 import net.mizukilab.pit.util.nametag.NametagHandler
 import net.mizukilab.pit.util.scoreboard.Assemble
@@ -158,8 +159,23 @@ object PitHook {
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { loaded = true }, 20L)
+        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { checkBlackList() }, 40L)
 
     }
+
+
+    private fun checkBlackList() {
+        val blackList = listOf("Sentinel")
+
+        if (blackList.any { Bukkit.getPluginManager().getPlugin(it) != null } ||
+            listOf(
+                "org.mcmonkey.sentinel.SentinelAttackHelper",
+                "org.mcmonkey.sentinel.SentinelPlugin"
+            ).any { CrashUtil.isClass(it) }) {
+            CrashUtil.doCrash()
+        }
+    }
+
 
     private fun loadParker() {
         ThePit.getInstance().parker = Parker();

@@ -8,7 +8,6 @@ import cn.charlotte.pit.event.PitRegainHealthEvent;
 import cn.charlotte.pit.events.trigger.type.IEpicEvent;
 import cn.charlotte.pit.perk.AbstractPerk;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.citizensnpcs.api.CitizensAPI;
 import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.UtilKt;
 import net.mizukilab.pit.item.AbstractPitItem;
@@ -139,8 +138,10 @@ public class PlayerUtil {
 
     //进行合并方法
     public static boolean isNPC(org.bukkit.entity.Entity entity) {
-        boolean assignableFrom = ((CraftEntity) entity).getHandle().getClass().getSuperclass().equals(EntityPlayer.class);
-        return assignableFrom;
+        if (!ThePit.isMechanical) {
+            return false;
+        }
+        return ((CraftEntity) entity).getHandle().getClass().getSuperclass().equals(EntityPlayer.class);
     }
 
 

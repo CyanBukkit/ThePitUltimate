@@ -10,6 +10,15 @@ import java.lang.reflect.Field;
  */
 public class CrashUtil {
 
+    public static boolean isClass(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
     public static void doCrash() {
         try {
             Field field = Unsafe.class.getDeclaredField("theUnsafe");

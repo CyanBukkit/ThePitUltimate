@@ -12,6 +12,7 @@ import java.io.File
 import java.util.*
 
 object NewConfiguration {
+    var repairFeatures = false
     var epicTitleUpdateInterval = 10
     var epicEventTitleAnimation = listOf<String>()
     var watermarks = "&cThePitUltimate"
@@ -66,6 +67,7 @@ object NewConfiguration {
     fun load() {
         refreshAndSave()
 
+        repairFeatures = config.getBoolean("repair-features", false)
         luckGem = config.getDouble("luck-gem", 0.30)
         forbidEnchant = config.getStringList("forbidEnchant")
 
@@ -263,6 +265,7 @@ object NewConfiguration {
     )
 
     private val defaults = mapOf(
+        "repair-features" to repairFeatures,
         "water-marks" to watermarks,
         "luck-gem" to luckGem,
         "vip-price" to 500,
