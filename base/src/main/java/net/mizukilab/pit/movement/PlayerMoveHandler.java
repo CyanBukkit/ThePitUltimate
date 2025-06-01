@@ -232,7 +232,9 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
     private Map<Player, ArmorStand> armorStandMap = new HashMap<>();
     private static boolean isInArena(Location to) {
         PitWorldConfig config = ThePit.getInstance().getPitConfig();
-        final AABB aabb = new AABB(config.getPitLocA().getX(), config.getPitLocA().getY(), config.getPitLocA().getZ(), config.getPitLocB().getX(), config.getPitLocB().getY(), config.getPitLocB().getZ());
+        Location pitLocA = config.getPitLocA();
+        Location pitLocB = config.getPitLocB();
+        final AABB aabb = new AABB(pitLocA.getX(), pitLocA.getY(), pitLocA.getZ(), pitLocB.getX(), pitLocB.getY(), pitLocB.getZ());
 
         final AABB playerAABB = new AABB(to.getX(), to.getY(), to.getZ(), to.getX() + 0.8, to.getY() + 2, to.getZ() + 0.8);
 

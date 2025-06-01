@@ -242,8 +242,7 @@ public class ProtectListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() instanceof ArmorStand) {
-            ArmorStand stand = (ArmorStand) event.getRightClicked();
+        if (event.getRightClicked() instanceof ArmorStand stand) {
             if (stand.getHelmet() != null) {
                 event.setCancelled(true);
             }
@@ -260,17 +259,14 @@ public class ProtectListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     private void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
+            if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
+                event.setCancelled(true);
+            }
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 event.setCancelled(true);
                 return;
             }
             if (PlayerUtil.isStaffSpectating((Player) event.getEntity())) {
-                event.setCancelled(true);
-                return;
-            }
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
-            if (!profile.isInArena() && !PlayerUtil.isNPC(event.getEntity())) {
-
                 event.setCancelled(true);
             }
         }
@@ -278,37 +274,38 @@ public class ProtectListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageByEntityEvent event) {
+        boolean damagerInArena = false;
+        boolean entityInArena = false;
         if (event.getEntity() instanceof Player) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
             if (!profile.isInArena() && !PlayerUtil.isNPC(event.getEntity())) {
-                event.setCancelled(true);
+                entityInArena = true;
             }
         }
-
-        if (event.getDamager() instanceof Projectile) {
-            if (((Projectile) event.getDamager()).getShooter() instanceof Player) {
-                Player shooter = (Player) (((Projectile) event.getDamager()).getShooter());
+        Entity damager = event.getDamager();
+        if (damager instanceof Player) {
+            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
+            if (!PlayerUtil.isNPC(damager) && !profile.isInArena()) {
+                damagerInArena = true;
+            }
+        }
+        if (damager instanceof Projectile) {
+            if (((Projectile) damager).getShooter() instanceof Player) {
+                Player shooter = (Player) (((Projectile) damager).getShooter());
                 if (!PlayerUtil.isNPC(shooter)) {
                     if (event.getEntity().getUniqueId().equals(shooter.getUniqueId())) {
                         event.setCancelled(true);
                     }
                     PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(shooter.getUniqueId());
                     if (!profile.isInArena()) {
-                        event.setCancelled(true);
-
+                        damagerInArena = true;
                     }
                 }
             }
         }
+        event.setCancelled(damagerInArena && entityInArena);
 
-        if (event.getDamager() instanceof Player) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getDamager().getUniqueId());
-            if (!PlayerUtil.isNPC(event.getDamager())) {
-                if (!profile.isInArena()) {
-                    event.setCancelled(true);
-                }
-            }
-        }
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

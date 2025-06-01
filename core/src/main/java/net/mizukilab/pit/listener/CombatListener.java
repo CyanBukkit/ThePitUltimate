@@ -495,7 +495,7 @@ public class CombatListener implements Listener {
 
     public void handlePlayerDeath(Player player, Player killer, boolean shouldRespawn) {
         PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        boolean npc = Utils.isNPC(player);
+        boolean npc = PlayerUtil.isNPC(player);
         if (killer != null) {
             //what
             Player reallyKiller = Bukkit.getPlayer(killer.getUniqueId());

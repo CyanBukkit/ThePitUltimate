@@ -15,6 +15,7 @@ import net.mizukilab.pit.getPitProfile
 import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem
 import net.mizukilab.pit.parm.AutoRegister
+import net.mizukilab.pit.util.PlayerUtil
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.chat.CC
 import net.mizukilab.pit.util.chat.ChatComponentBuilder
@@ -104,7 +105,7 @@ class JewelSword : IMythicItem(), Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun onDeath(event: PlayerDeathEvent) {
         val player = event.entity
-        if (Utils.isNPC(player)) return
+        if (PlayerUtil.isNPC(player)) return
         clearKill(player)
     }
 
