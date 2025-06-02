@@ -107,6 +107,9 @@ public class MythicWellMenu extends Menu {
             button.put(INPUT_SLOT, new EnchantDisplayButton(itemStack, this,false));
             button.put(CLICK_SLOT, new EnchantButton(itemStack, this));
 
+            button.put(17, new EnchantmentDisplayButton(0));
+            button.put(26, new EnchantmentDisplayButton(1));
+            button.put(35, new EnchantmentDisplayButton(2));
 
             Integer tier = ItemUtil.getItemIntData(itemStack, "tier");
             if (tier != null && tier == (foundColor == MythicColor.DARK ? 1 : 2)) {
@@ -206,6 +209,10 @@ public class MythicWellMenu extends Menu {
             if(enchantingItem.getType() != Material.AIR) {
                 button.put(INPUT_SLOT, new EnchantDisplayButton(enchantingItem, this, false));
                 button.put(CLICK_SLOT, new EnchantButton(enchantingItem, this));
+
+                button.put(17, new EnchantmentDisplayButton(0));
+                button.put(26, new EnchantmentDisplayButton(1));
+                button.put(35, new EnchantmentDisplayButton(2));
             } else {
                 int currentTick = (int) (Utils.toUnsignedInt(animationData.getAnimationGlobalTick()) / 2L);
                 button.put(CLICK_SLOT - 2, new DisplayButton(stacks[currentTick % stacks.length], true));
