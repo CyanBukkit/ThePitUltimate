@@ -17,15 +17,14 @@ import net.mizukilab.pit.util.chat.CC;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
 import spg.lgdev.handler.MovementHandler;
 import xyz.upperlevel.spigot.book.BookUtil;
 
@@ -203,6 +202,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
 
             float initialYaw = player.getLocation().getYaw();
             float initialPitch = player.getLocation().getPitch();
+            launchPlayer(player,to,initialYaw,initialPitch);
             if (to.clone().add(0, -1, 0).getBlock().getType() == Material.SLIME_BLOCK) {
                 BlockIterator blockIterator = new BlockIterator(player.getLocation());
 
@@ -224,12 +224,38 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
                         0, 0, 0, 0, 1, 1
                 );
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-
-                }
+            }
         }
 
     }
-    private Map<Player, ArmorStand> armorStandMap = new HashMap<>();
+
+    public static void launchPlayer(Player player, Location to, float initialYaw, float initialPitch) {
+        if (to.clone().add(0, -1, 0).getBlock().getType() == Material.SLIME_BLOCK) {
+            BlockIterator blockIterator = new BlockIterator(player.getLocation());
+
+            for (int i = 0; i < 30 && blockIterator.hasNext(); i++) {
+                blockIterator.next();
+            }
+
+            player.getLocation().setYaw(initialYaw);
+            player.getLocation().setPitch(initialPitch);
+
+            if (blockIterator.hasNext()) {
+                Vector pushDirection = new Vector(1.5, 0.5, 0);
+                player.setVelocity(pushDirection.multiply(1.8));
+
+                player.playSound(player.getLocation(), Sound.EXPLODE, 1, 1);
+
+                PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
+                        EnumParticle.EXPLOSION_LARGE, true,
+                        (float) to.getX(), (float) to.getY(), (float) to.getZ(),
+                        0.2F, 0.2F, 0.2F, 0, 5
+                );
+                ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+            }
+        }
+    }
+
     private static boolean isInArena(Location to) {
         PitWorldConfig config = ThePit.getInstance().getPitConfig();
         Location pitLocA = config.getPitLocA();
