@@ -30,6 +30,7 @@ object SewersRunnable : BukkitRunnable(), Listener {
     private var lastClaimed = -1L
 
     var isParticle = false
+    private var particleTask: BukkitRunnable? = null
 
     private val randomList = RandomList(
         "xp" to 90,
@@ -48,19 +49,20 @@ object SewersRunnable : BukkitRunnable(), Listener {
         val locs = ThePit.getInstance().pitConfig.sewersChestsLocations
         if (locs.isEmpty()) return
 
-
-        if (!isParticle) {
+        if (!isParticle || particleTask == null ) {
             isParticle = true
-            object : BukkitRunnable() {
+            particleTask = object : BukkitRunnable() {
                 override fun run() {
                     if (!isParticle) {
                         cancel()
+                        return
                     }
                     locs.forEach { loc ->
                         generateRandomParticlesAroundChest(loc, Effect.HAPPY_VILLAGER)
                     }
                 }
-            }.runTaskTimer(ThePit.getInstance(), 0L, 20L)
+            }
+            particleTask!!.runTaskTimer(ThePit.getInstance(), 0L, 10L)
         }
 
         if (System.currentTimeMillis() - lastClaimed < 1000 * NewConfiguration.sewersSpawn) return
@@ -89,14 +91,18 @@ object SewersRunnable : BukkitRunnable(), Listener {
     }
 
     private fun generateRandomParticlesAroundChest(center: Location, effect: Effect) {
-        repeat(15) { // 生成 6 个随机粒子
-            val randomXOffset = Random.nextDouble(-1.0, 1.0) // 随机 X 偏移
-            val randomZOffset = Random.nextDouble(-1.0, 1.0) // 随机 Z 偏移
-            val randomHeightOffset = Random.nextDouble(0.3, 1.2) // 随机高度变化
+        repeat(25) {
+            val randomXOffset = Random.nextDouble(-1.5, 1.5)
+            val randomZOffset = Random.nextDouble(-1.5, 1.5)
+            val randomHeightOffset = if (center.block.type == Material.CHEST) {
+                Random.nextDouble(1.0, 2.5)
+            } else {
+                Random.nextDouble(0.3, 1.8)
+            }
 
             val particleLoc = center.clone().add(randomXOffset, randomHeightOffset, randomZOffset)
 
-            particleLoc.world.playEffect(particleLoc, effect, 2, 2)
+            particleLoc.world.playEffect(particleLoc, effect, 3, 3)
         }
     }
 

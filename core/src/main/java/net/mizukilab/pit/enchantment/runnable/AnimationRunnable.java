@@ -55,7 +55,7 @@ public class AnimationRunnable extends BukkitRunnable {
         );
 
 
-        this.runTaskTimerAsynchronously(ThePit.getInstance(), 20, 1);
+        this.runTaskTimerAsynchronously(ThePit.getInstance(), 1, 1);
 
     }
 
