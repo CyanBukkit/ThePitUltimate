@@ -43,7 +43,10 @@ import java.util.Map;
 @Setter
 public class MythicWellMenu extends Menu {
 
-    private final int[] ANIMATIONS_SLOT = new int[]{19, 10, 11, 12, 21, 30, 29, 28};
+    // 神话之井中间3x3区域的动画槽位，按照指定顺序：19->10->11->12->21->30->29->28
+    private final int[] ANIMATIONS_SLOT = new int[]{
+        19, 10, 11, 12, 21, 30, 29, 28
+    };
     private final int INPUT_SLOT = 20;
     private final int CLICK_SLOT = 25;
     private final MythicWellMenu instance;
@@ -137,34 +140,66 @@ public class MythicWellMenu extends Menu {
                 return button;
             }
 
-            if (animationData.getAnimationTick() == 0 || animationData.getAnimationTick() == 1 || animationData.getAnimationTick() == 4 || animationData.getAnimationTick() == 5) {
+            int tick = animationData.getAnimationTick();
+            
+            // 第一阶段：准备阶段 (0-11 tick)
+            if (tick <= 11) {
+                if (tick == 0 || tick == 3 || tick == 6 || tick == 9) {
+                    // 所有方块亮起
+                    for (int i : ANIMATIONS_SLOT) {
+                        button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(foundColor.getColorByte()).build(), true));
+                    }
+                } else {
+                    // 方块熄灭
+                    for (int i : ANIMATIONS_SLOT) {
+                        button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(0).build(), true));
+                    }
+                }
+            }
+            // 第二阶段：旋转能量聚集 (12-35 tick)
+            else if (tick <= 35) {
+                int rotationIndex = ((tick - 12) / 3) % 8;
+                for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
+                    if (rotationIndex == i) {
+                        button.put(ANIMATIONS_SLOT[i], new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(foundColor.getColorByte()).build(), true));
+                    } else {
+                        button.put(ANIMATIONS_SLOT[i], new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(0).build(), true));
+                    }
+                }
+                button.put(INPUT_SLOT, new DisplayButton(new ItemBuilder(Material.INK_SACK)
+                        .name("&a正在聚集能量!")
+                        .durability(Math.min((tick - 12) / 3, 15))
+                        .build(), true));
+            }
+            // 第三阶段：能量聚集 (36-59 tick)
+            else if (tick <= 59) {
+                int burstIndex = ((tick - 36) / 3) % 8;
+                for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
+                    if (i <= burstIndex) {
+                        button.put(ANIMATIONS_SLOT[i], new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(foundColor.getColorByte()).build(), true));
+                    } else {
+                        button.put(ANIMATIONS_SLOT[i], new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(0).build(), true));
+                    }
+                }
+                button.put(INPUT_SLOT, new DisplayButton(new ItemBuilder(Material.INK_SACK)
+                        .name("&a能量汇聚中!")
+                        .durability(Math.min(burstIndex + 8, 15))
+                        .build(), true));
+            }
+            // 第四阶段：完成 (60+ tick)
+            else {
                 for (int i : ANIMATIONS_SLOT) {
                     button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(foundColor.getColorByte()).build(), true));
                 }
-            } else if (animationData.getAnimationTick() == 2 || animationData.getAnimationTick() == 3 || animationData.getAnimationTick() == 6 || animationData.getAnimationTick() == 7) {
-                for (int i : ANIMATIONS_SLOT) {
-                    button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(0).build(), true));
-                }
-            } else {
-                if (animationData.getAnimationTick() <= 23) {
-                    int slot = animationData.getAnimationTick() % 8;
-                    for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
-                        if (slot == i) {
-                            button.put(ANIMATIONS_SLOT[i], new AnimationButton(animationData.getColor()));
-                        } else {
-                            button.put(ANIMATIONS_SLOT[i], new AnimationButton(0));
-                        }
-                    }
-                    button.put(INPUT_SLOT, new DisplayButton(new ItemBuilder(Material.INK_SACK)
-                            .name("&a正在选择!")
-                            .durability(Math.min(animationData.getAnimationTick() - 7, 15))
-                            .build(), true));
-                }
+                button.put(INPUT_SLOT, new DisplayButton(new ItemBuilder(Material.INK_SACK)
+                        .name("&a附魔完成!")
+                        .durability(10)
+                        .build(), true));
             }
 
         } else {
             for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
-                if (animationData.getAnimationTick() / 2 == i) {
+                if (animationData.getAnimationTick() / 4 == i) {
                     button.put(ANIMATIONS_SLOT[i], new AnimationButton(animationData.getColor()));
                 } else {
                     button.put(ANIMATIONS_SLOT[i], new AnimationButton(0));
@@ -214,7 +249,8 @@ public class MythicWellMenu extends Menu {
                 button.put(26, new EnchantmentDisplayButton(1));
                 button.put(35, new EnchantmentDisplayButton(2));
             } else {
-                int currentTick = (int) (Utils.toUnsignedInt(animationData.getAnimationGlobalTick()) / 2L);
+                // 调整物品展示切换速度：每8个tick切换一次
+                int currentTick = (int) (Utils.toUnsignedInt(animationData.getAnimationGlobalTick()) / 8L);
                 button.put(CLICK_SLOT - 2, new DisplayButton(stacks[currentTick % stacks.length], true));
                 button.put(CLICK_SLOT, new EnchantButton(enchantingItem, this));
             }
