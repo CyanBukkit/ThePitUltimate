@@ -1,5 +1,6 @@
 package net.mizukilab.pit.enchantment.menu;
 
+import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import io.irina.backports.utils.SWMRHashTable;
 import lombok.Getter;
@@ -23,6 +24,7 @@ import net.mizukilab.pit.util.menu.Button;
 import net.mizukilab.pit.util.menu.Menu;
 import net.mizukilab.pit.util.menu.buttons.DisplayButton;
 import net.mizukilab.pit.util.random.RandomUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -43,7 +45,6 @@ import java.util.Map;
 @Setter
 public class MythicWellMenu extends Menu {
 
-    // 神话之井中间3x3区域的动画槽位，按照指定顺序：19->10->11->12->21->30->29->28
     private final int[] ANIMATIONS_SLOT = new int[]{
         19, 10, 11, 12, 21, 30, 29, 28
     };
@@ -141,22 +142,17 @@ public class MythicWellMenu extends Menu {
             }
 
             int tick = animationData.getAnimationTick();
-            
-            // 第一阶段：准备阶段 (0-11 tick)
             if (tick <= 11) {
-                if (tick == 0 || tick == 3 || tick == 6 || tick == 9) {
-                    // 所有方块亮起
-                    for (int i : ANIMATIONS_SLOT) {
-                        button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(foundColor.getColorByte()).build(), true));
-                    }
-                } else {
-                    // 方块熄灭
-                    for (int i : ANIMATIONS_SLOT) {
-                        button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(0).build(), true));
-                    }
+                byte[] colors = {14, 1, 4, 5, 11, 10, 6, 0};
+                byte currentColor = colors[tick % colors.length];
+                for (int i : ANIMATIONS_SLOT) {
+                    button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(currentColor).build(), true));
                 }
+                button.put(INPUT_SLOT, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE)
+                        .name("&a能量共鸣中!")
+                        .durability(currentColor)
+                        .build(), true));
             }
-            // 第二阶段：旋转能量聚集 (12-35 tick)
             else if (tick <= 35) {
                 int rotationIndex = ((tick - 12) / 3) % 8;
                 for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
@@ -171,7 +167,6 @@ public class MythicWellMenu extends Menu {
                         .durability(Math.min((tick - 12) / 3, 15))
                         .build(), true));
             }
-            // 第三阶段：能量聚集 (36-59 tick)
             else if (tick <= 59) {
                 int burstIndex = ((tick - 36) / 3) % 8;
                 for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
@@ -186,20 +181,35 @@ public class MythicWellMenu extends Menu {
                         .durability(Math.min(burstIndex + 8, 15))
                         .build(), true));
             }
-            // 第四阶段：完成 (60+ tick)
             else {
+                String enchantingItem = profile.getEnchantingItem();
+                ItemStack itemStack = InventoryUtil.deserializeItemStack(enchantingItem);
                 for (int i : ANIMATIONS_SLOT) {
                     button.put(i, new DisplayButton(new ItemBuilder(Material.STAINED_GLASS_PANE).name("&c").durability(foundColor.getColorByte()).build(), true));
                 }
-                button.put(INPUT_SLOT, new DisplayButton(new ItemBuilder(Material.INK_SACK)
-                        .name("&a附魔完成!")
-                        .durability(10)
-                        .build(), true));
+                if (itemStack != null && itemStack.getType() != Material.AIR) {
+                    button.put(INPUT_SLOT, new EnchantDisplayButton(itemStack, this, false));
+                    button.put(17, new EnchantmentDisplayButton(0));
+                    button.put(26, new EnchantmentDisplayButton(1));
+                    button.put(35, new EnchantmentDisplayButton(2));
+                    button.put(CLICK_SLOT, new EnchantButton(itemStack, this));
+                    Integer tier = ItemUtil.getItemIntData(itemStack, "tier");
+                    if (tier != null && tier == (foundColor == MythicColor.DARK ? 1 : 2)) {
+                        button.put(14, new EnchantSinceButton(this, foundColor));
+                    } else if (tier != null && tier != (foundColor == MythicColor.DARK ? 2 : 3)) {
+                    }
+                } else {
+                    button.put(INPUT_SLOT, new DisplayButton(new ItemBuilder(Material.EMERALD)
+                            .name("&a&l附魔完成!")
+                            .lore("&7附魔已成功完成")
+                            .build(), true));
+                }
             }
 
         } else {
             for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
-                if (animationData.getAnimationTick() / 4 == i) {
+                int currentPosition = (animationData.getAnimationTick() / 4) % 8;
+                if (currentPosition == i) {
                     button.put(ANIMATIONS_SLOT[i], new AnimationButton(animationData.getColor()));
                 } else {
                     button.put(ANIMATIONS_SLOT[i], new AnimationButton(0));
@@ -249,7 +259,6 @@ public class MythicWellMenu extends Menu {
                 button.put(26, new EnchantmentDisplayButton(1));
                 button.put(35, new EnchantmentDisplayButton(2));
             } else {
-                // 调整物品展示切换速度：每8个tick切换一次
                 int currentTick = (int) (Utils.toUnsignedInt(animationData.getAnimationGlobalTick()) / 8L);
                 button.put(CLICK_SLOT - 2, new DisplayButton(stacks[currentTick % stacks.length], true));
                 button.put(CLICK_SLOT, new EnchantButton(enchantingItem, this));
@@ -408,10 +417,37 @@ public class MythicWellMenu extends Menu {
 
     @Override
     public void onClose(Player player) {
+
+        if (animationData.isStartEnchanting() && !animationData.isFinished()) {
+
+            player.sendMessage(CC.translate("&c附魔进行中，无法关闭界面！"));
+            player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1, 1.2F);
+
+            // 延迟重新打开菜单，并确保动画继续运行
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                if (player.isOnline()) {
+                    // 确保动画数据仍在运行列表中
+                    if (!runnable.getAnimations().containsKey(player.getUniqueId())) {
+                        runnable.getAnimations().put(player.getUniqueId(), this.animationData);
+                    }
+                    
+                    // 重新打开菜单
+                    this.openMenu(player);
+                    
+                    // 强制刷新一次动画状态，确保同步
+                    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                        if (player.isOnline() && Menu.currentlyOpenedMenus.get(player.getName()) instanceof MythicWellMenu) {
+                            this.openMenu(player);
+                        }
+                    }, 2L);
+                }
+            }, 1L);
+            return;
+        }
+        
+        // 正常关闭逻辑
         runnable.sendReset(player);
         this.animationData.setFinished(true);
         runnable.getAnimations().remove(player.getUniqueId());
-
-        //nothing to do
     }
 }

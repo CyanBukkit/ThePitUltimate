@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -63,8 +64,19 @@ public class AnimationRunnable extends BukkitRunnable {
         synchronized (animations) {
             final Object2ObjectOpenHashMap<UUID, AnimationData> removeMap = new Object2ObjectOpenHashMap<>(animations);
             removeMap.forEach((uuid, animationData) -> {
-                if (!animationData.getPlayer().isOnline() ||
-                        !(Menu.currentlyOpenedMenus.get(animationData.getPlayer().getName()) instanceof MythicWellMenu)) {
+                // 如果玩家不在线，直接移除
+                if (!animationData.getPlayer().isOnline()) {
+                    animations.remove(uuid);
+                    return;
+                }
+
+                // 如果正在附魔中，不要移除动画数据，即使GUI暂时不是MythicWellMenu
+                if (animationData.isStartEnchanting() && !animationData.isFinished()) {
+                    return;
+                }
+                
+                // 只有在非附魔状态下且不在MythicWellMenu中时才移除
+                if (!(Menu.currentlyOpenedMenus.get(animationData.getPlayer().getName()) instanceof MythicWellMenu)) {
                     animations.remove(uuid);
                 }
             });
@@ -108,34 +120,25 @@ public class AnimationRunnable extends BukkitRunnable {
                     if (foundColor == null) {
                         continue;
                     }
-
-                    // 增强的附魔动画序列（加快速度）
                     handleEnchantingAnimation(data, player, foundColor, menu);
-
                 } else {
-                    if (data.animationTick > 28) {  // 8个位置 * 4tick = 32，减1为31，但用28更合适
-                        data.animationTick = 0;
-                    }
-
-                    if (data.animationTick % 4 != 0) {  // 改为每4tick切换一次
+                    if (data.animationTick % 4 != 0) {
                         data.animationTick++;
                         continue;
                     }
 
-                    int realTick = data.animationTick / 4;  // 对应调整计算
+                    int realTick = (data.animationTick / 4) % 8;
 
-
-                    if (Menu.currentlyOpenedMenus.get(data.getPlayer().getName()) instanceof MythicWellMenu) {
+                    if (menu instanceof MythicWellMenu) {
                         menu.openMenu(data.getPlayer());
                     }
 
-                    Location location = animationLocations.get(realTick);
-
-                    if (data.animationTick == 0) {
-                        data.player.sendBlockChange(animationLocations.get(7), Material.STAINED_GLASS, (byte) 0);
-                    } else {
-                        data.player.sendBlockChange(animationLocations.get(realTick - 1), Material.STAINED_GLASS, (byte) 0);
+                    if (data.animationTick > 0) {
+                        int prevIndex = (realTick - 1 + 8) % 8;
+                        data.player.sendBlockChange(animationLocations.get(prevIndex), Material.STAINED_GLASS, (byte) 0);
                     }
+
+                    Location location = animationLocations.get(realTick);
                     data.player.sendBlockChange(location, Material.STAINED_GLASS, data.color);
                 }
                 data.animationTick++;
@@ -143,53 +146,30 @@ public class AnimationRunnable extends BukkitRunnable {
         }
     }
 
-    /**
-     * 处理附魔过程中的炫酷动画（调慢速度）
-     */
     private void handleEnchantingAnimation(AnimationData data, Player player, MythicColor foundColor, Menu menu) {
         int tick = data.animationTick;
-
-        // 第一阶段：准备阶段 (0-11 tick) - 延长时间
         if (tick <= 11) {
-            if (tick == 0 || tick == 3 || tick == 6 || tick == 9) {
-                // 所有方块同时亮起
-                for (Location location : animationLocations) {
-                    player.sendBlockChange(location, Material.STAINED_GLASS, foundColor.getColorByte());
-                }
-                // 播放准备音效
+            byte[] colors = {14, 1, 4, 5, 11, 10, 6, 0};
+            byte currentColor = colors[tick % colors.length];
+
+            for (Location location : animationLocations) {
+                player.sendBlockChange(location, Material.STAINED_GLASS, currentColor);
+            }
+            if (tick % 3 == 0) {
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1.5F + (tick / 3) * 0.1F);
-
-                // 添加粒子效果
                 spawnParticles(player, "SPELL_MOB", foundColor);
-
-            } else if (tick == 1 || tick == 2 || tick == 4 || tick == 5 || tick == 7 || tick == 8 || tick == 10 || tick == 11) {
-                // 方块熄灭
-                for (Location location : animationLocations) {
-                    player.sendBlockChange(location, Material.STAINED_GLASS, (byte) 0);
-                }
-                if (tick % 3 == 1) {  // 只在特定tick播放音效
-                    player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 0.8F);
-                }
             }
         }
-        // 第二阶段：旋转能量聚集 (12-35 tick) - 大幅延长时间
         else if (tick <= 35) {
-            int rotationIndex = ((tick - 12) / 3) % 8;  // 每3tick切换一个位置，更慢
-
-            // 清除所有方块
+            int rotationIndex = ((tick - 12) / 3) % 8;
             for (Location location : animationLocations) {
                 player.sendBlockChange(location, Material.STAINED_GLASS, (byte) 0);
             }
-
-            // 在当前位置显示方块
             player.sendBlockChange(animationLocations.get(rotationIndex), Material.STAINED_GLASS, foundColor.getColorByte());
 
-            // 渐强音效
-            if ((tick - 12) % 3 == 0) {  // 每3tick播放一次音效
+            if ((tick - 12) % 3 == 0) {
                 float pitch = 0.5F + ((tick - 12) / 3) * 0.15F;
                 player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, pitch);
-
-                // 螺旋粒子效果
                 spawnSpiralParticles(player, foundColor);
             }
         }
@@ -204,99 +184,83 @@ public class AnimationRunnable extends BukkitRunnable {
             if ((tick - 36) % 3 == 0) {
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1.0F + burstIndex * 0.1F);
                 player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.5F, 2.0F);
-
-                // 魔法粒子效果（替代爆炸）
                 spawnMagicParticles(player, foundColor);
             }
 
-            // 在最后一个tick播放完成效果
             if (tick == 59) {
-                // 播放成功音效
                 player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1.2F);
                 player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 0.5F, 1.5F);
-
-                // 最终魔法粒子效果
                 spawnFinalMagicParticles(player, foundColor);
             }
         }
-        // 第四阶段：完成 (60+ tick)
         else {
-            data.finished = true;
+            if (!data.finished) {
+                data.finished = true;
 
-            // 最终完成效果
-            for (Location location : animationLocations) {
-                player.sendBlockChange(location, Material.STAINED_GLASS, foundColor.getColorByte());
-            }
-
-            // 成功音效
-            player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1.0F);
-            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 2.0F);
-
-            // 最终粒子效果
-            spawnFinalBurstParticles(player, foundColor);
-
-            // 确保菜单正确刷新，避免被关闭
-            Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-                if (player.isOnline() && Menu.currentlyOpenedMenus.get(player.getName()) instanceof MythicWellMenu) {
-                    menu.openMenu(player);
+                for (Location location : animationLocations) {
+                    player.sendBlockChange(location, Material.STAINED_GLASS, foundColor.getColorByte());
                 }
-            });
+
+                player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1.0F);
+                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 2.0F);
+                spawnFinalBurstParticles(player, foundColor);
+
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+                String currentItemStr = profile.getEnchantingItem();
+                if (currentItemStr != null) {
+                    ItemStack currentItem = InventoryUtil.deserializeItemStack(currentItemStr);
+                    if (currentItem != null && currentItem.getType() != Material.AIR) {
+                        profile.setEnchantingItem(InventoryUtil.serializeItemStack(currentItem));
+                    }
+                }
+
+                Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                    if (player.isOnline()) {
+                        Menu currentMenu = Menu.currentlyOpenedMenus.get(player.getName());
+                        if (currentMenu instanceof MythicWellMenu) {
+                            currentMenu.openMenu(player);
+                        }
+                    }
+                });
+
+            }
             return;
         }
-
         Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
-            if (player.isOnline() && Menu.currentlyOpenedMenus.get(player.getName()) instanceof MythicWellMenu) {
-                menu.openMenu(player);
+            if (player.isOnline()) {
+                Menu currentMenu = Menu.currentlyOpenedMenus.get(player.getName());
+                if (currentMenu instanceof MythicWellMenu) {
+                    currentMenu.openMenu(player);
+                }
             }
         });
     }
-
-    /**
-     * 生成基础粒子效果
-     */
     private void spawnParticles(Player player, String particleType, MythicColor color) {
         Location center = player.getLocation().add(0, 1, 0);
         int[] rgb = ParticleUtil.getColorFromMythicColor(color.getInternalName());
-
-        // 创建魔法阵效果
         ParticleUtil.createMagicCircleParticles(player, center, 1.5, rgb[0], rgb[1], rgb[2]);
-
-        // 播放额外的视觉音效
         player.playSound(center, Sound.FIZZ, 0.5F, 1.5F);
     }
 
-    /**
-     * 生成螺旋粒子效果
-     */
     private void spawnSpiralParticles(Player player, MythicColor color) {
         Location center = player.getLocation().add(0, 1, 0);
         int[] rgb = ParticleUtil.getColorFromMythicColor(color.getInternalName());
 
-        // 螺旋上升的粒子效果
         ParticleUtil.createSpiralParticles(player, center, rgb[0], rgb[1], rgb[2]);
         player.playSound(player.getLocation(), Sound.PORTAL, 0.3F, 2.0F);
     }
 
-    /**
-     * 生成魔法粒子效果（替代爆炸）
-     */
     private void spawnMagicParticles(Player player, MythicColor color) {
         Location center = player.getLocation().add(0, 1, 0);
         int[] rgb = ParticleUtil.getColorFromMythicColor(color.getInternalName());
 
-        // 魔法能量聚集效果
         ParticleUtil.createMagicParticles(player, center, rgb[0], rgb[1], rgb[2]);
         player.playSound(player.getLocation(), Sound.PORTAL, 0.3F, 1.5F);
     }
-
-    /**
-     * 生成最终魔法粒子效果
-     */
     private void spawnFinalMagicParticles(Player player, MythicColor color) {
         Location center = player.getLocation().add(0, 1, 0);
         int[] rgb = ParticleUtil.getColorFromMythicColor(color.getInternalName());
 
-        // 最终魔法完成效果
         ParticleUtil.createSpiralParticles(player, center, rgb[0], rgb[1], rgb[2]);
         player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE, 1.0F, 1.5F);
     }
@@ -309,6 +273,7 @@ public class AnimationRunnable extends BukkitRunnable {
         player.playSound(player.getLocation(), Sound.FIREWORK_LARGE_BLAST, 1.0F, 1.0F);
         player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE, 1.0F, 1.5F);
     }
+
 
     public void sendReset(Player player) {
         for (Location location : animationLocations) {

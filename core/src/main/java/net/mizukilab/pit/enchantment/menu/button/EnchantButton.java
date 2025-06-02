@@ -107,13 +107,25 @@ public class EnchantButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         try {
-            if (item == null || item.getType() == Material.AIR) {
+            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+            String enchantingItemStr = profile.getEnchantingItem();
+            
+            ItemStack currentItem = null;
+            if (enchantingItemStr != null) {
+                currentItem = InventoryUtil.deserializeItemStack(enchantingItemStr);
+            }
+            
+            if (currentItem == null || currentItem.getType() == Material.AIR) {
+                currentItem = this.item;
+            }
+            
+            if (currentItem == null || currentItem.getType() == Material.AIR) {
                 return getDefaultDisplayItem();
             }
-            IMythicItem mythicItem = getMythicItem(item);
+            
+            IMythicItem mythicItem = Utils.getMythicItem0(currentItem);
             MythicColor color = MythicColor.valueOf(ItemUtil.getItemStringData(mythicItem.toItemStack(), "mythic_color").toUpperCase());
             int level = mythicItem.getTier();
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
             List<String> lines = new ArrayList<>();
             if (level < (color == MythicColor.DARK ? 2 : 3)) {
                 lines.add("&7升级至: &a" + RomanUtil.convert(level + 1) + " 阶");
@@ -159,15 +171,29 @@ public class EnchantButton extends Button {
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
-        if (item == null || item.getType() == Material.AIR) {
+        // 从profile中获取最新的物品数据，而不是使用构造函数传入的旧数据
+        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        String enchantingItemStr = profile.getEnchantingItem();
+        
+        ItemStack actualItem = null;
+        if (enchantingItemStr != null) {
+            actualItem = InventoryUtil.deserializeItemStack(enchantingItemStr);
+        }
+        
+        // 如果profile中没有物品或物品为空，则使用传入的item作为备用
+        if (actualItem == null || actualItem.getType() == Material.AIR) {
+            actualItem = this.item;
+        }
+        
+        if (actualItem == null || actualItem.getType() == Material.AIR) {
             return;
         }
 
-        IMythicItem mythicItem = getMythicItem(item);
+        IMythicItem mythicItem = Utils.getMythicItem0(actualItem);
 
         if (mythicItem == null) return;
 
-        final String mythicColor = ItemUtil.getItemStringData(item, "mythic_color");
+        final String mythicColor = ItemUtil.getItemStringData(actualItem, "mythic_color");
         if (mythicColor == null) {
             return;
         }
@@ -186,7 +212,6 @@ public class EnchantButton extends Button {
         if (level >= (color == MythicColor.DARK ? 2 : 3)) {
             return;
         }
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         if (profile.getCoins() < getPrice(player, level + 1, color)) {
             return;
         }
@@ -199,10 +224,12 @@ public class EnchantButton extends Button {
                 player.sendMessage(CC.translate("&c请放入一条额外的 " + color.getChatColor() + color.getDisplayName() + "色神话之甲 &c才能附魔!"));
                 return;
             }
+        } else {
+            player.sendMessage(CC.translate("&e[调试] 不需要材料，等级: " + level + ", 需要材料的等级: " + (color == MythicColor.DARK ? 1 : 2)));
         }
         profile.setCoins(profile.getCoins() - getPrice(player, level + 1, color));
-        //handle enchant
-        doEnchant(item, player, mythicItem);
+        //handle enchant - 使用最新的物品数据
+        doEnchant(actualItem, player, mythicItem);
 
         menu.getAnimationData().setFinished(false);
         menu.getAnimationData().setStartEnchanting(true);

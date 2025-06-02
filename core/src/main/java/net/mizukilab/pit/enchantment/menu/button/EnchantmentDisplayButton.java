@@ -46,6 +46,13 @@ public class EnchantmentDisplayButton extends Button {
             return getEmptySlot("mythicItem为null");
         }
 
+        ItemStack refreshedItem = InventoryUtil.deserializeItemStack(InventoryUtil.serializeItemStack(mythicItem.toItemStack()));
+        mythicItem = Utils.getMythicItem0(refreshedItem);
+        
+        if (mythicItem == null) {
+            return getEmptySlot("刷新后mythicItem为null");
+        }
+
         if (!mythicItem.isEnchanted()) {
             return getEmptySlot("物品未附魔");
         }
