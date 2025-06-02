@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,7 +58,7 @@ public class EnchantmentDisplayButton extends Button {
 
         List<Map.Entry<AbstractEnchantment, Integer>> enchantList = enchantments.entrySet()
                 .stream()
-                .sorted((e1, e2) -> e1.getKey().getEnchantName().compareTo(e2.getKey().getEnchantName()))
+                .sorted(Comparator.comparing(e -> e.getKey().getEnchantName()))
                 .collect(Collectors.toList());
 
         if (enchantIndex >= enchantList.size()) {
