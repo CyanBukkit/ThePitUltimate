@@ -221,7 +221,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     }
 
     private void postLoad() {
-     loadEventPoller();
+        loadEventPoller();
     }
 
     private void preLoad(boolean whiteList) throws Exception {
@@ -251,6 +251,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.initBossBar();
 
         this.initPet();
+        Bukkit.getPluginManager().registerEvents(new PlayerMoveHandler(), this);
         this.signGui = new SignGui(this);
 
         this.rebootRunnable = new RebootRunnable();
