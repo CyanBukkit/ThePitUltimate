@@ -5,9 +5,9 @@ import cn.charlotte.pit.data.PlayerProfile;
 import io.irina.backports.utils.SWMRHashTable;
 import lombok.Getter;
 import lombok.Setter;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.enchantment.menu.button.*;
 import net.mizukilab.pit.enchantment.runnable.AnimationRunnable;
-import net.mizukilab.pit.item.DyeColor;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.item.MythicColor;
 import net.mizukilab.pit.item.type.mythic.MagicFishingRod;
@@ -33,7 +33,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ import java.util.Map;
 public class MythicWellMenu extends Menu {
 
     private final int[] ANIMATIONS_SLOT = new int[]{
-        19, 10, 11, 12, 21, 30, 29, 28
+            19, 10, 11, 12, 21, 30, 29, 28
     };
     private final int INPUT_SLOT = 20;
     private final int CLICK_SLOT = 25;
@@ -54,13 +53,14 @@ public class MythicWellMenu extends Menu {
     private AnimationRunnable.AnimationData animationData;
 
     static ItemStack[] stacks = null;
+
     static {
         List<ItemStack> stacksList = new ArrayList<>();
         stacksList.add(new MythicSwordItem().toItemStack());
-        stacksList.add( new MythicBowItem().toItemStack());
+        stacksList.add(new MythicBowItem().toItemStack());
         stacksList.add(new MagicFishingRod().toItemStack());
         MythicLeggingsItem mythicLeggingsItem = new MythicLeggingsItem();
-        for (MythicColor color : MythicColor.values()){
+        for (MythicColor color : MythicColor.values()) {
             mythicLeggingsItem.color = color;
             stacksList.add(mythicLeggingsItem.toItemStack());
         }
@@ -108,7 +108,7 @@ public class MythicWellMenu extends Menu {
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 return button;
             }
-            button.put(INPUT_SLOT, new EnchantDisplayButton(itemStack, this,false));
+            button.put(INPUT_SLOT, new EnchantDisplayButton(itemStack, this, false));
             button.put(CLICK_SLOT, new EnchantButton(itemStack, this));
 
             button.put(17, new EnchantmentDisplayButton(0));
@@ -152,8 +152,7 @@ public class MythicWellMenu extends Menu {
                         .name("&a能量共鸣中!")
                         .durability(currentColor)
                         .build(), true));
-            }
-            else if (tick <= 35) {
+            } else if (tick <= 35) {
                 int rotationIndex = ((tick - 12) / 3) % 8;
                 for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
                     if (rotationIndex == i) {
@@ -166,8 +165,7 @@ public class MythicWellMenu extends Menu {
                         .name("&a正在聚集能量!")
                         .durability(Math.min((tick - 12) / 3, 15))
                         .build(), true));
-            }
-            else if (tick <= 59) {
+            } else if (tick <= 59) {
                 int burstIndex = ((tick - 36) / 3) % 8;
                 for (int i = 0; i < ANIMATIONS_SLOT.length; i++) {
                     if (i <= burstIndex) {
@@ -180,8 +178,7 @@ public class MythicWellMenu extends Menu {
                         .name("&a能量汇聚中!")
                         .durability(Math.min(burstIndex + 8, 15))
                         .build(), true));
-            }
-            else {
+            } else {
                 String enchantingItem = profile.getEnchantingItem();
                 ItemStack itemStack = InventoryUtil.deserializeItemStack(enchantingItem);
                 for (int i : ANIMATIONS_SLOT) {
@@ -251,7 +248,7 @@ public class MythicWellMenu extends Menu {
             } else {
                 this.animationData.setColor((byte) 6);
             }
-            if(enchantingItem.getType() != Material.AIR) {
+            if (enchantingItem.getType() != Material.AIR) {
                 button.put(INPUT_SLOT, new EnchantDisplayButton(enchantingItem, this, false));
                 button.put(CLICK_SLOT, new EnchantButton(enchantingItem, this));
 
@@ -418,33 +415,35 @@ public class MythicWellMenu extends Menu {
     @Override
     public void onClose(Player player) {
 
-        if (animationData.isStartEnchanting() && !animationData.isFinished()) {
+        if (!NewConfiguration.INSTANCE.getRapidEnchanting()) {
+            if (animationData.isStartEnchanting() && !animationData.isFinished()) {
 
-            player.sendMessage(CC.translate("&c附魔进行中，无法关闭界面！"));
-            player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1, 1.2F);
+                player.sendMessage(CC.translate("&c附魔进行中，无法关闭界面！"));
+                player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1, 1.2F);
 
-            // 延迟重新打开菜单，并确保动画继续运行
-            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
-                if (player.isOnline()) {
-                    // 确保动画数据仍在运行列表中
-                    if (!runnable.getAnimations().containsKey(player.getUniqueId())) {
-                        runnable.getAnimations().put(player.getUniqueId(), this.animationData);
-                    }
-                    
-                    // 重新打开菜单
-                    this.openMenu(player);
-                    
-                    // 强制刷新一次动画状态，确保同步
-                    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
-                        if (player.isOnline() && Menu.currentlyOpenedMenus.get(player.getName()) instanceof MythicWellMenu) {
-                            this.openMenu(player);
+                // 延迟重新打开菜单，并确保动画继续运行
+                Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                    if (player.isOnline()) {
+                        // 确保动画数据仍在运行列表中
+                        if (!runnable.getAnimations().containsKey(player.getUniqueId())) {
+                            runnable.getAnimations().put(player.getUniqueId(), this.animationData);
                         }
-                    }, 2L);
-                }
-            }, 1L);
-            return;
+
+                        // 重新打开菜单
+                        this.openMenu(player);
+
+                        // 强制刷新一次动画状态，确保同步
+                        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                            if (player.isOnline() && Menu.currentlyOpenedMenus.get(player.getName()) instanceof MythicWellMenu) {
+                                this.openMenu(player);
+                            }
+                        }, 2L);
+                    }
+                }, 1L);
+                return;
+            }
         }
-        
+
         // 正常关闭逻辑
         runnable.sendReset(player);
         this.animationData.setFinished(true);

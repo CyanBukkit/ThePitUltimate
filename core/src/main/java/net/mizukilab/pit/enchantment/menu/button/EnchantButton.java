@@ -224,8 +224,6 @@ public class EnchantButton extends Button {
                 player.sendMessage(CC.translate("&c请放入一条额外的 " + color.getChatColor() + color.getDisplayName() + "色神话之甲 &c才能附魔!"));
                 return;
             }
-        } else {
-            player.sendMessage(CC.translate("&e[调试] 不需要材料，等级: " + level + ", 需要材料的等级: " + (color == MythicColor.DARK ? 1 : 2)));
         }
         profile.setCoins(profile.getCoins() - getPrice(player, level + 1, color));
         //handle enchant - 使用最新的物品数据
@@ -718,10 +716,6 @@ public class EnchantButton extends Button {
         return abstractEnchantment instanceof ILimit;
     }
 
-    public static boolean isPlayerBlackList(Player player) {
-        List<String> BLACKLIST = List.of("TongXin", "yizhimeng728");
-        return BLACKLIST.contains(player.getName());
-    }
 
     private boolean shouldAnnouncement(Player player, MythicColor color, AbstractPitItem mythicItem, List<AbstractEnchantment> enchantments, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> rareResults) {
         AbstractEnchantment enchantment;

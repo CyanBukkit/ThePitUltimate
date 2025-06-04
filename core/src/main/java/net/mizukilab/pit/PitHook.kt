@@ -17,8 +17,7 @@ import net.mizukilab.pit.command.PitCommands
 import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.command.handler.HandHasItemValidator
 import net.mizukilab.pit.command.handler.metaKey
-import net.mizukilab.pit.config.NewConfiguration
-import net.mizukilab.pit.config.TabConfiguration
+import net.mizukilab.pit.config.*
 import net.mizukilab.pit.data.operator.ProfileOperator
 import net.mizukilab.pit.enchantment.type.addon.AngelArmsEnchant
 import net.mizukilab.pit.enchantment.type.aqua.ClubRodEnchant
@@ -163,7 +162,6 @@ object PitHook {
 
     }
 
-
     private fun checkBlackList() {
         val blackList = listOf("Sentinel")
 
@@ -272,6 +270,7 @@ object PitHook {
     fun loadConfig() {
         try {
             println("Loaded config...")
+
             NewConfiguration.loadFile()
             NewConfiguration.load()
             TabConfiguration.loadFile()

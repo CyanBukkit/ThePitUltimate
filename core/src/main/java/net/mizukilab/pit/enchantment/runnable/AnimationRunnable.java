@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.config.PitWorldConfig;
 import net.mizukilab.pit.enchantment.menu.MythicWellMenu;
 import net.mizukilab.pit.item.MythicColor;
@@ -63,23 +64,32 @@ public class AnimationRunnable extends BukkitRunnable {
     public void run() {
         synchronized (animations) {
             final Object2ObjectOpenHashMap<UUID, AnimationData> removeMap = new Object2ObjectOpenHashMap<>(animations);
-            removeMap.forEach((uuid, animationData) -> {
-                // 如果玩家不在线，直接移除
-                if (!animationData.getPlayer().isOnline()) {
-                    animations.remove(uuid);
-                    return;
-                }
+            if (!NewConfiguration.INSTANCE.getRapidEnchanting()) {
+                removeMap.forEach((uuid, animationData) -> {
+                    // 如果玩家不在线，直接移除
+                    if (!animationData.getPlayer().isOnline()) {
+                        animations.remove(uuid);
+                        return;
+                    }
 
-                // 如果正在附魔中，不要移除动画数据，即使GUI暂时不是MythicWellMenu
-                if (animationData.isStartEnchanting() && !animationData.isFinished()) {
-                    return;
-                }
-                
-                // 只有在非附魔状态下且不在MythicWellMenu中时才移除
-                if (!(Menu.currentlyOpenedMenus.get(animationData.getPlayer().getName()) instanceof MythicWellMenu)) {
-                    animations.remove(uuid);
-                }
-            });
+                    // 如果正在附魔中，不要移除动画数据，即使GUI暂时不是MythicWellMenu
+                    if (animationData.isStartEnchanting() && !animationData.isFinished()) {
+                        return;
+                    }
+
+                    // 只有在非附魔状态下且不在MythicWellMenu中时才移除
+                    if (!(Menu.currentlyOpenedMenus.get(animationData.getPlayer().getName()) instanceof MythicWellMenu)) {
+                        animations.remove(uuid);
+                    }
+                });
+            } else {
+                removeMap.forEach((uuid, animationData) -> {
+                    if (!animationData.getPlayer().isOnline() ||
+                            !(Menu.currentlyOpenedMenus.get(animationData.getPlayer().getName()) instanceof MythicWellMenu)) {
+                        animations.remove(uuid);
+                    }
+                });
+            }
 
             for (AnimationData data : animations.values()) {
                 data.animationGlobalTick++;
@@ -159,8 +169,7 @@ public class AnimationRunnable extends BukkitRunnable {
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1.5F + (tick / 3) * 0.1F);
                 spawnParticles(player, "SPELL_MOB", foundColor);
             }
-        }
-        else if (tick <= 35) {
+        } else if (tick <= 35) {
             int rotationIndex = ((tick - 12) / 3) % 8;
             for (Location location : animationLocations) {
                 player.sendBlockChange(location, Material.STAINED_GLASS, (byte) 0);
@@ -172,9 +181,7 @@ public class AnimationRunnable extends BukkitRunnable {
                 player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, pitch);
                 spawnSpiralParticles(player, foundColor);
             }
-        }
-
-        else if (tick <= 59) {
+        } else if (tick <= 59) {
             int burstIndex = ((tick - 36) / 3) % 8;
 
             for (int i = 0; i <= burstIndex; i++) {
@@ -192,8 +199,7 @@ public class AnimationRunnable extends BukkitRunnable {
                 player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 0.5F, 1.5F);
                 spawnFinalMagicParticles(player, foundColor);
             }
-        }
-        else {
+        } else {
             if (!data.finished) {
                 data.finished = true;
 
@@ -235,6 +241,7 @@ public class AnimationRunnable extends BukkitRunnable {
             }
         });
     }
+
     private void spawnParticles(Player player, String particleType, MythicColor color) {
         Location center = player.getLocation().add(0, 1, 0);
         int[] rgb = ParticleUtil.getColorFromMythicColor(color.getInternalName());
@@ -257,6 +264,7 @@ public class AnimationRunnable extends BukkitRunnable {
         ParticleUtil.createMagicParticles(player, center, rgb[0], rgb[1], rgb[2]);
         player.playSound(player.getLocation(), Sound.PORTAL, 0.3F, 1.5F);
     }
+
     private void spawnFinalMagicParticles(Player player, MythicColor color) {
         Location center = player.getLocation().add(0, 1, 0);
         int[] rgb = ParticleUtil.getColorFromMythicColor(color.getInternalName());

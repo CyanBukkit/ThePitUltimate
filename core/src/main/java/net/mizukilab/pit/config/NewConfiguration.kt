@@ -6,13 +6,13 @@ import net.mizukilab.pit.item.MythicColor
 import net.mizukilab.pit.listener.CombatListener
 import net.mizukilab.pit.menu.prestige.button.PrestigeStatusButton
 import net.mizukilab.pit.util.level.LevelUtil
-import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import java.io.File
 import java.util.*
 
 object NewConfiguration {
+    var rapidEnchanting = false;
     var repairFeatures = false
     var epicTitleUpdateInterval = 10
     var epicEventTitleAnimation = listOf<String>()
@@ -67,7 +67,7 @@ object NewConfiguration {
 
     fun load() {
         refreshAndSave()
-
+        rapidEnchanting = config.getBoolean("rapid-enchanting", false)
         repairFeatures = config.getBoolean("repair-features", false)
         luckGem = config.getDouble("luck-gem", 0.30)
         forbidEnchant = config.getStringList("forbidEnchant")
@@ -266,6 +266,7 @@ object NewConfiguration {
     )
 
     private val defaults = mapOf(
+        "rapid-enchanting" to rapidEnchanting,
         "repair-features" to repairFeatures,
         "water-marks" to watermarks,
         "luck-gem" to luckGem,

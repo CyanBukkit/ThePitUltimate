@@ -109,7 +109,9 @@ public class GameEffectListener implements Listener {
             if (player.getHealth() <= event.getFinalDamage()) {
                 player.damage(player.getMaxHealth() * 100);
             } else {
-                player.setHealth(player.getHealth() - event.getFinalDamage());
+                double newHealth = player.getHealth() - event.getFinalDamage();
+                // 确保生命值在有效范围内
+                player.setHealth(Math.max(0, Math.min(newHealth, player.getMaxHealth())));
             }
 
             PlayerProfile.getPlayerProfileByUuid(player.getUniqueId())
@@ -340,9 +342,11 @@ public class GameEffectListener implements Listener {
                             damager = (Player) event.getDamager();
                             if (!player.getUniqueId().equals(damager.getUniqueId())) {
                                 damager.damage(0.01, player);
+                                float mirrorDamage = (float) (((enchantLevel * 25 - 25) * 0.01) * finalDamage.get());
+                                double newDamagerHealth = damager.getHealth() - mirrorDamage;
+                                // 确保生命值在有效范围内
+                                damager.setHealth(Math.max(0.1, Math.min(newDamagerHealth, damager.getMaxHealth())));
                             }
-                            float mirrorDamage = (float) (((enchantLevel * 25 - 25) * 0.01) * finalDamage.get());
-                            damager.setHealth(Math.max(0.1, damager.getHealth() - mirrorDamage));
                         }
                     }
                     if (enchantLevel > 0 && finalDamage.get() > 0 && finalDamage.get() < 1000) {
@@ -362,7 +366,8 @@ public class GameEffectListener implements Listener {
             } else { //TODO 修正 一击毙命, 但是event不cancel
                 double v = player.getHealth() - finalDamage.get();
                 if (v > 0) {
-                    player.setHealth(v);
+                    // 确保生命值不超过最大生命值上限
+                    player.setHealth(Math.min(v, player.getMaxHealth()));
                 } else {
                     player.setHealth(0);
                 }
