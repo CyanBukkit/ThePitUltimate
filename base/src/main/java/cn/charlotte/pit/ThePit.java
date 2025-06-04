@@ -152,7 +152,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Setter
     @Getter
     private PointsAPI pointsAPI;
-
+    @Setter
     @Getter
     private String serverId;
     @Getter

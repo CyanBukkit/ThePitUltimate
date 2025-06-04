@@ -12,6 +12,7 @@ import java.io.File
 import java.util.*
 
 object NewConfiguration {
+    var serverId = "null"
     var rapidEnchanting = false;
     var repairFeatures = false
     var epicTitleUpdateInterval = 10
@@ -67,6 +68,7 @@ object NewConfiguration {
 
     fun load() {
         refreshAndSave()
+        serverId = config.getString("server-id", null)
         rapidEnchanting = config.getBoolean("rapid-enchanting", false)
         repairFeatures = config.getBoolean("repair-features", false)
         luckGem = config.getDouble("luck-gem", 0.30)
@@ -199,6 +201,9 @@ object NewConfiguration {
         epicEventTitleAnimation = config.getList("title.event.epic.animation", epicEventTitleAnimation) as List<String>
 
         epicTitleUpdateInterval = config.getInt("title.event.epic.interval", epicTitleUpdateInterval)
+        if (serverId != "null") {
+            ThePit.getInstance().serverId = serverId
+        }
         val pitConfig = ThePit.getInstance().globalConfig
         pitConfig.maxLevel = maxLevel;
         pitConfig.animationForEpicEvent = epicEventTitleAnimation
@@ -266,6 +271,7 @@ object NewConfiguration {
     )
 
     private val defaults = mapOf(
+        "server-id" to "null",
         "rapid-enchanting" to rapidEnchanting,
         "repair-features" to repairFeatures,
         "water-marks" to watermarks,

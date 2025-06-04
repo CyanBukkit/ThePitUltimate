@@ -36,16 +36,20 @@ object PitPapiHook : PlaceholderExpansion() {
             "boost" -> {
                 return CombatListener.eventBoost.toString()
             }
+
             "next_map" -> {
-                val map = ThePit.getInstance().configManager.getPitWorldConfigSpecific(ThePit.getInstance().configManager.cursor + 1L)
-                    if(map != null){
-                        return map.worldName
-                    }
+                val map =
+                    ThePit.getInstance().configManager.getPitWorldConfigSpecific(ThePit.getInstance().configManager.cursor + 1L)
+                if (map != null) {
+                    return map.worldName
+                }
                 return "NO"
             }
+
             "cooldown_switchmap" -> {
                 ThePit.getInstance().mapSelector.remainTime.toString()
             }
+
             "level_tag_roman" -> {
                 return CC.translate(profile?.formattedLevelTagWithRoman ?: "&7[0]")
             }
@@ -65,9 +69,15 @@ object PitPapiHook : PlaceholderExpansion() {
                 }
                 return ""
             }
-            "coins_int" ->{
+
+            "prestige" -> {
+                return profile?.prestige.toString()
+            }
+
+            "coins_int" -> {
                 return profile?.coins?.toInt().toString()
             }
+
             "coins" -> {
                 return profile?.coins?.toString() ?: "0.0"
             }
