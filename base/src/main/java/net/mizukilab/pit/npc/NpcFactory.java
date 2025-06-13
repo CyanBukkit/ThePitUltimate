@@ -13,6 +13,7 @@ import net.jitse.npclib.nms.v1_8_R3.NPC_v1_8_R3;
 import net.mizukilab.pit.npc.runnable.NpcRunnable;
 import net.mizukilab.pit.parm.AutoRegister;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,6 +40,7 @@ public class NpcFactory implements Listener {
         Bukkit.getOnlinePlayers().forEach(this::show);
     }
     public void show(Player player){
+
         pitNpc.forEach(i -> {
             i.getNpc().create();
             if(!i.getNpc().isShown(player)) {

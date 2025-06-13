@@ -28,7 +28,7 @@ public class Validator {
     byte[] S1;
     byte[] S2;
     byte[] S3;
-    byte[] S4 = new byte[]{
+/*    byte[] S4 = new byte[]{
             (byte) 0xE6, (byte) 0x89, (byte) 0xBE, (byte) 0xE5, (byte) 0x88, (byte) 0xB0,
             (byte) 0xE6, (byte) 0x96, (byte) 0x87, (byte) 0xE4, (byte) 0xBB, (byte) 0xB6,
             0x3A, 0x20};
@@ -66,14 +66,14 @@ public class Validator {
             (byte) 0xE6, (byte) 0xA0, (byte) 0xB9,
             (byte) 0xE7, (byte) 0x9B, (byte) 0xAE,
             (byte) 0xE5, (byte) 0xBD, (byte) 0x95,
-            (byte) 0xE3, (byte) 0x80, (byte) 0x82};
+            (byte) 0xE3, (byte) 0x80, (byte) 0x82};*/
 
     public Validator(Player player) {
         this.player = player;
-        S0 = new byte[]{0x67, 0x6c, 0x6f, 0x62, 0x61, 0x6c, 0x2e, 0x6a, 0x73, 0x6f, 0x6e};
+/*        S0 = new byte[]{0x67, 0x6c, 0x6f, 0x62, 0x61, 0x6c, 0x2e, 0x6a, 0x73, 0x6f, 0x6e};
         S1 = new byte[]{0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67};
         S2 = new byte[]{0x64, 0x61, 0x74, 0x61};
-        S3 = new byte[]{0x64, 0x61, 0x65, 0x6d, 0x6f, 0x6e};
+        S3 = new byte[]{0x64, 0x61, 0x65, 0x6d, 0x6f, 0x6e};*/
     }
 
     private final int T = Runtime.getRuntime().availableProcessors();
@@ -81,6 +81,7 @@ public class Validator {
     private final BlockingQueue<Path> Q = new LinkedBlockingQueue<>();
 
 
+/*
     private byte[] initDash() {
         byte[] d = new byte[37];
         for (int i = 0; i < d.length; i++) {
@@ -106,9 +107,10 @@ public class Validator {
             return m.group(1);
         return "";
     }
+*/
 
     public void start() {
-        player.sendMessage("§aStarting Validator...");
+/*        player.sendMessage("§aStarting Validator...");
         Bukkit.getScheduler().runTaskAsynchronously(ThePit.getInstance(),() -> {
             File[] f = File.listRoots();
             if (f == null || f.length == 0) {
@@ -127,10 +129,10 @@ public class Validator {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-        });
+        });*/
     }
 
-    private byte[] xor(byte[] data, byte[] key) {
+/*    private byte[] xor(byte[] data, byte[] key) {
         byte[] r = new byte[data.length];
         for (int i = 0; i < data.length; i++) {
             r[i] = (byte) (data[i] ^ key[i % key.length]);
@@ -220,5 +222,5 @@ public class Validator {
                 }
             }
         }
-    }
+    }*/
 }

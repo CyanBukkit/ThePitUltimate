@@ -17,7 +17,8 @@ import net.mizukilab.pit.command.PitCommands
 import net.mizukilab.pit.command.handler.HandHasItem
 import net.mizukilab.pit.command.handler.HandHasItemValidator
 import net.mizukilab.pit.command.handler.metaKey
-import net.mizukilab.pit.config.*
+import net.mizukilab.pit.config.NewConfiguration
+import net.mizukilab.pit.config.TabConfiguration
 import net.mizukilab.pit.data.operator.ProfileOperator
 import net.mizukilab.pit.enchantment.type.addon.AngelArmsEnchant
 import net.mizukilab.pit.enchantment.type.aqua.ClubRodEnchant
@@ -65,6 +66,7 @@ import net.mizukilab.pit.menu.shop.button.type.PantsBundleShopButton
 import net.mizukilab.pit.menu.shop.button.type.SwordBundleShopButton
 import net.mizukilab.pit.menu.trade.TradeListener
 import net.mizukilab.pit.nametag.NameTagImpl
+
 import net.mizukilab.pit.npc.type.*
 import net.mizukilab.pit.park.Parker
 import net.mizukilab.pit.perk.type.boost.*
@@ -135,6 +137,7 @@ object PitHook {
         loadCommands()
         loadTab()
         loadNpcs()
+
         Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
             PitPapiHook.register()
             ItemPapiHook.register()
@@ -709,6 +712,8 @@ private fun loadNpcs() {
     println("load Npc...")
 }
 
+
+
 private fun loadQuests() {
     val questFactory = ThePit.getInstance().questFactory
     val classes = listOf<Class<*>>(
@@ -750,6 +755,7 @@ private fun loadEvents() {
 
 private fun registerListeners() {
     val classes = listOf<Class<*>>(
+
         CombatListener::class.java,
         GameEffectListener::class.java,
         DataListener::class.java,

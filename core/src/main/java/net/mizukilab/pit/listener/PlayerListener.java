@@ -6,20 +6,26 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.data.sub.PlayerBanData;
 import cn.charlotte.pit.data.sub.PlayerInv;
+import cn.charlotte.pit.event.PitKillEvent;
+import cn.charlotte.pit.event.PitProfileLoadedEvent;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.data.operator.PackedOperator;
 import net.mizukilab.pit.data.operator.ProfileOperator;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
-import cn.charlotte.pit.event.PitKillEvent;
 import net.mizukilab.pit.event.PitPlayerEnchantEvent;
-import cn.charlotte.pit.event.PitProfileLoadedEvent;
 import net.mizukilab.pit.medal.AbstractMedal;
 import net.mizukilab.pit.medal.impl.challenge.LuckyDiamondMedal;
 import net.mizukilab.pit.medal.impl.challenge.TrickleDownMedal;
 import net.mizukilab.pit.menu.item.cactus.CactusMenu;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.runnable.ProfileLoadRunnable;
-import net.mizukilab.pit.util.*;
+import net.mizukilab.pit.util.PitProfileUpdater;
+import net.mizukilab.pit.util.PlayerUtil;
+import net.mizukilab.pit.util.Utils;
+import net.mizukilab.pit.util.VectorUtil;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.inventory.InventoryUtil;
@@ -28,11 +34,8 @@ import net.mizukilab.pit.util.item.ItemUtil;
 import net.mizukilab.pit.util.level.LevelUtil;
 import net.mizukilab.pit.util.random.RandomUtil;
 import net.mizukilab.pit.util.time.TimeUtil;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.*;
 import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -86,9 +89,10 @@ public class PlayerListener implements Listener {
             //post init, when checked
             orLoadOperator.heartBeat();
 
-            this.whenLoaded(prof,player);
+            this.whenLoaded(prof, player);
         });
         event.setJoinMessage(null);
+        event.getPlayer().sendMessage(CC.translate("&eThePitUltimate &7Loaded For Website: &e&lhttps://pit.meowtery.cn/"));
         return orLoadOperator;
     }
 
@@ -143,8 +147,7 @@ public class PlayerListener implements Listener {
     }
 
 
-
-    public void whenLoaded(PlayerProfile load,Player player) {
+    public void whenLoaded(PlayerProfile load, Player player) {
         updateLoginTime(load);
 
         if (load.getProfileFormatVersion() == 0) {
@@ -166,6 +169,7 @@ public class PlayerListener implements Listener {
         }
         load.setLastLoginTime(System.currentTimeMillis());
     }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         ThePit pit = ThePit.getInstance();
@@ -184,7 +188,6 @@ public class PlayerListener implements Listener {
 
         loadData(event);
     }
-
 
 
     @EventHandler
