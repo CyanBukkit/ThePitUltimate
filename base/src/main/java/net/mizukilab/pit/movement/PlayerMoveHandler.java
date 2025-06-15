@@ -398,7 +398,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
                     Location safeLandingLoc = findSafeLandingLocation(landingLoc);
 
                     if (player.isOnline()) {
-                        player.teleport(safeLandingLoc);
+                        player.setPassenger(null);
                         try {
                             player.playSound(player.getLocation(), Sound.FALL_BIG, 0.8f, 1.0f);
                         } catch (Exception e) {
