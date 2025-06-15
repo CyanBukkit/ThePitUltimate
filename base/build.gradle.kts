@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.huanmeng"
-version = /*UUID.randomUUID().toString().substring(0,4);*/"4.3.2"
+version = /*UUID.randomUUID().toString().substring(0,4);*/"4.3.3"
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
@@ -42,8 +42,7 @@ tasks.named<ShadowJar>("shadowJar") {
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
-
-    implementation(fileTree("../packLib"))
+    implementation(fileTree(mapOf("dir" to "../packLib", "include" to listOf("*.jar"))))
     api(libs.reflectionhelper)
     api(libs.hutool.crypto)
     api(libs.book)
