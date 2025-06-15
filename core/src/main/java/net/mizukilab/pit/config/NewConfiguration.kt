@@ -35,7 +35,7 @@ object NewConfiguration {
 
     var customChatFormatEnable = false
     var customChatFormat = "%pit_level_tag_roman% %s&f: %s"
-
+    var alwaysT2Enchant = true
     var scoreboardShowtime = true
 
     var pitSupportPermission = "pit.vip"
@@ -80,7 +80,7 @@ object NewConfiguration {
         lobbyCommand = config.getString("lobby-command", "hub")
 
         dateFormat = config.getString("dateFormat", "MM/dd HH:mm")
-
+        alwaysT2Enchant = config.getBoolean("alwaysT2Enchant",false)
         noobProtect = config.getBoolean("noob-protect.enable")
         noobProtectLevel = config.getInt("noob-protect.level")
         noobDamageBoost = config.getDouble("noob-protect.damage_boost")
@@ -304,6 +304,7 @@ object NewConfiguration {
         "noob-protect.level" to 120,
         "noob-protect.damage_boost" to 1.1,
         "noob-protect.damage_reduce" to 0.9,
+        "alwaysT2Enchant" to false,
 
         //mm兼容
         "mm-listener.mm_mob_a.xp-provide" to "10-100",

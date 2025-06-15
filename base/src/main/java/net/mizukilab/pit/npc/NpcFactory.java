@@ -13,6 +13,7 @@ import net.jitse.npclib.nms.v1_8_R3.NPC_v1_8_R3;
 import net.mizukilab.pit.npc.runnable.NpcRunnable;
 import net.mizukilab.pit.parm.AutoRegister;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +31,16 @@ public class NpcFactory implements Listener {
     NPCLib npcLib = new NPCLib(ThePit.getInstance());
     @Getter
     private final List<AbstractPitNPC> pitNpc = new ArrayList<>();
+    public boolean hasNPC(Entity e) {
+        for (AbstractPitNPC abstractPitNPC : pitNpc) {
+            NPC_v1_8_R3 npc = (NPC_v1_8_R3) abstractPitNPC.getNpc();
+            if (npc.getEntityId() ==e.getEntityId()) {
+                return true;
+            }
+        }
+        return false;
 
+    }
     public void reload(){
         pitNpc.forEach(i -> {
             initNpc(i.getNpc(),i);

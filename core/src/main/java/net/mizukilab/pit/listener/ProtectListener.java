@@ -5,9 +5,12 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.DroppedEntityData;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.data.sub.PlacedBlockData;
+import net.jitse.npclib.nms.v1_8_R3.NPC_v1_8_R3;
 import net.mizukilab.pit.medal.impl.challenge.ObsidianBreakMedal;
+import net.mizukilab.pit.npc.AbstractPitNPC;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.runnable.ClearRunnable;
+import net.mizukilab.pit.util.Log;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.CC;
@@ -35,6 +38,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -184,7 +188,17 @@ public class ProtectListener implements Listener {
         e.getDrops().clear();
         e.setDroppedExp(0);
     }
+    @Deprecated
+    public boolean hasNPC(Entity e) { //inline support TODO removed in future
+        for (AbstractPitNPC abstractPitNPC : ThePit.getInstance().getNpcFactory().getPitNpc()) {
+            NPC_v1_8_R3 npc = (NPC_v1_8_R3) abstractPitNPC.getNpc();
+            if (npc.getEntityId() ==e.getEntityId()) {
+                return true;
+            }
+        }
+        return false;
 
+    }
     @EventHandler(priority = EventPriority.MONITOR)
     private void onPlace(PlayerBucketEmptyEvent event) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getPlayer().getUniqueId());
@@ -255,20 +269,21 @@ public class ProtectListener implements Listener {
             event.setCancelled(true);
         }
     }
-
+    //TODO 自己建立PlayerAttack后会莫名其妙失灵
     @EventHandler(priority = EventPriority.LOW)
-    private void onDamage(EntityDamageEvent event) {
+    private void onFallDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
                 event.setCancelled(true);
+                return;
             }
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 event.setCancelled(true);
                 return;
             }
-            if (PlayerUtil.isStaffSpectating((Player) event.getEntity())) {
-                event.setCancelled(true);
-            }
+//            if (PlayerUtil.isStaffSpectating((Player) event.getEntity())) {
+//                event.setCancelled(true);
+//            }
         }
     }
 
@@ -276,25 +291,27 @@ public class ProtectListener implements Listener {
     public void onDamage(EntityDamageByEntityEvent event) {
         boolean damagerInArena = false;
         boolean entityInArena = false;
-        if (event.getEntity() instanceof Player) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(event.getEntity().getUniqueId());
-            if (!profile.isInArena() && !PlayerUtil.isNPC(event.getEntity())) {
+        Entity entity = event.getEntity();
+        UUID uniqueId = entity.getUniqueId();
+        if (entity instanceof Player) {
+            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(uniqueId);
+            if (!profile.isInArena() && !PlayerUtil.isNPC(entity)) {
                 entityInArena = true;
             }
         }
-        Entity damager = event.getDamager();
-        if (damager instanceof Player) {
+        Entity damager1 = event.getDamager();
+        if (damager1 instanceof Player damager) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
             if (!PlayerUtil.isNPC(damager) && !profile.isInArena()) {
                 damagerInArena = true;
             }
         }
-        if (damager instanceof Projectile) {
-            if (((Projectile) damager).getShooter() instanceof Player) {
-                Player shooter = (Player) (((Projectile) damager).getShooter());
+        if (damager1 instanceof Projectile damager) {
+            if (damager.getShooter() instanceof Player shooter) {
                 if (!PlayerUtil.isNPC(shooter)) {
-                    if (event.getEntity().getUniqueId().equals(shooter.getUniqueId())) {
+                    if (uniqueId.equals(shooter.getUniqueId())) {
                         event.setCancelled(true);
+                        return;
                     }
                     PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(shooter.getUniqueId());
                     if (!profile.isInArena()) {
@@ -303,8 +320,9 @@ public class ProtectListener implements Listener {
                 }
             }
         }
-        event.setCancelled(damagerInArena && entityInArena);
-
+        boolean cancel = damagerInArena && entityInArena;
+        Log.WriteLine("Damager: " + damager1.getName() +  " | " + damagerInArena + " | " + entityInArena + " Result: " + cancel);
+        event.setCancelled(cancel);
 
     }
 
