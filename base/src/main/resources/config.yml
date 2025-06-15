@@ -8,10 +8,8 @@
 #    #{date}
 #
 #
-validate:
-  state: CN
-  token: "{code}"
-
+#没有非必要的定制功能 不需要填!
+eigenToken: ""
 service:
   mongodb:
     ip: 127.0.0.1

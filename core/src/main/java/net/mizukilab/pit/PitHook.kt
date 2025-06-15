@@ -668,7 +668,7 @@ private fun loadPerks() {
         Despot::class.java,
     )
 
-    if (ThePit.getInstance().globalConfig.token == "d06b2f1ee-3950-9104-8895-60e10db58ac") {
+    if (ThePit.getInstance().globalConfig.token == "MyPitNetWork") {
         classes += UberSteakPlus::class.java
     }
 

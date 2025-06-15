@@ -21,20 +21,12 @@ object MagicLoader {
     fun load() {
         Thread {
             try {
-                val token = ThePit.getInstance().globalConfig.token
-                if (token == null || token == "xxx" || try { UUID.fromString(token); false } catch (e: IllegalArgumentException) { true }) {
-                    ThePit.getInstance().sendLogs("§c未检测到凭证，请尽快在 §econfig.yml §c中填写密钥以避免服务器关闭。")
-                    sleep(360)
-                    Bukkit.shutdown()
-                    return@Thread
-                }
                 ThePit.getInstance().info("§e正在验证凭证，请稍候…")
                 val magicLicense = MagicLicense(ThePit.getInstance())
                 val response = magicLicense.authenticate(
-                    "mc.163mc.cn",
+                    "121.4.65.200",
                     ThePit.getInstance().description.name,
                     ThePit.getInstance().description.version,
-                    token,
                     false
                 )
                 ThePit.getInstance().info(

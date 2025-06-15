@@ -69,12 +69,7 @@ public class PitGlobalConfig extends Configuration {
     public int periodForEpicEvent;
     @Getter
     @ConfigData(
-            path = "validate.state"
-    )
-    private String state;
-    @Getter
-    @ConfigData(
-            path = "validate.token"
+            path = "eigenToken"
     )
     private String token;
     @Setter
