@@ -452,7 +452,7 @@ public class EnchantButton extends Button {
         int amount = mythicItem.getEnchantments().size();
         if (amount == 1) { // If this item have only 1 enchantment
             AbstractEnchantment enchantment = null;
-            if (getPlayerMythicBook(player, item)) { //定义不明
+            if (Utils.canUseMythicBook(player, item)) { //定义不明
                 AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
                 mythicItem.getEnchantments().put(rareEnchant, 3);
                 announcement = true;
@@ -469,6 +469,7 @@ public class EnchantButton extends Button {
                 }
                 enchantments.add(enchantment);
                 mythicItem.getEnchantments().put(enchantment, 1);
+                mythicItem.boostedByBook = true;
             } else {
                 for (int i = 0; i < 2; i++) {
                     results.removeAll(enchantments);
@@ -497,7 +498,7 @@ public class EnchantButton extends Button {
                 }
             }
         } else if (amount == 2) { //21 -> 311
-            if (getPlayerMythicBook(player, item)) {
+            if (Utils.canUseMythicBook(player, item)) {
                 AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
                 Object2IntOpenHashMap<AbstractEnchantment> enchantments1 = mythicItem.getEnchantments();
                 int levelCurrentlyEnchantment = 0;
@@ -508,6 +509,7 @@ public class EnchantButton extends Button {
                 announcement = true;
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
                 profile.setEnchantingBook(null);
+                mythicItem.boostedByBook = true;
             } else {
                 results.removeAll(enchantments);
                 AbstractEnchantment enchantment;
@@ -578,7 +580,7 @@ public class EnchantButton extends Button {
 
         if (amount == 1) { // If this item has only 1 enchantment
 
-            boolean useBook = getPlayerMythicBook(player, item);
+            boolean useBook = Utils.canUseMythicBook(player, item);
 
             if (useBook) {
                 AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
@@ -643,7 +645,7 @@ public class EnchantButton extends Button {
             }
         } else if (amount == 2) { //11
             int choice = random.nextInt(2);
-            boolean useBook = getPlayerMythicBook(player, item);
+            boolean useBook = Utils.canUseMythicBook(player, item);
             if (useBook) {
                 choice = 3;
                 AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
@@ -683,7 +685,7 @@ public class EnchantButton extends Button {
         //Tier 1 Enchant Start
         int choice = random.nextInt(4);
 
-        boolean useBook = getPlayerMythicBook(player, item);
+        boolean useBook = Utils.canUseMythicBook(player, item);
         if (useBook) {
             choice = 5;
             AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
@@ -800,24 +802,4 @@ public class EnchantButton extends Button {
         return false;
     }
 
-    //获取玩家是否可在该物品上使用神话之书 可则返回书物品 否则返回null
-    public static boolean getPlayerMythicBook(Player player, ItemStack item) {
-        //设置神话之书物品
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-
-        IMythicItem mythicItem = Utils.getMythicItem(item);
-
-        if (mythicItem.getColor() == MythicColor.RAGE) {
-            return false;
-        }
-
-        if (mythicItem.boostedByBook) {
-            return false;
-        }
-
-        if (profile.getEnchantingBook() != null) {
-            return "mythic_reel".equals(ItemUtil.getInternalName(InventoryUtil.deserializeItemStack(profile.getEnchantingBook())));
-        }
-        return false;
-    }
 }

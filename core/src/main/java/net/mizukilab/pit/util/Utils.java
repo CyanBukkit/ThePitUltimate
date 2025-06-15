@@ -24,6 +24,7 @@ import net.mizukilab.pit.item.type.mythic.MythicLeggingsItem;
 import net.mizukilab.pit.item.type.mythic.MythicSwordItem;
 import net.mizukilab.pit.util.aabb.AABB;
 import net.mizukilab.pit.util.arithmetic.IntegerUtils;
+import net.mizukilab.pit.util.inventory.InventoryUtil;
 import net.mizukilab.pit.util.item.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -320,5 +321,26 @@ public class Utils {
         final AABB playerAABB = new AABB(location.getX(), location.getY(), location.getZ(), location.getX() + 0.8, location.getY() + 2, location.getZ() + 0.8);
         final boolean inArena = !aabb.intersectsWith(playerAABB);
         return inArena;
+    }
+
+    //获取玩家是否可在该物品上使用神话之书 可则返回书物品 否则返回null
+    public static boolean canUseMythicBook(Player player, ItemStack item) {
+        //设置神话之书物品
+        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+
+        IMythicItem mythicItem = getMythicItem(item);
+
+        if (mythicItem.getColor() == MythicColor.RAGE) {
+            return false;
+        }
+
+        if (mythicItem.boostedByBook) {
+            return false;
+        }
+
+        if (profile.getEnchantingBook() != null) {
+            return "mythic_reel".equals(ItemUtil.getInternalName(InventoryUtil.deserializeItemStack(profile.getEnchantingBook())));
+        }
+        return false;
     }
 }
