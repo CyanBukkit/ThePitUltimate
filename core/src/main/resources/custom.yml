@@ -88,42 +88,118 @@ forbidEnchant:
 bounty:
   updateInterval: 1
 rate:
-  dark:
-    vip1:
-      test: pit.vip1
-      value: 0.08
-    vip2:
-      test: pit.vip2
-      value: 0.04
-    default:
-      value: 0.02
-  normal:
-    vip1:
-      test: pit.vip1
-      value: 0.08
-    vip2:
-      test: pit.vip2
-      value: 0.04
-    default:
-      value: 0.02
-  rage:
-    vip1:
-      test: pit.vip1
-      value: 0.08
-    vip2:
-      test: pit.vip2
-      value: 0.04
-    default:
-      value: 0.02
-  sewers:
-    vip1:
-      test: pit.vip1
-      value: 0.08
-    vip2:
-      test: pit.vip2
-      value: 0.04
-    default:
-      value: 0.02
+  1:
+    dark:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    normal:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    rage:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    sewers:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+  2:
+    dark:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    normal:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    rage:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    sewers:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+
+  3:
+    dark:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    normal:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    rage:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
+    sewers:
+      vip1:
+        test: pit.vip1
+        value: 0.08
+      vip2:
+        test: pit.vip2
+        value: 0.04
+      default:
+        value: 0.02
 mythicDropChance:
   vip1:
     test: permission.vip1

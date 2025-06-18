@@ -5,6 +5,8 @@ plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("io.freefair.lombok") version "8.10"
     id("java-library")
+    id("java")
+    id("org.jetbrains.dokka") version "1.9.20" // 请根据需要调整版本号
     kotlin("jvm") version "2.1.20"
     alias(libs.plugins.shadow)
 }
@@ -38,7 +40,6 @@ tasks.named<ShadowJar>("shadowJar") {
     from("build/tmp/processed-resources")
     mergeServiceFiles()
 }
-
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
@@ -84,9 +85,15 @@ kotlin {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
-
+tasks.register<Jar>("dokkaHtmlJar") {
+    dependsOn(tasks.dokkaHtml)
+    archiveClassifier.set("javadoc") // 可视作替代 javadocJar
+    from(tasks.dokkaHtml)
+}
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
+    source = sourceSets["main"].allJava
+    classpath = files()
 }
 
 tasks.build {

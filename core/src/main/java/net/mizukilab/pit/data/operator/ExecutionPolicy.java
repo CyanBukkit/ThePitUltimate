@@ -27,7 +27,7 @@ public interface ExecutionPolicy {
                         }
                         lastBoundPlayer.kickPlayer("An error was occurred on your profile, please contact the administrator to get details. ");
                     }
-                );
+            );
         }
     }
 }

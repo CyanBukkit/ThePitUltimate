@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import java.io.File
 import java.util.*
+import kotlin.collections.HashMap
 
 object NewConfiguration {
     var serverId = "null"
@@ -53,7 +54,7 @@ object NewConfiguration {
 
     lateinit var config: YamlConfiguration
 
-    private val rareRate = HashMap<MythicColor, MutableList<Rate>>()
+    private val rareRate = HashMap<Int,HashMap<MythicColor, MutableList<Rate>>>()
 
     private val mythicChance = ArrayList<Pair<String, Double>>()
 
@@ -142,56 +143,60 @@ object NewConfiguration {
         }
 
         rareRate.clear()
+        var configurationSection = config.getConfigurationSection("rate")
+        for (i in 1..3) {
+            var configElf = configurationSection.getConfigurationSection(i.toString());
+            rareRate[i] = HashMap();
+            rareRate[i]?.put(MythicColor.DARK, ArrayList<Rate>().apply {
+                val darkRateSection = configElf.getConfigurationSection("dark")
 
-        rareRate[MythicColor.DARK] = ArrayList<Rate>().apply {
-            val darkRateSection = config.getConfigurationSection("rate.dark")
+                for (key in darkRateSection.getKeys(false)) {
+                    val permission = darkRateSection.getString("${key}.test", "pit.${key}")
+                    val chance = darkRateSection.getDouble("${key}.value", 0.02)
 
-            for (key in darkRateSection.getKeys(false)) {
-                val permission = darkRateSection.getString("${key}.test", "pit.${key}")
-                val chance = darkRateSection.getDouble("${key}.value", 0.02)
-
-                this += Rate(permission, chance)
-            }
-        }
-
-        rareRate[MythicColor.ORANGE] = ArrayList<Rate>().apply {
-            val normalSection = config.getConfigurationSection("rate.normal")
-
-            for (key in normalSection.getKeys(false)) {
-                val permission = normalSection.getString("${key}.test")
-                val chance = normalSection.getDouble("${key}.value")
-
-                if (permission == null) {
-                    continue
+                    this += Rate(permission, chance)
                 }
+            })
 
-                this += Rate(permission, chance)
-            }
-        }
+            rareRate[i]?.put(MythicColor.ORANGE, ArrayList<Rate>().apply {
+                val normalSection = configElf.getConfigurationSection("normal")
 
-        rareRate[MythicColor.DARK_GREEN] = ArrayList<Rate>().apply {
-            val normalSection = config.getConfigurationSection("rate.sewers")
+                for (key in normalSection.getKeys(false)) {
+                    val permission = normalSection.getString("${key}.test")
+                    val chance = normalSection.getDouble("${key}.value")
 
-            for (key in normalSection.getKeys(false)) {
-                val permission = normalSection.getString("${key}.test")
-                val chance = normalSection.getDouble("${key}.value")
+                    if (permission == null) {
+                        continue
+                    }
 
-                if (permission == null) {
-                    continue
+                    this += Rate(permission, chance)
                 }
+            })
 
-                this += Rate(permission, chance)
-            }
-        }
-        rareRate[MythicColor.RAGE] = ArrayList<Rate>().apply {
-            val rageSection = config.getConfigurationSection("rate.rage")
+            rareRate[i]?.put(MythicColor.DARK_GREEN, ArrayList<Rate>().apply {
+                val normalSection = configElf.getConfigurationSection("sewers")
 
-            for (key in rageSection.getKeys(false)) {
-                val permission = rageSection.getString("${key}.test", "pit.${key}")
-                val chance = rageSection.getDouble("${key}.value", 0.02)
+                for (key in normalSection.getKeys(false)) {
+                    val permission = normalSection.getString("${key}.test")
+                    val chance = normalSection.getDouble("${key}.value")
 
-                this += Rate(permission, chance)
-            }
+                    if (permission == null) {
+                        continue
+                    }
+
+                    this += Rate(permission, chance)
+                }
+            })
+            rareRate[i]?.put(MythicColor.RAGE, ArrayList<Rate>().apply {
+                val rageSection = configElf.getConfigurationSection("rage")
+
+                for (key in rageSection.getKeys(false)) {
+                    val permission = rageSection.getString("${key}.test", "pit.${key}")
+                    val chance = rageSection.getDouble("${key}.value", 0.02)
+
+                    this += Rate(permission, chance)
+                }
+            })
         }
         maxLevel = config.getInt("maxLevel", 120)
         scoreBoardAnimation = config.getList("scoreboard.animation", scoreBoardAnimation) as List<String>
@@ -224,14 +229,14 @@ object NewConfiguration {
         return 0.005
     }
 
-    fun getChance(player: Player, color: MythicColor): Double {
+    fun getChance(player: Player, color: MythicColor,level: Int): Double {
         val list = when (color) {
             MythicColor.DARK, MythicColor.RAGE, MythicColor.DARK_GREEN -> {
-                rareRate[color]
+                rareRate[level]?.get(color)
             }
 
             else -> {
-                rareRate[MythicColor.ORANGE]
+                rareRate[level]?.get(MythicColor.ORANGE)
             }
         }
 
@@ -375,23 +380,58 @@ object NewConfiguration {
         "forbidEnchant" to forbidEnchant,
 
         "bounty.updateInterval" to bountyTickInterval,
-        "rate.dark.vip1.test" to "pit.vip1",
-        "rate.dark.vip1.value" to 0.08,
-        "rate.dark.vip2.test" to "pit.vip2",
-        "rate.dark.vip2.value" to 0.04,
-        "rate.dark.default.value" to 0.02,
+        "rate.1.dark.vip1.test" to "pit.vip1",
+        "rate.1.dark.vip1.value" to 0.08,
+        "rate.1.dark.vip2.test" to "pit.vip2",
+        "rate.1.dark.vip2.value" to 0.04,
+        "rate.1.dark.default.value" to 0.02,
 
-        "rate.normal.vip1.test" to "pit.vip1",
-        "rate.normal.vip1.value" to 0.08,
-        "rate.normal.vip2.test" to "pit.vip2",
-        "rate.normal.vip2.value" to 0.04,
-        "rate.normal.default.value" to 0.02,
+        "rate.1.normal.vip1.test" to "pit.vip1",
+        "rate.1.normal.vip1.value" to 0.08,
+        "rate.1.normal.vip2.test" to "pit.vip2",
+        "rate.1.normal.vip2.value" to 0.04,
+        "rate.1.normal.default.value" to 0.02,
 
-        "rate.rage.vip1.test" to "pit.vip1",
-        "rate.rage.vip1.value" to 0.08,
-        "rate.rage.vip2.test" to "pit.vip2",
-        "rate.rage.vip2.value" to 0.04,
-        "rate.rage.default.value" to 0.02,
+        "rate.1.rage.vip1.test" to "pit.vip1",
+        "rate.1.rage.vip1.value" to 0.08,
+        "rate.1.rage.vip2.test" to "pit.vip2",
+        "rate.1.rage.vip2.value" to 0.04,
+        "rate.1.rage.default.value" to 0.02,
+
+        "rate.2.dark.vip1.test" to "pit.vip1",
+        "rate.2.dark.vip1.value" to 0.08,
+        "rate.2.dark.vip2.test" to "pit.vip2",
+        "rate.2.dark.vip2.value" to 0.04,
+        "rate.2.dark.default.value" to 0.02,
+
+        "rate.2.normal.vip1.test" to "pit.vip1",
+        "rate.2.normal.vip1.value" to 0.08,
+        "rate.2.normal.vip2.test" to "pit.vip2",
+        "rate.2.normal.vip2.value" to 0.04,
+        "rate.2.normal.default.value" to 0.02,
+
+        "rate.2.rage.vip1.test" to "pit.vip1",
+        "rate.2.rage.vip1.value" to 0.08,
+        "rate.2.rage.vip2.test" to "pit.vip2",
+        "rate.2.rage.vip2.value" to 0.04,
+        "rate.2.rage.default.value" to 0.02,
+        "rate.3.dark.vip1.test" to "pit.vip1",
+        "rate.3.dark.vip1.value" to 0.08,
+        "rate.3.dark.vip2.test" to "pit.vip2",
+        "rate.3.dark.vip2.value" to 0.04,
+        "rate.3.dark.default.value" to 0.02,
+
+        "rate.3.normal.vip1.test" to "pit.vip1",
+        "rate.3.normal.vip1.value" to 0.08,
+        "rate.3.normal.vip2.test" to "pit.vip2",
+        "rate.3.normal.vip2.value" to 0.04,
+        "rate.3.normal.default.value" to 0.02,
+
+        "rate.3.rage.vip1.test" to "pit.vip1",
+        "rate.3.rage.vip1.value" to 0.08,
+        "rate.3.rage.vip2.test" to "pit.vip2",
+        "rate.3.rage.vip2.value" to 0.04,
+        "rate.3.rage.default.value" to 0.02,
 
 
         "rate.sewers.vip1.test" to "pit.vip1",
@@ -400,6 +440,21 @@ object NewConfiguration {
         "rate.sewers.vip2.value" to 0.04,
         "rate.sewers.default.value" to 0.02,
 
+        "rate.1.sewers.vip1.test" to "pit.vip1",
+        "rate.1.sewers.vip1.value" to 0.08,
+        "rate.1.sewers.vip2.test" to "pit.vip2",
+        "rate.1.sewers.vip2.value" to 0.04,
+        "rate.1.sewers.default.value" to 0.02,
+        "rate.2.sewers.vip1.test" to "pit.vip1",
+        "rate.2.sewers.vip1.value" to 0.08,
+        "rate.2.sewers.vip2.test" to "pit.vip2",
+        "rate.2.sewers.vip2.value" to 0.04,
+        "rate.2.sewers.default.value" to 0.02,
+        "rate.3.sewers.vip1.test" to "pit.vip1",
+        "rate.3.sewers.vip1.value" to 0.08,
+        "rate.3.sewers.vip2.test" to "pit.vip2",
+        "rate.3.sewers.vip2.value" to 0.04,
+        "rate.3.sewers.default.value" to 0.02,
 
         "mythicDropChance.vip1.test" to "permission.vip1",
         "mythicDropChance.vip1.value" to 0.01,

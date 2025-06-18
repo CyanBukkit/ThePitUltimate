@@ -49,15 +49,17 @@ public class EnchantmentFactor {
         this.actionDisplayEnchants = new ConcurrentHashMap<>(); //keep sync!!!
     }
 
+    /**
+     * 初始化附魔Entry
+     * @param classes
+     */
     public void init(Collection<Class<? extends AbstractEnchantment>> classes) {
         log.info("Loading enchantments...");
         for (Class<?> clazz : classes) {
             if (AbstractEnchantment.class.isAssignableFrom(clazz)) {
                 try {
                     AbstractEnchantment enchantment = (AbstractEnchantment) clazz.getConstructor().newInstance();
-                    this.enchantmentMap.put(enchantment.getNbtName(), enchantment);
-                    PublicUtil.register(clazz, enchantment, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
-                    registerTickTask(clazz, enchantment);
+                    registerEnchantment(enchantment);
                 } catch (Exception e) {
                     log.error("{} exception on install enchantments.", String.valueOf(e));
                 }
@@ -66,6 +68,18 @@ public class EnchantmentFactor {
         log.info("{} enchantments loaded!", enchantmentMap.size());
     }
 
+    public void registerEnchantment(AbstractEnchantment enchantment) {
+        this.enchantmentMap.put(enchantment.getNbtName(), enchantment);
+        PublicUtil.register(enchantment.getClass(), enchantment, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
+        registerTickTask(enchantment.getClass(), enchantment);
+    }
+
+
+    /**
+     * 移除附魔
+     * @param nbtName
+     * @param enchantName
+     */
     public void unregister(String nbtName, String enchantName) {
         if (nbtName == null) {
             nbtName = "NULL";
@@ -83,13 +97,24 @@ public class EnchantmentFactor {
             String nbt = enchObj.getNbtName();
             boolean b = nbt.equalsIgnoreCase(finalNbtName) || enchObj.getEnchantName().equalsIgnoreCase(finalEnchantName);
             if (b) {
-                log.info("Removing {}", nbt);
-                PublicUtil.unregister(enchObj.getClass(), enchObj, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
-                iterator.remove();
+                removeEnchantment(enchObj, iterator);
             }
         }
         log.info("Enchantments {} -> {}", size, enchantmentMap.size());
     }
+
+    public void removeEnchantment(AbstractEnchantment enchObj, Iterator<AbstractEnchantment> iterator) {
+        log.info("Removing {}", enchObj.getNbtName());
+        PublicUtil.unregister(enchObj.getClass(), enchObj, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
+        iterator.remove();
+    }
+
+    public void removeEnchantment(AbstractEnchantment enchObj) {
+        log.info("Removing {}", enchObj.getNbtName());
+        PublicUtil.unregister(enchObj.getClass(), enchObj, playerDamageds, attackEntities, iItemDamages, playerBeKilledByEntities, playerKilledEntities, playerRespawns, playerShootEntities);
+        this.enchantmentMap.remove(enchObj.getNbtName());
+    }
+
 
     private void registerTickTask(Class<?> clazz, AbstractEnchantment enchantment) {
         if (ITickTask.class.isAssignableFrom(clazz)) {

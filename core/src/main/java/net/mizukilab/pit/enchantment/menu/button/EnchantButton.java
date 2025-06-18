@@ -349,7 +349,7 @@ public class EnchantButton extends Button {
                     break;
                 }
                 if (level == 2) {
-                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                         AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
                         mythicItem.getEnchantments().put(enchantment, 1);
                         announcement = true;
@@ -363,7 +363,7 @@ public class EnchantButton extends Button {
             }
             case RAGE: {
                 if (level == 1) {
-                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                         AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
                         mythicItem.getEnchantments().put(enchantment, RandomUtil.random.nextInt(enchantment.getMaxEnchantLevel() - 1) + 1);
                         announcement = true;
@@ -378,16 +378,16 @@ public class EnchantButton extends Button {
                 RandomUtil.switchSeed();
                 if (level == 1) {
                     if(!NewConfiguration.INSTANCE.getAlwaysT2Enchant()) {
-                        announcement = levelTier1MythicEnchantLogic(item, player, mythicItem, rareResults, announcement, results, enchantments);
+                        announcement = levelTier1MythicEnchantLogic(item, player, mythicItem,level, rareResults, announcement, results, enchantments);
                         //Tier 1 Enchant End
                     } else{
-                        announcement = levelTier2MythicEnchantLogic(item, player, mythicItem, rareResults, announcement, color, enchantments,results);
+                        announcement = levelTier2MythicEnchantLogic(item, player, mythicItem,level, rareResults, announcement, color, enchantments,results);
 
                     }
                 } else if (level == 2) {
-                    announcement = levelTier2MythicEnchantLogic(item, player, mythicItem, rareResults, announcement, color, enchantments, results);
+                    announcement = levelTier2MythicEnchantLogic(item, player, mythicItem,level, rareResults, announcement, color, enchantments, results);
                 } else if (level == 3) {
-                    announcement = levelTier3MythicEnchantLogic(item, player, mythicItem, rareResults, announcement, results, enchantments, color);
+                    announcement = levelTier3MythicEnchantLogic(item, player, mythicItem,level, rareResults, announcement, results, enchantments, color);
                 }
             }
         }
@@ -448,7 +448,7 @@ public class EnchantButton extends Button {
         profile.setEnchantingItem(InventoryUtil.serializeItemStack(mythicItem.toItemStack()));
     }
 
-    private boolean levelTier3MythicEnchantLogic(ItemStack item, Player player, IMythicItem mythicItem, List<AbstractEnchantment> rareResults, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> enchantments, MythicColor color) {
+    private boolean levelTier3MythicEnchantLogic(ItemStack item, Player player, IMythicItem mythicItem,int level, List<AbstractEnchantment> rareResults, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> enchantments, MythicColor color) {
         int amount = mythicItem.getEnchantments().size();
         if (amount == 1) { // If this item have only 1 enchantment
             AbstractEnchantment enchantment = null;
@@ -460,7 +460,7 @@ public class EnchantButton extends Button {
                 profile.setEnchantingBook(null);
                 //add logic TODO
                 results.removeAll(enchantments);
-                if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+                if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                     announcement = true;
                     rareResults.removeAll(enchantments);
                     enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
@@ -473,7 +473,7 @@ public class EnchantButton extends Button {
             } else {
                 for (int i = 0; i < 2; i++) {
                     results.removeAll(enchantments);
-                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                         announcement = true;
                         rareResults.removeAll(enchantments);
                         enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
@@ -513,7 +513,7 @@ public class EnchantButton extends Button {
             } else {
                 results.removeAll(enchantments);
                 AbstractEnchantment enchantment;
-                if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+                if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                     announcement = true;
                     rareResults.removeAll(enchantments);
                     enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
@@ -575,10 +575,10 @@ public class EnchantButton extends Button {
         return announcement;
     }
 
-    private boolean levelTier2MythicEnchantLogic(ItemStack item, Player player, IMythicItem mythicItem, List<AbstractEnchantment> rareResults, boolean announcement, MythicColor color, List<AbstractEnchantment> enchantments, List<AbstractEnchantment> results) {
+    private boolean levelTier2MythicEnchantLogic(ItemStack item, Player player, IMythicItem mythicItem,int level, List<AbstractEnchantment> rareResults, boolean announcement, MythicColor color, List<AbstractEnchantment> enchantments, List<AbstractEnchantment> results) {
         int amount = mythicItem.getEnchantments().size();
 
-        if (amount == 1) { // If this item has only 1 enchantment
+        if (amount <= 1) { // If this item has only 1 enchantment
 
             boolean useBook = Utils.canUseMythicBook(player, item);
 
@@ -610,13 +610,13 @@ public class EnchantButton extends Button {
                         }
                         case 1: { // 1->21
                             mythicItem.getEnchantments().put(enchantment, 2);
-                            announcement = shouldAnnouncement(player, color, mythicItem, enchantments, announcement, results, rareResults);
+                            announcement = shouldAnnouncement(player, color, mythicItem,level, enchantments, announcement, results, rareResults);
                             break;
                         }
                         case 2: { // 1->211
                             mythicItem.getEnchantments().put(enchantment, 2);
                             for (int i = 0; i < 2; i++) {
-                                announcement = shouldAnnouncement(player, color, mythicItem, enchantments, announcement, results, rareResults);
+                                announcement = shouldAnnouncement(player, color, mythicItem,level, enchantments, announcement, results, rareResults);
                             }
                         }
                         default:
@@ -633,14 +633,14 @@ public class EnchantButton extends Button {
                             break;
                         }
                         case 1: { // 2->21
-                            announcement = shouldAnnouncement(player, color, mythicItem, enchantments, announcement, results, rareResults);
+                            announcement = shouldAnnouncement(player, color, mythicItem,level, enchantments, announcement, results, rareResults);
                             break;
                         }
                         default:
                             break;
                     }
                 } else {
-                    announcement = shouldAnnouncement(player, color, mythicItem, enchantments, announcement, results, rareResults);
+                    announcement = shouldAnnouncement(player, color, mythicItem,level, enchantments, announcement, results, rareResults);
                 }
             }
         } else if (amount == 2) { //11
@@ -665,7 +665,7 @@ public class EnchantButton extends Button {
                 case 1: { // 11->111
                     results.removeAll(enchantments);
                     AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
-                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+                    if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                         announcement = true;
                         rareResults.removeAll(enchantments);
                         enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
@@ -681,7 +681,7 @@ public class EnchantButton extends Button {
         return announcement;
     }
 
-    private boolean levelTier1MythicEnchantLogic(ItemStack item, Player player, IMythicItem mythicItem, List<AbstractEnchantment> rareResults, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> enchantments) {
+    private boolean levelTier1MythicEnchantLogic(ItemStack item, Player player, IMythicItem mythicItem,int level, List<AbstractEnchantment> rareResults, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> enchantments) {
         //Tier 1 Enchant Start
         int choice = random.nextInt(4);
 
@@ -739,10 +739,10 @@ public class EnchantButton extends Button {
     }
 
 
-    private boolean shouldAnnouncement(Player player, MythicColor color, AbstractPitItem mythicItem, List<AbstractEnchantment> enchantments, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> rareResults) {
+    private boolean shouldAnnouncement(Player player, MythicColor color, AbstractPitItem mythicItem,int level, List<AbstractEnchantment> enchantments, boolean announcement, List<AbstractEnchantment> results, List<AbstractEnchantment> rareResults) {
         AbstractEnchantment enchantment;
         results.removeAll(enchantments);
-        if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color))) {
+        if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
             announcement = true;
             rareResults.removeAll(enchantments);
             enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
