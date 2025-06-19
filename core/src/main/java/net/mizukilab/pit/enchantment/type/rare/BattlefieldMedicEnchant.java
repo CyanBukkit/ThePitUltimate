@@ -1,6 +1,5 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
-import cn.charlotte.pit.data.PlayerProfile;
 import com.google.common.util.concurrent.AtomicDouble;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
@@ -58,21 +57,23 @@ public class BattlefieldMedicEnchant extends AbstractEnchantment implements IPla
         double healAmount = 1.0 + enchantLevel * 0.5; // 1.5, 2.0, 2.5 hearts
         int resistanceChance = enchantLevel * 15 + 10; // 25%, 40%, 55%
         return "&7击杀敌人时恢复 &c" + healAmount + "❤ &7生命值" +
-               "/s&7受到伤害时有 &e" + resistanceChance + "% &7的概率获得" +
-               "/s&3抗性提升 " + (enchantLevel == 1 ? "I" : enchantLevel == 2 ? "II" : "III") + 
-               " &f(00:0" + (enchantLevel + 2) + ") &7(8秒冷却)";
+                "/s&7受到伤害时有 &e" + resistanceChance + "% &7的概率获得" +
+                "/s&3抗性提升 " + (enchantLevel == 1 ? "I" : enchantLevel == 2 ? "II" : "III") +
+                " &f(00:0" + (enchantLevel + 2) + ") &7(8秒冷却)";
     }
 
     @Override
     public String getText(int level, Player player) {
-        return resistanceCooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ? 
-               "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(resistanceCooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).getRemaining()).replace(" ", "");
+        return resistanceCooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ?
+                "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(resistanceCooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).getRemaining()).replace(" ", "");
     }
 
     @Override
     @PlayerOnly
     public void handlePlayerKilled(int enchantLevel, Player killer, Entity target, AtomicDouble coin, AtomicDouble exp) {
-
+        if (target.hasMetadata("NPC") || target.hasMetadata("Bot")) {
+            return;
+        }
         double healAmount = (1.0 + enchantLevel * 0.5) * 2;
         PlayerUtil.heal(killer, healAmount);
 
@@ -86,7 +87,7 @@ public class BattlefieldMedicEnchant extends AbstractEnchantment implements IPla
             if (Math.random() * 100 < resistanceChance) {
 
                 myself.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (enchantLevel + 2) * 20, enchantLevel - 1), true);
-                
+
 
                 myself.playSound(myself.getLocation(), Sound.ANVIL_USE, 0.8f, 1.2f);
 
