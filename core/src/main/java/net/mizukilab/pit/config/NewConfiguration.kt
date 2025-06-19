@@ -557,12 +557,16 @@ object NewConfiguration {
             "vip2" to mapOf("test" to "pit.vip2", "value" to 0.04),
             "default" to mapOf("value" to 0.02)
         )
+
         for (level in levels) {
             for (rateType in rateTypes) {
                 for ((vipType, config) in vipConfigs) {
                     val baseKey = "rate.$level.$rateType.$vipType"
                     config.forEach { (configType, value) ->
-                        rateDefaults["$baseKey.$configType"] = value
+                        val fullKey = "$baseKey.$configType"
+                        if (isValidKey(fullKey)) {
+                            rateDefaults[fullKey] = value
+                        }
                     }
                 }
             }
@@ -571,6 +575,35 @@ object NewConfiguration {
         return rateDefaults
     }
 
+
+    private fun isValidKey(key: String): Boolean {
+        val invalidPatterns = listOf(
+            "11l11llll1iili11",
+            Regex("[0-9]+[il]+[0-9]+[il]+"),
+            Regex("^[0-9il]+$")
+        )
+
+        val validPattern = Regex("^[a-zA-Z0-9._-]+$")
+
+        if (!validPattern.matches(key)) {
+            return false
+        }
+        for (pattern in invalidPatterns) {
+            when (pattern) {
+                is String -> if (key.contains(pattern)) return false
+                is Regex -> if (pattern.containsMatchIn(key)) return false
+            }
+        }
+
+        val expectedComponents = listOf("rate", "dark", "normal", "rage", "sewers", "vip1", "vip2", "default", "test", "value")
+        val keyParts = key.split(".")
+
+        if (!keyParts.any { part -> expectedComponents.contains(part) }) {
+            return false
+        }
+
+        return true
+    }
     fun getMaxScoreboardAnimationInterval(): Int {
 
         return scoreboardAnimationInterval.coerceIn(50, 500)
