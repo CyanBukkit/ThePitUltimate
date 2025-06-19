@@ -158,7 +158,7 @@ public class GameEffectListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player attacker) {
-            if (NewConfiguration.INSTANCE.getRepairFeatures()) {
+            if (NewConfiguration.INSTANCE.getRepairFeatures())  {
                 if (event.getEntity() instanceof CraftLivingEntity livingEntity) { //特性修复 //TODO
                     if (livingEntity.getHandle().hurtTicks > 5) {
                         event.setCancelled(true);
@@ -361,7 +361,13 @@ public class GameEffectListener implements Listener {
             }
 
             if (player.getHealth() < finalDamage.get()) {
-                player.damage(500000.0);
+                // 添加安全检查，避免机器人死亡时的NullPointerException
+                try {
+                    player.damage(500000.0);
+                } catch (Exception e) {
+                    // 如果damage方法出错，直接设置生命值为0
+                    player.setHealth(0);
+                }
                 event.setCancelled(true);
             } else { //TODO 修正 一击毙命, 但是event不cancel
                 double v = player.getHealth() - finalDamage.get();

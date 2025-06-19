@@ -45,7 +45,7 @@ server-name: "&e天坑乱斗"
 genesis-start-date: 1675339795842
 #30s内换图播报
 scoreboard:
-  viewSwitchMapCooldownPre30s: true
+  viewSwitchMapCooldownPre30s: false
 currentMapId: 0
 #设置 -1 为关闭 轮换, 详细id见本jar的 worlds/world.yml
-duration: 60000
+duration: -1
