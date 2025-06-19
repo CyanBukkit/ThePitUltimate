@@ -36,22 +36,25 @@ public class Scoreboard implements AssembleAdapter {
 
     private long lastAnimationTime = 0;
     private int animationTick = 0;
+    private long animationStartTime = System.currentTimeMillis();
 
     @Override
     public String getTitle(Player player) {
-        List<String> title;
-        title = NewConfiguration.INSTANCE.getScoreBoardAnimation();
-
-        String text = title.get(animationTick);
-        if (System.currentTimeMillis() - lastAnimationTime >= 250) {
-            animationTick++;
-            if (animationTick + 1 >= title.size()) {
-                animationTick = 0;
+        List<String> title = NewConfiguration.INSTANCE.getScoreBoardAnimation();
+        long currentTime = System.currentTimeMillis();
+        long animationInterval = NewConfiguration.INSTANCE.getMaxScoreboardAnimationInterval();
+        long timeSinceStart = currentTime - animationStartTime;
+        int totalFrames = title.size();
+        int currentFrame = (int) ((timeSinceStart / animationInterval) % totalFrames);
+        if (currentTime - lastAnimationTime >= animationInterval) {
+            animationTick = currentFrame;
+            lastAnimationTime = currentTime;
+            if (timeSinceStart > Long.MAX_VALUE / 2) {
+                animationStartTime = currentTime;
             }
-            lastAnimationTime = System.currentTimeMillis();
         }
-
-        return text;
+        int safeIndex = Math.max(0, Math.min(animationTick, totalFrames - 1));
+        return title.get(safeIndex);
     }
 
 

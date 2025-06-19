@@ -37,6 +37,7 @@ object NewConfiguration {
     var customChatFormat = "%pit_level_tag_roman% %s&f: %s"
     var alwaysT2Enchant = true
     var scoreboardShowtime = true
+    var scoreboardAnimationInterval = 80
 
     var pitSupportPermission = "pit.vip"
     var scoreBoardAnimation = listOf<String>()
@@ -163,7 +164,6 @@ object NewConfiguration {
 
     private fun getDynamicConfigKeys(): Set<String> {
         return setOf(
-            "not-netease-skins",
             "kingsQuestsMarker"
         )
     }
@@ -247,6 +247,7 @@ object NewConfiguration {
         removeSupportWhenNoPermission = config.getBoolean("removeSupportWhenNoPermission", false)
 
         scoreboardShowtime = config.getBoolean("scoreboard-showtime")
+        scoreboardAnimationInterval = config.getInt("scoreboard-animation-interval", 80)
 
         mythicChance.clear()
         config.getConfigurationSection("mythicDropChance")!!.let {
@@ -510,36 +511,25 @@ object NewConfiguration {
         ),
         "title.event.epic.interval" to 10,
         "scoreboard.animation" to listOf(
-            // 正向光波 (带残影效果)
-            "&f&l神&5&l话&5&l天&5&l坑",
-            "&d&l神&f&l话&5&l天&5&l坑",
-            "&5&l神&d&l话&f&l天&5&l坑",
-            "&5&l神&5&l话&d&l天&f&l坑",
-            "&5&l神&5&l话&5&l天&d&l坑", // 逆向渐隐过渡,
-
-
-            // 逆向渐隐过渡
-            "&5&l神&5&l话&f&l天&5&l坑",
-            "&5&l神&f&l话&d&l天&5&l坑",
-            "&f&l神&d&l话&5&l天&5&l坑",
-            "&d&l神&5&l话&5&l天&5&l坑",
-            "&5&l神&5&l话&5&l天&5&l坑", // 反向光波 (镜像运动),
-
-
-            // 反向光波 (镜像运动)
-            "&5&l神&5&l话&5&l天&f&l坑",
-            "&5&l神&5&l话&f&l天&d&l坑",
-            "&5&l神&f&l话&d&l天&5&l坑",
-            "&f&l神&d&l话&5&l天&5&l坑",
-            "&d&l神&5&l话&5&l天&5&l坑", // 光波反弹效果,
-
-
-            // 光波反弹效果
-            "&5&l神&f&l话&5&l天&5&l坑",
-            "&d&l神&5&l话&f&l天&5&l坑",
-            "&5&l神&d&l话&5&l天&f&l坑",
-            "&5&l神&5&l话&d&l天&5&l坑",
-            "&5&l神&5&l话&5&l天&d&l坑"
+            "&5&l神话天坑",
+            "&f&l神&5&l话天坑",
+            "&f&l神话&f&l天&5&l坑",
+            "&f&l神话天&f&l坑",
+            "&f&l神话天坑",
+            "&5&l神话天坑",
+            "&f&l神话天坑",
+            "&5&l神话天坑",
+            "&f&l神话天坑",
+            "&5&l神话天坑",
+            "&f&l神话天坑",
+            "&5&l神话天坑",
+            "&f&l神话天坑",
+            "&5&l神话天坑",
+            "&5&l神话天坑",
+            "&5&l神话天坑",
+            "&5&l神话天坑",
+            "&5&l神话天坑",
+            "&5&l神话天坑"
         ),
         "scoreboard.loading" to listOf(
             "", "&c正在加载档案...", "&c请稍等片刻...", "", "&c公告群: &exxxxxxx", "", "&cThePitUltimate"
@@ -555,6 +545,7 @@ object NewConfiguration {
         "mythicDropChance.vip2.value" to 0.02,
 
         "punch_y" to 4.0,
+        "scoreboard-animation-interval" to 80,
     ) + generateRateDefaults()
 
     private fun generateRateDefaults(): Map<String, Any> {
@@ -579,4 +570,10 @@ object NewConfiguration {
 
         return rateDefaults
     }
+
+    fun getMaxScoreboardAnimationInterval(): Int {
+
+        return scoreboardAnimationInterval.coerceIn(50, 500)
+    }
+
 }

@@ -339,6 +339,13 @@ private fun loadEnchants() {
         //addon
         AngelArmsEnchant::class.java,
         //new
+        VengeanceSpiritEnchant::class.java,
+        SacredShieldEnchant::class.java,
+        GuardianAngelEnchant::class.java,
+        EnduringWillEnchant::class.java,
+        ThornsReflectEnchant::class.java,
+        ElementalFuryEnchant::class.java,
+        BattlefieldMedicEnchant::class.java,
         ThunderArrowEnchant::class.java,
         UndeadArrowEnchant::class.java,
         LastShadowLeapForward::class.java,
