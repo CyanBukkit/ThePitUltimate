@@ -29,11 +29,7 @@ public class ActionBarManager implements IActionBarManager {
         }
         Map<String, MutablePair<String, Integer>> value = stringStringMap.getValue();
         MutablePair<String, Integer> stringIntegerMutablePair = value.get(arg);
-        if(stringIntegerMutablePair != null) {
-            stringIntegerMutablePair = new MutablePair<>(val, -repeat);
-        } else {
-            stringIntegerMutablePair = new MutablePair<>(val, repeat);
-        }
+        stringIntegerMutablePair = new MutablePair<>(val, repeat);
         value.put(arg, stringIntegerMutablePair);
     }
 
