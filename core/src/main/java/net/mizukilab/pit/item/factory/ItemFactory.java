@@ -63,6 +63,14 @@ public class ItemFactory implements IItemFactory {
 
     @Beta
     public IMythicItem getIMythicItem(ItemStack stack, Runnable runnable) {
+        return getIMythicItem(stack, runnable,clientSide);
+    }
+    @Beta
+    public IMythicItem getIMythicItem(ItemStack stack,boolean clientSide) {
+        return getIMythicItem(stack,EMPTY_RUNNABLE,clientSide);
+    }
+    @Beta
+    public IMythicItem getIMythicItem(ItemStack stack, Runnable runnable,boolean clientSide) {
         NBTTagCompound extra = ItemUtil.getExtra(stack);
         String internalName = ItemUtil.getInternalName0(extra);
         if(internalName == null){

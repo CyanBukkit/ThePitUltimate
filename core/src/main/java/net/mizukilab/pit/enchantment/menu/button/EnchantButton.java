@@ -19,6 +19,7 @@ import net.mizukilab.pit.event.PitPlayerEnchantEvent;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.item.MythicColor;
+import net.mizukilab.pit.item.factory.ItemFactory;
 import net.mizukilab.pit.item.type.MythicEnchantingTable;
 import net.mizukilab.pit.menu.shop.button.AbstractShopButton;
 import net.mizukilab.pit.util.FuncsKt;
@@ -189,7 +190,7 @@ public class EnchantButton extends Button {
             return;
         }
 
-        IMythicItem mythicItem = Utils.getMythicItem0(actualItem);
+        IMythicItem mythicItem = ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItem(actualItem,true);
 
         if (mythicItem == null) return;
 
