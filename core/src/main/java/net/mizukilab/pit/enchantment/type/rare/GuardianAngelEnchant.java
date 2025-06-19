@@ -57,7 +57,7 @@ public class GuardianAngelEnchant extends AbstractEnchantment implements IPlayer
         return "&7当生命值低于 &c" + threshold + "% &7时，获得以下效果:" +
                "/s&f▶ &3抗性提升 III &f(00:05)" +
                "/s&f▶ &c生命恢复 II &f(00:08)" +
-               "/s&f▶ &b速度 II &f(00:05) (" + cooldownSeconds + "秒冷却)";
+               "/s&f▶ &b速度 II &f(00:05) &7(" + cooldownSeconds + "秒冷却)";
     }
 
     @Override

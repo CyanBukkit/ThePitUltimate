@@ -38,7 +38,7 @@ public class SacredShieldEnchant extends AbstractEnchantment implements ITickTas
 
     @Override
     public EnchantmentRarity getRarity() {
-        return EnchantmentRarity.RARE;
+        return EnchantmentRarity.OP;
     }
 
     @Override

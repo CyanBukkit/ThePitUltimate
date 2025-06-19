@@ -56,11 +56,13 @@ public class ElementalFuryEnchant extends AbstractEnchantment implements IAttack
 
     @Override
     public String getUsefulnessLore(int enchantLevel) {
-        int chance = enchantLevel * 8 + 12; // 20%, 28%, 36%
-        return "&7攻击时有 &e" + chance + "% &7的概率触发元素效果:" +
-               "/s&c火焰: &7点燃敌人 " + (enchantLevel + 2) + " 秒" +
-               "/s&b冰霜: &7缓慢敌人 " + (enchantLevel + 1) + " 秒" +
-               "/s&e雷电: &7获得 &b速度 &7效果 " + (enchantLevel + 2) + " 秒 (3秒冷却)";
+        int chance = enchantLevel * 6 + 8;
+        double lightningDamage = enchantLevel * 0.5 + 1.5; // 2, 2.5, 3 hearts
+        return "&7攻击时有 &e" + chance + "% &7概率触发随机元素效果" +
+               "/s&f▶ &c火焰元素&7: 点燃目标 &c" + (enchantLevel + 2) + "秒" +
+               "/s&f▶ &b冰霜元素&7: 缓慢目标 &b" + (enchantLevel + 1) + "秒" +
+               "/s&f▶ &e雷电元素&7: 召唤雷击造成 &e" + lightningDamage + "♥ &7伤害" +
+               "/s&8冷却时间: 10秒";
     }
 
     @Override
@@ -75,7 +77,7 @@ public class ElementalFuryEnchant extends AbstractEnchantment implements IAttack
         Player targetPlayer = (Player) target;
         
         if (cooldown.getOrDefault(attacker.getUniqueId(), new Cooldown(0)).hasExpired()) {
-            int chance = enchantLevel * 8 + 12;
+            int chance = enchantLevel * 6 + 8;
             if (RandomUtil.hasSuccessfullyByChance(chance / 100.0)) {
 
                 int elementType = (int) (Math.random() * 3);
@@ -92,14 +94,14 @@ public class ElementalFuryEnchant extends AbstractEnchantment implements IAttack
                         break;
                         
                     case 2:
-                        attacker.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (enchantLevel + 2) * 20, 1), true);
-
-                        PlayerUtil.heal(attacker, enchantLevel * 0.5);
-                        attacker.playSound(attacker.getLocation(), Sound.AMBIENCE_THUNDER, 0.6f, 1.5f);
+                        targetPlayer.getWorld().strikeLightningEffect(targetPlayer.getLocation());
+                        double lightningDamage = (enchantLevel * 0.5 + 1.5) * 2;
+                        targetPlayer.damage(lightningDamage);
+                        attacker.playSound(attacker.getLocation(), Sound.AMBIENCE_THUNDER, 1.0f, 1.0f);
                         break;
                 }
                 
-                cooldown.put(attacker.getUniqueId(), new Cooldown(3, TimeUnit.SECONDS));
+                cooldown.put(attacker.getUniqueId(), new Cooldown(10, TimeUnit.SECONDS));
             }
         }
     }
