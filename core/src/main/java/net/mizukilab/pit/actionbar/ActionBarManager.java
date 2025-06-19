@@ -28,9 +28,7 @@ public class ActionBarManager implements IActionBarManager {
             multiMap.put(uniqueId, stringStringMap);
         }
         Map<String, MutablePair<String, Integer>> value = stringStringMap.getValue();
-        MutablePair<String, Integer> stringIntegerMutablePair = value.get(arg);
-        stringIntegerMutablePair = new MutablePair<>(val, repeat);
-        value.put(arg, stringIntegerMutablePair);
+        value.put(arg, new MutablePair<>(val, repeat));
     }
 
     public void addActionBarOnQueue(Player player, String arg, String val, int repeat) {
