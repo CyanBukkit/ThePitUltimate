@@ -10,10 +10,9 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import java.io.File
 import java.util.*
-import kotlin.collections.HashMap
 
 object NewConfiguration {
-    var serverId = "null"
+    private var serverId = "null"
     var rapidEnchanting = false;
     var repairFeatures = false
     var epicTitleUpdateInterval = 10
@@ -54,7 +53,7 @@ object NewConfiguration {
 
     lateinit var config: YamlConfiguration
 
-    private val rareRate = HashMap<Int,HashMap<MythicColor, MutableList<Rate>>>()
+    private val rareRate = HashMap<Int, HashMap<MythicColor, MutableList<Rate>>>()
 
     private val mythicChance = ArrayList<Pair<String, Double>>()
 
@@ -67,8 +66,150 @@ object NewConfiguration {
         config = YamlConfiguration.loadConfiguration(file)
     }
 
+    fun cleanupConfig() {
+        val validKeys = getAllValidKeys()
+        val currentKeys = getAllCurrentKeys()
+        val unusedKeys = currentKeys - validKeys
+        val missingKeys = validKeys - currentKeys
+
+        var hasChanges = false
+        if (unusedKeys.isNotEmpty()) {
+            println("发现 ${unusedKeys.size} 个无用的配置项，正在清理...")
+            unusedKeys.forEach { key ->
+                println("删除无用配置: $key")
+                removeConfigKey(key)
+                hasChanges = true
+            }
+        }
+
+        if (missingKeys.isNotEmpty()) {
+            println("发现 ${missingKeys.size} 个缺失的配置项，正在补全...")
+            val allDefaults = defaults + generateRateDefaults()
+            missingKeys.forEach { key ->
+                val defaultValue = allDefaults[key]
+                if (defaultValue != null) {
+                    println("补全缺失配置: $key = $defaultValue")
+                    config.set(key, defaultValue)
+                    hasChanges = true
+                }
+            }
+        }
+
+        if (hasChanges) {
+            save()
+            println("配置文件清理完成！")
+        } else {
+            println("配置文件无需清理")
+        }
+    }
+
+    private fun removeConfigKey(key: String) {
+        val keys = key.split(".")
+        var currentSection: org.bukkit.configuration.ConfigurationSection = config
+
+        for (i in 0 until keys.size - 1) {
+            val sectionKey = keys[i]
+            if (currentSection.isConfigurationSection(sectionKey)) {
+                currentSection = currentSection.getConfigurationSection(sectionKey)!!
+            } else {
+                return
+            }
+        }
+
+        val finalKey = keys.last()
+        currentSection.set(finalKey, null)
+
+        cleanupEmptySections(keys.dropLast(1))
+    }
+
+    private fun cleanupEmptySections(keyPath: List<String>) {
+        if (keyPath.isEmpty()) return
+        for (depth in keyPath.size downTo 1) {
+            val currentPath = keyPath.take(depth)
+            val parentPath = currentPath.dropLast(1)
+            val sectionName = currentPath.last()
+            var parentSection: org.bukkit.configuration.ConfigurationSection = config
+            for (pathPart in parentPath) {
+                if (parentSection.isConfigurationSection(pathPart)) {
+                    parentSection = parentSection.getConfigurationSection(pathPart)!!
+                } else {
+                    continue
+                }
+            }
+            if (parentSection.isConfigurationSection(sectionName)) {
+                val targetSection = parentSection.getConfigurationSection(sectionName)!!
+                val allKeys = targetSection.getKeys(true)
+                val isEmpty = allKeys.isEmpty() || allKeys.all { key ->
+                    val value = targetSection.get(key)
+                    value == null || (value is org.bukkit.configuration.ConfigurationSection && value.getKeys(true)
+                        .isEmpty())
+                }
+                if (isEmpty) {
+                    println("删除空配置节: ${currentPath.joinToString(".")}")
+                    parentSection.set(sectionName, null)
+                } else {
+                    break
+                }
+            }
+        }
+    }
+
+    private fun getAllValidKeys(): Set<String> {
+        val allDefaults = defaults + generateRateDefaults()
+        val dynamicKeys = getDynamicConfigKeys()
+        return (allDefaults.keys + dynamicKeys).toSet()
+    }
+
+
+    private fun getDynamicConfigKeys(): Set<String> {
+        return setOf(
+            "not-netease-skins",
+            "kingsQuestsMarker"
+        )
+    }
+
+    private fun getAllCurrentKeys(): Set<String> {
+        val keys = mutableSetOf<String>()
+
+        fun collectKeys(section: org.bukkit.configuration.ConfigurationSection, prefix: String = "") {
+            for (key in section.getKeys(false)) {
+                val fullKey = if (prefix.isEmpty()) key else "$prefix.$key"
+                if (section.isConfigurationSection(key)) {
+                    collectKeys(section.getConfigurationSection(key)!!, fullKey)
+                } else {
+                    keys.add(fullKey)
+                }
+            }
+        }
+
+        collectKeys(config)
+        return keys
+    }
+
+    fun validateConfig(): ConfigValidationResult {
+        val validKeys = getAllValidKeys()
+        val currentKeys = getAllCurrentKeys()
+
+        val unusedKeys = currentKeys - validKeys
+        val missingKeys = validKeys - currentKeys
+
+        return ConfigValidationResult(
+            isValid = unusedKeys.isEmpty() && missingKeys.isEmpty(),
+            unusedKeys = unusedKeys.toList(),
+            missingKeys = missingKeys.toList(),
+            totalKeys = currentKeys.size,
+            validKeysCount = validKeys.size
+        )
+    }
+
     fun load() {
         refreshAndSave()
+        val validationResult = validateConfig()
+        if (!validationResult.isValid) {
+            validationResult.printReport()
+            cleanupConfig()
+        }
+
         serverId = config.getString("server-id", null)
         rapidEnchanting = config.getBoolean("rapid-enchanting", false)
         repairFeatures = config.getBoolean("repair-features", false)
@@ -81,7 +222,7 @@ object NewConfiguration {
         lobbyCommand = config.getString("lobby-command", "hub")
 
         dateFormat = config.getString("dateFormat", "MM/dd HH:mm")
-        alwaysT2Enchant = config.getBoolean("alwaysT2Enchant",false)
+        alwaysT2Enchant = config.getBoolean("alwaysT2Enchant", false)
         noobProtect = config.getBoolean("noob-protect.enable")
         noobProtectLevel = config.getInt("noob-protect.level")
         noobDamageBoost = config.getDouble("noob-protect.damage_boost")
@@ -229,7 +370,7 @@ object NewConfiguration {
         return 0.005
     }
 
-    fun getChance(player: Player, color: MythicColor,level: Int): Double {
+    fun getChance(player: Player, color: MythicColor, level: Int): Double {
         val list = when (color) {
             MythicColor.DARK, MythicColor.RAGE, MythicColor.DARK_GREEN -> {
                 rareRate[level]?.get(color)
@@ -274,6 +415,33 @@ object NewConfiguration {
         val expRange: IntRange,
         val coinsRange: IntRange,
     )
+
+    data class ConfigValidationResult(
+        val isValid: Boolean,
+        val unusedKeys: List<String>,
+        val missingKeys: List<String>,
+        val totalKeys: Int,
+        val validKeysCount: Int
+    ) {
+        fun printReport() {
+            println("配置文件状态: ${if (isValid) "✓ 正常" else "✗ 需要清理"}")
+            println("当前配置项数量: $totalKeys")
+            println("有效配置项数量: $validKeysCount")
+
+            if (unusedKeys.isNotEmpty()) {
+                println("\n无用的配置项 (${unusedKeys.size}个):")
+                unusedKeys.forEach { println("  - $it") }
+            }
+
+            if (missingKeys.isNotEmpty()) {
+                println("\n缺失的配置项 (${missingKeys.size}个):")
+                missingKeys.forEach { println("  - $it") }
+            }
+            if (!isValid) {
+                println("\n正在准备清理配置文件")
+            }
+        }
+    }
 
     private val defaults = mapOf(
         "server-id" to "null",
@@ -380,86 +548,35 @@ object NewConfiguration {
         "forbidEnchant" to forbidEnchant,
 
         "bounty.updateInterval" to bountyTickInterval,
-        "rate.1.dark.vip1.test" to "pit.vip1",
-        "rate.1.dark.vip1.value" to 0.08,
-        "rate.1.dark.vip2.test" to "pit.vip2",
-        "rate.1.dark.vip2.value" to 0.04,
-        "rate.1.dark.default.value" to 0.02,
-
-        "rate.1.normal.vip1.test" to "pit.vip1",
-        "rate.1.normal.vip1.value" to 0.08,
-        "rate.1.normal.vip2.test" to "pit.vip2",
-        "rate.1.normal.vip2.value" to 0.04,
-        "rate.1.normal.default.value" to 0.02,
-
-        "rate.1.rage.vip1.test" to "pit.vip1",
-        "rate.1.rage.vip1.value" to 0.08,
-        "rate.1.rage.vip2.test" to "pit.vip2",
-        "rate.1.rage.vip2.value" to 0.04,
-        "rate.1.rage.default.value" to 0.02,
-
-        "rate.2.dark.vip1.test" to "pit.vip1",
-        "rate.2.dark.vip1.value" to 0.08,
-        "rate.2.dark.vip2.test" to "pit.vip2",
-        "rate.2.dark.vip2.value" to 0.04,
-        "rate.2.dark.default.value" to 0.02,
-
-        "rate.2.normal.vip1.test" to "pit.vip1",
-        "rate.2.normal.vip1.value" to 0.08,
-        "rate.2.normal.vip2.test" to "pit.vip2",
-        "rate.2.normal.vip2.value" to 0.04,
-        "rate.2.normal.default.value" to 0.02,
-
-        "rate.2.rage.vip1.test" to "pit.vip1",
-        "rate.2.rage.vip1.value" to 0.08,
-        "rate.2.rage.vip2.test" to "pit.vip2",
-        "rate.2.rage.vip2.value" to 0.04,
-        "rate.2.rage.default.value" to 0.02,
-        "rate.3.dark.vip1.test" to "pit.vip1",
-        "rate.3.dark.vip1.value" to 0.08,
-        "rate.3.dark.vip2.test" to "pit.vip2",
-        "rate.3.dark.vip2.value" to 0.04,
-        "rate.3.dark.default.value" to 0.02,
-
-        "rate.3.normal.vip1.test" to "pit.vip1",
-        "rate.3.normal.vip1.value" to 0.08,
-        "rate.3.normal.vip2.test" to "pit.vip2",
-        "rate.3.normal.vip2.value" to 0.04,
-        "rate.3.normal.default.value" to 0.02,
-
-        "rate.3.rage.vip1.test" to "pit.vip1",
-        "rate.3.rage.vip1.value" to 0.08,
-        "rate.3.rage.vip2.test" to "pit.vip2",
-        "rate.3.rage.vip2.value" to 0.04,
-        "rate.3.rage.default.value" to 0.02,
-
-
-        "rate.sewers.vip1.test" to "pit.vip1",
-        "rate.sewers.vip1.value" to 0.08,
-        "rate.sewers.vip2.test" to "pit.vip2",
-        "rate.sewers.vip2.value" to 0.04,
-        "rate.sewers.default.value" to 0.02,
-
-        "rate.1.sewers.vip1.test" to "pit.vip1",
-        "rate.1.sewers.vip1.value" to 0.08,
-        "rate.1.sewers.vip2.test" to "pit.vip2",
-        "rate.1.sewers.vip2.value" to 0.04,
-        "rate.1.sewers.default.value" to 0.02,
-        "rate.2.sewers.vip1.test" to "pit.vip1",
-        "rate.2.sewers.vip1.value" to 0.08,
-        "rate.2.sewers.vip2.test" to "pit.vip2",
-        "rate.2.sewers.vip2.value" to 0.04,
-        "rate.2.sewers.default.value" to 0.02,
-        "rate.3.sewers.vip1.test" to "pit.vip1",
-        "rate.3.sewers.vip1.value" to 0.08,
-        "rate.3.sewers.vip2.test" to "pit.vip2",
-        "rate.3.sewers.vip2.value" to 0.04,
-        "rate.3.sewers.default.value" to 0.02,
 
         "mythicDropChance.vip1.test" to "permission.vip1",
         "mythicDropChance.vip1.value" to 0.01,
         "mythicDropChance.vip2.test" to "permission.vip2",
         "mythicDropChance.vip2.value" to 0.02,
-    )
 
+        "punch_y" to 4.0,
+    ) + generateRateDefaults()
+
+    private fun generateRateDefaults(): Map<String, Any> {
+        val rateDefaults = mutableMapOf<String, Any>()
+        val rateTypes = listOf("dark", "normal", "rage", "sewers")
+        val levels = listOf(1, 2, 3)
+        val vipConfigs = mapOf(
+            "vip1" to mapOf("test" to "pit.vip1", "value" to 0.08),
+            "vip2" to mapOf("test" to "pit.vip2", "value" to 0.04),
+            "default" to mapOf("value" to 0.02)
+        )
+        for (level in levels) {
+            for (rateType in rateTypes) {
+                for ((vipType, config) in vipConfigs) {
+                    val baseKey = "rate.$level.$rateType.$vipType"
+                    config.forEach { (configType, value) ->
+                        rateDefaults["$baseKey.$configType"] = value
+                    }
+                }
+            }
+        }
+
+        return rateDefaults
+    }
 }

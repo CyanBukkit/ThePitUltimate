@@ -24,7 +24,7 @@ object MagicLoader {
                 ThePit.getInstance().info("§e正在验证凭证，请稍候…")
                 val magicLicense = MagicLicense(ThePit.getInstance())
                 val response = magicLicense.authenticate(
-                    "121.4.65.200",
+                    "jnic.dev",
                     ThePit.getInstance().description.name,
                     ThePit.getInstance().description.version,
                     false
