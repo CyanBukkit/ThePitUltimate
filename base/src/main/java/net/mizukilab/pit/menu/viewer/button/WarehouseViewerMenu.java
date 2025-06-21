@@ -49,10 +49,10 @@ public class WarehouseViewerMenu extends Menu {
                     boolean isEmpty = warehouse.isEmpty(warehouseId);
 
                     List<String> lore = new ArrayList<>();
-                    lore.add("&7物品数量: &a" + itemCount + "&7/&a54");
+                    lore.add("§7物品数量: &a" + itemCount + "&7/&a54");
                     lore.add("");
                     if (isEmpty) {
-                        lore.add("&c这个寄存箱是空的");
+                        lore.add("§c这个寄存箱为空");
                     } else {
                         lore.add("&e点击查看!");
                     }
@@ -60,7 +60,7 @@ public class WarehouseViewerMenu extends Menu {
                     Material material = isEmpty ? Material.CHEST : Material.ENDER_CHEST;
 
                     return new ItemBuilder(material)
-                            .name("&寄存箱 #" + warehouseId)
+                            .name("§6寄存箱 #" + warehouseId)
                             .lore(lore)
                             .amount(warehouseId)
                             .build();
@@ -68,6 +68,9 @@ public class WarehouseViewerMenu extends Menu {
 
                 @Override
                 public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
+                    if (warehouse.isEmpty(warehouseId)) {
+                        return;
+                    }
                     new SingleWarehouseViewerMenu(profile, warehouseId).openMenu(player);
                 }
             });

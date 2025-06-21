@@ -96,6 +96,14 @@ public class PitWorldConfig extends Configuration {
     @Setter
     @Getter
     @ConfigData(
+            path = "loc.npc.warehouse"
+    )
+    @ConfigSerializer(serializer = LocationSerializer.class)
+    private Location warehouseNpcLocation;
+
+    @Setter
+    @Getter
+    @ConfigData(
             path = "loc.npc.genesis_demon"
     )
     @ConfigSerializer(serializer = LocationSerializer.class)

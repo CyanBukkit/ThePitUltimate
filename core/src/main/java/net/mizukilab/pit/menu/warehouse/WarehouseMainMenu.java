@@ -21,7 +21,7 @@ public class WarehouseMainMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "仓库系统";
+        return "寄存所";
     }
 
     @Override
@@ -33,7 +33,7 @@ public class WarehouseMainMenu extends Menu {
             buttons.put(slots[i], new WarehouseSlotButton(i + 1, profile));
         }
 
-        for (int i = 0; i < 54; i++) {
+        for (int i = 0; i < 36; i++) {
             if (!buttons.containsKey(i)) {
                 buttons.put(i, new Button() {
                     @Override

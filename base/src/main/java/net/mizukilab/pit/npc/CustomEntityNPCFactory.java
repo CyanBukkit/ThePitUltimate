@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 
@@ -32,11 +33,7 @@ public class CustomEntityNPCFactory implements Listener {
     @Getter
     private final Map<UUID, AbstractCustomEntityNPC> entityToNPCMap = new HashMap<>();
 
-    @Getter
-    private final Map<UUID, Hologram> entityToHologramMap = new HashMap<>();
-
-    @Getter
-    private final Map<UUID, List<Hologram>> entityToAllHologramsMap = new HashMap<>();
+    private final Map<UUID, Map<UUID, List<Hologram>>> playerNPCHolograms = new HashMap<>();
 
     public boolean isCustomNPC(Entity entity) {
         return entityToNPCMap.containsKey(entity.getUniqueId());
@@ -55,19 +52,49 @@ public class CustomEntityNPCFactory implements Listener {
 
 
     public void showNPCsToPlayer(Player player) {
+        cleanupPlayerHolograms(player);
+        
         customEntityNPCs.forEach(npc -> {
             if (npc.getEntity() != null && !npc.getEntity().isDead()) {
-
-                List<Hologram> holograms = entityToAllHologramsMap.get(npc.getEntity().getUniqueId());
-                if (holograms != null) {
-                    for (Hologram hologram : holograms) {
-                        if (!hologram.isSpawned()) {
-                            hologram.spawn();
-                        }
-                    }
-                }
+                createPersonalHologramForPlayer(npc, player);
             }
         });
+    }
+    
+    private void cleanupPlayerHolograms(Player player) {
+        Map<UUID, List<Hologram>> playerHolograms = playerNPCHolograms.get(player.getUniqueId());
+        if (playerHolograms != null) {
+            playerHolograms.values().forEach(holograms -> {
+                holograms.forEach(hologram -> {
+                    if (hologram.isSpawned()) {
+                        hologram.deSpawn();
+                    }
+                });
+            });
+            playerHolograms.clear();
+        }
+    }
+    
+    private void createPersonalHologramForPlayer(AbstractCustomEntityNPC npc, Player player) {
+        if (npc.getEntity() == null) return;
+
+        double hologramHeight = getHologramHeight(npc.getEntityType());
+        Location baseLocation = npc.getEntity().getLocation().add(0, hologramHeight, 0);
+        List<String> lines = npc.getNpcTextLine(player);
+
+        if (!lines.isEmpty()) {
+            List<Hologram> holograms = new ArrayList<>();
+            
+            for (int i = 0; i < lines.size(); i++) {
+                Location lineLocation = baseLocation.clone().add(0, (lines.size() - 1 - i) * 0.29, 0);
+                Hologram hologram = HologramAPI.createHologram(lineLocation, CC.translate(lines.get(i)));
+                hologram.spawn(Collections.singletonList(player));
+                holograms.add(hologram);
+            }
+
+            playerNPCHolograms.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>())
+                    .put(npc.getEntity().getUniqueId(), holograms);
+        }
     }
 
 
@@ -91,6 +118,7 @@ public class CustomEntityNPCFactory implements Listener {
 
         }, 20L);
         Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), this::maintainNPCs, 20L, 20L);
+        Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), this::updateHolograms, 100L, 100L);
     }
 
     private void createNPCEntity(AbstractCustomEntityNPC npc) {
@@ -108,8 +136,6 @@ public class CustomEntityNPCFactory implements Listener {
 
             npc.setEntity(entity);
             entityToNPCMap.put(entity.getUniqueId(), npc);
-
-            createHologramForNPC(npc);
 
         } catch (Exception e) {
             Bukkit.getLogger().severe("创建NPC失败: " + npc.getNpcInternalName() + " - " + e.getMessage());
@@ -197,29 +223,6 @@ public class CustomEntityNPCFactory implements Listener {
     }
 
 
-    private void createHologramForNPC(AbstractCustomEntityNPC npc) {
-        if (npc.getEntity() == null) return;
-
-        double hologramHeight = getHologramHeight(npc.getEntityType());
-        Location baseLocation = npc.getEntity().getLocation().add(0, hologramHeight, 0);
-        List<String> lines = npc.getNpcTextLine(null);
-
-        if (!lines.isEmpty()) {
-
-            List<Hologram> holograms = new ArrayList<>();
-
-            for (int i = 0; i < lines.size(); i++) {
-
-                Location lineLocation = baseLocation.clone().add(0, (lines.size() - 1 - i) * 0.29, 0);
-                Hologram hologram = HologramAPI.createHologram(lineLocation, CC.translate(lines.get(i)));
-                hologram.spawn();
-                holograms.add(hologram);
-            }
-
-            entityToHologramMap.put(npc.getEntity().getUniqueId(), holograms.get(0));
-            entityToAllHologramsMap.put(npc.getEntity().getUniqueId(), holograms);
-        }
-    }
 
     private void maintainNPCs() {
         customEntityNPCs.removeIf(npc -> {
@@ -227,29 +230,57 @@ public class CustomEntityNPCFactory implements Listener {
             if (entity == null || entity.isDead()) {
                 if (entity != null) {
                     entityToNPCMap.remove(entity.getUniqueId());
-                    entityToHologramMap.remove(entity.getUniqueId());
-                    List<Hologram> holograms = entityToAllHologramsMap.remove(entity.getUniqueId());
-                    if (holograms != null) {
-                        for (Hologram hologram : holograms) {
-                            if (hologram.isSpawned()) {
-                                hologram.deSpawn();
-                            }
-                        }
-                    }
+                    cleanupNPCHolograms(entity.getUniqueId());
                 }
                 return true;
             }
-            List<Hologram> holograms = entityToAllHologramsMap.get(entity.getUniqueId());
-            if (holograms != null) {
-                double hologramHeight = getHologramHeight(npc.getEntityType());
-                Location baseLocation = entity.getLocation().add(0, hologramHeight, 0);
-                for (int i = 0; i < holograms.size(); i++) {
-                    Location lineLocation = baseLocation.clone().add(0, (holograms.size() - 1 - i) * 0.29, 0);
-                    holograms.get(i).setLocation(lineLocation);
+            return false;
+        });
+    }
+    
+    private void updateHolograms() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Map<UUID, List<Hologram>> playerHolograms = playerNPCHolograms.get(player.getUniqueId());
+            if (playerHolograms != null) {
+                for (UUID npcEntityId : playerHolograms.keySet()) {
+                    AbstractCustomEntityNPC npc = entityToNPCMap.get(npcEntityId);
+                    if (npc != null && npc.getEntity() != null && !npc.getEntity().isDead()) {
+                        updateNPCHologramForPlayer(npc, player);
+                    }
                 }
             }
-
-            return false;
+        }
+    }
+    
+    private void updateNPCHologramForPlayer(AbstractCustomEntityNPC npc, Player player) {
+        List<Hologram> existingHolograms = playerNPCHolograms.get(player.getUniqueId()).get(npc.getEntity().getUniqueId());
+        if (existingHolograms == null) return;
+        
+        List<String> newLines = npc.getNpcTextLine(player);
+        if (existingHolograms.size() != newLines.size()) {
+            existingHolograms.forEach(hologram -> {
+                if (hologram.isSpawned()) {
+                    hologram.deSpawn();
+                }
+            });
+            createPersonalHologramForPlayer(npc, player);
+        } else {
+            for (int i = 0; i < newLines.size(); i++) {
+                existingHolograms.get(i).setText(CC.translate(newLines.get(i)));
+            }
+        }
+    }
+    
+    private void cleanupNPCHolograms(UUID npcEntityId) {
+        playerNPCHolograms.values().forEach(playerHolograms -> {
+            List<Hologram> holograms = playerHolograms.remove(npcEntityId);
+            if (holograms != null) {
+                holograms.forEach(hologram -> {
+                    if (hologram.isSpawned()) {
+                        hologram.deSpawn();
+                    }
+                });
+            }
         });
     }
 
@@ -282,17 +313,18 @@ public class CustomEntityNPCFactory implements Listener {
             }
         });
 
-        entityToAllHologramsMap.values().forEach(holograms -> {
-            for (Hologram hologram : holograms) {
-                if (hologram.isSpawned()) {
-                    hologram.deSpawn();
-                }
-            }
+        playerNPCHolograms.values().forEach(playerHolograms -> {
+            playerHolograms.values().forEach(holograms -> {
+                holograms.forEach(hologram -> {
+                    if (hologram.isSpawned()) {
+                        hologram.deSpawn();
+                    }
+                });
+            });
         });
 
         entityToNPCMap.clear();
-        entityToHologramMap.clear();
-        entityToAllHologramsMap.clear();
+        playerNPCHolograms.clear();
     }
 
 
@@ -345,5 +377,11 @@ public class CustomEntityNPCFactory implements Listener {
 
             event.setCancelled(true);
         }
+    }
+    
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        cleanupPlayerHolograms(event.getPlayer());
+        playerNPCHolograms.remove(event.getPlayer().getUniqueId());
     }
 } 

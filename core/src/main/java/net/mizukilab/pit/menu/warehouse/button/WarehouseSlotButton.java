@@ -30,11 +30,11 @@ public class WarehouseSlotButton extends Button {
         int itemCount = profile.getWarehouse().getItemCount(warehouseId);
         boolean isEmpty = profile.getWarehouse().isEmpty(warehouseId);
 
-        Material material = isEmpty ? Material.CHEST : Material.ENDER_PEARL;
-        String statusColor = isEmpty ? "&7" : "&a";
+        Material material = isEmpty ? Material.CHEST : Material.ENDER_PORTAL_FRAME;
+        String statusColor = isEmpty ? "§7" : "§a";
 
         return new ItemBuilder(material)
-                .name("&6寄存箱 #" + warehouseId)
+                .name("§6寄存箱 #" + warehouseId)
                 .lore(Arrays.asList(
                         "",
                         statusColor + "物品数量: " + itemCount + "/54",
