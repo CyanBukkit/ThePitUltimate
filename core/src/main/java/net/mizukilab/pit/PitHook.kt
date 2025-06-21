@@ -68,6 +68,7 @@ import net.mizukilab.pit.menu.trade.TradeListener
 import net.mizukilab.pit.nametag.NameTagImpl
 
 import net.mizukilab.pit.npc.type.*
+import net.mizukilab.pit.npc.type.custom.SewersNpc
 import net.mizukilab.pit.park.Parker
 import net.mizukilab.pit.perk.type.boost.*
 import net.mizukilab.pit.perk.type.prestige.*
@@ -712,11 +713,23 @@ private fun loadNpcs() {
             PrestigeNPC::class.java,
             QuestNpc::class.java,
             ShopNPC::class.java,
-            StatusNPC::class.java,
-            SewersNpc::class.java
+            StatusNPC::class.java
         )
     )
     println("load Npc...")
+
+    loadCustomEntityNpcs()
+}
+
+private fun loadCustomEntityNpcs() {
+    val customNpcFactory = ThePit.getInstance().customEntityNPCFactory
+    Bukkit.getServer().pluginManager.registerEvents(customNpcFactory, ThePit.getInstance())
+    customNpcFactory.init(
+        listOf(
+            SewersNpc::class.java,
+        )
+    )
+    println("load Custom Entity NPCs...")
 }
 
 

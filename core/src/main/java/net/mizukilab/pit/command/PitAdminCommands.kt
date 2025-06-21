@@ -17,8 +17,6 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.mizukilab.pit.PitHook
 import net.mizukilab.pit.command.handler.HandHasItem
-import net.mizukilab.pit.config.NewConfiguration.load
-import net.mizukilab.pit.config.NewConfiguration.loadFile
 import net.mizukilab.pit.events.impl.QuickMathEvent
 import net.mizukilab.pit.item.AbstractPitItem
 import net.mizukilab.pit.item.MythicColor
@@ -52,27 +50,28 @@ import kotlin.math.min
 class PitAdminCommands {
     @Execute(name = "switchMap")
     @Shortcut("swm")
-    fun switchMap(@Context player: Player,@OptionalArg("cursor") cursor: Integer){
+    fun switchMap(@Context player: Player, @OptionalArg("cursor") cursor: Integer) {
         player.sendMessage("成功切换")
         var mapSelector = ThePit.getInstance().mapSelector
-        if(cursor == null){
+        if (cursor == null) {
             mapSelector.switchMap();
             return;
         }
         mapSelector.switchMapIndexed(cursor.toInt());
     }
+
     @Execute(name = "lookupAndSwitchMap")
     @Shortcut("lookupSWM")
-    fun lookupMap(@Context player: Player,@OptionalArg("cursorName") cursor: String){
+    fun lookupMap(@Context player: Player, @OptionalArg("cursorName") cursor: String) {
         var mapSelector = ThePit.getInstance().mapSelector
-        if(cursor == null){
+        if (cursor == null) {
             var cursorInt: Int = -1;
             ThePit.getInstance().configManager.pitConfigs.values.forEach {
                 if (it.worldName.equals(cursor)) {
-                   cursorInt = it.id
+                    cursorInt = it.id
                 }
             };
-            if(cursorInt == -1){
+            if (cursorInt == -1) {
                 player.sendMessage("error")
                 return;
             }
@@ -81,6 +80,7 @@ class PitAdminCommands {
         }
         player.sendMessage("error")
     }
+
     @Execute(name = "createEquation")
     @Shortcut("eq")
     fun eqEvent(@Context player: Player, @Arg("eqQuest") eq: String, @Arg("eqAns") ans: String) {
@@ -129,17 +129,19 @@ class PitAdminCommands {
 
         return CC.translate("&a成功!添加第" + num + "个出生点")
     }
+
     @Execute(name = "readyEpic")
     @Async
     fun readyEpic(@Context player: Player) {
         var nextEpicEvent = ThePit.getInstance().eventFactory.nextEpicEvent
-        if(nextEpicEvent != null) {
+        if (nextEpicEvent != null) {
             CC.boardCast("&c&l跳过! &f管理员已经跳过事件延迟")
             ThePit.getInstance().eventFactory.nextEpicEventTimer.fastExpired()
         } else {
             player.sendMessage("There is no epic event currently available")
         }
     }
+
     @Execute(name = "loc")
     @Async
     fun dumpLocation(@Context player: Player) {
@@ -217,6 +219,7 @@ class PitAdminCommands {
 
         return CC.translate("&a成功设置下水道鱼NPC位置!")
     }
+
     @Execute(name = "shopNpc")
     @Async
     fun setShopNpcLocation(@Context player: Player): String {
@@ -331,6 +334,7 @@ class PitAdminCommands {
         ThePit.getInstance().pitConfig.save()
         return CC.translate("成功设置龙蛋事件位置！")
     }
+
     @Execute(name = "pitLoc")
     fun setPitLoc(@Context player: Player, @Arg("type") type: String): String {
         if (type.equals("a", ignoreCase = true)) {
@@ -369,6 +373,7 @@ class PitAdminCommands {
         ThePit.getInstance().pitConfig.save()
         return CC.translate("&a成功设置下水道出生点")
     }
+
     @Execute(name = "ham")
     fun hamNpc(@Context player: Player): String {
         val config = ThePit.getInstance()
@@ -415,12 +420,12 @@ class PitAdminCommands {
         ThePit.getInstance().configManager.reload()
         PitHook.loadConfig()
         ThePit.getInstance().mapSelector.reload()
+        ThePit.getInstance().customEntityNPCFactory.reload()
         for (npc in ThePit.getInstance().npcFactory.pitNpc) {
             npc.npc.setLocation(npc.getNpcSpawnLocation())
         }
         sender.sendMessage(CC.translate("&7 重载完成!"))
     }
-
 
 
     @Execute(name = "edit")

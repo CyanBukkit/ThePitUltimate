@@ -8,7 +8,7 @@ plugins {
     kotlin("jvm") version "2.1.20"
     alias(libs.plugins.shadow)
 }
-var devBuild = false
+var devBuild = true
 if (devBuild) {
     println("当前使用DevBuild模式构建!!,请详细斟酌是否构建")
     Scanner(System.`in`).next()
@@ -39,7 +39,9 @@ tasks.named<ShadowJar>("shadowJar") {
     relocate("net.jodah", "net.mizukilab.pit.libs")
     relocate("net.jitse", "net.mizukilab.pit.libs")
     relocate("xyz.upperlevel.spigot", "net.mizukilab.pit.libs")
-    exclude("org/**")
+    if (!devBuild) {
+        exclude("org/**")
+    }
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
     mergeServiceFiles()
@@ -52,7 +54,11 @@ dependencies {
     }
     compileOnly(fileTree("../packLib"))
     compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
-    compileOnly(libs.reflectionhelper)
+    if (devBuild) {
+        api(libs.reflectionhelper)
+    }else{
+        compileOnly(libs.reflectionhelper)
+    }
     compileOnly(libs.hutool.crypto)
     compileOnly(libs.book)
     compileOnly(libs.slf4j)

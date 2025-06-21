@@ -112,6 +112,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Getter
     private NpcFactory npcFactory;
     @Getter
+    private net.mizukilab.pit.npc.CustomEntityNPCFactory customEntityNPCFactory;
+    @Getter
     private NametagHandler nametagHandler;
     private IItemFactory factory;
     @Getter
@@ -487,6 +489,10 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         log.info("Loading NPCFactory...");
         this.npcFactory = new NpcFactory();
         log.info("Loaded NPCFactory!");
+        
+        log.info("Loading CustomEntityNPCFactory...");
+        this.customEntityNPCFactory = new net.mizukilab.pit.npc.CustomEntityNPCFactory();
+        log.info("Loaded CustomEntityNPCFactory!");
     }
 
     public void loadEvents() {
