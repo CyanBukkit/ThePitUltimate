@@ -40,6 +40,6 @@ public class SingleWarehouseMenu extends Menu {
     
     @Override
     public int getSize() {
-        return 54;
+        return 45;
     }
 } 

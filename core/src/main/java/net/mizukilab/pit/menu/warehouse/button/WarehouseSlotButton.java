@@ -37,7 +37,7 @@ public class WarehouseSlotButton extends Button {
                 .name("§6寄存箱 #" + warehouseId)
                 .lore(Arrays.asList(
                         "",
-                        statusColor + "物品数量: " + itemCount + "/54",
+                        statusColor + "物品数量: " + itemCount + "/45",
                         "",
                         "&e点击打开!"
                 ))

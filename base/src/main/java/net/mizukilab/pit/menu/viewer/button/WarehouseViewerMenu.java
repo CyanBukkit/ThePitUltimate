@@ -49,7 +49,7 @@ public class WarehouseViewerMenu extends Menu {
                     boolean isEmpty = warehouse.isEmpty(warehouseId);
 
                     List<String> lore = new ArrayList<>();
-                    lore.add("§7物品数量: &a" + itemCount + "&7/&a54");
+                    lore.add("§7物品数量: &a" + itemCount + "&7/&a45");
                     lore.add("");
                     if (isEmpty) {
                         lore.add("§c这个寄存箱为空");

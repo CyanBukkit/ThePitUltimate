@@ -4,6 +4,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.util.inventory.InventoryUtil;
 import net.mizukilab.pit.util.item.ItemUtil;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * @Author: Araykal
@@ -48,6 +51,10 @@ public class WarehouseListener implements Listener {
         if (event.getClickedInventory() != null && event.getClickedInventory().equals(player.getInventory())) {
             moveItemToWarehouse(player, inventory, clickedItem, event.getSlot());
         } else if (event.getClickedInventory() != null && isWarehouseInventory(event.getClickedInventory())) {
+            // 如果点击的是屏障占位符，则不做任何操作
+            if (isBarrierPlaceholder(clickedItem)) {
+                return;
+            }
             moveItemToPlayerInventory(player, inventory, clickedItem, event.getSlot());
         }
     }
@@ -88,7 +95,7 @@ public class WarehouseListener implements Listener {
 
         for (int i = 0; i < warehouseInventory.getSize(); i++) {
             org.bukkit.inventory.ItemStack existingItem = warehouseInventory.getItem(i);
-            if (existingItem != null && existingItem.isSimilar(item)) {
+            if (existingItem != null && !isBarrierPlaceholder(existingItem) && existingItem.isSimilar(item)) {
                 int maxStackSize = item.getMaxStackSize();
                 int existingAmount = existingItem.getAmount();
                 int itemAmount = item.getAmount();
@@ -109,7 +116,16 @@ public class WarehouseListener implements Listener {
                 }
             }
         }
-        int emptySlot = warehouseInventory.firstEmpty();
+        // 寻找空格子或屏障占位符
+        int emptySlot = -1;
+        for (int i = 0; i < warehouseInventory.getSize(); i++) {
+            ItemStack slotItem = warehouseInventory.getItem(i);
+            if (slotItem == null || isBarrierPlaceholder(slotItem)) {
+                emptySlot = i;
+                break;
+            }
+        }
+        
         if (emptySlot == -1) {
             player.sendMessage("§c寄存箱已满!");
             return;
@@ -134,7 +150,7 @@ public class WarehouseListener implements Listener {
                     existingItem.setAmount(existingAmount + canAdd);
 
                     if (canAdd == itemAmount) {
-                        warehouseInventory.setItem(warehouseSlot, null);
+                        warehouseInventory.setItem(warehouseSlot, createBarrierPlaceholder());
                     } else {
                         item.setAmount(itemAmount - canAdd);
                         warehouseInventory.setItem(warehouseSlot, item);
@@ -150,7 +166,7 @@ public class WarehouseListener implements Listener {
             return;
         }
         player.getInventory().addItem(item.clone());
-        warehouseInventory.setItem(warehouseSlot, null);
+        warehouseInventory.setItem(warehouseSlot, createBarrierPlaceholder());
         player.playSound(player.getLocation(), Sound.LAVA_POP, 1.0f, 1.0f);
         player.updateInventory();
     }
@@ -159,5 +175,30 @@ public class WarehouseListener implements Listener {
         if (item == null) return true;
 
         return ItemUtil.canSaveEnderChest(item);
+    }
+
+    private ItemStack createBarrierPlaceholder() {
+        ItemStack glass = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
+        ItemMeta meta = glass.getItemMeta();
+        meta.setDisplayName("§7储存格");
+        glass.setItemMeta(meta);
+        return glass;
+    }
+
+    private boolean isBarrierPlaceholder(ItemStack item) {
+        if (item == null || item.getType() != Material.STAINED_GLASS_PANE || item.getDurability() != 15) {
+            return false;
+        }
+        ItemMeta meta = item.getItemMeta();
+        return meta != null && "§7储存格".equals(meta.getDisplayName());
+    }
+
+    private void updateBarrierPlaceholders(Inventory warehouseInventory) {
+        for (int i = 0; i < warehouseInventory.getSize(); i++) {
+            ItemStack item = warehouseInventory.getItem(i);
+            if (item == null) {
+                warehouseInventory.setItem(i, createBarrierPlaceholder());
+            }
+        }
     }
 } 

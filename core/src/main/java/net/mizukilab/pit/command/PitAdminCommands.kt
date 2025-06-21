@@ -181,7 +181,6 @@ class PitAdminCommands {
     }
 
     @Execute(name = "warehouseLoc")
-    @Async
     fun setWarehouseLocLocation(@Context player: Player): String {
         ThePit.getInstance().pitConfig.warehouseNpcLocation = player.location
         ThePit.getInstance().pitConfig.save()

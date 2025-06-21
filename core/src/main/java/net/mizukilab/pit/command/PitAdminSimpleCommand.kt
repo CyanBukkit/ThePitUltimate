@@ -105,6 +105,9 @@ class PitAdminSimpleCommand {
         if (menu.equals("shop", ignoreCase = true)) {
             ThePit.api.openMenu(player, "shop")
         }
+        if (menu.equals("house",ignoreCase = true)) {
+            ThePit.api.openMenu(player, "warehouse")
+        }
         if (menu.equals("perkBuy", ignoreCase = true)) {
             PerkChooseMenu().openMenu(player)
         }
