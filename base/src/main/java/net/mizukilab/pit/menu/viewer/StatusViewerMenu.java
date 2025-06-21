@@ -5,10 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.PerkData;
 import cn.charlotte.pit.data.sub.PlayerInv;
 import cn.charlotte.pit.perk.AbstractPerk;
-import net.mizukilab.pit.menu.viewer.button.EnderChestViewerMenu;
-import net.mizukilab.pit.menu.viewer.button.InventoryViewerMenu;
-import net.mizukilab.pit.menu.viewer.button.PitPassiveStatusButton;
-import net.mizukilab.pit.menu.viewer.button.PitStatusButton;
+import net.mizukilab.pit.menu.viewer.button.*;
 import net.mizukilab.pit.menu.viewer.button.admin.TradeDataViewerButton;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.chat.CC;
@@ -55,7 +52,7 @@ public class StatusViewerMenu extends Menu {
         PlayerInv inventory;
         if (Bukkit.getPlayer(profile.getPlayerUuid()) == null) {
             inventory = profile.getInventory();
-            player.sendMessage(CC.translate("&c该玩家离线,将查询离线档案!"));
+            player.sendMessage(CC.translate("&c这名玩家离线,这将查询离线档案!"));
         } else {
             profile.save(Bukkit.getPlayer(profile.getPlayerUuid()));
             inventory = PlayerInv.fromPlayerInventory(Bukkit.getPlayer(profile.getPlayerUuid()).getInventory());
@@ -287,6 +284,30 @@ public class StatusViewerMenu extends Menu {
                     return;
                 }
                 new EnderChestViewerMenu(profile).openMenu(player);
+            }
+        });
+
+        button.put(26, new Button() {
+            @Override
+            public ItemStack getButtonItem(Player player) {
+                if (!profile.getPlayerOption().isEnderChestVisibility() && !PlayerUtil.isStaff(player)) {
+                    return new ItemBuilder(Material.ENDER_PEARL)
+                            .name("&6寄存箱")
+                            .lore("&7查看这名玩家的寄存所的物品.", " ", "&e点击查看!", " ", "&c此玩家选择隐藏了寄存信息,你无法查看!")
+                            .build();
+                }
+                return new ItemBuilder(Material.ENDER_PEARL)
+                        .name("&6寄存箱")
+                        .lore("&7查看这名玩家的寄存所的物品.", " ", "&e点击查看!")
+                        .build();
+            }
+
+            @Override
+            public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
+                if (!profile.getPlayerOption().isEnderChestVisibility() && !PlayerUtil.isStaff(player)) {
+                    return;
+                }
+                new WarehouseViewerMenu(profile).openMenu(player);
             }
         });
         return button;

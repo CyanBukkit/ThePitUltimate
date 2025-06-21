@@ -144,6 +144,7 @@ public class PlayerProfile {
     private volatile PlayerInv inventory; //原子写入
     private volatile PlayerEnderChest enderChest;
     private int enderChestRow;
+    private volatile PlayerWarehouse warehouse;
 
     //每次都遍历查询，效率低下
     //所以专用Map降低大O复杂度
@@ -293,6 +294,7 @@ public class PlayerProfile {
     public PlayerProfile() {
         this.inventory = new PlayerInv();
         this.enderChest = new PlayerEnderChest();
+        this.warehouse = new PlayerWarehouse();
         this.killRecap = new KillRecap();
         this.buffData = new BuffData();
         this.combatTimer = new Cooldown(0);
@@ -1203,6 +1205,17 @@ public class PlayerProfile {
 
     public void setEnderChestRow(int enderChestRow) {
         this.enderChestRow = enderChestRow;
+    }
+
+    public PlayerWarehouse getWarehouse() {
+        if (warehouse == null) {
+            warehouse = new PlayerWarehouse();
+        }
+        return warehouse;
+    }
+
+    public void setWarehouse(PlayerWarehouse warehouse) {
+        this.warehouse = warehouse;
     }
 
     @Deprecated

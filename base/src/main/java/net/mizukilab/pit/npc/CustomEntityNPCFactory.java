@@ -48,11 +48,8 @@ public class CustomEntityNPCFactory implements Listener {
 
 
     public void reload() {
-
         cleanup();
-
         customEntityNPCs.forEach(this::createNPCEntity);
-
         Bukkit.getOnlinePlayers().forEach(this::showNPCsToPlayer);
     }
 
@@ -76,16 +73,23 @@ public class CustomEntityNPCFactory implements Listener {
 
     @SneakyThrows
     public void init(Collection<Class<? extends AbstractCustomEntityNPC>> classes) {
-        for (Class<?> clazz : classes) {
-            if (AbstractCustomEntityNPC.class.isAssignableFrom(clazz)) {
-                AbstractCustomEntityNPC customNPC = (AbstractCustomEntityNPC) clazz.getConstructor().newInstance();
+        cleanupWorldEntities();
 
-                createNPCEntity(customNPC);
-
-                customEntityNPCs.add(customNPC);
+        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+            for (Class<?> clazz : classes) {
+                if (AbstractCustomEntityNPC.class.isAssignableFrom(clazz)) {
+                    try {
+                        AbstractCustomEntityNPC customNPC = (AbstractCustomEntityNPC) clazz.getConstructor().newInstance();
+                        createNPCEntity(customNPC);
+                        customEntityNPCs.add(customNPC);
+                    } catch (Exception e) {
+                        Bukkit.getLogger().severe("创建自定义NPC失败: " + clazz.getSimpleName() + " - " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
 
+        }, 20L);
         Bukkit.getScheduler().runTaskTimer(ThePit.getInstance(), this::maintainNPCs, 20L, 20L);
     }
 
@@ -249,6 +253,27 @@ public class CustomEntityNPCFactory implements Listener {
         });
     }
 
+    private void cleanupWorldEntities() {
+        try {
+            Bukkit.getWorlds().forEach(world -> {
+                
+                List<Entity> entitiesToRemove = new ArrayList<>();
+
+                for (Entity entity : world.getEntities()) {
+                    if (!(entity instanceof Player) && 
+                        !(entity instanceof org.bukkit.entity.Item) &&
+                        !(entity instanceof org.bukkit.entity.ExperienceOrb)) {
+                        entitiesToRemove.add(entity);
+                    }
+                }
+
+                entitiesToRemove.forEach(Entity::remove);
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void cleanup() {
         entityToNPCMap.values().forEach(npc -> {

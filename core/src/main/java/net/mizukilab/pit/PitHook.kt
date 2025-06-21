@@ -69,6 +69,7 @@ import net.mizukilab.pit.nametag.NameTagImpl
 
 import net.mizukilab.pit.npc.type.*
 import net.mizukilab.pit.npc.type.custom.SewersNpc
+import net.mizukilab.pit.npc.type.custom.WarehouseNPC
 import net.mizukilab.pit.park.Parker
 import net.mizukilab.pit.perk.type.boost.*
 import net.mizukilab.pit.perk.type.prestige.*
@@ -727,6 +728,7 @@ private fun loadCustomEntityNpcs() {
     customNpcFactory.init(
         listOf(
             SewersNpc::class.java,
+            WarehouseNPC::class.java,
         )
     )
     println("load Custom Entity NPCs...")
@@ -791,6 +793,7 @@ private fun registerListeners() {
         ButtonListener::class.java,
         GenesisCombatListener::class.java,
         TradeListener::class.java,
+        WarehouseListener::class.java,
         iSpigot::class.java,
         HologramListener::class.java,
     )
