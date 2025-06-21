@@ -582,6 +582,7 @@ private fun loadPerks() {
         BeastModeBundlePerk::class.java,
         BountySolventShopPerk::class.java,
         CelebrityPerk::class.java,
+        CloakRoomPerk::class.java,
         CombatSpadePerk::class.java,
         ContractorPerk::class.java,
         CoolPerk::class.java,
@@ -733,7 +734,6 @@ private fun loadCustomEntityNpcs() {
     )
     println("load Custom Entity NPCs...")
 }
-
 
 
 private fun loadQuests() {
