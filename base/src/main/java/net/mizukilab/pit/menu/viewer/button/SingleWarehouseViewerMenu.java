@@ -38,13 +38,26 @@ public class SingleWarehouseViewerMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
         Inventory warehouse = profile.getWarehouse().getWarehouse(warehouseId);
-        for (int i = 0; i < 54; i++) {
+
+        for (int i = 0; i < 45; i++) {
             final int slot = i;
             buttons.put(i, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
                     ItemStack item = warehouse.getItem(slot);
                     return item != null ? item : new ItemStack(Material.AIR);
+                }
+                
+                @Override
+                public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
+                }
+            });
+        }
+        for (int i = 45; i < 53; i++) {
+            buttons.put(i, new Button() {
+                @Override
+                public ItemStack getButtonItem(Player player) {
+                    return new ItemStack(Material.AIR);
                 }
                 
                 @Override
