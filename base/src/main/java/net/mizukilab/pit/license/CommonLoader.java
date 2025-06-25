@@ -8,7 +8,6 @@ public class CommonLoader {
             plugin.getLogger().warning("Loading from local storage");
             Class.forName("net.mizukilab.pit.Loader").getMethod("start").invoke(null);
         } catch (Exception e) {
-            e.printStackTrace();
             plugin.getLogger().warning("Fetching");
             MagicLoader.load();
             MagicLoader.ensureIsLoaded();
