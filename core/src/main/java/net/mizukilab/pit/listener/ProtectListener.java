@@ -320,8 +320,7 @@ public class ProtectListener implements Listener {
                 }
             }
         }
-        boolean cancel = damagerInArena && entityInArena;
-        Log.WriteLine("Damager: " + damager1.getName() +  " | " + damagerInArena + " | " + entityInArena + " Result: " + cancel);
+        boolean cancel = damagerInArena || entityInArena;
         event.setCancelled(cancel);
 
     }
