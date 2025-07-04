@@ -72,6 +72,7 @@ class Regularity : AbstractEnchantment(), Listener {
 
         var level = -1
         val operator = (ThePit.getInstance().profileOperator as ProfileOperator).getOperator(attacker)
+
         if (operator != null) {
             if (operator.profile().leggings != null) {
                 if (operator.isLoaded) {
@@ -92,6 +93,7 @@ class Regularity : AbstractEnchantment(), Listener {
                 else -> 1.5
             }
         ) {
+
             val metadata = victim.getMetadata("regularity")
             metadata.firstOrNull()?.asLong()?.let {
                 if (System.currentTimeMillis() < it) {
@@ -100,6 +102,7 @@ class Regularity : AbstractEnchantment(), Listener {
                     victim.removeMetadata("regularity", ThePit.getInstance())
                 }
             }
+
             if (!victim.isDead) {
                 val boost = when (level) {
                     1 -> 45

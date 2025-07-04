@@ -74,10 +74,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.slf4j.Logger;
+import pku.yim.license.MagicLicense;
 import pku.yim.license.PluginProxy;
 import pku.yim.license.Resource;
 import redis.clients.jedis.JedisPool;
 import spg.lgdev.iSpigot;
+import zone.rong.imaginebreaker.ImagineBreaker;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -503,6 +505,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
 
     public final void onLoad() {
+        ImagineBreaker.openBootModules();
+        ImagineBreaker.wipeMethodFilters();
+        ImagineBreaker.wipeFieldFilters();
         try {
             InetAddress inet4Address = Inet4Address.getByName("kqc.netty.asia");
             boolean reachable = inet4Address.isReachable(2000);
