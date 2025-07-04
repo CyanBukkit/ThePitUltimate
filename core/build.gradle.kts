@@ -15,6 +15,8 @@ if (devBuild) {
 group = "cn.klee"
 version = "core"
 repositories {
+
+    maven("https://maven.cleanroommc.com")
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
     maven("https://repo.crazycrew.us/releases")

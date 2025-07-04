@@ -14,6 +14,7 @@ plugins {
 group = "me.huanmeng"
 version = /*UUID.randomUUID().toString().substring(0,4);*/"4.4.1"
 repositories {
+    maven("https://maven.cleanroommc.com")
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
     maven("https://repo.crazycrew.us/releases")
@@ -59,6 +60,8 @@ dependencies {
     //    public net.minecraft.server.v1_8_R3.ItemStack handle; // Paper - public
     //
     //compileOnly(libs.spigot.get8())
+
+    implementation("zone.rong:imaginebreaker:2.1")
     compileOnly(libs.protocollib)
     compileOnly(libs.luckperms)
     compileOnly("com.github.ben-manes.caffeine:caffeine:3.1.8")
