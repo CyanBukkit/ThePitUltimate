@@ -13,6 +13,7 @@ import net.mizukilab.pit.parm.listener.IAttackEntity
 import net.mizukilab.pit.parm.listener.IPlayerBeKilledByEntity
 import net.mizukilab.pit.parm.listener.IPlayerDamaged
 import net.mizukilab.pit.parm.listener.IPlayerKilledEntity
+import net.mizukilab.pit.parm.listener.IPlayerRespawn
 import net.mizukilab.pit.util.PlayerUtil
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.chat.CC
@@ -41,7 +42,7 @@ import kotlin.math.sin
  */
 @AutoRegister
 class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEntity, IPlayerKilledEntity,
-    IPlayerBeKilledByEntity {
+    IPlayerBeKilledByEntity,IPlayerRespawn {
 
     override fun getInternalPerkName() = "despot_streak"
 
@@ -195,5 +196,12 @@ class Despot : AbstractPerk(), MegaStreak, Listener, IPlayerDamaged, IAttackEnti
                 }
             }, 5L)
         }
+    }
+
+    override fun handleRespawn(enchantLevel: Int, myself: Player?) {
+        if (myself != null) {
+            myself.maxHealth = PlayerProfile.getPlayerProfileByUuid(myself.uniqueId).maxHealth
+        }
+
     }
 }
