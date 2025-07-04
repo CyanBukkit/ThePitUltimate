@@ -1,5 +1,6 @@
 package net.mizukilab.pit.enchantment.type.rare
 
+import cn.charlotte.pit.ThePit
 import com.google.common.util.concurrent.AtomicDouble
 import net.minecraft.server.v1_8_R3.BlockPosition
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent
@@ -61,7 +62,7 @@ class ExecutionerEnchant : AbstractEnchantment(), IAttackEntity {
     ) {
         val targetPlayer = target as Player
         for (nearbyPlayers in PlayerUtil.getNearbyPlayers(targetPlayer.location, 10.0)) {
-            var npc = PlayerUtil.isNPC(nearbyPlayers)
+            var npc = ThePit.getInstance().npcFactory.hasNPC(nearbyPlayers)
             if (npc) {
                 continue
             }

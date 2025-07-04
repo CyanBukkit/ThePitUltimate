@@ -85,7 +85,7 @@ public class ItemFactory implements IItemFactory {
         if (iMythicItem == null || clientSide) { //会导致不掉命bug, 有点厉害
             runnable.run();
 
-            return getIMythicItem0(stack, internalName);
+            return getIMythicItem0(stack, internalName,clientSide);
         } else {
             runnable.run();
             return iMythicItem;
@@ -119,8 +119,8 @@ public class ItemFactory implements IItemFactory {
         return getIMythicItem(stack);
     }
 
-    public IMythicItem getIMythicItem0(ItemStack stack, String internalName) {
-        if(!this.clientSide) {
+    public IMythicItem getIMythicItem0(ItemStack stack, String internalName,boolean clientSide) {
+        if(!clientSide) {
             if (ItemUtil.shouldUpdateItem(stack)) {
                 if (ItemUtil.shouldUpdateUUID()) {
                     ItemUtil.randomUUIDItem(stack);
@@ -133,12 +133,12 @@ public class ItemFactory implements IItemFactory {
 
         if (mythicItem != null) {
             if (mythicItem.uuid != null) {
-                if(!this.clientSide) {
+                if(!clientSide) {
                     if (mythicItem.uuid.equals(IMythicItem.getDefUUID())) {
                         mythicItem.uuid = ItemUtil.randomUUIDItem(stack);
                     }
-                    theReference.putValue(mythicItem.uuid, mythicItem);
                 }
+                theReference.putValue(mythicItem.uuid, mythicItem);
             }
         }
         return mythicItem;

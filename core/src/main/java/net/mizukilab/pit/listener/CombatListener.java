@@ -249,7 +249,7 @@ public class CombatListener implements Listener {
         player.removeMetadata("vanished", ThePit.getInstance());
         player.removeMetadata("leech_hit", ThePit.getInstance());
         player.removeMetadata("true_damage_immune", ThePit.getInstance());
-        player.removeMetadata("regularity_cooldown", ThePit.getInstance());
+        player.removeMetadata("regularity", ThePit.getInstance());
         player.removeMetadata("mixed_combat_" + player.getUniqueId(), ThePit.getInstance());
 
     }

@@ -17,6 +17,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.metadata.FixedMetadataValue
+import org.bukkit.metadata.LazyMetadataValue
+import org.bukkit.scheduler.BukkitRunnable
 
 
 @AutoRegister
@@ -90,12 +92,12 @@ class Regularity : AbstractEnchantment(), Listener {
                 else -> 1.5
             }
         ) {
-            val metadata = victim.getMetadata("regularity_cooldown")
+            val metadata = victim.getMetadata("regularity")
             metadata.firstOrNull()?.asLong()?.let {
                 if (System.currentTimeMillis() < it) {
                     return
                 } else {
-                    victim.removeMetadata("regularity_cooldown", ThePit.getInstance())
+                    victim.removeMetadata("regularity", ThePit.getInstance())
                 }
             }
             if (!victim.isDead) {
@@ -105,18 +107,19 @@ class Regularity : AbstractEnchantment(), Listener {
                     else -> 75
                 } * 0.01
 
-                Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), {
-                    victim.noDamageTicks = 0
-                    (victim as CraftPlayer).handle.invulnerableTicks = 0;
-                    victim.damage(event.damage * boost, attacker)
-                    victim.noDamageTicks = 25;
+                object : BukkitRunnable() {
+                    override fun run() {
+                        victim.noDamageTicks = 0
+                        (victim as CraftPlayer).handle.invulnerableTicks = 0;
+                        victim.damage(event.damage * boost, attacker)
+                        victim.noDamageTicks = victim.maximumNoDamageTicks;
 
-                    victim.setMetadata(
-                        "regularity_cooldown",
-                        FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L + 50)
-                    )
-                    Utils.pointMetadataAndRemove(victim, 500, "regularity_cooldown");
-                }, 5L)
+                        victim.setMetadata(
+                            "regularity",
+                            FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L)
+                        )
+                    }
+                }.runTaskLater(ThePit.getInstance(),5L)
             }
         }
     }

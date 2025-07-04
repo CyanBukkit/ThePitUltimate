@@ -1,5 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import java.util.*
+import java.util.Scanner
 
 plugins {
     kotlin("plugin.lombok") version "2.1.20"
@@ -10,8 +10,7 @@ plugins {
 }
 var devBuild = false
 if (devBuild) {
-    println("当前使用DevBuild模式构建!!,请详细斟酌是否构建")
-    Scanner(System.`in`).next()
+    println("WARN! 当前使用DevBuild模式构建!!,请详细斟酌是否构建")
 }
 group = "cn.klee"
 version = "core"

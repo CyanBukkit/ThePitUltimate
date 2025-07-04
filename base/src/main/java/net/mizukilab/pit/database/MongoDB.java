@@ -10,6 +10,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import lombok.Getter;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.conversions.Bson;
@@ -20,12 +21,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.logging.Logger;
 
 /**
- * 2 * @Author: EmptyIrony
+ * 2 * @Author: KleeLoveLife
  * 3 * @Date: 2020/12/28 23:03
  * 4
  */
 
-public final class MongoDB {
+@Getter
+public class MongoDB {
 
     private static final Logger log = ThePit.getInstance().getLogger();
 
@@ -140,46 +142,6 @@ public final class MongoDB {
         createIndex(mailCollection, "uuidIndex", "uuid");
         log.info("Connected! (连接成功>>>>)");
         log.info("Costs " + ChronoUnit.MILLIS.between(connects, Instant.now()));
-    }
-
-    public MongoClient getMongoClient() {
-        return this.mongoClient;
-    }
-
-    public MongoDatabase getDatabase() {
-        return this.database;
-    }
-
-    public MongoCollection<Document> getCollection() {
-        return this.collection;
-    }
-
-    public JacksonMongoCollection<PlayerProfile> getProfileCollection() {
-        return this.profileCollection;
-    }
-
-    public JacksonMongoCollection<TradeData> getTradeCollection() {
-        return this.tradeCollection;
-    }
-
-    public JacksonMongoCollection<PlayerMailData> getMailCollection() {
-        return this.mailCollection;
-    }
-
-    public JacksonMongoCollection<PlayerInvBackup> getInvCollection() {
-        return this.invCollection;
-    }
-
-    public JacksonMongoCollection<CDKData> getCdkCollection() {
-        return this.cdkCollection;
-    }
-
-    public JacksonMongoCollection<FixedRewardData> getRewardCollection() {
-        return this.rewardCollection;
-    }
-
-    public JacksonMongoCollection<EventQueue> getEventQueueCollection() {
-        return eventQueueCollection;
     }
 
     private void createIndex(MongoCollection<?> collection, String indexName, String fieldName) {

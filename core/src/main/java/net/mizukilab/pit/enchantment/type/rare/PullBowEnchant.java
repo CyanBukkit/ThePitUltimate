@@ -75,7 +75,7 @@ public class PullBowEnchant extends AbstractEnchantment implements Listener, IPl
             Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
                 int count = 0;
                 for (Player targetPlayer : PlayerUtil.getNearbyPlayers(target.getLocation(), 2.5D)) {
-                    if (targetPlayer == attacker) continue;
+                    if (targetPlayer == attacker || ThePit.getInstance().getNpcFactory().hasNPC(targetPlayer)) continue;
 
                     if (enchantLevel <= 1 && !targetPlayer.getUniqueId().equals(targetEntity.getUniqueId())) {
                         continue;
