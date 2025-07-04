@@ -1,6 +1,7 @@
 package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.data.PlayerProfile;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.AtomicDouble;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
@@ -13,6 +14,7 @@ import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.parm.AutoRegister;
 import net.mizukilab.pit.parm.listener.IPlayerKilledEntity;
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity;
+import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.item.ItemUtil;
 import net.mizukilab.pit.util.time.TimeUtil;
@@ -177,7 +179,7 @@ public class DemonHenEnchant extends AbstractEnchantment implements IActionDispl
         Collection<Entity> nearbyEntities = explosionLocation.getWorld().getNearbyEntities(explosionLocation, 3, 3, 3);
         
         for (Entity entity : nearbyEntities) {
-            if (entity instanceof LivingEntity && entity.isValid()) {
+            if (entity instanceof LivingEntity && entity.isValid() && !PlayerProfile.getPlayerProfileByUuid(entity.getUniqueId()).isInArena()) {
                 Vector knockback = entity.getLocation().toVector()
                     .subtract(explosionLocation.toVector())
                     .normalize()
