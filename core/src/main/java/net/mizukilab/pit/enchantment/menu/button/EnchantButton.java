@@ -190,7 +190,7 @@ public class EnchantButton extends Button {
             return;
         }
 
-        IMythicItem mythicItem = ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItem(actualItem,true);
+        IMythicItem mythicItem = ((ItemFactory)ThePit.getInstance().getItemFactory()).getIMythicItem(actualItem);
 
         if (mythicItem == null) return;
 
