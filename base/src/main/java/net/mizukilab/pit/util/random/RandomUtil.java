@@ -53,9 +53,8 @@ public class RandomUtil {
             return false;
         }
 
-        double i = (random.nextInt(1000000000) / 1000000000D);
 
-        return i <= chance;
+        return random.nextDouble() < chance;
     }
 
     public static Object helpMeToChooseOne(Object... entry) {

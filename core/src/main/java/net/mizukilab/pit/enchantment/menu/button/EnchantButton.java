@@ -43,6 +43,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -433,35 +434,44 @@ public class EnchantButton extends Button {
         if (announcement) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
-            net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(mythicItem.toItemStack());
-            NBTTagCompound tag = new NBTTagCompound();
-            nms.save(tag);
-            BaseComponent[] hoverEventComponents = new BaseComponent[]{
-                    new TextComponent(tag.toString())
-            };
-            new BukkitRunnable() {
-                final Cooldown cooldown = new Cooldown(10, TimeUnit.SECONDS);
-
-                public void run() {
-                    if (menu.getAnimationData().isFinished()) {
-                        this.cancel();
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (!FuncsKt.isSpecial(p)) {
-                                if (!PlusPlayer.getPlusPlayer().contains(player.getName())) {
-                                    p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
-                                            .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
-                                    p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
-                                }
-                            }
-
-                        }
-                    } else if (cooldown.hasExpired()) {
-                        this.cancel();
-                    }
-                }
-            }.runTaskTimerAsynchronously(ThePit.getInstance(), 50, 5);
+            BaseComponent[] hoverEventComponents = toEmptyHover(mythicItem);
+            beginAnnounceAsync(player, mythicItem, profile, hoverEventComponents);
         }
         end(player, mythicItem);
+    }
+
+    private static BaseComponent @NotNull [] toEmptyHover(IMythicItem mythicItem) {
+        net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(mythicItem.toItemStack());
+        NBTTagCompound tag = new NBTTagCompound();
+        nms.save(tag);
+        BaseComponent[] hoverEventComponents = new BaseComponent[]{
+                new TextComponent(tag.toString())
+        };
+        return hoverEventComponents;
+    }
+
+    private void beginAnnounceAsync(Player player, IMythicItem mythicItem, PlayerProfile profile, BaseComponent[] hoverEventComponents) {
+        new BukkitRunnable() {
+            final Cooldown cooldown = new Cooldown(10, TimeUnit.SECONDS);
+
+            public void run() {
+                if (menu.getAnimationData().isFinished()) {
+                    this.cancel();
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (!FuncsKt.isSpecial(p)) {
+                            if (!PlusPlayer.getPlusPlayer().contains(player.getName())) {
+                                p.spigot().sendMessage(new ChatComponentBuilder(CC.translate("&d&l稀有附魔! &7" + profile.getFormattedNameWithRoman() + " &7在神话之井中获得了稀有物品: " + mythicItem.toItemStack().getItemMeta().getDisplayName() + " &e[查看]"))
+                                        .setCurrentHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents)).create());
+                                p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+                            }
+                        }
+
+                    }
+                } else if (cooldown.hasExpired()) {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimerAsynchronously(ThePit.getInstance(), 50, 5);
     }
 
     private static void end(Player player, IMythicItem mythicItem) {
