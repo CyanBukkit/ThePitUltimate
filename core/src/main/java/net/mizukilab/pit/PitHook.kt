@@ -105,19 +105,36 @@ import net.mizukilab.pit.util.menu.ButtonListener
 import net.mizukilab.pit.util.nametag.NametagHandler
 import net.mizukilab.pit.util.scoreboard.Assemble
 import org.bukkit.Bukkit
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginDescriptionFile
 import real.nanoneko.EnchantedConstructor
 import real.nanoneko.ItemConstructor
 import real.nanoneko.PerkConstructor
 import spg.lgdev.iSpigot
+import java.io.InputStreamReader
+import java.util.jar.Manifest
 
 object PitHook {
     @JvmStatic
-    val gitVersion = "bc234c94"
+    val gitVersion = getGitVersionFromManifest()
 
     @JvmStatic
-    val itemVersion = "p3_uuid"
+    fun getGitVersionFromManifest(): String? {
+        // 1. 找到 Manifest 资源
+        val manifestStream = PitHook::class.java.classLoader
+            .getResourceAsStream("META-INF/tpu.MF")
+        if(manifestStream == null){
+            println("Unable to get the core version, are you loaded correct core?")
+            return "unknown"
+        }
+        val yml = YamlConfiguration.loadConfiguration(InputStreamReader(manifestStream))
+        val value: String = yml.getString("git","unknown")
+        println("Currently load core version: $value")
+        return value
+    }
+    @JvmStatic
+    val itemVersion = "golf_uuid"
     fun init() {
         loadConfig()
         loadParker()

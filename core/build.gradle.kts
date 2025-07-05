@@ -1,11 +1,12 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import java.util.Scanner
+import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("io.freefair.lombok") version "8.10"
-
     kotlin("jvm") version "2.1.20"
+    id("com.diffplug.spotless") version "6.19.0"
     alias(libs.plugins.shadow)
 }
 var devBuild = true
@@ -29,7 +30,36 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.panda-lang.org/releases")
 }
+
+tasks.named("compileJava") {
+    dependsOn("spotlessApply")
+}
+tasks.named("compileKotlin") {
+    dependsOn("spotlessApply")
+}
+val generatedMetaInf = layout.buildDirectory.dir("generated-resources/META-INF")
+val genTpuMf by tasks.registering {
+    outputs.dir(generatedMetaInf)
+    val gitVersionString: String by rootProject.extra
+    doLast {
+        val f = generatedMetaInf.get().file("tpu.MF").asFile
+        f.parentFile.mkdirs()
+        f.writeText("""
+            git: $gitVersionString
+        """.trimIndent())
+    }
+}
+tasks.processResources {
+    dependsOn(genTpuMf)
+    from(layout.buildDirectory.dir("generated-resources")) {
+        into("")  // 会打到 META-INF/tpu.MF
+    }
+}
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    dependsOn("processResources")
+}
 tasks.named<ShadowJar>("shadowJar") {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveFileName.set("ThePitUltimate-$version" + (if (devBuild) "-dev" else "") + ".jar")
     exclude("META-INF/**")
     relocate("pku.yim.license", "net.mizukilab.pit.license")
@@ -43,9 +73,15 @@ tasks.named<ShadowJar>("shadowJar") {
     if (!devBuild) {
         exclude("org/**")
     }
+
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
     mergeServiceFiles()
+    from(generatedMetaInf) {
+        into("META-INF")
+        // 指定此 source 的重复处理方式
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
 dependencies {
     var dependencyNotation = project(":base")

@@ -440,7 +440,7 @@ public class EnchantButton extends Button {
         end(player, mythicItem);
     }
 
-    private static BaseComponent @NotNull [] toEmptyHover(IMythicItem mythicItem) {
+    private static BaseComponent [] toEmptyHover(IMythicItem mythicItem) {
         net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(mythicItem.toItemStack());
         NBTTagCompound tag = new NBTTagCompound();
         nms.save(tag);
