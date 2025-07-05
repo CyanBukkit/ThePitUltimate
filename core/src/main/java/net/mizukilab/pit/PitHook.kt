@@ -117,7 +117,7 @@ import java.util.jar.Manifest
 
 object PitHook {
     @JvmStatic
-    val gitVersion = "%git_version%"
+    val gitVersion = "4a3f7b"
 
     @JvmStatic
     val itemVersion = "golf_uuid"
