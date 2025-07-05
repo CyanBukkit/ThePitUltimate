@@ -9,7 +9,7 @@ plugins {
     id("com.diffplug.spotless") version "6.19.0"
     alias(libs.plugins.shadow)
 }
-var devBuild = true
+var devBuild = false
 if (devBuild) {
     println("WARN! 当前使用DevBuild模式构建!!,请详细斟酌是否构建")
 }
