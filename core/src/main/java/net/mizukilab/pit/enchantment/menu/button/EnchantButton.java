@@ -258,6 +258,9 @@ public class EnchantButton extends Button {
             }
             return;
         }
+        if(!startEnchantLogicEvent.isAllowEnchant()){
+            return;
+        }
         MythicColor color = MythicColor.valueOf(ItemUtil.getItemStringData(item, "mythic_color").toUpperCase());
         int level = mythicItem.getTier();
         int maxLive = 0;
@@ -419,6 +422,9 @@ public class EnchantButton extends Button {
         //Check if the mythic item have a prefix and announce it
         //reload it , maybe trash code
         //mythicItem.loadFromItemStack(mythicItem.toItemStack());
+        if(startEnchantLogicEvent.isCancelled()){
+            return;
+        }
         new PitPlayerEnchantEvent(player, mythicItem, mythicItem).callEvent();
         if (mythicItem.getPrefix() != null) {
             announcement = true;
