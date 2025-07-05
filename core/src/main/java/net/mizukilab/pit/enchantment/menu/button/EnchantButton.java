@@ -5,6 +5,7 @@ import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
 import cn.charlotte.pit.event.StartEnchantLogicEvent;
 import cn.charlotte.pit.events.genesis.GenesisTeam;
+import cn.hutool.core.lang.func.Consumer3;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -251,8 +252,9 @@ public class EnchantButton extends Button {
 
         StartEnchantLogicEvent startEnchantLogicEvent = new StartEnchantLogicEvent(player);
         startEnchantLogicEvent.callEvent();
-        if(startEnchantLogicEvent.getConsumer() != null){
-            startEnchantLogicEvent.getConsumer().accept(item,mythicItem,player);
+        Consumer3<ItemStack, AbstractPitItem, Player> consumer = startEnchantLogicEvent.getConsumer();
+        if(consumer != null){
+            consumer.accept(item,mythicItem,player);
             if(!startEnchantLogicEvent.isCancelled()) {
                 new PitPlayerEnchantEvent(player, mythicItem, mythicItem).callEvent();
                 end(player, mythicItem);

@@ -117,22 +117,8 @@ import java.util.jar.Manifest
 
 object PitHook {
     @JvmStatic
-    val gitVersion = getGitVersionFromManifest()
+    val gitVersion = "6b544bf.dirty"
 
-    @JvmStatic
-    fun getGitVersionFromManifest(): String? {
-        // 1. 找到 Manifest 资源
-        val manifestStream = PitHook::class.java.classLoader
-            .getResourceAsStream("META-INF/tpu.MF")
-        if(manifestStream == null){
-            println("Unable to get the core version, are you loaded correct core?")
-            return "unknown"
-        }
-        val yml = YamlConfiguration.loadConfiguration(InputStreamReader(manifestStream))
-        val value: String = yml.getString("git","unknown")
-        println("Currently load core version: $value")
-        return value
-    }
     @JvmStatic
     val itemVersion = "golf_uuid"
     fun init() {

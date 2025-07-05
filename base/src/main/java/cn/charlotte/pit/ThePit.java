@@ -93,7 +93,7 @@ import java.util.Set;
  * @author EmptyIrony, Misoryan, KleeLoveLife, Rabbit0w0, Araykal
  */
 public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
-
+    public static String BASE_VERSION;
     public static PitInternalHook api;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
     private static boolean DEBUG_SERVER = false;
@@ -195,6 +195,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
 
     @Override
     public void onEnable() {
+        BASE_VERSION = this.getDescription().getVersion();
         audiences = BukkitAudiences.create(this);
         instance = this;
         BannerUtil.printFileContent("banner.txt");

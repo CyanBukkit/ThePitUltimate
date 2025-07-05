@@ -1,12 +1,12 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import java.util.Scanner
 import org.apache.tools.ant.filters.ReplaceTokens
+import java.io.ByteArrayOutputStream
 
 plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("io.freefair.lombok") version "8.10"
     kotlin("jvm") version "2.1.20"
-    id("com.diffplug.spotless") version "6.19.0"
     alias(libs.plugins.shadow)
 }
 var devBuild = true
@@ -30,34 +30,38 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.panda-lang.org/releases")
 }
-
-tasks.named("compileJava") {
-    dependsOn("spotlessApply")
-}
 tasks.named("compileKotlin") {
-    dependsOn("spotlessApply")
+    dependsOn(injectGitVersion)
 }
-val generatedMetaInf = layout.buildDirectory.dir("generated-resources/META-INF")
-val genTpuMf by tasks.registering {
-    outputs.dir(generatedMetaInf)
-    val gitVersionString: String by rootProject.extra
+tasks.named("compileJava") {
+    dependsOn(injectGitVersion)
+}
+
+val injectGitVersion by tasks.registering {
+    group = "versioning"
+    description = "Injects Git version into source code before compilation."
+
+    val gitVersion = rootProject.extra["gitVersionString"].toString()
+
+    val sourceDirs = listOf("src/main/java", "src/main/kotlin")
+
     doLast {
-        val f = generatedMetaInf.get().file("tpu.MF").asFile
-        f.parentFile.mkdirs()
-        f.writeText("""
-            git: $gitVersionString
-        """.trimIndent())
+        sourceDirs.forEach { dir ->
+            fileTree(dir) {
+                include("**/*.kt", "**/*.java")
+            }.forEach { file ->
+                val original = file.readText()
+                val updated = original.replace("%git_version%", gitVersion,false)
+                if (original != updated) {
+                    file.writeText(updated)
+                    println("🔧 Patched: ${file.relativeTo(projectDir)}")
+                }
+            }
+        }
+        println("✅ Git version '$gitVersion' injected.")
     }
 }
-tasks.processResources {
-    dependsOn(genTpuMf)
-    from(layout.buildDirectory.dir("generated-resources")) {
-        into("")  // 会打到 META-INF/tpu.MF
-    }
-}
-tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
-    dependsOn("processResources")
-}
+
 tasks.named<ShadowJar>("shadowJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveFileName.set("ThePitUltimate-$version" + (if (devBuild) "-dev" else "") + ".jar")
@@ -77,11 +81,6 @@ tasks.named<ShadowJar>("shadowJar") {
     exclude("kotlin/**", "junit/**", "org/junit/**")
     from("build/tmp/processed-resources")
     mergeServiceFiles()
-    from(generatedMetaInf) {
-        into("META-INF")
-        // 指定此 source 的重复处理方式
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
 }
 dependencies {
     var dependencyNotation = project(":base")
