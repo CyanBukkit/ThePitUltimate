@@ -20,8 +20,12 @@ object EventsHandler {
         if (count < 50) {
             val need = 50 - count
             for (index in 0..need) {
-                val event = factory.epicEvents[Random.nextInt(factory.epicEvents.size)] as AbstractEvent
-                epicQueue.add(event.eventInternalName)
+                var until = factory.epicEvents.size
+                if (until > 0) {
+                    var nextInt = Random.nextInt(until)
+                    val event = factory.epicEvents[nextInt] as AbstractEvent
+                    epicQueue.add(event.eventInternalName)
+                }
             }
         }
 
@@ -32,8 +36,11 @@ object EventsHandler {
             for (index in 0..need) {
                 val event = factory.normalEvents[Random.nextInt(factory.normalEvents.size)] as AbstractEvent
                 if (event.eventInternalName.equals("auction") && RandomUtil.hasSuccessfullyByChance(0.75)) {
-                    val anotherEvent = factory.normalEvents[Random.nextInt(factory.normalEvents.size)] as AbstractEvent
-                    normalQueue.add(anotherEvent.eventInternalName)
+                    var until = factory.normalEvents.size
+                    if (until > 0) {
+                        val anotherEvent = factory.normalEvents[Random.nextInt(until)] as AbstractEvent
+                        normalQueue.add(anotherEvent.eventInternalName)
+                    }
                 } else {
                     normalQueue.add(event.eventInternalName)
                 }

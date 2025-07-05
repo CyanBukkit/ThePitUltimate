@@ -30,37 +30,75 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.panda-lang.org/releases")
 }
-tasks.named("compileKotlin") {
-    dependsOn(injectGitVersion)
-}
-tasks.named("compileJava") {
-    dependsOn(injectGitVersion)
-}
+val gitVersion = rootProject.extra["gitVersionString"].toString()
 
 val injectGitVersion by tasks.registering {
     group = "versioning"
     description = "Injects Git version into source code before compilation."
 
-    val gitVersion = rootProject.extra["gitVersionString"].toString()
 
-    val sourceDirs = listOf("src/main/java", "src/main/kotlin")
+    val inputDirs = listOf("src/main/kotlin", "src/main/java")
+    val outputDir = file("build/generated/gitProcessed")
+
+    outputs.dir(outputDir)
 
     doLast {
-        sourceDirs.forEach { dir ->
-            fileTree(dir) {
-                include("**/*.kt", "**/*.java")
-            }.forEach { file ->
-                val original = file.readText()
-                val updated = original.replace("%git_version%", gitVersion,false)
-                if (original != updated) {
-                    file.writeText(updated)
-                    println("🔧 Patched: ${file.relativeTo(projectDir)}")
-                }
+        delete(outputDir)
+        inputDirs.forEach { srcDir ->
+            fileTree(srcDir).matching {
+                include("**/*.kt")
+            }.forEach { srcFile ->
+                val relativePath = srcFile.relativeTo(file(srcDir))
+                val targetFile = outputDir.resolve(relativePath)
+                targetFile.parentFile.mkdirs()
+
+                val content = srcFile.readText()
+                val replaced = content.replace("%git_version%", gitVersion)
+                targetFile.writeText(replaced)
             }
         }
-        println("✅ Git version '$gitVersion' injected.")
+        println("🔄 Git version injected into generated sources.")
     }
 }
+val lastFin by tasks.registering {
+    group = "versioning"
+    description = "Injects Git version into source code before compilation."
+
+
+    val inputDirs = listOf("src/main/kotlin", "src/main/java")
+    val outputDir = file("build/generated/gitProcessed")
+
+    outputs.dir(outputDir)
+
+    doLast {
+        delete(outputDir)
+        inputDirs.forEach { srcDir ->
+            fileTree(srcDir).matching {
+                include("**/*.kt")
+            }.forEach { srcFile ->
+                val relativePath = srcFile.relativeTo(file(srcDir))
+                val targetFile = outputDir.resolve(relativePath)
+                targetFile.parentFile.mkdirs()
+
+                val content = srcFile.readText()
+                val replaced = content.replace(gitVersion, "%git_version%")
+                targetFile.writeText(replaced)
+            }
+        }
+        println("🔄 Git version restored into generated sources.")
+    }
+}
+tasks.withType<JavaCompile>().configureEach {
+    dependsOn("injectGitVersion")
+
+    finalizedBy(lastFin)
+}
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    dependsOn("injectGitVersion")
+
+    finalizedBy(lastFin)
+}
+// Java 编译任务（如果你启用了 Java 插件）
 
 tasks.named<ShadowJar>("shadowJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
