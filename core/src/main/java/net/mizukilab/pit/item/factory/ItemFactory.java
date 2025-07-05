@@ -142,6 +142,8 @@ public class ItemFactory implements IItemFactory {
                 if(!flag){
                     theReference.putValue(mythicItem.uuid, mythicItem);
                 }
+            } else {
+                mythicItem.uuid = ItemUtil.randomUUIDItem(stack);
             }
         }
         return mythicItem;
