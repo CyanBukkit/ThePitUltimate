@@ -133,12 +133,15 @@ public class ItemFactory implements IItemFactory {
 
         if (mythicItem != null) {
             if (mythicItem.uuid != null) {
+                boolean flag = mythicItem.uuid.equals(IMythicItem.getDefUUID());
                 if(!clientSide) {
-                    if (mythicItem.uuid.equals(IMythicItem.getDefUUID())) {
+                    if (flag) {
                         mythicItem.uuid = ItemUtil.randomUUIDItem(stack);
                     }
                 }
-                theReference.putValue(mythicItem.uuid, mythicItem);
+                if(!flag){
+                    theReference.putValue(mythicItem.uuid, mythicItem);
+                }
             }
         }
         return mythicItem;
