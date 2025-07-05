@@ -247,7 +247,7 @@ public class EnchantButton extends Button {
      */
     private void doEnchant(ItemStack item, Player player, IMythicItem mythicItem) {
 
-        mythicItem.loadFromItemStack(item);
+
         MythicColor color = MythicColor.valueOf(ItemUtil.getItemStringData(item, "mythic_color").toUpperCase());
         int level = mythicItem.getTier();
         int maxLive = 0;
@@ -408,7 +408,7 @@ public class EnchantButton extends Button {
 
         //Check if the mythic item have a prefix and announce it
         //reload it , maybe trash code
-        mythicItem.loadFromItemStack(mythicItem.toItemStack());
+        //mythicItem.loadFromItemStack(mythicItem.toItemStack());
         new PitPlayerEnchantEvent(player, mythicItem, mythicItem).callEvent();
         if (mythicItem.getPrefix() != null) {
             announcement = true;

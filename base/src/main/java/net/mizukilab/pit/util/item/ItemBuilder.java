@@ -363,7 +363,8 @@ public class ItemBuilder {
     }
 
     public ItemBuilder uuid(UUID uuid) {
-        this.changeNbt("uuid", uuid.toString());
+        //this.changeNbt("uuid", uuid.toString());
+        ItemUtil.setUUIDObj(is,uuid);
         return this;
     }
 

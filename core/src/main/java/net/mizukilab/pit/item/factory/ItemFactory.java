@@ -6,9 +6,11 @@ import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.IItemFactory;
 import net.mizukilab.pit.item.IMythicItem;
 import net.mizukilab.pit.util.ItemGlobalReference;
+import net.mizukilab.pit.util.Log;
 import net.mizukilab.pit.util.PublicUtil;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.item.ItemUtil;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -120,32 +122,45 @@ public class ItemFactory implements IItemFactory {
     }
 
     public IMythicItem getIMythicItem0(ItemStack stack, String internalName,boolean clientSide) {
+        UUID itemUUID = null;
         if(!clientSide) {
             if (ItemUtil.shouldUpdateItem(stack)) {
                 if (ItemUtil.shouldUpdateUUID()) {
-                    ItemUtil.randomUUIDItem(stack);
+                    Log.WriteLine("Updates the item for " + stack);
+                    itemUUID = ItemUtil.randomUUIDItem(stack);
                 }
+
+                Log.WriteLine("sign " + stack);
                 ItemUtil.signVer(stack);
             }
         }
 
         IMythicItem mythicItem = Utils.getMythicItem0(stack, internalName);
-
         if (mythicItem != null) {
+
             if (mythicItem.uuid != null) {
-                boolean flag = mythicItem.uuid.equals(IMythicItem.getDefUUID());
+                boolean sameAsDefault = mythicItem.uuid.equals(IMythicItem.getDefUUID());
                 if(!clientSide) {
-                    if (flag) {
-                        mythicItem.uuid = ItemUtil.randomUUIDItem(stack);
+                    if (sameAsDefault) {
+                        logic(stack, itemUUID, mythicItem);
                     }
                 }
-                if(!flag){
+                if(!sameAsDefault){
                     theReference.putValue(mythicItem.uuid, mythicItem);
                 }
             } else {
-                mythicItem.uuid = ItemUtil.randomUUIDItem(stack);
+                logic(stack, itemUUID, mythicItem);
             }
         }
         return mythicItem;
+    }
+
+    private static void logic(ItemStack stack, UUID itemUUID, IMythicItem mythicItem) {
+        if (itemUUID == null) {
+
+            Log.WriteLine("Randomize the UUID " + stack);
+            itemUUID = ItemUtil.randomUUIDItem(stack);
+        }
+        mythicItem.uuid = itemUUID;
     }
 }

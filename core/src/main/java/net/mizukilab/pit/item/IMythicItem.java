@@ -391,7 +391,7 @@ public abstract class IMythicItem extends AbstractPitItem {
             String recordsString = ((NBTTagString) recordsStringRaw).a_();
 
             for (String recordString : Utils.splitByCharAt(recordsString, ';')) {
-                final String[] split = recordString.split("\\|");
+                final String[] split = Utils.splitByCharAt(recordString,'|');
                 if (split.length >= 3) {
                     enchantmentRecords.add(
                             new EnchantmentRecord(

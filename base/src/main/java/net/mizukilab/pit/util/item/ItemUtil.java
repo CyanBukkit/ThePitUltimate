@@ -4,6 +4,7 @@ import cn.charlotte.pit.ThePit;
 import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.item.AbstractPitItem;
 import net.mizukilab.pit.item.IItemFactory;
+import net.mizukilab.pit.util.Log;
 import net.mizukilab.pit.util.PublicUtil;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +31,16 @@ public class ItemUtil {
         if(extra == null) {
             return -1;
         }
+        //        tag.setLong("up",PublicUtil.getMostSignificantBits(uuidseq));
+        //        tag.setLong("do",PublicUtil.getLeastSignificantBits(uuidseq));
         long up = getLong(extra, "up");
         long down = getLong(extra, "do");
         if(up == 0 || down == 0) {
             UUID uuidObj = getUUIDObj(item);
             if (uuidObj != null) {
-                setUUIDObj(item, uuidObj);
+                Log.WriteLine("SET UUID OBJECT for " + up + " d:" + down);
+                setUUIDObj(extra, uuidObj);
+
                 return uuidObj.hashCode();
             } else {
                 return -1;
@@ -50,29 +55,30 @@ public class ItemUtil {
         return UUID.fromString(uuid);
     }
 
+    public static void setUUIDObj(NBTTagCompound extra, UUID uuid) {
+        setUUID(extra, uuid.toString());
+    }
     public static void setUUIDObj(ItemStack stack, UUID uuid) {
         setUUID(stack, uuid.toString());
     }
 
     public static void setUUID(ItemStack stack, String uuid) {
         NBTTagCompound extra = getExtra(stack);
-        if (extra != null) {
-            extra.setString("uuid", uuid);
-            updateMagic(extra,uuid);
+        setUUID(extra,uuid);
+    }
+    public static void setUUID(NBTTagCompound compound, String uuid) {
+        if (compound != null) {
+            compound.setString("uuid", uuid);
+            updateMagic(compound,uuid);
         }
     }
     public static long getLong(NBTTagCompound tag,String what) {
-        NBTBase nbtBase = tag.get(what);
-        if(nbtBase instanceof NBTTagLong){
-            return ((NBTTagLong) nbtBase).c();
-        } else {
-            return 0;
-        }
+        return tag.getLong(what);
     }
 
     public static void updateMagic(NBTTagCompound tag,String uuidseq) {
-        tag.setLong("up",PublicUtil.getMostSignificantBits(uuidseq));
-        tag.setLong("do",PublicUtil.getLeastSignificantBits(uuidseq));
+        tag.set("up",new NBTTagLong(PublicUtil.getMostSignificantBits(uuidseq)));
+        tag.set("do",new NBTTagLong(PublicUtil.getLeastSignificantBits(uuidseq)));
 
     }
     public static void setVer(ItemStack stack, String ver) {
