@@ -3,6 +3,7 @@ package net.mizukilab.pit.enchantment.menu.button;
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.data.sub.EnchantmentRecord;
+import cn.charlotte.pit.event.StartEnchantLogicEvent;
 import cn.charlotte.pit.events.genesis.GenesisTeam;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -247,7 +248,16 @@ public class EnchantButton extends Button {
      */
     private void doEnchant(ItemStack item, Player player, IMythicItem mythicItem) {
 
-
+        StartEnchantLogicEvent startEnchantLogicEvent = new StartEnchantLogicEvent(player);
+        startEnchantLogicEvent.callEvent();
+        if(startEnchantLogicEvent.getConsumer() != null){
+            startEnchantLogicEvent.getConsumer().accept(item,mythicItem,player);
+            if(!startEnchantLogicEvent.isCancelled()) {
+                new PitPlayerEnchantEvent(player, mythicItem, mythicItem).callEvent();
+                end(player, mythicItem);
+            }
+            return;
+        }
         MythicColor color = MythicColor.valueOf(ItemUtil.getItemStringData(item, "mythic_color").toUpperCase());
         int level = mythicItem.getTier();
         int maxLive = 0;
@@ -445,6 +455,10 @@ public class EnchantButton extends Button {
                 }
             }.runTaskTimerAsynchronously(ThePit.getInstance(), 50, 5);
         }
+        end(player, mythicItem);
+    }
+
+    private static void end(Player player, IMythicItem mythicItem) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
         profile.setEnchantingItem(InventoryUtil.serializeItemStack(mythicItem.toItemStack()));
     }
