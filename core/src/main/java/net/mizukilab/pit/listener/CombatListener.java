@@ -501,7 +501,7 @@ public class CombatListener implements Listener {
             Player reallyKiller = Bukkit.getPlayer(killer.getUniqueId());
             if (reallyKiller != null || npc) {
                 PlayerProfile killerProfile = PlayerProfile.getPlayerProfileByUuid(killer.getUniqueId());
-                this.handleKill(killer, killerProfile, player, playerProfile,npc);
+                this.handleKill(killer, killerProfile, player, playerProfile, npc);
             }
         } else {
             EntityDamageEvent damageEvent = player.getLastDamageCause();
@@ -530,190 +530,190 @@ public class CombatListener implements Listener {
         if (npc) { //NPC Name
             return;
         }
-            final Player finalKiller = killer;
+        final Player finalKiller = killer;
 
-            double respawnTime = playerProfile.getRespawnTime();
+        double respawnTime = playerProfile.getRespawnTime();
 
-            PlayerUtil.resetPlayer(player, true, false);
-            double mythicProtectChance = 0;
+        PlayerUtil.resetPlayer(player, true, false);
+        double mythicProtectChance = 0;
 
-            PlayerInventory inventory = player.getInventory();
-            int divineMiracleEnchantLevel = Utils.getEnchantLevel(inventory.getLeggings(), "divine_miracle_enchant");
-            if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) {
-                divineMiracleEnchantLevel = 0;
-            }
-            if (divineMiracleEnchantLevel > 0) {
-                mythicProtectChance += 0.15 * divineMiracleEnchantLevel;
-            }
-            if (PlayerUtil.isPlayerUnlockedPerk(player, "divine_intervention")) {
-                mythicProtectChance += 0.05 * PlayerUtil.getPlayerUnlockedPerkLevel(player, "divine_intervention");
-            }
+        PlayerInventory inventory = player.getInventory();
+        int divineMiracleEnchantLevel = Utils.getEnchantLevel(inventory.getLeggings(), "divine_miracle_enchant");
+        if (PlayerUtil.isVenom(player) || PlayerUtil.isEquippingSomber(player)) {
+            divineMiracleEnchantLevel = 0;
+        }
+        if (divineMiracleEnchantLevel > 0) {
+            mythicProtectChance += 0.15 * divineMiracleEnchantLevel;
+        }
+        if (PlayerUtil.isPlayerUnlockedPerk(player, "divine_intervention")) {
+            mythicProtectChance += 0.05 * PlayerUtil.getPlayerUnlockedPerkLevel(player, "divine_intervention");
+        }
 
-            //Promotion effect
-            if (PlayerUtil.isPlayerChosePerk(player, "assistant_to_the_streaker")
-                    && PlayerUtil.isPlayerUnlockedPerk(player, "promotion")) {
-                if (playerProfile.getStreakKills() >= 50) {
-                    if (PlayerUtil.isPlayerChosePerk(player, "over_drive")
-                            || PlayerUtil.isPlayerChosePerk(player, "high_lander")
-                            || PlayerUtil.isPlayerChosePerk(player, "beast_mode_mega_streak")
-                            || PlayerUtil.isPlayerChosePerk(player, "hermit")) {
-                        mythicProtectChance = 1;
-                    }
-                }
-                if (playerProfile.getStreakKills() > 100) {
-                    if ((PlayerUtil.isPlayerChosePerk(player, "uber_streak") && playerProfile.getStreakKills() >= 400)
-                            || PlayerUtil.isPlayerChosePerk(player, "to_the_moon")) {
-                        mythicProtectChance = 1;
-                    }
-                    if (PlayerUtil.isPlayerChosePerk(player, "uber_streak_plus") && playerProfile.getStreakKills() >= 1000) {
-                        mythicProtectChance = 1;
-                    }
+        //Promotion effect
+        if (PlayerUtil.isPlayerChosePerk(player, "assistant_to_the_streaker")
+                && PlayerUtil.isPlayerUnlockedPerk(player, "promotion")) {
+            if (playerProfile.getStreakKills() >= 50) {
+                if (PlayerUtil.isPlayerChosePerk(player, "over_drive")
+                        || PlayerUtil.isPlayerChosePerk(player, "high_lander")
+                        || PlayerUtil.isPlayerChosePerk(player, "beast_mode_mega_streak")
+                        || PlayerUtil.isPlayerChosePerk(player, "hermit")) {
+                    mythicProtectChance = 1;
                 }
             }
-            //Funky Feather Item
-            ItemLiveDropEvent itemLiveDropEvent = new ItemLiveDropEvent(mythicProtectChance);
-            itemLiveDropEvent.callEvent();
-            mythicProtectChance = itemLiveDropEvent.getChance();
-            if (mythicProtectChance < 1 && !itemLiveDropEvent.isCancelled()) {
-                for (int i = 0; i < 9; i++) {
-                    ItemStack item = inventory.getItem(i);
-                    if ("funky_feather".equals(ItemUtil.getInternalName(item))) {
-                        if (item.getAmount() <= 1) {
-                            inventory.setItem(i, new ItemBuilder(Material.AIR).build());
-                        } else {
-                            item.setAmount(item.getAmount() - 1);
-                            inventory.setItem(i, item);
+            if (playerProfile.getStreakKills() > 100) {
+                if ((PlayerUtil.isPlayerChosePerk(player, "uber_streak") && playerProfile.getStreakKills() >= 400)
+                        || PlayerUtil.isPlayerChosePerk(player, "to_the_moon")) {
+                    mythicProtectChance = 1;
+                }
+                if (PlayerUtil.isPlayerChosePerk(player, "uber_streak_plus") && playerProfile.getStreakKills() >= 1000) {
+                    mythicProtectChance = 1;
+                }
+            }
+        }
+        //Funky Feather Item
+        ItemLiveDropEvent itemLiveDropEvent = new ItemLiveDropEvent(mythicProtectChance);
+        itemLiveDropEvent.callEvent();
+        mythicProtectChance = itemLiveDropEvent.getChance();
+        if (mythicProtectChance < 1 && !itemLiveDropEvent.isCancelled()) {
+            for (int i = 0; i < 9; i++) {
+                ItemStack item = inventory.getItem(i);
+                if ("funky_feather".equals(ItemUtil.getInternalName(item))) {
+                    if (item.getAmount() <= 1) {
+                        inventory.setItem(i, new ItemBuilder(Material.AIR).build());
+                    } else {
+                        item.setAmount(item.getAmount() - 1);
+                        inventory.setItem(i, item);
+                    }
+                    mythicProtectChance = 1;
+                    break;
+                }
+            }
+        }
+        boolean noProtect = !itemLiveDropEvent.isCancelled() && RandomUtil.hasSuccessfullyByChance(1 - mythicProtectChance);
+        if (!itemLiveDropEvent.isCancelled()) {
+            for (int i = 0; i < 36; i++) {
+                ItemStack item = inventory.getItem(i);
+                if (item == null || item.getType() == Material.AIR) continue;
+
+                final IMythicItem mythicSwordItem = ((ItemFactory) ThePit.getInstance().getItemFactory()).getIMythicItemSync(item);
+                if (mythicSwordItem == null) {
+                    continue;
+                }
+
+                if (!noProtect) {
+                    if ((mythicSwordItem instanceof LuckyChestplate) /*|| mythicSwordItem.getEnchantments().containsKey(new RealManEnchant())*/) {
+                        noProtect = true;
+                    }
+                }
+                if (noProtect) {
+                    inventory.setItem(i, Utils.subtractLive(mythicSwordItem));
+                }
+            }
+        }
+
+        if (noProtect) {
+            inventory.setHelmet(Utils.subtractLive(inventory.getHelmet()));
+            inventory.setChestplate(Utils.subtractLive(inventory.getChestplate()));
+        }
+        IMythicItem leggings = MythicUtil.getMythicItem(inventory.getLeggings());
+        if (leggings != null && (noProtect || leggings instanceof LuckyChestplate
+                /*|| leggings.getEnchantments().containsKey(new RealManEnchant())*/)) {
+            inventory.setLeggings(Utils.subtractLive(leggings));
+        }
+        if (noProtect) {
+            inventory.setBoots(Utils.subtractLive(inventory.getBoots()));
+        }
+
+        if (!noProtect) {
+            player.sendMessage(CC.translate("&d&l物品保护! &7由于一个天赋/附魔/物品/事件提供的概率保护,本次死亡没有损失背包内神话物品生命."));
+        }
+        for (ItemStack itemStack : inventory) {
+            if (ItemUtil.isDeathDrop(itemStack)) {
+                inventory.remove(itemStack);
+            }
+        }
+
+        if (ItemUtil.isDeathDrop(inventory.getHelmet())) {
+            inventory.setHelmet(new ItemStack(Material.AIR));
+        }
+        if (ItemUtil.isDeathDrop(inventory.getChestplate())) {
+            inventory.setChestplate(new ItemStack(Material.AIR));
+        }
+        if (ItemUtil.isDeathDrop(inventory.getLeggings())) {
+            inventory.setLeggings(new ItemStack(Material.AIR));
+        }
+        if (ItemUtil.isDeathDrop(inventory.getBoots())) {
+            inventory.setBoots(new ItemStack(Material.AIR));
+        }
+
+        //process assist - start
+
+        double totalDamage = 0;
+        List<DamageData> activeDamage = new ArrayList<>();
+        for (DamageData it : playerProfile.getDamageMap().values()) {
+            if (it.getTimer().hasExpired()) {
+                totalDamage += it.getDamage();
+                activeDamage.add(it);
+            }
+        }
+        if (totalDamage > 0) {
+            this.handleAssist(player, finalKiller, activeDamage, (long) totalDamage);
+        }
+
+
+        //process assist - end
+
+        //save status - start
+        playerProfile.getDamageMap().clear();
+        playerProfile.deActiveMegaSteak();
+        playerProfile.setInArena(false);
+        playerProfile.setDeaths(playerProfile.getDeaths() + 1);
+        playerProfile.setCombatTimer(new Cooldown(0));
+        playerProfile.setBountyStreak(0);
+        playerProfile.setStrengthNum(0);
+        playerProfile.setStrengthTimer(new Cooldown(0));
+        //save status - end
+
+        InventoryUtil.supplyItems(player);
+        PackedOperator operator = (PackedOperator) playerProfile.toOperator();
+        if (operator != null) {
+            operator.pending(i -> {
+                playerProfile.setInventory(PlayerInv.fromPlayerInventory(inventory));
+            });
+        }
+        if (shouldRespawn) {
+            ((CraftPlayer) player).getHandle().invulnerableTicks = 40;
+            // player.setHealth(player.getMaxHealth());
+            Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> player.spigot().respawn(), 10);
+            player.setGameMode(GameMode.SPECTATOR);
+
+            if (playerProfile.getRespawnTime() <= 1.5) {
+                playerProfile.setRespawnTime(0.1d);
+            }
+
+            if (respawnTime > 0.1) {
+                new BukkitRunnable() {
+                    private int remainingTime = (int) respawnTime;
+
+                    @Override
+                    public void run() {
+                        if (remainingTime <= 0) {
+                            this.cancel();
+                            return;
                         }
-                        mythicProtectChance = 1;
-                        break;
+                        TitleUtil.sendTitle(player, "&c你死了！", "&7将在 &6" + remainingTime + "秒 &7后复活", 5, 5, 20);
+                        remainingTime--;
                     }
-                }
-            }
-            boolean noProtect = !itemLiveDropEvent.isCancelled() && RandomUtil.hasSuccessfullyByChance(1 - mythicProtectChance);
-            if (!itemLiveDropEvent.isCancelled()) {
-                for (int i = 0; i < 36; i++) {
-                    ItemStack item = inventory.getItem(i);
-                    if (item == null || item.getType() == Material.AIR) continue;
+                }.runTaskTimer(ThePit.getInstance(), 0, 20);
 
-                    final IMythicItem mythicSwordItem = ((ItemFactory) ThePit.getInstance().getItemFactory()).getIMythicItemSync(item);
-                    if (mythicSwordItem == null) {
-                        continue;
-                    }
-
-                    if (!noProtect) {
-                        if ((mythicSwordItem instanceof LuckyChestplate) /*|| mythicSwordItem.getEnchantments().containsKey(new RealManEnchant())*/) {
-                            noProtect = true;
-                        }
-                    }
-                    if (noProtect) {
-                        inventory.setItem(i, Utils.subtractLive(mythicSwordItem));
-                    }
-                }
+                Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
+                    this.doRespawn(player);
+                    TitleUtil.sendTitle(player, "&a已复活！", " ", 5, 5, 20);
+                }, (long) (respawnTime * 20L));
+            } else {
+                Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> doRespawn(player), 1L);
             }
-
-            if (noProtect) {
-                inventory.setHelmet(Utils.subtractLive(inventory.getHelmet()));
-                inventory.setChestplate(Utils.subtractLive(inventory.getChestplate()));
-            }
-            IMythicItem leggings = MythicUtil.getMythicItem(inventory.getLeggings());
-            if (leggings != null && (noProtect || leggings instanceof LuckyChestplate
-                    /*|| leggings.getEnchantments().containsKey(new RealManEnchant())*/)) {
-                inventory.setLeggings(Utils.subtractLive(leggings));
-            }
-            if (noProtect) {
-                inventory.setBoots(Utils.subtractLive(inventory.getBoots()));
-            }
-
-            if (!noProtect) {
-                player.sendMessage(CC.translate("&d&l物品保护! &7由于一个天赋/附魔/物品/事件提供的概率保护,本次死亡没有损失背包内神话物品生命."));
-            }
-            for (ItemStack itemStack : inventory) {
-                if (ItemUtil.isDeathDrop(itemStack)) {
-                    inventory.remove(itemStack);
-                }
-            }
-
-            if (ItemUtil.isDeathDrop(inventory.getHelmet())) {
-                inventory.setHelmet(new ItemStack(Material.AIR));
-            }
-            if (ItemUtil.isDeathDrop(inventory.getChestplate())) {
-                inventory.setChestplate(new ItemStack(Material.AIR));
-            }
-            if (ItemUtil.isDeathDrop(inventory.getLeggings())) {
-                inventory.setLeggings(new ItemStack(Material.AIR));
-            }
-            if (ItemUtil.isDeathDrop(inventory.getBoots())) {
-                inventory.setBoots(new ItemStack(Material.AIR));
-            }
-
-            //process assist - start
-
-            double totalDamage = 0;
-            List<DamageData> activeDamage = new ArrayList<>();
-            for (DamageData it : playerProfile.getDamageMap().values()) {
-                if (it.getTimer().hasExpired()) {
-                    totalDamage += it.getDamage();
-                    activeDamage.add(it);
-                }
-            }
-            if (totalDamage > 0) {
-                this.handleAssist(player, finalKiller, activeDamage, (long) totalDamage);
-            }
-
-
-            //process assist - end
-
-            //save status - start
-            playerProfile.getDamageMap().clear();
-            playerProfile.deActiveMegaSteak();
-            playerProfile.setInArena(false);
-            playerProfile.setDeaths(playerProfile.getDeaths() + 1);
-            playerProfile.setCombatTimer(new Cooldown(0));
-            playerProfile.setBountyStreak(0);
-            playerProfile.setStrengthNum(0);
-            playerProfile.setStrengthTimer(new Cooldown(0));
-            //save status - end
-
-            InventoryUtil.supplyItems(player);
-            PackedOperator operator = (PackedOperator) playerProfile.toOperator();
-            if (operator != null) {
-                operator.pending(i -> {
-                    playerProfile.setInventory(PlayerInv.fromPlayerInventory(inventory));
-                });
-            }
-            if (shouldRespawn) {
-                ((CraftPlayer) player).getHandle().invulnerableTicks = 40;
-                // player.setHealth(player.getMaxHealth());
-                Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> player.spigot().respawn(), 10);
-                player.setGameMode(GameMode.SPECTATOR);
-
-                if (playerProfile.getRespawnTime() <= 1.5) {
-                    playerProfile.setRespawnTime(0.1d);
-                }
-
-                if (respawnTime > 0.1) {
-                    new BukkitRunnable() {
-                        private int remainingTime = (int) respawnTime;
-
-                        @Override
-                        public void run() {
-                            if (remainingTime <= 0) {
-                                this.cancel();
-                                return;
-                            }
-                            TitleUtil.sendTitle(player, "&c你死了！", "&7将在 &6" + remainingTime + "秒 &7后复活", 5, 5, 20);
-                            remainingTime--;
-                        }
-                    }.runTaskTimer(ThePit.getInstance(), 0, 20);
-
-                    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> {
-                        this.doRespawn(player);
-                        TitleUtil.sendTitle(player, "&a已复活！", " ", 5, 5, 20);
-                    }, (long) (respawnTime * 20L));
-                } else {
-                    Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), () -> doRespawn(player), 1L);
-                }
-            }
+        }
     }
 
     private void doRespawn(Player player) {
