@@ -60,7 +60,7 @@ class Regularity : AbstractEnchantment(), Listener {
         }%&7. &7(最多三次)"
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.NORMAL)
     fun damage(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
 
@@ -113,13 +113,12 @@ class Regularity : AbstractEnchantment(), Listener {
                 object : BukkitRunnable() {
                     override fun run() {
                         victim.noDamageTicks = 0
-                        (victim as CraftPlayer).handle.invulnerableTicks = 0;
                         victim.damage(event.damage * boost, attacker)
-                        victim.noDamageTicks = victim.maximumNoDamageTicks;
+                        victim.noDamageTicks = (victim.maximumNoDamageTicks * 0.8).toInt();
 
                         victim.setMetadata(
                             "regularity",
-                            FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L)
+                            FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 700L)
                         )
                     }
                 }.runTaskLater(ThePit.getInstance(), 5L)
