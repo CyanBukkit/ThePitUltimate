@@ -513,6 +513,8 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             InetAddress inet4Address = Inet4Address.getByName("kqc.netty.asia");
             boolean reachable = inet4Address.isReachable(2000);
             if (!reachable) {
+                Bukkit.shutdown();
+
                 throw new Exception("fuck you");
             }
         } catch (Exception e) {
