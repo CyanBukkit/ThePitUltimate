@@ -35,17 +35,17 @@ public class AuctionBidButton extends Button {
             AuctionEvent.BidHistory highestBid = event.getHighestBidHistory();
 
             if (highestBid != null) {
-                lines.add("&7当前最高出价: &6" + ((int) highestBid.getCoins()) + " 硬币");
+                lines.add("&7当前最高出价: &6" + ( highestBid.getCoins()) + " 硬币");
                 lines.add("&7来自: " + PlayerProfile.getPlayerProfileByUuid(highestBid.getUuid()).getFormattedNameWithRoman());
                 lines.add("&7结束: &a" + TimeUtil.millisToTimer(event.getTimer().getRemaining()));
                 lines.add("");
-                lines.add("&7叫价: &6" + (int) (event.getRate() * highestBid.getCoins()) + " 硬币");
+                lines.add("&7叫价: &6" +  (event.getRate() * highestBid.getCoins()) + " 硬币");
                 if (event.getHighestBidHistory(player.getUniqueId()) != null) {
                     AuctionEvent.BidHistory playerHighestBid = event.getHighestBidHistory(player.getUniqueId());
-                    lines.add("&7你的当前出价: &6" + (int) playerHighestBid.getCoins() + " 硬币");
+                    lines.add("&7你的当前出价: &6" +  playerHighestBid.getCoins() + " 硬币");
                 }
             } else {
-                lines.add("&7起价: &6" + (int) event.getLots().getStartPrice() + " 硬币");
+                lines.add("&7起价: &6" +  event.getLots().getStartPrice() + " 硬币");
                 lines.add("&7结束: &a" + TimeUtil.millisToTimer(event.getTimer().getRemaining()));
             }
             lines.add("");
