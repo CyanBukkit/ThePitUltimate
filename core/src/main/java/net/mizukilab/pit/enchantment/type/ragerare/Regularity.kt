@@ -60,7 +60,7 @@ class Regularity : AbstractEnchantment(), Listener {
         }%&7. &7(最多三次)"
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     fun damage(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
 
@@ -122,7 +122,7 @@ class Regularity : AbstractEnchantment(), Listener {
                             FixedMetadataValue(ThePit.getInstance(), System.currentTimeMillis() + 1000L)
                         )
                     }
-                }.runTaskLater(ThePit.getInstance(),5L)
+                }.runTaskLater(ThePit.getInstance(), 5L)
             }
         }
     }

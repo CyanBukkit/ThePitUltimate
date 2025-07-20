@@ -32,6 +32,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
+import java.util.*
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -41,6 +42,9 @@ class JewelSword : IMythicItem(), Listener {
     companion object {
         @JvmStatic
         private val KILL_TARGET = 117
+    }
+    init {
+        uuid = UUID.randomUUID()
     }
 
     var killed = 0
@@ -79,6 +83,7 @@ class JewelSword : IMythicItem(), Listener {
         return ItemBuilder(itemStack)
             .lore(lore)
             .jewelSwordKills(killed)
+            .uuid(uuid)
             .itemDamage(6.5)
             .build()
     }
@@ -87,6 +92,8 @@ class JewelSword : IMythicItem(), Listener {
         Utils.toNMStackQuick(item)?.tag?.getCompound("extra")?.getInt("killed")?.let {
             killed = it
         }
+
+        this.uuid = ItemUtil.getUUIDObj(item);
         super.loadFromItemStack(item)
     }
 

@@ -5,6 +5,7 @@ import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.util.MythicUtil
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.item.ItemBuilder
+import net.mizukilab.pit.util.item.ItemUtil
 import net.mizukilab.pit.util.random.RandomUtil
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
+import java.util.*
 
 
 class LuckyChestplate : IMythicItem(), Listener {
@@ -22,6 +24,7 @@ class LuckyChestplate : IMythicItem(), Listener {
     init {
         this.maxLive = 10
         this.live = 10
+        this.uuid = UUID.randomUUID();
     }
 
     override fun getInternalName(): String {
@@ -47,6 +50,7 @@ class LuckyChestplate : IMythicItem(), Listener {
         val tag = nmsItem?.tag ?: return
         val extra = tag.getCompound("extra") ?: return
 
+        this.uuid = ItemUtil.getUUIDObj(item);
         this.maxLive = extra.getInt("maxLive")
         this.live = extra.getInt("live")
     }
@@ -69,6 +73,7 @@ class LuckyChestplate : IMythicItem(), Listener {
             .internalName(internalName)
             .maxLive(this.maxLive)
             .live(this.live)
+            .uuid(uuid)
             .deathDrop(false)
             .canSaveToEnderChest(true)
             .removeOnJoin(false)

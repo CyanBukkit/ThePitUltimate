@@ -3,9 +3,11 @@ package net.mizukilab.pit.item.type
 import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.item.ItemBuilder
+import net.mizukilab.pit.util.item.ItemUtil
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import java.util.*
 
 
 class ArmageddonBoots : IMythicItem() {
@@ -13,6 +15,7 @@ class ArmageddonBoots : IMythicItem() {
     init {
         maxLive = 66
         live = 66
+        uuid = UUID.randomUUID()
     }
 
     override fun getInternalName(): String {
@@ -39,6 +42,7 @@ class ArmageddonBoots : IMythicItem() {
         val extra = tag.getCompound("extra") ?: return
 
 
+        this.uuid = ItemUtil.getUUIDObj(item);
         this.maxLive = extra.getInt("maxLive")
         this.live = extra.getInt("live")
         if (extra.hasKey("forceCanTrade")) {
@@ -66,6 +70,7 @@ class ArmageddonBoots : IMythicItem() {
             .internalName(internalName)
             .maxLive(maxLive)
             .live(live)
+            .uuid(uuid)
             .setLetherColor(Color.RED)
             .deathDrop(false)
             .canSaveToEnderChest(true)

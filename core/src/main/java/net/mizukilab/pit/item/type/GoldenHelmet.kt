@@ -10,6 +10,7 @@ import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+import java.util.*
 
 
 @AutoRegister
@@ -17,6 +18,7 @@ class GoldenHelmet : IMythicItem(), Listener {
     init {
         this.maxLive = 50
         this.live = 50
+        this.uuid = UUID.randomUUID();
     }
 
     override fun getInternalName(): String {
@@ -41,7 +43,7 @@ class GoldenHelmet : IMythicItem(), Listener {
         val nmsItem = Utils.toNMStackQuick(item)
         val tag = nmsItem?.tag ?: return
         val extra = tag.getCompound("extra") ?: return
-
+        this.uuid = ItemUtil.getUUIDObj(item)
         this.maxLive = extra.getInt("maxLive")
         this.live = extra.getInt("live")
         if (extra.hasKey("forceCanTrade")) {
@@ -80,6 +82,7 @@ class GoldenHelmet : IMythicItem(), Listener {
             .deathDrop(false)
             .removeOnJoin(false)
             .internalName(internalName)
+            .uuid(uuid)
             .maxLive(this.maxLive)
             .live(this.live)
             .deathDrop(false)
