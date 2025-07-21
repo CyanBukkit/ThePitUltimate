@@ -71,7 +71,8 @@ public class PlayerUtil {
     }
 
     public static boolean isEquippingSomber(Player player) {
-        return player.getInventory().getLeggings() != null && ThePit.getApi().getItemEnchantLevel(player.getInventory().getLeggings(), "somber_enchant") > 0;
+        PlayerProfile playerProfile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        return playerProfile.leggings != null && playerProfile.leggings.getEnchantmentLevel( "somber_enchant") > 0;
     }
 
     public static boolean isCritical(Player player) {
@@ -146,7 +147,7 @@ public class PlayerUtil {
 
 
     public static boolean isSinkingMoonlight(Player player) {
-        return player.hasMetadata("sinking_moonlight") && player.getMetadata("sinking_moonlight").get(0).asLong() > System.currentTimeMillis();
+        return player.hasMetadata("sinking_moonlight") && player.getMetadata("sinking_moonlight").getFirst().asLong() > System.currentTimeMillis();
     }
 
     public static boolean isEquippingArmageddon(Player player) {
@@ -281,16 +282,23 @@ public class PlayerUtil {
     }
 
     public static int getAmountOfActiveHealingPerk(Player player) {
+
+        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        if(!profile.isInArena()){
+            return Integer.MAX_VALUE;
+        }
         boolean vampirePresent = PlayerUtil.isPlayerChosePerk(player, "Vampire");
-        boolean goldenHeadPresent = PlayerUtil.isPlayerChosePerk(player, "GoldenHead");
+        if(vampirePresent){
+            return Integer.MAX_VALUE;
+        }
         boolean ramboPresent = PlayerUtil.isPlayerChosePerk(player, "rambo");
+        if(ramboPresent){
+            return Integer.MAX_VALUE;
+        }
+        boolean goldenHeadPresent = PlayerUtil.isPlayerChosePerk(player, "GoldenHead");
         boolean olympusPresent = PlayerUtil.isPlayerChosePerk(player, "Olympus");
         boolean tastySoupPresent = PlayerUtil.isPlayerChosePerk(player, "tasty_soup_perk");
         int amount = 0;
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        if (vampirePresent || ramboPresent || !profile.isInArena()) {
-            return Integer.MAX_VALUE;
-        }
         if (goldenHeadPresent) {
             amount++;
         }
@@ -339,25 +347,26 @@ public class PlayerUtil {
         int defense = 0;
         ItemStack[] is = player.getInventory().getArmorContents();
         for (ItemStack i : is) {
-            if (i.getType() == Material.LEATHER_HELMET || i.getType() == Material.LEATHER_BOOTS || i.getType() == Material.GOLD_BOOTS || i.getType() == Material.CHAINMAIL_BOOTS) {
+            Material type = i.getType();
+            if (type == Material.LEATHER_HELMET || type == Material.LEATHER_BOOTS || type == Material.GOLD_BOOTS || type == Material.CHAINMAIL_BOOTS) {
                 defense += 1;
             }
-            if (i.getType() == Material.LEATHER_LEGGINGS || i.getType() == Material.GOLD_HELMET || i.getType() == Material.CHAINMAIL_HELMET || i.getType() == Material.IRON_HELMET) {
+            if (type == Material.LEATHER_LEGGINGS || type == Material.GOLD_HELMET || type == Material.CHAINMAIL_HELMET || type == Material.IRON_HELMET) {
                 defense += 2;
             }
-            if (i.getType() == Material.LEATHER_CHESTPLATE || i.getType() == Material.GOLD_LEGGINGS || i.getType() == Material.DIAMOND_HELMET || i.getType() == Material.DIAMOND_BOOTS) {
+            if (type == Material.LEATHER_CHESTPLATE || type == Material.GOLD_LEGGINGS || type == Material.DIAMOND_HELMET || type == Material.DIAMOND_BOOTS) {
                 defense += 3;
             }
-            if (i.getType() == Material.CHAINMAIL_LEGGINGS) {
+            if (type == Material.CHAINMAIL_LEGGINGS) {
                 defense += 4;
             }
-            if (i.getType() == Material.GOLD_CHESTPLATE || i.getType() == Material.CHAINMAIL_CHESTPLATE || i.getType() == Material.IRON_LEGGINGS) {
+            if (type == Material.GOLD_CHESTPLATE || type == Material.CHAINMAIL_CHESTPLATE || type == Material.IRON_LEGGINGS) {
                 defense += 5;
             }
-            if (i.getType() == Material.IRON_CHESTPLATE || i.getType() == Material.DIAMOND_LEGGINGS) {
+            if (type == Material.IRON_CHESTPLATE || type == Material.DIAMOND_LEGGINGS) {
                 defense += 6;
             }
-            if (i.getType() == Material.DIAMOND_CHESTPLATE) {
+            if (type == Material.DIAMOND_CHESTPLATE) {
                 defense += 8;
             }
         }
@@ -398,23 +407,6 @@ public class PlayerUtil {
         }
     }
 
-    public static int getPing(Player player) {
-        int ping = ((CraftPlayer) player).getHandle().ping;
-
-        if (ping >= 100) {
-            return ping - 30;
-        }
-
-        if (ping >= 50) {
-            return ping - 20;
-        }
-
-        if (ping >= 20) {
-            return ping - 10;
-        }
-
-        return ping;
-    }
 
     public static void resetPlayer(Player player) {
         resetPlayer(player, true, true);

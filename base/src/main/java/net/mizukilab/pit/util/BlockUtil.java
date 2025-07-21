@@ -1,5 +1,6 @@
 package net.mizukilab.pit.util;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -13,7 +14,7 @@ import java.util.Set;
  * @since 2025/1/22
  */
 public class BlockUtil {
-    public static Set<Material> blockType = new HashSet<>();
+    public static Set<Material> blockType = new ObjectOpenHashSet<>();
 
     static {
         blockType.add(Material.CACTUS);
