@@ -17,6 +17,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import lombok.SneakyThrows;
+import nya.Skip;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -34,6 +35,7 @@ import java.util.List;
  * @Author: EmptyIrony
  * @Date: 2021/2/4 14:56
  */
+@Skip
 public class PacketListener extends PacketAdapter {
     protected Payload payload = new Payload();
     public PacketListener() {

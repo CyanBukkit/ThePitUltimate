@@ -8,6 +8,7 @@ import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.internal.NPCBase;
 import net.jitse.npclib.internal.NPCManager;
 import net.mizukilab.pit.util.PlayerUtil;
+import nya.Skip;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -23,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * @author Jitse Boonstra
  */
+@Skip
 public class PlayerListener extends HandleMoveBase implements Listener {
 
     private final NPCLib instance;

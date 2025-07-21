@@ -34,7 +34,11 @@ object EventsHandler {
         if (count < 100) {
             val need = 100 - count
             for (index in 0..need) {
-                val event = factory.normalEvents[Random.nextInt(factory.normalEvents.size)] as AbstractEvent
+                var until1 = factory.normalEvents.size
+                if(until1 < 1) {
+                    continue;
+                }
+                val event = factory.normalEvents[Random.nextInt(until1)] as AbstractEvent
                 if (event.eventInternalName.equals("auction") && RandomUtil.hasSuccessfullyByChance(0.75)) {
                     var until = factory.normalEvents.size
                     if (until > 0) {

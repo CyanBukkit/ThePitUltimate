@@ -16,6 +16,7 @@ import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.item.ItemUtil;
+import nya.Skip;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,6 +47,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2020/12/30 22:48
  */
 @AutoRegister
+@Skip
 public class ProtectListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
