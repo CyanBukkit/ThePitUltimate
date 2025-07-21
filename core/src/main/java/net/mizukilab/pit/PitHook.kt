@@ -167,6 +167,7 @@ object PitHook {
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { loaded = true }, 20L)
         Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { checkBlackList() }, 40L)
+        println("Done")
 
     }
 
