@@ -3,7 +3,3 @@ Version: 4.4.6
 EntryClass: net.mizukilab.pit.Loader
 EntryPoint: start
 InfPort: false
-KeepClasses:
-  - "^net\\.mizukilab\\.pit\\.enchantment..*$"
-  - "^net\\.mizukilab\\.pit\\.runnable..*$"
-  - "^net\\.mizukilab\\.pit\\.item..*$"
