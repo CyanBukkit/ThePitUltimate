@@ -530,6 +530,9 @@ public class CombatListener implements Listener {
         }
         //saves performance
         if (npc) { //NPC Name
+            if(NewConfiguration.INSTANCE.getAlwaysCheckNPC()){
+                player.setGameMode(GameMode.SPECTATOR);
+            }
             return;
         }
         final Player finalKiller = killer;

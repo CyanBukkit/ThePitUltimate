@@ -13,6 +13,7 @@ import java.util.*
 
 object NewConfiguration {
     private var serverId = "null"
+    var alwaysCheckNPC = false;
     var rapidEnchanting = false;
     var repairFeatures = false
     var epicTitleUpdateInterval = 10
@@ -242,7 +243,7 @@ object NewConfiguration {
         }
 
         ThePunchEnchant.PUNCH_Y = config.getDouble("punch_y", 4.0)
-
+        alwaysCheckNPC = config.getBoolean("alwaysCheckNPC",false);
         pitSupportPermission = config.getString("pitSupportPermission", pitSupportPermission)
         removeSupportWhenNoPermission = config.getBoolean("removeSupportWhenNoPermission", false)
 
@@ -487,7 +488,8 @@ object NewConfiguration {
         //自定义聊天格式
         "custom-chat-format.enable" to false,
         "custom-chat-format.format" to "%pit_genesis_tag%%pit_level_tag_roman% %s&f: %s",
-
+        //一切NPC都要经过神秘的处理
+        "alwaysCheckNPC" to false,
         //自定义活动人数需求
         "event-online-required.hunt" to 5,
         "event-online-required.dragon_egg" to 5,
