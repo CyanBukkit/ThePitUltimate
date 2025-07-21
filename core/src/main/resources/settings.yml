@@ -5,4 +5,5 @@ EntryPoint: start
 InfPort: false
 KeepClasses:
   - "^net\\.mizukilab\\.pit\\.enchantment..*$"
+  - "^net\\.mizukilab\\.pit\\.runnable..*$"
   - "^net\\.mizukilab\\.pit\\.item..*$"
