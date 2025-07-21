@@ -17,7 +17,6 @@ import java.util.Map;
  */
 
 public class MagicFishingRod extends IMythicItem {
-
     @Override
     public String getInternalName() {
         return "magic_fishing_rod";
