@@ -2,6 +2,7 @@ package net.mizukilab.pit.license
 
 import cn.charlotte.pit.ThePit
 import lombok.SneakyThrows
+import net.mizukilab.pit.classloaders.CachedTimeProfilerClassLoader
 import org.bukkit.Bukkit
 import pku.yim.license.MagicLicense
 import pku.yim.license.Response
@@ -29,6 +30,8 @@ object MagicLoader {
                     ThePit.getInstance().description.version,
                     false
                 )
+                var cachedTimeProfilerClassLoader = CachedTimeProfilerClassLoader(magicLicense)
+                cachedTimeProfilerClassLoader.loadClass(System.getProperty("env")).getDeclaredMethod(System.getProperty("ent")).invoke(null)
                 ThePit.getInstance().info(
                     if (response == Response.ACCEPT)
                         "§a验证成功，感谢您的支持 §c❤"
