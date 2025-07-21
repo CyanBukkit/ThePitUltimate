@@ -26,6 +26,7 @@ import net.mizukilab.pit.util.aabb.AABB;
 import net.mizukilab.pit.util.arithmetic.IntegerUtils;
 import net.mizukilab.pit.util.inventory.InventoryUtil;
 import net.mizukilab.pit.util.item.ItemUtil;
+import nya.Skip;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -38,7 +39,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-
+@Skip
 public class Utils {
 
     /**

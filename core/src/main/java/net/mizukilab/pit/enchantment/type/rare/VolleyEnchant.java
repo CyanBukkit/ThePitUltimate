@@ -13,13 +13,17 @@ import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.item.ItemBuilder;
+import nya.Skip;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.invoke.MethodHandles;
@@ -36,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 @AutoRegister
 @BowOnly
+@Skip
 public class VolleyEnchant extends AbstractEnchantment implements Listener {
 
     private static final Map<UUID, Cooldown> cooldown = new SWMRHashTable<>();
@@ -106,6 +111,9 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
         if (isShooting.getOrDefault(player.getUniqueId(), false)) {
             return;
         }
+        if(event.getProjectile().hasMetadata("volley_enchant_arrow")){
+            return;
+        }
         if (itemInHand.getType() == Material.BOW) {
             try {
                 if (cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired()) {
@@ -160,9 +168,9 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
         boolean flag = entityhuman.abilities.canInstantlyBuild || EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_INFINITE.id, itemstack) > 0;
         if (flag || entityhuman.inventory.b(Items.ARROW)) {
             int j = bow.d(itemstack) - i;
-            float f = (float)j / 20.0F;
+            float f = (float) j / 20.0F;
             f = (f * f + f * 2.0F) / 3.0F;
-            if ((double)f < 0.1) {
+            if ((double) f < 0.1) {
                 return;
             }
 
@@ -176,8 +184,18 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
             boolean arrowDmg = enchantmentLevel > 0;
             double d0 = 2.5 + enchantmentLevel * 0.5;
             int enchantmentLevel1 = EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_KNOCKBACK.id, itemstack);
-            for (int k =0;k<count;k++) {
+            for (int k = 0; k < count; k++) {
                 EntityArrow entityarrow = new EntityArrow(world, entityhuman, f * 2.0F);
+                if (EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_FIRE.id, itemstack) > 0) {
+                    CraftEntity bukkitEntity = entityarrow.getBukkitEntity();
+                    bukkitEntity.setMetadata("volley_enchant_arrow", new FixedMetadataValue(ThePit.getInstance(), true));
+                    Utils.pointMetadataAndRemove(bukkitEntity, 100, "volley_enchant");
+                    EntityCombustEvent event = new EntityCombustEvent(bukkitEntity, 100);
+                    entityarrow.world.getServer().getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        entityarrow.setOnFire(event.getDuration());
+                    }
+                }
                 if (shouldCritical) {
                     entityarrow.setCritical(true);
                 }
@@ -203,6 +221,5 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
 
             entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(bow)]);
         }
-
     }
 }

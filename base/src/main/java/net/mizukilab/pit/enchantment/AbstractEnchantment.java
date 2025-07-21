@@ -2,6 +2,7 @@ package net.mizukilab.pit.enchantment;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
@@ -18,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Method;
+
 /**
  * 2 * @Author: EmptyIrony
  * 3 * @Date: 2020/12/28 23:21
@@ -26,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Getter
 public abstract class AbstractEnchantment {
-
     public abstract String getEnchantName();
 
     public abstract int getMaxEnchantLevel();
@@ -39,7 +41,6 @@ public abstract class AbstractEnchantment {
     //Todo: 附魔触发后的冷却时间
     @Nullable
     public abstract Cooldown getCooldown();
-
     //填写此玩家触发附魔的所需冷却时间
     public String getCooldownActionText(Cooldown cooldown) {
         return (cooldown.hasExpired() ? "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(cooldown.getRemaining()).replace(" ", ""));
