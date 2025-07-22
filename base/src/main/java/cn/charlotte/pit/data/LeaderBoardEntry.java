@@ -1,6 +1,7 @@
 package cn.charlotte.pit.data;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.UUID;
  * @Author: EmptyIrony
  * @Date: 2021/1/3 12:57
  */
+@Getter
 public class LeaderBoardEntry {
 
     private static List<LeaderBoardEntry> leaderBoardEntries = new ObjectArrayList<>();
@@ -33,26 +35,6 @@ public class LeaderBoardEntry {
 
     public static void setLeaderBoardEntries(List<LeaderBoardEntry> leaderBoardEntries) {
         LeaderBoardEntry.leaderBoardEntries = leaderBoardEntries;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public UUID getUuid() {
-        return this.uuid;
-    }
-
-    public int getRank() {
-        return this.rank;
-    }
-
-    public double getExperience() {
-        return this.experience;
-    }
-
-    public int getPrestige() {
-        return this.prestige;
     }
 
     @Override

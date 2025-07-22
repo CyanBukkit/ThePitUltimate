@@ -69,6 +69,9 @@ object SewersRunnable : BukkitRunnable(), Listener {
         if (System.currentTimeMillis() - lastClaimed < 1000 * NewConfiguration.sewersSpawn) return
 
         var count = 0
+        locs.filter { it.block.type != Material.AIR || it.block.hasMetadata("Sewers_Chest") }.forEach { i ->
+            i.block.removeMetadata("Sewers_Chest", ThePit.getInstance())
+        }
         locs.filter { it.block.type == Material.AIR || !it.block.hasMetadata("Sewers_Chest") }
             .forEach { loc ->
                 loc.block.apply {
