@@ -185,7 +185,7 @@ public class PublicUtil {
                 java.lang.reflect.Field handleField = CraftItemStack.class.getDeclaredField("handle");
                 handleField.setAccessible(true);
                 net.minecraft.server.v1_8_R3.ItemStack itemStack = (net.minecraft.server.v1_8_R3.ItemStack) handleField.get(item);
-                if (itemStack != null && false) {
+                if (itemStack != null) {
                     MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(CraftItemStack.class, MethodHandles.lookup());
                     VarHandle varHandle = lookup.unreflectVarHandle(handleField);
                     METHOD_ = varHandle;
