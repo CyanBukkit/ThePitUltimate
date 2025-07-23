@@ -65,8 +65,7 @@ object MagicLoader {
                 exitProcess(0)
             }
         }
-        var cachedTimeProfilerClassLoader = CachedTimeProfilerClassLoader(magicLicense)
-        cachedTimeProfilerClassLoader.loadClass(System.getProperty("env")).getDeclaredMethod(System.getProperty("ent")).invoke(null)
+        magicLicense?.loadClass(System.getProperty("env"))?.getDeclaredMethod(System.getProperty("ent"))?.invoke(null)
 
     }
 }
