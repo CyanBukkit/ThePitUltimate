@@ -14,6 +14,7 @@ import kotlin.system.exitProcess
 object MagicLoader {
     private val lock = Object()
     private var exception: Exception? = null
+    private var magicLicense: MagicLicense? = null
 
     @Volatile
     private var isLoaded = false
@@ -30,18 +31,17 @@ object MagicLoader {
                     ThePit.getInstance().description.version,
                     false
                 )
-                var cachedTimeProfilerClassLoader = CachedTimeProfilerClassLoader(magicLicense)
-                cachedTimeProfilerClassLoader.loadClass(System.getProperty("env")).getDeclaredMethod(System.getProperty("ent")).invoke(null)
+                this.magicLicense = magicLicense;
+                synchronized(lock) {
+                    isLoaded = true
+                    lock.notifyAll()
+                }
                 ThePit.getInstance().info(
                     if (response == Response.ACCEPT)
                         "§a验证成功，感谢您的支持 §c❤"
                     else
                         response.toString()
                 )
-                synchronized(lock) {
-                    isLoaded = true
-                    lock.notifyAll()
-                }
             } catch (ex: Exception) {
                 synchronized(lock) {
                     exception = ex
@@ -64,6 +64,9 @@ object MagicLoader {
                 exception!!.printStackTrace()
                 exitProcess(0)
             }
+            var cachedTimeProfilerClassLoader = CachedTimeProfilerClassLoader(magicLicense)
+            cachedTimeProfilerClassLoader.loadClass(System.getProperty("env")).getDeclaredMethod(System.getProperty("ent")).invoke(null)
+
         }
     }
 }

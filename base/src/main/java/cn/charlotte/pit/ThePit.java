@@ -198,7 +198,6 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     public void onEnable() {
         BASE_VERSION = this.getDescription().getVersion();
         audiences = BukkitAudiences.create(this);
-        instance = this;
         BannerUtil.printFileContent("banner.txt");
         serverId = DateCodeUtils.dateToCode(LocalDate.now());
 
@@ -512,6 +511,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         ImagineBreaker.openBootModules();
         ImagineBreaker.wipeMethodFilters();
         ImagineBreaker.wipeFieldFilters();
+        instance = this;
         try {
             InetAddress inet4Address = Inet4Address.getByName("kqc.netty.asia");
             boolean reachable = inet4Address.isReachable(2000);
@@ -528,6 +528,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
                 Thread.currentThread().getThreadGroup().enumerate(new Thread[0]);
             }
         }
+        CommonLoader.preBootstrap(this);
         DependencyManager dependencyManager = new DependencyManager(this, new ReflectionClassLoader(this));
         dependencyManager.loadDependencies(
                 new Dependency("fastutil", "it.unimi.dsi", "fastutil", "8.5.15", LoaderType.REFLECTION),
