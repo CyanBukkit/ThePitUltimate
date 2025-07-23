@@ -4,7 +4,7 @@ import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.api.PointsAPI;
 import cn.charlotte.pit.data.PlayerProfile;
 import net.mizukilab.pit.config.NewConfiguration;
-import net.mizukilab.pit.impl.PlayerPointsAPIImpl;
+import net.mizukilab.pit.impl.PlayerPointsAPI;
 import net.mizukilab.pit.medal.impl.challenge.hidden.SupporterMedal;
 import net.mizukilab.pit.menu.supporter.SupporterMenu;
 import net.mizukilab.pit.util.chat.CC;
@@ -48,7 +48,7 @@ public class SupporterEntranceButton extends Button {
 
             PointsAPI pointsAPI = ThePit.getInstance().getPointsAPI();
             if (pointsAPI == null) {
-                pointsAPI = PlayerPointsAPIImpl.INSTANCE;
+                pointsAPI = PlayerPointsAPI.API;
             }
 
             if (profile.isSupporter()) {
@@ -88,7 +88,7 @@ public class SupporterEntranceButton extends Button {
                 final PointsAPI implemenPointsAPI = ThePit.getInstance().getPointsAPI();
                 final PointsAPI pointsAPI;
                 if (implemenPointsAPI == null) {
-                    pointsAPI = PlayerPointsAPIImpl.INSTANCE;
+                    pointsAPI = PlayerPointsAPI.API;
                 } else {
                     pointsAPI = implemenPointsAPI;
                 }

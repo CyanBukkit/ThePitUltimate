@@ -221,9 +221,11 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
             disablePlugin();
             return;
         }
-        CommonLoader.bootstrap(this);
-        //Post load
-        postLoad();
+        //Post load, delayed init
+        Bukkit.getScheduler().runTask(this,() -> {
+            CommonLoader.bootstrap(this);
+            postLoad();
+        });
     }
 
     private void postLoad() {

@@ -7,18 +7,18 @@ import org.bukkit.entity.Player
 
 object PlayerPointsAPIImpl : PointsAPI {
     private val pointsAPI by lazy {
-        (Bukkit.getPluginManager().getPlugin("PlayerPoints") as PlayerPoints).api
+        (Bukkit.getPluginManager()
+            .getPlugin("PlayerPoints") as? PlayerPoints)
+            ?.api
     }
 
-    override fun hasPoints(player: Player, points: Int): Boolean {
-        return pointsAPI.look(player.uniqueId) >= points
-    }
+    override fun hasPoints(player: Player, points: Int): Boolean =
+        (pointsAPI?.look(player.uniqueId) ?: 0) >= points
 
-    override fun getPoints(player: Player): Int {
-        return pointsAPI.look(player.uniqueId)
-    }
+    override fun getPoints(player: Player): Int =
+        pointsAPI?.look(player.uniqueId) ?: 0
 
     override fun costPoints(player: Player, points: Int) {
-        pointsAPI.take(player.uniqueId, points)
+        pointsAPI?.take(player.uniqueId, points)
     }
 }

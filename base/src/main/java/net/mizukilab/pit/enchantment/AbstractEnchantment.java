@@ -143,4 +143,5 @@ public abstract class AbstractEnchantment {
         }
         return hashCode;
     }
+
 }

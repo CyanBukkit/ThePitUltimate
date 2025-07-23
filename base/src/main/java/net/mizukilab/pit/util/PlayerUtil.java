@@ -147,7 +147,7 @@ public class PlayerUtil {
 
 
     public static boolean isSinkingMoonlight(Player player) {
-        return player.hasMetadata("sinking_moonlight") && player.getMetadata("sinking_moonlight").getFirst().asLong() > System.currentTimeMillis();
+        return player.hasMetadata("sinking_moonlight") && player.getMetadata("sinking_moonlight").get(0).asLong() > System.currentTimeMillis();
     }
 
     public static boolean isEquippingArmageddon(Player player) {

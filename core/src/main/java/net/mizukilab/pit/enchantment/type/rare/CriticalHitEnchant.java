@@ -10,6 +10,7 @@ import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.time.TimeUtil;
+import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-
+@Skip
 @WeaponOnly
 @BowOnly
 public class CriticalHitEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {

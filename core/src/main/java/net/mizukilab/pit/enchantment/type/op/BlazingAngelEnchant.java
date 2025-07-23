@@ -11,6 +11,7 @@ import net.mizukilab.pit.parm.listener.IAttackEntity;
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.time.TimeUtil;
+import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: Misoryan
  * @Created_In: 2021/4/9 19:14
  */
-
+@Skip
 @WeaponOnly
 @BowOnly
 public class BlazingAngelEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {

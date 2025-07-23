@@ -9,6 +9,7 @@ import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
 import net.mizukilab.pit.parm.listener.IAttackEntity
 import net.mizukilab.pit.parm.listener.IPlayerShootEntity
 import net.mizukilab.pit.util.cooldown.Cooldown
+import nya.Skip
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffectType
@@ -21,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @Creator Misoryan
  * @Date 2021/5/8 19:13
  */
-
+@Skip
 @ArmorOnly
 class BreachingChargeEnchant : AbstractEnchantment(), IAttackEntity, IPlayerShootEntity,
     IActionDisplayEnchant {

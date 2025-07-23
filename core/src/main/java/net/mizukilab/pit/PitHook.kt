@@ -49,6 +49,7 @@ import net.mizukilab.pit.hologram.HologramListener
 import net.mizukilab.pit.hook.ItemPapiHook
 import net.mizukilab.pit.hook.PitPapiHook
 import net.mizukilab.pit.impl.PitInternalImpl.loaded
+import net.mizukilab.pit.impl.PlayerPointsAPI
 import net.mizukilab.pit.item.factory.ItemFactory
 import net.mizukilab.pit.item.type.*
 import net.mizukilab.pit.item.type.egg.SpeedEggs
@@ -165,9 +166,10 @@ object PitHook {
         //CleanupDupeEnch0525Runnable.runTaskTimer(ThePit.getInstance(), 20L, 20L)
         //SpecialPlayerRunnable.runTaskTimer(ThePit.getInstance(), 1L, 1L)
         //PrivatePlayerRunnable.runTaskTimer(ThePit.getInstance(),1L,1L)
-        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { loaded = true }, 20L)
-        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { checkBlackList() }, 40L)
+        PlayerPointsAPI.init()
         println("Done")
+        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { checkBlackList() }, 40L)
+        Bukkit.getScheduler().runTaskLater(ThePit.getInstance(), { loaded = true }, 20L)
 
     }
 

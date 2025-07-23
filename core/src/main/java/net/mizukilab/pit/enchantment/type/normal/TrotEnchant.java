@@ -7,6 +7,7 @@ import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.item.IMythicItem;
+import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import nya.Skip;
 import org.bukkit.Location;
@@ -18,6 +19,7 @@ import spg.lgdev.iSpigot;
  * @Author: Starry_Killer
  * @Created_In: 2023/11/22 18:15
  */
+
 @ArmorOnly
 @Skip
 public class TrotEnchant extends AbstractEnchantment implements MovementHandler {
@@ -64,7 +66,8 @@ public class TrotEnchant extends AbstractEnchantment implements MovementHandler 
     public void handleUpdateLocation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
         IMythicItem leggings = (IMythicItem) PlayerProfile.getPlayerProfileByUuid(player.getUniqueId()).leggings;
         float walkSpeed = player.getWalkSpeed();
-        if (leggings != null) {
+        boolean b = PlayerUtil.shouldIgnoreEnchant(player);
+        if (leggings != null && !b) {
             int level = this.getItemEnchantLevel(leggings);
             if (level == 1) {
                 if (walkSpeed != 0.21F) {
