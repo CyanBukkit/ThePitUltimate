@@ -151,7 +151,8 @@ public class PlayerListener implements Listener {
 
     public void whenLoaded(PlayerProfile load, Player player) {
         updateLoginTime(load);
-
+        load.setPlayerName(player.getName());
+        load.setLowerName(player.getName().toLowerCase());
         if (load.getProfileFormatVersion() == 0) {
             PitProfileUpdater.updateVersion0(load);
         }

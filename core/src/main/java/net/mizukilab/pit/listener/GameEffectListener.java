@@ -187,8 +187,6 @@ public class GameEffectListener implements Listener {
         PerkFactory perkFactory = instance.getPerkFactory();
         EnchantmentFactor enchantmentFactor = instance.getEnchantmentFactor();
 
-        QuestFactory questFactory = instance.getQuestFactory();
-
         AtomicDouble finalDamage = new AtomicDouble(0);
         AtomicDouble boostDamage = new AtomicDouble(1);
         AtomicBoolean cancel = new AtomicBoolean(false);
