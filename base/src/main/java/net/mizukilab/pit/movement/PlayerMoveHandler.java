@@ -2,6 +2,7 @@ package net.mizukilab.pit.movement;
 
 import cn.charlotte.pit.ThePit;
 import cn.charlotte.pit.data.PlayerProfile;
+import cn.charlotte.pit.data.operator.IOperator;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
@@ -100,148 +101,149 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
                 return;
             }
         }
+        if(profile != PlayerProfile.NONE_PROFILE) {
+            profile.setLastActionTimestamp(System.currentTimeMillis());
+            if (to.getBlockX() != from.getBlockX() ||
+                    to.getBlockY() != from.getBlockY() ||
+                    to.getBlockZ() != from.getBlockZ()) {
 
-        profile.setLastActionTimestamp(System.currentTimeMillis());
-        if (to.getBlockX() != from.getBlockX() ||
-                to.getBlockY() != from.getBlockY() ||
-                to.getBlockZ() != from.getBlockZ()) {
-
-            if (profile.isScreenShare()) {
-                BookUtil.openPlayer(player,
-                        BookUtil.writtenBook()
-                                .title(CC.translate("&c$screenShareRequest"))
-                                .author("Amadeus Ai")
-                                .pages(
-                                        new BookUtil.PageBuilder()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&4&l您因疑似作弊而被冻结!"))
-                                                                .build()
-                                                )
-                                                .newLine()
-                                                .newLine()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&0请在 3 分钟 内添加以下QQ:"))
-                                                                .build()
-                                                )
-                                                .newLine()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&0QQ: " + profile.getScreenShareQQ()))
-                                                                .build()
-                                                )
-                                                .newLine()
-                                                .newLine()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&0如关闭客户端/超时未添加"))
-                                                                .build()
-                                                )
-                                                .newLine()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&0等拒绝查端的行为,"))
-                                                                .build()
-                                                )
-                                                .newLine()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&0账号会被封禁 30 天!"))
-                                                                .build()
-                                                )
-                                                .newLine()
-                                                .newLine()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&0如遇到问题,可在公屏向管理员求助."))
-                                                                .build()
-                                                )
-                                                .build()
-                                )
-                                .build()
-                );
-            }
-            if (profile.getWipedData() != null && !profile.getWipedData().isKnow()) {
-                BookUtil.openPlayer(player,
-                        BookUtil.writtenBook()
-                                .title(CC.translate("&c$wipeNotification #" + player.getName()))
-                                .author("Amadeus Ai")
-                                .pages(
-                                        new BookUtil.PageBuilder()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&0您因" + profile.getWipedData().getReason()))
-                                                                .build()
-                                                )
-                                                .newLine()
-                                                .add(
-                                                        CC.translate("&0我们已清除您的存档")
-                                                )
-                                                .newLine()
-                                                .add(
-                                                        CC.translate("&0希望您在未来的游戏中")
-                                                )
-                                                .newLine()
-                                                .add(
-                                                        CC.translate("&0遵守我们的规则，谢谢")
-                                                ).newLine()
-                                                .add(
-                                                        CC.translate("&0如有疑问，请在论坛中申诉")
-                                                )
-                                                .newLine()
-                                                .newLine()
-                                                .add(
-                                                        BookUtil.TextBuilder
-                                                                .of(CC.translate("&a我已知晓"))
-                                                                .onHover(BookUtil.HoverAction.showText(CC.translate("&f点击不再提示")))
-                                                                .onClick(BookUtil.ClickAction.runCommand("/iKnowIGotWiped"))
-                                                                .build()
-                                                )
-                                                .build()
-                                )
-                                .build()
-                );
-            }
-
-            boolean isInArena = isInArena(to);
-
-            profile.setInArena(isInArena);
-
-            if (!profile.isEditingMode()) {
-                if (BlockUtil.isBlockNearby(player.getLocation(), 3) && player.getGameMode() == GameMode.ADVENTURE) {
-                    player.setGameMode(GameMode.SURVIVAL);
-                    return;
+                if (profile.isScreenShare()) {
+                    BookUtil.openPlayer(player,
+                            BookUtil.writtenBook()
+                                    .title(CC.translate("&c$screenShareRequest"))
+                                    .author("KleeLoveLife")
+                                    .pages(
+                                            new BookUtil.PageBuilder()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&4&l您因疑似作弊而被冻结!"))
+                                                                    .build()
+                                                    )
+                                                    .newLine()
+                                                    .newLine()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&0请在 3 分钟 内添加以下QQ:"))
+                                                                    .build()
+                                                    )
+                                                    .newLine()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&0QQ: " + profile.getScreenShareQQ()))
+                                                                    .build()
+                                                    )
+                                                    .newLine()
+                                                    .newLine()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&0如关闭客户端/超时未添加"))
+                                                                    .build()
+                                                    )
+                                                    .newLine()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&0等拒绝查端的行为,"))
+                                                                    .build()
+                                                    )
+                                                    .newLine()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&0账号会被封禁 30 天!"))
+                                                                    .build()
+                                                    )
+                                                    .newLine()
+                                                    .newLine()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&0如遇到问题,可在公屏向管理员求助."))
+                                                                    .build()
+                                                    )
+                                                    .build()
+                                    )
+                                    .build()
+                    );
                 }
-                if (profile.isInArena()) {
-                    if (player.getGameMode() == GameMode.ADVENTURE) {
+                if (profile.getWipedData() != null && !profile.getWipedData().isKnow()) {
+                    BookUtil.openPlayer(player,
+                            BookUtil.writtenBook()
+                                    .title(CC.translate("&c$wipeNotification #" + player.getName()))
+                                    .author("KleeLoveLife")
+                                    .pages(
+                                            new BookUtil.PageBuilder()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&0您因" + profile.getWipedData().getReason()))
+                                                                    .build()
+                                                    )
+                                                    .newLine()
+                                                    .add(
+                                                            CC.translate("&0我们已清除您的存档")
+                                                    )
+                                                    .newLine()
+                                                    .add(
+                                                            CC.translate("&0希望您在未来的游戏中")
+                                                    )
+                                                    .newLine()
+                                                    .add(
+                                                            CC.translate("&0遵守我们的规则，谢谢")
+                                                    ).newLine()
+                                                    .add(
+                                                            CC.translate("&0如有疑问，请在论坛中申诉")
+                                                    )
+                                                    .newLine()
+                                                    .newLine()
+                                                    .add(
+                                                            BookUtil.TextBuilder
+                                                                    .of(CC.translate("&a我已知晓"))
+                                                                    .onHover(BookUtil.HoverAction.showText(CC.translate("&f点击不再提示")))
+                                                                    .onClick(BookUtil.ClickAction.runCommand("/iKnowIGotWiped"))
+                                                                    .build()
+                                                    )
+                                                    .build()
+                                    )
+                                    .build()
+                    );
+                }
+
+                boolean isInArena = isInArena(to);
+
+                profile.setInArena(isInArena);
+
+                if (!profile.isEditingMode()) {
+                    if (BlockUtil.isBlockNearby(player.getLocation(), 3) && player.getGameMode() == GameMode.ADVENTURE) {
                         player.setGameMode(GameMode.SURVIVAL);
+                        return;
                     }
-                } else {
-                    if (player.getGameMode() == GameMode.SURVIVAL) {
-                        player.setGameMode(GameMode.ADVENTURE);
+                    if (profile.isInArena()) {
+                        if (player.getGameMode() == GameMode.ADVENTURE) {
+                            player.setGameMode(GameMode.SURVIVAL);
+                        }
+                    } else {
+                        if (player.getGameMode() == GameMode.SURVIVAL) {
+                            player.setGameMode(GameMode.ADVENTURE);
+                        }
                     }
                 }
-            }
-            if (PlayerUtil.isStaffSpectating(player)) {
-                player.setAllowFlight(true);
-            }
-        }
-        if (player.isOnGround()) {
-            boolean backing = player.hasMetadata("backing");
-            if (backing) {
-                if (to.getBlockX() != from.getBlockX() ||
-                        to.getBlockY() != from.getBlockY() ||
-                        to.getBlockZ() != from.getBlockZ()) {
-                    player.removeMetadata("backing", ThePit.getInstance());
-                    player.sendMessage(CC.translate("&c回城被取消."));
+                if (PlayerUtil.isStaffSpectating(player)) {
+                    player.setAllowFlight(true);
                 }
             }
-            Material currentBlock = to.clone().add(0, -1, 0).getBlock().getType();
-            if (currentBlock == Material.SLIME_BLOCK) {
-                float initialYaw = player.getLocation().getYaw();
-                float initialPitch = player.getLocation().getPitch();
-                launchPlayer(player, to, initialYaw, initialPitch);
+            if (player.isOnGround()) {
+                boolean backing = player.hasMetadata("backing");
+                if (backing) {
+                    if (to.getBlockX() != from.getBlockX() ||
+                            to.getBlockY() != from.getBlockY() ||
+                            to.getBlockZ() != from.getBlockZ()) {
+                        player.removeMetadata("backing", ThePit.getInstance());
+                        player.sendMessage(CC.translate("&c回城被取消."));
+                    }
+                }
+                Material currentBlock = to.clone().add(0, -1, 0).getBlock().getType();
+                if (currentBlock == Material.SLIME_BLOCK) {
+                    float initialYaw = player.getLocation().getYaw();
+                    float initialPitch = player.getLocation().getPitch();
+                    launchPlayer(player, to, initialYaw, initialPitch);
+                }
             }
         }
     }
@@ -498,9 +500,12 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
 
     @Override
     public void handleUpdateRotation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
-        PlayerProfile profile = ThePit.getInstance().getProfileOperator().getIOperator(player.getUniqueId()).profile();
-        if (profile != null) {
-            profile.setLastActionTimestamp(System.currentTimeMillis());
+        IOperator iOperator = ThePit.getInstance().getProfileOperator().getIOperator(player.getUniqueId());
+        if(iOperator != null) {
+            PlayerProfile profile = iOperator.profile();
+            if (profile != null) {
+                profile.setLastActionTimestamp(System.currentTimeMillis());
+            }
         }
     }
 

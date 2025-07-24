@@ -28,7 +28,10 @@ import net.mizukilab.pit.menu.admin.item.AdminItemMenu
 import net.mizukilab.pit.menu.admin.trade.TradeTrackerMenu
 import net.mizukilab.pit.menu.genesis.GenesisMenu
 import net.mizukilab.pit.menu.heresy.HeresyMenu
+import net.mizukilab.pit.menu.mail.MailMenu
 import net.mizukilab.pit.menu.main.AuctionMenu
+import net.mizukilab.pit.menu.prestige.PrestigeMainMenu
+import net.mizukilab.pit.menu.quest.main.QuestMenu
 import net.mizukilab.pit.menu.sewers.SewersMenu
 import net.mizukilab.pit.menu.shop.ShopMenu
 import net.mizukilab.pit.menu.warehouse.WarehouseMainMenu
