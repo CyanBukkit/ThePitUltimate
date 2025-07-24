@@ -498,7 +498,10 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
 
     @Override
     public void handleUpdateRotation(Player player, Location location, Location location1, PacketPlayInFlying packetPlayInFlying) {
-        ThePit.getInstance().getProfileOperator().getIOperator(player.getUniqueId()).profile().setLastActionTimestamp(System.currentTimeMillis());
+        PlayerProfile profile = ThePit.getInstance().getProfileOperator().getIOperator(player.getUniqueId()).profile();
+        if (profile != null) {
+            profile.setLastActionTimestamp(System.currentTimeMillis());
+        }
     }
 
     private static boolean isInArena(Location to) {
