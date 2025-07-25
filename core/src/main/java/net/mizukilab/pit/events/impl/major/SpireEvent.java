@@ -268,7 +268,6 @@ public class SpireEvent extends AbstractEvent implements IEpicEvent, Listener, I
             return;
         }
         dataMap.remove(player.getUniqueId());
-        PlayerMoveHandler.getCantMoveList().remove(player);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

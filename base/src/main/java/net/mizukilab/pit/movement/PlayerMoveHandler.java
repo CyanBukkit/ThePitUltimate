@@ -449,6 +449,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             endFlight(player);
         }
         slimeCooldowns.remove(player);
+        cantMoveList.remove(player);
     }
 
     @EventHandler
