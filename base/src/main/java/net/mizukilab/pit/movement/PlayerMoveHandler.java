@@ -36,6 +36,7 @@ import xyz.upperlevel.spigot.book.BookUtil;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -45,8 +46,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlayerMoveHandler implements MovementHandler, Listener {
 
     private static final Set<Player> cantMoveList = new ConcurrentHashSet<>();
-    private static final Map<Player, FlightData> flyingPlayers = new ConcurrentHashMap<>();
-    private static final Map<Player, Long> slimeCooldowns = new ConcurrentHashMap<>();
+    private static final Map<Player, FlightData> flyingPlayers = new WeakHashMap<>();
+    private static final Map<Player, Long> slimeCooldowns = new WeakHashMap<>();
     private static final long SLIME_COOLDOWN_MS = 3000; // 3秒冷却时间
 
     private static class FlightData {
@@ -457,16 +458,8 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             ArmorStand armorStand = (ArmorStand) event.getDismounted();
             if (flyingPlayers.containsKey(player)) {
                 FlightData flightData = flyingPlayers.get(player);
-                if (flightData.getArmorStand().equals(armorStand)) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (armorStand.isValid() && player.isOnline() && flyingPlayers.containsKey(player)) {
-                                armorStand.setPassenger(player);
-                            }
-                        }
-                    }.runTaskLater(ThePit.getInstance(), 1L);
-                }
+                flightData.getTask().cancel();
+                armorStand.remove();
             }
         }
     }
