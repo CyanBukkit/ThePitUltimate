@@ -458,7 +458,7 @@ public class PlayerMoveHandler implements MovementHandler, Listener {
             Player player = (Player) event.getEntity();
             ArmorStand armorStand = (ArmorStand) event.getDismounted();
             if (flyingPlayers.containsKey(player)) {
-                FlightData flightData = flyingPlayers.get(player);
+                FlightData flightData = flyingPlayers.remove(player);
                 flightData.getTask().cancel();
                 armorStand.remove();
             }

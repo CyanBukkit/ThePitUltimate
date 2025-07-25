@@ -63,7 +63,7 @@ class Regularity : AbstractEnchantment(), Listener {
         }%&7. &7(最多三次)"
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     fun damage(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
 
@@ -96,6 +96,7 @@ class Regularity : AbstractEnchantment(), Listener {
                 else -> 1.5
             }
         ) {
+            println("REG in ${event.finalDamage}")
 
             val metadata = victim.getMetadata("regularity")
             metadata.firstOrNull()?.asLong()?.let {
@@ -115,7 +116,6 @@ class Regularity : AbstractEnchantment(), Listener {
 
                 object : BukkitRunnable() {
                     override fun run() {
-
                         victim.noDamageTicks = 0;
                         victim.damage(event.damage * boost, attacker)
                         victim.noDamageTicks = (victim.maximumNoDamageTicks * 0.8).toInt();
