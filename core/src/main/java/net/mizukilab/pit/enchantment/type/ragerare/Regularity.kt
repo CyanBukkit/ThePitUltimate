@@ -11,6 +11,7 @@ import net.mizukilab.pit.util.Utils
 import net.mizukilab.pit.util.cooldown.Cooldown
 import nya.Skip
 import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -62,7 +63,7 @@ class Regularity : AbstractEnchantment(), Listener {
         }%&7. &7(最多三次)"
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGH)
     fun damage(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
 
@@ -114,7 +115,8 @@ class Regularity : AbstractEnchantment(), Listener {
 
                 object : BukkitRunnable() {
                     override fun run() {
-                        victim.noDamageTicks = 0
+
+                        victim.noDamageTicks = 0;
                         victim.damage(event.damage * boost, attacker)
                         victim.noDamageTicks = (victim.maximumNoDamageTicks * 0.8).toInt();
 

@@ -127,7 +127,7 @@ public class CombatListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
     private void onCombat(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             if (event.getDamager() instanceof Player damager) {
@@ -216,7 +216,7 @@ public class CombatListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         ProfileLoadRunnable.getInstance().handleQuit(player);
