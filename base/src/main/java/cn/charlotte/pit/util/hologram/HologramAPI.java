@@ -1,6 +1,7 @@
 package cn.charlotte.pit.util.hologram;
 
 import cn.charlotte.pit.ThePit;
+import cn.charlotte.pit.util.hologram.packet.PacketArmorStand;
 import cn.charlotte.pit.util.hologram.packet.PacketHologram;
 import cn.charlotte.pit.util.hologram.reflection.NMUClass;
 import cn.charlotte.pit.util.hologram.reflection.Reflection;
@@ -97,10 +98,11 @@ public abstract class HologramAPI {
     protected static boolean spawn(@Nonnull final Hologram hologram, final Collection<? extends Player> receivers) throws Exception {
         checkReceiverWorld(hologram, receivers);
         if (!receivers.isEmpty()) {
-            ((CraftHologram) hologram).sendSpawnPackets(receivers, true, true);
-            ((CraftHologram) hologram).sendTeleportPackets(receivers, true, true);
-            ((CraftHologram) hologram).sendNamePackets(receivers);
-            ((CraftHologram) hologram).sendAttachPacket(receivers);
+            if (hologram instanceof PacketHologram packetHologram) {
+                receivers.forEach(i -> {
+                    packetHologram.getHologram().show(i, false);
+                });
+            }
         }
         return true;
     }
@@ -109,8 +111,11 @@ public abstract class HologramAPI {
         if (receivers.isEmpty()) {
             return false;
         }
-
-        ((CraftHologram) hologram).sendDestroyPackets(receivers);
+        if (hologram instanceof PacketHologram packetHologram) {
+            receivers.forEach(i -> {
+                packetHologram.getHologram().show(i, false);
+            });
+        }
         return true;
     }
 

@@ -18,21 +18,6 @@ import java.util.Collections;
 //@AutoRegister
 public class HologramListeners implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onTeleport(PlayerTeleportEvent e) {
-        Player p = e.getPlayer();
-        for (Hologram h : HologramAPI.getHolograms()) {
-            if (h.isSpawned()) {
-                if (h.getLocation().getWorld().getName().equals(e.getTo().getWorld().getName())) {
-                    try {
-                        HologramAPI.spawn(h, new ArrayList<>(Collections.singletonList(p)));
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldChange(PlayerChangedWorldEvent e) {
