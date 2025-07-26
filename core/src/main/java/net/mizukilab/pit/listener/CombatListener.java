@@ -127,8 +127,10 @@ public class CombatListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR,ignoreCancelled = true)
     private void onCombat(EntityDamageByEntityEvent event) {
+
+
         if (event.getEntity() instanceof Player) {
             if (event.getDamager() instanceof Player damager) {
                 Player player = (Player) event.getEntity();

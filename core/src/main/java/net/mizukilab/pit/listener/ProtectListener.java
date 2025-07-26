@@ -33,13 +33,11 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -271,9 +269,8 @@ public class ProtectListener implements Listener {
             event.setCancelled(true);
         }
     }
-    //TODO 自己建立PlayerAttack后会莫名其妙失灵
-    @EventHandler(priority = EventPriority.LOW)
-    private void onFallDamage(EntityDamageEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST,ignoreCancelled = false)
+    public void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
                 event.setCancelled(true);
@@ -283,14 +280,7 @@ public class ProtectListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
-//            if (PlayerUtil.isStaffSpectating((Player) event.getEntity())) {
-//                event.setCancelled(true);
-//            }
         }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onDamage(EntityDamageByEntityEvent event) {
         boolean damagerInArena = false;
         boolean entityInArena = false;
         Entity entity = event.getEntity();
@@ -301,29 +291,31 @@ public class ProtectListener implements Listener {
                 entityInArena = true;
             }
         }
-        Entity damager1 = event.getDamager();
-        if (damager1 instanceof Player damager) {
-            PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
-            if (!PlayerUtil.isNPC(damager) && !profile.isInArena()) {
-                damagerInArena = true;
+        if(event instanceof EntityDamageByEntityEvent e) {
+            Entity damager1 = e.getDamager();
+            if (damager1 instanceof Player damager) {
+                PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(damager.getUniqueId());
+                if (!PlayerUtil.isNPC(damager) && !profile.isInArena()) {
+                    damagerInArena = true;
+                }
             }
-        }
-        if (damager1 instanceof Projectile damager) {
-            if (damager.getShooter() instanceof Player shooter) {
-                if (!PlayerUtil.isNPC(shooter)) {
-                    if (uniqueId.equals(shooter.getUniqueId())) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                    PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(shooter.getUniqueId());
-                    if (!profile.isInArena()) {
-                        damagerInArena = true;
+            if (damager1 instanceof Projectile damager) {
+                if (damager.getShooter() instanceof Player shooter) {
+                    if (!PlayerUtil.isNPC(shooter)) {
+                        if (uniqueId.equals(shooter.getUniqueId())) {
+                            event.setCancelled(true);
+                            return;
+                        }
+                        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(shooter.getUniqueId());
+                        if (!profile.isInArena()) {
+                            damagerInArena = true;
+                        }
                     }
                 }
             }
+            boolean cancel = damagerInArena || entityInArena;
+            event.setCancelled(cancel);
         }
-        boolean cancel = damagerInArena || entityInArena;
-        event.setCancelled(cancel);
 
     }
 

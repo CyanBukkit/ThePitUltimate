@@ -104,7 +104,7 @@ public class GameEffectListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerFired(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player && event.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
             event.setCancelled(true);
@@ -157,7 +157,7 @@ public class GameEffectListener implements Listener {
         CC.boardCast("Time change to: " + event.getTime());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW,ignoreCancelled = true)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player attacker) {
             if (NewConfiguration.INSTANCE.getRepairFeatures())  {

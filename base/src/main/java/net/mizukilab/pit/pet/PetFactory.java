@@ -149,7 +149,7 @@ public class PetFactory implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && !(event.getDamager() instanceof Player)) {
             final PetData data = entityToPetData.get(event.getDamager().getUniqueId());

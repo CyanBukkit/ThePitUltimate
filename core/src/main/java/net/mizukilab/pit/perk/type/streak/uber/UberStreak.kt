@@ -140,7 +140,7 @@ class UberStreak : AbstractPerk(), Listener, MegaStreak {
     /**
      * 100 连杀负面效果 和 激活后每击杀100名玩家的负面效果
      */
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun onDamage(event: EntityDamageByEntityEvent) {
         val victim = event.entity
         val damager = event.damager

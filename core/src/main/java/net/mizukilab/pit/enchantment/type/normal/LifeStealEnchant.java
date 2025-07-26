@@ -47,7 +47,7 @@ public class LifeStealEnchant extends AbstractEnchantment implements Listener {
         return "&7攻击恢复自身相当于伤害量 &c" + (enchantLevel * 4) + "% &7的生命 (上限&c1.5❤&7)";
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onDamage(EntityDamageByEntityEvent event) {
         Player attacker = null;
         if (event.getDamager() instanceof Player) {

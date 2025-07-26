@@ -88,7 +88,7 @@ public class TrueDamageArrowEnchant extends AbstractEnchantment implements Liste
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onTrueShotTrigger(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player && event.getEntity() instanceof Player victim) {
             if (event.getDamager().hasMetadata("true_shot")) {

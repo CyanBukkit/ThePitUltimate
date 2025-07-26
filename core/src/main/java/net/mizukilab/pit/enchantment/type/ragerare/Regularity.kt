@@ -13,6 +13,7 @@ import nya.Skip
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -66,13 +67,11 @@ class Regularity : AbstractEnchantment(), Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     fun damage(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
-
         if (attacker !is Player) return
 
         val victim = event.entity
-        if (victim !is Player) return
+        if (victim !is LivingEntity) return
 
-        if(victim.noDamageTicks > 0) return
         var level = -1
         val operator = (ThePit.getInstance().profileOperator as ProfileOperator).getOperator(attacker)
 
@@ -96,8 +95,6 @@ class Regularity : AbstractEnchantment(), Listener {
                 else -> 1.5
             }
         ) {
-            println("REG in ${event.finalDamage}")
-
             val metadata = victim.getMetadata("regularity")
             metadata.firstOrNull()?.asLong()?.let {
                 if (System.currentTimeMillis() < it) {
@@ -118,7 +115,6 @@ class Regularity : AbstractEnchantment(), Listener {
                     override fun run() {
                         victim.noDamageTicks = 0;
                         victim.damage(event.damage * boost, attacker)
-                        victim.noDamageTicks = (victim.maximumNoDamageTicks * 0.8).toInt();
 
                         victim.setMetadata(
                             "regularity",
