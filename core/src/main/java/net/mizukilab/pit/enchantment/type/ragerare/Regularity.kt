@@ -72,7 +72,7 @@ class Regularity : AbstractEnchantment(), Listener {
         val victim = event.entity
         if (victim !is Player) return
 
-
+        if(victim.noDamageTicks > 0) return
         var level = -1
         val operator = (ThePit.getInstance().profileOperator as ProfileOperator).getOperator(attacker)
 
