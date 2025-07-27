@@ -25,8 +25,13 @@ import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.minecraft.server.v1_8_R3.NBTTagCompound
+import net.mizukilab.pit.Util
 import net.mizukilab.pit.audience
 import net.mizukilab.pit.command.handler.HandHasItem
+import net.mizukilab.pit.enchantment.type.custom.VollewyA
+import net.mizukilab.pit.enchantment.type.custom.Volley_B
+import net.mizukilab.pit.enchantment.type.rare.VolleyEnchant
+import net.mizukilab.pit.item.IMythicItem
 import net.mizukilab.pit.map.kingsquests.ui.CakeBakeUI
 import net.mizukilab.pit.map.kingsquests.ui.KingQuestsUI
 import net.mizukilab.pit.menu.offer.OfferMenu
@@ -950,6 +955,41 @@ class PitCommands {
         ThePit.getApi().openAuctionMenu(player)
     }
 
+    @Execute(name = "changeVolley")
+    @HandHasItem
+    fun changeVolley(@Context player: Player) {
+        val mythicItem = MythicUtil.getMythicItem(player.itemInHand)
+
+        val volleyALevel = Utils.getEnchantLevel(mythicItem, "volley_enchant")
+        val volleyBLevel = Utils.getEnchantLevel(mythicItem, "volley_enchant_B")
+
+        if (volleyALevel < 1 && volleyBLevel < 1) {
+            player.sendMessage(CC.translate("&c手中神话武器，并没有任何一类连射附魔！"))
+            return
+        }
+
+        when {
+            volleyALevel >= 1 -> {
+                mythicItem.enchantments.apply {
+                    put(Volley_B(), volleyALevel)
+                    remove(VollewyA())
+                }
+
+                player.itemInHand = mythicItem.toItemStack()
+                player.sendMessage(CC.translate("&a已将连射附魔切换为 B 类型！"))
+            }
+            volleyBLevel >= 1 -> {
+
+                mythicItem.enchantments.apply {
+                    put(VollewyA(), volleyBLevel)
+                    remove(Volley_B())
+                }
+
+                player.itemInHand = mythicItem.toItemStack()
+                player.sendMessage(CC.translate("&a已将连射附魔切换为 A 类型！"))
+            }
+        }
+    }
     @Execute(name = "cool")
     fun cool(@Context player: Player) {
         if (!PlayerUtil.isPlayerUnlockedPerk(player, "cool_perk")) {

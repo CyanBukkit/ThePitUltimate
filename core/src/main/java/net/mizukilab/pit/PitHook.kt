@@ -28,6 +28,8 @@ import net.mizukilab.pit.enchantment.type.aqua.RogueEnchant
 import net.mizukilab.pit.enchantment.type.auction.FractionalReserveEnchant
 import net.mizukilab.pit.enchantment.type.auction.rare.PaparazziEnchant
 import net.mizukilab.pit.enchantment.type.auction.rare.PitMBAEnchant
+import net.mizukilab.pit.enchantment.type.custom.VollewyA
+import net.mizukilab.pit.enchantment.type.custom.Volley_B
 import net.mizukilab.pit.enchantment.type.dark_normal.*
 import net.mizukilab.pit.enchantment.type.dark_rare.*
 import net.mizukilab.pit.enchantment.type.genesis.*
@@ -540,6 +542,11 @@ private fun loadEnchants() {
 
     //  classes += Limit24520Ench::class.java
     //  classes += LimitXZQ1Ench::class.java
+    if (ThePit.getInstance().globalConfig.token == "SmallMY"){
+        classes += VollewyA::class.java
+        classes += Volley_B::class.java
+        classes -= VolleyEnchant::class.java
+    }
     music.apply {
         add(JerryEnchant())
         add(JerryEnchant2())
