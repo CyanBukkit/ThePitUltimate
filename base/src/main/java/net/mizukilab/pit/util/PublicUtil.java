@@ -177,10 +177,8 @@ public class PublicUtil {
     public static net.minecraft.server.v1_8_R3.ItemStack toNMStackQuick(ItemStack item) {
         if (item instanceof CraftItemStack) {
             try {
-                if (false) {
-                    if (METHOD_ != null) {
-                        return (net.minecraft.server.v1_8_R3.ItemStack) METHOD_.get(item);
-                    }
+                if (METHOD_ != null) {
+                    return (net.minecraft.server.v1_8_R3.ItemStack) METHOD_.get(item);
                 }
                 java.lang.reflect.Field handleField = CraftItemStack.class.getDeclaredField("handle");
                 handleField.setAccessible(true);
