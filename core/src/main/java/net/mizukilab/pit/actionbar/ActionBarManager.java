@@ -21,7 +21,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ActionBarManager implements IActionBarManager {
     int tick = 0;
     Map<UUID, MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>>> multiMap = new SWMRHashTable<>();
-    ReentrantLock lock = new ReentrantLock();
     public void addActionBarOnQueue(Player player, String arg, String val, int repeat,boolean flush) {
         UUID uniqueId = player.getUniqueId();
         MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>> stringStringMap = multiMap.get(uniqueId);
@@ -38,11 +37,9 @@ public class ActionBarManager implements IActionBarManager {
     }
 
     public void tick() {
-        lock.lock();
         ((SWMRHashTable<UUID, MutablePair<StringBuilder,Map<String, MutablePair<String, Integer>>>>) multiMap).removeIf((uuid, mappedString) -> { //forEach as multimap
             return tickPiece(uuid, mappedString.getValue(),mappedString.getKey());
         });
-        lock.unlock();
     }
 
     private boolean tickPiece(UUID uuid, Map<String, MutablePair<String, Integer>> mappedString,StringBuilder builder) {
@@ -70,6 +67,7 @@ public class ActionBarManager implements IActionBarManager {
                 }
             }
             builder.append(rawString);
+            ab.set(true);
             if (index.incrementAndGet() < size) {
                 builder.append("&7| ");
             }
@@ -77,8 +75,6 @@ public class ActionBarManager implements IActionBarManager {
             int i1 = !reduce ? --repeat : repeat;
             if (i1 <= 0) {
                 return true;
-            } else if (!rawString.isEmpty()) {
-                ab.set(true);
             }
             //always set it seems not expensive only memory operation
             value.setValue(i1); //setting the value instead create new one, do not use SimpleEntry, because of its rehashing operation
