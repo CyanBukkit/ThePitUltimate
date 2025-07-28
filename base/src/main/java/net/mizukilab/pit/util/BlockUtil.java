@@ -1,6 +1,7 @@
 package net.mizukilab.pit.util;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -26,13 +27,27 @@ public class BlockUtil {
         int baseX = location.getBlockX();
         int baseY = location.getBlockY();
         int baseZ = location.getBlockZ();
-
+        int chunkX = baseX >> 4;
+        int chunkZ = baseZ >> 4;
+        Chunk lastChunk = world.getChunkAt(chunkX, chunkZ);
         for (int x = -range; x <= range; x++) {
+            int curX = (baseX + x);
+            int curChunkX = curX >> 4;
+            int xChunkIn = curX & 15;
             for (int y = -range; y <= range; y++) {
+                int curY = (baseY + y);
                 for (int z = -range; z <= range; z++) {
-                    Block block = world.getBlockAt(baseX + x, baseY + y, baseZ + z);
-                    if (blockType.contains(block.getType())) {
-                        return true;
+                    int curZ = (baseZ + z);
+                    int curChunkZ = curZ >> 4;
+                    if(curChunkZ == chunkX && curChunkZ == chunkZ) {
+
+                    } else {
+                        lastChunk = world.getChunkAt(chunkX = curChunkX, chunkZ = curChunkZ);
+                    }
+                    if(lastChunk != null && lastChunk.isLoaded()) {
+                        if (blockType.contains(lastChunk.getBlock(xChunkIn, curY, curZ & 15).getType())) {
+                            return true;
+                        }
                     }
                 }
             }
