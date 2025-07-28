@@ -42,6 +42,7 @@ public class PrestigeStatusButton extends Button {
     @Override
     public void clicked(Player player, int slot, ClickType clickType, int hotbarButton, ItemStack currentItem) {
         PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        boolean isNot = ThePit.getInstance().getGlobalConfig().getToken().equals("SmallMY");
         if (profile.getLevel() >= 120 && profile.getPrestige() < limit) {
             // && profile.getCoins() >= Math.round(profile.getPrestige() * 12 / 30) * 10000
             if (profile.getGrindedCoins() >= 16000 * (profile.getPrestige() + 1)) {
@@ -123,7 +124,7 @@ public class PrestigeStatusButton extends Button {
                     } else {
                         new PrestigeMainMenu().openMenu(player);
                     }
-                }, true, 5, (Button) null).openMenu(player);
+                }, true, isNot ? 1 : 5, (Button) null).openMenu(player);
             }
         }
     }
