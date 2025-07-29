@@ -112,7 +112,7 @@ public class EnderBowEnchant extends AbstractEnchantment implements IPlayerShoot
                 cooldown.put(player.getUniqueId(), new Cooldown(getCooldownInt(level), TimeUnit.SECONDS));
                 Entity projectile = event.getProjectile();
                 event.getProjectile().setMetadata("ender_bow", new FixedMetadataValue(ThePit.getInstance(), true));
-                Utils.pointMetadataAndRemove(projectile, 500, "ender_bow");
+                Utils.pointMetadataAndRemove(projectile, 2000, "ender_bow");
                 //event.setProjectile(projectile);
             }
         }
