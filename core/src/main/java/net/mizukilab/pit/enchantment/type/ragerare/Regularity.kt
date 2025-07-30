@@ -111,8 +111,14 @@ class Regularity : AbstractEnchantment(), Listener {
                     else -> 75
                 } * 0.01
 
+                val operator_vic = (ThePit.getInstance().profileOperator as ProfileOperator).getOperator(attacker)
                 object : BukkitRunnable() {
                     override fun run() {
+                        if(operator_vic.profile() != null){
+                            if (!operator_vic.profile().isInArena) {
+                                return
+                            }
+                        }
                         victim.noDamageTicks = 0;
                         victim.damage(event.damage * boost, attacker)
 
