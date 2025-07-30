@@ -106,13 +106,22 @@ public class PlayerListener implements Listener {
         }
         return false;
     }
-
+    public boolean isSaving(PackedOperator op){
+        if(op.profile() != null){
+            return op.profile().code == -2;
+        }
+        return false;
+    }
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
+
         ((ProfileOperator) ThePit.getInstance().getProfileOperator())
                 .operatorStrict(event.getPlayer()).ifPresent(profileOper -> {
                     PlayerProfile profile = profileOper.profile();
+                    if(isSaving(profileOper)){
+                        return;
+                    }
                     //synchronize
                     PlayerInv playerInv = PlayerInv.fromPlayerInventory(event.getPlayer().getInventory());
                     profile.disallow();
