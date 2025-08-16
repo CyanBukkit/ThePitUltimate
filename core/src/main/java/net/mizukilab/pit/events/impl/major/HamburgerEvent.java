@@ -127,7 +127,11 @@ public class HamburgerEvent extends AbstractEvent implements IEpicEvent, Listene
             if (event.getClickedBlock().getType() == Material.SKULL) {
                 final Skull skull = (Skull) event.getClickedBlock().getState();
                 if (skull.getSkullType() == SkullType.PLAYER) {
-                    if (location.distance(event.getClickedBlock().getLocation()) <= 3) {
+                    Location location1 = event.getClickedBlock().getLocation();
+                    if (location.getWorld() != location1.getWorld()) {
+                        return;
+                    }
+                    if (location.distance(location1) <= 3) {
                         final Player player = event.getPlayer();
                         InventoryUtil.removeItemWithInternalName(player, "ham");
 

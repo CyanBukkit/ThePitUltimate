@@ -121,6 +121,9 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
         }
         entities.forEach(nearbyEntities -> {
             Location location = nearbyEntities.getLocation();
+            if(player.getWorld() != location.getWorld()){
+                return;
+            }
             if (nearbyEntities.getType() != EntityType.ARMOR_STAND || nearbyEntities.isDead() || (location.distanceSquared(player.getLocation()) > 1 && location.subtract(0, -1, 0).distanceSquared(player.getLocation()) > 1)) {
                 return;
             }
@@ -470,7 +473,9 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
             line.add("&f已占领方块: &a0 &7(0.0%)");
             return line;
         }
-        line.add("&f已占领方块: &a" + data.belong + " &7(" + Math.round((Math.min((double) data.belong / this.allblocks, 1.0) * 100 * 10.0)) / 10.0 + "%)");
+        line.add("&f已占领方块: &a" + data.belong + "" +
+                " &7(" + Math.round((Math.min((double) data.belong / this.allblocks, 1.0) * 100 * 10.0))
+                / 10.0 + "%)");
         return line;
     }
 

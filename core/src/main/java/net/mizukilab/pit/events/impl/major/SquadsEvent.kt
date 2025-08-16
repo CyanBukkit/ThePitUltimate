@@ -134,8 +134,18 @@ class SquadsEvent : IEpicEvent, AbstractEvent(),
                 continue
             }
 
-            val players = Bukkit.getOnlinePlayers().toList()
-            players.sortedBy { it.location.distanceSquared(player.location) }
+            var players = Bukkit.getOnlinePlayers().toList()
+            players = players.sortedWith { a, b ->
+                val aDiffWorld = a.location.world != player.world
+                val bDiffWorld = b.location.world != player.world
+
+                when {
+                    aDiffWorld && !bDiffWorld -> -1
+                    !aDiffWorld && bDiffWorld -> 1
+                    else -> a.location.distanceSquared(player.location)
+                        .compareTo(b.location.distanceSquared(player.location))
+                }
+            }
             for (target in players) {
                 val teamData = teamMap[target.uniqueId]
                 if (teamData != null) {
