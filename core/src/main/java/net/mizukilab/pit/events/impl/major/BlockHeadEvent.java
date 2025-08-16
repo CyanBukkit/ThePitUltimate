@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
+import net.mizukilab.pit.config.NewConfiguration;
 import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.chat.CC;
 import net.mizukilab.pit.util.cooldown.Cooldown;
@@ -78,7 +79,7 @@ public class BlockHeadEvent extends AbstractEvent implements IEpicEvent, Listene
 
     @Override
     public int requireOnline() {
-        return 10;
+        return NewConfiguration.INSTANCE.getEventOnlineRequired().getOrDefault("block_head",10);
     }
 
     @Override
