@@ -3,6 +3,7 @@ package net.mizukilab.pit.runnable;
 import cn.charlotte.pit.data.PlayerProfile;
 import cn.charlotte.pit.util.hologram.Hologram;
 import cn.charlotte.pit.util.hologram.HologramAPI;
+import cn.hutool.core.collection.ConcurrentHashSet;
 import io.irina.backports.utils.SWMRHashTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -132,7 +133,7 @@ public class BountyRunnable extends BukkitRunnable {
         private Cooldown spawnCooldown;
 
         public AnimationData() {
-            this.holograms = new HashSet<>();
+            this.holograms = new ConcurrentHashSet<>();
             this.spawnCooldown = new Cooldown(0);
         }
 

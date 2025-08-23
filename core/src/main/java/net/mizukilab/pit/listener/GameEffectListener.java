@@ -157,7 +157,7 @@ public class GameEffectListener implements Listener {
         CC.boardCast("Time change to: " + event.getTime());
     }
 
-    @EventHandler(priority = EventPriority.LOW,ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player attacker) {
             if (NewConfiguration.INSTANCE.getRepairFeatures())  {
