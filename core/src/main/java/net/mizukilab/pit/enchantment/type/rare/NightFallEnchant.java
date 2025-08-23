@@ -10,6 +10,9 @@ import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.time.TimeUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -21,10 +24,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @BowOnly
-public class NightFallEnchant extends AbstractEnchantment implements IPlayerShootEntity, IActionDisplayEnchant {
+public class NightFallEnchant extends AbstractEnchantment implements IPlayerShootEntity, IActionDisplayEnchant, Listener {
 
     private final Map<UUID, Cooldown> Cooldown = new HashMap();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        Cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getText(int level, Player player) {
         return Cooldown.getOrDefault(player.getUniqueId(), new Cooldown(0L)).hasExpired()

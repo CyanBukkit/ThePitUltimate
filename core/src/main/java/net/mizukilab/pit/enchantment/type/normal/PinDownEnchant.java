@@ -15,7 +15,9 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import real.nanoneko.register.IMagicLicense;
 
 import java.util.HashMap;
@@ -30,7 +32,10 @@ public class PinDownEnchant extends AbstractEnchantment implements Listener, IAc
     private static final SiltedUpBuff debuff = new SiltedUpBuff();
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "阻滞战术";

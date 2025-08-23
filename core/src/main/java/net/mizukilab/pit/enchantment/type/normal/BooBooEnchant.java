@@ -9,6 +9,9 @@ import net.mizukilab.pit.util.PlayerUtil;
 import net.mizukilab.pit.util.cooldown.Cooldown;
 import nya.Skip;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -21,9 +24,13 @@ import java.util.concurrent.TimeUnit;
 
 @ArmorOnly
 @Skip
-public class BooBooEnchant extends AbstractEnchantment implements ITickTask, IActionDisplayEnchant {
+public class BooBooEnchant extends AbstractEnchantment implements ITickTask, IActionDisplayEnchant, Listener {
 
     public static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
 
     @Override
     public String getEnchantName() {

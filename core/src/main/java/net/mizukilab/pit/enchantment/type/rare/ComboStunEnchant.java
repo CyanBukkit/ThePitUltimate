@@ -2,6 +2,8 @@ package net.mizukilab.pit.enchantment.type.rare;
 
 import cn.charlotte.pit.data.PlayerProfile;
 import com.google.common.util.concurrent.AtomicDouble;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant;
@@ -36,7 +38,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ComboStunEnchant extends AbstractEnchantment implements Listener, IAttackEntity, IActionDisplayEnchant {
 
     private final DecimalFormat numFormat = new DecimalFormat("0.0");
-    private final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();
+    private final Map<UUID, Cooldown> cooldown = new Object2ObjectOpenHashMap<>();
+
 
     @Override
     public String getEnchantName() {

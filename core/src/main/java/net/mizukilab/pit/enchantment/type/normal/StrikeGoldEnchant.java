@@ -16,6 +16,9 @@ import com.google.common.util.concurrent.AtomicDouble;
 import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -30,10 +33,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ArmorOnly
 @WeaponOnly
 @BowOnly
-public class StrikeGoldEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant, IPlayerShootEntity {
+public class StrikeGoldEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant, IPlayerShootEntity, Listener {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "致富之路";

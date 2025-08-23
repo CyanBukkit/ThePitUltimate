@@ -9,6 +9,9 @@ import net.mizukilab.pit.util.cooldown.Cooldown;
 import net.mizukilab.pit.util.time.TimeUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -17,10 +20,13 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @ArmorOnly
-public class SacredShieldEnchant extends AbstractEnchantment implements ITickTask, IActionDisplayEnchant {
+public class SacredShieldEnchant extends AbstractEnchantment implements ITickTask, Listener, IActionDisplayEnchant {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "神圣护盾";

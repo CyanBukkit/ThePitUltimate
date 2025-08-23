@@ -14,6 +14,9 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -27,10 +30,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Skip
 @WeaponOnly
 @BowOnly
-public class BlazingAngelEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+public class BlazingAngelEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant, Listener {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     public static int getCooldownInt(int enchantLevel) {
         switch (enchantLevel) {
             case 2:

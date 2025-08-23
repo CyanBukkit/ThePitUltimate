@@ -13,6 +13,9 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -30,10 +33,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeaponOnly
 @Skip
-public class CrushEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+public class CrushEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant, Listener {
 
     private final Map<UUID, Cooldown> COOLDOWN = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        COOLDOWN.remove(event.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "致残";

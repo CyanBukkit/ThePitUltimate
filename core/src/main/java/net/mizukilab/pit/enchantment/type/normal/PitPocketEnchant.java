@@ -12,6 +12,9 @@ import com.google.common.util.concurrent.AtomicDouble;
 import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +29,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeaponOnly
 @Skip
-public class PitPocketEnchant extends AbstractEnchantment implements IAttackEntity {
+public class PitPocketEnchant extends AbstractEnchantment implements IAttackEntity, Listener {
 
     private final Map<UUID, Cooldown> COOLDOWN = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        COOLDOWN.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "天坑钱包";

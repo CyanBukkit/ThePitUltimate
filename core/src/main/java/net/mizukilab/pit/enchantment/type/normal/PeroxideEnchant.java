@@ -13,6 +13,9 @@ import nya.Skip;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -25,10 +28,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Skip
 @ArmorOnly
-public class PeroxideEnchant extends AbstractEnchantment implements IPlayerDamaged, IActionDisplayEnchant {
+public class PeroxideEnchant extends AbstractEnchantment implements IPlayerDamaged, IActionDisplayEnchant, Listener {
 
     private final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "过氧化物";

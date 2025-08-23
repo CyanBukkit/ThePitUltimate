@@ -12,6 +12,9 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import nya.Skip;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -23,10 +26,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Skip
 @WeaponOnly
 @ArmorOnly
-public class AssassinsEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+public class AssassinsEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant , Listener {
 
     private static final HashMap<UUID, Cooldown> Cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        Cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "暗影刺客";

@@ -81,7 +81,10 @@ public class VerminEnchant extends AbstractEnchantment implements Listener,ITick
     public int loopTick(int enchantLevel) {
         return 3;
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        COOLDOWN.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getText(int level, Player player) {
         return COOLDOWN.getOrDefault(player.getUniqueId(), new Cooldown(0)).hasExpired() ? "&a&l✔" : "&c&l" + TimeUtil.millisToRoundedTime(COOLDOWN.get(player.getUniqueId()).getRemaining()).replace(" ", "") + " ";

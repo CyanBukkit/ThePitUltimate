@@ -15,6 +15,9 @@ import nya.Skip;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -24,10 +27,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 @Skip
 @ArmorOnly
-public class BattlefieldMedicEnchant extends AbstractEnchantment implements IPlayerKilledEntity, IPlayerDamaged, IActionDisplayEnchant {
+public class BattlefieldMedicEnchant extends AbstractEnchantment implements IPlayerKilledEntity, IPlayerDamaged, IActionDisplayEnchant, Listener {
 
     private static final HashMap<UUID, Cooldown> resistanceCooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        resistanceCooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "战地医师";

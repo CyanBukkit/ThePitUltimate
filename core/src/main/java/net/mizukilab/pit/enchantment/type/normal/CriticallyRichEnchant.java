@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeaponOnly
 public class CriticallyRichEnchant extends AbstractEnchantment implements IAttackEntity {
 
-    private final Map<UUID, Cooldown> cooldownMap = new HashMap<>();
 
     @Override
     public String getEnchantName() {

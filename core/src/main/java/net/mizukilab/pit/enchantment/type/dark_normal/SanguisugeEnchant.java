@@ -13,6 +13,9 @@ import net.mizukilab.pit.util.item.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -25,10 +28,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 @ArmorOnly
-public class SanguisugeEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+public class SanguisugeEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant, Listener {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        cooldown.remove(event.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "血";

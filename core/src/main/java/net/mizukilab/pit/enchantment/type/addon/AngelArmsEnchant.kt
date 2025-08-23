@@ -3,7 +3,6 @@ package net.mizukilab.pit.enchantment.type.addon
 import com.google.common.util.concurrent.AtomicDouble
 import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant
-import net.mizukilab.pit.enchantment.param.event.PlayerOnly
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
 import net.mizukilab.pit.parm.listener.IAttackEntity
@@ -12,6 +11,9 @@ import net.mizukilab.pit.util.cooldown.Cooldown
 import net.mizukilab.pit.util.time.TimeUtil
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.potion.PotionEffectType
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -22,12 +24,16 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @since 2025/5/1
  */
 @ArmorOnly
-class AngelArmsEnchant : AbstractEnchantment(), IAttackEntity, IActionDisplayEnchant {
+class AngelArmsEnchant : AbstractEnchantment(), IAttackEntity, IActionDisplayEnchant,Listener {
     val cooldown: MutableMap<UUID, Cooldown> = mutableMapOf()
     override fun getEnchantName(): String {
         return "天使军：忠义"
     }
 
+    @EventHandler
+    fun onQuit(event: PlayerQuitEvent) {
+        cooldown.remove(event.player.uniqueId)
+    }
     override fun getMaxEnchantLevel(): Int {
         return 3
     }

@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @AutoRegister
 public class DemonHenEnchant extends AbstractEnchantment implements IActionDisplayEnchant, IPlayerShootEntity, Listener, IPlayerKilledEntity {
 
-    private static final Map<UUID, Cooldown> cooldown = new Reference2ObjectArrayMap<>();
+    private static final Map<UUID, Cooldown> cooldown = new ConcurrentHashMap<>();
     
 
     private final Map<UUID, DemonHenData> demonHens = new ConcurrentHashMap<>();
