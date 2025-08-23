@@ -31,11 +31,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 @ArmorOnly
-public class HealShieldEnchant extends AbstractEnchantment implements IPlayerDamaged, ITickTask, IActionDisplayEnchant {
+public class HealShieldEnchant extends AbstractEnchantment implements Listener,IPlayerDamaged, ITickTask, IActionDisplayEnchant {
 
     private final HashMap<UUID, Integer> shield = new HashMap<>();
     private final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        UUID uniqueId = e.getPlayer().getUniqueId();
+        shield.remove(uniqueId);
+        cooldown.remove(uniqueId);
+    }
     @Override
     public String getEnchantName() {
         return "沃土予身";

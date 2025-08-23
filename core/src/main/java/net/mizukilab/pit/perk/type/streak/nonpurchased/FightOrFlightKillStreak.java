@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -37,7 +38,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class FightOrFlightKillStreak extends AbstractPerk implements Listener, IAttackEntity, IPlayerShootEntity {
 
     private static final HashMap<UUID, Cooldown> strength = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        strength.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getInternalPerkName() {
         return "fight_or_flight";

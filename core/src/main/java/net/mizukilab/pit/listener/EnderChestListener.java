@@ -25,6 +25,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,12 @@ public class EnderChestListener implements Listener {
 
     private final Map<UUID, Location> locationCache = new HashMap<>();
     private final Map<UUID, Cooldown> openCooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        UUID uniqueId = e.getPlayer().getUniqueId();
+        locationCache.remove(uniqueId);
+        openCooldown.remove(uniqueId);
+    }
     @EventHandler
     public void onInvClick(InventoryClickEvent event) {
         if (event.getInventory().getName().equals("末影箱")) {

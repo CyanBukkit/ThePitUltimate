@@ -20,6 +20,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityShootBowEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
 
 import java.lang.reflect.Field
@@ -39,7 +40,10 @@ class Volley_B : AbstractEnchantment(),  Listener {
     init {
         playerUsingFiled.isAccessible = true
     }
-
+    @EventHandler
+    fun onQuit(pq: PlayerQuitEvent) {
+        cooldown.remove(pq.player.uniqueId)
+    }
     override fun getEnchantName(): String {
         return "连续射击"
     }

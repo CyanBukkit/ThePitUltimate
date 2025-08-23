@@ -37,7 +37,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EnderBowEnchant extends AbstractEnchantment implements IPlayerShootEntity, Listener, IActionDisplayEnchant {
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
     private static int getCooldownInt(int enchantLevel) {
         switch (enchantLevel) {
             case 2:

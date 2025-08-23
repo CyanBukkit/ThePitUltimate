@@ -86,7 +86,7 @@ class PitCommands {
     private val PATTEN_DEFAULT_YMD = "yyyy-MM-dd"
     private val dateFormat = SimpleDateFormat(PATTEN_DEFAULT_YMD)
     private val numFormat = DecimalFormat("0.00")
-    private val COOLDOWN_SHOW: MutableMap<UUID, Cooldown> = HashMap()
+    private val COOLDOWN_SHOW: Cache<UUID, Cooldown> = CacheBuilder.newBuilder().expireAfterWrite(1,TimeUnit.MINUTES).build<UUID,Cooldown>()
 
     @Execute(name = "thepit", aliases = ["天坑", "天坑乱斗", "version", "ver"])
     fun info(@Context player: Player) {
@@ -203,12 +203,12 @@ class PitCommands {
             player.sendMessage(CC.translate("&c你需要购买 &e天坑乱斗会员 &c才可以使用此指令!"))
             return
         }
-        COOLDOWN_SHOW.putIfAbsent(player.uniqueId, Cooldown(0))
-        if (!COOLDOWN_SHOW[player.uniqueId]!!.hasExpired() && !player.hasPermission("thepit.admin")) {
+        var ifPresent = COOLDOWN_SHOW.getIfPresent(player.uniqueId)
+        if ((ifPresent != null && ifPresent.hasExpired()) && !player.hasPermission("thepit.admin")) {
             player.sendMessage(
                 CC.translate(
                     "此指令仍在冷却中: " + TimeUtil.millisToTimer(
-                        COOLDOWN_SHOW[player.uniqueId]!!.remaining
+                        ifPresent.remaining
                     )
                 )
             )

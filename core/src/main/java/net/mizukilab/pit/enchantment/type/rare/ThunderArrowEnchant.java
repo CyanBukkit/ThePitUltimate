@@ -18,6 +18,9 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -31,9 +34,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 2025/1/17
  */
 @BowOnly
-public class ThunderArrowEnchant extends AbstractEnchantment implements IPlayerShootEntity, IActionDisplayEnchant {
+public class ThunderArrowEnchant extends AbstractEnchantment implements Listener,IPlayerShootEntity, IActionDisplayEnchant {
     private Map<UUID, Cooldown> cooldown = new Object2ObjectOpenHashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "雷箭";

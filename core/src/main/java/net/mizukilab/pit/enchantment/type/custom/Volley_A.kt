@@ -33,7 +33,6 @@ import java.util.concurrent.ConcurrentHashMap
 @BowOnly
 class VollewyA : AbstractEnchantment(), Listener {
     private val playerUsingFiled: Field = EntityHuman::class.java.getDeclaredField("h")
-    private val cooldown = HashMap<UUID, Cooldown>()
     private val arrowBuilder: ItemBuilder = ItemBuilder(Material.ARROW).internalName("default_arrow").defaultItem().canDrop(false).canSaveToEnderChest(false)
 
     init {

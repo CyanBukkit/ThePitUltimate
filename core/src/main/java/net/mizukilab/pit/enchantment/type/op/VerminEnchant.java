@@ -55,12 +55,6 @@ public class VerminEnchant extends AbstractEnchantment implements Listener,ITick
     public Cooldown getCooldown() {
         return new Cooldown(15, TimeUnit.SECONDS);
     }
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        COOLDOWN.remove(player.getUniqueId());
-
-    }
     @Override
     public String getUsefulnessLore(int enchantLevel) {
         return String.format(

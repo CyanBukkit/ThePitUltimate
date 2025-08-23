@@ -94,7 +94,9 @@ public class VolleyEnchant extends AbstractEnchantment implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        cooldown.remove(e.getPlayer().getUniqueId());
+        UUID uniqueId = e.getPlayer().getUniqueId();
+        cooldown.remove(uniqueId);
+        isShooting.remove(uniqueId);
     }
 
     @EventHandler

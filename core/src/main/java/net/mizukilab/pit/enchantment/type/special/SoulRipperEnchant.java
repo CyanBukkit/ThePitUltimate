@@ -14,6 +14,9 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -26,12 +29,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 @AutoRegister
-public class SoulRipperEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
+public class SoulRipperEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IActionDisplayEnchant {
 
     public static final HashMap<UUID, UUID> buff = new HashMap<>();
     public static final HashMap<UUID, Integer> tier = new HashMap<>();
     public static final HashMap<UUID, Cooldown> duration = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        UUID uniqueId = e.getPlayer().getUniqueId();
+        buff.remove(uniqueId);
+        tier.remove(uniqueId);
+        duration.remove(uniqueId);
+    }
     @Override
     public String getEnchantName() {
         return "灵魂收割者";

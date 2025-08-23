@@ -20,6 +20,9 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -30,12 +33,17 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 @Skip
 @WeaponOnly
-class PrimordialStrikerEnchant : AbstractEnchantment(), IPlayerDamaged, IPlayerKilledEntity, IAttackEntity, ITickTask,
+class PrimordialStrikerEnchant : AbstractEnchantment(), IPlayerDamaged, IPlayerKilledEntity,Listener, IAttackEntity, ITickTask,
     IActionDisplayEnchant {
 
     private val shields = mutableMapOf<UUID, Int>()
     private val cooldowns = mutableMapOf<UUID, Cooldown>()
-
+    @EventHandler
+    fun onQuit(pq: PlayerQuitEvent){
+        val key = pq.player.uniqueId
+        shields.remove(key);
+        cooldowns.remove(key);
+    }
     override fun getEnchantName() = "原初圣伊"
 
     override fun getMaxEnchantLevel() = 1

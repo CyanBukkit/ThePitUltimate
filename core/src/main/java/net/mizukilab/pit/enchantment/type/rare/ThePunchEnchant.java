@@ -14,6 +14,9 @@ import net.mizukilab.pit.util.cooldown.Cooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -28,14 +31,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeaponOnly
 @BowOnly
-public class ThePunchEnchant extends AbstractEnchantment implements IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
+public class ThePunchEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IPlayerShootEntity, IActionDisplayEnchant {
 
     public static double PUNCH_X = 0;
     public static double PUNCH_Y = 0;
     public static double PUNCH_Z = 0;
 
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "击飞!";

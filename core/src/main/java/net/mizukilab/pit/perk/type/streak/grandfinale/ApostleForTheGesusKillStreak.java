@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -45,7 +46,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ApostleForTheGesusKillStreak extends AbstractPerk implements Listener, IAttackEntity, IPlayerShootEntity {
 
     public static final HashMap<UUID, Cooldown> strength = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        strength.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getInternalPerkName() {
         return "rn_gesus_kill_streak";

@@ -6,20 +6,29 @@ import net.mizukilab.pit.enchantment.AbstractEnchantment
 import net.mizukilab.pit.enchantment.IActionDisplayEnchant
 import net.mizukilab.pit.enchantment.param.item.WeaponOnly
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity
+import net.mizukilab.pit.events.impl.major.SquadsEvent
 import net.mizukilab.pit.parm.listener.IAttackEntity
 import net.mizukilab.pit.util.PlayerUtil
 import net.mizukilab.pit.util.cooldown.Cooldown
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 
 @WeaponOnly
-class HealerEnchant : AbstractEnchantment(), IAttackEntity, IActionDisplayEnchant {
+class HealerEnchant : AbstractEnchantment(), Listener,IAttackEntity, IActionDisplayEnchant {
     override fun getEnchantName(): String {
         return "医师"
+    }
+
+    @EventHandler
+    fun onQuit(e: PlayerQuitEvent) {
+        Companion.cooldown.remove(e.player.uniqueId)
     }
 
     override fun getMaxEnchantLevel(): Int {

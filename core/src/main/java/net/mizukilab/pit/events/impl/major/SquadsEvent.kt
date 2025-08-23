@@ -598,7 +598,6 @@ class SquadsEvent : IEpicEvent, AbstractEvent(),
 
     class PlayerData(val uuid: UUID) {
 
-        val invites = HashMap<UUID, Cooldown>()
     }
 
     class TeamData(var char: Char) {

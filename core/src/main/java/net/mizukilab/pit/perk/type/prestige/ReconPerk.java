@@ -10,6 +10,9 @@ import net.mizukilab.pit.util.cooldown.Cooldown;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -20,10 +23,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Created_In: 2021/3/24 20:54
  */
 
-public class ReconPerk extends AbstractPerk implements IPlayerShootEntity {
+public class ReconPerk extends AbstractPerk implements Listener,IPlayerShootEntity {
 
     private final Map<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getInternalPerkName() {
         return "recon_perk";

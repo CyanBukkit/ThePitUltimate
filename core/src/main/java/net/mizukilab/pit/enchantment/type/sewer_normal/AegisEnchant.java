@@ -14,6 +14,9 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,12 +29,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Created_In: 2021/3/16 21:43
  */
 @ArmorOnly
-public class AegisEnchant extends AbstractEnchantment implements ITickTask, IPlayerDamaged, IActionDisplayEnchant {
-
+public class AegisEnchant extends AbstractEnchantment implements ITickTask, IPlayerDamaged, IActionDisplayEnchant, Listener {
     private static final Map<UUID, Boolean> shield = new HashMap<>();
     private static final Map<UUID, Cooldown> cooldownMap = new HashMap<>();
     private static final int COOLDOWN_DURATION = 9;
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        cooldownMap.remove(e.getPlayer().getUniqueId());
+        shield.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "宙斯之盾";

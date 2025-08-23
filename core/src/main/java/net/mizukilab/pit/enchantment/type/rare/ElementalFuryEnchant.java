@@ -15,6 +15,9 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -25,10 +28,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @WeaponOnly
-public class ElementalFuryEnchant extends AbstractEnchantment implements IAttackEntity, IActionDisplayEnchant {
-
+public class ElementalFuryEnchant extends AbstractEnchantment implements Listener,IAttackEntity, IActionDisplayEnchant {
     private static final HashMap<UUID, Cooldown> cooldown = new HashMap<>();
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+    }
     @Override
     public String getEnchantName() {
         return "元素";
