@@ -64,7 +64,7 @@ class Regularity : AbstractEnchantment(), Listener {
         }%&7. &7(最多三次)"
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGH)
     fun damage(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
         if (attacker !is Player) return
