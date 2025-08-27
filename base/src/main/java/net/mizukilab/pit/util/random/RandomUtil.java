@@ -63,7 +63,7 @@ public class RandomUtil {
     }
 
     public static void switchSeed() {
-        random.setSeed(System.nanoTime());
+        //no-op
     }
 
     public static Location generateRandomLocation() {
