@@ -7,6 +7,7 @@ import org.bukkit.World;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 2 * @Author: EmptyIrony
@@ -60,6 +61,10 @@ public class RandomUtil {
     public static Object helpMeToChooseOne(Object... entry) {
         switchSeed();
         return entry[random.nextInt(entry.length)];
+    }
+    public static Object helpMeToChooseOne(List entry) {
+        switchSeed();
+        return entry.get(random.nextInt(entry.size()));
     }
 
     public static void switchSeed() {

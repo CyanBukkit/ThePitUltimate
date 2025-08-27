@@ -356,12 +356,12 @@ public class EnchantButton extends Button {
                 }
                 if (level == 2) {
                     if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
-                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                         mythicItem.getEnchantments().put(enchantment, 1);
                         announcement = true;
                     } else {
                         results.removeIf(enchant -> enchant.getNbtName().equals("somber_enchant"));
-                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                         mythicItem.getEnchantments().put(enchantment, 1);
                     }
                 }
@@ -370,11 +370,11 @@ public class EnchantButton extends Button {
             case RAGE: {
                 if (level == 1) {
                     if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
-                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                         mythicItem.getEnchantments().put(enchantment, RandomUtil.random.nextInt(enchantment.getMaxEnchantLevel() - 1) + 1);
                         announcement = true;
                     } else {
-                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                        AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                         mythicItem.getEnchantments().put(enchantment, RandomUtil.random.nextInt(enchantment.getMaxEnchantLevel() - 1) + 1);
                     }
                     break;
@@ -476,7 +476,7 @@ public class EnchantButton extends Button {
         if (amount == 1) { // If this item have only 1 enchantment
             AbstractEnchantment enchantment = null;
             if (Utils.canUseMythicBook(player, item)) { //定义不明
-                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                 mythicItem.getEnchantments().put(rareEnchant, 3);
                 announcement = true;
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -486,9 +486,9 @@ public class EnchantButton extends Button {
                 if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                     announcement = true;
                     rareResults.removeAll(enchantments);
-                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                 } else {
-                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                 }
                 enchantments.add(enchantment);
                 mythicItem.getEnchantments().computeInt(enchantment, (a,b) -> max(b, 1));
@@ -499,9 +499,9 @@ public class EnchantButton extends Button {
                     if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                         announcement = true;
                         rareResults.removeAll(enchantments);
-                        enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                        enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                     } else {
-                        enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                        enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                     }
                     enchantments.add(enchantment);
                     mythicItem.getEnchantments().computeInt(enchantment, (a,b) -> max(b, 1));
@@ -522,7 +522,7 @@ public class EnchantButton extends Button {
             }
         } else if (amount == 2) { //21 -> 311
             if (Utils.canUseMythicBook(player, item)) {
-                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                 Object2IntOpenHashMap<AbstractEnchantment> enchantments1 = mythicItem.getEnchantments();
                 int levelCurrentlyEnchantment = 0;
                 for (Integer value : enchantments1.values()) {
@@ -540,9 +540,9 @@ public class EnchantButton extends Button {
                 if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                     announcement = true;
                     rareResults.removeAll(enchantments);
-                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                 } else {
-                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                    enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                 }
                 enchantments.add(enchantment);
                 mythicItem.getEnchantments().put(enchantment, 1);
@@ -579,7 +579,7 @@ public class EnchantButton extends Button {
                 totalLevel += mythicItem.getEnchantments().getInt(abstractEnchantment);
             }
             if ((totalLevel == 8 && RandomUtil.hasSuccessfullyByChance(0.9)) || totalLevel == 9) {
-                mythicItem.getEnchantments().put((AbstractEnchantment) RandomUtil.helpMeToChooseOne(mythicItem.getEnchantments().keySet().toArray()), 1);
+                mythicItem.getEnchantments().put((AbstractEnchantment) RandomUtil.helpMeToChooseOne(mythicItem.getEnchantments().keySet()), 1);
             }
         }
         boolean badLuck = true;
@@ -590,7 +590,7 @@ public class EnchantButton extends Button {
             }
         }
         if (badLuck) {
-            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(mythicItem.getEnchantments().keySet().toArray());
+            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(mythicItem.getEnchantments().keySet());
             mythicItem.getEnchantments().put(enchantment, 3);
             if ((enchantment.getRarity() == EnchantmentRarity.RARE || enchantment.getRarity() == EnchantmentRarity.RAGE_RARE)) {
                 announcement = true;
@@ -607,7 +607,7 @@ public class EnchantButton extends Button {
             boolean useBook = Utils.canUseMythicBook(player, item);
 
             if (useBook) {
-                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                 mythicItem.getEnchantments().put(rareEnchant, 3);
                 announcement = true;
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -672,7 +672,7 @@ public class EnchantButton extends Button {
             boolean useBook = Utils.canUseMythicBook(player, item);
             if (useBook) {
                 choice = 3;
-                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                AbstractEnchantment rareEnchant = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                 mythicItem.getEnchantments().computeInt(rareEnchant, (a,b) -> max(b,3));
                 announcement = true;
                 PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
@@ -682,17 +682,17 @@ public class EnchantButton extends Button {
 
             switch (choice) {
                 case 0: { // 11->21
-                    AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(enchantments.toArray());
+                    AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(enchantments);
                     mythicItem.getEnchantments().computeInt(enchantment, (a,b) -> max(b,2));
                     break;
                 }
                 case 1: { // 11->111
                     results.removeAll(enchantments);
-                    AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                    AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                     if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
                         announcement = true;
                         rareResults.removeAll(enchantments);
-                        enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+                        enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
                     }
                     enchantments.add(enchantment);
                     mythicItem.getEnchantments().computeInt(enchantment, (a,b) -> max(b,1));
@@ -718,7 +718,7 @@ public class EnchantButton extends Button {
         boolean useBook = Utils.canUseMythicBook(player, item);
         if (useBook) {
             choice = 5;
-            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+            AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
 
             mythicItem.getEnchantments().computeInt(enchantment, (a,b) -> max(b,3));
             announcement = true;
@@ -730,7 +730,7 @@ public class EnchantButton extends Button {
         switch (choice) {
             case 0: { //choice 0: 1 of Lv1 Enchantment
 
-                AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                 enchantments.add(enchantment);
                 mythicItem.getEnchantments().computeInt(enchantment, (a,b) -> max(b,1));
                 break;
@@ -739,7 +739,7 @@ public class EnchantButton extends Button {
 
                 for (int i = 0; i < 2; i++) {
                     results.removeAll(enchantments);
-                    AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                    AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                     enchantments.add(enchantment);
                     mythicItem.getEnchantments().computeInt(enchantment, (a,b) -> max(b,1));
                 }
@@ -747,14 +747,14 @@ public class EnchantButton extends Button {
             }
             case 1: { //choice 0: 1 of Lv2 Enchantment
 
-                AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                 enchantments.add(enchantment);
                 mythicItem.getEnchantments().put(enchantment, Math.min(enchantment.getMaxEnchantLevel(), 2));
                 break;
             }
             case 2: { //choice 0: 2 of Lv2 Enchantment
 
-                AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+                AbstractEnchantment enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
                 enchantments.add(enchantment);
                 mythicItem.getEnchantments().put(enchantment, Math.min(enchantment.getMaxEnchantLevel(), 2));
                 break;
@@ -776,9 +776,9 @@ public class EnchantButton extends Button {
         if (RandomUtil.hasSuccessfullyByChance(NewConfiguration.INSTANCE.getChance(player, color,level))) {
             announcement = true;
             rareResults.removeAll(enchantments);
-            enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults.toArray());
+            enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(rareResults);
         } else {
-            enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results.toArray());
+            enchantment = (AbstractEnchantment) RandomUtil.helpMeToChooseOne(results);
         }
         enchantments.add(enchantment);
         mythicItem.getEnchantments().put(enchantment, 1);
