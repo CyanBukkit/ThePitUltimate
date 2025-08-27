@@ -14,6 +14,7 @@ import net.mizukilab.pit.util.time.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -72,14 +73,18 @@ public class EventFactory {
         for (Class<?> clazz : classes) {
             if (IEpicEvent.class.isAssignableFrom(clazz)) {
                 try {
-                    this.epicEvents.add((IEpicEvent) clazz.getConstructor().newInstance());
+                    Constructor<?> declaredConstructor = clazz.getDeclaredConstructor();
+                    declaredConstructor.setAccessible(true);
+                    this.epicEvents.add((IEpicEvent) declaredConstructor.newInstance());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
             if (INormalEvent.class.isAssignableFrom(clazz)) {
                 try {
-                    this.normalEvents.add((INormalEvent) clazz.getConstructor().newInstance());
+                    Constructor<?> declaredConstructor = clazz.getDeclaredConstructor();
+                    declaredConstructor.setAccessible(true);
+                    this.normalEvents.add((INormalEvent) declaredConstructor.newInstance());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

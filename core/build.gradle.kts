@@ -1,15 +1,24 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import java.util.Scanner
 import org.apache.tools.ant.filters.ReplaceTokens
+import proguard.gradle.ProGuardTask
 import java.io.ByteArrayOutputStream
-
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:7.7.0")
+    }
+}
 plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("io.freefair.lombok") version "8.10"
     kotlin("jvm") version "2.1.20"
     alias(libs.plugins.shadow)
 }
-var devBuild = true
+
+var devBuild = false
 if (devBuild) {
     println("WARN! 当前使用DevBuild模式构建!!,请详细斟酌是否构建")
 }
@@ -59,6 +68,22 @@ val injectGitVersion by tasks.registering {
         }
         println("🔄 Git version injected into generated sources.")
     }
+}
+tasks.register<ProGuardTask>("proguard") {
+    configuration(file("proguard.pro"))
+
+    injars(tasks.named<Jar>("jar").flatMap { it.archiveFile })
+    if (System.getProperty("java.version").startsWith("1.")) {
+        libraryjars(file("${System.getProperty("java.home")}/lib/rt.jar"))
+    } else {
+        libraryjars(file("${System.getProperty("java.home")}/jmods/java.base.jmod"))
+    }
+    repositories
+    libraryjars(configurations.compileClasspath)
+
+    verbose()
+
+    outjars(layout.buildDirectory.file("libs/proguard-tpu-minified.jar"))
 }
 val lastFin by tasks.registering {
     group = "versioning"

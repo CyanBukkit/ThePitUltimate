@@ -176,15 +176,17 @@ object PitHook {
     }
 
     private fun checkBlackList() {
-        val blackList = listOf("Sentinel")
-
-        if (blackList.any { Bukkit.getPluginManager().getPlugin(it) != null } ||
-            listOf(
-                "org.mcmonkey.sentinel.SentinelAttackHelper",
-                "org.mcmonkey.sentinel.SentinelPlugin"
-            ).any { CrashUtil.isClass(it) }) {
-            CrashUtil.doCrash()
-        }
+//        val blackList = listOf("Sentinel")
+//
+//        if (blackList.any {
+//            Bukkit.getPluginManager().getPlugin(it) != null
+//        } ||
+//            listOf(
+//                "org.mcmonkey.sentinel.SentinelAttackHelper",
+//                "org.mcmonkey.sentinel.SentinelPlugin"
+//            ).any { CrashUtil.isClass(it) }) {
+//            CrashUtil.doCrash()
+//        }
     }
 
 
