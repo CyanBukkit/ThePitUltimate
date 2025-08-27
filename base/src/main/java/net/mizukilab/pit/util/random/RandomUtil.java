@@ -8,6 +8,7 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 2 * @Author: EmptyIrony
@@ -61,6 +62,9 @@ public class RandomUtil {
     public static Object helpMeToChooseOne(Object... entry) {
         switchSeed();
         return entry[random.nextInt(entry.length)];
+    }
+    public static Object helpMeToChooseOne(Set entry) {
+        return helpMeToChooseOne(entry.toArray());
     }
     public static Object helpMeToChooseOne(List entry) {
         switchSeed();
