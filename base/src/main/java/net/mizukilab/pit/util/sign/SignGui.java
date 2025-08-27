@@ -35,9 +35,12 @@ public class SignGui {
                     public void onPacketReceiving(PacketEvent event) {
                         final Player player = event.getPlayer();
                         Vector v = signLocations.remove(player.getName());
-                        com.comphenix.protocol.wrappers.BlockPosition bp = event.getPacket().getBlockPositionModifier().getValues().get(0);
-                        final WrappedChatComponent[] chatarray = event.getPacket().getChatComponentArrays().getValues().get(0);
-                        final String[] lines = {chatarray[0].getJson().replace("\"", ""), chatarray[1].getJson().replace("\"", ""), chatarray[2].getJson().replace("\"", ""), chatarray[3].getJson().replace("\"", "")};
+                        com.comphenix.protocol.wrappers.BlockPosition bp = event.getPacket().getBlockPositionModifier().
+                                getValues().get(0);
+                        final WrappedChatComponent[] chatarray = event.getPacket().getChatComponentArrays().
+                                getValues().get(0);
+                        final String[] lines = {chatarray[0].getJson().replace("\"", "")
+                                , chatarray[1].getJson().replace("\"", ""), chatarray[2].getJson().replace("\"", ""), chatarray[3].getJson().replace("\"", "")};
                         final SignGUIListener response = listeners.remove(event.getPlayer().getName());
 
                         if (v == null) {
@@ -55,7 +58,7 @@ public class SignGui {
 
                         if (response != null) {
                             event.setCancelled(true);
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> response.onSignDone(player, lines));
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> response.onSignDone(player, lines),1);
                         }
                     }
                 });

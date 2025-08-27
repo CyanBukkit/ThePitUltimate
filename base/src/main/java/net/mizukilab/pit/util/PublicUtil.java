@@ -65,14 +65,13 @@ public class PublicUtil {
         int absorptionHearts1 = (int) ((CraftPlayer) victim).getHandle().getAbsorptionHearts();
         int absorptionHearts = (int) (absorptionHearts1 / 2);
         int totalHearts = (int) victim.getMaxHealth() / 2;
-        int health = (int) victim.getHealth();
-        int nowHearts = health / 2;
-        int damageHearts = ((int)finalDamage) / 2;
+        int nowHearts = (int) Math.ceil(victim.getHealth() / 2D);
+        int damageHearts = (int) Math.ceil(finalDamage / 2D);
         StringBuilder builder = new StringBuilder();
         builder.append(RankUtil.getPlayerColoredName(victim.getUniqueId()));
         boolean venom = !PlayerUtil.    isNPC(victim) && PlayerUtil.isVenom(victim);
         builder.append(venom ? " &2" : " &4");
-        builder.append("❤".repeat(Math.max(0, nowHearts)));
+        builder.append("❤".repeat(Math.max(0, nowHearts - damageHearts)));
 
         if (absorptionHearts > 0) {
             builder.append("&e");
@@ -82,7 +81,7 @@ public class PublicUtil {
         builder.append(venom ? "&a" : "&c");
         builder.append("❤".repeat(Math.max(0, damageHearts)));
         builder.append("&7");
-        int heats = totalHearts - nowHearts - damageHearts;
+        int heats = totalHearts - nowHearts;
         builder.append("❤".repeat(Math.max(0, heats)));
         ThePit.getInstance().getActionBarManager().addActionBarOnQueue(damager, "heart", builder + (PlayerUtil.isPlayerUnlockedPerk(damager, "raw_numbers_perk") ? " &c" + numFormat.format(finalDamage) + "HP" : ""), 3, false);
     }
