@@ -88,7 +88,7 @@ object TabConfiguration {
     }
 
     private fun refreshAndSave() {
-        this.defaults.forEach {
+        this.defaults.entries.forEach {
             if (this.config.get(it.key) == null) {
                 this.config.set(it.key, it.value)
             }

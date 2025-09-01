@@ -56,8 +56,7 @@ public abstract class AbstractEnchantment {
     public int getItemEnchantLevel(AbstractPitItem im) {
         if (im == null)
             return -1;
-        int anInt = im.getEnchantments().getInt(this);
-        return anInt;
+        return im.getEnchantments().getInt(this);
     }
 
     public int getItemEnchantLevel(ItemStack item) {
@@ -65,34 +64,6 @@ public abstract class AbstractEnchantment {
         if (iMythicItem != null) {
             return iMythicItem.getEnchantments().getInt(this);
         } //更快的解析
-        if (item == null || item.getType() == Material.AIR) {
-            return -1;
-        }
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = PublicUtil.toNMStackQuick(item);
-        NBTTagCompound tag = nmsItem.getTag();
-        if (tag == null) {
-            return -1;
-        }
-        NBTBase extra = tag.get("extra");
-        if (!(extra instanceof NBTTagCompound) || !((NBTTagCompound) extra).hasKey("ench")) {
-            return -1;
-        }
-        NBTTagList list = ((NBTTagCompound) extra)
-                .getList("ench", 8);
-
-        if (list == null || list.isEmpty()) {
-            return -1;
-        }
-        for (int i = 0; i < list.size(); i++) {
-            String string = list.getString(i);
-            String[] split = PublicUtil.splitByCharAt(string, ':');
-            if (split.length != 2) {
-                return -1;
-            }
-            if (split[0].equals(this.getNbtName())) {
-                return Integer.parseInt(split[1]);
-            }
-        }
         return -1;
     }
 

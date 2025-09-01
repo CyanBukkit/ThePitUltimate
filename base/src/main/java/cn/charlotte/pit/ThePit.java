@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.mizukilab.pit.actionbar.IActionBarManager;
@@ -200,6 +201,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         audiences = BukkitAudiences.create(this);
         BannerUtil.printFileContent("banner.txt");
         serverId = DateCodeUtils.dateToCode(LocalDate.now());
+
+        // ensure the warm up component
+        Component.text(-1);
 
         saveDefaultConfig();
 
@@ -862,8 +866,12 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
      * @return True if we have PlayerPoints, else false.
      */
     private boolean hookPlayerPoints() {
-        this.playerPoints = ((PlayerPoints) Bukkit.getPluginManager().getPlugin("PlayerPoints")).getAPI();
-        return playerPoints != null;
+        try {
+            this.playerPoints = ((PlayerPoints) Bukkit.getPluginManager().getPlugin("PlayerPoints")).getAPI();
+            return playerPoints != null;
+        } catch (Throwable throwable){
+            return false;
+        }
     }
 
     private void hookMechanical() {

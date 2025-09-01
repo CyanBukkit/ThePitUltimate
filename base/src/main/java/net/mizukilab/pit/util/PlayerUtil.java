@@ -427,8 +427,8 @@ public class PlayerUtil {
         player.setAllowFlight(false);
         player.setCanPickupItems(true);
         if (clearInventory) {
-            player.getInventory().clear();
             player.getInventory().setArmorContents(null);
+            player.getInventory().clear();
             player.getEnderChest().clear();
         }
         if (closeInventory) {
@@ -440,13 +440,16 @@ public class PlayerUtil {
         entityPlayer.getDataWatcher().watch(9, (byte) 0);
         entityPlayer.removeAllEffects();
         entityPlayer.setAbsorptionHearts(0.0F);
-
-        //apply stats - start
-        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
-        player.setFoodLevel(profile.getFoodLevel());
         //temp disable
         player.setWalkSpeed(0.2F);
 
+        player.updateInventory();
+    }
+
+    public static void postResetPlayer(Player player) {
+        PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
+        //apply stats - start
+        player.setFoodLevel(profile.getFoodLevel());
         IEpicEvent activeEpicEvent = ThePit.getInstance().getEventFactory().getActiveEpicEvent();
         if (activeEpicEvent != null) {
             if (activeEpicEvent.processTrigger(IEpicEvent.TrigAction.CLEAR, player, profile)) {
@@ -456,8 +459,6 @@ public class PlayerUtil {
         //apply stats - end
         //heal player
         player.setHealth(player.getMaxHealth());
-
-        player.updateInventory();
     }
 
     public static void sendMessage(String message, Player... players) {

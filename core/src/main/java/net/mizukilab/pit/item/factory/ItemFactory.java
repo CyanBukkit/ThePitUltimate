@@ -127,11 +127,9 @@ public class ItemFactory implements IItemFactory {
         if(!clientSide) {
             if (ItemUtil.shouldUpdateItem(stack)) {
                 if (ItemUtil.shouldUpdateUUID()) {
-                    Log.WriteLine("Updates the item for " + stack);
                     itemUUID = ItemUtil.randomUUIDItem(stack);
                 }
 
-                Log.WriteLine("sign " + stack);
                 ItemUtil.signVer(stack);
             }
         }
@@ -158,8 +156,6 @@ public class ItemFactory implements IItemFactory {
 
     private static void logic(ItemStack stack, UUID itemUUID, IMythicItem mythicItem) {
         if (itemUUID == null) {
-
-            Log.WriteLine("Randomize the UUID " + stack);
             itemUUID = ItemUtil.randomUUIDItem(stack);
         }
         mythicItem.uuid = itemUUID;

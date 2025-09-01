@@ -425,8 +425,7 @@ public class EnchantButton extends Button {
         if (announcement) {
             PlayerProfile profile = PlayerProfile.getPlayerProfileByUuid(player.getUniqueId());
 
-            BaseComponent[] hoverEventComponents = toEmptyHover(mythicItem);
-            beginAnnounceAsync(player, mythicItem, profile, hoverEventComponents);
+            beginAnnounceAsync(player, mythicItem, profile);
         }
         end(player, mythicItem);
     }
@@ -437,18 +436,21 @@ public class EnchantButton extends Button {
     }
     private static BaseComponent[] toEmptyHover(IMythicItem mythicItem) {
         net.minecraft.server.v1_8_R3.ItemStack nms = Utils.toNMStackQuick(mythicItem.toItemStack());
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        nms.save(nbtTagCompound);
         return new BaseComponent[]{
-                new TextComponent(nms.getTag().toString())
+                new TextComponent(nbtTagCompound.toString())
         };
     }
 
-    private void beginAnnounceAsync(Player player, IMythicItem mythicItem, PlayerProfile profile, BaseComponent[] hoverEventComponents) {
+    private void beginAnnounceAsync(Player player, IMythicItem mythicItem, PlayerProfile profile) {
         new BukkitRunnable() {
             final Cooldown cooldown = new Cooldown(10, TimeUnit.SECONDS);
 
             public void run() {
                 if (menu.getAnimationData().isFinished()) {
                     this.cancel();
+                    BaseComponent[] hoverEventComponents = toEmptyHover(mythicItem);
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (!FuncsKt.isSpecial(p)) {
                             if (!PlusPlayer.getPlusPlayer().contains(player.getName())) {

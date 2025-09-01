@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-var devBuild = false
+var devBuild = true
 if (devBuild) {
     println("WARN! 当前使用DevBuild模式构建!!,请详细斟酌是否构建")
 }

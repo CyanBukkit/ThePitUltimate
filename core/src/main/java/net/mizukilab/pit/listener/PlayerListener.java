@@ -63,6 +63,8 @@ import org.bukkit.util.BlockIterator;
 
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -87,7 +89,6 @@ public class PlayerListener implements Listener {
         ThePit.getInstance().getParker().hideAlways(player);
         PackedOperator orLoadOperator = ((ProfileOperator) ThePit.getInstance().getProfileOperator()).getOrLoadOperator(player);
         orLoadOperator.pendingUntilLoaded(prof -> {
-            if (statusCheck(orLoadOperator)) return;
             //post init, when checked
             orLoadOperator.heartBeat();
 
@@ -168,6 +169,7 @@ public class PlayerListener implements Listener {
         if (player != null && player.isOnline()) {
             load.setLogin(true);
             Bukkit.getScheduler().runTask(ThePit.getInstance(), () -> {
+                PlayerUtil.postResetPlayer(player);
                 new PitProfileLoadedEvent(load).callEvent();
             });
             FixedRewardData.Companion.sendMail(load, player);
