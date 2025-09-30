@@ -54,4 +54,9 @@ You can see his detailed information in this website
 [GLX_2](https://nmsl.website/index.php?title=%E9%BE%9A%E6%9D%8E%E8%BD%A9&diff=prev&oldid=2011)
 
 TODO:
+
 ![GLX_SCAM](https://github.com/Patcher0/ThePitUltimate/blob/master/glx.png)
+![GLX_SCAM2](https://github.com/Patcher0/ThePitUltimate/blob/master/glx2.jpg)
+![GLX_SCAM3](https://github.com/Patcher0/ThePitUltimate/blob/master/glx3.jpg)
+![GLX_SCAM4](https://github.com/Patcher0/ThePitUltimate/blob/master/glx4.jpg)
+![GLX_SCAM5](https://github.com/Patcher0/ThePitUltimate/blob/master/glx5.jpg)
