@@ -1,22 +1,15 @@
-# ThePitStudy
-## What is ThePitStudy and why should I use it?
+# ThePitUltimate
+## What is ThePitUltimate and why should I use it?
 
-ThePitStudy is designed for efficient server running.
+ThePitUltimate is designed for efficient server running.
 * Simple to set up and use
 * Extremely configurable
 * Uses minimal CPU/Memory
 * Safe for many players to use
 * Insanely fast, when using the slowest mode
  
-ThePitStudy is a fork of ThePitPremium that has huge speed and memory improvements and considerably more features.  
+ThePitUltimate is a fork of ThePitPremium that has huge speed and memory improvements and considerably more features.  
 If you use other plugins which depend on ThePitPremium, simply having "TPS" installed will boost their performance.
-
-## Downloads
-
-Downloads are available either on Nyacho
-- [Nyacho](https://www.nyacho.cn/)
-
-Snapshots are available on [Github Actions](https://github.com/ThePitPlus/ThePitPlus).
 
 ## Features
 
@@ -38,7 +31,7 @@ Put the latest build version to your project as a dependency.
 
 ## Contributing
 
-Want to add new features to ThePitStudy or fix bugs yourself? You can get the game running, with ThePitStudy, from the code here:
+Want to add new features to ThePitUltimate or fix bugs yourself? You can get the game running, with ThePitUltimate, from the code here:
 
 ## Special thanks
 
@@ -46,3 +39,11 @@ Want to add new features to ThePitStudy or fix bugs yourself? You can get the ga
 </a>
 
 [JetBrains](https://jb.gg/OpenSourceSupport), creators of the IntelliJ IDEA, supports us with their Open Source Licenses.
+
+## FAQs
+### Why was project made public?
+A: Because of some money issue, we call the "Araykal" as "GongliXuan" and he is facing a temp imprisonment now, there are some reasons as follows
+ * He didn't pay any salary to KleeLoveLife
+ * Ask KleeLoveLife for money using various excuses
+ * Using PUA and personal identity information to pressure me into coding
+ * Fraud

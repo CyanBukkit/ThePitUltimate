@@ -78,7 +78,6 @@ public class RankUtil {
                     return mob.get().getType().getDisplayName();
                 }
             }
-
             return CONSTANT_BOT_NAME;
         }
 

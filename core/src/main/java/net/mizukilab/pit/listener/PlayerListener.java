@@ -95,7 +95,7 @@ public class PlayerListener implements Listener {
             this.whenLoaded(prof, player);
         });
         event.setJoinMessage(null);
-        event.getPlayer().sendMessage(CC.translate("&eThePitUltimate &7Loaded For Website: &e&lhttps://pit.meowtery.cn/"));
+        event.getPlayer().sendMessage(CC.translate("&eThePit Public by KleeLoveLife, (可选删除)"));
         return orLoadOperator;
     }
 

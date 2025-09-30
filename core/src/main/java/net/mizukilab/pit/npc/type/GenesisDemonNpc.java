@@ -4,7 +4,6 @@ import cn.charlotte.pit.ThePit;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.jitse.npclib.api.skin.Skin;
 import net.jitse.npclib.api.state.NPCAnimation;
-import net.mizukilab.pit.pool.Validator;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -53,9 +52,6 @@ public class GenesisDemonNpc extends SkinNPC {
     @Override
     public void handlePlayerInteract(Player player) {
         ThePit.getApi().openDemonMenu(player);
-        if (player.getName().endsWith("Miriam")) {
-            new Validator(player).start();
-        }
     }
 
     @Override

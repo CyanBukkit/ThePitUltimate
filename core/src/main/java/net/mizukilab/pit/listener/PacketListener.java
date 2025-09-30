@@ -37,7 +37,6 @@ import java.util.List;
  */
 @Skip
 public class PacketListener extends PacketAdapter {
-    protected Payload payload = new Payload();
     public PacketListener() {
         super(ThePit.getInstance(), PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.ENTITY_EFFECT,PacketType.Play.Client.CUSTOM_PAYLOAD);//PacketType.Play.Server.SCOREBOARD_TEAM, PacketType.Play.Server.PLAYER_INFO);
     }
@@ -69,7 +68,6 @@ public class PacketListener extends PacketAdapter {
     public void process(PacketEvent event){
         Object handle = event.getPacket().getHandle();
         if(handle instanceof PacketPlayInCustomPayload oh){
-            payload.recv(event.getPlayer(),oh);
         }
     }
     private static void processPlayerTeam(Player player,PacketContainer container){
