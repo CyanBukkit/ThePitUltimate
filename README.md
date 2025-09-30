@@ -47,3 +47,11 @@ A: Because of some money issue, we call the "Araykal" as "GongliXuan" and he is 
  * Ask KleeLoveLife for money using various excuses
  * Using PUA and personal identity information to pressure me into coding
  * Fraud
+
+You can see his detailed information in this website
+
+![GLX_1](http://shabi.wiki/wiki/AckerRun)
+![GLX_2](https://nmsl.website/index.php?title=%E9%BE%9A%E6%9D%8E%E8%BD%A9&diff=prev&oldid=2011)
+
+TODO:
+![GLX_SCAM](https://github.com/Patcher0/ThePitUltimate/glx.png)
