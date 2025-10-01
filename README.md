@@ -55,6 +55,7 @@ You can see his detailed information in this website
 
 TODO:
 
+![GLX_SCAM_-1](https://github.com/Patcher0/ThePitUltimate/blob/master/blyat_glx.png)
 ![GLX_SCAM](https://github.com/Patcher0/ThePitUltimate/blob/master/glx.png)
 ![GLX_SCAM2](https://github.com/Patcher0/ThePitUltimate/blob/master/glx2.jpg)
 ![GLX_SCAM3](https://github.com/Patcher0/ThePitUltimate/blob/master/glx3.jpg)
