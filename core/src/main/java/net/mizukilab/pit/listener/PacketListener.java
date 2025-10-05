@@ -6,7 +6,6 @@ import cn.charlotte.pit.data.operator.IOperator;
 import cn.charlotte.pit.data.operator.IProfilerOperator;
 import cn.charlotte.pit.event.PotionAddEvent;
 import com.comphenix.protocol.reflect.EquivalentConverter;
-import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.*;
 import net.minecraft.server.v1_8_R3.*;
 import net.mizukilab.pit.bungee.Payload;
@@ -27,13 +26,14 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * @Author: EmptyIrony
  * @Date: 2021/2/4 14:56
+ * 玄易同志: 哥们门呢？为什么这个可爱的门怎么没留着啊？为啥给删掉了注释掉不就好了？
+ * 为什么删掉他
  */
 @Skip
 public class PacketListener extends PacketAdapter {
