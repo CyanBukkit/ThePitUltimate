@@ -26,6 +26,16 @@ group = "cn.klee"
 version = "core"
 repositories {
 
+    maven("https://libraries.minecraft.net")
+    maven("https://nexus.cyanbukkit.cn/repository/maven-public/") {
+        //加载失败跳过这个站点
+        content {
+            excludeGroup("com.mojang") //排除spigot
+        }
+    }
+    maven("https://repo.opencollab.dev/main/")
+    maven("https://maven.elmakers.com/repository")
+    maven("https://jitpack.io/")
     maven("https://maven.cleanroommc.com")
     maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
@@ -171,7 +181,7 @@ dependencies {
     compileOnly("com.github.f4b6a3:uuid-creator:6.0.0")
     compileOnly(libs.papi)
     compileOnly(libs.narshorn)
-    compileOnly(libs.protocollib)
+//    compileOnly(libs.protocollib)
     compileOnly(libs.jedis)
     compileOnly("org.mongojack:mongojack:5.0.1")
     compileOnly("org.mongodb:mongodb-driver-sync:5.2.0")

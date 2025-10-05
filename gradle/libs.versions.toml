@@ -3,7 +3,7 @@
 adventure = "4.17.0"
 adventure-platform = "4.3.2"
 server_8 = "1.8.8-R0.1-SNAPSHOT"
-protocolLib = "5.1.0"
+protocolLib = "5.4.0"
 scoreboard-library = "2.1.8"
 kotlin = "2.0.0-RC3"
 mongodb = "3.12.11"
@@ -44,7 +44,7 @@ mongodb = { group = "org.mongodb", name = "mongo-java-driver", version.ref = "mo
 
 spigot_8 = { group = "org.spigotmc", name = "spigot", version.ref = "server_8" }
 
-protocollib = { group = "com.comphenix.protocol", name = "ProtocolLib", version.ref = "protocolLib" }
+#protocollib = { group = "com.comphenix.protocol", name = "ProtocolLib", version.ref = "protocolLib" }
 
 scoreboardlibrary-api = { group = "net.megavex", name = "scoreboard-library-api", version.ref = "scoreboard-library" }
 scoreboardlibrary-impl = { group = "net.megavex", name = "scoreboard-library-implementation", version.ref = "scoreboard-library" }
