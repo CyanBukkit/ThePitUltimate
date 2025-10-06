@@ -18,7 +18,7 @@ public class JustAirBlockPattern implements Pattern {
         return this.block;
     }
 
-    @Override
+//    @Override
     public boolean apply(Extent extent, Vector setPosition, Vector getPosition) throws WorldEditException {
         if (!extent.getBlock(getPosition).isAir()) {
             return false;
