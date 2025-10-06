@@ -1,3 +1,4 @@
+import org.gradle.internal.impldep.org.apache.http.client.methods.RequestBuilder.options
 
 plugins {
     id("java")
@@ -15,6 +16,7 @@ tasks.named<Jar>("jar") {
 }
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    options.compilerArgs = listOf<String>("-Xlint:deprecation", "-Xlint:unchecked" )
 }
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
