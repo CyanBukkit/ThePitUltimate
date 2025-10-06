@@ -11,6 +11,14 @@ object Loader {
             setApi(PitInternalImpl)
         }
         PitHook.init()
+        ThePit.getInstance().logger.info("""
+            
+              CyanBukkit 网站 
+            www.cyanbukkit.net
+            
+            插件维护与更新 By CyanBukkit
+            
+        """.trimIndent())
     }
     @JvmStatic
     fun begin(){
