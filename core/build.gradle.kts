@@ -162,7 +162,7 @@ dependencies {
         implementation(dependencyNotation)
     }
 //    compileOnly(fileTree("../packLib"))
-//    compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
+    compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
     if (devBuild) {
         api(libs.reflectionhelper)
     }else{
