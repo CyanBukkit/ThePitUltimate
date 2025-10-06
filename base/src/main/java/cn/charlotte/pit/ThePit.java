@@ -198,7 +198,7 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
     @Override
     public void onEnable() {
         BASE_VERSION = this.getDescription().getVersion();
-        audiences = BukkitAudiences.create(this);
+        audiences = BukkitAudiences.create(this); // paper 的那格
         BannerUtil.printFileContent("banner.txt");
         serverId = DateCodeUtils.dateToCode(LocalDate.now());
 

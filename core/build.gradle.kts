@@ -1,14 +1,14 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import java.util.Scanner
 import org.apache.tools.ant.filters.ReplaceTokens
-import proguard.gradle.ProGuardTask
+//import proguard.gradle.ProGuardTask
 import java.io.ByteArrayOutputStream
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.7.0")
+//        classpath("com.guardsquare:proguard-gradle:7.7.0")
     }
 }
 plugins {
@@ -79,22 +79,22 @@ val injectGitVersion by tasks.registering {
         println("🔄 Git version injected into generated sources.")
     }
 }
-tasks.register<ProGuardTask>("proguard") {
-    configuration(file("proguard.pro"))
-
-    injars(tasks.named<Jar>("jar").flatMap { it.archiveFile })
-    if (System.getProperty("java.version").startsWith("1.")) {
-        libraryjars(file("${System.getProperty("java.home")}/lib/rt.jar"))
-    } else {
-        libraryjars(file("${System.getProperty("java.home")}/jmods/java.base.jmod"))
-    }
-    repositories
-    libraryjars(configurations.compileClasspath)
-
-    verbose()
-
-    outjars(layout.buildDirectory.file("libs/proguard-tpu-minified.jar"))
-}
+//tasks.register<ProGuardTask>("proguard") {
+//    configuration(file("proguard.pro"))
+//
+//    injars(tasks.named<Jar>("jar").flatMap { it.archiveFile })
+//    if (System.getProperty("java.version").startsWith("1.")) {
+//        libraryjars(file("${System.getProperty("java.home")}/lib/rt.jar"))
+//    } else {
+//        libraryjars(file("${System.getProperty("java.home")}/jmods/java.base.jmod"))
+//    }
+//    repositories
+//    libraryjars(configurations.compileClasspath)
+//
+//    verbose()
+//
+//    outjars(layout.buildDirectory.file("libs/proguard-tpu-minified.jar"))
+//}
 val lastFin by tasks.registering {
     group = "versioning"
     description = "Injects Git version into source code before compilation."
@@ -161,8 +161,8 @@ dependencies {
     if (devBuild) {
         implementation(dependencyNotation)
     }
-    compileOnly(fileTree("../packLib"))
-    compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
+//    compileOnly(fileTree("../packLib"))
+//    compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
     if (devBuild) {
         api(libs.reflectionhelper)
     }else{
