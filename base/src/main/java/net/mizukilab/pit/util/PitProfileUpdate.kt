@@ -1,10 +1,10 @@
 package net.mizukilab.pit.util
 
 import cn.charlotte.pit.data.PlayerProfile
-import nya.Skip
+//import nya.Skip
 
 @Suppress("DEPRECATION")
-@Skip
+//@Skip
 object PitProfileUpdater {
 
     @JvmStatic

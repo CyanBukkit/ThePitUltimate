@@ -10,13 +10,13 @@ import net.mizukilab.pit.util.Log;
 import net.mizukilab.pit.util.PublicUtil;
 import net.mizukilab.pit.util.Utils;
 import net.mizukilab.pit.util.item.ItemUtil;
-import nya.Skip;
+//import nya.Skip;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
-@Skip
+//@Skip
 public class ItemFactory implements IItemFactory {
 
     public boolean clientSide = false;

@@ -75,9 +75,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.slf4j.Logger;
-import pku.yim.license.MagicLicense;
-import pku.yim.license.PluginProxy;
-import pku.yim.license.Resource;
+//import pku.yim.license.MagicLicense;
+//import pku.yim.license.PluginProxy;
+//import pku.yim.license.Resource;
 import redis.clients.jedis.JedisPool;
 import spg.lgdev.iSpigot;
 import zone.rong.imaginebreaker.ImagineBreaker;
@@ -94,7 +94,9 @@ import java.util.function.Function;
 /**
  * @author EmptyIrony, Misoryan, KleeLoveLife, Rabbit0w0, Araykal
  */
-public class ThePit extends JavaPlugin implements PluginMessageListener, PluginProxy {
+public class ThePit extends JavaPlugin implements PluginMessageListener
+//        ,  PluginProxy
+{
     public static String BASE_VERSION;
     public static PitInternalHook api;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThePit.class);
@@ -900,17 +902,17 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         this.factory = factory;
     }
 
-    @Override
+//    @Override
     public void info(String s) {
         log.info(s);
     }
 
-    @Override
+//    @Override
     public void disablePlugin() {
         onDisable();
     }
 
-    @Override
+//    @Override
     public boolean isPrimaryThread() {
         return Bukkit.isPrimaryThread();
     }
@@ -920,9 +922,9 @@ public class ThePit extends JavaPlugin implements PluginMessageListener, PluginP
         return api;
     }
 
-    @Override
-    public Resource getResourceType() {
-        return Resource.CLEAR_LOWERCASE;
-    }
+//    @Override
+//    public Resource getResourceType() {
+//        return Resource.CLEAR_LOWERCASE;
+//    }
 
 }

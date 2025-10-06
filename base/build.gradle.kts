@@ -54,7 +54,7 @@ tasks.named<ShadowJar>("shadowJar") {
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "../libs", "include" to listOf("*.jar"))))
-    implementation(fileTree(mapOf("dir" to "../packLib", "include" to listOf("*.jar"))))
+//    implementation(fileTree(mapOf("dir" to "../packLib", "include" to listOf("*.jar"))))
     api(libs.reflectionhelper)
     api(libs.hutool.crypto)
     api(libs.book)

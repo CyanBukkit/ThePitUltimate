@@ -4,14 +4,14 @@ import net.mizukilab.pit.enchantment.AbstractEnchantment;
 import net.mizukilab.pit.enchantment.param.item.ArmorOnly;
 import net.mizukilab.pit.enchantment.rarity.EnchantmentRarity;
 import net.mizukilab.pit.util.cooldown.Cooldown;
-import nya.Skip;
+//import nya.Skip;
 
 
 /**
  * @Author: Misoryan
  * @Created_In: 2021/2/25 14:48
  */
-@Skip
+//@Skip
 @ArmorOnly
 public class PebbleEnchant extends AbstractEnchantment {
 

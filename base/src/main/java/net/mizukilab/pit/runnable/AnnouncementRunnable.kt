@@ -1,11 +1,11 @@
 package net.mizukilab.pit.runnable
 
 
-import nya.Skip
+//import nya.Skip
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
-@Skip
+//@Skip
 object AnnouncementRunnable : BukkitRunnable() {
     private var index = 0;
     val announcement = listOf(

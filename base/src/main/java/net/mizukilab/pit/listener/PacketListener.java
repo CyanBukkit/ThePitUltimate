@@ -16,7 +16,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import lombok.SneakyThrows;
-import nya.Skip;
+//import nya.Skip;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -36,7 +36,7 @@ import java.util.List;
  * //import net.mizukilab.pit.bungee.Payload;
  * 为什么删掉他
  */
-@Skip
+//@Skip
 public class PacketListener extends PacketAdapter {
     public PacketListener() {
         super(ThePit.getInstance(), PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.ENTITY_EFFECT,PacketType.Play.Client.CUSTOM_PAYLOAD);//PacketType.Play.Server.SCOREBOARD_TEAM, PacketType.Play.Server.PLAYER_INFO);
