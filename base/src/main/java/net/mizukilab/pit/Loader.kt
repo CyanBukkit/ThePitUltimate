@@ -6,7 +6,6 @@ import net.mizukilab.pit.impl.PitInternalImpl
 
 object Loader {
 
-    @JvmStatic
     fun start() {
         ThePit.getInstance().apply {
             setApi(PitInternalImpl)
@@ -16,7 +15,6 @@ object Loader {
     @JvmStatic
     fun begin(){
         System.setProperty("env",this.javaClass.name);
-
         System.setProperty("ent","start");
         println("MagicLicense initialized")
     }

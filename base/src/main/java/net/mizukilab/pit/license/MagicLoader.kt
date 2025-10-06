@@ -58,7 +58,7 @@ object MagicLoader {
     fun ensureIsLoaded() {
         if (!isLoaded) {
             synchronized(lock) {
-                (lock as Object).wait()
+                lock.wait()
             }
             if (exception != null) {
                 exception!!.printStackTrace()
