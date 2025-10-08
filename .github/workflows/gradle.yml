@@ -18,7 +18,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read,write
 
     steps:
       - uses: actions/checkout@v5
@@ -29,6 +29,9 @@ jobs:
     
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
+        
+      - name: Give enough permissions
+        run: chmod +x gradlew
     
       - name: Build with Gradle
         run: ./gradlew build
