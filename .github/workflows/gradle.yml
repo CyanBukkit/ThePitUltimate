@@ -35,6 +35,9 @@ jobs:
     
       - name: Build with Gradle
         run: ./gradlew build
+
+      - name: Build jar with Gradle
+        run: ./gradlew jar
     
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
